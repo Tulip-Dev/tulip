@@ -94,11 +94,11 @@ public slots:
       cursor = textBrowser->document()->find(rx, QTextCursor(textBrowser->document()->begin()));
 
       while (!cursor.isNull()) {
-	QRegularExpressionMatch match, match2;
-	if ((cursor.selectedText().indexOf(rx, 0, &match) != -1) &&
-	    (match.captured(1) != "<string>") &&
-	    (cursor.selectedText().indexOf(rx2, 0, &match2) != -1) &&
-	    (match2.captured(3) != "tlpimporthook")) {
+        QRegularExpressionMatch match, match2;
+        if ((cursor.selectedText().indexOf(rx, 0, &match) != -1) &&
+            (match.captured(1) != "<string>") &&
+            (cursor.selectedText().indexOf(rx2, 0, &match2) != -1) &&
+            (match2.captured(3) != "tlpimporthook")) {
           formt = cursor.charFormat();
           formt.setAnchor(true);
           formt.setUnderlineStyle(QTextCharFormat::SingleUnderline);
