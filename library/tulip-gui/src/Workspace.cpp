@@ -197,18 +197,14 @@ int Workspace::addPanel(tlp::View *view) {
 }
 
 void Workspace::delView(tlp::View *view) {
-  unsigned int i = 0;
   for (auto it : _panels) {
     if (it->view() == view) {
       delete it;
-      _panels.erase(_panels.begin() + i);
-      if (_panels.empty()) {
-        emit panelsEmpty();
-      }
-      return;
+      break;
     }
-    ++i;
   }
+  if (!_panels.size())
+    emit panelsEmpty();
 }
 
 void Workspace::panelDestroyed(QObject *obj) {
