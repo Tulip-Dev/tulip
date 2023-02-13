@@ -123,7 +123,8 @@ ConvolutionClusteringSetup::ConvolutionClusteringSetup(ConvolutionClustering *co
   connect(_ui->okButton, SIGNAL(pressed()), this, SLOT(accept()));
   connect(_ui->cancelButton, SIGNAL(pressed()), this, SLOT(reject()));
   connect(_ui->discretizationSlider, SIGNAL(valueChanged(int)), this, SLOT(update()));
-  connect(_ui->discretizationSlider, SIGNAL(valueChanged(int)), _ui->LCDNumber1_3, SLOT(display(int)));
+  connect(_ui->discretizationSlider, SIGNAL(valueChanged(int)), _ui->LCDNumber1_3,
+          SLOT(display(int)));
   connect(_ui->CheckBox1, SIGNAL(toggled(bool)), this, SLOT(setlog(bool)));
   connect(_ui->widthSlider, SIGNAL(valueChanged(int)), _ui->LCDNumber1, SLOT(display(int)));
 
