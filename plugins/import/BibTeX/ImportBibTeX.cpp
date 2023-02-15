@@ -2034,7 +2034,7 @@ public:
                 break;
               }
               auto addLink = [&](node a1, node a2) {
-                edge e = graph->existEdge(a1, a2);
+                edge e = graph->existEdge(a1, a2,false);
                 unsigned int cnt = 0;
                 if (e.isValid())
                   cnt = countProp->getEdgeValue(e);
