@@ -38,7 +38,7 @@ public:
 };
 
 struct PerspectiveProcessInfo {
-  PerspectiveProcessInfo() {}
+  PerspectiveProcessInfo() : _perspectiveId(0) {}
 
   PerspectiveProcessInfo(const QString &name, const QVariantMap &args, const QString &file,
                          time_t id)

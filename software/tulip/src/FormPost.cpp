@@ -103,7 +103,7 @@ QNetworkReply *FormPost::postData(QString url) {
   host = url.right(url.length() - url.indexOf("://") - 3);
   host = host.left(host.indexOf("/"));
   QString crlf = "\r\n";
-  tlp::setSeedOfRandomSequence(QDateTime::currentDateTime().toTime_t());
+  tlp::setSeedOfRandomSequence(QDateTime::currentDateTime().toMSecsSinceEpoch());
   tlp::initRandomSequence();
   QString b =
       QVariant(rand()).toString() + QVariant(rand()).toString() + QVariant(rand()).toString();

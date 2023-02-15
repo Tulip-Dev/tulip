@@ -86,7 +86,7 @@ public:
           */
           SelectedEntity selectedEntity;
 
-          if (glMainView->getGlMainWidget()->pickNodesEdges(qMouseEv->x(), qMouseEv->y(),
+          if (glMainView->getGlMainWidget()->pickNodesEdges(qMouseEv->pos().x(), qMouseEv->pos().y(),
                                                             selectedEntity)) {
 
             /*

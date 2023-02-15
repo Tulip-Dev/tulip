@@ -24,6 +24,7 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QStandardPaths>
+#include <QRegularExpression>
 #include <QTcpSocket>
 
 #include <tulip/PythonVersionChecker.h>
@@ -157,7 +158,9 @@ int main(int argc, char **argv) {
   QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
   // Enables high-DPI scaling on X11 or Windows platforms
   // Enabled on MacOSX with NSHighResolutionCapable key in Info.plist file
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+#endif
 
   QApplication tulip_agent(argc, argv);
   QString name("Tulip ");
@@ -174,7 +177,8 @@ int main(int argc, char **argv) {
   tulip_agent.setApplicationName(name);
 
   // Parse arguments
-  QRegExp perspectiveRegexp("^\\-\\-perspective=(.*)");
+  QRegularExpression perspectiveRegexp("^\\-\\-perspective=(.*)");
+  QRegularExpressionMatch match;
   QString perspName;
   QString fileToOpen;
   bool showAgent = true;
@@ -182,8 +186,8 @@ int main(int argc, char **argv) {
   for (int i = 1; i < QApplication::arguments().size(); ++i) {
     QString s = QApplication::arguments()[i];
 
-    if (perspectiveRegexp.exactMatch(s)) {
-      perspName = perspectiveRegexp.cap(1);
+    if (s.indexOf(perspectiveRegexp, 0, &match) != -1) {
+      perspName = match.captured(1);
     } else if (s == "--no-show-agent") {
       showAgent = false;
     } else {

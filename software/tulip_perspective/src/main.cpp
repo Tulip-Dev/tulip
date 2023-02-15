@@ -23,8 +23,9 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QStandardPaths>
-#include <QGuiApplication>
+#include <QRegularExpression>
 #include <QScreen>
+#include <QWindow>
 
 #include <CrashHandling.h>
 
@@ -203,7 +204,9 @@ int main(int argc, char **argv) {
   QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
   // Enables high-DPI scaling on X11 or Windows platforms
   // Enabled on MacOSX with NSHighResolutionCapable key in Info.plist file
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+#endif
 
   QApplication tulip_perspective(argc, argv);
   // the applicationName below is used to identify the location
@@ -217,16 +220,17 @@ int main(int argc, char **argv) {
   QRect windowGeometry;
   PerspectiveContext *context = new PerspectiveContext();
 
-  QRegExp perspectiveRegexp("^\\-\\-perspective=(.*)");
-  QRegExp pRegexp("^\\-p");
-  QRegExp titleRegexp("^\\-\\-title=(.*)");
-  QRegExp iconRegexp("^\\-\\-icon=(.*)");
-  QRegExp portRegexp("^\\-\\-port=([0-9]*)");
-  QRegExp idRegexp("^\\-\\-id=([0-9]*)");
-  QRegExp geometryRegexp("^\\-\\-geometry=([0-9]*)\\,([0-9]*)\\,([0-9]*)\\,([0-9]*)");
-  QRegExp debugPluginLoadRegExp("^\\-debug_plugin_load");
+  QRegularExpression perspectiveRegexp("^\\-\\-perspective=(.*)");
+  QRegularExpression pRegexp("^\\-p");
+  QRegularExpression titleRegexp("^\\-\\-title=(.*)");
+  QRegularExpression iconRegexp("^\\-\\-icon=(.*)");
+  QRegularExpression portRegexp("^\\-\\-port=([0-9]*)");
+  QRegularExpression idRegexp("^\\-\\-id=([0-9]*)");
+  QRegularExpression geometryRegexp("^\\-\\-geometry=([0-9]*)\\,([0-9]*)\\,([0-9]*)\\,([0-9]*)");
+  QRegularExpression debugPluginLoadRegexp("^\\-debug_plugin_load");
   bool debugPluginLoad = false;
-  QRegExp extraParametersRegexp("^\\-\\-([^=]*)=(.*)");
+  QRegularExpression extraParametersRegexp("^\\-\\-([^=]*)=(.*)");
+  QRegularExpressionMatch match;
 
   QStringList args = QApplication::arguments();
 
@@ -235,28 +239,30 @@ int main(int argc, char **argv) {
 
     if ((a == "--help") || (a == "-h")) {
       usage("");
-    } else if (perspectiveRegexp.exactMatch(a)) {
-      perspectiveName = perspectiveRegexp.cap(1);
-    } else if (pRegexp.exactMatch(a)) {
+    } else if (a.indexOf(perspectiveRegexp, 0, &match) != -1) {
+      perspectiveName = match.captured(1);
+    } else if (a.indexOf(pRegexp, 0, &match) != -1) {
       perspectiveName = args[++i];
-    } else if (titleRegexp.exactMatch(a)) {
-      title = titleRegexp.cap(1);
-    } else if (iconRegexp.exactMatch(a)) {
-      iconPath = iconRegexp.cap(1);
-    } else if (geometryRegexp.exactMatch(a)) {
-      windowGeometry = QRect(geometryRegexp.cap(1).toInt(), geometryRegexp.cap(2).toInt(),
-                             geometryRegexp.cap(3).toInt(), geometryRegexp.cap(4).toInt());
-    } else if (portRegexp.exactMatch(a)) {
-      context->tulipPort = portRegexp.cap(1).toUInt();
-    } else if (debugPluginLoadRegExp.exactMatch(a))
+    } else if (a.indexOf(titleRegexp, 0, &match) != -1) {
+      title = match.captured(1);
+    } else if (a.indexOf(iconRegexp, 0, &match) != -1) {
+      iconPath = match.captured(1);
+    } else if (a.indexOf(geometryRegexp, 0, &match) != -1) {
+      windowGeometry = QRect(match.captured(1).toInt(),
+			     match.captured(2).toInt(),
+                             match.captured(3).toInt(),
+			     match.captured(4).toInt());
+    } else if (a.indexOf(portRegexp, 0, &match) != -1) {
+      context->tulipPort = match.captured(1).toUInt();
+    } else if (a.indexOf(debugPluginLoadRegexp, 0, &match) != -1)
       debugPluginLoad = true;
-    else if (idRegexp.exactMatch(a)) {
-      context->id = idRegexp.cap(1).toUInt();
+    else if (a.indexOf(idRegexp, 0, &match) != -1) {
+      context->id = match.captured(1).toUInt();
       QString dumpPath = QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0))
-                             .filePath("tulip_perspective-" + idRegexp.cap(1) + ".log");
+                             .filePath("tulip_perspective-" + match.captured(1) + ".log");
       CrashHandling::setDumpPath(QStringToTlpString(dumpPath));
-    } else if (extraParametersRegexp.exactMatch(a)) {
-      extraParams[extraParametersRegexp.cap(1)] = extraParametersRegexp.cap(2);
+    } else if (a.indexOf(extraParametersRegexp, 0, &match) != -1) {
+      extraParams[match.captured(1)] = match.captured(2);
     } else {
       projectFilePath = a;
     }
@@ -350,7 +356,7 @@ int main(int argc, char **argv) {
       mainWindow->setGeometry(windowGeometry);
     } else {
       mainWindow->move(0, 0);
-      mainWindow->resize(QGuiApplication::primaryScreen()->availableGeometry().size() * 0.9);
+      mainWindow->resize(mainWindow->windowHandle()->screen()->availableGeometry().size() * 0.9);
     }
 
     TulipSettings::setFirstRun(false);

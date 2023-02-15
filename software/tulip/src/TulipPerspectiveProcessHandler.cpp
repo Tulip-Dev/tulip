@@ -24,7 +24,9 @@
 #include <QFileDialog>
 #include <QPainter>
 #include <QStandardPaths>
+#include <QRegularExpression>
 #include <QTcpSocket>
+
 #include <tulip/TulipProject.h>
 
 #include <ctime>
@@ -125,7 +127,7 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) 
 
   TulipPerspectiveCrashHandler crashHandler;
 
-  QRegExp plateform("^" + QString(TLP_PLATEFORM_HEADER) + " (.*)\n"),
+  QRegularExpression plateform("^" + QString(TLP_PLATEFORM_HEADER) + " (.*)\n"),
       arch("^" + QString(TLP_ARCH_HEADER) + " (.*)\n"),
       compiler("^" + QString(TLP_COMPILER_HEADER) + " (.*)\n"),
       version("^" + QString(TLP_VERSION_HEADER) + " (.*)\n");
@@ -135,7 +137,7 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) 
               .filePath("tulip_perspective-" + QString::number(info._perspectiveId) + ".log"));
   f.open(QIODevice::ReadOnly);
 
-  QMap<QRegExp *, QString> envInfo;
+  QMap<QRegularExpression *, QString> envInfo;
   envInfo[&plateform] = "";
   envInfo[&arch] = "";
   envInfo[&compiler] = "";
@@ -159,8 +161,9 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) 
       stackTrace += line;
     } else {
       for (auto re : envInfo.keys()) {
-        if (re->exactMatch(line)) {
-          envInfo[re] = re->cap(1);
+        QRegularExpressionMatch match;
+	if (line.indexOf(*re, 0, &match) != -1) {
+          envInfo[re] = match.captured(1);
           break;
         }
       }

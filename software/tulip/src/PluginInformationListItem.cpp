@@ -99,9 +99,15 @@ void PluginInformationListItem::remove() {
   _ui->rebootFrame->show();
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void PluginInformationListItem::enterEvent(QEvent *) {
   emit focused();
 }
+#else
+void PluginInformationListItem::enterEvent(QEnterEvent *) {
+  emit focused();
+}
+#endif
 
 void PluginInformationListItem::downloadProgress(qint64 received, qint64 total) {
   _ui->progressBar->setMaximum(total);
