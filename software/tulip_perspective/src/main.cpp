@@ -248,10 +248,8 @@ int main(int argc, char **argv) {
     } else if (a.indexOf(iconRegexp, 0, &match) != -1) {
       iconPath = match.captured(1);
     } else if (a.indexOf(geometryRegexp, 0, &match) != -1) {
-      windowGeometry = QRect(match.captured(1).toInt(),
-			     match.captured(2).toInt(),
-                             match.captured(3).toInt(),
-			     match.captured(4).toInt());
+      windowGeometry = QRect(match.captured(1).toInt(), match.captured(2).toInt(),
+                             match.captured(3).toInt(), match.captured(4).toInt());
     } else if (a.indexOf(portRegexp, 0, &match) != -1) {
       context->tulipPort = match.captured(1).toUInt();
     } else if (a.indexOf(debugPluginLoadRegexp, 0, &match) != -1)

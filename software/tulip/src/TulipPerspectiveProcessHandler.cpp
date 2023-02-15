@@ -162,7 +162,7 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) 
     } else {
       for (auto re : envInfo.keys()) {
         QRegularExpressionMatch match;
-	if (line.indexOf(*re, 0, &match) != -1) {
+        if (line.indexOf(*re, 0, &match) != -1) {
           envInfo[re] = match.captured(1);
           break;
         }
