@@ -247,13 +247,7 @@ IF (NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
     # Set some common libraries and headers search paths for MinGW
     SET(CMAKE_LIBRARY_PATH "${MINGW_BIN_PATH};${MINGW_LIB_PATH};${MINGW_LIB64_PATH};${CMAKE_LIBRARY_PATH}")
     SET(CMAKE_INCLUDE_PATH "${MINGW_INCLUDE_PATH};${MINGW_INCLUDE_PATH}/freetype2;${MINGW_INCLUDE_PATH}/libpng*;${CMAKE_INCLUDE_PATH}")
-
-    # Check if libintl is present in the MinGW build environment
-    FIND_LIBRARY(INTL_LIBRARY intl PATHS ${MINGW_LIB_PATH} ${MINGW_LIB64_PATH} NO_DEFAULT_PATH)
-  ELSE(MINGW)
-    FIND_LIBRARY(INTL_LIBRARY intl)
-  ENDIF(MINGW)
-  MARK_AS_ADVANCED(INTL_LIBRARY)
+  ENDIF()
 
   # Don't need to find zlib when compiling with emscripten as there is an available emscripten port of it
   IF(NOT EMSCRIPTEN)

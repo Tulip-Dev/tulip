@@ -15,10 +15,21 @@ IF(NOT MSVC AND NOT BSD)
       # ensure correct iberty header file is selected with MSYS2
       SET(CMAKE_INCLUDE_PATH ${MINGW_INCLUDE_PATH}/libiberty ${CMAKE_INCLUDE_PATH})
 
-    ENDIF(MINGW)
+      FIND_PACKAGE(Bfd)
+      FIND_PACKAGE(Iberty)
 
-    FIND_PACKAGE(Bfd)
-    FIND_PACKAGE(Iberty)
+      # Check if libintl is present in the MinGW build environment
+      FIND_LIBRARY(INTL_LIBRARY intl PATHS ${MINGW_LIB_PATH} ${MINGW_LIB64_PATH} NO_DEFAULT_PATH)
+      # the switch from binutils 2.39 to 2.40 added the two dependencies below
+      # for libbfd.a which is needed by crashandling static library
+      # Check if libsframe is present in the MinGW build environment
+      FIND_LIBRARY(SFRAME_LIBRARY sframe PATHS ${MINGW_LIB_PATH} ${MINGW_LIB64_PATH} NO_DEFAULT_PATH)
+      FIND_PACKAGE(Zstd)
+      MARK_AS_ADVANCED(SFRAME_LIBRARY)
+    ELSE(MINGW)
+      FIND_LIBRARY(INTL_LIBRARY intl)
+    ENDIF(MINGW)
+    MARK_AS_ADVANCED(INTL_LIBRARY)
 
     IF(BFD_FOUND)
 
@@ -60,6 +71,12 @@ IF(BFD_FOUND)
     TARGET_LINK_LIBRARIES(crash_handling ${INTL_LIBRARY})
 
   ENDIF(INTL_LIBRARY)
+
+  # sframe, zlib and zstd libraries may be needed
+  # since the switch from binutils 2.39 to 2.40
+  IF(MINGW)
+    TARGET_LINK_LIBRARIES(crash_handling ${SFRAME_LIBRARY} z zstd)
+  ENDIF(MINGW)
 
 ENDIF(BFD_FOUND)
 
