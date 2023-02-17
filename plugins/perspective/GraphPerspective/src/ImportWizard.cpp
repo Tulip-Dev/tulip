@@ -94,8 +94,7 @@ ImportWizard::~ImportWizard() {
   delete _ui;
 }
 
-void ImportWizard::initWithModuleFile(const std::string &module,
-				      const std::string &file) {
+void ImportWizard::initWithModuleFile(const std::string &module, const std::string &file) {
   // used at perspective launch time
   // to initialize file::filename default value with file
   // we first have to select the module in _ui_>importModules
@@ -111,17 +110,16 @@ void ImportWizard::initWithModuleFile(const std::string &module,
     for (; j < model->rowCount(index); j++) {
       auto subIndex = model->index(j, 1, index);
       if (subIndex.data().toString() == QString(module.c_str())) {
-	// select module
-	_ui->importModules->setCurrentIndex(subIndex);
-	break;
+        // select module
+        _ui->importModules->setCurrentIndex(subIndex);
+        break;
       }
     }
     if (j < model->rowCount(index))
       break;
   }
 
-  ParameterListModel *paramModel =
-    static_cast<ParameterListModel *>(_ui->parameters->model());
+  ParameterListModel *paramModel = static_cast<ParameterListModel *>(_ui->parameters->model());
   auto dataSet = paramModel->parametersValues();
   // finally set file as default filename
   dataSet.set("file::filename", file);
@@ -160,7 +158,11 @@ void ImportWizard::moduleSelected(const QModelIndex &index) {
 
 std::string ImportWizard::module() const {
   if (_ui->importModules->selectionModel()->hasSelection())
-    return _ui->importModules->selectionModel()->selectedIndexes()[0].data().toByteArray().toStdString();
+    return _ui->importModules->selectionModel()
+        ->selectedIndexes()[0]
+        .data()
+        .toByteArray()
+        .toStdString();
 
   return "";
 }
