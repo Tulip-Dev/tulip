@@ -93,7 +93,7 @@ public:
   bool terminated() override;
 
 public slots:
-  void importGraph();
+  void importGraph(const std::string &module = "", const std::string &file = "");
   void exportGraph(tlp::Graph *g = nullptr);
   void saveGraphHierarchyInTlpFile(tlp::Graph *g = nullptr);
   void createPanel(tlp::Graph *g = nullptr);

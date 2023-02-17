@@ -41,11 +41,12 @@ public:
   explicit ImportWizard(QWidget *parent = nullptr);
   ~ImportWizard() override;
 
-  QString algorithm() const;
+  std::string module() const;
+  void initWithModuleFile(const std::string &module, const std::string &file);
   tlp::DataSet parameters() const;
 
 protected slots:
-  void algorithmSelected(const QModelIndex &index);
+  void moduleSelected(const QModelIndex &index);
   void helpButtonClicked();
   void updateFinishButton();
   void setFilter(QString filter);

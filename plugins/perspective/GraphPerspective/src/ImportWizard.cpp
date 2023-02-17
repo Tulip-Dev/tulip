@@ -56,7 +56,7 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
   _ui->importModules->setRootIndex(model->index(0, 0));
   _ui->importModules->expandAll();
   connect(_ui->importModules->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-          this, SLOT(algorithmSelected(QModelIndex)));
+          this, SLOT(moduleSelected(QModelIndex)));
 
   _ui->parameters->setItemDelegate(new TulipItemDelegate(_ui->parameters));
   _ui->parameters->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
@@ -94,7 +94,41 @@ ImportWizard::~ImportWizard() {
   delete _ui;
 }
 
-void ImportWizard::algorithmSelected(const QModelIndex &index) {
+void ImportWizard::initWithModuleFile(const std::string &module,
+				      const std::string &file) {
+  // used at perspective launch time
+  // to initialize file::filename default value with file
+  // we first have to select the module in _ui_>importModules
+  auto model = _ui->importModules->model();
+  // root is the "Import" item (non visible)
+  auto root = model->index(0, 1);
+  // Be warn, that we consider only two levels (groups, plugins of groups)
+  // loop on groups (File, Graph ...)
+  for (int i = 0; i < model->rowCount(root); ++i) {
+    auto index = model->index(i, 1, root);
+    // loop on current group import plugins
+    int j = 0;
+    for (; j < model->rowCount(index); j++) {
+      auto subIndex = model->index(j, 1, index);
+      if (subIndex.data().toString() == QString(module.c_str())) {
+	// select module
+	_ui->importModules->setCurrentIndex(subIndex);
+	break;
+      }
+    }
+    if (j < model->rowCount(index))
+      break;
+  }
+
+  ParameterListModel *paramModel =
+    static_cast<ParameterListModel *>(_ui->parameters->model());
+  auto dataSet = paramModel->parametersValues();
+  // finally set file as default filename
+  dataSet.set("file::filename", file);
+  paramModel->setParametersValues(dataSet);
+}
+
+void ImportWizard::moduleSelected(const QModelIndex &index) {
   QString alg(index.data().toString());
   string algs = tlp::QStringToTlpString(alg);
   _ui->parametersFrame->setVisible(!alg.isEmpty());
@@ -116,7 +150,6 @@ void ImportWizard::algorithmSelected(const QModelIndex &index) {
     button(QWizard::HelpButton)->setVisible(false);
   }
 
-  //_ui->categoryLabel->setText(categoryText);
   _ui->parametersLabel->setText(parametersText);
 
   _ui->parameters->setModel(newModel);
@@ -125,9 +158,9 @@ void ImportWizard::algorithmSelected(const QModelIndex &index) {
   updateFinishButton();
 }
 
-QString ImportWizard::algorithm() const {
+std::string ImportWizard::module() const {
   if (_ui->importModules->selectionModel()->hasSelection())
-    return _ui->importModules->selectionModel()->selectedIndexes()[0].data().toString();
+    return _ui->importModules->selectionModel()->selectedIndexes()[0].data().toByteArray().toStdString();
 
   return "";
 }

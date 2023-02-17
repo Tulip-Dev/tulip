@@ -1304,12 +1304,17 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
   showStartPanels(g);
 }
 
-void GraphPerspective::importGraph() {
+void GraphPerspective::importGraph(const std::string &module,
+				   const std::string &file) {
   ImportWizard wizard(_mainWindow);
+  if (!module.empty()) {
+    wizard.initWithModuleFile(module, file);
+    _mainWindow->show();
+  }
 
   if (wizard.exec() == QDialog::Accepted) {
     DataSet data = wizard.parameters();
-    importGraph(tlp::QStringToTlpString(wizard.algorithm()), data);
+    importGraph(wizard.module(), data);
   }
 }
 
@@ -1456,10 +1461,16 @@ void GraphPerspective::open(QString fileName) {
         TulipSettings::addToRecentDocuments(fileInfo.absoluteFilePath());
         break;
       } else if (fileName.endsWith(QString::fromStdString(extension))) {
-        DataSet params;
-        params.set("file::filename", QStringToTlpString(fileName));
-        addRecentDocument(fileName);
-        importGraph(modules[extension], params);
+	ImportModule *m = PluginLister::getPluginObject<ImportModule>(modules[extension]);
+	if (m->getParameters().size() == 1) {
+	  // direct call of module if file::filename is its only parameter
+	  DataSet params;
+	  params.set("file::filename", QStringToTlpString(fileName));
+	  addRecentDocument(fileName);
+	  importGraph(modules[extension], params);
+	} else
+	  // display wizard to allow user to setup other module parameters
+	  importGraph(modules[extension], QStringToTlpString(fileName));
         break;
       }
     }
