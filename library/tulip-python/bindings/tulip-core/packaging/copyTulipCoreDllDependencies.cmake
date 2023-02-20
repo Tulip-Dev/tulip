@@ -32,7 +32,7 @@ ENDFUNCTION()
 # Append the top level prerequisites items to the TULIP_NATIVE_PYTHON_MODULE_DEPS list
 # and resolve them (get their absolute path)
 FOREACH(DLL_DEP ${TULIP_NATIVE_PYTHON_MODULE_TL_DEPS})
-  IF(NOT "${DLL_DEP}" MATCHES "^python[0-9][0-9].dll$")
+  IF(NOT "${DLL_DEP}" MATCHES "^python[0-9]*\\.dll$")
     LIST(APPEND TULIP_NATIVE_PYTHON_MODULE_DEPS ${DLL_DEP})
     GP_RESOLVE_ITEM(${TULIP_NATIVE_PYTHON_MODULE} ${DLL_DEP} "" ${DIRS} DLL_DEP_RESOLVED)
   ENDIF()
