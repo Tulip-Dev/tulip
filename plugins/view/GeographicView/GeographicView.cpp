@@ -278,7 +278,7 @@ DataSet GeographicView::state() const {
   pair<double, double> mapCenter = geoViewGraphicsView->getLeafletMapsPage()->getCurrentMapCenter();
   dataSet.set("mapCenterLatitude", mapCenter.first);
   dataSet.set("mapCenterLongitude", mapCenter.second);
-  dataSet.set("mapZoom", geoViewGraphicsView->getLeafletMapsPage()->getCurrentMapZoom());
+  dataSet.set("mapZoom", geoViewGraphicsView->getLeafletMapsPage()->getCurrentZoom());
   dataSet.set("renderingParameters", geoViewGraphicsView->getGlMainWidget()
                                          ->getScene()
                                          ->getGlGraphComposite()

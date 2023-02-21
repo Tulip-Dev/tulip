@@ -304,8 +304,8 @@ bool GeographicViewBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
     if (ok && !started && (e->type() == QEvent::MouseButtonRelease) && graph &&
         (qMouseEv->button() & mButton)) {
       GlMainWidget *glw = static_cast<GlMainWidget *>(widget);
-      auto minBound = llMap->getLatLngForPixelPosOnScreen(x, glw->height() - y + h);
-      auto maxBound = llMap->getLatLngForPixelPosOnScreen(x + w, glw->height() - y);
+      auto minBound = llMap->screenPosToGeoPos(x, glw->height() - y + h);
+      auto maxBound = llMap->screenPosToGeoPos(x + w, glw->height() - y);
       llMap->zoomOnRectangle(minBound, maxBound);
     }
     return ok;

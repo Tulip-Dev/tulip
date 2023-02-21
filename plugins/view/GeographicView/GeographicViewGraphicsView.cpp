@@ -236,7 +236,8 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
       globeCameraBackup(nullptr, true), mapCameraBackup(nullptr, true), geoLayout(nullptr),
       geoViewSize(nullptr), geoViewShape(nullptr), geoLayoutBackup(nullptr),
       mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
-      polygonEntity(nullptr), planisphereEntity(nullptr), noLayoutMsgBox(nullptr),
+      polygonEntity(nullptr), planisphereEntity(nullptr),
+      addressSelectionDialog(nullptr), noLayoutMsgBox(nullptr),
       firstGlobeSwitch(true), geoLayoutComputed(false), renderFbo(nullptr), latProp(nullptr),
       lngProp(nullptr) {
   mapTextureId = "leafletMap" + to_string(reinterpret_cast<uintptr_t>(this));
@@ -262,8 +263,6 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   _placeholderItem->setPen(QPen(Qt::transparent));
   scene()->addItem(_placeholderItem);
 
-  addressSelectionDialog = new AddressSelectionDialog(Perspective::instance()->mainWindow());
-
   auto proxyGM = scene()->addWidget(leafletMaps);
   proxyGM->setPos(0, 0);
   proxyGM->setParentItem(_placeholderItem);
@@ -280,7 +279,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   // before allowing some display feedback
   tlp::disableQtUserInput();
 
-  while (!leafletMaps->pageInit()) {
+  while (!leafletMaps->isInited()) {
     QApplication::processEvents();
   }
 
@@ -787,16 +786,16 @@ void GeographicViewGraphicsView::mapToPolygon() {
 }
 
 void GeographicViewGraphicsView::zoomIn() {
-  leafletMaps->setCurrentZoom(leafletMaps->getCurrentMapZoom() + 1);
+  leafletMaps->setCurrentZoom(leafletMaps->getCurrentZoom() + 1);
 }
 
 void GeographicViewGraphicsView::zoomOut() {
-  leafletMaps->setCurrentZoom(leafletMaps->getCurrentMapZoom() - 1);
+  leafletMaps->setCurrentZoom(leafletMaps->getCurrentZoom() - 1);
 }
 
 void GeographicViewGraphicsView::currentZoomChanged() {
-  zoomInButton->setEnabled(leafletMaps->getCurrentMapZoom() != 20);
-  zoomOutButton->setEnabled(leafletMaps->getCurrentMapZoom() != 0);
+  zoomInButton->setEnabled(leafletMaps->getCurrentZoom() != leafletMaps->getMaxZoom());
+  zoomOutButton->setEnabled(leafletMaps->getCurrentZoom() != 0);
 }
 
 GlGraphComposite *GeographicViewGraphicsView::getGlGraphComposite() const {
@@ -838,6 +837,11 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
       progress.setWindowTitle("Retrieving latitude/longitude for address: ");
       progress.setMinimumWidth(400);
       progress.setWindowModality(Qt::WindowModal);
+      progress.setValue(0);
+      progress.show();
+      // ensure progress visibility from the beginning
+      // to avoid to block addressSelectionDialog input
+      QApplication::processEvents();
 
       for (auto n : graph->nodes()) {
         progress.setValue(++nbNodesProcessed);
@@ -909,6 +913,9 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
                   idx = 0;
                 }
               } else {
+		if (!addressSelectionDialog)
+		  addressSelectionDialog = new AddressSelectionDialog(Perspective::instance()->mainWindow());
+
                 addressSelectionDialog->clearList();
                 addressSelectionDialog->setBaseAddress(tlpStringToQString(addr));
 
@@ -1031,19 +1038,19 @@ void GeographicViewGraphicsView::refreshMap() {
 
   GlOffscreenRenderer::getInstance()->makeOpenGLContextCurrent();
   BoundingBox bb;
-  Coord rightCoord = leafletMaps->getPixelPosOnScreenForLatLng(180, 180);
-  Coord leftCoord = leafletMaps->getPixelPosOnScreenForLatLng(0, 0);
+  Coord rightCoord = leafletMaps->geoPosToScreenPos(180, 180);
+  Coord leftCoord = leafletMaps->geoPosToScreenPos(0, 0);
 
   if (rightCoord[0] - leftCoord[0]) {
     float mapWidth = (width() / (rightCoord - leftCoord)[0]) * 180.;
     float middleLng =
-        leafletMaps->getLatLngForPixelPosOnScreen(width() / 2., height() / 2.).second * 2.;
+        leafletMaps->screenPosToGeoPos(width() / 2., height() / 2.).second * 2.;
     bb.expand(Coord(middleLng - mapWidth / 2.,
-                    latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.),
+                    latitudeToMercator(leafletMaps->screenPosToGeoPos(0, 0).first * 2.),
                     0));
     bb.expand(Coord(
         middleLng + mapWidth / 2.,
-        latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.),
+        latitudeToMercator(leafletMaps->screenPosToGeoPos(width(), height()).first * 2.),
         0));
     GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
     sceneZoomAndPan.zoomAndPanAnimationStep(1);

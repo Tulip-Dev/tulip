@@ -116,24 +116,24 @@ public:
 
   LeafletMaps(const std::vector<MapLayer> &mapLayers);
 
-  bool pageLoaded();
-
   bool mapLoaded();
 
   void setMapCenter(double latitude, double longitude);
 
-  int getCurrentMapZoom();
+  int getCurrentZoom();
+
+  int getMaxZoom();
 
   void setCurrentZoom(int zoom);
 
   std::pair<double, double> getCurrentMapCenter();
 
-  Coord getPixelPosOnScreenForLatLng(double lat, double lng);
+  Coord geoPosToScreenPos(double lat, double lng);
 
-  std::pair<double, double> getLatLngForPixelPosOnScreen(int x, int y);
+  std::pair<double, double> screenPosToGeoPos(int x, int y);
 
-  bool pageInit() const {
-    return init;
+  bool isInited() const {
+    return inited;
   }
 
   void setMapBounds(Graph *graph,
@@ -158,7 +158,8 @@ private:
   QVariant executeJavascript(const QString &jsCode);
 
   const std::vector<MapLayer> &mapLayers;
-  bool init;
+  unsigned int currentLayer;
+  bool inited;
   QWEBFRAME *frame;
   int x, y;
 };

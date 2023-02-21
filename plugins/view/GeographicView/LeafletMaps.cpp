@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
 )";
 
 LeafletMaps::LeafletMaps(const std::vector<MapLayer> &mapLayers)
-    : QWEBVIEW(nullptr), mapLayers(mapLayers), init(false) {
+    : QWEBVIEW(nullptr), mapLayers(mapLayers), currentLayer(0), inited(false) {
 #ifdef QT_HAS_WEBKIT
   // disable output of "libpng warning: iCCP: known incorrect sRGB profile"
   // due to QtWebKit ill-formed png files
@@ -164,16 +164,12 @@ QVariant LeafletMaps::executeJavascript(const QString &jsCode) {
 #endif
 }
 
-bool LeafletMaps::pageLoaded() {
-  return executeJavascript(R"(typeof init !== "undefined")").toBool();
-}
-
 bool LeafletMaps::mapLoaded() {
   return executeJavascript(R"(typeof map !== "undefined")").toBool();
 }
 
 void LeafletMaps::triggerLoading() {
-  if (!pageLoaded()) {
+  if (executeJavascript(R"(typeof init == "undefined")").toBool()) {
     QTimer::singleShot(500, this, SLOT(triggerLoading()));
     return;
   }
@@ -191,12 +187,15 @@ void LeafletMaps::triggerLoading() {
   // it is first centered in the Atlantic Ocean
   // in order to emphasize the need to configure geolocation
   executeJavascript("init(44.8084, -40, 3)");
-  init = true;
+  inited = true;
 }
 
 void LeafletMaps::switchToMapLayer(const char *layer) {
   QString code = "switchToLayer(mapLayers['%1'])";
   executeJavascript(code.arg(layer));
+  for (currentLayer = 0; currentLayer < mapLayers.size(); ++currentLayer)
+    if (strcmp(layer, mapLayers[currentLayer].name) == 0)
+      break;
 }
 
 void LeafletMaps::switchToCustomTileLayer(const QString &url, const QString &attribution) {
@@ -209,7 +208,7 @@ void LeafletMaps::setMapCenter(double latitude, double longitude) {
   executeJavascript(code.arg(latitude).arg(longitude));
 }
 
-Coord LeafletMaps::getPixelPosOnScreenForLatLng(double lat, double lng) {
+Coord LeafletMaps::geoPosToScreenPos(double lat, double lng) {
   QString code = "map.latLngToContainerPoint(L.latLng(%1, %2)).toString();";
   QString pointStr = executeJavascript(code.arg(lat).arg(lng)).toString();
 
@@ -222,7 +221,7 @@ Coord LeafletMaps::getPixelPosOnScreenForLatLng(double lat, double lng) {
   return Coord(xStr.toDouble(&ok), yStr.toDouble(&ok), 0);
 }
 
-std::pair<double, double> LeafletMaps::getLatLngForPixelPosOnScreen(int x, int y) {
+std::pair<double, double> LeafletMaps::screenPosToGeoPos(int x, int y) {
   QString code = "map.containerPointToLatLng(L.point(%1, %2)).toString();";
   QString latLngStr = executeJavascript(code.arg(x).arg(y)).toString();
 
@@ -233,7 +232,11 @@ std::pair<double, double> LeafletMaps::getLatLngForPixelPosOnScreen(int x, int y
   return make_pair(latStr.toDouble(), lngStr.toDouble());
 }
 
-int LeafletMaps::getCurrentMapZoom() {
+int LeafletMaps::getMaxZoom() {
+  return mapLayers[currentLayer].maxZoom;
+}
+
+int LeafletMaps::getCurrentZoom() {
   return executeJavascript("map.getZoom();").toInt();
 }
 
@@ -242,9 +245,11 @@ static int clamp(int i, int minVal, int maxVal) {
 }
 
 void LeafletMaps::setCurrentZoom(int zoom) {
-  QString code = "map.setZoom(%1);";
-  executeJavascript(code.arg(clamp(zoom, 0, 20)));
-  emit currentZoomChanged();
+  if (zoom != getCurrentZoom()) {
+    QString code = "map.setZoom(%1);";
+    executeJavascript(code.arg(clamp(zoom, 0, getMaxZoom())));
+    emit currentZoomChanged();
+  }
 }
 
 pair<double, double> LeafletMaps::getCurrentMapCenter() {
