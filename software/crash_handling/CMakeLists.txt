@@ -2,56 +2,52 @@ SET(LIB_SRCS
     CrashHandling.cpp
     StackWalker.cpp)
 
-IF(NOT MSVC AND NOT BSD)
+IF(LINUX OR MINGW)
 
-  IF(LINUX OR MINGW)
+  FIND_PACKAGE(Bfd)
+  FIND_PACKAGE(Iberty)
 
-    IF(MINGW)
+  IF(MINGW)
 
-      # ensure correct bfd header file is selected with MSYS2
-      SET(CMAKE_INCLUDE_PATH ${MINGW_INCLUDE_PATH}/binutils ${CMAKE_INCLUDE_PATH})
-      # ensure correct binutils libraries are selected with MSYS2
-      SET(CMAKE_LIBRARY_PATH ${MINGW_LIB_PATH}/binutils ${CMAKE_LIBRARY_PATH})
-      # ensure correct iberty header file is selected with MSYS2
-      SET(CMAKE_INCLUDE_PATH ${MINGW_INCLUDE_PATH}/libiberty ${CMAKE_INCLUDE_PATH})
+    # ensure correct bfd header file is selected with MSYS2
+    SET(CMAKE_INCLUDE_PATH ${MINGW_INCLUDE_PATH}/binutils ${CMAKE_INCLUDE_PATH})
+    # ensure correct binutils libraries are selected with MSYS2
+    SET(CMAKE_LIBRARY_PATH ${MINGW_LIB_PATH}/binutils ${CMAKE_LIBRARY_PATH})
+    # ensure correct iberty header file is selected with MSYS2
+    SET(CMAKE_INCLUDE_PATH ${MINGW_INCLUDE_PATH}/libiberty ${CMAKE_INCLUDE_PATH})
 
-      FIND_PACKAGE(Bfd)
-      FIND_PACKAGE(Iberty)
+    # Check if libintl is present in the MinGW build environment
+    FIND_LIBRARY(INTL_LIBRARY intl PATHS ${MINGW_LIB_PATH} ${MINGW_LIB64_PATH} NO_DEFAULT_PATH)
+    # the switch from binutils 2.39 to 2.40 added the two dependencies below
+    # for libbfd.a which is needed by crashandling static library
+    # Check if libsframe is present in the MinGW build environment
+    FIND_LIBRARY(SFRAME_LIBRARY sframe PATHS ${MINGW_LIB_PATH} ${MINGW_LIB64_PATH} NO_DEFAULT_PATH)
+    IF(SFRAME_LIBRARY)
+      FIND_PACKAGE(Zstd)
+      MARK_AS_ADVANCED(SFRAME_LIBRARY)
+    ENDIF()
+  ELSE(MINGW)
+    FIND_LIBRARY(INTL_LIBRARY intl)
+  ENDIF(MINGW)
 
-      # Check if libintl is present in the MinGW build environment
-      FIND_LIBRARY(INTL_LIBRARY intl PATHS ${MINGW_LIB_PATH} ${MINGW_LIB64_PATH} NO_DEFAULT_PATH)
-      # the switch from binutils 2.39 to 2.40 added the two dependencies below
-      # for libbfd.a which is needed by crashandling static library
-      # Check if libsframe is present in the MinGW build environment
-      FIND_LIBRARY(SFRAME_LIBRARY sframe PATHS ${MINGW_LIB_PATH} ${MINGW_LIB64_PATH} NO_DEFAULT_PATH)
-      IF(SFRAME_LIBRARY)
-	FIND_PACKAGE(Zstd)
-	MARK_AS_ADVANCED(SFRAME_LIBRARY)
-      ENDIF()
-    ELSE(MINGW)
-      FIND_LIBRARY(INTL_LIBRARY intl)
-    ENDIF(MINGW)
+  MARK_AS_ADVANCED(INTL_LIBRARY)
 
-    MARK_AS_ADVANCED(INTL_LIBRARY)
+  IF(BFD_FOUND)
 
-    IF(BFD_FOUND)
+    SET(LIB_SRCS ${LIB_SRCS} BfdWrapper.cpp)
+    ADD_DEFINITIONS(-DHAVE_BFD)
+    # workaround for latest versions of GNU binutils
+    ADD_DEFINITIONS(-DPACKAGE -DPACKAGE_VERSION)
+    INCLUDE_DIRECTORIES(BEFORE ${BFD_INCLUDE_DIR})
 
-      SET(LIB_SRCS ${LIB_SRCS} BfdWrapper.cpp)
-      ADD_DEFINITIONS(-DHAVE_BFD)
-      # workaround for latest versions of GNU binutils
-      ADD_DEFINITIONS(-DPACKAGE -DPACKAGE_VERSION)
-      INCLUDE_DIRECTORIES(BEFORE ${BFD_INCLUDE_DIR})
+  ELSE(BFD_FOUND)
 
-    ELSE(BFD_FOUND)
+    MESSAGE("Install GNU binutils development package to get a detailed stack trace when Tulip crashes.")
 
-      MESSAGE("Install GNU binutils development package to get a detailed stack trace when Tulip crashes.")
+  ENDIF(BFD_FOUND)
 
-    ENDIF(BFD_FOUND)
+ENDIF(LINUX OR MINGW)
 
-  ENDIF(LINUX OR MINGW)
-
-ENDIF(NOT MSVC AND NOT BSD)
-	
 INCLUDE_DIRECTORIES(BEFORE ${TulipCoreBuildInclude} ${TulipCoreInclude})
 
 IF(UNIX)
