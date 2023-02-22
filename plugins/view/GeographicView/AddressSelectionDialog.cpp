@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <QPushButton>
 
 #include "AddressSelectionDialog.h"
 #include "ui_AddressSelectionDialog.h"
@@ -25,7 +26,7 @@ namespace tlp {
 AddressSelectionDialog::AddressSelectionDialog(QWidget *parent)
     : QDialog(parent), _ui(new Ui::AddressSelectionDialogData) {
   _ui->setupUi(this);
-  connect(_ui->okButton, SIGNAL(clicked()), this, SLOT(accept()));
+  _ui->buttonBox->button(QDialogButtonBox::Abort)->setToolTip("abort the Geolocation process");
 }
 
 AddressSelectionDialog::~AddressSelectionDialog() {
@@ -33,7 +34,7 @@ AddressSelectionDialog::~AddressSelectionDialog() {
 }
 
 void AddressSelectionDialog::setBaseAddress(const QString &address) {
-  _ui->addressLabel->setText(address);
+  _ui->addressLabel->setText(QString("<b>%1</b>").arg(address));
 }
 
 void AddressSelectionDialog::addResultToList(const QString &result) {
@@ -42,7 +43,7 @@ void AddressSelectionDialog::addResultToList(const QString &result) {
 
 void AddressSelectionDialog::clearList() {
   _ui->resultsList->clear();
-  _ui->rememberChoiceCB->setChecked(false);
+  _ui->rememberChoiceCB->setChecked(true);
 }
 
 bool AddressSelectionDialog::rememberAddressChoice() const {

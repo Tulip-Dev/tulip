@@ -235,7 +235,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
     : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(nullptr), leafletMaps(nullptr),
       globeCameraBackup(nullptr, true), mapCameraBackup(nullptr, true), geoLayout(nullptr),
       geoViewSize(nullptr), geoViewShape(nullptr), geoLayoutBackup(nullptr),
-      mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
+      mapTranslationBlocked(false), geocodingActive(false), abortGeocoding(false),
       polygonEntity(nullptr), planisphereEntity(nullptr), addressSelectionDialog(nullptr),
       noLayoutMsgBox(nullptr), firstGlobeSwitch(true), geoLayoutComputed(false), renderFbo(nullptr),
       latProp(nullptr), lngProp(nullptr) {
@@ -372,7 +372,7 @@ GeographicViewGraphicsView::~GeographicViewGraphicsView() {
       addressSelectionDialog->accept();
     }
 
-    cancelGeocoding = true;
+    abortGeocoding = true;
 
     // disable user input
     // before allowing some display feedback
@@ -831,7 +831,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
     // hide msg
     noLayoutMsgBox->setVisible(false);
     {
-      QProgressDialog progress("Retrieving latitude/longitude for address: ", "Cancel", 0, nbNodes,
+      QProgressDialog progress("Retrieving latitude/longitude for address: ", "Abort", 0, nbNodes,
                                Perspective::instance()->mainWindow());
       progress.setWindowTitle("Retrieving latitude/longitude for address: ");
       progress.setMinimumWidth(400);
@@ -842,10 +842,13 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
       // to avoid to block addressSelectionDialog input
       QApplication::processEvents();
 
+      abortGeocoding = false;
       for (auto n : graph->nodes()) {
         progress.setValue(++nbNodesProcessed);
-        if (progress.wasCanceled() || cancelGeocoding)
+        if (progress.wasCanceled() || abortGeocoding) {
+	  abortGeocoding = true;
           break;
+	}
 
         string addrValue = addressProperty->getNodeValue(n);
 
@@ -923,8 +926,13 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
                   addressSelectionDialog->addResultToList(tlpStringToQString(result.address));
                 }
 
-                addressSelectionDialog->exec();
-                idx = addressSelectionDialog->getPickedResultIdx();
+                if (addressSelectionDialog->exec())
+		  idx = addressSelectionDialog->getPickedResultIdx();
+		else {
+		  abortGeocoding = true;
+		  break;
+		}
+
               }
             } else if (geocodingResults.empty()) {
               qWarning() << "No geolocation found for" << tlpStringToQString(addrValue);
@@ -946,7 +954,12 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
         }
       }
     }
-    if (failures) {
+    if (abortGeocoding)
+      QMessageBox::warning(Perspective::instance()->mainWindow(),
+			   "Geolocation abortion",
+			   QString("Geolocation by address aborted by user."),
+			   QMessageBox::Ok);
+    else if (failures) {
       QString msg = QString("%1 %2 have not been geolocated.\nDo you want to see %3?")
                         .arg(failures > 1 ? QString::number(failures) : QString("One"))
                         .arg(failures > 1 ? "addresses" : "address")

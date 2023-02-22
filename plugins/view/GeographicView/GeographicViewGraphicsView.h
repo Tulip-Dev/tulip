@@ -166,7 +166,7 @@ private:
   bool mapTranslationBlocked;
 
   bool geocodingActive;
-  bool cancelGeocoding;
+  bool abortGeocoding;
 
   GlMainWidget *glMainWidget;
   GlMainWidgetGraphicsItem *glWidgetItem;
