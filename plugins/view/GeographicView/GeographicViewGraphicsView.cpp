@@ -846,9 +846,9 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
       for (auto n : graph->nodes()) {
         progress.setValue(++nbNodesProcessed);
         if (progress.wasCanceled() || abortGeocoding) {
-	  abortGeocoding = true;
+          abortGeocoding = true;
           break;
-	}
+        }
 
         string addrValue = addressProperty->getNodeValue(n);
 
@@ -927,12 +927,11 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
                 }
 
                 if (addressSelectionDialog->exec())
-		  idx = addressSelectionDialog->getPickedResultIdx();
-		else {
-		  abortGeocoding = true;
-		  break;
-		}
-
+                  idx = addressSelectionDialog->getPickedResultIdx();
+                else {
+                  abortGeocoding = true;
+                  break;
+                }
               }
             } else if (geocodingResults.empty()) {
               qWarning() << "No geolocation found for" << tlpStringToQString(addrValue);
@@ -955,10 +954,8 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
       }
     }
     if (abortGeocoding)
-      QMessageBox::warning(Perspective::instance()->mainWindow(),
-			   "Geolocation abortion",
-			   QString("Geolocation by address aborted by user."),
-			   QMessageBox::Ok);
+      QMessageBox::warning(Perspective::instance()->mainWindow(), "Geolocation abortion",
+                           QString("Geolocation by address aborted by user."), QMessageBox::Ok);
     else if (failures) {
       QString msg = QString("%1 %2 have not been geolocated.\nDo you want to see %3?")
                         .arg(failures > 1 ? QString::number(failures) : QString("One"))

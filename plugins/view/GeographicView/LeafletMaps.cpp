@@ -195,7 +195,7 @@ void LeafletMaps::switchToMapLayer(const char *layer) {
   for (currentLayer = 0; currentLayer < mapLayers.size(); ++currentLayer) {
     if (strcmp(layer, mapLayers[currentLayer].name) == 0) {
       if (mapLayers[currentLayer].maxZoom < getCurrentZoom())
-	setCurrentZoom(mapLayers[currentLayer].maxZoom);
+        setCurrentZoom(mapLayers[currentLayer].maxZoom);
       break;
     }
   }
