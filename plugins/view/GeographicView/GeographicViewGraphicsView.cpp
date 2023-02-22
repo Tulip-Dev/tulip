@@ -793,7 +793,7 @@ void GeographicViewGraphicsView::zoomOut() {
 }
 
 void GeographicViewGraphicsView::currentZoomChanged() {
-  zoomInButton->setEnabled(leafletMaps->getCurrentZoom() != leafletMaps->getMaxZoom());
+  zoomInButton->setEnabled(leafletMaps->getCurrentZoom() < leafletMaps->getMaxZoom());
   zoomOutButton->setEnabled(leafletMaps->getCurrentZoom() != 0);
 }
 

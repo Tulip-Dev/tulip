@@ -191,11 +191,18 @@ void LeafletMaps::triggerLoading() {
 }
 
 void LeafletMaps::switchToMapLayer(const char *layer) {
+  // first check zoom
+  for (currentLayer = 0; currentLayer < mapLayers.size(); ++currentLayer) {
+    if (strcmp(layer, mapLayers[currentLayer].name) == 0) {
+      if (mapLayers[currentLayer].maxZoom < getCurrentZoom())
+	setCurrentZoom(mapLayers[currentLayer].maxZoom);
+      break;
+    }
+  }
   QString code = "switchToLayer(mapLayers['%1'])";
   executeJavascript(code.arg(layer));
-  for (currentLayer = 0; currentLayer < mapLayers.size(); ++currentLayer)
-    if (strcmp(layer, mapLayers[currentLayer].name) == 0)
-      break;
+  // because maxZoom changed
+  emit currentZoomChanged();
 }
 
 void LeafletMaps::switchToCustomTileLayer(const QString &url, const QString &attribution) {
