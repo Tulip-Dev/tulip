@@ -201,7 +201,7 @@ void LeafletMaps::switchToMapLayer(const char *layer) {
   }
   QString code = "switchToLayer(mapLayers['%1'])";
   executeJavascript(code.arg(layer));
-  // because maxZoom changed
+  // because currentZoom and maxZoom may have changed
   emit currentZoomChanged();
 }
 
@@ -252,10 +252,17 @@ static int clamp(int i, int minVal, int maxVal) {
 }
 
 void LeafletMaps::setCurrentZoom(int zoom) {
+  zoom = clamp(zoom, 0, getMaxZoom());
   if (zoom != getCurrentZoom()) {
     QString code = "map.setZoom(%1);";
-    executeJavascript(code.arg(clamp(zoom, 0, getMaxZoom())));
+    executeJavascript(code.arg(zoom));
+#ifdef QT_HAS_WEBKIT
+    // as zoom setting is asynchronous
+    // we emit currentZoomChanged() with a little delay
+    QTimer::singleShot(100, this, SIGNAL(currentZoomChanged()));
+#else
     emit currentZoomChanged();
+#endif
   }
 }
 

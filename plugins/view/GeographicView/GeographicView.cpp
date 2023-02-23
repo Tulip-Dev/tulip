@@ -143,10 +143,10 @@ void GeographicView::fillContextMenu(QMenu *menu, const QPointF &pf) {
 
   QAction *action = menu->addAction("Zoom +");
   action->setToolTip(QString("Increase zoom level"));
-  connect(action, SIGNAL(triggered()), this, SLOT(zoomIn()));
+  connect(action, SIGNAL(triggered()), geoViewGraphicsView, SLOT(zoomIn()));
   action = menu->addAction("Zoom -");
-  action->setToolTip(QString("Increase zoom level"));
-  connect(action, SIGNAL(triggered()), this, SLOT(zoomOut()));
+  action->setToolTip(QString("Decrease zoom level"));
+  connect(action, SIGNAL(triggered()), geoViewGraphicsView, SLOT(zoomOut()));
   menu->addSeparator();
   menu->addAction("Augmented display")->setEnabled(false);
   menu->addSeparator();
@@ -265,9 +265,8 @@ void GeographicView::setState(const DataSet &dataSet) {
 }
 
 void GeographicView::initMap() {
-  geoViewGraphicsView->getLeafletMapsPage()->setMapCenter(mapCenterLatitudeInit,
-                                                          mapCenterLongitudeInit);
-  geoViewGraphicsView->getLeafletMapsPage()->setCurrentZoom(mapZoomInit);
+  getLeafletMaps()->setMapCenter(mapCenterLatitudeInit, mapCenterLongitudeInit);
+  getLeafletMaps()->setCurrentZoom(mapZoomInit);
 }
 
 DataSet GeographicView::state() const {
@@ -275,10 +274,10 @@ DataSet GeographicView::state() const {
   DataSet configurationWidget = geoViewConfigWidget->state();
   dataSet.set("configurationWidget", configurationWidget);
   dataSet.set("mapType", int(_mapType));
-  pair<double, double> mapCenter = geoViewGraphicsView->getLeafletMapsPage()->getCurrentMapCenter();
+  auto mapCenter = getLeafletMaps()->getCurrentMapCenter();
   dataSet.set("mapCenterLatitude", mapCenter.first);
   dataSet.set("mapCenterLongitude", mapCenter.second);
-  dataSet.set("mapZoom", geoViewGraphicsView->getLeafletMapsPage()->getCurrentZoom());
+  dataSet.set("mapZoom", getLeafletMaps()->getCurrentZoom());
   dataSet.set("renderingParameters", geoViewGraphicsView->getGlMainWidget()
                                          ->getScene()
                                          ->getGlGraphComposite()
@@ -354,18 +353,6 @@ void GeographicView::centerView() {
 
 void GeographicView::centerOnNode() {
   geoViewGraphicsView->centerMapOnNode(_nodeUnderMouse);
-}
-
-void GeographicView::zoomIn() {
-  geoViewGraphicsView->zoomIn();
-}
-
-void GeographicView::zoomOut() {
-  geoViewGraphicsView->zoomOut();
-}
-
-void GeographicView::currentZoomChanged() {
-  geoViewGraphicsView->currentZoomChanged();
 }
 
 QList<QWidget *> GeographicView::configurationWidgets() const {

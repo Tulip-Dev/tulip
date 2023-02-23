@@ -249,7 +249,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   leafletMaps = new LeafletMaps(geoView->getMapLayers());
   leafletMaps->setMouseTracking(false);
   leafletMaps->resize(512, 512);
-  connect(leafletMaps, SIGNAL(currentZoomChanged()), _geoView, SLOT(currentZoomChanged()));
+  connect(leafletMaps, SIGNAL(currentZoomChanged()), this, SLOT(currentZoomChanged()));
 #ifdef QT_HAS_WEBENGINE
   tId = 0;
   connect(leafletMaps, SIGNAL(refreshMap()), this, SLOT(queueMapRefresh()));
@@ -303,11 +303,11 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   // zoom +
   zoomInButton = new QPushButton(QIcon(":/tulip/view/geographic/zoom+.png"), "");
   zoomInButton->setFixedSize(24, 24);
-  connect(zoomInButton, SIGNAL(pressed()), _geoView, SLOT(zoomIn()));
+  connect(zoomInButton, SIGNAL(pressed()), this, SLOT(zoomIn()));
   // zoom -
   zoomOutButton = new QPushButton(QIcon(":/tulip/view/geographic/zoom-.png"), "");
   zoomOutButton->setFixedSize(24, 24);
-  connect(zoomOutButton, SIGNAL(pressed()), _geoView, SLOT(zoomOut()));
+  connect(zoomOutButton, SIGNAL(pressed()), this, SLOT(zoomOut()));
 
   // configure a QFrame to layout map type combox and zoom buttons
   QFrame *frame = new QFrame();

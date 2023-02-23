@@ -86,7 +86,7 @@ public:
     return glMainWidget;
   }
 
-  LeafletMaps *getLeafletMapsPage() const {
+  LeafletMaps *getLeafletMaps() const {
     return leafletMaps;
   }
 

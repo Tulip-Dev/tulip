@@ -94,8 +94,8 @@ public:
 
   QGraphicsItem *centralItem() const override;
 
-  LeafletMaps *getLeafletMap() {
-    return geoViewGraphicsView->getLeafletMapsPage();
+  inline LeafletMaps *getLeafletMaps() const {
+    return geoViewGraphicsView->getLeafletMaps();
   }
 
   void registerTriggers();
@@ -147,10 +147,6 @@ public slots:
   void centerOnNode();
 
   void mapTypeChanged(QString mapTypeName);
-
-  void zoomIn();
-  void zoomOut();
-  void currentZoomChanged();
 
   static const std::vector<LeafletMaps::MapLayer> &getMapLayers();
   static MapType getMapType(const QString &name);

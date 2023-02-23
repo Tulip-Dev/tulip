@@ -298,7 +298,7 @@ bool GeographicViewBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   if (started) {
     bool ok = MouseBoxZoomer::eventFilter(widget, e);
 
-    auto llMap = geoView->getGeographicViewGraphicsView()->getLeafletMapsPage();
+    auto llMap = geoView->getLeafletMaps();
     QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
     if (ok && !started && (e->type() == QEvent::MouseButtonRelease) && graph &&
