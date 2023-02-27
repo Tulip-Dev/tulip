@@ -22,6 +22,7 @@
 
 #include <QFile>
 #include <QFontDatabase>
+#include <QFontMetrics>
 #include <QPainter>
 
 #include <unordered_map>
@@ -70,7 +71,7 @@ void TulipFontIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mod
                                 QIcon::State) {
   painter->save();
 
-  // set the correct color
+  // compute a convenient pen color
   QColor color(50, 50, 50);
 
   if ((mode == QIcon::Active) || (mode == QIcon::Selected))
@@ -82,21 +83,42 @@ void TulipFontIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mod
     color.setRgb(255 - color.red(), 255 - color.green(), 255 - color.blue());
   painter->setPen(color);
 
+  // ensure icon full display in the given rect
+  // so compute a sub rect with same h/w ratio as icon bounding rect
+  QFontMetrics fm(font);
+  auto br = fm.boundingRect(iconQString);
+  auto maxH = (br.height() * rect.width()) / br.width();
+  auto srect(rect);
+  if (srect.height() > maxH)
+    // reduce height
+    srect.setHeight(maxH);
   // add some 'padding' around the icon
-  font.setPixelSize(qRound(rect.height() * 0.9));
+  font.setPixelSize(qRound(srect.height() * 0.9));
+
   // set the font
   painter->setFont(font);
 
-  painter->drawText(rect, iconQString, QTextOption(Qt::AlignCenter | Qt::AlignVCenter));
+  painter->drawText(srect, iconQString,
+                    QTextOption(Qt::AlignCenter | Qt::AlignVCenter));
 
   painter->restore();
 }
 
 QPixmap TulipFontIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state) {
-  QPixmap pm(size);
+  // ensure icon full display, so compute an enlarged pixmap size
+  // with same h/w ratio as icon bounding rect
+  QFontMetrics fm(font);
+  auto br = fm.boundingRect(iconQString);
+  auto sz(size);
+  auto minW = (sz.height() * br.width()) / br.height();
+  if (sz.width() < minW)
+    // enlarge width
+    sz.setWidth(minW);
+
+  QPixmap pm(sz);
   pm.fill(Qt::transparent); // we need transparency
   QPainter painter(&pm);
-  paint(&painter, QRect(QPoint(0, 0), size), mode, state);
+  paint(&painter, QRect(QPoint(0, 0), sz), mode, state);
 
   return pm;
 }
