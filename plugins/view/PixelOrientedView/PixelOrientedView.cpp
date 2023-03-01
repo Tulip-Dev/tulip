@@ -101,7 +101,7 @@ PixelOrientedView::~PixelOrientedView() {
 }
 
 std::list<QWidget *> PixelOrientedView::configurationWidgets() const {
-  return std::list<QWidget *> {propertiesSelectionWidget, optionsWidget};
+  return std::list<QWidget *>{propertiesSelectionWidget, optionsWidget};
 }
 
 void PixelOrientedView::initGlWidget() {

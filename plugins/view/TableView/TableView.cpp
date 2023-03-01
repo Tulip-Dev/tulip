@@ -203,7 +203,7 @@ void TableView::setupWidget() {
 }
 
 std::list<QWidget *> TableView::configurationWidgets() const {
-  return std::list<QWidget *> {propertiesEditor};
+  return std::list<QWidget *>{propertiesEditor};
 }
 
 void TableView::graphChanged(tlp::Graph *g) {

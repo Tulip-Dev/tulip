@@ -131,7 +131,7 @@ void ScatterPlot2DView::cleanupGlScene() {
 }
 
 std::list<QWidget *> ScatterPlot2DView::configurationWidgets() const {
-  return std::list<QWidget *> {propertiesSelectionWidget, optionsWidget};
+  return std::list<QWidget *>{propertiesSelectionWidget, optionsWidget};
 }
 
 void ScatterPlot2DView::graphicsViewResized(int w, int h) {

@@ -124,7 +124,7 @@ void ParallelCoordinatesView::initGlWidget() {
 }
 
 std::list<QWidget *> ParallelCoordinatesView::configurationWidgets() const {
-  return std::list<QWidget *> {dataConfigWidget, drawConfigWidget};
+  return std::list<QWidget *>{dataConfigWidget, drawConfigWidget};
 }
 
 void ParallelCoordinatesView::graphicsViewResized(int w, int h) {

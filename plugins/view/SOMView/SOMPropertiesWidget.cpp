@@ -65,8 +65,8 @@ SOMPropertiesWidget::SOMPropertiesWidget(SOMView *view, QWidget *parent)
 
 std::list<QWidget *> SOMPropertiesWidget::configurationWidgets() const {
 
-  return std::list<QWidget *> {dimensionConfigurationWidget,
-    const_cast<QWidget *>(static_cast<const QWidget *>(this))};
+  return std::list<QWidget *>{dimensionConfigurationWidget,
+                              const_cast<QWidget *>(static_cast<const QWidget *>(this))};
 }
 
 unsigned int SOMPropertiesWidget::getGridWidth() const {

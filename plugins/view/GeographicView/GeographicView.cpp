@@ -356,8 +356,8 @@ void GeographicView::centerOnNode() {
 }
 
 std::list<QWidget *> GeographicView::configurationWidgets() const {
-  return std::list<QWidget *> {geolocalisationConfigWidget, geoViewConfigWidget,
-    sceneConfigurationWidget, sceneLayersConfigurationWidget};
+  return std::list<QWidget *>{geolocalisationConfigWidget, geoViewConfigWidget,
+                              sceneConfigurationWidget, sceneLayersConfigurationWidget};
 }
 
 void GeographicView::applySettings() {

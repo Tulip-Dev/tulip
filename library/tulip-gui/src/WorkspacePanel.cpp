@@ -359,8 +359,7 @@ bool WorkspacePanel::eventFilter(QObject *obj, QEvent *ev) {
       return _view->showContextMenu(QCursor::pos(),
                                     static_cast<QGraphicsSceneContextMenuEvent *>(ev)->scenePos());
     } else if (_viewConfigurationWidgets != nullptr &&
-               std::find(lcw.begin(), lcw.end(), qobject_cast<QWidget *>(obj))
-	       != lcw.end())
+               std::find(lcw.begin(), lcw.end(), qobject_cast<QWidget *>(obj)) != lcw.end())
       return true;
 
     else if (ev->type() == QEvent::MouseButtonPress && !_viewConfigurationExpanded &&

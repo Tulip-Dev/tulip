@@ -88,7 +88,7 @@ HistogramView::~HistogramView() {
 }
 
 std::list<QWidget *> HistogramView::configurationWidgets() const {
-  return std::list<QWidget *> {propertiesSelectionWidget, histoOptionsWidget};
+  return std::list<QWidget *>{propertiesSelectionWidget, histoOptionsWidget};
 }
 
 void HistogramView::initGlWidget() {

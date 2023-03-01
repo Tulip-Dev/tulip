@@ -177,7 +177,7 @@ void GlMainView::glMainViewDrawn(bool graphChanged) {
 }
 
 std::list<QWidget *> GlMainView::configurationWidgets() const {
-  return std::list<QWidget *> {_sceneConfigurationWidget, _sceneLayersConfigurationWidget};
+  return std::list<QWidget *>{_sceneConfigurationWidget, _sceneLayersConfigurationWidget};
 }
 
 void GlMainView::updateShowOverviewButton() {
