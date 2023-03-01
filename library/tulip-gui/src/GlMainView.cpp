@@ -176,8 +176,8 @@ void GlMainView::glMainViewDrawn(bool graphChanged) {
     drawOverview(graphChanged);
 }
 
-QList<QWidget *> GlMainView::configurationWidgets() const {
-  return QList<QWidget *>() << _sceneConfigurationWidget << _sceneLayersConfigurationWidget;
+std::list<QWidget *> GlMainView::configurationWidgets() const {
+  return std::list<QWidget *> {_sceneConfigurationWidget, _sceneLayersConfigurationWidget};
 }
 
 void GlMainView::updateShowOverviewButton() {
@@ -409,20 +409,20 @@ bool GlMainView::eventFilter(QObject *obj, QEvent *event) {
     QResizeEvent *resizeEvent = static_cast<QResizeEvent *>(event);
     graphicsView()->viewport()->setFixedSize(resizeEvent->size());
     // same for the configuration widgets
-    QList<QWidget *> list = configurationWidgets();
+    std::list<QWidget *> lcw = configurationWidgets();
 
     sceneRectChanged(QRectF(QPoint(0, 0), graphicsView()->size()));
 
-    if (!list.isEmpty() &&
-        list.first()->parentWidget()) { // test if the current view has a configuration widget
-      QWidget *pqw = list.first()->parentWidget()->parentWidget();
+    if (!lcw.empty() &&
+        lcw.front()->parentWidget()) { // test if the current view has a configuration widget
+      QWidget *pqw = lcw.front()->parentWidget()->parentWidget();
       QSize sSize = pqw->size();
       sSize.setHeight(resizeEvent->size().height() - 50);
       pqw->resize(sSize);
       sSize.setHeight(resizeEvent->size().height() - 60);
-      sSize = list.first()->size();
+      sSize = lcw.front()->size();
 
-      for (auto c : list) { // resize each configuration widget
+      for (auto c : lcw) { // resize each configuration widget
         c->resize(sSize);
       }
     }

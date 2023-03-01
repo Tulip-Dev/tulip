@@ -63,14 +63,10 @@ SOMPropertiesWidget::SOMPropertiesWidget(SOMView *view, QWidget *parent)
   setWindowTitle("Options");
 }
 
-QList<QWidget *> SOMPropertiesWidget::configurationWidgets() const {
+std::list<QWidget *> SOMPropertiesWidget::configurationWidgets() const {
 
-  QList<QWidget *> widgets;
-
-  widgets << dimensionConfigurationWidget
-          << const_cast<QWidget *>(static_cast<const QWidget *>(this));
-
-  return widgets;
+  return std::list<QWidget *> {dimensionConfigurationWidget,
+    const_cast<QWidget *>(static_cast<const QWidget *>(this))};
 }
 
 unsigned int SOMPropertiesWidget::getGridWidth() const {

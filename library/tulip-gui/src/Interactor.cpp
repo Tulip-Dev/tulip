@@ -25,8 +25,8 @@
 using namespace std;
 using namespace tlp;
 
-QMap<std::string, QList<std::string>> InteractorLister::_compatibilityMap =
-    QMap<std::string, QList<std::string>>();
+QMap<std::string, std::list<std::string>> InteractorLister::_compatibilityMap =
+    QMap<std::string, std::list<std::string>>();
 
 bool interactorLessThan(Interactor *a, Interactor *b) {
   return a->priority() > b->priority();
@@ -47,19 +47,18 @@ void InteractorLister::initInteractorsDependencies() {
   std::list<std::string> views(PluginLister::availablePlugins<View>());
 
   for (const std::string &viewName : views) {
-    QList<Interactor *> compatibleInteractors;
+    std::list<Interactor *> compatibleInteractors;
 
     for (auto i : interactorToName.keys()) {
       if (i->isCompatible(viewName))
-        compatibleInteractors << i;
+        compatibleInteractors.push_back(i);
     }
+    compatibleInteractors.sort(interactorLessThan);
 
-    std::sort(compatibleInteractors.begin(), compatibleInteractors.end(), interactorLessThan);
-
-    QList<string> compatibleNames;
+    std::list<string> compatibleNames;
 
     for (auto i : compatibleInteractors)
-      compatibleNames << interactorToName[i];
+      compatibleNames.push_back(interactorToName[i]);
 
     _compatibilityMap[viewName] = compatibleNames;
   }
@@ -68,7 +67,7 @@ void InteractorLister::initInteractorsDependencies() {
     delete i;
 }
 
-QList<string> InteractorLister::compatibleInteractors(const std::string &viewName) {
+std::list<string> InteractorLister::compatibleInteractors(const std::string &viewName) {
   return _compatibilityMap[viewName];
 }
 

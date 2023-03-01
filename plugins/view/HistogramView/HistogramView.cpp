@@ -87,8 +87,8 @@ HistogramView::~HistogramView() {
   }
 }
 
-QList<QWidget *> HistogramView::configurationWidgets() const {
-  return QList<QWidget *>() << propertiesSelectionWidget << histoOptionsWidget;
+std::list<QWidget *> HistogramView::configurationWidgets() const {
+  return std::list<QWidget *> {propertiesSelectionWidget, histoOptionsWidget};
 }
 
 void HistogramView::initGlWidget() {
@@ -900,7 +900,7 @@ void HistogramView::registerTriggers() {
   }
 }
 
-void HistogramView::interactorsInstalled(const QList<tlp::Interactor *> &) {
+void HistogramView::interactorsInstalled(const std::list<tlp::Interactor *> &) {
   toggleInteractors(detailedHistogram != nullptr);
 }
 

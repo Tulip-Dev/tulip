@@ -59,7 +59,7 @@ void View::toggleInteractors(const bool activate,
   }
 }
 
-void View::setInteractors(const QList<tlp::Interactor *> &inters) {
+void View::setInteractors(const std::list<tlp::Interactor *> &inters) {
   _interactors = inters;
 
   for (auto i : inters)
@@ -207,11 +207,11 @@ void View::treatEvent(const Event &ev) {
   }
 }
 
-QList<QWidget *> View::configurationWidgets() const {
-  return QList<QWidget *>();
+std::list<QWidget *> View::configurationWidgets() const {
+  return std::list<QWidget *>();
 }
 
-void View::interactorsInstalled(const QList<tlp::Interactor *> &) {
+void View::interactorsInstalled(const std::list<tlp::Interactor *> &) {
   emit interactorsChanged();
 }
 

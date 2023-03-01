@@ -90,7 +90,7 @@ public:
     return geoViewGraphicsView;
   }
 
-  QList<QWidget *> configurationWidgets() const override;
+  std::list<QWidget *> configurationWidgets() const override;
 
   QGraphicsItem *centralItem() const override;
 

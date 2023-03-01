@@ -108,7 +108,7 @@ public:
   tlp::DataSet state() const override;
   bool eventFilter(QObject *object, QEvent *event) override;
   void fillContextMenu(QMenu *menu, const QPointF &point) override;
-  QList<QWidget *> configurationWidgets() const override;
+  std::list<QWidget *> configurationWidgets() const override;
   bool getNodeOrEdgeAtViewportPos(int x, int y, node &n, edge &e) const override;
   void graphicsViewResized(int w, int h) override;
 
@@ -195,7 +195,7 @@ private:
   void registerTriggers();
   void removeTriggers();
 
-  void interactorsInstalled(const QList<tlp::Interactor *> &) override;
+  void interactorsInstalled(const std::list<tlp::Interactor *> &) override;
 
   QMenu *viewSetupMenu;
   QAction *classicLayout;

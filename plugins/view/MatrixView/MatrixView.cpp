@@ -207,8 +207,8 @@ DataSet MatrixView::state() const {
   return ds;
 }
 
-QList<QWidget *> MatrixView::configurationWidgets() const {
-  return QList<QWidget *>() << _configurationWidget;
+std::list<QWidget *> MatrixView::configurationWidgets() const {
+  return std::list<QWidget *> {_configurationWidget};
 }
 
 void MatrixView::fillContextMenu(QMenu *menu, const QPointF &point) {

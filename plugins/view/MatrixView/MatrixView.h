@@ -90,7 +90,7 @@ public:
   void graphChanged(tlp::Graph *graph) override;
 
   tlp::DataSet state() const override;
-  QList<QWidget *> configurationWidgets() const override;
+  std::list<QWidget *> configurationWidgets() const override;
 
   void draw() override;
   void refresh() override;

@@ -87,7 +87,7 @@ public:
   void drawPreviewWidget();
   void init();
   void refresh() override;
-  QList<QWidget *> configurationWidgets() const override;
+  std::list<QWidget *> configurationWidgets() const override;
 
   void createPicture(const std::string &pictureName, int width, int height);
 
@@ -324,7 +324,7 @@ private:
 
   void internalSwitchToPreviewMode(bool animation);
 
-  void interactorsInstalled(const QList<Interactor *> &interactors) override;
+  void interactorsInstalled(const std::list<Interactor *> &interactors) override;
 
   bool checkGridValidity() const;
 

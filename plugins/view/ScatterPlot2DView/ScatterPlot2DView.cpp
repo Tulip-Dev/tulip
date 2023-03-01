@@ -130,8 +130,8 @@ void ScatterPlot2DView::cleanupGlScene() {
   }
 }
 
-QList<QWidget *> ScatterPlot2DView::configurationWidgets() const {
-  return QList<QWidget *>() << propertiesSelectionWidget << optionsWidget;
+std::list<QWidget *> ScatterPlot2DView::configurationWidgets() const {
+  return std::list<QWidget *> {propertiesSelectionWidget, optionsWidget};
 }
 
 void ScatterPlot2DView::graphicsViewResized(int w, int h) {
@@ -923,7 +923,7 @@ void ScatterPlot2DView::switchFromDetailViewToMatrixView() {
   // select the navigator interactor
   // allowing to choose one of the detailed views
   if (!interactors().empty())
-    setCurrentInteractor(interactors()[0]);
+    setCurrentInteractor(interactors().front());
   getGlMainWidget()->draw();
 }
 
@@ -982,7 +982,7 @@ std::vector<ScatterPlot2D *> ScatterPlot2DView::getSelectedScatterPlots() const 
   return ret;
 }
 
-void ScatterPlot2DView::interactorsInstalled(const QList<tlp::Interactor *> &) {
+void ScatterPlot2DView::interactorsInstalled(const std::list<tlp::Interactor *> &) {
   toggleInteractors(detailedScatterPlot != nullptr);
 }
 

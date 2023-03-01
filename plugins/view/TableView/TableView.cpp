@@ -202,8 +202,8 @@ void TableView::setupWidget() {
   connect(_ui->tableSettingsButton, SIGNAL(clicked()), this, SLOT(showHideTableSettings()));
 }
 
-QList<QWidget *> TableView::configurationWidgets() const {
-  return QList<QWidget *>() << propertiesEditor;
+std::list<QWidget *> TableView::configurationWidgets() const {
+  return std::list<QWidget *> {propertiesEditor};
 }
 
 void TableView::graphChanged(tlp::Graph *g) {

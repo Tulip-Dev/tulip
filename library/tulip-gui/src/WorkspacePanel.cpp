@@ -17,6 +17,8 @@
  *
  */
 
+#include <algorithm>
+
 #include "tulip/WorkspacePanel.h"
 #include "tulip/InteractorConfigWidget.h"
 #include "ui_WorkspacePanel.h"
@@ -163,11 +165,11 @@ void WorkspacePanel::setView(tlp::View *view) {
 
   _view = view;
 
-  QList<Interactor *> compatibleInteractors;
-  QList<std::string> interactorNames = InteractorLister::compatibleInteractors(view->name());
+  std::list<Interactor *> compatibleInteractors;
+  std::list<std::string> interactorNames = InteractorLister::compatibleInteractors(view->name());
 
   for (const std::string &name : interactorNames) {
-    compatibleInteractors << PluginLister::getPluginObject<Interactor>(name);
+    compatibleInteractors.push_back(PluginLister::getPluginObject<Interactor>(name));
   }
 
   _view->setInteractors(compatibleInteractors);
@@ -178,7 +180,7 @@ void WorkspacePanel::setView(tlp::View *view) {
   refreshInteractorsToolbar();
 
   if (!compatibleInteractors.empty())
-    setCurrentInteractor(compatibleInteractors[0]);
+    setCurrentInteractor(compatibleInteractors.front());
 
   connect(_view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
   connect(_view, SIGNAL(graphSet(tlp::Graph *)), this, SLOT(viewGraphSet(tlp::Graph *)));
@@ -352,11 +354,13 @@ void WorkspacePanel::closeEvent(QCloseEvent *event) {
 
 bool WorkspacePanel::eventFilter(QObject *obj, QEvent *ev) {
   if (_view != nullptr) {
+    auto lcw = _view->configurationWidgets();
     if (ev->type() == QEvent::GraphicsSceneContextMenu) {
       return _view->showContextMenu(QCursor::pos(),
                                     static_cast<QGraphicsSceneContextMenuEvent *>(ev)->scenePos());
     } else if (_viewConfigurationWidgets != nullptr &&
-               _view->configurationWidgets().contains(qobject_cast<QWidget *>(obj)))
+               std::find(lcw.begin(), lcw.end(), qobject_cast<QWidget *>(obj))
+	       != lcw.end())
       return true;
 
     else if (ev->type() == QEvent::MouseButtonPress && !_viewConfigurationExpanded &&
@@ -447,7 +451,7 @@ void WorkspacePanel::refreshInteractorsToolbar() {
   }
 
   delete _ui->interactorsFrame->layout();
-  bool interactorsUiShown = !compatibleInteractors.isEmpty();
+  bool interactorsUiShown = !compatibleInteractors.empty();
   _ui->currentInteractorButton->setVisible(interactorsUiShown);
   _ui->interactorsFrame->setVisible(interactorsUiShown);
   _ui->sep2->setVisible(interactorsUiShown);
@@ -474,7 +478,7 @@ void WorkspacePanel::refreshInteractorsToolbar() {
     }
 
     _ui->interactorsFrame->setLayout(interactorsLayout);
-    setCurrentInteractor(compatibleInteractors[0]);
+    setCurrentInteractor(compatibleInteractors.front());
   }
 }
 

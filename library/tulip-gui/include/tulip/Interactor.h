@@ -192,11 +192,11 @@ protected:
  * @brief The InteractorLister class lists compatible interactors for a given tlp::View
  */
 class TLP_QT_SCOPE InteractorLister {
-  static QMap<std::string, QList<std::string>> _compatibilityMap;
+  static QMap<std::string, std::list<std::string>> _compatibilityMap;
 
 public:
   static void initInteractorsDependencies();
-  static QList<std::string> compatibleInteractors(const std::string &viewName);
+  static std::list<std::string> compatibleInteractors(const std::string &viewName);
 };
 ///@endcond
 

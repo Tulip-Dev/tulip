@@ -239,7 +239,7 @@ void SOMView::setState(const DataSet &dataSet) {
     construct(nullptr);
 
   if (isDetailedMode) {
-    properties->configurationWidgets()[0]->parentWidget()->parentWidget()->setVisible(true);
+    properties->configurationWidgets().front()->parentWidget()->parentWidget()->setVisible(true);
     isDetailedMode = false;
   }
 
@@ -1046,7 +1046,7 @@ void SOMView::selectAllNodesInMask() {
   }
 }
 
-QList<QWidget *> SOMView::configurationWidgets() const {
+std::list<QWidget *> SOMView::configurationWidgets() const {
   return properties->configurationWidgets();
 }
 
@@ -1090,13 +1090,13 @@ void SOMView::switchToDetailedMode(SOMPreviewComposite *preview) {
   assert(preview);
   internalSwitchToDetailedMode(preview, properties->useAnimation());
   // hide configuration widgets
-  properties->configurationWidgets()[0]->parentWidget()->parentWidget()->setVisible(false);
+  properties->configurationWidgets().front()->parentWidget()->parentWidget()->setVisible(false);
 }
 
 void SOMView::switchToPreviewMode() {
   internalSwitchToPreviewMode(properties->useAnimation());
   // show configuration widgets
-  properties->configurationWidgets()[0]->parentWidget()->parentWidget()->setVisible(true);
+  properties->configurationWidgets().front()->parentWidget()->parentWidget()->setVisible(true);
 }
 
 void SOMView::copyToGlMainWidget(GlMainWidget *widget) {
@@ -1150,7 +1150,7 @@ void SOMView::internalSwitchToPreviewMode(bool animation) {
   toggleInteractors(false);
 }
 
-void SOMView::interactorsInstalled(const QList<tlp::Interactor *> &) {
+void SOMView::interactorsInstalled(const std::list<tlp::Interactor *> &) {
   toggleInteractors(isDetailedMode);
 }
 

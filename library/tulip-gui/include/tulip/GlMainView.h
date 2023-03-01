@@ -93,7 +93,7 @@ public:
   GlMainView(bool needTooltipAndUrlManager = false);
   ~GlMainView() override;
   tlp::GlMainWidget *getGlMainWidget() const;
-  QList<QWidget *> configurationWidgets() const override;
+  std::list<QWidget *> configurationWidgets() const override;
   bool overviewVisible() const;
   bool quickAccessBarVisible() const;
   QPixmap snapshot(const QSize &outputSize = QSize()) const override;

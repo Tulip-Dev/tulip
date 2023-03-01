@@ -20,10 +20,10 @@
 #define VIEW_H
 
 #include <unordered_set>
+#include <list>
 
 #include <QObject>
 #include <QSet>
-#include <QList>
 #include <QSize>
 
 #include <tulip/tulipconf.h>
@@ -95,7 +95,7 @@ class ViewToolTipAndUrlManager;
 class TLP_QT_SCOPE View : public QObject, public tlp::Plugin, public tlp::Observable {
   Q_OBJECT
 
-  QList<tlp::Interactor *> _interactors;
+  std::list<tlp::Interactor *> _interactors;
   tlp::Interactor *_currentInteractor;
   tlp::Graph *_graph;
   tlp::ViewToolTipAndUrlManager *_tturlManager;
@@ -150,7 +150,7 @@ public:
     The list is always the same as the one given when View::setInteractors() was called.
     @see setInteractors();
     */
-  inline const QList<Interactor *> &interactors() const {
+  inline const std::list<Interactor *> &interactors() const {
     return _interactors;
   }
 
@@ -177,7 +177,7 @@ public:
     @see View::applySettings()
     @warning This method must not instantiate configuration widgets on the fly.
     */
-  virtual QList<QWidget *> configurationWidgets() const;
+  virtual std::list<QWidget *> configurationWidgets() const;
 
   /**
     @brief Backup the state of the view.
@@ -266,7 +266,7 @@ public slots:
     @brief defines the list of interactors available on this View
     @note Calling this will trigger the View::interactorsInstalled() callback for custom handling.
   */
-  virtual void setInteractors(const QList<tlp::Interactor *> &);
+  virtual void setInteractors(const std::list<tlp::Interactor *> &);
 
   /**
     @brief defines the active interactor that will receive user inputs.
@@ -413,7 +413,7 @@ protected slots:
     @brief Callback method after setInteractors() was called.
     At this point, a call to View::interactors() is considered valid.
     */
-  virtual void interactorsInstalled(const QList<tlp::Interactor *> &interactors);
+  virtual void interactorsInstalled(const std::list<tlp::Interactor *> &interactors);
 
   /**
     @brief Callback method after setCurrentInteractor() was called.

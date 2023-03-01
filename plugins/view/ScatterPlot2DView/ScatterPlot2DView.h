@@ -103,7 +103,7 @@ public:
   void graphChanged(Graph *graph) override;
   Graph *getScatterPlotGraph();
 
-  QList<QWidget *> configurationWidgets() const override;
+  std::list<QWidget *> configurationWidgets() const override;
 
   std::vector<ScatterPlot2D *> getSelectedScatterPlots() const;
   bool matrixViewSet() const {
@@ -163,7 +163,7 @@ public slots:
   void showPropertiesSelectionWidget();
 
 private:
-  void interactorsInstalled(const QList<tlp::Interactor *> &) override;
+  void interactorsInstalled(const std::list<tlp::Interactor *> &) override;
   void initGlWidget();
   void generateScatterPlots();
 

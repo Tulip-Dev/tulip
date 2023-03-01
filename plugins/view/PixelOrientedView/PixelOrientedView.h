@@ -100,8 +100,8 @@ public:
   Graph *getPixelOrientedGraph() {
     return pixelOrientedGraph;
   }
-  QList<QWidget *> configurationWidgets() const override;
-  void interactorsInstalled(const QList<tlp::Interactor *> &) override;
+  std::list<QWidget *> configurationWidgets() const override;
+  void interactorsInstalled(const std::list<tlp::Interactor *> &) override;
 
   void toggleInteractors(const bool activate);
 

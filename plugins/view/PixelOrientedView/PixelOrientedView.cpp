@@ -100,8 +100,8 @@ PixelOrientedView::~PixelOrientedView() {
   delete graphComposite;
 }
 
-QList<QWidget *> PixelOrientedView::configurationWidgets() const {
-  return QList<QWidget *>() << propertiesSelectionWidget << optionsWidget;
+std::list<QWidget *> PixelOrientedView::configurationWidgets() const {
+  return std::list<QWidget *> {propertiesSelectionWidget, optionsWidget};
 }
 
 void PixelOrientedView::initGlWidget() {
@@ -710,7 +710,7 @@ BoundingBox PixelOrientedView::getSmallMultiplesViewBoundingBox() {
   return glBBSV.getBoundingBox();
 }
 
-void PixelOrientedView::interactorsInstalled(const QList<tlp::Interactor *> &) {
+void PixelOrientedView::interactorsInstalled(const std::list<tlp::Interactor *> &) {
   toggleInteractors(detailOverview != nullptr);
 }
 

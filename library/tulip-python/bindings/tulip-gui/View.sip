@@ -230,12 +230,7 @@ Returns the interactors currently installed on the view.
 %End
 
 %MethodCode
-    std::list<tlp::Interactor*> ret;
-    QList<tlp::Interactor*> interactors = sipCpp->interactors();
-    for (int i = 0 ; i < interactors.count() ; ++i) {
-        ret.push_back(interactors.at(i));
-    }
-    sipRes = new std::list<tlp::Interactor*>(ret);
+    sipRes = new std::list<tlp::Interactor*>(sipCpp->interactors());
 %End
 
 // =========================================================================================================================
@@ -277,12 +272,7 @@ Installs a new set of interactors on the view.
 
 
 %MethodCode
-    QList<tlp::Interactor*> param;
-    std::list<tlp::Interactor*>::const_iterator it = a0->begin();
-    for (; it != a0->end() ; ++it) {
-        param.append(*it);
-    }
-    sipCpp->setInteractors(param);
+    sipCpp->setInteractors(*a0);
 %End
 
 // =========================================================================================================================

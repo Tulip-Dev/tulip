@@ -93,7 +93,7 @@ public:
     return _histoGraph;
   }
   bool eventFilter(QObject *object, QEvent *event) override;
-  QList<QWidget *> configurationWidgets() const override;
+  std::list<QWidget *> configurationWidgets() const override;
 
   std::vector<Histogram *> getHistograms() const;
   bool smallMultiplesViewSet() const {
@@ -145,7 +145,7 @@ public slots:
 protected slots:
 
 private:
-  void interactorsInstalled(const QList<tlp::Interactor *> &) override;
+  void interactorsInstalled(const std::list<tlp::Interactor *> &) override;
   void registerTriggers();
   void initGlWidget();
   void buildHistograms();

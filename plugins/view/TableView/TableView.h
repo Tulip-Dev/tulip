@@ -58,7 +58,7 @@ public:
   tlp::DataSet state() const override;
   void setState(const tlp::DataSet &) override;
   void setupWidget() override;
-  QList<QWidget *> configurationWidgets() const override;
+  std::list<QWidget *> configurationWidgets() const override;
   bool getNodeOrEdgeAtViewportPos(int x, int y, tlp::node &n, tlp::edge &e) const override;
 
   // Qt bug workaround

@@ -90,7 +90,7 @@ QuickAccessBar *ParallelCoordinatesView::getQuickAccessBarImpl() {
   return _bar;
 }
 
-void ParallelCoordinatesView::interactorsInstalled(const QList<tlp::Interactor *> &) {
+void ParallelCoordinatesView::interactorsInstalled(const std::list<tlp::Interactor *> &) {
   toggleInteractors(graphProxy && graphProxy->getNumberOfSelectedProperties());
 }
 
@@ -123,8 +123,8 @@ void ParallelCoordinatesView::initGlWidget() {
   getGlMainWidget()->setMouseTracking(true);
 }
 
-QList<QWidget *> ParallelCoordinatesView::configurationWidgets() const {
-  return QList<QWidget *>() << dataConfigWidget << drawConfigWidget;
+std::list<QWidget *> ParallelCoordinatesView::configurationWidgets() const {
+  return std::list<QWidget *> {dataConfigWidget, drawConfigWidget};
 }
 
 void ParallelCoordinatesView::graphicsViewResized(int w, int h) {
