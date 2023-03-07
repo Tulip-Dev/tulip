@@ -33,6 +33,7 @@
 # TULIP_PYTHON_LIBRARY: The path to the TulipPython module library.
 # TULIP_SHARE_DIR: Installation path for resources
 # TULIP_VERSION: Complete version string.
+# TULIP_MM_VERSION: Major and minor version string.
 # TULIP_MAJOR_VERSION: Major version digit.
 # TULIP_MINOR_VERSION: Minor version digit.
 # TULIP_PATCH_VERSION: Patch version digit.
@@ -56,6 +57,7 @@ MACRO(RETRIEVE_VERSION)
   SET(TULIP_MAJOR_VERSION)
   SET(TULIP_MINOR_VERSION)
   SET(TULIP_PATCH_VERSION)
+  SET(TULIP_MM_VERSION)
 
   # Check for TulipRelease.h
   IF(TULIP_INCLUDE_DIR)
@@ -67,6 +69,11 @@ MACRO(RETRIEVE_VERSION)
     STRING(REGEX MATCH "[0-9]*\\${TulipVersionSeparator}[0-9]*\\${TulipVersionSeparator}[0-9][^\"]*"
            TULIP_VERSION
            ${TMPSTR})
+
+       STRING(REGEX REPLACE "([0-9]*\\${TulipVersionSeparator}[0-9]*)\\${TulipVersionSeparator}([0-9][^\"]*)"
+               "\\1"
+              TULIP_MM_VERSION
+              ${TULIP_VERSION})
 
     STRING(REGEX REPLACE "([0-9]*)\\${TulipVersionSeparator}([0-9]*)\\${TulipVersionSeparator}([0-9][^\"]*)"
             "\\1"
