@@ -40,8 +40,7 @@ void TulipFontIconEngine::init(const std::string &iconName) {
   if (iconQString.isEmpty()) {
     if (unknownIcons.find(iconName) == unknownIcons.end()) {
       unknownIcons.insert(iconName);
-      tlp::warning() << "Warning: icon \"" << iconName.c_str()
-                     << "\" does not exist" << std::endl;
+      tlp::warning() << "Warning: icon \"" << iconName.c_str() << "\" does not exist" << std::endl;
     }
     // use fas-question instead
     init("fas-question");
@@ -52,8 +51,7 @@ void TulipFontIconEngine::init(const std::string &iconName) {
       // load the font file
       auto fontId = QFontDatabase::addApplicationFont(tlpStringToQString(fontFile));
       if (fontId == -1) {
-        tlp::warning() << "Error when loading font file "
-                       << fontFile << std::endl;
+        tlp::warning() << "Error when loading font file " << fontFile << std::endl;
         font = nullFont;
         return;
       }
@@ -62,8 +60,7 @@ void TulipFontIconEngine::init(const std::string &iconName) {
       if (!fontFamilies.empty()) {
         qFonts.emplace(fontFile, fontFamilies.at(0));
       } else {
-        tlp::warning() << "No data found when loading file " << fontFile
-                       << std::endl;
+        tlp::warning() << "No data found when loading file " << fontFile << std::endl;
         font = nullFont;
         return;
       }

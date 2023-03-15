@@ -365,10 +365,9 @@ bool TLPBImport::importGraph() {
           } else
             return (delete is, errorTrap());
         } else {
-	  if (!prop->readNodeDefaultValue(*is) ||
-	      !prop->readEdgeDefaultValue(*is))
-	    return (delete is, errorTrap());
-	}
+          if (!prop->readNodeDefaultValue(*is) || !prop->readEdgeDefaultValue(*is))
+            return (delete is, errorTrap());
+        }
       }
 
       // nodes / edges values
