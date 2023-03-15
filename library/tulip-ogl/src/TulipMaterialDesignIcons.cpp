@@ -88,7 +88,7 @@ unsigned int TulipMaterialDesignIcons::getIconCodePoint(const std::string &iconN
   if (it != iconCodePoint.end())
     return (it->second);
   else if (iconName[2] == '-') {
-    // compatibility with Tulip 5
+    // ensure compatibility with version before Tulip 5.7
     // md-... => mdi-...
     std::string name(iconName);
     name.insert(2, 1, 'i');
@@ -118,7 +118,10 @@ std::string TulipMaterialDesignIcons::getIconUtf8String(const std::string &iconN
   }
 
   std::string iconString;
-  utf8::append(iconCodePoint[iconName.c_str()], back_inserter(iconString));
+  // ensure compatibility with version before Tulip 5.7
+  auto cp = getIconCodePoint(iconName);
+  if (cp)
+    utf8::append(cp, back_inserter(iconString));
   return iconString;
 }
 } // namespace tlp

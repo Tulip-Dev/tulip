@@ -59,7 +59,6 @@ std::string TulipIconicFont::getIconStyle(const std::string &iconName) {
 }
 
 std::string TulipIconicFont::getIconUtf8String(const std::string &iconName) {
-  assert(isIconSupported(iconName));
   return (iconName[0] == 'f') ? TulipFontAwesome::getIconUtf8String(iconName)
                               : TulipMaterialDesignIcons::getIconUtf8String(iconName);
 }

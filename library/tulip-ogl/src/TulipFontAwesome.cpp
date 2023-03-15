@@ -121,7 +121,7 @@ unsigned int TulipFontAwesome::getIconCodePoint(const std::string &iconName) {
   if (it != iconCodePoint.end())
     return (it->second);
   if (iconName[2] == '-') {
-    // compatibility with Tulip 5
+    // ensure compatibility with version before Tulip 5.7
     std::string name(iconName);
     // fa-...-o => far-..
     if (name.compare(name.size() - 2, 2, "-o") == 0) {
@@ -170,7 +170,10 @@ std::string TulipFontAwesome::getIconUtf8String(const std::string &iconName) {
   }
 
   std::string iconString;
-  utf8::append(iconCodePoint[iconName.c_str()], back_inserter(iconString));
+  // ensure compatibility with version before Tulip 5.7
+  auto cp = getIconCodePoint(iconName);
+  if (cp)
+    utf8::append(cp, back_inserter(iconString));
   return iconString;
 }
 } // namespace tlp

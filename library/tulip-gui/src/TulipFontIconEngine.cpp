@@ -26,37 +26,51 @@
 #include <QPainter>
 
 #include <unordered_map>
+#include <unordered_set>
 
 using namespace tlp;
 
 std::unordered_map<std::string, QFont> qFonts;
+std::unordered_set<std::string> unknownIcons;
 QFont nullFont;
 
 void TulipFontIconEngine::init(const std::string &iconName) {
   // get iconQString
   iconQString = QString(TulipIconicFont::getIconUtf8String(iconName).c_str());
-  // then get font
-  auto &&fontFile = TulipIconicFont::getTTFLocation(iconName);
-  if (qFonts.find(fontFile) == qFonts.end()) {
-    // load the font file
-    auto fontId = QFontDatabase::addApplicationFont(tlpStringToQString(fontFile));
-    if (fontId == -1) {
-      qDebug() << "Error when loading font file " << tlpStringToQString(fontFile);
-      font = nullFont;
-      return;
+  if (iconQString.isEmpty()) {
+    if (unknownIcons.find(iconName) == unknownIcons.end()) {
+      unknownIcons.insert(iconName);
+      tlp::warning() << "Warning: icon \"" << iconName.c_str()
+                     << "\" does not exist" << std::endl;
     }
+    // use fas-question instead
+    init("fas-question");
+  } else {
+    // then get font
+    auto &&fontFile = TulipIconicFont::getTTFLocation(iconName);
+    if (qFonts.find(fontFile) == qFonts.end()) {
+      // load the font file
+      auto fontId = QFontDatabase::addApplicationFont(tlpStringToQString(fontFile));
+      if (fontId == -1) {
+        tlp::warning() << "Error when loading font file "
+                       << fontFile << std::endl;
+        font = nullFont;
+        return;
+      }
 
-    QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
-    if (!fontFamilies.empty()) {
-      qFonts.emplace(fontFile, fontFamilies.at(0));
-    } else {
-      qDebug() << "No data found when loading file" << tlpStringToQString(fontFile);
-      font = nullFont;
-      return;
+      QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
+      if (!fontFamilies.empty()) {
+        qFonts.emplace(fontFile, fontFamilies.at(0));
+      } else {
+        tlp::warning() << "No data found when loading file " << fontFile
+                       << std::endl;
+        font = nullFont;
+        return;
+      }
     }
+    font = qFonts[fontFile];
+    font.setStyleName(tlpStringToQString(TulipIconicFont::getIconStyle(iconName)));
   }
-  font = qFonts[fontFile];
-  font.setStyleName(tlpStringToQString(TulipIconicFont::getIconStyle(iconName)));
 }
 
 TulipFontIconEngine::TulipFontIconEngine(const std::string &iconName, bool dm) : darkMode(dm) {
