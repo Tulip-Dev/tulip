@@ -845,11 +845,21 @@ struct TLPDefaultPropertyBuilder : public TLPFalse {
   bool addString(const std::string &val) override {
     if (i == 0) {
       i++;
+      // ensure ascendant compatibility for viewIcon default value
+      // "fas-circle-question" instead of "fa-question-circle" since Tulip 5.7
+      if ((propertyBuilder->property->getName() == "viewIcon") &&
+	  (val == "fa-question-circle"))
+	return propertyBuilder->setAllNodeValue("fas-circle-question");
       return propertyBuilder->setAllNodeValue(val);
     }
 
     if (i == 1) {
       i++;
+      // ensure ascendant compatibility for viewIcon default value
+      // "fas-circle-question" instead of "fa-question-circle" since Tulip 5.7
+      if ((propertyBuilder->property->getName() == "viewIcon") &&
+	  (val == "fa-question-circle"))
+	return propertyBuilder->setAllEdgeValue("fas-circle-question");
       return propertyBuilder->setAllEdgeValue(val);
     }
     parser->errorMsg = "invalid property default value format";

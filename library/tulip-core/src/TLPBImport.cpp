@@ -344,13 +344,31 @@ bool TLPBImport::importGraph() {
 
         static_cast<StringProperty *>(prop)->setAllEdgeValue(value);
       } else {
-        // read and set property node default value
-        if (!prop->readNodeDefaultValue(*is))
-          return (delete is, errorTrap());
-
-        // read and set property edge default value
-        if (!prop->readEdgeDefaultValue(*is))
-          return (delete is, errorTrap());
+        // read and set property default values
+        if (prop->getName() == "viewIcon") {
+          // ensure ascendant compatibility for viewIcon default value
+          // "fas-circle-question" instead of "fa-question-circle"
+          // since Tulip 5.7
+          std::string defVal;
+          // read and set property node default value
+          if (StringType::readb(*is, defVal)) {
+            if (defVal == "fa-question-circle")
+              defVal = "fas-circle-question";
+            prop->setAllNodeStringValue(defVal);
+          } else
+            return (delete is, errorTrap());
+          // read and set property edge default value
+          if (StringType::readb(*is, defVal)) {
+            if (defVal == "fa-question-circle")
+              defVal = "fas-circle-question";
+            prop->setAllEdgeStringValue(defVal);
+          } else
+            return (delete is, errorTrap());
+        } else {
+	  if (!prop->readNodeDefaultValue(*is) ||
+	      !prop->readEdgeDefaultValue(*is))
+	    return (delete is, errorTrap());
+	}
       }
 
       // nodes / edges values
