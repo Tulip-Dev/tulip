@@ -141,7 +141,7 @@ public:
 
   void zoomOnRectangle(std::pair<double, double> &nw, std::pair<double, double> &se);
 
-  void switchToMapLayer(const char *layer);
+  void switchToMapLayer(int layer);
 
   void switchToCustomTileLayer(const QString &url, const QString &attrib);
 

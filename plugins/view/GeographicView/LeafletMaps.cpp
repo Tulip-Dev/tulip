@@ -58,7 +58,7 @@ a {
 <script type="text/javascript">
 var map;
 var mapBounds;
-var mapLayers = {};
+var mapLayers = [];
 var currentLayer;
 function refreshMap() {
   leafletMapsQObject.refreshMap();
@@ -77,7 +77,7 @@ function addMapLayer(name, url, attrib, zMax) {
   addEventHandlersToLayer(layer);
   if (typeof currentLayer == "undefined")
     currentLayer = layer;
-  mapLayers[name] = layer;
+  mapLayers.push(layer);
 }
 function init(lat, lng, zoom) {
   map = L.map('map_canvas', {
@@ -177,10 +177,11 @@ void LeafletMaps::triggerLoading() {
   frame->addToJavaScriptWindowObject("leafletMapsQObject", this);
 #endif
   // add map layers
+  int i = 0;
   for (const MapLayer &layer : mapLayers) {
     if (layer.url != nullptr) {
       QString code = "addMapLayer('%1', '%2', '%3', %4)";
-      executeJavascript(code.arg(layer.name).arg(layer.url).arg(layer.attrib).arg(layer.maxZoom));
+      executeJavascript(code.arg(i++).arg(layer.url).arg(layer.attrib).arg(layer.maxZoom));
     }
   }
   // initialize map
@@ -190,17 +191,13 @@ void LeafletMaps::triggerLoading() {
   inited = true;
 }
 
-void LeafletMaps::switchToMapLayer(const char *layer) {
+void LeafletMaps::switchToMapLayer(int layer) {
+  currentLayer = layer;
   // first check zoom
-  for (currentLayer = 0; currentLayer < mapLayers.size(); ++currentLayer) {
-    if (strcmp(layer, mapLayers[currentLayer].name) == 0) {
-      if (mapLayers[currentLayer].maxZoom < getCurrentZoom())
-        setCurrentZoom(mapLayers[currentLayer].maxZoom);
-      break;
-    }
-  }
+  if (mapLayers[currentLayer].maxZoom < getCurrentZoom())
+    setCurrentZoom(mapLayers[currentLayer].maxZoom);
   QString code = "switchToLayer(mapLayers['%1'])";
-  executeJavascript(code.arg(layer));
+  executeJavascript(code.arg(currentLayer));
   // because currentZoom and maxZoom may have changed
   emit currentZoomChanged();
 }

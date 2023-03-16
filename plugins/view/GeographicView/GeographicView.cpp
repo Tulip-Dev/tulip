@@ -99,22 +99,26 @@ void GeographicView::graphChanged(Graph *g) {
   }
 }
 
-void GeographicView::mapTypeChanged(QString mapTypeName) {
+void GeographicView::switchMapType(MapType type) {
   QComboBox *comboBox = geoViewGraphicsView->getMapTypeComboBox();
 
   if (comboBox == nullptr)
     return;
 
-  disconnect(comboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(mapTypeChanged(QString)));
+  disconnect(comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(mapTypeChanged(int)));
 
-  _mapType = getMapType(mapTypeName);
+  _mapType = type;
 
   geoViewGraphicsView->switchMapType();
 
   comboBox->setCurrentIndex(0);
-  comboBox->setItemText(0, mapTypeName);
+  comboBox->setItemText(0, mapLayers[_mapType].name);
 
-  connect(comboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(mapTypeChanged(QString)));
+  connect(comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(mapTypeChanged(int)));
+}
+
+void GeographicView::mapTypeChanged(int i) {
+  switchMapType(MapType(i - 2));
 }
 
 void GeographicView::fillContextMenu(QMenu *menu, const QPointF &pf) {
@@ -202,11 +206,7 @@ void GeographicView::setState(const DataSet &dataSet) {
   } else
     dataSet.get("mapType", mapType);
 
-  _mapType = MapType(mapType);
-
-  string mapTypeName = QStringToTlpString(getViewName(_mapType));
-
-  mapTypeChanged(mapTypeName.c_str());
+  switchMapType(MapType(mapType));
 
   sceneLayersConfigurationWidget->setGlMainWidget(geoViewGraphicsView->getGlMainWidget());
   sceneConfigurationWidget->setGlMainWidget(geoViewGraphicsView->getGlMainWidget());
@@ -513,14 +513,6 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
 
   return QPixmap::fromImage(snapshotImage)
       .scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-}
-
-GeographicView::MapType GeographicView::getMapType(const QString &name) {
-  for (unsigned int i = 0; i < mapLayers.size(); ++i) {
-    if (name == mapLayers[i].name)
-      return MapType(i);
-  }
-  return OpenStreetMap;
 }
 
 const char *GeographicView::getViewName(GeographicView::MapType mapType) {

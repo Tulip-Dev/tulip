@@ -296,8 +296,8 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   for (auto &layer : GeographicView::getMapLayers())
     mapTypeComboBox->addItem(layer.name);
 
-  connect(mapTypeComboBox, SIGNAL(currentTextChanged(QString)), _geoView,
-          SLOT(mapTypeChanged(QString)));
+  connect(mapTypeComboBox, SIGNAL(currentIndexChanged(int)), _geoView,
+    SLOT(mapTypeChanged(int)));
 
   // 2 push buttons
   // zoom +
@@ -1158,7 +1158,7 @@ void GeographicViewGraphicsView::switchMapType() {
 
   default:
     enableLeafletMap = true;
-    leafletMaps->switchToMapLayer(GeographicView::getViewName(mapType));
+    leafletMaps->switchToMapLayer(mapType);
   }
 
   if (planisphereEntity && planisphereEntity->isVisible()) {

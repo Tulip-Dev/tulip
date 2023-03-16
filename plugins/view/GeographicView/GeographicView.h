@@ -146,10 +146,9 @@ public slots:
   void centerView();
   void centerOnNode();
 
-  void mapTypeChanged(QString mapTypeName);
+  void mapTypeChanged(int);
 
   static const std::vector<LeafletMaps::MapLayer> &getMapLayers();
-  static MapType getMapType(const QString &name);
   static const char *getViewName(MapType mapType);
 
 protected slots:
@@ -159,6 +158,7 @@ protected slots:
   void initMap();
 
 private:
+  void switchMapType(MapType type);
   void updatePoly(bool force = false);
 
   void loadStoredPolyInformation(const DataSet &dataset);
