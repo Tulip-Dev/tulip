@@ -205,7 +205,6 @@ int main(int argc, char **argv) {
     // ensure to find all libs needed by tulip_perspective
     qputenv("DYLD_FRAMEWORK_PATH", path.append("/Frameworks").toLocal8Bit());
     qputenv("DYLD_FALLBACK_LIBRARY_PATH", path.toLocal8Bit());
-    qputenv("DYLD_LIBRARY_PATH", path.toLocal8Bit());
     path = appDir;
     qputenv("QT_PLUGIN_PATH", path.append("/PlugIns").toLocal8Bit());
     qputenv("QT_QPA_PLATFORM_PLUGIN_PATH=", path.append("/platforms").toLocal8Bit());
@@ -213,11 +212,11 @@ int main(int argc, char **argv) {
     if (!pyv.isEmpty()) {
       // ensure pip external modules can be installed and used through the gui
       path = appDir;
-      qputenv("DYLD_LIBRARY_PATH", path.append("/Frameworks/Python.framework/Versions/")
-                                       .append(pyv)
-                                       .append("/lib:")
-                                       .append(qgetenv("DYLD_LIBRARY_PATH"))
-                                       .toLocal8Bit());
+      qputenv("DYLD_LIBRARY_PATH",
+              path.append("/Frameworks/Python.framework/Versions/")
+              .append(pyv)
+              .append("/lib")
+              .toLocal8Bit());
       path = appDir;
       qputenv("PATH", path.append("/Frameworks/Python.framework/Versions/")
                           .append(pyv)
