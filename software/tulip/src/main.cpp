@@ -212,11 +212,10 @@ int main(int argc, char **argv) {
     if (!pyv.isEmpty()) {
       // ensure pip external modules can be installed and used through the gui
       path = appDir;
-      qputenv("DYLD_LIBRARY_PATH",
-              path.append("/Frameworks/Python.framework/Versions/")
-              .append(pyv)
-              .append("/lib")
-              .toLocal8Bit());
+      qputenv("DYLD_LIBRARY_PATH", path.append("/Frameworks/Python.framework/Versions/")
+                                       .append(pyv)
+                                       .append("/lib")
+                                       .toLocal8Bit());
       path = appDir;
       qputenv("PATH", path.append("/Frameworks/Python.framework/Versions/")
                           .append(pyv)
