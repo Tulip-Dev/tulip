@@ -89,9 +89,7 @@ GraphPerspectiveLogger::LogType GraphPerspectiveLogger::getLastLogType() const {
 
   switch (_logType) {
   case QtDebugMsg:
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
   case QtInfoMsg:
-#endif
     return Info;
 
   case QtWarningMsg:
