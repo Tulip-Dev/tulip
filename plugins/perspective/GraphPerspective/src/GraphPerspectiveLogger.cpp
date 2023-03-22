@@ -115,6 +115,12 @@ int GraphPerspectiveLogger::countByType(LogType logType) const {
 
 void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, const QString &msg,
                                  bool pyOutput) {
+#ifdef __APPLE__
+  // hide a strange message observed on Big Sur
+  // https://bugreports.qt.io/browse/QTBUG-98369
+  if (msg.indexOf("Populating font family aliases took") == 0)
+    return;
+#endif
   _logType = type;
   _pythonOutput = pyOutput;
 
