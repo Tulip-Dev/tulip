@@ -221,7 +221,7 @@ node graphCenterHeuristic(Graph *graph, PluginProgress *pluginProgress) {
   const vector<node> &nodes = graph->nodes();
   tlp::NodeStaticProperty<bool> toTreat(graph, true);
   tlp::NodeStaticProperty<unsigned int> dist(graph);
-  unsigned int i = 0, n = 0, result = 0;
+  unsigned int n = 0, result = 0;
   unsigned int cDist = UINT_MAX - 2;
   unsigned int nbTry = 2 + sqrt(nbNodes);
   unsigned int maxTries = nbTry;
@@ -237,7 +237,6 @@ node graphCenterHeuristic(Graph *graph, PluginProgress *pluginProgress) {
     }
 
     if (toTreat[n]) {
-      ++i;
       unsigned int di = tlp::maxDistance(graph, n, dist);
       toTreat[n] = false;
 

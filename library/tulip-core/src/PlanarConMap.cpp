@@ -571,7 +571,6 @@ void PlanarConMap::computeFaces() {
           faces.push_back(lf);
           edge e1 = e;
           node n_tmp, n;
-          int i = 0;
 
           if (sens.get(e1.id))
             n = target(e1);
@@ -609,7 +608,6 @@ void PlanarConMap::computeFaces() {
             if (source(e1) == n)
               sens.set(e1.id, true);
 
-            ++i;
           } while ((e1 != e) || (n_tmp != n));
 
           facesEdges.emplace(lf, edges);
