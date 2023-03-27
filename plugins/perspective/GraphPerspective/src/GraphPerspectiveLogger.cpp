@@ -118,7 +118,14 @@ void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, con
   // https://bugreports.qt.io/browse/QTBUG-98369
   if (msg.indexOf("Populating font family aliases took") == 0)
     return;
+#elif __unix__
+  // hide XCB error messages occuring sometimes
+  // when closing a dialog using the "close" (x) button
+  // https://bugreports.qt.io/browse/QTBUG-56893
+  if (msg.indexOf("QXcbConnection: XCB error") == 0)
+    return;
 #endif
+
   _logType = type;
   _pythonOutput = pyOutput;
 
