@@ -53,7 +53,9 @@ using namespace std;
 #define INOUT_DIRECTION "input/output"
 
 static string html_help_def(const string &A, const string &B) {
-  return "<tr><td><b>" + A + "</b><td style=\"padding-left: 5px;\">" + B + "</td></tr>";
+  // class="A" is used by doc/python/gen_plugins_doc.py
+  // and gives a reliable way to extract parameter "type" or "values"
+  return "<tr><td><b>" + A + "</b><td style=\"padding-left: 5px;\" class=\"" + A + "\">" + B + "</td></tr>";
 }
 
 static string getParameterTypename(const string &name, const string &typeId) {
@@ -91,7 +93,9 @@ string ParameterDescriptionList::generateParameterHTMLDocumentation(
 
   string doc;
 
-  doc += "<div style=\"font-style: italic; font-size: 90%;\">";
+  // class="description" is used by doc/python/gen_plugins_doc.py
+  // and gives a reliable way to extract parameter description
+  doc += "<div style=\"font-style: italic; font-size: 90%;\" class=\"help\">";
   doc += help + "</div>";
   doc += "<table border=\"0\" class=\"paramtable\">";
   doc += html_help_def(TYPE_SECTION, getParameterTypename(name, type));

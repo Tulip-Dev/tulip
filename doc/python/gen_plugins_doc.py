@@ -263,6 +263,21 @@ for cat in sorted(plugins.keys()):
         writeSection(p.name(), '^')
         writeSection('Description', '"')
         infos = formatSphinxDoc(p.info())
+        pos = infos.find('<a')
+        while pos != -1:
+            pos2 = infos.find('href="', pos + 2)
+            pos3 = infos.find('"', pos2 + 6)
+            url = infos[pos2 + 6: pos3]
+            pos2 = infos.find('>', pos3)
+            pos3 = infos.find('</a>', pos2)
+            txt = infos[pos2 + 1: pos3]
+            url = '`' + txt + ' <' + url + '>`_'
+            infos = infos[0 : pos] + url + infos[pos3 + 4:]
+            if pos + len(url) < len(infos):
+                pos = infos.find('<a', pos)
+            else:
+                break
+
         safeprint(infos+'\n', file=f)
 
         params = tlp.PluginLister.getPluginParameters(p.name())
@@ -271,18 +286,18 @@ for cat in sorted(plugins.keys()):
         nbInParams = 0
         for param in params.getParameters():
             paramHelpHtml = param.getHelp()
-            pattern = '<p class="help">'
+            pattern = 'class="description">'
             pos = paramHelpHtml.find(pattern)
             paramHelp = ''
             if pos != -1:
-                pos2 = paramHelpHtml.rfind('</p>')
+                pos2 = paramHelpHtml.find('</', pos)
                 paramHelp = paramHelpHtml[pos+len(pattern):pos2]
                 paramHelp = formatSphinxDoc(paramHelp)
-            pattern = '<b>type</b><td class="b">'
+            pattern = 'class="type">'
             pos = paramHelpHtml.find(pattern)
             paramType = ''
             if pos != -1:
-                pos2 = paramHelpHtml.find('</td>', pos)
+                pos2 = paramHelpHtml.find('</', pos)
                 paramType = paramHelpHtml[pos+len(pattern):pos2].replace(
                     ' (double precision)', '')
             if param.getName() == 'result' and 'Property' in paramType:
@@ -295,11 +310,11 @@ for cat in sorted(plugins.keys()):
                 paramDir = 'output'
             else:
                 nbInParams = nbInParams+1
-            pattern = '<b>values</b><td class="b">'
+            pattern = 'class="values">'
             pos = paramHelpHtml.find(pattern)
             paramValues = ''
             if pos != -1:
-                pos2 = paramHelpHtml.find('</td>', pos)
+                pos2 = paramHelpHtml.find('</', pos)
                 paramValues = paramHelpHtml[pos+len(pattern):pos2]
                 paramValues = formatSphinxDoc(paramValues)
             paramDefValue = param.getDefaultValue()
