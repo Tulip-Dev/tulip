@@ -55,7 +55,8 @@ using namespace std;
 static string html_help_def(const string &A, const string &B) {
   // class="A" is used by doc/python/gen_plugins_doc.py
   // and gives a reliable way to extract parameter "type" or "values"
-  return "<tr><td><b>" + A + "</b><td style=\"padding-left: 5px;\" class=\"" + A + "\">" + B + "</td></tr>";
+  return "<tr><td><b>" + A + "</b><td style=\"padding-left: 5px;\" class=\"" + A + "\">" + B +
+         "</td></tr>";
 }
 
 static string getParameterTypename(const string &name, const string &typeId) {
