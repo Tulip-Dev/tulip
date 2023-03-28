@@ -67,8 +67,7 @@ struct GuillaumeLatapyModel : public ImportModule {
       "Randomly generates a small word graph using the model described in<br/>J.-L. "
       "Guillaume and M. Latapy.<br/><b>Bipartite graphs as models of complex "
       "networks.</b><br/>In Workshop on Combinatorial and Algorithmic Aspects of "
-      "Networking (CAAN), LNCS, volume 1, 2004. doi: <a href=\"https://doi.org/10.1016/j.physa.2006.04.047\">"
-      "10.1016/j.physa.2006.04.047<a/>",
+      "Networking (CAAN), LNCS, volume 1, 2004. doi: <a href=\"https://doi.org/10.1016/j.physa.2006.04.047\">10.1016/j.physa.2006.04.047</a>",
       "1.0", "Social network")
 
   GuillaumeLatapyModel(PluginContext *context) : ImportModule(context) {

@@ -938,8 +938,8 @@ public:
                     "(compressed)</p><p>Imports a graph recorded in a file using the TLP format "
                     "(Tulip Software Graph Format).<br/>See "
                     "<a "
-                    "href=\"https://tulip.labri.fr/site/?q=tlp-file-format\">https://"
-                    "tulip.labri.fr->Framework->TLP File Format</a> for "
+                    "href=\"https://tulip.labri.fr/site/?q=tlp-file-format\">"
+                    "TLP File Format</a> for "
                     "description.<br/>Note: When using the Tulip graphical user "
                     "interface,<br/>choosing <b>File->Import->TLP</b> menu item is the same as "
                     "using <b>File->Open</b> menu item.</p>",
