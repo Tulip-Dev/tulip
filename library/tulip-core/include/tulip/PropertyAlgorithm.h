@@ -21,10 +21,53 @@
 #define PROPERTYALGORITHM_H
 
 #include <tulip/Algorithm.h>
-#include <tulip/TemplateAlgorithm.h>
+#include <tulip/Graph.h>
 
 namespace tlp {
 class PluginContext;
+static const std::string PROPERTY_ALGORITHM_CATEGORY = "Property";
+
+/**
+ * @ingroup Plugins
+ * @brief A non-template interface for tlp::TypedPropertyAlgorithm
+ * @see tlp::TypedPropertyAlgorithm
+ **/
+class TLP_SCOPE PropertyAlgorithm : public tlp::Algorithm {
+public:
+  PropertyAlgorithm(const tlp::PluginContext *context) : Algorithm(context) {}
+  std::string category() const override {
+    return PROPERTY_ALGORITHM_CATEGORY;
+  }
+};
+
+template <class Property>
+class TLP_SCOPE TypedPropertyAlgorithm : public PropertyAlgorithm {
+public:
+  Property *result;
+  TypedPropertyAlgorithm(const tlp::PluginContext *context)
+      : PropertyAlgorithm(context), result(nullptr) {
+    if (dataSet != nullptr) {
+      if (!dataSet->exists("result")) {
+        std::string propname("result");
+        unsigned number = 0;
+
+        while (graph->existProperty(propname)) {
+          propname.clear();
+          propname += "result" + std::to_string(number);
+          ++number;
+        }
+
+        result = graph->getProperty<Property>(propname);
+      } else {
+        dataSet->get("result", result);
+      }
+    }
+  }
+
+  std::string category() const override {
+    return PROPERTY_ALGORITHM_CATEGORY;
+  }
+};
 
 class BooleanProperty;
 static const std::string BOOLEAN_ALGORITHM_CATEGORY = "Selection";
@@ -34,7 +77,7 @@ static const std::string BOOLEAN_ALGORITHM_CATEGORY = "Selection";
  * @brief The Boolean algorithm takes a graph as input and output its results as a
  * tlp::BooleanProperty
  */
-class TLP_SCOPE BooleanAlgorithm : public TemplateAlgorithm<tlp::BooleanProperty> {
+class TLP_SCOPE BooleanAlgorithm : public TypedPropertyAlgorithm<tlp::BooleanProperty> {
 protected:
   BooleanAlgorithm(const tlp::PluginContext *, bool needInOutResult = false);
 
@@ -51,7 +94,7 @@ static const std::string COLOR_ALGORITHM_CATEGORY = "Coloring";
  * @ingroup Plugins
  * @brief The color algorithm takes a graph as input and output its results as a tlp::ColorProperty
  */
-class TLP_SCOPE ColorAlgorithm : public TemplateAlgorithm<tlp::ColorProperty> {
+class TLP_SCOPE ColorAlgorithm : public TypedPropertyAlgorithm<tlp::ColorProperty> {
 protected:
   ColorAlgorithm(const tlp::PluginContext *, bool needInOutResult = false);
 
@@ -69,7 +112,7 @@ static const std::string DOUBLE_ALGORITHM_CATEGORY = "Measure";
  * @brief The double algorithm takes a graph as input and output its results as a
  * tlp::DoubleProperty
  */
-class TLP_SCOPE DoubleAlgorithm : public TemplateAlgorithm<tlp::DoubleProperty> {
+class TLP_SCOPE DoubleAlgorithm : public TypedPropertyAlgorithm<tlp::DoubleProperty> {
 protected:
   ///
   DoubleAlgorithm(const tlp::PluginContext *, bool needInOutResult = false);
@@ -88,7 +131,7 @@ static const std::string INTEGER_ALGORITHM_CATEGORY = "Measure";
  * @brief The integer algorithm takes a graph as input and output its results as a
  * tlp::IntegerProperty
  */
-class TLP_SCOPE IntegerAlgorithm : public TemplateAlgorithm<tlp::IntegerProperty> {
+class TLP_SCOPE IntegerAlgorithm : public TypedPropertyAlgorithm<tlp::IntegerProperty> {
 protected:
   IntegerAlgorithm(const tlp::PluginContext *, bool needInOutResult = false);
 
@@ -106,7 +149,7 @@ static const std::string LAYOUT_ALGORITHM_CATEGORY = "Layout";
  * @brief The layout algorithm takes a graph as input and output its results as a
  * tlp::LayoutProperty
  */
-class TLP_SCOPE LayoutAlgorithm : public TemplateAlgorithm<tlp::LayoutProperty> {
+class TLP_SCOPE LayoutAlgorithm : public TypedPropertyAlgorithm<tlp::LayoutProperty> {
 protected:
   ///
   LayoutAlgorithm(const tlp::PluginContext *, bool needInOutResult = false);
@@ -124,7 +167,7 @@ static const std::string SIZE_ALGORITHM_CATEGORY = "Resizing";
  * @ingroup Plugins
  * @brief The size algorithm takes a graph as input and output its results as a tlp::SizeProperty
  */
-class TLP_SCOPE SizeAlgorithm : public TemplateAlgorithm<tlp::SizeProperty> {
+class TLP_SCOPE SizeAlgorithm : public TypedPropertyAlgorithm<tlp::SizeProperty> {
 protected:
   SizeAlgorithm(const tlp::PluginContext *, bool needInOutResult = false);
 
@@ -142,7 +185,7 @@ static const std::string STRING_ALGORITHM_CATEGORY = "Labeling";
  * @brief The string algorithm takes a graph as input and output its results as a
  * tlp::StringProperty
  */
-class TLP_SCOPE StringAlgorithm : public TemplateAlgorithm<tlp::StringProperty> {
+class TLP_SCOPE StringAlgorithm : public TypedPropertyAlgorithm<tlp::StringProperty> {
 protected:
   ///
   StringAlgorithm(const tlp::PluginContext *, bool needInOutResult = false);

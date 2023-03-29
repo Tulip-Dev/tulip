@@ -22,8 +22,6 @@
 #include "PluginErrorReport.h"
 #include "PluginInformationListItem.h"
 
-#include <tulip/Algorithm.h>
-#include <tulip/TemplateAlgorithm.h>
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/View.h>
 #include <tulip/Perspective.h>
