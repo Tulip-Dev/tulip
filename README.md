@@ -4,7 +4,7 @@
 
 [Tulip](https://tulip.labri.fr) is an open source, cross-platform, data visualization framework mainly dedicated to the analysis, 
 the drawing and the visualization of very large graphs (up to the million of nodes and edges).
-It has been created by [David Auber](http://www.labri.fr/perso/auber/david_auber_home_page/doku.php/start), 
+It has been created by [David Auber](https://www.labri.fr/perso/auber/david_auber_home_page/),
 from [LaBRI](https://www.labri.fr/) (Laboratoire Bordelais de Recherche en Informatique) and [University of Bordeaux](https://www.u-bordeaux.fr/),
 and maintained over the years by an average size development team.
 Until the 5.1 release, the main Tulip code repository (subversion based) was hosted 
