@@ -36,8 +36,7 @@ static const char *paramHelp[] = {
     "Sets the desired distance between adjacent nodes. If the new value is less than or equal to 0 the default value (100) is used.",
 
     // 3D layout
-    "If true, the layout is computed in 3D, else it is computed in 2D."
-};
+    "If true, the layout is computed in 3D, else it is computed in 2D."};
 
 class OGDFPivotMDS : public OGDFLayoutPluginBase {
 
@@ -86,9 +85,9 @@ public:
       size_t nbElts = nodes.size();
 
       for (unsigned int i = 0; i < nbElts; ++i) {
-	tlp::Coord nodeCoord = result->getNodeValue(nodes[i]);
-	nodeCoord[2] = 0.0;
-	result->setNodeValue(nodes[i], nodeCoord);
+        tlp::Coord nodeCoord = result->getNodeValue(nodes[i]);
+        nodeCoord[2] = 0.0;
+        result->setNodeValue(nodes[i], nodeCoord);
       }
     }
   }
