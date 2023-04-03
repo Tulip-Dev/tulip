@@ -1414,6 +1414,7 @@ public:
         "publications</b> property edge value will indicate the number of publications they wrote "
         "in common.</li></ul>",
         "true", false);
+    addDependency("FM^3 (OGDF)", "1.5");
   }
 
   std::string icon() const override {
