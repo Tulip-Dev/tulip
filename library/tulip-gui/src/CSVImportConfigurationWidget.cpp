@@ -261,9 +261,10 @@ bool CSVTableWidget::line(unsigned int row, const vector<CSVToken> &lineTokens) 
     return true;
 
   if (checkCommentsLines) {
-    if (lineTokens[0].value[0] == '#')
-      ++nbCommentsLines;
-    else if (lineTokens[0].value.substr(0, 2) == "//")
+    auto token = lineTokens[0].value.data();
+    // no need to check token size
+    // because a token contains at least one char plus the null ending char
+    if ((token[0] == '#') || ((token[0] == '/') && token[1] == '/'))
       ++nbCommentsLines;
     else
       checkCommentsLines = false;
