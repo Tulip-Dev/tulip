@@ -763,6 +763,7 @@ void Workspace::swapPanelsRequested(WorkspacePanel *panel) {
         _panels[i] = sourcePanel;
       else if (it == sourcePanel)
         _panels[i] = panel;
+      ++i;
     }
     updatePanels();
   }
