@@ -55,8 +55,6 @@
         <file>icons/20/color_interpolation_enabled.png</file>
         <file>icons/20/edges_disabled.png</file>
         <file>icons/20/edges_enabled.png</file>
-        <file>icons/20/edges_label.png</file>
-        <file>icons/20/edges_nolabel.png</file>
         <file>icons/20/size_interpolation_disabled.png</file>
         <file>icons/20/size_interpolation_enabled.png</file>
         <file>icons/20/set_label_color.png</file>
@@ -114,12 +112,7 @@
         <file>icons/arrow_two_head.png</file>
         <file>ui/split3_3_screen.png</file>
         <file>ui/sidebar.png</file>
-        <file>ui/statusbar.png</file>
-        <file>icons/bugs.png</file>
-        <file>icons/forums.png</file>
         <file>icons/icon-quote.gif</file>
-        <file>icons/screenshots.png</file>
-        <file>icons/tutorials.png</file>
         <file>icons/32/input-output.png</file>
         <file>icons/32/input.png</file>
         <file>icons/32/output.png</file>
