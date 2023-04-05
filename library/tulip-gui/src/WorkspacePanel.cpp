@@ -90,15 +90,26 @@ protected:
   }
 };
 
+#endif
+
 class CustomTabWidget : public QTabWidget {
 
 public:
   CustomTabWidget(QWidget *parent = 0) : QTabWidget(parent) {
+#ifdef WIN32
     setTabBar(new CustomTabBar());
-  }
-};
-
 #endif
+  }
+
+  // workaround for a QT bug which propagates unused wheel events
+  // of configuration widgets to the view
+  void wheelEvent(QWheelEvent *e) override {
+    QWidget::wheelEvent(e);
+    // block event propagation
+    e->accept();
+  }
+
+};
 
 // ========================
 
@@ -189,11 +200,7 @@ void WorkspacePanel::setView(tlp::View *view) {
   _view->graphicsView()->scene()->installEventFilter(this);
 
   if (!_view->configurationWidgets().empty()) {
-#ifdef WIN32
     QTabWidget *viewConfigurationTabs = new CustomTabWidget();
-#else
-    QTabWidget *viewConfigurationTabs = new QTabWidget();
-#endif
     // use the main window style sheet
     auto ss = Perspective::styleSheet();
     // remove QTabBar specs
