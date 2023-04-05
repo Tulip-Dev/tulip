@@ -108,7 +108,6 @@ public:
     // block event propagation
     e->accept();
   }
-
 };
 
 // ========================
