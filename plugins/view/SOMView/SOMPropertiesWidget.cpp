@@ -38,7 +38,7 @@ using namespace tlp;
 SOMPropertiesWidget::SOMPropertiesWidget(SOMView *view, QWidget *parent)
     : QWidget(parent), _ui(new Ui::SOMPropertiesWidget), view(view) {
   _ui->setupUi(this);
-  dimensionConfigurationWidget = new tlp::ComputeSOMWidget(parent);
+  dimensionConfigurationWidget = new tlp::ComputeSOMWidget();
 
   defaultScale = new ColorScale(ColorScalesManager::getLatestColorScale());
 

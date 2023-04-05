@@ -155,8 +155,7 @@ void TableView::setupWidget() {
   setShowContextMenu(false);
   setCentralWidget(centralWidget);
 
-  propertiesEditor =
-      new PropertiesEditor(static_cast<QGraphicsProxyWidget *>(centralItem())->widget());
+  propertiesEditor = new PropertiesEditor();
 
   connect(propertiesEditor, SIGNAL(propertyVisibilityChanged(tlp::PropertyInterface *, bool)), this,
           SLOT(setPropertyVisible(tlp::PropertyInterface *, bool)));
