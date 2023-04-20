@@ -39,7 +39,8 @@ public:
                     If two nodes are in the same strongly connected component, they have the same value; if not, they have a different value.<br/> \
                     Edges between nodes in the same component have the same value as nodes.<br/> \
                     Those between nodes of different components have a null value.<br/> \
-                    In the undirected case, these later ones are the disconnecting edges (also called bridges) of the graph.", "1.1", "Component")
+                    In the undirected case, these later ones are the disconnecting edges (also called bridges) of the graph.",
+                    "1.1", "Component")
   StrongComponent(const tlp::PluginContext *context);
   ~StrongComponent() override;
   bool run() override;
@@ -47,10 +48,8 @@ public:
 private:
   unsigned curComponent, curTS;
   void findSCC(tlp::node, std::unordered_map<tlp::node, bool> &,
-               std::unordered_map<tlp::node, unsigned> &,
-               std::stack<tlp::node> &);
-  void findDE(tlp::node, std::vector<tlp::edge> &,
-              std::unordered_map<tlp::node, unsigned int> &,
+               std::unordered_map<tlp::node, unsigned> &, std::stack<tlp::node> &);
+  void findDE(tlp::node, std::vector<tlp::edge> &, std::unordered_map<tlp::node, unsigned int> &,
               std::unordered_map<tlp::node, unsigned int> &);
 };
 

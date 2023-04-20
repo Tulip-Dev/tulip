@@ -30,13 +30,12 @@ struct dfsFindSCCStruct {
   Iterator<node> *outNodes;
 
   dfsFindSCCStruct(node n, Iterator<node> *nodes, unsigned ts)
-    : curN(n), oldTS(ts), res(ts), outNodes(nodes) {}
+      : curN(n), oldTS(ts), res(ts), outNodes(nodes) {}
 };
 
 // dfs from n and its out neighbours
 // to find strongly connected components (used in directed case)
-void StrongComponent::findSCC(tlp::node n,
-                              std::unordered_map<tlp::node, bool> &finished,
+void StrongComponent::findSCC(tlp::node n, std::unordered_map<tlp::node, bool> &finished,
                               std::unordered_map<tlp::node, unsigned> &minTS,
                               std::stack<tlp::node> &renum) {
   minTS[n] = curTS;
@@ -107,9 +106,8 @@ struct dfsFindDEStruct {
   edge edgeToParent;
   Iterator<edge> *inOutEdges;
 
-  dfsFindDEStruct(node n, Iterator<edge> *edges,
-                  node nParent = node(), edge e = edge()) :
-    curN(n), parent(nParent), edgeToParent(e), inOutEdges(edges) {}
+  dfsFindDEStruct(node n, Iterator<edge> *edges, node nParent = node(), edge e = edge())
+      : curN(n), parent(nParent), edgeToParent(e), inOutEdges(edges) {}
 };
 
 // dfs from n and its inout neighbours
@@ -142,8 +140,7 @@ void StrongComponent::findDE(tlp::node n, std::vector<tlp::edge> &de,
         break;
       } else if (n != topInfos.parent)
         // Update minVisitedTS of curN for parent comparison
-        minVisitedTS[topInfos.curN] =
-          std::min(minVisitedTS[topInfos.curN], visitedTS[n]);
+        minVisitedTS[topInfos.curN] = std::min(minVisitedTS[topInfos.curN], visitedTS[n]);
     }
     if (&topInfos != &dfsStack.top())
       // neighbour infos has been pushed on stack
@@ -165,12 +162,13 @@ void StrongComponent::findDE(tlp::node n, std::vector<tlp::edge> &de,
       de.push_back(topInfos.edgeToParent);
     // propagate minVisitedTS of curN to its parent
     minVisitedTS[topInfos.parent] =
-      std::min(minVisitedTS[topInfos.parent], minVisitedTS[topInfos.curN]);
+        std::min(minVisitedTS[topInfos.parent], minVisitedTS[topInfos.curN]);
   }
 }
 
 StrongComponent::StrongComponent(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
-  addInParameter<bool>("directed", "Indicates if the graph should be considered as directed or not.", "true");
+  addInParameter<bool>("directed",
+                       "Indicates if the graph should be considered as directed or not.", "true");
   addOutParameter<unsigned>("#strongly connected components",
                             "Number of strongly components found");
   // old name
