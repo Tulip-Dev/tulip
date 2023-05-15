@@ -2,6 +2,8 @@
 // CLP
 //
 
+#include <cstdint>
+
 /* Version number of project */
 #define CLP_VERSION "1.14.7"
 
