@@ -153,7 +153,8 @@ void ConvolutionClustering::autoSetParameter() {
   // width=(int)(deltaXMax*histosize/(metric->getNodeMax()-metric->getNodeMin()));
   // width=(int)(deltaXMin*histosize/(metric->getNodeMax()-metric->getNodeMin()));
   deltaSum /= histo.size();
-  width = int(deltaSum * histosize / (metric->getNodeDoubleMax(graph) - metric->getNodeDoubleMin(graph)));
+  width = int(deltaSum * histosize /
+              (metric->getNodeDoubleMax(graph) - metric->getNodeDoubleMin(graph)));
   //===============================================================================
   // Find good threshold
   // make the average of all local minimum
