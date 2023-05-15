@@ -77,7 +77,7 @@ double EccentricityMetric::compute(unsigned int nPos) {
   unsigned int nbNodes = graph->numberOfNodes();
   double max_d_acc = nbNodes;
   if (weight)
-    max_d_acc = nbNodes * weight->getEdgeDoubleMax();
+    max_d_acc = nbNodes * weight->getEdgeDoubleMax(graph);
 
   for (unsigned int i = 0; i < nbNodes; ++i) {
     double d = distance[i];
@@ -116,9 +116,9 @@ bool EccentricityMetric::run() {
     dataSet->get("graph diameter", diameter);
   }
 
-  // Edges weights should be positive
-  if (weight && weight->getEdgeDoubleMin() <= 0) {
-    pluginProgress->setError("Edges weights should be positive.");
+  // Edges weights have to be positive
+  if (weight && weight->getEdgeDoubleMin(graph) <= 0) {
+    pluginProgress->setError("Edges weights have to be strictly positive.");
     return false;
   }
 

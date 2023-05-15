@@ -149,7 +149,7 @@ Coord GEMLayout::computeForces(unsigned int v, float shake, float gravity, bool 
   double maxEdgeLength;
 
   if (_useLength)
-    maxEdgeLength = std::max(2.0, metric->getEdgeDoubleMin());
+    maxEdgeLength = std::max(2.0, metric->getEdgeDoubleMin(graph));
   else
     maxEdgeLength = EDGELENGTH;
 
@@ -326,7 +326,7 @@ void GEMLayout::arrange() {
   double maxEdgeLength;
 
   if (_useLength)
-    maxEdgeLength = std::max(2.0, metric->getEdgeDoubleMin());
+    maxEdgeLength = std::max(2.0, metric->getEdgeDoubleMin(graph));
   else
     maxEdgeLength = EDGELENGTH;
 

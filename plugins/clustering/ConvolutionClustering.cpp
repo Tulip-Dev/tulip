@@ -139,7 +139,7 @@ void ConvolutionClustering::autoSetParameter() {
     lastValue = (*itMap).first;
   }
 
-  histosize = int((metric->getNodeDoubleMax() - metric->getNodeDoubleMin()) / deltaXMin);
+  histosize = int((metric->getNodeDoubleMax(graph) - metric->getNodeDoubleMin(graph)) / deltaXMin);
 
   if (histosize > 16384)
     histosize = 16384; // histosize = histosize <? 16384;
@@ -153,7 +153,7 @@ void ConvolutionClustering::autoSetParameter() {
   // width=(int)(deltaXMax*histosize/(metric->getNodeMax()-metric->getNodeMin()));
   // width=(int)(deltaXMin*histosize/(metric->getNodeMax()-metric->getNodeMin()));
   deltaSum /= histo.size();
-  width = int(deltaSum * histosize / (metric->getNodeDoubleMax() - metric->getNodeDoubleMin()));
+  width = int(deltaSum * histosize / (metric->getNodeDoubleMax(graph) - metric->getNodeDoubleMin(graph)));
   //===============================================================================
   // Find good threshold
   // make the average of all local minimum
@@ -187,8 +187,8 @@ void ConvolutionClustering::autoSetParameter() {
 vector<double> *ConvolutionClustering::getHistogram() {
   // building of the histogram of values
   histogramOfValues.clear();
-  double minVal = metric->getNodeDoubleMin();
-  double maxMinRange = metric->getNodeDoubleMax() - minVal;
+  double minVal = metric->getNodeDoubleMin(graph);
+  double maxMinRange = metric->getNodeDoubleMax(graph) - minVal;
 
   for (auto n : graph->nodes()) {
     int tmp = int((metric->getNodeDoubleValue(n) - minVal) * histosize / maxMinRange);
@@ -223,8 +223,8 @@ vector<double> *ConvolutionClustering::getHistogram() {
 }
 //================================================================================
 void ConvolutionClustering::getClusters(const std::vector<int> &ranges) {
-  double minVal = metric->getNodeDoubleMin();
-  double maxMinRange = metric->getNodeDoubleMax() - minVal;
+  double minVal = metric->getNodeDoubleMin(graph);
+  double maxMinRange = metric->getNodeDoubleMax(graph) - minVal;
   for (auto n : graph->nodes()) {
     int tmp = getInterval(int((metric->getNodeDoubleValue(n) - minVal) * histosize / maxMinRange),
                           ranges);
@@ -271,7 +271,7 @@ bool ConvolutionClustering::check(std::string &errorMsg) {
   if (metric == nullptr)
     metric = graph->getProperty<DoubleProperty>("viewMetric");
 
-  if (metric->getNodeDoubleMax() == metric->getNodeDoubleMin()) {
+  if (metric->getNodeDoubleMax(graph) == metric->getNodeDoubleMin(graph)) {
     errorMsg = "All metric values are the same";
     return false;
   }

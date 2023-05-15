@@ -155,9 +155,9 @@ public:
     if (graph->numberOfNodes() <= 2)
       return true;
 
-    // Edges weights should be positive
-    if (weight && weight->getEdgeDoubleMin() <= 0) {
-      pluginProgress->setError("Edges weights should be positive.");
+    // Edges weights have to be positive
+    if (weight && weight->getEdgeDoubleMin(graph) <= 0) {
+      pluginProgress->setError("Edges weights have to be strictly positive.");
       return false;
     }
 

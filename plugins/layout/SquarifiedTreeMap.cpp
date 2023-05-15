@@ -80,7 +80,7 @@ bool SquarifiedTreeMap::check(std::string &errorMsg) {
   if (!metric && graph->existProperty("viewMetric")) {
     metric = graph->getProperty<DoubleProperty>("viewMetric");
 
-    if (metric->getNodeDoubleMin() < 0.) {
+    if (metric->getNodeDoubleMin(graph) < 0.) {
       errorMsg = "Graph's nodes must have a positive metric.";
       return false;
     }
