@@ -109,8 +109,14 @@ install_name_tool -change $PYTHON_DIR_PATH/Python ${AROBASE}loader_path/../../..
 for DYLIB in $(find ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip -name '*.dylib' -print)
 do
   otool -L ${DYLIB} | grep Python
-  if [ $? -eq 0 ]; then
-    install_name_tool -change $PYTHON_DIR_PATH/Python ${AROBASE}loader_path/../../Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${DYLIB}
+  if [ $? -eq 0 ]
+  then
+    if [ "$(dirname ${DYLIB})" = "lib/tulip" ]
+    then
+      install_name_tool -change $PYTHON_DIR_PATH/Python ${AROBASE}loader_path/../../Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${DYLIB}
+    else
+      install_name_tool -change $PYTHON_DIR_PATH/Python ${AROBASE}loader_path/../../../Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${DYLIB}
+    fi
   fi
 done
 
