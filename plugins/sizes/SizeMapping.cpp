@@ -21,39 +21,32 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StaticProperty.h>
-#include <tulip/ParallelTools.h>
+#include <tulip/GraphParallelTools.h>
 
 using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
     // property
-    "Input metric whose values will be mapped to sizes.",
+    "Metric whose values will be mapped to sizes.",
 
     // input
-    "If not all dimensions (width, height, depth) are checked below, the dimensions not computed "
-    "are copied from this property.",
+    "If not all dimensions (width, height, depth) are checked below, the dimensions not computed are copied from this property.",
 
     // width
-    "Adjusts width (along x axis) to represent the chosen property. If not chosen, the dimension "
-    "is copied "
-    "from input.",
+    "Adjusts size on x-axis to map the metric. If not, the size is copied from the \"input\" property.<br/>For edges, this is the size on the source node side.",
 
     // height
-    "Adjusts height (along y axis) to represent the chosen property. If not chosen, the dimension "
-    "is copied "
-    "from input.",
+    "Adjusts size on y-axis to map the metric. If not, the size is copied from the \"input\" property.<br/>For edges, this is the size on the target node side.",
 
-    //  depth
-    "Adjusts depth (along z axis) to represent the chosen property. If not chosen, the dimension "
-    "is copied "
-    "from input.",
+    // depth
+    "Adjusts size on z-axis to map the metric. If not, the size is copied from \"input\" property.<br/>Not used for edges.",
 
     // min
-    "Gives the minimum value of the range of computed sizes.",
+    "Minimum value of the range of computed sizes.<br/>A value of 0 would be better for edges.",
 
     // max
-    "Gives the maximum value of the range of computed sizes.",
+    "Maximum value of the range of computed sizes.<br/>A value of 1 would be better for edges.",
 
     // Mapping type
     "Type of mapping."
@@ -66,7 +59,7 @@ static const char *paramHelp[] = {
     "Whether sizes are computed for nodes or for edges.",
 
     // mapping proportionality
-    "The mapping can be either area/volume proportional, meaning that the areas/volumes will be proportional, or dimensions proportional that the width, height and depth will be."};
+    "For nodes only, the mapping can be either area/volume proportional, which means that the areas/volumes will be proportional, or dimensions proportional which means that the width, height and depth will be."};
 
 // error msg for invalid range value
 static const string rangeSizeErrorMsg = "max size must be greater than min size";
@@ -172,7 +165,7 @@ public:
     }
 
     if (!xaxis && !yaxis && !zaxis) {
-      errorMsg = "You need at least one axis to map on.";
+      errorMsg = "You need at least one dimension (width, height or depth) to map on.";
       return false;
     }
 
@@ -199,7 +192,8 @@ public:
 
       // compute size of nodes
       NodeStaticProperty<Size> nodeSize(graph);
-      nodeSize.copyFromProperty(entrySize);
+      if (!xaxis || !yaxis || !zaxis)
+        nodeSize.copyFromProperty(entrySize);
 
       TLP_PARALLEL_MAP_NODES(graph, [&](const node &n) {
         double sizos = 0;
@@ -226,11 +220,17 @@ public:
       shift = entryMetric->getEdgeDoubleMin(graph);
       // compute size of edges
       EdgeStaticProperty<Size> edgeSize(graph);
+      if (!xaxis || !yaxis)
+        edgeSize.copyFromProperty(entrySize);
 
       TLP_PARALLEL_MAP_EDGES(graph, [&](const edge &e) {
         double sizos = min + (entryMetric->getEdgeDoubleValue(e) - shift) * (max - min) / range;
-        edgeSize[e][0] = float(sizos);
-        edgeSize[e][1] = float(sizos);
+
+	if (xaxis)
+	  edgeSize[e][0] = float(sizos);
+
+	if (yaxis)
+	  edgeSize[e][1] = float(sizos);
       });
       edgeSize.copyToProperty(result);
     }
