@@ -226,11 +226,11 @@ public:
       TLP_PARALLEL_MAP_EDGES(graph, [&](const edge &e) {
         double sizos = min + (entryMetric->getEdgeDoubleValue(e) - shift) * (max - min) / range;
 
-	if (xaxis)
-	  edgeSize[e][0] = float(sizos);
+        if (xaxis)
+          edgeSize[e][0] = float(sizos);
 
-	if (yaxis)
-	  edgeSize[e][1] = float(sizos);
+        if (yaxis)
+          edgeSize[e][1] = float(sizos);
       });
       edgeSize.copyToProperty(result);
     }
