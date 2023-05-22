@@ -29,22 +29,21 @@ PLUGIN(TLPBExport)
 using namespace tlp;
 using namespace std;
 
-// used to renumerate the hierarychy to be saved
-static unsigned int getSavedId(Graph *g = nullptr) {
-  static unsigned int nextSavedId = 0;
-  static unordered_map<unsigned int, unsigned int> ids;
+// used to reindex the hierarchy to be saved with consecutive ids
+static unsigned int getExportedId(Graph *g = nullptr) {
+  static unsigned int nextExportedId = 0;
+  static unordered_map<Graph *, unsigned int> ids;
   if (g == nullptr) {
     // reset
-    nextSavedId = 0;
+    nextExportedId = 0;
     ids.clear();
     return 0;
   }
-  auto id = g->getId();
-  auto it = ids.find(id);
+  auto it = ids.find(g);
   if (it != ids.end())
     return it->second;
-  ids[id] = nextSavedId;
-  return nextSavedId++;
+  ids[g] = nextExportedId;
+  return nextExportedId++;
 }
 
 //================================================================================
@@ -60,34 +59,34 @@ void TLPBExport::writeAttributes(ostream &os, Graph *g) {
   const DataSet &attributes = g->getAttributes();
 
   if (!attributes.empty()) {
+
     // If nodes and edges are stored as graph attributes
     // we need to update their ids before serializing them
     // as nodes and edges have been reindexed
-
     for (const pair<string, DataType *> &attribute : attributes.getValues()) {
       if (attribute.second->getTypeName() == string(typeid(node).name())) {
         node *n = static_cast<node *>(attribute.second->value);
-        n->id = getNode(*n).id;
+        n->id = exportedNode(*n).id;
       } else if (attribute.second->getTypeName() == string(typeid(edge).name())) {
         edge *e = static_cast<edge *>(attribute.second->value);
-        e->id = getEdge(*e).id;
+        e->id = exportedEdge(*e).id;
       } else if (attribute.second->getTypeName() == string(typeid(vector<node>).name())) {
         vector<node> *vn = static_cast<vector<node> *>(attribute.second->value);
 
         for (size_t i = 0; i < vn->size(); ++i) {
-          (*vn)[i].id = getNode((*vn)[i]).id;
+          (*vn)[i].id = exportedNode((*vn)[i]).id;
         }
       } else if (attribute.second->getTypeName() == string(typeid(vector<edge>).name())) {
         vector<edge> *ve = static_cast<vector<edge> *>(attribute.second->value);
 
         for (size_t i = 0; i < ve->size(); ++i) {
-          (*ve)[i].id = getEdge((*ve)[i]).id;
+          (*ve)[i].id = exportedEdge((*ve)[i]).id;
         }
       }
     }
   }
 
-  unsigned int id = getSavedId(g);
+  unsigned int id = getExportedId(g);
   // write graph id
   os.write(reinterpret_cast<const char *>(&id), sizeof(id));
   // write graph attributes
@@ -110,8 +109,8 @@ bool TLPBExport::exportGraph(std::ostream &os) {
     unsigned int edgesToWrite = 0, nbWrittenEdges = 0;
     for (auto e : graph->edges()) {
       std::pair<node, node> ends = graph->ends(e);
-      ends.first = getNode(ends.first);
-      ends.second = getNode(ends.second);
+      ends.first = exportedNode(ends.first);
+      ends.second = exportedNode(ends.second);
       vEdges[edgesToWrite] = std::move(ends);
 
       if (++edgesToWrite == MAX_EDGES_TO_WRITE) {
@@ -144,12 +143,12 @@ bool TLPBExport::exportGraph(std::ostream &os) {
     os.write(reinterpret_cast<const char *>(&numSubGraphs), sizeof(numSubGraphs));
 
     // initialize graph hierarchy ids
-    getSavedId();
+    getExportedId();
     for (unsigned int i = 0; i < numSubGraphs; ++i) {
       Graph *sg = vSubGraphs[i];
-      unsigned int parentId = getSavedId(sg->getSuperGraph());
+      unsigned int parentId = getExportedId(sg->getSuperGraph());
 
-      std::pair<unsigned int, unsigned int> ids(getSavedId(sg), parentId);
+      std::pair<unsigned int, unsigned int> ids(getExportedId(sg), parentId);
       // write ids
       os.write(reinterpret_cast<const char *>(&ids), sizeof(ids));
       // loop to write sg nodes ranges
@@ -160,7 +159,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         std::vector<node> sgNodes(nbNodes);
 
         for (unsigned int j = 0; j < nbNodes; ++j)
-          sgNodes[j] = getNode(nodes[j]);
+          sgNodes[j] = exportedNode(nodes[j]);
 
         std::sort(sgNodes.begin(), sgNodes.end());
 
@@ -227,7 +226,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         std::vector<edge> sgEdges(nbEdges);
 
         for (unsigned int j = 0; j < nbEdges; ++j)
-          sgEdges[j] = getEdge(edges[j]);
+          sgEdges[j] = exportedEdge(edges[j]);
 
         std::sort(sgEdges.begin(), sgEdges.end());
 
@@ -325,7 +324,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       os.write(reinterpret_cast<const char *>(&size), sizeof(size));
       os.write(reinterpret_cast<const char *>(nameOrType.data()), size);
       // write graph id
-      unsigned int propGraphId = (i < numGraphProperties) ? 0 : getSavedId(prop->getGraph());
+      unsigned int propGraphId = (i < numGraphProperties) ? 0 : getExportedId(prop->getGraph());
 
       os.write(reinterpret_cast<const char *>(&propGraphId), sizeof(propGraphId));
       // special treament for pathnames view properties
@@ -398,7 +397,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         bool checkForMetaGraph = prop->getTypename() == GraphProperty::propertyTypename;
         for (auto n : prop->getNonDefaultValuatedNodes(propGraphId ? nullptr : graph)) {
           // write current node reindexed id
-          size = getNode(n).id;
+          size = exportedNode(n).id;
           s.write(reinterpret_cast<const char *>(&size), sizeof(size));
 
           if (pnViewProp && !TulipBitmapDir.empty()) { // viewFont || viewTexture
@@ -415,7 +414,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
             auto sg = graph->getDescendantGraph(id);
             // record a null value if the node pointed subgraph
             // is not a descendant of the currently exported graph
-            UnsignedIntegerType::writeb(s, sg ? getSavedId(sg) : 0);
+            UnsignedIntegerType::writeb(s, sg ? getExportedId(sg) : 0);
           } else
             prop->writeNodeValue(s, n);
 
@@ -492,7 +491,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         // loop on edges
         unsigned int nbValues = 0;
         for (auto e : prop->getNonDefaultValuatedEdges(propGraphId ? nullptr : graph)) {
-          size = getEdge(e).id;
+          size = exportedEdge(e).id;
           s.write(reinterpret_cast<const char *>(&size), sizeof(size));
 
           if (isGraphProperty) {
@@ -504,7 +503,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
               // reindex only embedded edges belonging to the exported graph
               if (!graph->isElement(eEdge))
                 continue;
-              edge rEdge = getEdge(eEdge);
+              edge rEdge = exportedEdge(eEdge);
               rEdges.insert(rEdge);
             }
 

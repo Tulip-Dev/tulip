@@ -32,22 +32,21 @@
 using namespace std;
 using namespace tlp;
 
-// used to renumerate the hierarchy to be saved
-static unsigned int getSavedId(Graph *g = nullptr) {
-  static unsigned int nextSavedId = 0;
-  static unordered_map<unsigned int, unsigned int> ids;
+// used to reindex the hierarchy to be exportd
+static unsigned int getExportedId(Graph *g = nullptr) {
+  static unsigned int nextExportedId = 0;
+  static unordered_map<Graph *, unsigned int> ids;
   if (g == nullptr) {
     // reset
-    nextSavedId = 0;
+    nextExportedId = 0;
     ids.clear();
     return 0;
   }
-  auto id = g->getId();
-  auto it = ids.find(id);
+  auto it = ids.find(g);
   if (it != ids.end())
     return it->second;
-  ids[id] = nextSavedId;
-  return nextSavedId++;
+  ids[g] = nextExportedId;
+  return nextExportedId++;
 }
 
 static string convert(const string &tmp) {
@@ -119,20 +118,22 @@ public:
     return ":/tulip/gui/icons/logo32x32.png";
   }
   //====================================================
-  inline node getNode(node n) {
+  // ensure the export of reindexed nodes with consecutive ids
+  inline node exportedNode(node n) {
     return node(graph->nodePos(n));
   }
   //====================================================
-  inline edge getEdge(edge e) {
+  // ensure the export of reindexed edges with consecutive ids
+  inline edge exportedEdge(edge e) {
     return edge(graph->edgePos(e));
   }
   //=====================================================
-  void saveGraphElements(ostream &os, Graph *g, bool isSubGraph = true) {
+  void exportGraphElements(ostream &os, Graph *g, bool isSubGraph = true) {
     pluginProgress->setComment("Saving Graph Elements");
     pluginProgress->progress(progress, g->numberOfEdges() + g->numberOfNodes());
 
     if (isSubGraph) {
-      os << "(cluster " << getSavedId(g) << endl;
+      os << "(cluster " << getExportedId(g) << endl;
 
       if (inGuiTestingMode())
         g->sortElts();
@@ -152,7 +153,7 @@ public:
             pluginProgress->progress(progress, nbNodes + nbEdges);
 
           ++progress;
-          node current = getNode(nodes[i]);
+          node current = exportedNode(nodes[i]);
 
           if (!beginNode.isValid()) {
             beginNode = previousNode = current;
@@ -187,7 +188,7 @@ public:
             pluginProgress->progress(progress, nbNodes + nbEdges);
 
           ++progress;
-          edge current = getEdge(edges[i]);
+          edge current = exportedEdge(edges[i]);
 
           if (!beginEdge.isValid()) {
             beginEdge = previousEdge = current;
@@ -213,7 +214,7 @@ public:
       }
     } else {
       // ensure g is root graph
-      getSavedId(g);
+      getExportedId(g);
 
       unsigned int nbElts = g->numberOfNodes();
 
@@ -252,7 +253,7 @@ public:
         ++progress;
         edge e = edges[i];
         const pair<node, node> &ends = g->ends(e);
-        os << "(edge " << i << " " << getNode(ends.first).id << " " << getNode(ends.second).id
+        os << "(edge " << i << " " << exportedNode(ends.first).id << " " << exportedNode(ends.second).id
            << ")";
 
         if (i != nbElts - 1)
@@ -263,13 +264,13 @@ public:
     }
 
     for (Graph *sg : g->subGraphs())
-      saveGraphElements(os, sg);
+      exportGraphElements(os, sg);
 
     if (isSubGraph)
       os << ")" << endl;
   }
   //=====================================================
-  void saveLocalProperties(ostream &os, Graph *g, bool isSubGraph = true) {
+  void exportLocalProperties(ostream &os, Graph *g, bool isSubGraph = true) {
     pluginProgress->setComment("Saving Graph Properties");
     progress = 0;
     Iterator<PropertyInterface *> *itP = nullptr;
@@ -299,7 +300,7 @@ public:
       pluginProgress->setComment(tmp.str());
 
       os << "(property "
-         << " " << getSavedId(g) << " " << prop->getTypename() << " ";
+         << " " << getExportedId(g) << " " << prop->getTypename() << " ";
 
       os << "\"" << convert(prop->getName()) << "\"" << endl;
       string nDefault = prop->getNodeDefaultStringValue();
@@ -357,11 +358,11 @@ public:
           if (!sg)
             continue;
           tmp.clear();
-          // get the saved id
-          tmp = std::to_string(getSavedId(sg));
+          // get the exportd id
+          tmp = std::to_string(getExportedId(sg));
         }
 
-        os << "(node " << getNode(itn).id << " \"" << convert(tmp) << "\")" << endl;
+        os << "(node " << exportedNode(itn).id << " \"" << convert(tmp) << "\")" << endl;
       }
       delete itN;
 
@@ -386,7 +387,7 @@ public:
           for (auto eEdge : eEdges) {
             // reindex only embedded edges belonging to the exported graph
             if (graph->isElement(eEdge)) {
-              edge rEdge = getEdge(eEdge);
+              edge rEdge = exportedEdge(eEdge);
               rEdges.insert(rEdge);
             }
           }
@@ -394,8 +395,8 @@ public:
           if (rEdges.empty())
             continue;
 
-          // finally save the vector
-          os << "(edge " << getEdge(ite).id << " \"";
+          // finally export the vector
+          os << "(edge " << exportedEdge(ite).id << " \"";
           EdgeSetType::write(os, rEdges);
           os << "\")" << endl;
         }
@@ -417,7 +418,7 @@ public:
               tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
           }
 
-          os << "(edge " << getEdge(ite).id << " \"" << convert(tmp) << "\")" << endl;
+          os << "(edge " << exportedEdge(ite).id << " \"" << convert(tmp) << "\")" << endl;
         }
       }
       delete itE;
@@ -426,14 +427,14 @@ public:
     }
   }
   //=====================================================
-  void saveProperties(ostream &os, Graph *g, bool isSubGraph = true) {
-    saveLocalProperties(os, g, isSubGraph);
+  void exportProperties(ostream &os, Graph *g, bool isSubGraph = true) {
+    exportLocalProperties(os, g, isSubGraph);
 
     for (Graph *sg : g->subGraphs())
-      saveProperties(os, sg);
+      exportProperties(os, sg);
   }
   //=====================================================
-  void saveAttributes(ostream &os, Graph *g) {
+  void exportAttributes(ostream &os, Graph *g) {
     const DataSet &attributes = g->getAttributes();
 
     if (!attributes.empty()) {
@@ -444,37 +445,37 @@ public:
       for (const pair<string, DataType *> &attribute : attributes.getValues()) {
         if (attribute.second->getTypeName() == string(typeid(node).name())) {
           node *n = static_cast<node *>(attribute.second->value);
-          n->id = getNode(*n).id;
+          n->id = exportedNode(*n).id;
         } else if (attribute.second->getTypeName() == string(typeid(edge).name())) {
           edge *e = static_cast<edge *>(attribute.second->value);
-          e->id = getEdge(*e).id;
+          e->id = exportedEdge(*e).id;
         } else if (attribute.second->getTypeName() == string(typeid(vector<node>).name())) {
           vector<node> *vn = static_cast<vector<node> *>(attribute.second->value);
 
           for (size_t i = 0; i < vn->size(); ++i) {
-            (*vn)[i].id = getNode((*vn)[i]).id;
+            (*vn)[i].id = exportedNode((*vn)[i]).id;
           }
         } else if (attribute.second->getTypeName() == string(typeid(vector<edge>).name())) {
           vector<edge> *ve = static_cast<vector<edge> *>(attribute.second->value);
 
           for (size_t i = 0; i < ve->size(); ++i) {
-            (*ve)[i].id = getEdge((*ve)[i]).id;
+            (*ve)[i].id = exportedEdge((*ve)[i]).id;
           }
         }
       }
 
-      os << "(graph_attributes " << getSavedId(g) << " ";
+      os << "(graph_attributes " << getExportedId(g) << " ";
 
       DataSet::write(os, attributes);
       os << ")" << endl;
     }
 
-    // save subgraph attributes
+    // export subgraph attributes
     for (Graph *sg : g->subGraphs())
-      saveAttributes(os, sg);
+      exportAttributes(os, sg);
   }
   //=====================================================
-  void saveController(ostream &os, DataSet &data) {
+  void exportController(ostream &os, DataSet &data) {
     os << "(controller ";
     DataSet::write(os, data);
     os << ")" << endl;
@@ -518,14 +519,14 @@ public:
     os << "(comments \"" << comments << "\")" << endl;
 
     // initialize graph hierarchy ids
-    getSavedId();
-    saveGraphElements(os, graph, false);
-    saveProperties(os, graph, false);
-    saveAttributes(os, graph);
+    getExportedId();
+    exportGraphElements(os, graph, false);
+    exportProperties(os, graph, false);
+    exportAttributes(os, graph);
 
-    // Save views
+    // Export views
     if (dataSet != nullptr && dataSet->get<DataSet>("controller", controller))
-      saveController(os, controller);
+      exportController(os, controller);
 
     os << ')' << endl; // end of (tlp ...
 

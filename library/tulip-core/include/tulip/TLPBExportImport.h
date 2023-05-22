@@ -99,13 +99,13 @@ public:
     return ":/tulip/gui/icons/tlpb32x32.png";
   }
 
-  inline tlp::node getNode(tlp::node n) {
-    assert(graph->isElement(n));
+  // ensure the export of reindexed nodes with consecutive ids
+  inline tlp::node exportedNode(tlp::node n) {
     return tlp::node(graph->nodePos(n));
   }
 
-  inline tlp::edge getEdge(tlp::edge e) {
-    assert(graph->isElement(e));
+  // ensure the export of reindexed edges with consecutive ids
+  inline tlp::edge exportedEdge(tlp::edge e) {
     return tlp::edge(graph->edgePos(e));
   }
 
