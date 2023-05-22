@@ -253,8 +253,8 @@ public:
         ++progress;
         edge e = edges[i];
         const pair<node, node> &ends = g->ends(e);
-        os << "(edge " << i << " " << exportedNode(ends.first).id << " " << exportedNode(ends.second).id
-           << ")";
+        os << "(edge " << i << " " << exportedNode(ends.first).id << " "
+           << exportedNode(ends.second).id << ")";
 
         if (i != nbElts - 1)
           os << endl;
