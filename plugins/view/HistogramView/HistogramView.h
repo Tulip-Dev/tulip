@@ -54,8 +54,8 @@ class QuickAccessBarImpl;
  * to nodes (or edges).
  *
  * This view also allows to map visual properties (colors, sizes, glyphs, ..) of the graph elements
- * with respect to a graph metric in a visual way. These operations can be performed with the "Metric
- mapping"
+ * with respect to a graph metric in a visual way. These operations can be performed with the
+ "Metric mapping"
  * interactor. Many interactors are also bundled with the view to perform elements selection,
  statistical analysis, ...
  *
