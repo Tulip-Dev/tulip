@@ -126,7 +126,7 @@ void HistogramInteractorMetricMapping::construct() {
       "table.<br />" +
       "Press the \"OK\" button to apply the settings. </p>" +
       "<h4>Metric mapping instructions</h4>" +
-      "<p>The metric mapping is done with the help of the editable curve drawn on top of the "
+      "<p>The metric mapping is performed with the help of the editable curve drawn on top of the "
       "histogram. By double clicking on it, control points are created which allow to modify the "
       "curve shape (by drag and drop them) and so the metric mapping. The created control points "
       "can also be removed by double clicking on them. </p>" +

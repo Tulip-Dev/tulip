@@ -110,7 +110,7 @@ void InteractorHighLighter::construct() {
       "<p>To <b>remove elements</b> from the current set of highlighted ones, hold the <b>shift "
       "key</b> while clicking on the elements to remove.</p>" +
       "<p>To reset the set of highlighted elements, position the mouse cursor so that there is no "
-      "elements under it and do a left click. This operation can also be done by right clicking in "
+      "elements under it and do a left click. This operation can also be performed by right clicking in "
       "the drawing and select the \"Reset highlighting of elements\" entry in the popup menu which "
       "appears.</p>" +
       "<p>To select the highlighted elements, do a right click in the drawing and choose the "

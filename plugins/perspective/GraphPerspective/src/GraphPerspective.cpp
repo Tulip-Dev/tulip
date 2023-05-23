@@ -1706,8 +1706,7 @@ void GraphPerspective::group() {
   bool changeGraph = false;
 
   if (graph == graph->getRoot()) {
-    qWarning() << "[Group] Grouping cannot be done on the root graph. A subgraph has "
-                  "automatically been created";
+    qWarning() << "[Group] Grouping cannot be performed on the root graph. A subgraph has been automatically created";
     graph = graph->addCloneSubGraph("groups");
     changeGraph = true;
   }
