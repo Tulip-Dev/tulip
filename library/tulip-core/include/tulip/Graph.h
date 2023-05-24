@@ -1593,10 +1593,12 @@ public:
    * @param nodes The vector of nodes to put into the meta node.
    * @param multiEdges Whether a meta edge should be created for each underlying edge.
    * @param delAllEdge Whether the underlying edges will be removed from the whole hierarchy.
+   * @param allGrouped In the no multi edges case, indicates if the underlying edges will be grouped in a unique meta edge or in one for the in edges and one for the out edges.
+
    * @return The newly created meta node.
    */
   virtual node createMetaNode(const std::vector<node> &nodes, bool multiEdges = true,
-                              bool delAllEdge = true);
+                              bool delAllEdge = true, bool allGrouped = true);
 
   /**
    *  @brief Populates a quotient graph with one meta node
@@ -1618,8 +1620,9 @@ public:
    * @param subGraph an existing subgraph
    * @param multiEdges indicates if a meta edge will be created for each underlying edge
    * @param delAllEdge indicates if the underlying edges will be removed from the entire hierarchy
+   * @param allGrouped In the no multi edges case, indicates if the underlying edges will be grouped in a unique meta edge or in one for the in edges and one for the out edges.
    */
-  virtual node createMetaNode(Graph *subGraph, bool multiEdges = true, bool delAllEdge = true);
+  virtual node createMetaNode(Graph *subGraph, bool multiEdges = true, bool delAllEdge = true, bool allGrouped = true);
 
   /**
    * @brief Opens a metanode and replaces all edges between that

@@ -3950,9 +3950,9 @@ Remove last pushed state if no updates have been recorded.
 
 //===========================================================================================
 
-  tlp::node createMetaNode(const std::vector<tlp::node> &nodes, bool multiEdges = true, bool delAllEdge = true);
+  tlp::node createMetaNode(const std::vector<tlp::node> &nodes, bool multiEdges = true, bool delAllEdge = true, bool allGrouped = true);
 %Docstring
-tlp.Graph.createMetaNode(nodes, multiEdges=True, delAllEdge=True)
+tlp.Graph.createMetaNode(nodes, multiEdges=True, delAllEdge=True, allGrouped=True)
 
 .. versionadded:: 5.0
 
@@ -3966,6 +3966,8 @@ edges from the metanode to the other nodes.
 :type multiEdges: boolean
 :param delAllEdge: indicates if the underlying edges will be removed from the entire hierarchy
 :type delAllEdge: boolean
+:param allGrouped: In the no multi edges case, indicates if the underlying edges will be grouped in a unique meta edge or in one for the in edges and one for the out edges
+:type allGrouped: boolean
 :rtype: :class:`tlp.node`
 :throws: an exception if one of the provided nodes does not belong to the graph.
 
@@ -3982,15 +3984,15 @@ edges from the metanode to the other nodes.
    }
  }
  if (sipIsErr != -1) {
-   sipRes = new tlp::node(sipCpp->createMetaNode(*a0, a1, a2));
+   sipRes = new tlp::node(sipCpp->createMetaNode(*a0, a1, a2, a3));
  }
 %End
 
 //===========================================================================================
 
-  tlp::node createMetaNode(tlp::Graph* subgraph, bool multiEdges = true, bool delAllEdge = true);
+  tlp::node createMetaNode(tlp::Graph* subgraph, bool multiEdges = true, bool delAllEdge = true, bool allGrouped = true);
 %Docstring
-tlp.Graph.createMetaNode(subgraph, multiEdges=True, delAllEdge=True)
+tlp.Graph.createMetaNode(subgraph, multiEdges=True, delAllEdge=True, allGrouped=True)
 
 Closes a subgraph into a metanode and returns it. Edges from nodes
 in the subgraph to nodes outside the subgraph are replaced with
@@ -4009,8 +4011,10 @@ point to an empty subgraph.
 :type multiEdges: boolean
 :param delAllEdge: indicates if the underlying edges will be removed from the entire hierarchy
 :type delAllEdge: boolean
+:param allGrouped: In the no multi edges case, indicates if the underlying edges will be grouped in a unique meta edge or in one for the in edges and one for the out edges
+:type allGrouped: boolean
 :rtype: :class:`tlp.node`
-:throws: an exception if the provided subgraph is a descandent of the graph in the graph hierarchy or if one of the element in the subgraph does not belong to the graph.
+:throws: an exception if the provided subgraph is a descendant of the graph in the graph hierarchy or if one of the element in the subgraph does not belong to the graph.
 
 .. warning:: This method will fail when called on the root graph.
 
@@ -4041,7 +4045,7 @@ point to an empty subgraph.
       }
     }
     if (sipIsErr != -1) {
-      sipRes = new tlp::node(sipCpp->createMetaNode(a0, a1, a2));
+      sipRes = new tlp::node(sipCpp->createMetaNode(a0, a1, a2, a3));
     }
   }
 %End

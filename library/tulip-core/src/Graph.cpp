@@ -1190,7 +1190,7 @@ Graph *Graph::inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph,
   return inducedSubGraph(nodes, parentSubGraph, name);
 }
 //====================================================================================
-node Graph::createMetaNode(const std::vector<node> &nodes, bool multiEdges, bool delAllEdge) {
+node Graph::createMetaNode(const std::vector<node> &nodes, bool multiEdges, bool delAllEdge, bool allGrouped) {
   if (getRoot() == this) {
     tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
     tlp::warning() << "\t Error: Could not group a set of nodes in the root graph" << std::endl;
@@ -1218,13 +1218,13 @@ node Graph::createMetaNode(const std::vector<node> &nodes, bool multiEdges, bool
   stringstream st;
   st << "grp_" << setfill('0') << setw(5) << subGraph->getId();
   subGraph->setAttribute("name", st.str());
-  return createMetaNode(subGraph, multiEdges, delAllEdge);
+  return createMetaNode(subGraph, multiEdges, delAllEdge, allGrouped);
 }
 //====================================================================================
 #define NEED_TODEL 2
 #define NO_NEED_TODEL 0
 #define CHECK_TODEL 1
-node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
+node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll, bool allGrouped) {
   if (getRoot() == this) {
     tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
     tlp::warning() << "\t Error: Could not create a meta node in the root graph" << std::endl;
@@ -1254,9 +1254,12 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 
   // create new meta edges from nodes to metanode
   Graph *super = getSuperGraph();
-  std::unordered_map<node, std::unordered_set<node>> edges;
+  std::unordered_map<node, bool> hasEdges;
   std::unordered_map<node, edge> metaEdges;
   std::unordered_map<edge, set<edge>> subEdges;
+  // needed for the !multiEdges and !allGrouped case
+  std::unordered_map<node, bool> hasInvEdges;
+  std::unordered_map<node, edge> metaInvEdges;
 
   for (auto n : subGraph->nodes()) {
     for (auto e : getSuperGraph()->getInOutEdges(n)) {
@@ -1266,7 +1269,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
       unsigned int toDelete = isElement(src);
 
       if (toDelete && subGraph->isElement(tgt)) {
-        if (multiEdges || edges[src].empty()) {
+        if (multiEdges || !hasEdges[src]) {
           // add new meta edge
           edge metaEdge = addEdge(src, metaNode);
 
@@ -1286,7 +1289,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
           // e is a sub-edge of an already created meta edge
           subEdges[metaEdges[src]].insert(e);
 
-        edges[src].insert(tgt);
+        hasEdges[src] = true;
 
         if (((metaInfo->getNodeValue(src) != nullptr) ||
              (metaInfo->getNodeValue(tgt) != nullptr)) &&
@@ -1297,7 +1300,16 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
       }
 
       if (isElement(tgt) && subGraph->isElement(src)) {
-        if (multiEdges || edges[tgt].empty()) {
+        std::unordered_map<node, bool> *hasLinks;
+        std::unordered_map<node, edge> *metaLinks;
+        if (multiEdges || allGrouped) {
+          hasLinks = &hasEdges;
+          metaLinks = &metaEdges;
+        } else {
+          hasLinks = &hasInvEdges;
+          metaLinks = &metaInvEdges;
+        }
+        if (multiEdges || !(*hasLinks)[tgt]) {
           // add new meta edge
           edge metaEdge = addEdge(metaNode, tgt);
 
@@ -1309,15 +1321,15 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 
           if (!multiEdges)
             // record metaEdge
-            metaEdges[tgt] = metaEdge;
+            (*metaLinks)[tgt] = metaEdge;
 
           if (!super->isElement(metaEdge))
             super->addEdge(metaEdge);
         } else if (!multiEdges)
           // e is a sub-edge of an already created meta edge
-          subEdges[metaEdges[tgt]].insert(e);
+          subEdges[(*metaLinks)[tgt]].insert(e);
 
-        edges[tgt].insert(src);
+        (*hasLinks)[tgt] = true;
 
         if (toDelete == CHECK_TODEL)
           toDelete = ((metaInfo->getNodeValue(src) != nullptr) ||

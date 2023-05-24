@@ -89,8 +89,8 @@ Graph *GraphDecorator::getSuperGraph() const {
 
 //============================================================
 node GraphDecorator::createMetaNode(const std::vector<node> &nodes, bool multiEdges,
-                                    bool delAllEdge) {
-  return graph_component->createMetaNode(nodes, multiEdges, delAllEdge);
+                                    bool delAllEdge, bool allGrouped) {
+  return graph_component->createMetaNode(nodes, multiEdges, delAllEdge, allGrouped);
 }
 
 void GraphDecorator::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
@@ -98,8 +98,8 @@ void GraphDecorator::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGrap
   graph_component->createMetaNodes(itS, quotientGraph, metaNodes);
 }
 
-node GraphDecorator::createMetaNode(Graph *subGraph, bool multiEdges, bool delAllEdge) {
-  return graph_component->createMetaNode(subGraph, multiEdges, delAllEdge);
+node GraphDecorator::createMetaNode(Graph *subGraph, bool multiEdges, bool delAllEdge, bool allGrouped) {
+  return graph_component->createMetaNode(subGraph, multiEdges, delAllEdge, allGrouped);
 }
 
 //============================================================
