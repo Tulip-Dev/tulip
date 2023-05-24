@@ -98,7 +98,8 @@ void GraphDecorator::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGrap
   graph_component->createMetaNodes(itS, quotientGraph, metaNodes);
 }
 
-node GraphDecorator::createMetaNode(Graph *subGraph, bool multiEdges, bool delAllEdge, bool allGrouped) {
+node GraphDecorator::createMetaNode(Graph *subGraph, bool multiEdges, bool delAllEdge,
+                                    bool allGrouped) {
   return graph_component->createMetaNode(subGraph, multiEdges, delAllEdge, allGrouped);
 }
 

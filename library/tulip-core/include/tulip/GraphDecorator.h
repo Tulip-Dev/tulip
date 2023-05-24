@@ -74,8 +74,8 @@ public:
                       bool delAllEdge = true, bool allGrouped = true) override;
   void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
                        std::vector<node> &metaNodes) override;
-  node createMetaNode(Graph *subGraph, bool multiEdges = true,
-                      bool delAllEdge = true, bool allGrouped = true) override;
+  node createMetaNode(Graph *subGraph, bool multiEdges = true, bool delAllEdge = true,
+                      bool allGrouped = true) override;
 
   //============================================================
   node getOneNode() const override;

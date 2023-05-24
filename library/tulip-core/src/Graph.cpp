@@ -1190,7 +1190,8 @@ Graph *Graph::inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph,
   return inducedSubGraph(nodes, parentSubGraph, name);
 }
 //====================================================================================
-node Graph::createMetaNode(const std::vector<node> &nodes, bool multiEdges, bool delAllEdge, bool allGrouped) {
+node Graph::createMetaNode(const std::vector<node> &nodes, bool multiEdges, bool delAllEdge,
+                           bool allGrouped) {
   if (getRoot() == this) {
     tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
     tlp::warning() << "\t Error: Could not group a set of nodes in the root graph" << std::endl;
