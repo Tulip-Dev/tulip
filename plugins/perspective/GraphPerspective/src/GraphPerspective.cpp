@@ -828,11 +828,12 @@ top: -1px;
                                  "containing all selected elements of the current graph "
                                  "with underlying edges grouped in a unique meta-edge",
                                  "G");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionGroup_distinct_edges,
-                                 "Create a meta-node representing a newly created subgraph "
-				 "containing all selected elements of the current graph "
-				 "with underlying edges grouped according to their direction (in/out)",
-                                 "H");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(
+      _ui->actionGroup_distinct_edges,
+      "Create a meta-node representing a newly created subgraph "
+      "containing all selected elements of the current graph "
+      "with underlying edges grouped according to their direction (in/out)",
+      "H");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(
       _ui->actionCreate_sub_graph,
       "Create a subgraph containing all selected elements of the current graph", "Shift+G");
@@ -1696,7 +1697,6 @@ void GraphPerspective::copy(Graph *g, bool deleteAfter) {
 void GraphPerspective::groupUniqueEdge() {
   group(true);
 }
-
 
 void GraphPerspective::groupDistinctEdges() {
   group(false);
