@@ -151,7 +151,8 @@ protected slots:
   void cut();
   void paste();
   void copy();
-  void group();
+  void groupUniqueEdge();
+  void groupDistinctEdges();
   void createSubGraph();
   void cloneSubGraph();
   void addEmptySubGraph();
@@ -177,6 +178,7 @@ protected:
   bool eventFilter(QObject *, QEvent *) override;
   void importGraph(const std::string &module, tlp::DataSet &data);
   void destroyWorkspace();
+  void group(bool);
 
   QDialog *_searchDialog;
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS

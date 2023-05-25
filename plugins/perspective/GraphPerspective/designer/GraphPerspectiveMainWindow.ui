@@ -1331,6 +1331,20 @@ border: 0px;
      <addaction name="actionCreate_sub_graph"/>
      <addaction name="actionClone_sub_graph"/>
     </widget>
+    <widget class="QMenu" name="menu_Group_elements">
+     <property name="toolTip">
+      <string>Group selected elements in a meta-node</string>
+     </property>
+     <property name="title">
+      <string>&amp;Group elements in a meta-node</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>:/tulip/graphperspective/icons/16/group.png</normaloff>:/tulip/graphperspective/icons/16/group.png</iconset>
+     </property>
+     <addaction name="actionGroup_unique_edge"/>
+     <addaction name="actionGroup_distinct_edges"/>
+    </widget>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
     <addaction name="separator"/>
@@ -1347,7 +1361,7 @@ border: 0px;
     <addaction name="actionMake_selection_a_graph"/>
     <addaction name="actionReverse_selected_edges"/>
     <addaction name="separator"/>
-    <addaction name="actionGroup_elements"/>
+    <addaction name="menu_Group_elements"/>
     <addaction name="separator"/>
     <addaction name="separator"/>
     <addaction name="actionPreferences"/>
@@ -1598,21 +1612,6 @@ border: 0px;
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+A</string>
-   </property>
-  </action>
-  <action name="actionGroup_elements">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/16/group.png</normaloff>:/tulip/graphperspective/icons/16/group.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Group elements</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+G</string>
    </property>
   </action>
   <action name="actionCreate_sub_graph">
@@ -1935,6 +1934,26 @@ border: 0px;
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+M</string>
+   </property>
+  </action>
+  <action name="actionGroup_unique_edge">
+   <property name="text">
+    <string>Group with &amp;unique meta-edges</string>
+   </property>
+   <property name="icon">
+     <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/group.png</normaloff>:/tulip/graphperspective/icons/16/group.png</iconset>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="actionGroup_distinct_edges">
+   <property name="text">
+    <string>Group with &amp;distinct in/out meta-edges</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+H</string>
    </property>
   </action>
  </widget>

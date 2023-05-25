@@ -823,10 +823,16 @@ top: -1px;
                                  "I");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionCancel_selection,
                                  "Deselect all selected elements of the current graph", "Shift+A");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionGroup_elements,
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionGroup_unique_edge,
                                  "Create a meta-node representing a newly created subgraph "
-                                 "containing all selected elements of the current graph",
+                                 "containing all selected elements of the current graph "
+                                 "with underlying edges grouped in a unique meta-edge",
                                  "G");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionGroup_distinct_edges,
+                                 "Create a meta-node representing a newly created subgraph "
+				 "containing all selected elements of the current graph "
+				 "with underlying edges grouped according to their direction (in/out)",
+                                 "H");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(
       _ui->actionCreate_sub_graph,
       "Create a subgraph containing all selected elements of the current graph", "Shift+G");
@@ -1002,7 +1008,8 @@ top: -1px;
   connect(_ui->actionCut, SIGNAL(triggered()), this, SLOT(cut()));
   connect(_ui->actionPaste, SIGNAL(triggered()), this, SLOT(paste()));
   connect(_ui->actionCopy, SIGNAL(triggered()), this, SLOT(copy()));
-  connect(_ui->actionGroup_elements, SIGNAL(triggered()), this, SLOT(group()));
+  connect(_ui->actionGroup_unique_edge, SIGNAL(triggered()), this, SLOT(groupUniqueEdge()));
+  connect(_ui->actionGroup_distinct_edges, SIGNAL(triggered()), this, SLOT(groupDistinctEdges()));
   connect(_ui->actionCreate_sub_graph, SIGNAL(triggered()), this, SLOT(createSubGraph()));
   connect(_ui->actionClone_sub_graph, SIGNAL(triggered()), this, SLOT(cloneSubGraph()));
   connect(_ui->actionCreate_empty_sub_graph, SIGNAL(triggered()), this, SLOT(addEmptySubGraph()));
@@ -1686,7 +1693,16 @@ void GraphPerspective::copy(Graph *g, bool deleteAfter) {
   }
 }
 
-void GraphPerspective::group() {
+void GraphPerspective::groupUniqueEdge() {
+  group(true);
+}
+
+
+void GraphPerspective::groupDistinctEdges() {
+  group(false);
+}
+
+void GraphPerspective::group(bool allGrouped) {
   Observable::holdObservers();
   tlp::Graph *graph = _graphs->currentGraph();
   tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
@@ -1712,7 +1728,7 @@ void GraphPerspective::group() {
     changeGraph = true;
   }
 
-  graph->createMetaNode(groupedNodes, false);
+  graph->createMetaNode(groupedNodes, false, true, allGrouped);
 
   selection->setAllNodeValue(false);
   selection->setAllEdgeValue(false);
@@ -1804,7 +1820,8 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->actionSelect_All_Edges->setEnabled(enabled);
   _ui->actionCancel_selection->setEnabled(enabled);
   _ui->actionMake_selection_a_graph->setEnabled(enabled);
-  _ui->actionGroup_elements->setEnabled(enabled);
+  _ui->actionGroup_unique_edge->setEnabled(enabled);
+  _ui->actionGroup_distinct_edges->setEnabled(enabled);
   _ui->actionCreate_sub_graph->setEnabled(enabled);
   _ui->actionCreate_empty_sub_graph->setEnabled(enabled);
   _ui->actionClone_sub_graph->setEnabled(enabled);
