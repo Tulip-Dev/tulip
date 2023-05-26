@@ -1585,21 +1585,7 @@ struct MetaEdge {
   edge mE;
 };
 
-namespace std {
-template <>
-struct less<MetaEdge> {
-  bool operator()(const MetaEdge &c, const MetaEdge &d) const {
-    /*if (c.source<d.source) return true;
-    if (c.source>d.source) return false;
-    if (c.target<d.target) return true;
-    if (c.target>d.target) return false;
-    return false;*/
-    return (c.source < d.source) || ((c.source == d.source) && (c.target < d.target));
-  }
-};
-} // namespace std
-
-void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector<node> &metaNodes) {
+void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector<node> &metaNodes, bool inoutGrouped) {
   GraphProperty *metaInfo = static_cast<GraphAbstract *>(getRoot())->getMetaGraphProperty();
   unordered_map<edge, set<edge>> eMapping;
   Observable::holdObservers();
@@ -1627,7 +1613,21 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
     }
 
     {
-      set<MetaEdge> myQuotientGraph;
+      // define a contextual comparator
+      // to manage comparison according inoutGrouped value
+      // inoutGrouped = true implies 2 meta-edges
+      // corresponding to in/out direction of underlying edges
+      auto cmp = [inoutGrouped](const MetaEdge &m1, const MetaEdge &m2) {
+	if (!inoutGrouped) {
+	  if (m1.source == m2.target)
+	    return m1.target < m2.source;
+	  if (m1.target == m2.source)
+	    return m1.source < m2.target;
+	}
+	return (m1.source < m2.source) || ((m1.source == m2.source) && (m1.target < m2.target));
+      };
+
+      set<MetaEdge, decltype(cmp)> myQuotientGraph(cmp);
 
       // for each existing edge in the current graph
       // add a meta edge for the corresponding couple

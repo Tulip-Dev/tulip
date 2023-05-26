@@ -1608,10 +1608,12 @@ public:
    * @param itS a Graph iterator, (typically a subgraph iterator)
    * @param quotientGraph the graph that will contain the meta nodes
    * @param metaNodes will contains all the added meta nodes after the call
+   * @param inoutGrouped indicates if the underlying edges will be grouped
+   * in distinct meta-edges according their direction.
    *
    */
   virtual void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
-                               std::vector<node> &metaNodes);
+                               std::vector<node> &metaNodes, bool inoutGrouped = true);
   /**
    * @brief Closes an existing subgraph into a metanode.  Edges from nodes
    * in the subgraph to nodes outside the subgraph are replaced with

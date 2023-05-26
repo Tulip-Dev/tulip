@@ -94,8 +94,8 @@ node GraphDecorator::createMetaNode(const std::vector<node> &nodes, bool multiEd
 }
 
 void GraphDecorator::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
-                                     std::vector<node> &metaNodes) {
-  graph_component->createMetaNodes(itS, quotientGraph, metaNodes);
+                                     std::vector<node> &metaNodes, bool inoutGrouped) {
+  graph_component->createMetaNodes(itS, quotientGraph, metaNodes, inoutGrouped);
 }
 
 node GraphDecorator::createMetaNode(Graph *subGraph, bool multiEdges, bool delAllEdge,

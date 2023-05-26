@@ -32,8 +32,8 @@ using namespace tlp;
 
 //==============================================================================
 static const char *paramHelp[] = {
-    // oriented
-    "If true, the graph is considered oriented.",
+    // directed
+    "If true, the graph is considered directed.",
 
     // recursive
     "If true, the algorithm is applied along the entire hierarchy of subgraphs.",
@@ -111,7 +111,7 @@ public:
   QuotientClustering(PluginContext *context) : Algorithm(context) {
     addDependency("FM^3 (OGDF)", "1.4");
     addDependency("Fast Overlap Removal", "1.3");
-    addInParameter<bool>("oriented", paramHelp[0], "true");
+    addInParameter<bool>("directed", paramHelp[0], "true");
     addInParameter<StringCollection>("node function", paramHelp[2], AGGREGATION_FUNCTIONS, true,
                                      "none <br> average <br> sum <br> max <br> min");
     addInParameter<StringCollection>("edge function", paramHelp[3], AGGREGATION_FUNCTIONS, true,
@@ -135,7 +135,7 @@ public:
 
   //===============================================================================
   bool run() override {
-    bool oriented = true, edgeCardinality = true, clustersLayout = false;
+    bool directed = true, edgeCardinality = true, clustersLayout = false;
     bool recursive = false, quotientLayout = true, useSubGraphName = false;
     StringProperty *metaLabel = nullptr;
     StringCollection nodeFunctions(AGGREGATION_FUNCTIONS);
@@ -144,7 +144,7 @@ public:
     edgeFunctions.setCurrent(0);
 
     if (dataSet != nullptr) {
-      dataSet->get("oriented", oriented);
+      dataSet->getDeprecated("directed", "oriented", directed);
       dataSet->get("node function", nodeFunctions);
       dataSet->get("edge function", edgeFunctions);
       dataSet->get("edge cardinality", edgeCardinality);
@@ -193,7 +193,7 @@ public:
     }
     quotientGraph->setName(name);
 
-    if (!oriented) {
+    if (!directed) {
       opProp = new IntegerProperty(quotientGraph);
       opProp->setAllEdgeValue(edge().id);
     }
@@ -233,7 +233,7 @@ public:
     // compute meta nodes, edges and associated meta values
     Iterator<Graph *> *itS = graph->getSubGraphs();
     vector<node> mNodes;
-    graph->createMetaNodes(itS, quotientGraph, mNodes);
+    graph->createMetaNodes(itS, quotientGraph, mNodes, directed);
     delete itS;
 
     IntegerProperty *viewShape = graph->getProperty<IntegerProperty>("viewShape");
@@ -258,7 +258,7 @@ public:
     GraphProperty *metaInfo = graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph");
 
     // orientation
-    if (!oriented) {
+    if (!directed) {
       // for each edge
       // store opposite edge in opProp
       for (auto mE : quotientGraph->edges()) {
@@ -386,7 +386,7 @@ public:
     // recursive call if needed
     if (recursive) {
       DataSet dSet;
-      dSet.set("oriented", oriented);
+      dSet.set("directed", directed);
       dSet.set("node function", nodeFunctions);
       dSet.set("edge function", edgeFunctions);
       dSet.set("edge cardinality", edgeCardinality);
