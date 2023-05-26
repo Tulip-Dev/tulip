@@ -1585,7 +1585,8 @@ struct MetaEdge {
   edge mE;
 };
 
-void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector<node> &metaNodes, bool inoutGrouped) {
+void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector<node> &metaNodes,
+                            bool inoutGrouped) {
   GraphProperty *metaInfo = static_cast<GraphAbstract *>(getRoot())->getMetaGraphProperty();
   unordered_map<edge, set<edge>> eMapping;
   Observable::holdObservers();
@@ -1618,13 +1619,13 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
       // inoutGrouped = true implies 2 meta-edges
       // corresponding to in/out direction of underlying edges
       auto cmp = [inoutGrouped](const MetaEdge &m1, const MetaEdge &m2) {
-	if (!inoutGrouped) {
-	  if (m1.source == m2.target)
-	    return m1.target < m2.source;
-	  if (m1.target == m2.source)
-	    return m1.source < m2.target;
-	}
-	return (m1.source < m2.source) || ((m1.source == m2.source) && (m1.target < m2.target));
+        if (!inoutGrouped) {
+          if (m1.source == m2.target)
+            return m1.target < m2.source;
+          if (m1.target == m2.source)
+            return m1.source < m2.target;
+        }
+        return (m1.source < m2.source) || ((m1.source == m2.source) && (m1.target < m2.target));
       };
 
       set<MetaEdge, decltype(cmp)> myQuotientGraph(cmp);
