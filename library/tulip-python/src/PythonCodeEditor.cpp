@@ -899,7 +899,7 @@ void PythonCodeEditor::highlightCurrentLine() {
 
   if (highlightEditedLine() && !isReadOnly() && selectedText().isEmpty()) {
     QTextEdit::ExtraSelection selection;
-    QColor lineColor(_darkBackground ? "#D0D0D0" : "#D8D8D8");
+    QColor lineColor(_darkBackground ? "#CECECE" : "#D8D8D8");
     selection.format = textCursor().block().charFormat();
     selection.format.setBackground(lineColor);
     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
