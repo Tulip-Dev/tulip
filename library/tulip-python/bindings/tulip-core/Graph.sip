@@ -402,7 +402,7 @@ Creates and returns a new named subgraph of this graph.
 
   tlp::Graph* addCloneSubGraph(const std::string& name = "unnamed", bool addSibling = false, bool addSiblingProperties = false);
 %Docstring
-tlp.Graph.addCloneSubGraph(name="unnamed", addSibling=False, addSiblinProperties=False)
+tlp.Graph.addCloneSubGraph(name="unnamed", addSibling=False, addSiblingProperties=False)
 
 .. versionadded:: 4.5
 
