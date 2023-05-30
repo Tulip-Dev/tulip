@@ -1248,7 +1248,7 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
   int pos = lineNumberAreaWidth() + left + 1;
   int stop = 0;
 
-  for (int i = textBeforeCursor.length(); i >= 0; --i) {
+  for (int i = textBeforeCursor.length() - 1; i >= 0; --i) {
     if (textBeforeCursor[i] == '\t' || textBeforeCursor[i] == ' ' || textBeforeCursor[i] == '.' ||
         textBeforeCursor[i] == '(' || textBeforeCursor[i] == '[') {
       stop = i + 1;

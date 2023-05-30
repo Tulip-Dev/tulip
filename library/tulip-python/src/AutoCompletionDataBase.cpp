@@ -1309,10 +1309,11 @@ QSet<QString> AutoCompletionDataBase::getAllDictForType(const QString &type, con
   ret = _apiDb->getDictContentForType(type, prefix);
 
   if (!root) {
-    for (const QString &entry : ret) {
-      if (entry[0].isUpper()) {
-        ret.remove(entry);
-      }
+    for (QSet<QString>::iterator it = ret.begin(); it != ret.end();) {
+      if ((*it)[0].isUpper())
+        it = ret.erase(it);
+      else
+        ++it;
     }
   }
 
@@ -1459,10 +1460,11 @@ QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QStr
           ((_varToType.find(editedFunction) != _varToType.end() &&
             _varToType[editedFunction].find(expr) != _varToType[editedFunction].end()) ||
            (!_apiDb->typeExists(expr) && _apiDb->getFullTypeName(expr).isEmpty()))) {
-        for (const QString &entry : ret) {
-          if (entry[0].isUpper()) {
-            ret.remove(entry);
-          }
+        for (QSet<QString>::iterator it = ret.begin(); it != ret.end();) {
+          if ((*it)[0].isUpper())
+            it = ret.erase(it);
+          else
+            ++it;
         }
       }
     } else if (!dotContext) {
