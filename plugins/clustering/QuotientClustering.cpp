@@ -106,7 +106,7 @@ public:
   PLUGININFORMATION("Quotient Clustering", "David Auber", "13/06/2001",
                     "Computes a quotient subgraph (meta-nodes pointing on subgraphs) using an "
                     "already existing subgraphs hierarchy.",
-                    "1.5", "Clustering")
+                    "1.6", "Clustering")
   //================================================================================
   QuotientClustering(PluginContext *context) : Algorithm(context) {
     addDependency("FM^3 (OGDF)", "1.4");
