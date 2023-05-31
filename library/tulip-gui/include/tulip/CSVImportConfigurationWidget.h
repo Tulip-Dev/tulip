@@ -59,11 +59,11 @@ public:
   /**
    * @brief Change the type of the property. Use the PropertyClass::propertyTypename static var.
    **/
-  void setPropertyType(const std::string &propertyType);
+  void setPropertyType(const std::string &propertyType, bool defValue = false);
 
   QString getPropertyName() const;
 
-  void setPropertyName(const QString &name);
+  void setPropertyName(const QString &name, bool defValue = false);
 
   void toggleUsed();
 
@@ -75,11 +75,14 @@ private:
   Ui_CSVPropertyDialog *ui;
   bool nameEditable;
   unsigned int propertyNumber;
+  void addException(const std::string &value, CSVColumn::Action action);
+
 
 private slots:
   void showPropertyCreationDialog();
   void typeCBChanged(const QString &index);
   void addException();
+
   void delCurrentException();
 
 signals:

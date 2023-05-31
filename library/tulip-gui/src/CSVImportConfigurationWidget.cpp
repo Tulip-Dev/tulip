@@ -65,23 +65,29 @@ const string &PropertyConfigurationWidget::getPropertyType() const {
   return _type;
 }
 
-void PropertyConfigurationWidget::setPropertyType(const string &pType) {
+void PropertyConfigurationWidget::setPropertyType(const string &pType,
+                                                  bool defValue) {
   _type = pType.empty() ? "string" : pType;
   propertyEditButton->setText(
       QString("%1\n[%2]").arg(getPropertyName()).arg(propertyTypeToPropertyTypeLabel(_type)));
+  if (defValue)
+    _def_type = _type;
 }
 
 QString PropertyConfigurationWidget::getPropertyName() const {
   return tlpStringToQString(_name);
 }
-void PropertyConfigurationWidget::setPropertyName(const QString &pName) {
+void PropertyConfigurationWidget::setPropertyName(const QString &pName,
+                                                  bool defValue) {
   _name = QStringToTlpString(pName);
-  propertyEditButton->setText(QString("%1\n[%2]").arg(pName).arg(QString(_type.c_str())));
+  propertyEditButton->setText(QString("%1<br/><center>[%2]</center>").arg(pName).arg(QString(_type.c_str())));
   propertyEditButton->setToolTip(QString("<center><b>Column #%1</b></center>name: %2<br/>type: "
                                          "%3<br>Click for more import options.")
                                      .arg(propertyNumber)
                                      .arg(pName)
                                      .arg(_type.c_str()));
+  if (defValue)
+    _def_name = _name;
 }
 
 unsigned int PropertyConfigurationWidget::getPropertyNumber() const {
@@ -108,13 +114,19 @@ void PropertyConfigurationWidget::typeCBChanged(const QString &type) {
 }
 
 void PropertyConfigurationWidget::addException() {
+  addException("edit the value", CSVColumn::ASSIGN_NO_VALUE);
+}
+
+void PropertyConfigurationWidget::addException(const std::string &value,
+                                               CSVColumn::Action action) {
   QTableWidget *w = ui->exceptionTableWidget;
   auto row = w->rowCount();
   w->insertRow(row);
-  w->setItem(row, 0, new QTableWidgetItem(QString("edit the value")));
+  w->setItem(row, 0, new QTableWidgetItem(QString(value.c_str())));
   QComboBox *actionCB = new QComboBox(w);
   actionCB->addItem(QString("Assign no value"));
   actionCB->addItem(QString("Ignore the row"));
+  actionCB->setCurrentIndex(static_cast<int>(action));
   w->setCellWidget(row, 1, actionCB);
 }
 
@@ -177,6 +189,9 @@ void PropertyConfigurationWidget::showPropertyCreationDialog() {
       ui->separatorCB->setCurrentIndex(index);
   }
 
+  for (const auto &exception : _exceptions)
+    addException(exception.value, exception.action);
+
   ui->exceptionTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
   connect(ui->addExceptionButton, SIGNAL(released()), this, SLOT(addException()));
   connect(ui->delCurrentExceptionButton, SIGNAL(released()), this, SLOT(delCurrentException()));
@@ -193,6 +208,10 @@ void PropertyConfigurationWidget::showPropertyCreationDialog() {
       CSVColumn::addException(value, CSVColumn::Action(action));
     }
   }
+
+  // visual feedback to indicate if the column is configured as default or not
+  propertyEditButton->setStyleSheet(QString("QPushButton {font-weight: %1}").arg(isDefault() ? "normal" : "bold"));
+
   delete ui;
 }
 
@@ -510,12 +529,12 @@ void CSVImportConfigurationWidget::updateTableHeaders() {
   QStringList itemsLabels;
 
   for (unsigned int i = 0; i < columnCount(); ++i) {
-    // Update the column name
+    // set the default column name
     QString columnName = generateColumnName(i);
     itemsLabels << ""; // columnName;
-    propertyWidgets[i]->setPropertyName(columnName);
-    // Update the column type.
-    propertyWidgets[i]->setPropertyType(getColumnType(i));
+    propertyWidgets[i]->setPropertyName(columnName, true);
+    // set the default column type.
+    propertyWidgets[i]->setPropertyType(getColumnType(i), true);
   }
 
   ui->previewTableWidget->setHorizontalHeaderLabels(itemsLabels);
