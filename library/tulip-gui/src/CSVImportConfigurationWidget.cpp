@@ -65,8 +65,7 @@ const string &PropertyConfigurationWidget::getPropertyType() const {
   return _type;
 }
 
-void PropertyConfigurationWidget::setPropertyType(const string &pType,
-                                                  bool defValue) {
+void PropertyConfigurationWidget::setPropertyType(const string &pType, bool defValue) {
   _type = pType.empty() ? "string" : pType;
   propertyEditButton->setText(
       QString("%1\n[%2]").arg(getPropertyName()).arg(propertyTypeToPropertyTypeLabel(_type)));
@@ -77,10 +76,10 @@ void PropertyConfigurationWidget::setPropertyType(const string &pType,
 QString PropertyConfigurationWidget::getPropertyName() const {
   return tlpStringToQString(_name);
 }
-void PropertyConfigurationWidget::setPropertyName(const QString &pName,
-                                                  bool defValue) {
+void PropertyConfigurationWidget::setPropertyName(const QString &pName, bool defValue) {
   _name = QStringToTlpString(pName);
-  propertyEditButton->setText(QString("%1<br/><center>[%2]</center>").arg(pName).arg(QString(_type.c_str())));
+  propertyEditButton->setText(
+      QString("%1<br/><center>[%2]</center>").arg(pName).arg(QString(_type.c_str())));
   propertyEditButton->setToolTip(QString("<center><b>Column #%1</b></center>name: %2<br/>type: "
                                          "%3<br>Click for more import options.")
                                      .arg(propertyNumber)
@@ -117,8 +116,7 @@ void PropertyConfigurationWidget::addException() {
   addException("edit the value", CSVColumn::ASSIGN_NO_VALUE);
 }
 
-void PropertyConfigurationWidget::addException(const std::string &value,
-                                               CSVColumn::Action action) {
+void PropertyConfigurationWidget::addException(const std::string &value, CSVColumn::Action action) {
   QTableWidget *w = ui->exceptionTableWidget;
   auto row = w->rowCount();
   w->insertRow(row);
@@ -210,7 +208,8 @@ void PropertyConfigurationWidget::showPropertyCreationDialog() {
   }
 
   // visual feedback to indicate if the column is configured as default or not
-  propertyEditButton->setStyleSheet(QString("QPushButton {font-weight: %1}").arg(isDefault() ? "normal" : "bold"));
+  propertyEditButton->setStyleSheet(
+      QString("QPushButton {font-weight: %1}").arg(isDefault() ? "normal" : "bold"));
 
   delete ui;
 }

@@ -77,7 +77,6 @@ private:
   unsigned int propertyNumber;
   void addException(const std::string &value, CSVColumn::Action action);
 
-
 private slots:
   void showPropertyCreationDialog();
   void typeCBChanged(const QString &index);

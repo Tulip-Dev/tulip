@@ -43,8 +43,7 @@ class PropertyInterface;
 class TLP_QT_SCOPE CSVColumn {
 public:
   CSVColumn(const std::string &columnName = "", const std::string &columnType = "")
-      : _used(true), _name(columnName), _type(columnType),
-      _valueSeparator(DEF_VALUE_SEPARATOR) {}
+      : _used(true), _name(columnName), _type(columnType), _valueSeparator(DEF_VALUE_SEPARATOR) {}
 
   /**
    * @brief Get the name of the column.
@@ -65,7 +64,7 @@ public:
    **/
   bool isDefault() const {
     return (_name == _def_name) && (_type == _def_type) &&
-      (_valueSeparator == DEF_VALUE_SEPARATOR) && _exceptions.empty();
+           (_valueSeparator == DEF_VALUE_SEPARATOR) && _exceptions.empty();
   }
 
   /**
