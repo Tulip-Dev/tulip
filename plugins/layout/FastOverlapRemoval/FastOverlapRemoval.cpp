@@ -96,8 +96,8 @@ bool FastOverlapRemoval::run() {
   int nbPasses = 5;
 
   if (dataSet != nullptr) {
-    dataSet->getDeprecated("overlap removal type", "overlaps removal type",overlap_type);
-    dataSet->getDeprecated("bounding box", "boundingBox",viewSize);
+    dataSet->getDeprecated("overlap removal type", "overlaps removal type", overlap_type);
+    dataSet->getDeprecated("bounding box", "boundingBox", viewSize);
     dataSet->get("layout", viewLayout);
     dataSet->get("rotation", viewRot);
     dataSet->get("number of passes", nbPasses);

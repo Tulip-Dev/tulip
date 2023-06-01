@@ -63,7 +63,7 @@ public:
   enum PredefinedMetaValueCalculator : unsigned int {
     NO_CALC = StandardMetaValueCalculator::NO_CALC,
     AVG_CALC = StandardMetaValueCalculator::AVG_CALC,
-    SUM_CALC = StandardMetaValueCalculator:: SUM_CALC,
+    SUM_CALC = StandardMetaValueCalculator::SUM_CALC,
     MAX_CALC = StandardMetaValueCalculator::MAX_CALC,
     MIN_CALC = StandardMetaValueCalculator::MIN_CALC
   };
