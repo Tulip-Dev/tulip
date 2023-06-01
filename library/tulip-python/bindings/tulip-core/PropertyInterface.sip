@@ -25,6 +25,19 @@
 
 namespace tlp {
 
+// the enum below is used in DoubleProperty class
+// to allow the use of DoubleProperty::setMetaValueCalculator
+// in python bindings with enum values;
+// because sip cannot handle the ones declared
+// in DoubleProperty::PredefinedMetaValueCalculator enumeration
+enum StandardMetaValueCalculator {
+  NO_CALC = 0,
+  AVG_CALC = 1,
+  SUM_CALC = 2,
+  MAX_CALC = 3,
+  MIN_CALC = 4
+};
+
 class PropertyInterface : tlp::Observable /Abstract/ {
 %TypeHeaderCode
 #include <tulip/PropertyInterface.h>

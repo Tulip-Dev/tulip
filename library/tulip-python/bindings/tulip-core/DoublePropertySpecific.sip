@@ -23,6 +23,31 @@
 // | (https://sourceforge.net/projects/booggie/)                             |
 // +-------------------------------------------------------------------------+
 
+//===========================================================================================
+  void setMetaValueCalculator(unsigned int nodeCalc = tlp::AVG_CALC,
+                              unsigned int edgeCalc = tlp::AVG_CALC);
+%Docstring
+tlp.DoubleProperty.setMetaValueCalculator(nodeCalc, edgeCalc)
+
+Sets the predefined calculator for meta nodes and edges.
+
+:param nodeCalc: a predefined calculator value used for nodes
+:type nodeCalc : integer
+:param edgeCalc: a predefined calculator value used for edges
+:type edgeCalc : integer
+%End
+
+%MethodCode
+  if (a0 >= tlp::DoubleProperty::NO_CALC && a0 <= tlp::DoubleProperty::MIN_CALC
+   && a1 >= tlp::DoubleProperty::NO_CALC && a1 < tlp::DoubleProperty::MIN_CALC) {
+    sipCpp->setMetaValueCalculator(static_cast<tlp::DoubleProperty::PredefinedMetaValueCalculator>(a0), static_cast<tlp::DoubleProperty::PredefinedMetaValueCalculator>(a1));
+  } else {
+    sipIsErr = -1;
+    PyErr_SetString(PyExc_Exception, "one of the values provided as MetaValueCalculator is invalid");
+  }
+%End
+
+//===========================================================================================
   double getNodeMin(const tlp::Graph *subgraph=0);
 %Docstring
 tlp.DoubleProperty.getNodeMin(subgraph=None)

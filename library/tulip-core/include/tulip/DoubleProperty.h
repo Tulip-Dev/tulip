@@ -60,12 +60,12 @@ public:
   void setValueToGraphEdges(tlp::StoredType<double>::ReturnedConstValue v,
                             const Graph *graph) override;
 
-  enum PredefinedMetaValueCalculator {
-    NO_CALC = 0,
-    AVG_CALC = 1,
-    SUM_CALC = 2,
-    MAX_CALC = 3,
-    MIN_CALC = 4
+  enum PredefinedMetaValueCalculator : unsigned int {
+    NO_CALC = StandardMetaValueCalculator::NO_CALC,
+    AVG_CALC = StandardMetaValueCalculator::AVG_CALC,
+    SUM_CALC = StandardMetaValueCalculator:: SUM_CALC,
+    MAX_CALC = StandardMetaValueCalculator::MAX_CALC,
+    MIN_CALC = StandardMetaValueCalculator::MIN_CALC
   };
 
   // setMetaValueCalculator overloading
