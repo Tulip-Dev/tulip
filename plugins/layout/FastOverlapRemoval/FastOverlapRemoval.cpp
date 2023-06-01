@@ -86,8 +86,8 @@ bool FastOverlapRemoval::run() {
     pluginProgress->showStops(false);
   }
 
-  tlp::StringCollection stringCollection(OVERLAP_TYPE);
-  stringCollection.setCurrent(0);
+  tlp::StringCollection overlap_type(OVERLAP_TYPE);
+  overlap_type.setCurrent(0);
   LayoutProperty *viewLayout = nullptr;
   SizeProperty *viewSize = nullptr;
   DoubleProperty *viewRot = nullptr;
@@ -96,18 +96,9 @@ bool FastOverlapRemoval::run() {
   int nbPasses = 5;
 
   if (dataSet != nullptr) {
-
-    if (dataSet->exists("overlaps removal type"))
-      dataSet->get("overlaps removal type", stringCollection);
-    else
-      dataSet->get("overlap removal type", stringCollection);
-
+    dataSet->getDeprecated("overlap removal type", "overlaps removal type",overlap_type);
+    dataSet->getDeprecated("bounding box", "boundingBox",viewSize);
     dataSet->get("layout", viewLayout);
-
-    if (!dataSet->get("bounding box", viewSize))
-      // old name of the parameter
-      dataSet->get("boundingBox", viewSize);
-
     dataSet->get("rotation", viewRot);
     dataSet->get("number of passes", nbPasses);
     dataSet->get("x border", xBorder);
@@ -153,9 +144,9 @@ bool FastOverlapRemoval::run() {
     });
 
     // actually apply fast overlap removal
-    if (stringCollection.getCurrentString() == "X-Y") {
+    if (overlap_type.getCurrentString() == "X-Y") {
       removeRectangleOverlap(nbNodes, nodeRectangles.data(), xBorder, yBorder);
-    } else if (stringCollection.getCurrentString() == "X") {
+    } else if (overlap_type.getCurrentString() == "X") {
       removeRectangleOverlapX(nbNodes, nodeRectangles.data(), xBorder, yBorder);
     } else {
       removeRectangleOverlapY(nbNodes, nodeRectangles.data(), yBorder);
