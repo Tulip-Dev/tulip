@@ -139,11 +139,10 @@ bool PathLengthMetric::run() {
 }
 //=======================================
 bool PathLengthMetric::check(std::string &erreurMsg) {
-  if (AcyclicTest::isAcyclic(graph))
+    if (!AcyclicTest::isAcyclic(graph)) {
+        erreurMsg = "The graph must be acyclic.";
+        return false;
+    }
     return true;
-  else {
-    erreurMsg = "The graph must be acyclic.";
-    return false;
-  }
 }
 //=======================================

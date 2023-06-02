@@ -36,11 +36,9 @@ bool DagLevelMetric::run() {
 }
 //======================================================
 bool DagLevelMetric::check(std::string &erreurMsg) {
-  if (AcyclicTest::isAcyclic(graph)) {
-    erreurMsg = "";
-    return true;
-  } else {
-    erreurMsg = "The graph must be a acylic.";
-    return false;
+  if (!AcyclicTest::isAcyclic(graph)) {
+      erreurMsg = "The graph must be acylic.";
+      return false;
   }
+  return true;
 }
