@@ -1,0 +1,296 @@
+####################################
+#         System information       #
+####################################
+# Date:                   2023:05:30 
+# Time:                   10:33:38 
+# Xnee program:           cnee 
+# Xnee version:           3.19 
+# Xnee home:              http://www.gnu.org/software/xnee/ 
+# Xnee info mailing list: info-xnee@gnu.org 
+# Xnee bug mailing list:  bug-xnee@gnu.org 
+# X version:              11 
+# X revision:             0 
+# X vendor:               The X.Org Foundation 
+# X vendor release:       12013000 
+# Record version major:   1
+# Record version minor:   13
+# OS name:                Linux 
+# OS Release:             5.4.0-149-generic 
+# OS Version:             #166-Ubuntu SMP Tue Apr 18 16:51:45 UTC 2023 
+# Machine:                x86_64 
+# Nodename:               tulip-Precision-5810 
+# Display name:           :0
+# Dimension:              1920x1080
+
+
+
+##############################################
+#      Xnee application arguments            #
+##############################################
+#  /usr/local/bin/cnee -rec -etr -1 --keyboard --mouse -sk End -o group_unique.xns 
+
+
+##############################################
+#      Displays                              #
+##############################################
+# display :0
+# distribute
+
+
+##############################################
+#      Files                                 #
+##############################################
+# out-file group_unique.xns
+# err-file stderr
+
+
+##############################################
+#      Key Grabs                             #
+##############################################
+# stop-key         End
+# pause-key        0
+# resume-key       0
+# insert-key       0
+# exec-key         0
+# exec-program-key         xnee-exec-no-program
+
+
+##############################################
+#      Recording limits etc                  #
+##############################################
+
+events-to-record        -1
+data-to-record          -1
+seconds-to-record       -1
+# first-last
+
+# Record  all (including current) clients or only future ones
+all-clients
+# future-clients
+
+# Store the starting mouse position 
+# store-mouse-position
+
+
+##############################################
+#      Resolution                            #
+##############################################
+
+# Resolution
+#recorded-resolution  1920x1080
+#replay-resolution  1x1
+#resolution-adjustment  0
+
+
+##############################################
+#      Speed                                 #
+##############################################
+
+# Speed
+#speed-percent  100
+
+
+##############################################
+#      Replaying limits etc                  #
+##############################################
+
+max-threshold 20 
+min-threshold 20 
+tot-threshold 40 
+
+
+##############################################
+#      Feedback                              #
+##############################################
+#feedback-none
+#feedback-stderr
+feedback-xosd
+ 
+
+
+##############################################
+#      Various                               #
+##############################################
+
+# Plugin file 
+
+# Modes (currently not used)
+# synchronised-replay
+
+# Replay offset
+#replay-offset 0x0
+
+# Human printout of X11 data (instead of Xnee format)
+# human-printout  
+
+# Delay before starting record/replay
+# time 0
+
+# No recording of ReparentNotify
+# no-reparent-recording 
+
+# Various
+#########################################
+#          Record settings              #
+#########################################
+#   data_flags          7
+#   rState              0x55a6a3a492b0
+#   xids[0]             3
+#   xids[1]             0
+# Number of Ranges      2
+# RecordRange[0]
+request-range            0-0
+reply-range                   0-0 
+extension-request-major-range  0-0 
+extension-request-minor-range  0-0 
+extension-reply-major-range   0-0
+extension-reply-minor-range   0-0 
+delivered-event-range         21-21 
+device-event-range            2-6 
+error-range                   0-0 
+# RecordRange[1]
+request-range            0-0
+reply-range                   0-0 
+extension-request-major-range  0-0 
+extension-request-minor-range  0-0 
+extension-reply-major-range   0-0
+extension-reply-minor-range   0-0 
+delivered-event-range         0-0 
+device-event-range            66-71 
+error-range                   0-0 
+7,2,0,0,0,37,0,6650487,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,37,0,6650487,3,Virtual core keyboard
+7,2,0,0,0,42,0,6650967,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,42,0,6650967,3,Virtual core keyboard
+7,3,0,0,0,42,0,6651033,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,42,0,6651033,3,Virtual core keyboard
+7,3,0,0,0,37,0,6651095,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,37,0,6651095,3,Virtual core keyboard
+7,6,121,684,0,0,0,6652575,11,'Logitech USB Optical Mouse'
+7,6,126,684,0,0,0,6652583,11,'Logitech USB Optical Mouse'
+7,6,131,684,0,0,0,6652591,11,'Logitech USB Optical Mouse'
+7,6,138,684,0,0,0,6652599,11,'Logitech USB Optical Mouse'
+7,6,146,684,0,0,0,6652607,11,'Logitech USB Optical Mouse'
+7,6,154,684,0,0,0,6652615,11,'Logitech USB Optical Mouse'
+7,6,161,684,0,0,0,6652623,11,'Logitech USB Optical Mouse'
+7,6,167,684,0,0,0,6652631,11,'Logitech USB Optical Mouse'
+7,6,173,684,0,0,0,6652639,11,'Logitech USB Optical Mouse'
+7,6,178,683,0,0,0,6652647,11,'Logitech USB Optical Mouse'
+7,6,184,683,0,0,0,6652655,11,'Logitech USB Optical Mouse'
+7,6,190,683,0,0,0,6652663,11,'Logitech USB Optical Mouse'
+7,6,195,683,0,0,0,6652671,11,'Logitech USB Optical Mouse'
+7,6,198,683,0,0,0,6652679,11,'Logitech USB Optical Mouse'
+7,6,201,683,0,0,0,6652687,11,'Logitech USB Optical Mouse'
+7,6,204,683,0,0,0,6652695,11,'Logitech USB Optical Mouse'
+7,6,207,683,0,0,0,6652703,11,'Logitech USB Optical Mouse'
+7,6,209,682,0,0,0,6652711,11,'Logitech USB Optical Mouse'
+7,6,213,682,0,0,0,6652719,11,'Logitech USB Optical Mouse'
+7,6,215,682,0,0,0,6652727,11,'Logitech USB Optical Mouse'
+7,6,218,682,0,0,0,6652735,11,'Logitech USB Optical Mouse'
+7,6,221,682,0,0,0,6652743,11,'Logitech USB Optical Mouse'
+7,6,223,681,0,0,0,6652751,11,'Logitech USB Optical Mouse'
+7,6,226,681,0,0,0,6652759,11,'Logitech USB Optical Mouse'
+7,6,228,680,0,0,0,6652767,11,'Logitech USB Optical Mouse'
+7,6,230,680,0,0,0,6652775,11,'Logitech USB Optical Mouse'
+7,6,231,680,0,0,0,6652783,11,'Logitech USB Optical Mouse'
+7,6,232,679,0,0,0,6652839,11,'Logitech USB Optical Mouse'
+7,6,233,680,0,0,0,6652847,11,'Logitech USB Optical Mouse'
+7,6,234,681,0,0,0,6652855,11,'Logitech USB Optical Mouse'
+7,6,235,683,0,0,0,6652863,11,'Logitech USB Optical Mouse'
+7,6,235,684,0,0,0,6652871,11,'Logitech USB Optical Mouse'
+7,6,236,685,0,0,0,6652879,11,'Logitech USB Optical Mouse'
+7,6,236,686,0,0,0,6652895,11,'Logitech USB Optical Mouse'
+7,6,236,687,0,0,0,6652903,11,'Logitech USB Optical Mouse'
+7,6,237,687,0,0,0,6652911,11,'Logitech USB Optical Mouse'
+7,6,237,689,0,0,0,6652919,11,'Logitech USB Optical Mouse'
+7,6,237,691,0,0,0,6652927,11,'Logitech USB Optical Mouse'
+7,6,238,693,0,0,0,6652935,11,'Logitech USB Optical Mouse'
+7,6,239,695,0,0,0,6652943,11,'Logitech USB Optical Mouse'
+7,6,240,696,0,0,0,6652951,11,'Logitech USB Optical Mouse'
+7,6,240,698,0,0,0,6652959,11,'Logitech USB Optical Mouse'
+7,6,241,699,0,0,0,6652967,11,'Logitech USB Optical Mouse'
+7,6,242,700,0,0,0,6652975,11,'Logitech USB Optical Mouse'
+7,6,243,702,0,0,0,6652983,11,'Logitech USB Optical Mouse'
+7,6,244,702,0,0,0,6652991,11,'Logitech USB Optical Mouse'
+7,6,244,703,0,0,0,6652999,11,'Logitech USB Optical Mouse'
+7,6,245,703,0,0,0,6653015,11,'Logitech USB Optical Mouse'
+7,4,0,0,3,0,0,6653639,11,Logitech USB Optical Mouse
+6,4,0,0,3,0,0,6653639,2,Virtual core pointer
+7,5,0,0,3,0,0,6653815,11,Logitech USB Optical Mouse
+6,5,0,0,3,0,0,6653815,2,Virtual core pointer
+7,2,0,0,0,116,0,6656743,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,116,0,6656743,3,Virtual core keyboard
+7,3,0,0,0,116,0,6656887,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,116,0,6656887,3,Virtual core keyboard
+7,2,0,0,0,116,0,6657191,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,116,0,6657191,3,Virtual core keyboard
+7,3,0,0,0,116,0,6657335,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,116,0,6657335,3,Virtual core keyboard
+7,2,0,0,0,36,0,6658119,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,36,0,6658119,3,Virtual core keyboard
+0,21,0,0,0,0,0,6658152
+NEW-WINDOW:451,254:23068747,23068747,33565792,0,0,0:0x0+879+458:0,0:Exporting graph "group test"
+0,21,0,0,0,0,0,6658153
+0,21,0,0,0,0,0,6658153
+7,3,0,0,0,36,0,6658183,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,36,0,6658183,3,Virtual core keyboard
+7,2,0,0,0,28,0,6659623,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,28,0,6659623,3,Virtual core keyboard
+7,3,0,0,0,28,0,6659687,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,28,0,6659687,3,Virtual core keyboard
+7,2,0,0,0,26,0,6659863,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,26,0,6659863,3,Virtual core keyboard
+7,3,0,0,0,26,0,6659943,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,26,0,6659943,3,Virtual core keyboard
+7,2,0,0,0,39,0,6660103,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,39,0,6660103,3,Virtual core keyboard
+7,3,0,0,0,39,0,6660167,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,39,0,6660167,3,Virtual core keyboard
+7,2,0,0,0,28,0,6660375,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,28,0,6660375,3,Virtual core keyboard
+7,3,0,0,0,28,0,6660487,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,28,0,6660487,3,Virtual core keyboard
+7,2,0,0,0,17,0,6660551,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,17,0,6660551,3,Virtual core keyboard
+7,3,0,0,0,17,0,6660679,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,17,0,6660679,3,Virtual core keyboard
+7,2,0,0,0,42,0,6661095,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,42,0,6661095,3,Virtual core keyboard
+7,3,0,0,0,42,0,6661191,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,42,0,6661191,3,Virtual core keyboard
+7,2,0,0,0,30,0,6661191,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,30,0,6661191,3,Virtual core keyboard
+7,2,0,0,0,31,0,6661271,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,31,0,6661271,3,Virtual core keyboard
+7,3,0,0,0,30,0,6661303,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,30,0,6661303,3,Virtual core keyboard
+7,3,0,0,0,31,0,6661399,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,31,0,6661399,3,Virtual core keyboard
+7,2,0,0,0,62,0,6661767,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,62,0,6661767,3,Virtual core keyboard
+7,2,0,0,0,59,0,6661975,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,59,0,6661975,3,Virtual core keyboard
+7,3,0,0,0,62,0,6662023,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,62,0,6662023,3,Virtual core keyboard
+7,3,0,0,0,59,0,6662055,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,59,0,6662055,3,Virtual core keyboard
+7,2,0,0,0,28,0,6662391,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,28,0,6662391,3,Virtual core keyboard
+7,3,0,0,0,28,0,6662487,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,28,0,6662487,3,Virtual core keyboard
+7,2,0,0,0,46,0,6662487,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,46,0,6662487,3,Virtual core keyboard
+7,3,0,0,0,46,0,6662663,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,46,0,6662663,3,Virtual core keyboard
+7,2,0,0,0,33,0,6662727,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,33,0,6662727,3,Virtual core keyboard
+7,3,0,0,0,33,0,6662839,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,33,0,6662839,3,Virtual core keyboard
+7,2,0,0,0,36,0,6664391,8,Dell KB216 Wired Keyboard
+6,2,0,0,0,36,0,6664391,3,Virtual core keyboard
+0,21,0,0,0,0,0,6664429
+NEW-WINDOW:-1549207152,21926:23068753,23068753,33565888,0,0,0:873x0+-1549211856+21926:-1549230224,-1549230224:
+0,21,0,0,0,0,0,6664429
+0,21,0,0,0,0,0,6664429
+7,3,0,0,0,36,0,6664471,8,Dell KB216 Wired Keyboard
+6,3,0,0,0,36,0,6664471,3,Virtual core keyboard
