@@ -96,7 +96,7 @@ GEMLayout::GEMLayout(const tlp::PluginContext *context)
   addInParameter<LayoutProperty>("initial layout", paramHelp[2], "", false);
   addInParameter<BooleanProperty>("unmovable nodes", paramHelp[3], "", false);
   addInParameter<unsigned int>("max iterations", paramHelp[4], "0");
-  addDependency("Connected Component Packing", "1.0");
+  addDependency("Connected Component Packing", "1.1");
 }
 //=========================================================
 GEMLayout::~GEMLayout() {}
@@ -377,7 +377,7 @@ bool GEMLayout::run() {
     // call connected component packing
     LayoutProperty tmpLayout(graph);
     DataSet ds;
-    ds.set("coordinates", result);
+    ds.set("initial layout", result);
     graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout, err, &ds,
                                   pluginProgress);
     *result = tmpLayout;

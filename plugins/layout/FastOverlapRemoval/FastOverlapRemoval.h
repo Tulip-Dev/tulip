@@ -48,7 +48,7 @@ public:
       "Graph Drawing 2005, "
       "Vol. 3843 (2006), pp. 153-164,<br/>doi: <a "
       "href=\"https://doi.org/10.1007/11618058_15\">10.1007/11618058_15</a>",
-      "1.3", "Misc")
+      "1.4", "Misc")
 
   FastOverlapRemoval(const tlp::PluginContext *context);
   inline ~FastOverlapRemoval() override {}

@@ -21,7 +21,7 @@
 #include <tulip/LayoutProperty.h>
 
 static const char *paramHelp[] = {
-    // layout
+    // initial layout
     "The layout property from which a perfect aspect ratio has to be computed.",
 
     // subgraph only
@@ -30,10 +30,10 @@ static const char *paramHelp[] = {
 class PerfectLayout : public tlp::LayoutAlgorithm {
 public:
   PLUGININFORMATION("Perfect aspect ratio", "Tulip team", "09/19/2010",
-                    "Scales the graph layout to get an aspect ratio of 1.", "1.2", "")
+                    "Scales the graph layout to get an aspect ratio of 1.", "1.3", "")
 
   PerfectLayout(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
-    addInParameter<tlp::LayoutProperty>("layout", paramHelp[0], "viewLayout", false);
+    addInParameter<tlp::LayoutProperty>("initial layout", paramHelp[0], "viewLayout", false);
     addInParameter<bool>("subgraph only", paramHelp[1], "false");
   }
   bool run() override {
@@ -41,7 +41,7 @@ public:
     bool subgraphOnly(false);
 
     if (dataSet != nullptr) {
-      dataSet->get("layout", layout);
+      dataSet->getDeprecated("initial layout", "layout", layout);
       dataSet->getDeprecated("subgraph only", "Subgraph only", subgraphOnly);
     }
 

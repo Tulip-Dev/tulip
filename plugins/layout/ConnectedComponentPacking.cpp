@@ -35,7 +35,7 @@ const float spacing = 8;
 #define COMPLEXITY "auto;n5;n4logn;n4;n3logn;n3;n2logn;n2;nlogn;n;"
 
 static const char *paramHelp[] = {
-    // coordinates
+    // initial layout
     "Input layout of nodes and edges.",
 
     // rotation
@@ -47,7 +47,7 @@ static const char *paramHelp[] = {
 //====================================================================
 ConnectedComponentPacking::ConnectedComponentPacking(const tlp::PluginContext *context)
     : LayoutAlgorithm(context) {
-  addInParameter<LayoutProperty>("coordinates", paramHelp[0], "viewLayout");
+  addInParameter<LayoutProperty>("initial layout", paramHelp[0], "viewLayout");
   addNodeSizePropertyParameter(this);
   addInParameter<DoubleProperty>("rotation", paramHelp[1], "viewRotation");
   addInParameter<StringCollection>(
@@ -64,7 +64,7 @@ bool ConnectedComponentPacking::run() {
   string complexity("auto");
 
   if (dataSet != nullptr) {
-    dataSet->get("coordinates", layout);
+    dataSet->getDeprecated("initial layout", "coordinates", layout);
     getNodeSizePropertyParameter(dataSet, size);
     dataSet->get("rotation", rotation);
     StringCollection complexityCol;

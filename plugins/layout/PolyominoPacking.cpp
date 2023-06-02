@@ -48,7 +48,7 @@ using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-    // coordinates
+    // initial layout
     "Input layout of nodes and edges.",
 
     // rotation
@@ -117,7 +117,7 @@ private:
 PLUGIN(PolyominoPacking)
 
 PolyominoPacking::PolyominoPacking(const PluginContext *context) : LayoutAlgorithm(context) {
-  addInParameter<LayoutProperty>("coordinates", paramHelp[0], "viewLayout");
+  addInParameter<LayoutProperty>("initial layout", paramHelp[0], "viewLayout");
   addNodeSizePropertyParameter(this);
   addInParameter<DoubleProperty>("rotation", paramHelp[1], "viewRotation");
   addInParameter<unsigned int>("margin", paramHelp[2], "1");
@@ -135,7 +135,7 @@ bool PolyominoPacking::run() {
   bndIncrement = 1;
 
   if (dataSet != nullptr) {
-    dataSet->get("coordinates", layout);
+    dataSet->getDeprecated("initial layout", "coordinates", layout);
     getNodeSizePropertyParameter(dataSet, size);
     dataSet->get("rotation", rotation);
     dataSet->get("margin", margin);

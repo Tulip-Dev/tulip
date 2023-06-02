@@ -34,7 +34,7 @@ static const char *paramHelp[] = {
     // overlap removal type
     "Overlap removal type.",
 
-    // layout
+    // initial layout
     "The property used for the input layout of nodes and edges.",
 
     // node size
@@ -66,7 +66,7 @@ FastOverlapRemoval::FastOverlapRemoval(const tlp::PluginContext *context)
     : tlp::LayoutAlgorithm(context) {
   addInParameter<StringCollection>("overlap removal type", paramHelp[0], OVERLAP_TYPE, true,
                                    overlapRemovalTypeValuesDescription);
-  addInParameter<LayoutProperty>("layout", paramHelp[1], "viewLayout");
+  addInParameter<LayoutProperty>("initial layout", paramHelp[1], "viewLayout");
   addInParameter<SizeProperty>("bounding box", paramHelp[2], "viewSize");
   addInParameter<DoubleProperty>("rotation", paramHelp[3], "viewRotation");
   addInParameter<int>("number of passes", paramHelp[4], "5");
@@ -98,7 +98,7 @@ bool FastOverlapRemoval::run() {
   if (dataSet != nullptr) {
     dataSet->getDeprecated("overlap removal type", "overlaps removal type", overlap_type);
     dataSet->getDeprecated("bounding box", "boundingBox", viewSize);
-    dataSet->get("layout", viewLayout);
+    dataSet->getDeprecated("initial layout", "layout", viewLayout);
     dataSet->get("rotation", viewRot);
     dataSet->get("number of passes", nbPasses);
     dataSet->get("x border", xBorder);

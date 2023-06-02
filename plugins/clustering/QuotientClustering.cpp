@@ -110,7 +110,7 @@ public:
   //================================================================================
   QuotientClustering(PluginContext *context) : Algorithm(context) {
     addDependency("FM^3 (OGDF)", "1.4");
-    addDependency("Fast Overlap Removal", "1.3");
+    addDependency("Fast Overlap Removal", "1.4");
     addInParameter<bool>("directed", paramHelp[0], "true");
     addInParameter<StringCollection>("node function", paramHelp[2], AGGREGATION_FUNCTIONS, true,
                                      "none <br> average <br> sum <br> max <br> min");

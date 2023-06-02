@@ -321,7 +321,7 @@ static const char *paramHelp[] = {
 BubbleTree::BubbleTree(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addInParameter<bool>("complexity", paramHelp[0], "true");
-  addDependency("Connected Component Packing", "1.0");
+  addDependency("Connected Component Packing", "1.1");
   addDependency("Circular", "1.1");
 }
 
@@ -351,7 +351,7 @@ bool BubbleTree::run() {
     // call connected component packing
     LayoutProperty tmpLayout(graph);
     DataSet tmpdataSet;
-    tmpdataSet.set("coordinates", result);
+    tmpdataSet.set("initial layout", result);
     graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout, err, &tmpdataSet,
                                   pluginProgress);
     *result = tmpLayout;

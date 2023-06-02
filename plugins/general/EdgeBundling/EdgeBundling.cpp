@@ -44,7 +44,7 @@ using namespace tlp;
 //============================================
 
 static const char *paramHelp[] = {
-    // layout
+    // initial layout
     "The input layout of the graph.",
 
     // size
@@ -84,7 +84,7 @@ static const char *paramHelp[] = {
 
 //============================================
 EdgeBundling::EdgeBundling(const PluginContext *context) : Algorithm(context) {
-  addInParameter<LayoutProperty>("layout", paramHelp[0], "viewLayout");
+  addInParameter<LayoutProperty>("initial layout", paramHelp[0], "viewLayout");
   addInParameter<SizeProperty>("node size", paramHelp[1], "viewSize");
   addInParameter<bool>("grid graph", paramHelp[2], "false");
   addInParameter<bool>("3D layout", paramHelp[3], "false");
@@ -229,7 +229,7 @@ bool EdgeBundling::run() {
     dataSet->getDeprecated("3D layout", "3D_layout", layout3D);
     dataSet->getDeprecated("grid graph", "grid_graph", keepGrid);
     dataSet->getDeprecated("sphere layout", "sphere_layout", sphereLayout);
-    dataSet->get("layout", layout);
+    dataSet->getDeprecated("initial layout", "layout", layout);
     dataSet->getDeprecated("node size", "size", size);
   }
 
