@@ -204,7 +204,7 @@ void GraphView::restoreNode(node n) {
   notifyAddNode(n);
 }
 //----------------------------------------------------------------
-void GraphView::addNodesInternal(unsigned int nbAdded, const std::vector<node> *nodes) {
+  void GraphView::addNodesInternal(unsigned int nbAdded, const std::vector<node> *nodes, bool addNodeData) {
   _nodes.reserve(_nodes.size() + nbAdded);
 
   std::vector<node>::const_iterator it;
@@ -221,7 +221,8 @@ void GraphView::addNodesInternal(unsigned int nbAdded, const std::vector<node> *
   for (; it != ite; ++it) {
     node n(*it);
     assert(getRootImpl()->isElement(n));
-    _nodeData.set(n.id, new SGraphNodeData());
+    if (addNodeData)
+      _nodeData.set(n.id, new SGraphNodeData());
     _nodes.add(n);
   }
 
@@ -250,6 +251,8 @@ void GraphView::addNodes(Iterator<node> *addedNodes) {
     node n = addedNodes->next();
 
     if (!isElement(n)) {
+      // update _nodeData to ensure isElement(n) == true
+      _nodeData.set(n.id, new SGraphNodeData());
       nodes.push_back(n);
 
       if (!superIsRoot && !super->isElement(n))
@@ -263,7 +266,7 @@ void GraphView::addNodes(Iterator<node> *addedNodes) {
   }
 
   if (!nodes.empty())
-    addNodesInternal(nodes.size(), &nodes);
+    addNodesInternal(nodes.size(), &nodes, false);
 }
 //----------------------------------------------------------------
 edge GraphView::addEdgeInternal(edge e) {
