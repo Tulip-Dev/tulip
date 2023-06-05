@@ -204,7 +204,8 @@ void GraphView::restoreNode(node n) {
   notifyAddNode(n);
 }
 //----------------------------------------------------------------
-  void GraphView::addNodesInternal(unsigned int nbAdded, const std::vector<node> *nodes, bool addNodeData) {
+void GraphView::addNodesInternal(unsigned int nbAdded, const std::vector<node> *nodes,
+                                 bool addNodeData) {
   _nodes.reserve(_nodes.size() + nbAdded);
 
   std::vector<node>::const_iterator it;
