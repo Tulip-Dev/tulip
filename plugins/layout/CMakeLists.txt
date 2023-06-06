@@ -114,6 +114,11 @@ TARGET_LINK_LIBRARIES(EdgeSeparation-${TulipVersion} ${LibTulipCoreName})
 TULIP_INSTALL_PLUGIN(EdgeSeparation-${TulipVersion} ${TulipPluginsInstallDir})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+ADD_LIBRARY(AlignNodes-${TulipVersion} SHARED AlignNodes.cpp)
+TARGET_LINK_LIBRARIES(AlignNodes-${TulipVersion} ${LibTulipCoreName})
+TULIP_INSTALL_PLUGIN(AlignNodes-${TulipVersion} ${TulipPluginsInstallDir})
+
+##----------------------------------------------------------------------------------------------------------------------------
 TULIP_INSTALL_PLUGIN(MixedModel-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(ConnectedComponentPacking-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(Random-${TulipVersion} ${TulipPluginsInstallDir})
