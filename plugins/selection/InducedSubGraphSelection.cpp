@@ -27,15 +27,15 @@ PLUGIN(InducedSubGraphSelection)
 
 //=================================================================================
 static const char *paramHelp[] = {
-    // Nodes
-    "Set of nodes from which the induced subgraph is computed.",
+    // selection
+    "This property indicates the selected nodes from which the induced subgraph is computed.",
     // Use edges
     "If true, source and target nodes of selected edges will also be added in the input set of "
     "nodes."};
 //=================================================================================
 InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PluginContext *context)
     : BooleanAlgorithm(context) {
-  addInParameter<BooleanProperty>("nodes", paramHelp[0], "viewSelection");
+  addInParameter<BooleanProperty>("selection", paramHelp[0], "viewSelection");
   addInParameter<bool>("use edges", paramHelp[1], "false");
   addOutParameter<unsigned int>("#edges selected", "The number of newly selected edges");
   // old name
@@ -47,7 +47,9 @@ bool InducedSubGraphSelection::run() {
   bool useEdges = false;
 
   if (dataSet != nullptr) {
-    dataSet->getDeprecated("nodes", "Nodes", entrySelection);
+    if (!dataSet->getDeprecated("selection", "nodes", entrySelection))
+      // former deprecated
+      dataSet->get("Nodes", entrySelection);
     dataSet->getDeprecated("use edges", "Use edges", useEdges);
   }
 

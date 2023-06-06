@@ -31,11 +31,11 @@ static const char *paramHelp[] = {
     // edge direction
     "This parameter defines the navigation direction.",
 
-    // starting nodes
-    "This parameter defines the starting set of nodes used to walk in the graph.",
+    // selection
+    "This property indicates the selected nodes used to walk in the graph.",
 
-    // distance
-    "This parameter defines the maximal distance of reachable nodes."};
+    // max distance
+    "This parameter defines the maximum path length (number of edges) between a node already selected and a node that can be reached."};
 
 static const char *directionValuesDescription =
     "output edges: <i>follow output edges (directed)</i><br>"
@@ -49,8 +49,8 @@ ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PluginContext 
   addInParameter<StringCollection>("edge direction", paramHelp[0],
                                    "output edges;input edges;all edges", true,
                                    directionValuesDescription);
-  addInParameter<BooleanProperty>("starting nodes", paramHelp[1], "viewSelection");
-  addInParameter<int>("distance", paramHelp[2], "5");
+  addInParameter<BooleanProperty>("selection", paramHelp[1], "viewSelection");
+  addInParameter<int>("max distance", paramHelp[2], "5");
   addOutParameter<unsigned int>("#edges selected", "The number of newly selected edges");
   addOutParameter<unsigned int>("#nodes selected", "The number of newly selected nodes");
   // old name
@@ -65,47 +65,32 @@ bool ReachableSubGraphSelection::run() {
   BooleanProperty *startNodes = graph->getProperty<BooleanProperty>("viewSelection");
 
   if (dataSet != nullptr) {
-    dataSet->get("distance", maxDistance);
+    dataSet->getDeprecated("max distance", "distance", maxDistance);
 
     // Get the edge orientation
-    bool found(false);
-
-    if (dataSet->get("edge direction", edgeDirectionCollecion))
-      found = true;
+    int direction = 0;
+    if (dataSet->getDeprecated("edge direction", "edges direction", edgeDirectionCollecion))
+      direction = edgeDirectionCollecion.getCurrent();
     else
-      found = dataSet->get("edges direction", edgeDirectionCollecion); // former buggy parameter
-                                                                       // name
+      // If the new parameter is not defined search for the very former one.
+      dataSet->get("direction", direction);
 
-    if (found) {
-      if (edgeDirectionCollecion.getCurrentString() == edgesDirectionLabels[0]) {
-        edgeDirection = DIRECTED;
-      } else if (edgeDirectionCollecion.getCurrentString() == edgesDirectionLabels[1]) {
-        edgeDirection = INV_DIRECTED;
-      } else if (edgeDirectionCollecion.getCurrentString() == edgesDirectionLabels[2]) {
-        edgeDirection = UNDIRECTED;
-      }
-    } else {
-      // If the new parameter is not defined search for the old one.
-      int direction = 0;
+    switch (direction) {
+    case 0:
+      edgeDirection = DIRECTED;
+      break;
 
-      if (dataSet->get("direction", direction)) {
-        switch (direction) {
-        case 0:
-          edgeDirection = DIRECTED;
-          break;
+    case 1:
+      edgeDirection = INV_DIRECTED;
+      break;
 
-        case 1:
-          edgeDirection = INV_DIRECTED;
-          break;
-
-        case 2:
-          edgeDirection = UNDIRECTED;
-        }
-      }
+    case 2:
+      edgeDirection = UNDIRECTED;
     }
 
     // keep startingnodes for compatibility
-    if (!dataSet->get("starting nodes", startNodes))
+    if (!dataSet->getDeprecated("selection", "starting nodes", startNodes))
+      // former deprecated
       dataSet->get("startingnodes", startNodes);
   }
 
@@ -141,8 +126,8 @@ bool ReachableSubGraphSelection::run() {
     }
 
     // select corresponding edges
-    for (const edge &e : graph->edges()) {
-      const std::pair<node, node> &ends = graph->ends(e);
+    for (const edge e : graph->edges()) {
+      auto ends = graph->ends(e);
 
       if ((reachables.find(ends.first) != ite) && (reachables.find(ends.second) != ite)) {
         result->setEdgeValue(e, true);

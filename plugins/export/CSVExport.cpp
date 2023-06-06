@@ -34,10 +34,8 @@ using namespace std;
 static const char *paramHelp[] = {
     // the type of element to export
     "This parameter enables to choose the type of graph elements to export",
-    // export selection
-    "This parameter indicates if only selected elements have to be exported",
-    // export selection property
-    "This parameters enables to choose the property used for the selection",
+    // selection
+    "This parameter indicates the property used to restrict export to selected nodes only.",
     // export id of graph elements
     "This parameter indicates if the id of graph elements has to be exported",
     // exported properties
@@ -89,15 +87,14 @@ static const char *paramHelp[] = {
 //================================================================================
 CsvExport::CsvExport(const PluginContext *context) : ExportModule(context) {
   addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES);
-  addInParameter<bool>(EXPORT_SELECTION, paramHelp[1], "false");
-  addInParameter<BooleanProperty>("export selection property", paramHelp[2], "viewSelection");
-  addInParameter<bool>(EXPORT_ID, paramHelp[3], "false");
-  addInParameter<PropertiesCollection>(EXPORTED_PROPERTIES, paramHelp[4],
+  addInParameter<BooleanProperty>("selection", paramHelp[1], "", false);
+  addInParameter<bool>(EXPORT_ID, paramHelp[2], "false");
+  addInParameter<PropertiesCollection>(EXPORTED_PROPERTIES, paramHelp[3],
                                        "the user defined properties");
-  addInParameter<StringCollection>(FIELD_SEPARATOR, paramHelp[5], FIELD_SEPARATORS);
-  addInParameter<string>(FIELD_SEPARATOR_CUSTOM, paramHelp[6], CUSTOM_MARK);
-  addInParameter<StringCollection>(STRING_DELIMITER, paramHelp[7], STRING_DELIMITERS);
-  addInParameter<StringCollection>(DECIMAL_MARK, paramHelp[8], DECIMAL_MARKS);
+  addInParameter<StringCollection>(FIELD_SEPARATOR, paramHelp[4], FIELD_SEPARATORS);
+  addInParameter<string>(FIELD_SEPARATOR_CUSTOM, paramHelp[5], CUSTOM_MARK);
+  addInParameter<StringCollection>(STRING_DELIMITER, paramHelp[6], STRING_DELIMITERS);
+  addInParameter<StringCollection>(DECIMAL_MARK, paramHelp[7], DECIMAL_MARKS);
 }
 
 //================================================================================
@@ -146,6 +143,12 @@ bool CsvExport::exportGraph(std::ostream &os) {
     if (dataSet->getDeprecated(ELT_TYPE, "Type of elements", eltTypes))
       eltType = eltTypes.getCurrent();
 
+    // this parameter is no longer needed
+    // because the presence of the "selection" property is now sufficient
+    // to indicate if the export is restricted to the selection
+    // but it is there for compatibility reason
+    // and then force the use of "viewSelection"
+    // as default value of the former parameter "export selection property"
     dataSet->getDeprecated(EXPORT_SELECTION, "Export selection", exportSelection);
     dataSet->getDeprecated(EXPORT_ID, "Export id", exportId);
     dataSet->getDeprecated(EXPORTED_PROPERTIES, "Exported properties", propsCollection);
@@ -225,11 +228,13 @@ bool CsvExport::exportGraph(std::ostream &os) {
   os << endl;
 
   // export nodes
-  BooleanProperty *prop = graph->getProperty<BooleanProperty>("viewSelection");
+  BooleanProperty *prop = nullptr;
 
-  if (exportSelection && dataSet != nullptr) {
+  if (exportSelection) {
+    prop = graph->getProperty<BooleanProperty>("viewSelection");
     dataSet->getDeprecated("export selection property", "Export selection property", prop);
-  }
+  } else
+    dataSet->get("selection", prop);
 
   // get global locale
   std::locale prevLocale;
@@ -239,7 +244,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
     std::locale::global(std::locale(prevLocale, new decimal_comma));
 
   if (eltType != EDGE_TYPE) {
-    Iterator<node> *it = exportSelection ? prop->getNodesEqualTo(true, graph) : graph->getNodes();
+    Iterator<node> *it = prop ? prop->getNodesEqualTo(true, graph) : graph->getNodes();
 
     for (auto n : it) {
 
@@ -274,7 +279,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
 
   // export edges
   if (eltType != NODE_TYPE) {
-    Iterator<edge> *it = exportSelection ? prop->getEdgesEqualTo(true, graph) : graph->getEdges();
+    Iterator<edge> *it = prop ? prop->getEdgesEqualTo(true, graph) : graph->getEdges();
 
     for (auto e : it) {
 
