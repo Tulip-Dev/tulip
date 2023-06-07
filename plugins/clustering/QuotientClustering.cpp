@@ -339,7 +339,7 @@ public:
           }
 
           // insert one of the opposite meta edges in edgesToDel
-          // and insert its undelying edges in the set of the remaining one
+          // and insert its underlying edges in the set of the remaining one
           edge meToKeep(mE.id), meToDel(op.id);
 
           if (opOK)

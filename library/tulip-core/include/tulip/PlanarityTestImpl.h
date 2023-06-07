@@ -194,7 +194,7 @@ private:
   MutableContainer<int> largestNeighbor;
 
   //   // for each node u in T,
-  //   // label_b[u] = max{largest_neighbor[v] : v is a descendat of u in T_u}
+  //   // label_b[u] = max{largest_neighbor[v] : v is a descendant of u in T_u}
   //   // where T_u is the subtree of T rooted at u;
   //   //node_map<int> labelB;
   MutableContainer<int> labelB;

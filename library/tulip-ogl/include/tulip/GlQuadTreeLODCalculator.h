@@ -39,7 +39,7 @@ class Graph;
 class GlLayer;
 
 /**
- * Class use to compute bounding boxs of a vector of GlEntity
+ * Class used to compute bounding box of a vector of GlEntity
  */
 class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator, private Observable {
 

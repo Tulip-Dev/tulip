@@ -50,7 +50,7 @@ class BuWangZhouModel : public ImportModule {
 public:
   PLUGININFORMATION(
       "Bu Wang Zhou Model", "sallaberry", "20/06/2011",
-      "Randomly generates a scale-free graph unsing the model described "
+      "Randomly generates a scale-free graph using the model described "
       "in<br/>Shouliang Bu, Bing-Hong Wang, Tao Zhou.<br/><b>Gaining scale-free and "
       "high clustering complex networks.</b><br/>Physica A, 374, 864--868, 2007. doi: <a href=\""
       "10.1016/j.physa.2006.08.048\">https://doi.org/10.1016/j.physa.2006.08.048</a>",

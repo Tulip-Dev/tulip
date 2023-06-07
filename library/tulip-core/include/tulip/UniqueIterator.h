@@ -52,7 +52,7 @@ struct CheckAllFunctor {
  * @param checkFunctor a functor or a lambda function that enables to indicate whether or not the
  *element could be duplicated (default test all elements)
  *
- * The functor function shoul have the following form
+ * The functor function should have the following form
  * @code
  * template <typename T>
  * class ACheckFunctor {

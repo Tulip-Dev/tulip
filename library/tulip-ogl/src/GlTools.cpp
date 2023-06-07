@@ -293,7 +293,7 @@ GLfloat projectSize(const BoundingBox &bb, const MatrixGL &projectionMatrix,
   float width = fabs(x1 - x2);
   float size = pow(2. * width, 2);
 
-  // Test of visibily
+  // Test of visibility
   x2 += viewport[0];
   float y2 = (proj2[1] / proj2[3] * 0.5 + 0.5) * viewport[3] + viewport[1];
   Vector<float, 2> upleft;

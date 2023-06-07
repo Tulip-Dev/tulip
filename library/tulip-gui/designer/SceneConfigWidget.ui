@@ -1028,7 +1028,7 @@ of the scene remains unchanged.</string>
                <string>Parallel lines are preserved.</string>
               </property>
               <property name="text">
-               <string>O&amp;rthogonal (no shape distorsion)</string>
+               <string>O&amp;rthogonal (no shape distortion)</string>
               </property>
               <attribute name="buttonGroup">
                <string notr="true">buttonGroup</string>
@@ -1041,7 +1041,7 @@ of the scene remains unchanged.</string>
                <string>&lt;p&gt;As in the human view perception,&lt;br/&gt;parallel lines are not necessarily represented as parallel&lt;br/&gt;and closer the nodes are, the bigger they are represented.&lt;/p&gt;</string>
               </property>
               <property name="text">
-               <string>Central perspecti&amp;ve (shape distorsion)</string>
+               <string>Central perspecti&amp;ve (shape distortion)</string>
               </property>
               <attribute name="buttonGroup">
                <string notr="true">buttonGroup</string>

@@ -70,7 +70,7 @@ public:
   tlp::PropertyInterface *copyProperty(QString &errorMsg);
 
   /**
-   * @brief Get the name of the destintation property.
+   * @brief Get the name of the destination property.
    **/
   QString destinationPropertyName() const;
 
