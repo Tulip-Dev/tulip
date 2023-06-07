@@ -329,9 +329,11 @@ public:
   /**
     @brief Name of the perspective associated to the project.
 
-    When the user open a project from Tulip, this property is first read to identify what kind of perspective plugin should be launched to open the project
+    When the user open a project from Tulip, this property is first read to identify what kind of
+    perspective plugin should be launched to open the project
 
-    @warning If the perspective name associated to the project is invalid or correspond to a missing plugin, Tulip may not be able to open the file.
+    @warning If the perspective name associated to the project is invalid or correspond to a missing
+    plugin, Tulip may not be able to open the file.
     */
   Q_PROPERTY(QString perspective READ perspective WRITE setPerspective)
   /**
