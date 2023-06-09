@@ -25,7 +25,7 @@ using namespace tlp;
 using namespace ogdf;
 
 static const char *paramHelp[] = {
-    // minimum grid distance
+    // min grid distance
     "The minimum grid distance.",
 
     // transpose
@@ -40,7 +40,7 @@ public:
                     "1.1", "Hierarchical")
   OGDFVisibility(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ComponentSplitterLayout() : nullptr) {
-    addInParameter<int>("minimum grid distance", paramHelp[0], "1");
+    addInParameter<int>("min grid distance", paramHelp[0], "1");
     addInParameter<bool>("transpose", paramHelp[1], "false");
   }
 
@@ -57,7 +57,7 @@ public:
     if (dataSet != nullptr) {
       int ival = 0;
 
-      if (dataSet->get("minimum grid distance", ival))
+      if (dataSet->getDeprecated("min grid distance", "minimum grid distance", ival))
         visibility->setMinGridDistance(ival);
     }
   }

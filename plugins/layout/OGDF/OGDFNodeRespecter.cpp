@@ -44,10 +44,10 @@ static const char *paramHelp[] = {
     // number of iterations
     "The maximum number of iterations >=0.",
 
-    // Minimal Temperature
-    "The minimal temperature >= 0",
+    // min temperature
+    "The minimum temperature >= 0",
 
-    // Initial Temperature
+    // initial temperature
     "Sets the initial temperature > minimal temperature.",
 
     // Temperature Decrease
@@ -59,20 +59,20 @@ static const char *paramHelp[] = {
     // Oscillation Angle
     "Sets oscillation angle in [0...Pi].",
 
-    // Desired Minimal Edge Length
-    "Sets minimal edge length > 0.",
+    // min edge length
+    "Sets minimum edge length > 0.",
 
     // Init Dummies Per Edge
     "Sets init dummies per edge >= 0.",
 
-    // Maximal Dummies Per Edge
+    // max dummies per edge
     "Sets dummies per edge > init dummies per edge.",
 
-    // Dummy Insertion Threshold
+    // dummy insertion threshold
     "Sets dummy insertion threshold >= 1.",
 
-    // Maximum Disturbance
-    "Sets max disturbance >= 0.",
+    // max disturbance
+    "Sets maximum disturbance >= 0.",
 
     // Repulsion Distance
     "Sets repulsion distance >= 0. By default, it is the double of minimal edge length",
@@ -116,17 +116,17 @@ public:
                                      postProcessingValuesDescription);
     addInParameter<double>("bends normalization angle", paramHelp[2], to_string(Math::pi), false);
     addInParameter<int>("number of iterations", paramHelp[3], "30000", false);
-    addInParameter<double>("minimal temperature", paramHelp[4], "1.0", false);
+    addInParameter<double>("min temperature", paramHelp[4], "1.0", false);
     addInParameter<double>("initial temperature", paramHelp[5], "10.0", false);
     addInParameter<double>("temperature decrease", paramHelp[6], "0.0", false);
     addInParameter<double>("gravitation", paramHelp[7], "0.0625", false);
     addInParameter<double>("oscillation angle", paramHelp[8], to_string(Math::pi_2), false);
-    addInParameter<double>("minimal edge length", paramHelp[9],
+    addInParameter<double>("min edge length", paramHelp[9],
                            to_string(LayoutStandards::defaultNodeSeparation()), false);
     addInParameter<int>("init dummies per edge", paramHelp[10], "1", false);
-    addInParameter<int>("maximal dummies per pdge", paramHelp[11], "3", false);
+    addInParameter<int>("max dummies per edge", paramHelp[11], "3", false);
     addInParameter<double>("dummy insertion threshold", paramHelp[12], "5", false);
-    addInParameter<double>("maximum disturbance", paramHelp[13], "0", false);
+    addInParameter<double>("max disturbance", paramHelp[13], "0", false);
     addInParameter<double>("repulsion distance", paramHelp[14],
                            to_string(2 * LayoutStandards::defaultNodeSeparation()), false);
     addInParameter<double>("connected components spacing", paramHelp[15],
@@ -164,7 +164,7 @@ public:
       if (dataSet->get("number of iterations", ival))
         npl->setNumberOfIterations(ival);
 
-      if (dataSet->getDeprecated("minimal temperature", "Minimal Temperature", dval))
+      if (dataSet->getDeprecated("min temperature", "minimal temperature", dval) || dataSet->get("Minimal Temperature", dval))
         npl->setMinimalTemperature(dval);
 
       if (dataSet->getDeprecated("initial temperature", "Initial Temperature", dval))
@@ -179,19 +179,19 @@ public:
       if (dataSet->getDeprecated("oscillation Angle", "Oscillation Angle", dval))
         npl->setOscillationAngle(dval);
 
-      if (dataSet->getDeprecated("minimal edge length", "Desired Minimal Edge Length", dval))
+      if (dataSet->getDeprecated("min edge length", "minimal edge length", dval) || dataSet->get("Desired Minimal Edge Length", dval))
         npl->setDesiredMinEdgeLength(dval);
 
       if (dataSet->getDeprecated("init dummies per edge", "Init Dummies Per Edge", ival))
         npl->setInitDummiesPerEdge(ival);
 
-      if (dataSet->getDeprecated("maximal dummies per edge", "Maximal Dummies Per Edge", ival))
+      if (dataSet->getDeprecated("max dummies per edge", "maximal dummies per edge", ival) || dataSet->get("Maximal Dummies Per Edge", ival))
         npl->setMaxDummiesPerEdge(ival);
 
       if (dataSet->getDeprecated("dummy insertion threshold", "Dummy Insertion Threshold", dval))
         npl->setDummyInsertionThreshold(dval);
 
-      if (dataSet->getDeprecated("maximum disturbance", "Maximum Disturbance", dval))
+      if (dataSet->getDeprecated("max disturbance", "maximum disturbance", dval) || dataSet->get("Maximum Disturbance", dval))
         npl->setMaxDisturbance(dval);
 
       if (dataSet->getDeprecated("repulsion distance", "Repulsion Distance", dval))

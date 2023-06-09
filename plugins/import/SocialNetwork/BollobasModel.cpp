@@ -55,7 +55,7 @@ struct BollobasModel : public ImportModule {
 
   BollobasModel(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "2000");
-    addInParameter<unsigned int>("minimum degree", paramHelp[1], "4");
+    addInParameter<unsigned int>("min degree", paramHelp[1], "4");
   }
 
   bool importGraph() override {
@@ -64,7 +64,7 @@ struct BollobasModel : public ImportModule {
 
     if (dataSet != nullptr) {
       dataSet->get("nodes", n);
-      dataSet->get("minimum degree", d);
+      dataSet->getDeprecated("min degree", "minimum degree", d);
     }
 
     // check arguments

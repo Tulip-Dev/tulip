@@ -117,10 +117,10 @@ public:
     addInParameter<StringCollection>(TARGET_TYPE, paramHelp[2], TARGET_TYPES, true,
                                      "nodes <br> edges");
     addInParameter<ColorScale>("color scale", paramHelp[3], "");
-    addInParameter<bool>("override minimum value", paramHelp[4], "false", false);
-    addInParameter<double>("minimum value", paramHelp[5], "", false);
-    addInParameter<bool>("override maximum value", paramHelp[6], "false", false);
-    addInParameter<double>("maximum value", paramHelp[7], "", false);
+    addInParameter<bool>("override min value", paramHelp[4], "false", false);
+    addInParameter<double>("min value", paramHelp[5], "", false);
+    addInParameter<bool>("override max value", paramHelp[6], "false", false);
+    addInParameter<double>("max value", paramHelp[7], "", false);
   }
 
   //=========================================================
@@ -150,10 +150,10 @@ public:
       dataSet->getDeprecated("property", "input property", metric);
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);
-      dataSet->get("override minimum value", overrideMinInput);
-      dataSet->get("minimum value", minInput);
-      dataSet->get("override maximum value", overrideMaxInput);
-      dataSet->get("maximum value", maxInput);
+      dataSet->getDeprecated("override min value", "override minimum value", overrideMinInput);
+      dataSet->getDeprecated("min value", "minimum value", minInput);
+      dataSet->getDeprecated("override max value", "override maximum value", overrideMaxInput);
+      dataSet->getDeprecated("max value", "maximum value", maxInput);
 
       /// Do not allow NaN input
       if (overrideMaxInput &&

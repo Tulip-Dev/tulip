@@ -34,7 +34,7 @@ using namespace std;
 //================================================================================
 CliqueEnumeration::CliqueEnumeration(tlp::PluginContext *context)
     : Algorithm(context), minsize(0), cliqueid(0) {
-  addInParameter<unsigned int>("minimum size", "Clique minimum size", "0");
+  addInParameter<unsigned int>("min size", "minimum size of a clique", "0");
   addOutParameter<unsigned int>("#cliques created", "Number of cliques (subgraphs) created");
 }
 
@@ -164,7 +164,7 @@ void CliqueEnumeration::getDegenerateOrdering(vector<node> &ordering) {
 //================================================================================
 bool CliqueEnumeration::run() {
   if (dataSet != nullptr)
-    dataSet->get("minimum size", minsize);
+    dataSet->getDeprecated("min size", "minimum size", minsize);
 
   vector<node> ordering;
   getDegenerateOrdering(ordering);

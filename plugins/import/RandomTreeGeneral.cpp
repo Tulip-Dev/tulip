@@ -22,14 +22,14 @@ using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-    // minimum size
-    "Minimal number of nodes in the tree.",
+    // min size
+    "Minimum number of nodes in the tree.",
 
-    // maximum size
-    "Maximal number of nodes in the tree.",
+    // max size
+    "Maximum number of nodes in the tree.",
 
-    // maximal degree
-    "Maximal degree of the nodes.",
+    // max degree
+    "Maximum degree of the nodes.",
 
     // tree layout
     "If true, the generated tree is drawn with the 'Tree Leaf' layout algorithm."};
@@ -72,9 +72,9 @@ public:
   PLUGININFORMATION("Random General Tree", "Auber", "16/02/2001",
                     "Imports a new randomly generated tree.", "1.1", "Graph")
   RandomTreeGeneral(tlp::PluginContext *context) : ImportModule(context) {
-    addInParameter<unsigned>("minimum size", paramHelp[0], "10");
-    addInParameter<unsigned>("maximum size", paramHelp[1], "100");
-    addInParameter<unsigned>("maximal node degree", paramHelp[2], "5");
+    addInParameter<unsigned>("min size", paramHelp[0], "10");
+    addInParameter<unsigned>("max size", paramHelp[1], "100");
+    addInParameter<unsigned>("max degree", paramHelp[2], "5");
     addInParameter<bool>("tree layout", paramHelp[3], "false");
     addDependency("Tree Leaf", "1.1");
   }
@@ -89,14 +89,14 @@ public:
     bool needLayout = false;
 
     if (dataSet != nullptr) {
-      if (!dataSet->getDeprecated("minimum size", "Minimum size", sizeMin))
-        dataSet->get("minsize", sizeMin); // keep old parameter name for backward compatibility
+      if (!dataSet->getDeprecated("min size", "minimum size", sizeMin))
+        dataSet->getDeprecated("Minimum size", "minsize", sizeMin); // keep old parameter name for backward compatibility
 
-      if (!dataSet->getDeprecated("maximum size", "Maximum size", sizeMax))
-        dataSet->get("maxsize", sizeMax); // keep old parameter name for backward compatibility
+      if (!dataSet->getDeprecated("max size", "maximum size", sizeMax))
+        dataSet->getDeprecated("Maximum size", "maxsize", sizeMax); // keep old parameter name for backward compatibility
 
-      if (!dataSet->getDeprecated("maximal node degree", "Maximal node's degree", arityMax))
-        dataSet->get("maxdegree", arityMax); // keep old parameter name for backward compatibility
+      if (!dataSet->getDeprecated("max degree", "maximal node degree", arityMax))
+        dataSet->getDeprecated("Maximal node's degree", "maxdegree", arityMax); // keep old parameter name for backward compatibility
 
       dataSet->get("tree layout", needLayout);
     }
@@ -104,21 +104,21 @@ public:
     if (arityMax < 1) {
       if (pluginProgress)
         pluginProgress->setError(
-            "Error: maximum node's degree must be a strictly positive integer");
+            "Error: max degree must be a strictly positive integer");
 
       return false;
     }
 
     if (sizeMax < 1) {
       if (pluginProgress)
-        pluginProgress->setError("Error: maximum size must be a strictly positive integer");
+        pluginProgress->setError("Error: max size must be a strictly positive integer");
 
       return false;
     }
 
     if (sizeMax < sizeMin) {
       if (pluginProgress)
-        pluginProgress->setError("Error: maximum size must be greater than minimum size");
+        pluginProgress->setError("Error: max size must be greater than min size");
 
       return false;
     }

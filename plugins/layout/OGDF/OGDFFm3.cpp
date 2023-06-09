@@ -103,11 +103,11 @@ static const char *paramHelp[] = {
     "The node sizes.",
 
     // Unit edge length
-    "The unit edge length.",
+    "The unit edge length. Not used if \"edge length property\" is set.",
 
-    // New initial placement
-    "Indicates the initial placement before running algorithm. "
-    "This is a high level option inducing an implicit value to the 'Initial Placement Forces' "
+    // New initial layout
+    "Indicates the initial layout before running algorithm. "
+    "This is a high level option inducing an implicit value to the 'initial layout forces' "
     "parameter.",
 
     // Fixed iterations
@@ -139,11 +139,11 @@ static const char *paramHelp[] = {
     // Galaxy Choice
     "Specifies how sun nodes of galaxies are selected.",
 
-    // Max Iter Change
+    // max iterations change
     "Specifies how MaxIterations is changed in subsequent multilevels.",
 
-    // Initial Placement
-    "Specifies how the initial placement is generated.",
+    // Initial layout
+    "Specifies how the initial layout is generated.",
 
     // Force Model
     "Specifies the force-model.",
@@ -151,9 +151,9 @@ static const char *paramHelp[] = {
     // Repulsive Force Model
     "Specifies how to calculate repulsive forces.",
 
-    // Initial Placement Forces
-    "Specifies how the initial placement is done. "
-    "If not set do default, it supersedes the value induced by the 'New initial placement' "
+    // Initial layout Forces
+    "Specifies how the initial layout is done. "
+    "If not set to default, it supersedes the value induced by the 'new initial layout' "
     "parameter.",
 
     // Reduced Tree Construction
@@ -201,10 +201,10 @@ static const char *repulsiveForceValuesDescription =
     "grid approximation <i>(grid approximation)</i>";
 
 static const char *initialPlacementValuesDescription =
-    "random seed <i>(random placement, based on random seed)</i><br>"
-    "random time <i>(random placement, based on current time)</i><br>"
-    "uniform grid <i>(uniform placement on a grid)</i><br>"
-    "keep positions <i>(No change in placement)</i>";
+    "random seed <i>(random layout, based on random seed)</i><br>"
+    "random time <i>(random layout, based on current time)</i><br>"
+    "uniform grid <i>(uniform layout on a grid)</i><br>"
+    "keep positions <i>(No change in layout)</i>";
 
 static const char *smallestCellFindingValuesDescription =
     "iteratively <i>(iteratively, in constant time)</i><br>"
@@ -234,7 +234,7 @@ OGDFFm3::OGDFFm3(const tlp::PluginContext *context)
   addInParameter<NumericProperty *>("edge length property", paramHelp[0], "", false);
   addInParameter<SizeProperty>("node size", paramHelp[1], "viewSize", false);
   addInParameter<double>("unit edge length", paramHelp[2], "10.0", false);
-  addInParameter<bool>("new initial placement", paramHelp[3], "true");
+  addInParameter<bool>("new initial layout", paramHelp[3], "true");
   addInParameter<int>("fixed iterations", paramHelp[4], "0");
   addInParameter<double>("threshold", paramHelp[5], "0.01");
   addInParameter<StringCollection>("page format", paramHelp[6], PAGEFORMATLIST, true,
@@ -252,15 +252,15 @@ OGDFFm3::OGDFFm3(const tlp::PluginContext *context)
                                    presortValuesDescription);
   addInParameter<StringCollection>("galaxy choice", paramHelp[12], GALAXYCHOICELIST, true,
                                    galaxyChoiceValuesDescription);
-  addInParameter<StringCollection>("max iter change", paramHelp[13], MAXITERCHANGELIST, true,
+  addInParameter<StringCollection>("max iterations change", paramHelp[13], MAXITERCHANGELIST, true,
                                    maxIterChangeValuesDescription);
-  addInParameter<StringCollection>("initial placement", paramHelp[14], INITIALPLACEMENTMULTLIST,
+  addInParameter<StringCollection>("initial layout", paramHelp[14], INITIALPLACEMENTMULTLIST,
                                    true, "advanced<br/>simple");
   addInParameter<StringCollection>("force model", paramHelp[15], FORCEMODELLIST, true,
                                    forceModelValuesDescription);
   addInParameter<StringCollection>("repulsive force method", paramHelp[16],
                                    REPULSIVEFORCEMETHODLIST, true, repulsiveForceValuesDescription);
-  addInParameter<StringCollection>("initial placement forces", paramHelp[17],
+  addInParameter<StringCollection>("initial layout forces", paramHelp[17],
                                    INITIALPLACEMENTFORCESLIST, true,
                                    initialPlacementValuesDescription);
   addInParameter<StringCollection>("reduced tree construction", paramHelp[18],
@@ -283,7 +283,7 @@ void OGDFFm3::beforeCall() {
 
     bool bval = false;
 
-    if (dataSet->getDeprecated("new initial placement", "New initial placement", bval)) {
+    if (dataSet->getDeprecated("new initial layout", "new initial placement", bval) || dataSet->get("New initial placement", bval)) {
       fmmm->newInitialPlacement(bval);
     }
 
@@ -429,7 +429,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("max iter change", "Max Iter Change", stringCollection)) {
+    if (dataSet->getDeprecated("max iterations change", "max iter change", stringCollection) || dataSet->get("Max Iter Change", stringCollection)) {
       switch (stringCollection.getCurrent()) {
       case CONSTANT:
         fmmm->maxIterChange(FMMMOptions::MaxIterChange::Constant);
@@ -442,7 +442,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("initial placement", "Initial Placement Mult", stringCollection)) {
+    if (dataSet->getDeprecated("initial layout", "initial placement", stringCollection) || dataSet->get("Initial Placement Mult", stringCollection)) {
       if (stringCollection.getCurrent() == ADVANCED) {
         fmmm->initialPlacementMult(FMMMOptions::InitialPlacementMult::Advanced);
       } else {
@@ -477,8 +477,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("initial placement forces", "Initial Placement Forces",
-                               stringCollection)) {
+    if (dataSet->getDeprecated("initial layout forces", "initial placement forces", stringCollection) || dataSet->get("Initial Placement Forces", stringCollection)) {
       auto current = stringCollection.getCurrent();
       if (current != 0) {
         switch (current) {

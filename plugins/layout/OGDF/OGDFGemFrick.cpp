@@ -25,10 +25,10 @@
 
 static const char *paramHelp[] = {
     // number of rounds
-    "The maximal number of rounds per node.",
+    "The maximum number of rounds per node.",
 
-    // minimal temperature
-    "The minimal temperature.",
+    // min temperature
+    "The minimum temperature.",
 
     // initial temperature
     "The initial temperature to x; must be >= minimalTemperature.",
@@ -39,8 +39,8 @@ static const char *paramHelp[] = {
     // desired length
     "The desired edge length to x; must be >= 0.",
 
-    // maximal disturbance
-    "The maximal disturbance to x; must be >= 0.",
+    // max disturbance
+    "The maximum disturbance to x; must be >= 0.",
 
     // rotation angle
     "The opening angle for rotations to x (0 <= x <= pi / 2).",
@@ -57,8 +57,8 @@ static const char *paramHelp[] = {
     // Attraction formula
     "The formula for attraction.",
 
-    // minDistCC
-    "The minimal distance between connected components.",
+    // connected components spacing
+    "The minimum distance between connected components.",
 
     // page ratio
     "The page ratio used for packing connected components."};
@@ -85,11 +85,11 @@ public:
 OGDFGemFrick::OGDFGemFrick(const tlp::PluginContext *context)
     : OGDFLayoutPluginBase(context, context ? new ogdf::GEMLayout() : nullptr) {
   addInParameter<int>("number of rounds", paramHelp[0], "30000");
-  addInParameter<double>("minimal temperature", paramHelp[1], "0.005");
+  addInParameter<double>("min temperature", paramHelp[1], "0.005");
   addInParameter<double>("initial temperature", paramHelp[2], "12.0");
   addInParameter<double>("gravitation", paramHelp[3], "0.0625");
   addInParameter<double>("desired length", paramHelp[4], "5.0");
-  addInParameter<double>("maximal disturbance", paramHelp[5], "0.0");
+  addInParameter<double>("max disturbance", paramHelp[5], "0.0");
   addInParameter<double>("rotation angle", paramHelp[6], "1.04719755");
   addInParameter<double>("oscillation angle", paramHelp[7], "1.57079633");
   addInParameter<double>("rotation sensitivity", paramHelp[8], "0.01");
@@ -114,7 +114,7 @@ void OGDFGemFrick::beforeCall() {
       gem->numberOfRounds(ival);
     }
 
-    if (dataSet->get("minimal temperature", dval)) {
+    if (dataSet->getDeprecated("min temperature", "minimal temperature", dval)) {
       gem->minimalTemperature(dval);
     }
 
@@ -130,7 +130,7 @@ void OGDFGemFrick::beforeCall() {
       gem->desiredLength(dval);
     }
 
-    if (dataSet->get("maximal disturbance", dval)) {
+    if (dataSet->getDeprecated("max disturbance", "maximal disturbance", dval)) {
       gem->maximalDisturbance(dval);
     }
 

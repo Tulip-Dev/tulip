@@ -23,11 +23,11 @@ using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-    // minsize
-    "Minimal number of nodes in the tree.",
+    // min size
+    "Minimum number of nodes in the tree.",
 
-    // maxsize
-    "Maximal number of nodes in the tree.",
+    // max size
+    "Maximum number of nodes in the tree.",
 
     // tree layout
     "If true, the generated tree is drawn with the 'Tree Leaf' layout algorithm."};
@@ -68,8 +68,8 @@ public:
   PLUGININFORMATION("Uniform Random Binary Tree", "Auber", "16/02/2001",
                     "Imports a new randomly generated uniform binary tree.", "1.2", "Graph")
   RandomTree(tlp::PluginContext *context) : ImportModule(context) {
-    addInParameter<unsigned int>("minimum size", paramHelp[0], "50");
-    addInParameter<unsigned int>("maximum size", paramHelp[1], "60");
+    addInParameter<unsigned int>("min size", paramHelp[0], "50");
+    addInParameter<unsigned int>("max size", paramHelp[1], "60");
     addInParameter<bool>("tree layout", paramHelp[2], "false");
     addDependency("Tree Leaf", "1.1");
   }
@@ -83,25 +83,25 @@ public:
     bool needLayout = false;
 
     if (dataSet != nullptr) {
-      if (!dataSet->getDeprecated("minimum size", "Minimum size", minSize))
-        dataSet->get("minsize", minSize); // keep old name for backward compatibility
+      if (!dataSet->getDeprecated("min size", "minimum size", minSize))
+        dataSet->getDeprecated("Minimum size","minsize", minSize); // keep old name for backward compatibility
 
-      if (!dataSet->getDeprecated("maximum size", "Maximum size", maxSize))
-        dataSet->get("maxsize", maxSize); // keep old name for backward compatibility
+      if (!dataSet->getDeprecated("max size", "maximum size", maxSize))
+        dataSet->getDeprecated("Maximum size", "maxsize", maxSize); // keep old name for backward compatibility
 
       dataSet->get("tree layout", needLayout);
     }
 
     if (maxSize < 1) {
       if (pluginProgress)
-        pluginProgress->setError("Error: maximum size must be a strictly positive integer");
+        pluginProgress->setError("Error: max size must be a strictly positive integer");
 
       return false;
     }
 
     if (maxSize < minSize) {
       if (pluginProgress)
-        pluginProgress->setError("Error: maximum size must be greater than minimum size");
+        pluginProgress->setError("Error: max size must be greater than min size");
 
       return false;
     }
