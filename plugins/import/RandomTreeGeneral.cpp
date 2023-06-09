@@ -90,21 +90,23 @@ public:
 
     if (dataSet != nullptr) {
       if (!dataSet->getDeprecated("min size", "minimum size", sizeMin))
-        dataSet->getDeprecated("Minimum size", "minsize", sizeMin); // keep old parameter name for backward compatibility
+        dataSet->getDeprecated("Minimum size", "minsize",
+                               sizeMin); // keep old parameter name for backward compatibility
 
       if (!dataSet->getDeprecated("max size", "maximum size", sizeMax))
-        dataSet->getDeprecated("Maximum size", "maxsize", sizeMax); // keep old parameter name for backward compatibility
+        dataSet->getDeprecated("Maximum size", "maxsize",
+                               sizeMax); // keep old parameter name for backward compatibility
 
       if (!dataSet->getDeprecated("max degree", "maximal node degree", arityMax))
-        dataSet->getDeprecated("Maximal node's degree", "maxdegree", arityMax); // keep old parameter name for backward compatibility
+        dataSet->getDeprecated("Maximal node's degree", "maxdegree",
+                               arityMax); // keep old parameter name for backward compatibility
 
       dataSet->get("tree layout", needLayout);
     }
 
     if (arityMax < 1) {
       if (pluginProgress)
-        pluginProgress->setError(
-            "Error: max degree must be a strictly positive integer");
+        pluginProgress->setError("Error: max degree must be a strictly positive integer");
 
       return false;
     }

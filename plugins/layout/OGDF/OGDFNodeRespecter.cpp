@@ -164,7 +164,8 @@ public:
       if (dataSet->get("number of iterations", ival))
         npl->setNumberOfIterations(ival);
 
-      if (dataSet->getDeprecated("min temperature", "minimal temperature", dval) || dataSet->get("Minimal Temperature", dval))
+      if (dataSet->getDeprecated("min temperature", "minimal temperature", dval) ||
+          dataSet->get("Minimal Temperature", dval))
         npl->setMinimalTemperature(dval);
 
       if (dataSet->getDeprecated("initial temperature", "Initial Temperature", dval))
@@ -179,19 +180,22 @@ public:
       if (dataSet->getDeprecated("oscillation Angle", "Oscillation Angle", dval))
         npl->setOscillationAngle(dval);
 
-      if (dataSet->getDeprecated("min edge length", "minimal edge length", dval) || dataSet->get("Desired Minimal Edge Length", dval))
+      if (dataSet->getDeprecated("min edge length", "minimal edge length", dval) ||
+          dataSet->get("Desired Minimal Edge Length", dval))
         npl->setDesiredMinEdgeLength(dval);
 
       if (dataSet->getDeprecated("init dummies per edge", "Init Dummies Per Edge", ival))
         npl->setInitDummiesPerEdge(ival);
 
-      if (dataSet->getDeprecated("max dummies per edge", "maximal dummies per edge", ival) || dataSet->get("Maximal Dummies Per Edge", ival))
+      if (dataSet->getDeprecated("max dummies per edge", "maximal dummies per edge", ival) ||
+          dataSet->get("Maximal Dummies Per Edge", ival))
         npl->setMaxDummiesPerEdge(ival);
 
       if (dataSet->getDeprecated("dummy insertion threshold", "Dummy Insertion Threshold", dval))
         npl->setDummyInsertionThreshold(dval);
 
-      if (dataSet->getDeprecated("max disturbance", "maximum disturbance", dval) || dataSet->get("Maximum Disturbance", dval))
+      if (dataSet->getDeprecated("max disturbance", "maximum disturbance", dval) ||
+          dataSet->get("Maximum Disturbance", dval))
         npl->setMaxDisturbance(dval);
 
       if (dataSet->getDeprecated("repulsion distance", "Repulsion Distance", dval))

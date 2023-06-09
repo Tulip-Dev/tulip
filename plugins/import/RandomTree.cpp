@@ -84,10 +84,12 @@ public:
 
     if (dataSet != nullptr) {
       if (!dataSet->getDeprecated("min size", "minimum size", minSize))
-        dataSet->getDeprecated("Minimum size","minsize", minSize); // keep old name for backward compatibility
+        dataSet->getDeprecated("Minimum size", "minsize",
+                               minSize); // keep old name for backward compatibility
 
       if (!dataSet->getDeprecated("max size", "maximum size", maxSize))
-        dataSet->getDeprecated("Maximum size", "maxsize", maxSize); // keep old name for backward compatibility
+        dataSet->getDeprecated("Maximum size", "maxsize",
+                               maxSize); // keep old name for backward compatibility
 
       dataSet->get("tree layout", needLayout);
     }

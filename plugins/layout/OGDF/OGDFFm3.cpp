@@ -254,8 +254,8 @@ OGDFFm3::OGDFFm3(const tlp::PluginContext *context)
                                    galaxyChoiceValuesDescription);
   addInParameter<StringCollection>("max iterations change", paramHelp[13], MAXITERCHANGELIST, true,
                                    maxIterChangeValuesDescription);
-  addInParameter<StringCollection>("initial layout", paramHelp[14], INITIALPLACEMENTMULTLIST,
-                                   true, "advanced<br/>simple");
+  addInParameter<StringCollection>("initial layout", paramHelp[14], INITIALPLACEMENTMULTLIST, true,
+                                   "advanced<br/>simple");
   addInParameter<StringCollection>("force model", paramHelp[15], FORCEMODELLIST, true,
                                    forceModelValuesDescription);
   addInParameter<StringCollection>("repulsive force method", paramHelp[16],
@@ -283,7 +283,8 @@ void OGDFFm3::beforeCall() {
 
     bool bval = false;
 
-    if (dataSet->getDeprecated("new initial layout", "new initial placement", bval) || dataSet->get("New initial placement", bval)) {
+    if (dataSet->getDeprecated("new initial layout", "new initial placement", bval) ||
+        dataSet->get("New initial placement", bval)) {
       fmmm->newInitialPlacement(bval);
     }
 
@@ -429,7 +430,8 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("max iterations change", "max iter change", stringCollection) || dataSet->get("Max Iter Change", stringCollection)) {
+    if (dataSet->getDeprecated("max iterations change", "max iter change", stringCollection) ||
+        dataSet->get("Max Iter Change", stringCollection)) {
       switch (stringCollection.getCurrent()) {
       case CONSTANT:
         fmmm->maxIterChange(FMMMOptions::MaxIterChange::Constant);
@@ -442,7 +444,8 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("initial layout", "initial placement", stringCollection) || dataSet->get("Initial Placement Mult", stringCollection)) {
+    if (dataSet->getDeprecated("initial layout", "initial placement", stringCollection) ||
+        dataSet->get("Initial Placement Mult", stringCollection)) {
       if (stringCollection.getCurrent() == ADVANCED) {
         fmmm->initialPlacementMult(FMMMOptions::InitialPlacementMult::Advanced);
       } else {
@@ -477,7 +480,9 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("initial layout forces", "initial placement forces", stringCollection) || dataSet->get("Initial Placement Forces", stringCollection)) {
+    if (dataSet->getDeprecated("initial layout forces", "initial placement forces",
+                               stringCollection) ||
+        dataSet->get("Initial Placement Forces", stringCollection)) {
       auto current = stringCollection.getCurrent();
       if (current != 0) {
         switch (current) {
