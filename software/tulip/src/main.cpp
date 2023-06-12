@@ -199,24 +199,28 @@ int main(int argc, char **argv) {
 
 #if defined(__APPLE__)
   auto appDir = QApplication::applicationDirPath();
-  if (appDir.contains(".app/Contents/")) {
+  auto pos = appDir.indexOf(".app/Contents");
+  if (pos > -1) {
     // customize env when in macOS bundle
-    auto path = appDir;
+    auto contentsPath = appDir.mid(0, pos + 13);
+    auto path = contentsPath;
     // ensure to find all libs needed by tulip_perspective
     qputenv("DYLD_FRAMEWORK_PATH", path.append("/Frameworks").toLocal8Bit());
     qputenv("DYLD_FALLBACK_LIBRARY_PATH", path.toLocal8Bit());
-    path = appDir;
+    path = contentsPath;
     qputenv("QT_PLUGIN_PATH", path.append("/PlugIns").toLocal8Bit());
     qputenv("QT_QPA_PLATFORM_PLUGIN_PATH=", path.append("/platforms").toLocal8Bit());
     auto pyv = tlp::PythonVersionChecker::compiledVersion();
     if (!pyv.isEmpty()) {
       // ensure pip external modules can be installed and used through the gui
-      path = appDir;
+      path = contentsPath;
       qputenv("DYLD_LIBRARY_PATH", path.append("/Frameworks/Python.framework/Versions/")
                                        .append(pyv)
-                                       .append("/lib")
+                                       .append("/lib:")
+                                       .append(contentsPath)
+                                       .append("/Frameworks")
                                        .toLocal8Bit());
-      path = appDir;
+      path = contentsPath;
       qputenv("PATH", path.append("/Frameworks/Python.framework/Versions/")
                           .append(pyv)
                           .append("/bin:")
