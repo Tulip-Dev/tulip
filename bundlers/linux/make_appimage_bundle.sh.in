@@ -177,9 +177,8 @@ if [ "$PYTHON_LIB" != "" ]; then
   fi
   ln -s $PYTHON_LIB_NAME $PYTHON_LIB_SYMLINK_NAME
   popd
-  PYTHON_PACKAGE_NAME=$(echo $PYTHON_LIB | sed 's/^.*libpython\(.*\).so.*$/python\1/')
   # get pythonX.Y
-  PYTHON_PACKAGE_NAME=${PYTHON_PACKAGE_NAME:0:9}
+  PYTHON_PACKAGE_NAME=$(echo $PYTHON_LIB | sed 's/^.*libpython\(.*\).so.*$/python\1/')
   PYTHON_PACKAGE_BUNDLE_DIR=$BUNDLE_LIB_DIR/$PYTHON_PACKAGE_NAME/
   mkdir -p $PYTHON_PACKAGE_BUNDLE_DIR
   PYTHON_PACKAGE_DIR=$(dirname $PYTHON_LIB)/$PYTHON_PACKAGE_NAME
