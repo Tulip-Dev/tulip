@@ -546,12 +546,13 @@ static const char *paramHelp[] = {
  */
 class GMLImport : public ImportModule {
 public:
-  PLUGININFORMATION("GML", "Auber", "04/07/2001",
-                    "<p>Supported extension: gml</p><p>Imports a new graph from a file (.gml) in "
-                    "GML format (used by Graphlet).<br/>See:<br/>"
-                    "<a href=\"https://github.com/GunterMueller/UNI_PASSAU_FMI_Graph_Drawing\">https://github.com/GunterMueller/UNI_PASSAU_FMI_Graph_Drawing</a><br/>"
-                    "(formerly www.infosun.fim.uni-passau.de/Graphlet/GML/) for details.</p>",
-                    "1.1", "File")
+  PLUGININFORMATION(
+      "GML", "Auber", "04/07/2001",
+      "<p>Supported extension: gml</p><p>Imports a new graph from a file (.gml) in "
+      "GML format (used by Graphlet).<br/>See:<br/>"
+      "<a href=\"https://github.com/GunterMueller/UNI_PASSAU_FMI_Graph_Drawing\">https://github.com/GunterMueller/UNI_PASSAU_FMI_Graph_Drawing</a><br/>"
+      "(formerly www.infosun.fim.uni-passau.de/Graphlet/GML/) for details.</p>",
+      "1.1", "File")
   std::list<std::string> fileExtensions() const override {
     std::list<std::string> l;
     l.push_back("gml");

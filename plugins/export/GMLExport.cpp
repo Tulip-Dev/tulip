@@ -54,12 +54,13 @@ void printSize(ostream &os, const Size &v) {
  */
 class GMLExport : public tlp::ExportModule {
 public:
-  PLUGININFORMATION("GML Export", "Auber David", "31/07/2001",
-                    "<p>Supported extensions: gml</p><p>Exports a Tulip graph in a file using the "
-                    "GML format (used by Graphlet).<br/>See:<br/>"
-                    "<a href=\"https://github.com/GunterMueller/UNI_PASSAU_FMI_Graph_Drawing\">https://github.com/GunterMueller/UNI_PASSAU_FMI_Graph_Drawing</a><br/>"
-                    "(formerly www.infosun.fim.uni-passau.de/Graphlet/GML/) for details.</p>",
-                    "1.0", "File")
+  PLUGININFORMATION(
+      "GML Export", "Auber David", "31/07/2001",
+      "<p>Supported extensions: gml</p><p>Exports a Tulip graph in a file using the "
+      "GML format (used by Graphlet).<br/>See:<br/>"
+      "<a href=\"https://github.com/GunterMueller/UNI_PASSAU_FMI_Graph_Drawing\">https://github.com/GunterMueller/UNI_PASSAU_FMI_Graph_Drawing</a><br/>"
+      "(formerly www.infosun.fim.uni-passau.de/Graphlet/GML/) for details.</p>",
+      "1.0", "File")
   std::string fileExtension() const override {
     return "gml";
   }
