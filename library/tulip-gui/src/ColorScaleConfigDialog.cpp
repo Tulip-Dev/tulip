@@ -72,6 +72,12 @@ ColorScaleConfigDialog::ColorScaleConfigDialog(const ColorScale &colorScale, QWi
   connect(_ui->globalAlphaSB, SIGNAL(valueChanged(int)), this,
           SLOT(applyGlobalAlphaToColorScale()));
 
+  // relook colorbrewer html link
+  auto txt = _ui->colorbrewerLabel->text();
+  auto pos = txt.indexOf(" href=");
+  txt.insert(pos, " style=\"color:" HTML_LINK_COLOR "\"");
+  _ui->colorbrewerLabel->setText(txt);
+
   if (tulipImageColorScales.empty()) {
     loadTulipImageColorScales();
   }

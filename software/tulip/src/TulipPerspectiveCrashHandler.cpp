@@ -28,6 +28,7 @@
 
 #include "FormPost.h"
 #include <tulip/TulipProject.h>
+#include <tulip/TlpQtTools.h>
 
 static const QString SEPARATOR = "=======================\n";
 
@@ -45,6 +46,12 @@ TulipPerspectiveCrashHandler::TulipPerspectiveCrashHandler(QWidget *parent)
   // before setting the label pixmap
   px.setDevicePixelRatio(QGuiApplication::primaryScreen()->devicePixelRatio());
   _ui->icon->setPixmap(px);
+
+  // relook detailsLink html link
+  auto txt = _ui->detailsLink->text();
+  auto pos = txt.indexOf(" href=");
+  txt.insert(pos, " style=\"color:" HTML_LINK_COLOR "\"");
+  _ui->detailsLink->setText(txt);
 }
 
 TulipPerspectiveCrashHandler::~TulipPerspectiveCrashHandler() {

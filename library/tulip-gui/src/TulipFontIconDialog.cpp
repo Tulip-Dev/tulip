@@ -28,7 +28,6 @@
 #include <QBuffer>
 #include <QClipboard>
 #include <QCursor>
-#include <QDesktopServices>
 #include <QHelpEvent>
 #include <QGuiApplication>
 #include <QRegularExpression>
@@ -46,21 +45,15 @@ TulipFontIconDialog::TulipFontIconDialog(QWidget *parent)
   _ui->iconListWidget->installEventFilter(this);
   _ui->iconsCreditLabel->setText(
       QString("<p style=\" font-size:11px;\">Special credit for the design "
-              "of icons goes to:<br/><b>Font "
-              "Awesome </b><a "
-              "href=\"https://fontawesome.com\"><span "
-              "style=\"color:#0d47f1;\">fontawesome.com</span></a> "
-              "(v%1)<br/><b>Material Design Icons </b>"
-              "<a "
-              "href=\"https://materialdesignicons.com\"><span "
-              "style=\"color:#0d47f1;\">materialdesignicons.com</span></"
+              "of icons goes to:<br/><b>Font Awesome </b><a "
+              "href=\"https://fontawesome.com\" style=\"color:" HTML_LINK_COLOR ";\">fontawesome.com</"
+              "a> (v%1)<br/><b>Material Design Icons </b><a "
+              "href=\"https://materialdesignicons.com\" style=\"color:" HTML_LINK_COLOR ";\">materialdesignicons.com</"
               "a> (v%2)</p>")
           .arg(TulipFontAwesome::getVersion().c_str())
           .arg(TulipMaterialDesignIcons::getVersion().c_str()));
   connect(_ui->iconNameFilterLineEdit, SIGNAL(textChanged(const QString &)), this,
           SLOT(updateIconList()));
-  connect(_ui->iconsCreditLabel, SIGNAL(linkActivated(const QString &)), this,
-          SLOT(openUrlInBrowser(const QString &)));
 
   updateIconList();
 }
@@ -141,10 +134,6 @@ void TulipFontIconDialog::showEvent(QShowEvent *ev) {
   if (parentWidget())
     move(parentWidget()->window()->frameGeometry().topLeft() +
          parentWidget()->window()->rect().center() - rect().center());
-}
-
-void TulipFontIconDialog::openUrlInBrowser(const QString &url) {
-  QDesktopServices::openUrl(QUrl(url));
 }
 
 bool TulipFontIconDialog::eventFilter(QObject *, QEvent *event) {

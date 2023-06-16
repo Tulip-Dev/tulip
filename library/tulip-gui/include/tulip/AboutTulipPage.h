@@ -48,7 +48,6 @@ public:
 
 private slots:
 
-  void openUrlInBrowser(const QString &url);
   void rssReply(QNetworkReply *);
 
 private:

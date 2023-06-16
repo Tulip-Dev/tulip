@@ -179,4 +179,7 @@ inline QDebug operator<<(QDebug dbg, const std::string &s) {
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(a, tt, sc);                                                       \
   a->setStatusTip(a->toolTip())
 
+// the color to display html links
+#define HTML_LINK_COLOR "#0d71f1"
+
 #endif
