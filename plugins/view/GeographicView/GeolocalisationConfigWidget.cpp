@@ -62,7 +62,7 @@ GeolocalisationConfigWidget::GeolocalisationConfigWidget(QWidget *parent)
   // relook Nominatim html link
   auto txt = _ui->addressLocLabel->text();
   auto pos = txt.indexOf(" href=");
-  txt.insert(pos, " style=\"text-decoration: underline; color:" HTML_LINK_COLOR "\"");
+  txt.insert(pos, " style=\"color:" HTML_LINK_COLOR "\"");
   _ui->addressLocLabel->setText(txt);
 }
 

@@ -21,7 +21,6 @@
 
 #include <QMessageBox>
 #include <QFileInfo>
-#include <QDesktopServices>
 #include <QApplication>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
