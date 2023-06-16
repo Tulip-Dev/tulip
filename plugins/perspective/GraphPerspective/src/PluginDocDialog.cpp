@@ -19,7 +19,6 @@
 #include <tulip/TlpQtTools.h>
 #include "PluginDocDialog.h"
 
-
 void PluginDocDialog::showDoc(QWidget *parent, QString pluginName, QString pluginHelp,
                               tlp::ParameterListModel *model) {
   QString doc("<head><style type\"text/css\">a { color: " HTML_LINK_COLOR " }</style></head>");

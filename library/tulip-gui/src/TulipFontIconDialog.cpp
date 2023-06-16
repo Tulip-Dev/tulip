@@ -46,9 +46,11 @@ TulipFontIconDialog::TulipFontIconDialog(QWidget *parent)
   _ui->iconsCreditLabel->setText(
       QString("<p style=\" font-size:11px;\">Special credit for the design "
               "of icons goes to:<br/><b>Font Awesome </b><a "
-              "href=\"https://fontawesome.com\" style=\"color:" HTML_LINK_COLOR ";\">fontawesome.com</"
+              "href=\"https://fontawesome.com\" style=\"color:" HTML_LINK_COLOR
+              ";\">fontawesome.com</"
               "a> (v%1)<br/><b>Material Design Icons </b><a "
-              "href=\"https://materialdesignicons.com\" style=\"color:" HTML_LINK_COLOR ";\">materialdesignicons.com</"
+              "href=\"https://materialdesignicons.com\" style=\"color:" HTML_LINK_COLOR
+              ";\">materialdesignicons.com</"
               "a> (v%2)</p>")
           .arg(TulipFontAwesome::getVersion().c_str())
           .arg(TulipMaterialDesignIcons::getVersion().c_str()));

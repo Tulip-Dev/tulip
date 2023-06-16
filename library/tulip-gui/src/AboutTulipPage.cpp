@@ -82,24 +82,30 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       ": <a href=\"https://www.qt.io\" style=\"color:" HTML_LINK_COLOR ";\">www.qt.io</a></li>"
       "  <li> <b> OpenGL </b> " +
       (openGL_OK ? QString::number(OpenGlConfigManager::getOpenGLVersion()) : QString("?.?")) +
-      ": <a href=\"https://www.opengl.org\" style=\"color:" HTML_LINK_COLOR ";\">www.opengl.org</a> </li>"
+      ": <a href=\"https://www.opengl.org\" style=\"color:" HTML_LINK_COLOR
+      ";\">www.opengl.org</a> </li>"
       "<li><b>OGDF</b> v" +
       OGDF_VERSION +
       ": <a href=\"http://ogdf.net/\" style=\"color: " HTML_LINK_COLOR ";\">ogdf.net</a> </li>" +
       (!PythonVersionChecker::compiledVersion().isNull()
            ? QString("  <li> <b> Python </b> ") + PythonVersionChecker::compiledVersion() +
-                 ": <a href=\"https://www.python.org\" style=\"color:" HTML_LINK_COLOR ";\">www.python.org</a> </li>"
+                 ": <a href=\"https://www.python.org\" style=\"color:" HTML_LINK_COLOR
+                 ";\">www.python.org</a> </li>"
                  "  <li> <b> SIP </b> " +
                  getSipVersion() +
-                 ": <a href=\"https://www.riverbankcomputing.com/software/sip\"  style=\"color:" HTML_LINK_COLOR ";\">www.riverbankcomputing.com/software/sip</a></li>"
+                 ": <a href=\"https://www.riverbankcomputing.com/software/sip\"  style=\"color:" HTML_LINK_COLOR
+                 ";\">www.riverbankcomputing.com/software/sip</a></li>"
            : "") +
       "<li><b>Font Awesome</b> " + TulipFontAwesome::getVersion().c_str() +
-      ": <a href=\"http://fontawesome.com\" style=\"color:" HTML_LINK_COLOR ";\">fontawesome.com</a></li>"
+      ": <a href=\"http://fontawesome.com\" style=\"color:" HTML_LINK_COLOR
+      ";\">fontawesome.com</a></li>"
       "<li><b>Material Design Icons</b> " +
       TulipMaterialDesignIcons::getVersion().c_str() +
-      ": <a href=\"https://materialdesignicons.com\" style=\"color:" HTML_LINK_COLOR ";\">materialdesignicons.com</a></li>"
+      ": <a href=\"https://materialdesignicons.com\" style=\"color:" HTML_LINK_COLOR
+      ";\">materialdesignicons.com</a></li>"
       "<li><b>Color Brewer</b> "
-      ": <a href=\"http://colorbrewer2.org\" style=\"color:" HTML_LINK_COLOR ";\">colorbrewer2.org</a></li>"
+      ": <a href=\"http://colorbrewer2.org\" style=\"color:" HTML_LINK_COLOR
+      ";\">colorbrewer2.org</a></li>"
       "</ul>"
       "</p>";
 
@@ -138,11 +144,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
   }
 
   // relook some html links
-  std::vector<QLabel *> labels {
-    _ui->tutorialsLabel, _ui->forumsLabel,
-    _ui->screenshotsLabel, _ui->bugsLabel,
-    _ui->websiteLabel
-  };
+  std::vector<QLabel *> labels{_ui->tutorialsLabel, _ui->forumsLabel, _ui->screenshotsLabel,
+                               _ui->bugsLabel, _ui->websiteLabel};
   for (auto label : labels) {
     auto txt = label->text();
     auto pos = txt.indexOf(" href=");
@@ -167,7 +170,7 @@ void AboutTulipPage::rssReply(QNetworkReply *reply) {
   while (!xmlReader.atEnd() && i < RSS_LIMIT) {
     if (xmlReader.readNextStartElement()) {
       if (xmlReader.name() == QString("item")) {
-	QString title, description;
+        QString title, description;
 
         ++i;
         _ui->rssError->setVisible(false);
@@ -184,14 +187,14 @@ void AboutTulipPage::rssReply(QNetworkReply *reply) {
             description = xmlReader.readElementText();
         }
 
-	// relook html link
-	auto pos = description.indexOf(" href=");
-	if (pos != -1)
-	  description.insert(pos, " style=\"color:" HTML_LINK_COLOR "\"");
-	QString text("<p><span style=\"color:#626262; font-size:large;\">");
+        // relook html link
+        auto pos = description.indexOf(" href=");
+        if (pos != -1)
+          description.insert(pos, " style=\"color:" HTML_LINK_COLOR "\"");
+        QString text("<p><span style=\"color:#626262; font-size:large;\">");
         text += title + "</span></p><p><span>" + description + "</span></p>";
         QLabel *label = new QLabel(text, nullptr);
-	label->setOpenExternalLinks(true);
+        label->setOpenExternalLinks(true);
         label->setMinimumWidth(1);
         label->setWordWrap(true);
         label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
