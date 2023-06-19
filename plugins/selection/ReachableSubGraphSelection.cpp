@@ -42,12 +42,15 @@ static const char *directionValuesDescription =
     "input edges : <i>follow input edges (reverse-directed)</i><br>"
     "all edges   : <i>all edges (undirected)</i>";
 
-static const char *edgesDirectionLabels[] = {"output edges", "input edges", "all edges"};
+#define DIRECTION "output edges; input edges;all edges"
+#define DIRECTION_OUTPUT 0
+#define DIRECTION_INPUT 1
+#define DIRECTION_ALL 2
 
 ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PluginContext *context)
     : BooleanAlgorithm(context) {
   addInParameter<StringCollection>("edge direction", paramHelp[0],
-                                   "output edges;input edges;all edges", true,
+                                   DIRECTION, true,
                                    directionValuesDescription);
   addInParameter<BooleanProperty>("selection", paramHelp[1], "viewSelection");
   addInParameter<int>("max distance", paramHelp[2], "5");
@@ -60,7 +63,8 @@ ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PluginContext 
 ///===========================================================
 bool ReachableSubGraphSelection::run() {
   unsigned int maxDistance = 5;
-  StringCollection edgeDirectionCollecion;
+  StringCollection edgeDirectionCollection(DIRECTION);
+  edgeDirectionCollection.setCurrent(0);
   EDGE_TYPE edgeDirection = DIRECTED;
   BooleanProperty *startNodes = graph->getProperty<BooleanProperty>("viewSelection");
 
@@ -69,8 +73,8 @@ bool ReachableSubGraphSelection::run() {
 
     // Get the edge orientation
     int direction = 0;
-    if (dataSet->getDeprecated("edge direction", "edges direction", edgeDirectionCollecion))
-      direction = edgeDirectionCollecion.getCurrent();
+    if (dataSet->getDeprecated("edge direction", "edges direction", edgeDirectionCollection))
+      direction = edgeDirectionCollection.getCurrent();
     else
       // If the new parameter is not defined search for the very former one.
       dataSet->get("direction", direction);
