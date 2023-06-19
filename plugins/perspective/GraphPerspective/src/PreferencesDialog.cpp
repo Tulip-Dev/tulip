@@ -34,6 +34,9 @@ using namespace tlp;
 PreferencesDialog::PreferencesDialog(QWidget *parent)
     : QDialog(parent), _ui(new Ui::PreferencesDialog) {
   _ui->setupUi(this);
+#ifdef __APPLE__
+  resize(width(), 455);
+#endif
   _ui->graphDefaultsTable->setItemDelegate(new tlp::TulipItemDelegate(_ui->graphDefaultsTable));
   connect(_ui->graphDefaultsTable, SIGNAL(cellChanged(int, int)), this,
           SLOT(cellChanged(int, int)));
@@ -54,6 +57,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent)
   }
 
   _ui->graphDefaultsTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+  _ui->graphDefaultsTable->verticalHeader()->hide();
 }
 
 PreferencesDialog::~PreferencesDialog() {

@@ -321,29 +321,14 @@ font: 12px;
             <number>200</number>
            </attribute>
            <row>
-            <property name="text">
-             <string>New Row</string>
-            </property>
            </row>
            <row>
-            <property name="text">
-             <string>New Row</string>
-            </property>
            </row>
            <row>
-            <property name="text">
-             <string>New Row</string>
-            </property>
            </row>
            <row>
-            <property name="text">
-             <string>New Row</string>
-            </property>
            </row>
            <row>
-            <property name="text">
-             <string>New Row</string>
-            </property>
            </row>
            <column>
             <property name="text">
@@ -607,6 +592,9 @@ font: 12px;
             </item>
             <item>
              <widget class="QLineEdit" name="proxyUser">
+              <property name="placeholderText">
+               <string>name</string>
+              </property>
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -614,6 +602,9 @@ font: 12px;
             </item>
             <item>
              <widget class="QLineEdit" name="proxyPassword">
+              <property name="placeholderText">
+               <string>password</string>
+              </property>
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -621,19 +612,6 @@ font: 12px;
                <enum>QLineEdit::Password</enum>
               </property>
              </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
             </item>
            </layout>
           </widget>
