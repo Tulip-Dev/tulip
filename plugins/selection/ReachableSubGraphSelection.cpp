@@ -49,8 +49,7 @@ static const char *directionValuesDescription =
 
 ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PluginContext *context)
     : BooleanAlgorithm(context) {
-  addInParameter<StringCollection>("edge direction", paramHelp[0],
-                                   DIRECTION, true,
+  addInParameter<StringCollection>("edge direction", paramHelp[0], DIRECTION, true,
                                    directionValuesDescription);
   addInParameter<BooleanProperty>("selection", paramHelp[1], "viewSelection");
   addInParameter<int>("max distance", paramHelp[2], "5");
