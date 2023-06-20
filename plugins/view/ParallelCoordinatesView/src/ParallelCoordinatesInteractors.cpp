@@ -235,17 +235,23 @@ void InteractorBoxPlot::construct() {
 
 InteractorShowElementInfo::InteractorShowElementInfo(const tlp::PluginContext *)
     : ParallelCoordinatesInteractor(":/tulip/gui/icons/i_select.png",
-                                    "Get information on nodes/edges",
+                                    "Display node or edge properties",
                                     StandardInteractorPriority::GetInformation) {}
 
 void InteractorShowElementInfo::construct() {
-  setConfigurationWidgetText(QString("<html>") + "<head>" + "<title></title>" + "</head>" +
-                             "<body>" + "<h3>Show element properties interactor</h3>" +
-                             "<p>This interactor allows to view the properties associated to an "
-                             "element by clicking on it. Tulip will display all available "
-                             "properties of that node/edge using the Element tab of the Graph "
-                             "Editor sub-window</p>" +
-                             "</body>" + "</html>");
+  setConfigurationWidgetText(
+        QString("<h3>Display node or edge properties</h3>") +
+        "<b>Mouse left click</b> on an element (the mouse cursor must be as <img "
+        "src=\":/tulip/gui/icons/i_select.png\">),<br/>"
+        "to display a panel showing its properties.<br/>"
+        "As the panel is displayed, <b>Mouse left click</b> in a property row to edit the "
+        "corresponding value.<br/><br/>"
+#if defined(__APPLE__)
+        "<b>Mouse wheel</b> down/up can be used to zoom/unzoom the view."
+#else
+        "<b>Mouse wheel</b> up/down can be used to zoom/unzoom the view."
+#endif
+    );
   push_back(new ParallelCoordsElementShowInfo);
   push_back(new MousePanNZoomNavigator);
 }
@@ -259,11 +265,11 @@ void InteractorAxisSpacer::construct() {
       QString("<html>") + "<head>" + "<title></title>" + "</head>" + "<body>" +
       "<h3>Axis spacer interactor</h3>" +
       "<p>This interactor allows to modify the space between two consecutive axis.</p>" +
-      "<p>Put the mouse pointer under an axis, a red rectangle appears to indicate that the axis is "
+      "<p>Put the mouse pointer on an axis, a red rectangle appears to indicate that the axis is "
       "selected. Do a left click and keep the mouse button pressed while dragging the axis "
       "to its new position. The axis cannot be moved further than its neighbors.</p>" +
-      "<p>By double clicking anywhere in the view, all axis will be reset to their default positions"
-      "and equally spaced between each others.</p>" +
+      "<p>By double clicking anywhere in the view, all axis will be reset to their default positions "
+      "and equally spaced between from each other.</p>" +
       "<p>Positions will also be reset when the number of selected properties "
       "change.</p>" +
       "</body></html>");
