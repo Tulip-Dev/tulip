@@ -233,10 +233,19 @@ HistogramInteractorGetInformation::HistogramInteractorGetInformation(const tlp::
                                          StandardInteractorPriority::GetInformation) {}
 
 void HistogramInteractorGetInformation::construct() {
-  setConfigurationWidgetText(QString("<h3>Display node or edge properties</h3>") +
-                             "<b>Mouse left click</b> on an element to display its "
-                             "properties.<br/>then <b>Mouse left click</b> on a row to edit the "
-                             "corresponding value.");
+  setConfigurationWidgetText(
+        QString("<h3>Display node or edge properties</h3>") +
+        "<b>Mouse left click</b> on an element (the mouse cursor must be as <img "
+        "src=\":/tulip/gui/icons/i_select.png\">),<br/>"
+        "to display a panel showing its properties.<br/>"
+        "As the panel is displayed, <b>Mouse left click</b> in a property row to edit the "
+        "corresponding value.<br/><br/>"
+#if defined(__APPLE__)
+        "<b>Mouse wheel</b> down/up can be used to zoom/unzoom the view."
+#else
+        "<b>Mouse wheel</b> up/down can be used to zoom/unzoom the view."
+#endif
+    );
   push_back(new MousePanNZoomNavigator);
   push_back(new HistogramMouseShowElementInfo);
 }
