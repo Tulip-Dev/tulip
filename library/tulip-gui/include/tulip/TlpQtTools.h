@@ -22,6 +22,7 @@
 
 #include <QColor>
 #include <QDebug>
+#include <QCursor>
 
 #include <tulip/Color.h>
 #include <tulip/tulipconf.h>
@@ -151,6 +152,15 @@ TLP_QT_SCOPE QString getRegisteredTextureFile(QString name);
  * @brief forget all registered texture files
  */
 TLP_QT_SCOPE void clearRegisteredTextureFiles();
+
+#ifdef __APPLE__
+// on macosx Qt::WhatsThisCursor is not displayed,
+// Qt::PointingHandCursor is displayed instead
+TLP_QT_SCOPE const QCursor &QtWhatsThisCursor();
+#define qtWhatsThisCursor QtWhatsThisCursor()
+#else
+#define qtWhatsThisCursor Qt::WhatsThisCursor
+#endif
 
 } // namespace tlp
 

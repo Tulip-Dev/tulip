@@ -130,7 +130,7 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
 
     if (e->type() == QEvent::MouseMove) {
       if (pick(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity)) {
-        glMainWidget->setCursor(Qt::WhatsThisCursor);
+        glMainWidget->setCursor(qtWhatsThisCursor);
       } else {
         glMainWidget->setCursor(QCursor());
       }

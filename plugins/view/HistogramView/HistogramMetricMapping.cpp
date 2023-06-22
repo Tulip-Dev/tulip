@@ -802,7 +802,7 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
       if (selectedAnchor != nullptr) {
         glWidget->setCursor(QCursor(Qt::OpenHandCursor));
       } else if (pointerColorScale) {
-        glWidget->setCursor(QCursor(Qt::WhatsThisCursor));
+        glWidget->setCursor(QCursor(qtWhatsThisCursor));
       } else {
         glWidget->setCursor(QCursor(Qt::ArrowCursor));
       }

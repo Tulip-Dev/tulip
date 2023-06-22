@@ -614,4 +614,11 @@ void convertLikeFilter(QString &filter) {
   }
 }
 
+#ifdef __APPLE__
+const QCursor &QtWhatsThisCursor() {
+  static QCursor wtCursor(QPixmap(":/tulip/gui/icons/i_select.png"), 2, 4);
+  return wtCursor;
+}
+#endif
+
 } // namespace tlp

@@ -149,7 +149,7 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
 
     if (e->type() == QEvent::MouseMove) {
       if (pick(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity)) {
-        geoView->getGeographicViewGraphicsView()->getGlMainWidget()->setCursor(Qt::WhatsThisCursor);
+        geoView->getGeographicViewGraphicsView()->getGlMainWidget()->setCursor(qtWhatsThisCursor);
       } else {
         geoView->getGeographicViewGraphicsView()->getGlMainWidget()->setCursor(QCursor());
       }
