@@ -217,7 +217,8 @@ int main(int argc, char **argv) {
       qputenv("DYLD_FALLBACK_LIBRARY_PATH", path.append("/Frameworks/Python.framework/Versions/")
                                                 .append(pyv)
                                                 .append("/lib:")
-                                                .append(qgetenv("DYLD_FALLBACK_LIBRARY_PATH")).toLocal8Bit());
+                                                .append(qgetenv("DYLD_FALLBACK_LIBRARY_PATH"))
+                                                .toLocal8Bit());
       path = contentsPath;
       qputenv("PATH", path.append("/Frameworks/Python.framework/Versions/")
                           .append(pyv)
