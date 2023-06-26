@@ -140,7 +140,8 @@ wd="\${0%/*}"
 cd "\$wd/.."
 PY_VERSION=\$(ls ./Frameworks/Python.framework/Versions)
 export PATH="\$(pwd)/Frameworks/Python.framework/Versions/\$PY_VERSION/bin:\$PATH"
-export DYLD_LIBRARY_PATH="\$(pwd)/Frameworks/Python.framework/Versions/\$PY_VERSION/lib:\$(pwd)/Frameworks"
+export DYLD_LIBRARY_PATH="\$(pwd)/Frameworks/Python.framework/Versions/\$PY_VERSION/lib"
+export DYLD_FALLBACK_LIBRARY_PATH="\$(pwd)/Frameworks"
 python3 -m pip install --user \$1
 EOF
 # make it executable
