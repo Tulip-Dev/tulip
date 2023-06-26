@@ -74,8 +74,9 @@ void View::setCurrentInteractor(tlp::Interactor *i) {
   if (_currentInteractor) {
     _currentInteractor->uninstall();
 
-    if (graphicsView() != nullptr)
-      graphicsView()->setCursor(QCursor()); // Force reset cursor when interactor is changed
+    if (graphicsView() != nullptr && i != _currentInteractor)
+      // Force cursor reset when changing interactor
+      graphicsView()->setCursor(QCursor());
   }
 
   _currentInteractor = i;
@@ -168,6 +169,9 @@ void View::setGraph(tlp::Graph *g) {
   _graph = g;
 
   graphChanged(g);
+  // ensure current interactor refresh
+  if (currentInteractor())
+    setCurrentInteractor(currentInteractor());
 
   if (_graph != nullptr)
     _graph->addListener(this);

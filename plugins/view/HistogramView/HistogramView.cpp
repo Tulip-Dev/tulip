@@ -573,10 +573,6 @@ void HistogramView::graphChanged(Graph *g) {
   }
   setState(ds);
   drawOverview();
-  // ensure interactor refresh
-  // needed by statistics and navigator interactors
-  if (currentInteractor())
-    setCurrentInteractor(currentInteractor());
 }
 
 void HistogramView::buildHistograms() {
