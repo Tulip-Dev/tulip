@@ -298,7 +298,7 @@ tlp.computeLinesIntersection(line1, line2)
 
 .. versionadded:: 3.8
 
-Computes the intersection point (if any) of two 3d lines.
+Computes the intersection point (if any) of two 3D lines.
 Returns a tuple whose first member is a Boolean indicating
 if the lines intersect (if :const:`False` it means that lines are parallel or skew)
 and second member is the intersection point (if any).

@@ -190,7 +190,7 @@ tlp.voronoiDiagram(sites)
 
 .. versionadded:: 3.8
 
-Computes the voronoi diagram of a set of sites (for 2d and 3d layouts).
+Computes the voronoi diagram of a set of sites (for 2D and 3D layouts).
 It automatically computes the set of all voronoi
 vertices, edges and cells. In order to not have to deal with infinite
 voronoi rays, the input layout is enclosed in its convex hull in 2d or

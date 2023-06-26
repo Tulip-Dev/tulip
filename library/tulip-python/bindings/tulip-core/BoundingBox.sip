@@ -32,7 +32,7 @@ struct BoundingBox {
 
 %Docstring
 This class represents the 3D bounding box of an object.
-It is defined by two 3d points, the first one being the lowest point (bottom-left corner), 
+It is defined by two 3D points, the first one being the lowest point (bottom-left corner), 
 the second being the highest (top-right corner).
 
 A bounding box can be instantiated and manipulated the following ways::

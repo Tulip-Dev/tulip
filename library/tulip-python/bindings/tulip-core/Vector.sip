@@ -445,7 +445,7 @@ Computes and returns the euclidean norm of the vector.
 %Docstring
 tlp.Vec3f.dist(v)
 
-Computes and returns the distance between the vector (3d point) and another one.
+Computes and returns the distance between the vector (3D point) and another one.
 
 :param v: a vector
 :type v: :class:`tlp.Vec3f`
