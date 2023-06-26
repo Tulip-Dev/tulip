@@ -60,12 +60,13 @@ void GeographicViewConfigWidget::openCsvHelp() {
 }
 
 void GeographicViewConfigWidget::openPolyHelp() {
-  QMessageBox msgB(QMessageBox::NoIcon, "Map poly files",
-                   ".poly files format are an open street map "
-                   "format.\nYou can download .poly files from :<br/>"
-                   "<a href=\"https://github.com/jameschevalier/cities\" style=\"color:" HTML_LINK_COLOR ";\">https://github.com/jameschevalier/cities</a>",
-                   QMessageBox::Ok,
-                   Perspective::instance()->mainWindow()->centralWidget());
+  QMessageBox msgB(
+      QMessageBox::NoIcon, "Map poly files",
+      ".poly files format are an open street map "
+      "format.\nYou can download .poly files from :<br/>"
+      "<a href=\"https://github.com/jameschevalier/cities\" style=\"color:" HTML_LINK_COLOR
+      ";\">https://github.com/jameschevalier/cities</a>",
+      QMessageBox::Ok, Perspective::instance()->mainWindow()->centralWidget());
   msgB.setTextFormat(Qt::RichText);
   msgB.exec();
 }
