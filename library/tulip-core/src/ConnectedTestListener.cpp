@@ -55,7 +55,7 @@ void ConnectedTestListener::treatEvent(const Event &evt) {
 
     case GraphEvent::TLP_DEL_EDGE:
 
-       if (it != resultsBuffer.end()) {
+      if (it != resultsBuffer.end()) {
         if (!it->second)
           return;
 
