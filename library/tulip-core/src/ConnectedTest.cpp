@@ -66,13 +66,14 @@ static bool connectedTest(const Graph *const graph) {
 #endif
 //=================================================================
 bool ConnectedTest::isConnected(const tlp::Graph *const graph) {
-  if (instance.resultsBuffer.find(graph) != instance.resultsBuffer.end())
-    return instance.resultsBuffer[graph];
+  auto it = instance.resultsBuffer.find(graph);
+  if (it != instance.resultsBuffer.end())
+    return it->second;
 
   if (graph->isEmpty())
     return true;
 
-  // trees are the minimally connected graphs
+  // trees are connected graphs with the minimum number of edges
   if (graph->numberOfEdges() < graph->numberOfNodes() - 1)
     return false;
 

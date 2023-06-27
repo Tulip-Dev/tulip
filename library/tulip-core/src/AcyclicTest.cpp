@@ -78,12 +78,12 @@ void TestAcyclicListener::treatEvent(const Event &evt) {
 static TestAcyclicListener instance;
 //**********************************************************************
 bool AcyclicTest::isAcyclic(const Graph *graph) {
-  if (instance.resultsBuffer.find(graph) == instance.resultsBuffer.end()) {
-    instance.resultsBuffer[graph] = acyclicTest(graph);
-    graph->addListener(instance);
-  }
+  auto it = instance.resultsBuffer.find(graph);
+  if (it != instance.resultsBuffer.end())
+    return it->second;
 
-  return instance.resultsBuffer[graph];
+  graph->addListener(instance);
+  return instance.resultsBuffer[graph] = acyclicTest(graph);
 }
 //**********************************************************************
 void AcyclicTest::makeAcyclic(Graph *graph, vector<edge> &reversed,

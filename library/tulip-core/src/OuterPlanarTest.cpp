@@ -40,26 +40,30 @@ void OuterPlanarTestListener::treatEvent(const Event &evt) {
   if (gEvt) {
     Graph *graph = gEvt->getGraph();
 
+    auto it = resultsBuffer.find(graph);
     switch (gEvt->getType()) {
     case GraphEvent::TLP_ADD_EDGE:
-      if (resultsBuffer.find(graph) != resultsBuffer.end())
-        if (resultsBuffer[graph])
+      if (it != resultsBuffer.end()) {
+        if (it->second)
           return;
 
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
+        graph->removeListener(this);
+        resultsBuffer.erase(it);
+      }
       break;
 
     case GraphEvent::TLP_DEL_EDGE:
     case GraphEvent::TLP_DEL_NODE:
 
-      if (resultsBuffer.find(graph) != resultsBuffer.end())
-        if (!resultsBuffer[graph])
+      if (it != resultsBuffer.end())
+        if (!it->second)
           return;
 
     case GraphEvent::TLP_REVERSE_EDGE:
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
+      if (it != resultsBuffer.end()) {
+        graph->removeListener(this);
+        resultsBuffer.erase(it);
+      }
       break;
 
     default:
