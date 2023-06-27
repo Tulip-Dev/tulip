@@ -612,9 +612,7 @@ void PythonCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event) {
   }
 }
 
-static float clamp(float f, float minV, float maxV) {
-  return std::min(std::max(f, minV), maxV);
-}
+#define CLAMP(f, minV, maxV) std::min(std::max(f, minV), maxV)
 
 void PythonCodeEditor::updateTabWidth() {
   setTabWidth(textWidth(_indentPattern));
@@ -624,7 +622,7 @@ void PythonCodeEditor::zoomIn() {
   QTextCursor cursor = textCursor();
   selectAll();
   QTextCharFormat format = currentCharFormat();
-  _currentFont.setPointSize(clamp(_currentFont.pointSize() + 1, 6, 30));
+  _currentFont.setPointSize(CLAMP(_currentFont.pointSize() + 1, 6, 30));
   format.setFont(_currentFont);
   setCurrentCharFormat(format);
   setTextCursor(cursor);
@@ -635,7 +633,7 @@ void PythonCodeEditor::zoomOut() {
   QTextCursor cursor = textCursor();
   selectAll();
   QTextCharFormat format = currentCharFormat();
-  _currentFont.setPointSize(clamp(_currentFont.pointSize() - 1, 6, 30));
+  _currentFont.setPointSize(CLAMP(_currentFont.pointSize() - 1, 6, 30));
   format.setFont(_currentFont);
   setCurrentCharFormat(format);
   setTextCursor(cursor);

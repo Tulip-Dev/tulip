@@ -18,7 +18,7 @@ static FloatValidator floatValidator;
 
 bool validFloatString(const QString &s) {
   QRegularExpressionMatch match;
-  int pos = s.indexOf(floatRe, 0, &match);
+  auto pos = s.indexOf(floatRe, 0, &match);
 
   if (pos != -1) {
     return match.captured(1) == s;
@@ -41,7 +41,7 @@ QValidator::State FloatValidator::validate(QString &input, int &pos) const {
 
 void FloatValidator::fixup(QString &text) const {
   QRegularExpressionMatch match;
-  int pos = text.indexOf(floatRe, 0, &match);
+  auto pos = text.indexOf(floatRe, 0, &match);
 
   if (pos != -1) {
     text = match.captured(1);
@@ -77,17 +77,16 @@ QString ScientificDoubleSpinBox::textFromValue(double value) const {
 void ScientificDoubleSpinBox::stepBy(int steps) {
   QString text = cleanText();
   QRegularExpressionMatch match;
-  text.indexOf(floatRe, 0, &match);
-  QStringList groups = match.capturedTexts();
-  if (groups.count()) {
+  auto pos = text.indexOf(floatRe, 0, &match);
+  if (pos != -1) {
+    QStringList groups = match.capturedTexts();
     double decimal = 0;
     tlp::DoubleType::fromString(decimal, QStringToTlpString(groups[2]));
     decimal += steps;
     text = tlpStringToQString(tlp::DoubleType::toString(decimal));
+    if (groups.count() > 4) {
+      text += groups[4];
+    }
   }
-  if (groups.count() > 4) {
-    text += groups[4];
-  }
-
   lineEdit()->setText(text);
 }
