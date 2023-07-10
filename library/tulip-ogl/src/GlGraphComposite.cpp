@@ -169,10 +169,14 @@ void GlGraphComposite::treatEvent(const Event &evt) {
       if (prop) {
         if (prop == parameters.getDisplayFilteringProperty()) {
           parameters.setDisplayFilteringProperty(nullptr);
-          tlp::warning() << "Warning: displayFilteringProperty has been deleted, reset it to null to prevent free memory access" << std::endl;
+          tlp::warning()
+              << "Warning: displayFilteringProperty has been deleted, reset it to null to prevent free memory access"
+              << std::endl;
         } else if (prop == parameters.getElementOrderingProperty()) {
           parameters.setElementOrderingProperty(nullptr);
-          tlp::warning() << "Warning: elementOrderingProperty has been deleted, reset it to null to prevent free memory access" << std::endl;
+          tlp::warning()
+              << "Warning: elementOrderingProperty has been deleted, reset it to null to prevent free memory access"
+              << std::endl;
         }
       }
     }
@@ -184,7 +188,6 @@ void GlGraphComposite::treatEvent(const Event &evt) {
     }
   }
 }
-
 
 void GlGraphComposite::setRenderer(tlp::GlGraphRenderer *renderer) {
   delete graphRenderer;
