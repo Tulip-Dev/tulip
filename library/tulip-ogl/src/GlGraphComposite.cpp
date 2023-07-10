@@ -96,12 +96,30 @@ const GlGraphRenderingParameters &GlGraphComposite::getRenderingParameters() {
 }
 //===================================================================
 void GlGraphComposite::setRenderingParameters(const GlGraphRenderingParameters &parameter) {
-  if (parameters.isElementOrdered() != parameter.isElementOrdered()) {
-    parameters = parameter;
-    graphRenderer->setGraphModified(true);
-  } else {
-    parameters = parameter;
+  if (parameters.getDisplayFilteringProperty() != parameter.getDisplayFilteringProperty()) {
+    auto filterProp = parameters.getDisplayFilteringProperty();
+    if (filterProp)
+      filterProp->removeListener(this);
+    filterProp = parameter.getDisplayFilteringProperty();
+    // we must listen to filterProp deletion
+    // to prevent any free memory access (see treatEvent below)
+    if (filterProp)
+      filterProp->addListener(this);
   }
+  if (parameters.getElementOrderingProperty() != parameter.getElementOrderingProperty()) {
+    auto orderProp = parameters.getElementOrderingProperty();
+    if (orderProp)
+      orderProp->removeListener(this);
+    orderProp = parameter.getElementOrderingProperty();
+    // we must listen to orderProp deletion
+    // to prevent any free memory access (see treatEvent below)
+    if (orderProp)
+      orderProp->addListener(this);
+  }
+  if (parameters.isElementOrdered() != parameter.isElementOrdered())
+    graphRenderer->setGraphModified(true);
+
+  parameters = parameter;
 }
 //===================================================================
 GlGraphRenderingParameters *GlGraphComposite::getRenderingParametersPointer() {
@@ -145,6 +163,18 @@ void GlGraphComposite::treatEvent(const Event &evt) {
 
     if (g && inputData.getGraph() == g) {
       inputData.graph = nullptr;
+    } else {
+      PropertyInterface *prop = dynamic_cast<PropertyInterface *>(evt.sender());
+
+      if (prop) {
+        if (prop == parameters.getDisplayFilteringProperty()) {
+          parameters.setDisplayFilteringProperty(nullptr);
+          tlp::warning() << "Warning: displayFilteringProperty has been deleted, reset it to null to prevent free memory access" << std::endl;
+        } else if (prop == parameters.getElementOrderingProperty()) {
+          parameters.setElementOrderingProperty(nullptr);
+          tlp::warning() << "Warning: elementOrderingProperty has been deleted, reset it to null to prevent free memory access" << std::endl;
+        }
+      }
     }
   } else {
     const PropertyEvent *propertyEvent = dynamic_cast<const PropertyEvent *>(&evt);
@@ -154,6 +184,7 @@ void GlGraphComposite::treatEvent(const Event &evt) {
     }
   }
 }
+
 
 void GlGraphComposite::setRenderer(tlp::GlGraphRenderer *renderer) {
   delete graphRenderer;
