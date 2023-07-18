@@ -37,7 +37,8 @@ static const char *paramHelp[] = {
     // selection
     "This parameter indicates the property used to restrict export to selected nodes only.",
     // export id of graph elements
-    "This parameter indicates if the id of graph elements has to be exported",
+    "This parameter indicates if the internal ids of the nodes have to be exported and/or "
+    "the ids of the nodes at the extremities of each edges following the type of elements to export.",
     // exported properties
     "This parameter indicates the properties to be exported. Default indicates only the user "
     "defined properties",
@@ -211,6 +212,15 @@ bool CsvExport::exportGraph(std::ostream &os) {
 
   vector<bool> propIsString;
   unsigned int nbProps = 0;
+
+  //do nothing if no properties selected and ids not exported
+  if(propsCollection.emptySelected() && !exportId) {
+      if(pluginProgress!=nullptr)
+          pluginProgress->setError("Nothing to export. Export cancelled.");
+      else
+          tlp::warning() << "Nothing to export. Export cancelled." << std::endl;
+    return false;
+  }
 
   for (auto &propName : propsCollection.getSelected()) {
     auto prop = graph->getProperty(propName);
