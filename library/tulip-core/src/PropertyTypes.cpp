@@ -25,6 +25,7 @@
 
 #include <climits>
 #include <cfloat>
+#include <cstdint>
 
 using namespace std;
 using namespace tlp;

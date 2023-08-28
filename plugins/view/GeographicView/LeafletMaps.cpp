@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
 )";
 
 LeafletMaps::LeafletMaps(const std::vector<MapLayer> &mapLayers)
-    : QWEBVIEW(nullptr), mapLayers(mapLayers), currentLayer(0), inited(false) {
+    : QWEBVIEW(), mapLayers(mapLayers), currentLayer(0), inited(false) {
 #ifdef QT_HAS_WEBKIT
   // disable output of "libpng warning: iCCP: known incorrect sRGB profile"
   // due to QtWebKit ill-formed png files
