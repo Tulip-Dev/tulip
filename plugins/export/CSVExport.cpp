@@ -36,9 +36,9 @@ static const char *paramHelp[] = {
     "This parameter enables to choose the type of graph elements to export",
     // selection
     "This parameter indicates the property used to restrict export to selected nodes only.",
-    // export id of graph elements
-    "This parameter indicates if the internal ids of the nodes have to be exported and/or "
-    "the ids of the nodes at the extremities of each edges following the type of elements to export.",
+    // export ids of graph nodes
+    "This parameter indicates if the internal ids of the nodes and/or "
+    " the ids of the nodes at the extremities of each edge have to be exported, according the type of elements to export.",
     // exported properties
     "This parameter indicates the properties to be exported. Default indicates only the user "
     "defined properties",
@@ -64,7 +64,7 @@ static const char *paramHelp[] = {
 
 #define EXPORT_SELECTION "export selection"
 
-#define EXPORT_ID "export id"
+#define EXPORT_ID "export nodes ids"
 
 #define EXPORTED_PROPERTIES "exported properties"
 
@@ -151,7 +151,10 @@ bool CsvExport::exportGraph(std::ostream &os) {
     // and then force the use of "viewSelection"
     // as default value of the former parameter "export selection property"
     dataSet->getDeprecated(EXPORT_SELECTION, "Export selection", exportSelection);
-    dataSet->getDeprecated(EXPORT_ID, "Export id", exportId);
+    if (!dataSet->getDeprecated(EXPORT_ID, "export id", exportId))
+      // former deprecated
+      dataSet->get("Export id", exportId);
+
     dataSet->getDeprecated(EXPORTED_PROPERTIES, "Exported properties", propsCollection);
     dataSet->getDeprecated(FIELD_SEPARATOR_CUSTOM, "Custom separator", fieldSeparatorCustom);
 
