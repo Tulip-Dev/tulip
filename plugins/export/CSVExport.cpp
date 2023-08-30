@@ -216,12 +216,12 @@ bool CsvExport::exportGraph(std::ostream &os) {
   vector<bool> propIsString;
   unsigned int nbProps = 0;
 
-  //do nothing if no properties selected and ids not exported
-  if(propsCollection.emptySelected() && !exportId) {
-      if(pluginProgress!=nullptr)
-          pluginProgress->setError("Nothing to export. Export cancelled.");
-      else
-          tlp::warning() << "Nothing to export. Export cancelled." << std::endl;
+  // do nothing if no properties selected and ids not exported
+  if (propsCollection.emptySelected() && !exportId) {
+    if (pluginProgress != nullptr)
+      pluginProgress->setError("Nothing to export. Export cancelled.");
+    else
+      tlp::warning() << "Nothing to export. Export cancelled." << std::endl;
     return false;
   }
 
