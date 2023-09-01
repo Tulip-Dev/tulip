@@ -148,7 +148,6 @@ void ImportWizard::moduleSelected(const QModelIndex &index) {
   } else {
     button(QWizard::HelpButton)->setVisible(false);
     _ui->parametersLabel->setEnabled(false);
-
   }
 
   _ui->parametersLabel->setText(parametersText);
