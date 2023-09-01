@@ -143,9 +143,12 @@ void ImportWizard::moduleSelected(const QModelIndex &index) {
 
     setButtonText(QWizard::HelpButton, QString("%1 documentation").arg(alg));
     button(QWizard::HelpButton)->setVisible(true);
+    _ui->parametersLabel->setEnabled(true);
 
   } else {
     button(QWizard::HelpButton)->setVisible(false);
+    _ui->parametersLabel->setEnabled(false);
+
   }
 
   _ui->parametersLabel->setText(parametersText);
