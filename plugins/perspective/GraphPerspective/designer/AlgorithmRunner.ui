@@ -88,7 +88,11 @@
        </sizepolicy>
       </property>
       <property name="styleSheet">
-       <string notr="true">
+        <string notr="true">
+ExpandableGroupBox:disabled {
+/* fix needed for MacOSX dark mode */
+color: #A0A0A0;
+}
 ExpandableGroupBox[ expanded = &quot;true&quot; ] {
 margin-top: 1.5ex;
 }
