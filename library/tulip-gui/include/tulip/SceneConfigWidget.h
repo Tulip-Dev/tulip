@@ -52,6 +52,7 @@ public slots:
   void resetChanges();
   void applySettings();
   void dynamicFontRBToggled(bool);
+  void labelSizesRangeChanged();
 
 protected:
   bool eventFilter(QObject *, QEvent *) override;

@@ -677,7 +677,7 @@ font-weight: bold; font-size: 18px; color: #A0A0A0A0</string>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_6">
+           <widget class="QLabel" name="fontLimitsLabel">
             <property name="text">
              <string>Font size limits</string>
             </property>

@@ -32,6 +32,7 @@ SceneConfigWidget::SceneConfigWidget(QWidget *parent)
   _ui->setupUi(this);
 
   connect(_ui->dynamicFontSizeRB, SIGNAL(toggled(bool)), this, SLOT(dynamicFontRBToggled(bool)));
+  connect(_ui->labelSizesRangeSlider, SIGNAL(sliderReleased()), this, SLOT(labelSizesRangeChanged()));
   _ui->selectionColorButton->setDialogTitle("Choose the color of selected nodes or edges");
   _ui->backgroundColorButton->setDialogTitle("Choose the background color");
   _ui->labelsDisabledLabel->installEventFilter(this);
@@ -96,7 +97,10 @@ void SceneConfigWidget::resetChanges() {
   _ui->dynamicFontSizeRB->setChecked(!renderingParameters->isLabelFixedFontSize());
   _ui->labelsDensitySlider->setValue(renderingParameters->getLabelsDensity());
   _ui->labelSizesRangeSlider->setLowerValue(renderingParameters->getMinSizeOfLabel());
+  _ui->labelsMinSize->display(_ui->labelSizesRangeSlider->minimum());
   _ui->labelSizesRangeSlider->setUpperValue(renderingParameters->getMaxSizeOfLabel());
+  _ui->labelsMaxSize->display(_ui->labelSizesRangeSlider->maximum());
+  labelSizesRangeChanged();
 
   // EDGES
   _ui->edges3DCheck->setChecked(renderingParameters->isEdge3D());
@@ -194,4 +198,11 @@ void SceneConfigWidget::applySettings() {
 
 void SceneConfigWidget::dynamicFontRBToggled(bool state) {
   _ui->sizeLimitsGB->setEnabled(state);
+}
+
+void SceneConfigWidget::labelSizesRangeChanged() {
+  auto lowerSize = _ui->labelSizesRangeSlider->lowerValue();
+  auto upperSize = _ui->labelSizesRangeSlider->upperValue();
+  QString label = QString("Font size limits [%1, %2]").arg(lowerSize).arg(upperSize);
+  _ui->fontLimitsLabel->setText(label);
 }
