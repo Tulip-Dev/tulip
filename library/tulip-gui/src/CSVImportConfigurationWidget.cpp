@@ -248,9 +248,9 @@ CSVTableWidget::CSVTableWidget(QWidget *parent)
 #ifdef __APPLE__
   // specific MacOSX hack to ensure visibility
   // of disabled QTableWidgetItem on dark background
-  QPalette palette = palette();
+  QPalette palette = this->palette();
   palette.setColor(QPalette::Disabled, QPalette::Text, QColor("gray"));
-  setPalette(palette);
+  this->setPalette(palette);
 #endif
 }
 
