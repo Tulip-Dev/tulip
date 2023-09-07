@@ -19,10 +19,11 @@
 
 #include "tulip/QuickAccessBar.h"
 
+#include <QComboBox>
 #include <QFontDatabase>
+#include <QGraphicsView>
 #include <QListView>
 #include <QMouseEvent>
-#include <QGraphicsView>
 
 #include <tulip/GraphModel.h>
 #include <tulip/TulipFontDialog.h>

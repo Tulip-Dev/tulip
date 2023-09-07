@@ -22,11 +22,13 @@
 #define TULIPITEMDELEGATE_H
 
 #include <QStyledItemDelegate>
+class QComboBox;
 
-#include <tulip/TulipItemEditorCreators.h>
 #include <tulip/TulipMetaTypes.h>
 
 namespace tlp {
+
+class TulipItemEditorCreator;
 
 class TLP_QT_SCOPE TulipItemDelegate : public QStyledItemDelegate {
   Q_OBJECT

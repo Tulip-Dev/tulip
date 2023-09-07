@@ -20,7 +20,6 @@
 #include <tulip/TulipProject.h>
 
 #include <QApplication>
-#include <QMainWindow>
 #include <QProcess>
 #include <QTcpSocket>
 #include <QHostAddress>

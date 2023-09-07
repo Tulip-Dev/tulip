@@ -29,7 +29,6 @@
 #include <QPainter>
 #include <QTextBlock>
 #include <QApplication>
-#include <QMainWindow>
 #include <QToolTip>
 #include <QScrollBar>
 #include <QMessageBox>

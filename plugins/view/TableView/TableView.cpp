@@ -27,7 +27,6 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/StringProperty.h>
 #include <tulip/TulipMetaTypes.h>
-#include <tulip/Perspective.h>
 #include <tulip/CopyPropertyDialog.h>
 #include <tulip/PropertyCreationDialog.h>
 #include <tulip/Perspective.h>
@@ -35,7 +34,6 @@
 #include <QResizeEvent>
 #include <QGraphicsView>
 #include <QMenu>
-#include <QMainWindow>
 #include <QGraphicsItem>
 #include <QGraphicsProxyWidget>
 

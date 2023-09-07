@@ -17,8 +17,6 @@
  *
  */
 
-#include <QApplication>
-#include <QMainWindow>
 #include <QProgressDialog>
 
 #include <tulip/BooleanProperty.h>

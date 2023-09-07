@@ -29,8 +29,6 @@
 #include <tulip/Perspective.h>
 
 #include <QApplication>
-#include <QToolTip>
-#include <QMainWindow>
 #include <QMenu>
 #include <QMouseEvent>
 

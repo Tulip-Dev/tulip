@@ -17,12 +17,10 @@
  *
  */
 
-#include <QMainWindow>
 #include <QPainter>
 #include <QLinearGradient>
 
 #include <tulip/Interactor.h>
-#include <tulip/Perspective.h>
 #include "ScatterPlotCorrelCoeffSelectorOptionsWidget.h"
 #include "ui_ScatterPlotCorrelCoeffSelectorOptionsWidget.h"
 

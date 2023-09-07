@@ -46,7 +46,6 @@
 #include <QPainter>
 #include <QTimer>
 #include <QMessageBox>
-#include <QMainWindow>
 #include <QProgressDialog>
 #include <QOpenGLFramebufferObject>
 #include <QOpenGLPaintDevice>

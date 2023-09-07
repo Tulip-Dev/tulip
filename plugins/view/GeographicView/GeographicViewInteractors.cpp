@@ -17,7 +17,6 @@
  *
  */
 
-#include <QApplication>
 #include <tulip/MouseNodeBuilder.h>
 #include <tulip/MouseEdgeBuilder.h>
 #include <tulip/MouseSelector.h>

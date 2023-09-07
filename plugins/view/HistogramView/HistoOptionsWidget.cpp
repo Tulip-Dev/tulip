@@ -17,8 +17,6 @@
  *
  */
 
-#include <QMainWindow>
-
 #include <tulip/Perspective.h>
 
 #include "HistoOptionsWidget.h"

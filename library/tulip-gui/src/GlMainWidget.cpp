@@ -29,7 +29,6 @@
 #define __GLEW_H__
 
 #include <QSurfaceFormat>
-#include <QMainWindow>
 
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>

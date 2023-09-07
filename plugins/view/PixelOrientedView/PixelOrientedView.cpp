@@ -41,12 +41,10 @@
 #include "PixelOrientedView.h"
 #include "PixelOrientedViewQuickAccessBar.h"
 
-#include <QApplication>
 #include <QAbstractButton>
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>
 #include <QMessageBox>
-#include <QMainWindow>
 #include <QProgressDialog>
 #include <QTimer>
 

@@ -21,11 +21,8 @@
 #include "ui_MatrixViewConfigurationWidget.h"
 
 #include <tulip/Graph.h>
-#include <tulip/Perspective.h>
 #include <tulip/ColorButton.h>
 #include <tulip/TlpQtTools.h>
-
-#include <QMainWindow>
 
 using namespace std;
 namespace tlp {

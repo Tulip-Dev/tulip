@@ -26,7 +26,6 @@
 #include <QComboBox>
 #include <QPainter>
 #include <QDoubleSpinBox>
-#include <QMainWindow>
 
 #include <tulip/DataSet.h>
 #include <tulip/VectorEditor.h>

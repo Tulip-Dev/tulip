@@ -22,14 +22,9 @@
 
 #include <QSortFilterProxyModel>
 #include <QMenu>
-#include <QDialogButtonBox>
-#include <QDialog>
 #include <QCursor>
-#include <QMainWindow>
 #include <QMessageBox>
-#include <QTimer>
 #include <QGraphicsView>
-#include <QMainWindow>
 #include <QGraphicsItem>
 #include <QGraphicsProxyWidget>
 

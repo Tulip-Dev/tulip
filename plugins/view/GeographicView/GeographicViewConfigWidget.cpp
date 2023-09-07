@@ -22,7 +22,6 @@
 #include "GeographicView.h"
 
 #include <QFileDialog>
-#include <QMainWindow>
 #include <QMessageBox>
 
 #include <tulip/Perspective.h>

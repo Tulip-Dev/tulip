@@ -30,6 +30,7 @@
 #include <tulip/GraphElementModel.h>
 #include <tulip/GlSimpleEntityItemModel.h>
 #include <tulip/GlComplexPolygon.h>
+#include <tulip/Perspective.h>
 
 #include <QPropertyAnimation>
 #include <QLayout>

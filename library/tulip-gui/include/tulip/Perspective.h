@@ -28,8 +28,8 @@
 #include <QVariantMap>
 #include <QSet>
 #include <QMenu>
+#include <QMainWindow>
 
-class QMainWindow;
 class QTcpSocket;
 
 namespace tlp {

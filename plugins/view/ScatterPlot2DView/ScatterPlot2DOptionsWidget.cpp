@@ -19,12 +19,9 @@
 
 #include <QPainter>
 #include <QLinearGradient>
-#include <QMainWindow>
 
 #include "ScatterPlot2DOptionsWidget.h"
 #include "ui_ScatterPlot2DOptionsWidget.h"
-
-#include <tulip/Perspective.h>
 
 namespace tlp {
 

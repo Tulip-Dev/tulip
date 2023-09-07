@@ -28,7 +28,6 @@
 #include <QToolButton>
 #include <QSortFilterProxyModel>
 #include <QMessageBox>
-#include <QMainWindow>
 
 #include <tulip/Perspective.h>
 #include <tulip/BooleanProperty.h>

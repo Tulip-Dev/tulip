@@ -17,7 +17,6 @@
  *
  */
 #include <QColorDialog>
-#include <QMainWindow>
 #include <QFileDialog>
 
 #include <tulip/ColorScaleButton.h>

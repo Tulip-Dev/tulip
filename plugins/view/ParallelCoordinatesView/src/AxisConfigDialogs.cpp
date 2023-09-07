@@ -36,7 +36,6 @@
 #include <QPushButton>
 #include <QCheckBox>
 #include <QLabel>
-#include <QMainWindow>
 
 using namespace std;
 

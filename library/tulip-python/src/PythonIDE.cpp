@@ -27,7 +27,6 @@
 #include <QInputDialog>
 #include <QLineEdit>
 #include <QXmlStreamReader>
-#include <QMainWindow>
 #include <QCryptographicHash>
 #include <QByteArray>
 #include <QRegularExpression>

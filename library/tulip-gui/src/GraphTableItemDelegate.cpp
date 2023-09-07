@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <QPainter>
+
 #include <tulip/GraphTableItemDelegate.h>
 
 #include <tulip/GraphModel.h>

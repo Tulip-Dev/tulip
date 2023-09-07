@@ -30,9 +30,7 @@
 #include <tulip/ViewGraphPropertiesSelectionWidget.h>
 #include <tulip/WorkspacePanel.h>
 
-#include <QApplication>
 #include <QAbstractButton>
-#include <QMainWindow>
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>
 #include <QMessageBox>
@@ -574,10 +572,6 @@ void ScatterPlot2DView::buildScatterPlotsMatrix() {
 
         matrixComposite->addGlEntity(scatterOverview,
                                      selectedGraphProperties[i] + "_" + selectedGraphProperties[j]);
-
-        // add some feedback
-        /*if ((i + 1) * (j + 1) % 10 == 0)
-          QApplication::processEvents();*/
       }
     }
   }

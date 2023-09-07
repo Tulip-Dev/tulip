@@ -20,7 +20,8 @@
 #include <QMouseEvent>
 #include <QMessageBox>
 #include <QDrag>
-#include <QtCore/QTime>
+#include <QTime>
+#include <QPainter>
 
 #include "GraphPerspective.h"
 #include "AlgorithmRunnerItem.h"

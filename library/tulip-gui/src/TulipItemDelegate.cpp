@@ -20,13 +20,14 @@
 
 #include <QEvent>
 #include <QVBoxLayout>
+#include <QDialog>
 #include <QDialogButtonBox>
-#include <QMainWindow>
 #include <QLabel>
 #include <QTableView>
 
 #include <tulip/GraphModel.h>
 #include <tulip/Perspective.h>
+#include <tulip/TulipItemEditorCreators.h>
 
 using namespace tlp;
 
