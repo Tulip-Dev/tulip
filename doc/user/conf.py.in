@@ -121,4 +121,4 @@ epub_publisher = u'Tulip Team'
 epub_copyright = u'@CurrentYear@, Tulip Team'
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'http://docs.python.org/': None}
+intersphinx_mapping = {"python": ("https://docs.python.org/dev", None)}
