@@ -25,10 +25,9 @@
 class QComboBox;
 
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/TulipItemEditorCreators.h>
 
 namespace tlp {
-
-class TulipItemEditorCreator;
 
 class TLP_QT_SCOPE TulipItemDelegate : public QStyledItemDelegate {
   Q_OBJECT
