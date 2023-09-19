@@ -105,7 +105,7 @@ static QString getDefaultPythonVersionIfAny() {
   QString defaultPythonVersion;
   QProcess pythonProcess;
 
-  QString pythonCommand = "python";
+  QString pythonCommand = "python3";
 
   // Starting Python 3.4 the version number is printed on the standard output.
   pythonProcess.setReadChannel(QProcess::StandardOutput);
@@ -115,8 +115,18 @@ static QString getDefaultPythonVersionIfAny() {
   if (pythonProcess.exitStatus() == QProcess::NormalExit) {
 
     QString result = pythonProcess.readAll();
+    if (result.isEmpty()) {
+      // no python3 exe, try with python
+      pythonCommand = "python";
+      pythonProcess.start(pythonCommand, QStringList() << "--version");
+      pythonProcess.waitForFinished(-1);
+      if (pythonProcess.exitStatus() != QProcess::NormalExit)
+        return defaultPythonVersion;
 
+      result = pythonProcess.readAll();
+    }
 
+    // looking for 3.X.Y
     QRegularExpression versionRegexp("(3\\.[0-9]*\\.[0-9]*)");
     QRegularExpressionMatch match;
 
