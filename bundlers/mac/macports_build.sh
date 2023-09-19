@@ -43,7 +43,7 @@ if [ "$TRAVIS_BUILD_THIRDPARTY_ONLY" != "ON" ]; then
       PYTHON_EXECUTABLE=/usr/bin/python
     fi
   fi
-  PYTHON_EXECUTABLE_DEFINE="-DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}"
+  PYTHON_EXECUTABLE_DEFINE="-DPython_EXECUTABLE=${PYTHON_EXECUTABLE}"
 # install Tulip complete build dependencies
   if [ "$TULIP_BUILD_CORE_ONLY" != "ON" ]; then
     sudo port -N install freetype glew

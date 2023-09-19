@@ -3,7 +3,7 @@ SET(TULIP_BUILD_DOC ON CACHE BOOL "Do you want to build the documentation ? [ON|
 #Only
 IF(TULIP_BUILD_DOC)
   # Unset the previous values of the CMake cache variable SPHINX_EXECUTABLE
-  # in case the value of PYTHON_EXECUTABLE CMake variable changed
+  # in case the value of Python_EXECUTABLE CMake variable changed
   # but save it before into D_SPHINX_EXECUTABLE to be able to restore it
   # in case there will be no other available
   SET(D_SPHINX_EXECUTABLE ${SPHINX_EXECUTABLE})

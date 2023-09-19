@@ -9,7 +9,11 @@ yum -y update
 
 # install base build system
 yum -y install epel-release
-yum -y install xz cmake3 tar gzip make wget ccache
+if [ ! -f /usr/local/bin/cmake ]; then
+    yum -y install cmake3
+    ln -s /usr/bin/cmake3 /usr/bin/cmake
+fi
+yum -y install xz tar gzip make wget ccache
 
 # if needed install GCC 7 as OGDF requires a quite advanced C++11 compiler
 which gcc > /dev/null 2>&1
@@ -73,7 +77,7 @@ else
   RUN_TESTS=OFF
 fi
 
-cmake3 $COMPILER_DEFINES -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=$QT_PATH -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE -DTULIP_USE_CCACHE=$CCACHE -DTULIP_BUILD_FOR_APPIMAGE=ON -DTULIP_BUILD_TESTS=$RUN_TESTS ..
+cmake $COMPILER_DEFINES -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=$QT_PATH -DPython_EXECUTABLE=$PYTHON_EXECUTABLE -DTULIP_USE_CCACHE=$CCACHE -DTULIP_BUILD_FOR_APPIMAGE=ON -DTULIP_BUILD_TESTS=$RUN_TESTS ..
 make -j4 install
 
 # run unit tests

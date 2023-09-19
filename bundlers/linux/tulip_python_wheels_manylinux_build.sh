@@ -6,7 +6,7 @@ TULIP_PYTHON_TEST_WHEEL_SUFFIX=$1
 
 # install tulip-core wheel deps
 # yum -y install epel-release
-yum -y install zlib-devel qhull-devel python-devel ccache cmake3
+yum -y install zlib-devel qhull-devel ccache python-devel
 # install wheels build deps
 yum -y install libffi-devel
 
@@ -45,7 +45,7 @@ do
   popd
   CPYINC=/opt/python/$CPYDIR/include/$(ls ${CPYBIN}/../include)
   # configure and build python wheel with specific Python version
-  cmake3 ${TULIP_SRC} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INCLUDE_PATH=${CPYINC} -DCMAKE_INSTALL_PREFIX=/tmp/tulip_install -DPYTHON_EXECUTABLE=${CPYBIN}/python -DTULIP_ACTIVATE_PYTHON_WHEEL_TARGET=ON -DTULIP_PYTHON_TEST_WHEEL_SUFFIX=${TULIP_PYTHON_TEST_WHEEL_SUFFIX} -DTULIP_USE_CCACHE=ON
+  cmake ${TULIP_SRC} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INCLUDE_PATH=${CPYINC} -DCMAKE_INSTALL_PREFIX=/tmp/tulip_install -DPython_EXECUTABLE=${CPYBIN}/python -DPYTHON_INCLUDE_DIR=${CPYINC} -DTULIP_ACTIVATE_PYTHON_WHEEL_TARGET=ON -DTULIP_PYTHON_TEST_WHEEL_SUFFIX=${TULIP_PYTHON_TEST_WHEEL_SUFFIX} -DTULIP_USE_CCACHE=ON
   TULIP_VERSION=$(bash ./tulip-config --version)
   make -j4
   make test-wheel

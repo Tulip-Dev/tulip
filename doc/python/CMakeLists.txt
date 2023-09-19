@@ -23,7 +23,7 @@ FILE(GLOB PYFILES *.py)
 FILE(COPY ${PYFILES} DESTINATION .)
 
 ADD_CUSTOM_TARGET(pythonBindingsDoc ALL ${CMAKE_COMMAND} -DSPHINX_EXECUTABLE=${SPHINX_EXECUTABLE}
-                                                         -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
+                                                         -DPython_EXECUTABLE=${Python_EXECUTABLE}
                                                          -DSRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}
                                                          -DBIN_DIR=${CMAKE_CURRENT_BINARY_DIR}
                                                          -DTULIP_SOURCE_DIR=${CMAKE_SOURCE_DIR}
