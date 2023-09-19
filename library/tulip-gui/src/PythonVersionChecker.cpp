@@ -23,6 +23,8 @@
 #include <QRegularExpression>
 #include <QSettings>
 
+#include <iostream>
+
 using namespace tlp;
 using namespace std;
 
@@ -105,10 +107,7 @@ static QString getDefaultPythonVersionIfAny() {
 
   QString pythonCommand = "python";
 
-  // Before Python 3.4, the version number was printed on the standard error output.
   // Starting Python 3.4 the version number is printed on the standard output.
-  // So merge the output channels of the process.
-  pythonProcess.setProcessChannelMode(QProcess::MergedChannels);
   pythonProcess.setReadChannel(QProcess::StandardOutput);
   pythonProcess.start(pythonCommand, QStringList() << "--version");
   pythonProcess.waitForFinished(-1);
@@ -117,11 +116,12 @@ static QString getDefaultPythonVersionIfAny() {
 
     QString result = pythonProcess.readAll();
 
-    QRegularExpression versionRegexp(".*([0-9]*\\.[0-9]*)\\..*");
+
+    QRegularExpression versionRegexp("(3\\.[0-9]*\\.[0-9]*)");
     QRegularExpressionMatch match;
 
     if (result.indexOf(versionRegexp, 0, &match) != -1) {
-      defaultPythonVersion = match.captured(1);
+      defaultPythonVersion = match.captured(0);
 
       // Check the binary type of the python executable (32 or 64 bits)
       pythonProcess.start(

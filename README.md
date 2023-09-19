@@ -95,7 +95,7 @@ depending on your system configuration.
 
 The following dependencies are required to build Tulip:
 
-  * [CMake](https://cmake.org) >= 3.1
+  * [CMake](https://cmake.org) >= 3.12
   * A [C++11](https://en.wikipedia.org/wiki/C%2B%2B11) compiler : [GCC](https://gcc.gnu.org/) >= 4.8.1,
   [Clang](https://clang.llvm.org/) >= 3.3 or 
   [Microsoft Visual Studio](https://www.visualstudio.com/) >= 2013
@@ -109,7 +109,7 @@ The following dependencies are required to build Tulip:
 In order to build the Python components, the following dependencies are needed:
 
   * [Python](https://www.python.org) >= 3.7
-  * [SIP](https://www.riverbankcomputing.com/software/sip/intro) >= 4.19.14
+  * [SIP](https://www.riverbankcomputing.com/software/sip/intro) >= 4.19.25
   (if SIP can not be found or its version does not meet the minimum requirements,
   it will be compiled using the existing copy of its source code in the Tulip tree)
   
