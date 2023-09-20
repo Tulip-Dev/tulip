@@ -28,7 +28,7 @@ QTX_ADD_RESOURCES(LIB_RCC_SRCS
 	designer/resources.qrc
 )
 
-ADD_LIBRARY(PathFinder-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
-TARGET_LINK_LIBRARIES(PathFinder-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
+ADD_LIBRARY(PathFinder-${Tulip_VERSION} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
+TARGET_LINK_LIBRARIES(PathFinder-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 
-TULIP_INSTALL_PLUGIN(PathFinder-${TulipVersion} ${TulipInteractorPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(PathFinder-${Tulip_VERSION} ${TulipInteractorPluginsInstallDir})

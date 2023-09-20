@@ -24,9 +24,9 @@ generate_product_version(
    VersionFiles
    NAME "Tulip Perspective launcher"
    ICON ${PROJECT_SOURCE_DIR}/library/tulip-gui/resources/icons/tulip.ico
-   VERSION_MAJOR ${TulipMajorVersion}
-   VERSION_MINOR ${TulipMinorVersion}
-   VERSION_PATCH ${TulipReleaseVersion}
+   VERSION_MAJOR ${PROJECT_VERSION_MAJOR}
+   VERSION_MINOR ${PROJECT_VERSION_MINOR}
+   VERSION_PATCH ${PROJECT_VERSION_PATCH}
    COMPANY_NAME "LaBRI, University of Bordeaux"
    COMPANY_COPYRIGHT "(C) Copyright ${CURRENT_YEAR} David Auber and the Tulip development Team"
    ORIGINAL_FILENAME "tulip_perspective.exe"

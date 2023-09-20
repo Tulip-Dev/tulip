@@ -9,24 +9,24 @@ SET(StrengthClustering_SRCS
   StrengthClustering.h
   StrengthClustering.cpp)
 
-ADD_LIBRARY(StrengthClustering-${TulipVersion} SHARED ${StrengthClustering_SRCS})
-TARGET_LINK_LIBRARIES(StrengthClustering-${TulipVersion} ${LibTulipCoreName})
+ADD_LIBRARY(StrengthClustering-${Tulip_VERSION} SHARED ${StrengthClustering_SRCS})
+TARGET_LINK_LIBRARIES(StrengthClustering-${Tulip_VERSION} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(HierarchicalClustering_SRCS
   HierarchicalClustering.cpp
   HierarchicalClustering.h)
 
-ADD_LIBRARY(HierarchicalClustering-${TulipVersion} SHARED ${HierarchicalClustering_SRCS})
-TARGET_LINK_LIBRARIES(HierarchicalClustering-${TulipVersion} ${LibTulipCoreName})
+ADD_LIBRARY(HierarchicalClustering-${Tulip_VERSION} SHARED ${HierarchicalClustering_SRCS})
+TARGET_LINK_LIBRARIES(HierarchicalClustering-${Tulip_VERSION} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(CliqueEnumeration_SRCS
   CliqueEnumeration.cpp
   CliqueEnumeration.h)
 
-ADD_LIBRARY(CliqueEnumeration-${TulipVersion} SHARED ${CliqueEnumeration_SRCS})
-TARGET_LINK_LIBRARIES(CliqueEnumeration-${TulipVersion} ${LibTulipCoreName})
+ADD_LIBRARY(CliqueEnumeration-${Tulip_VERSION} SHARED ${CliqueEnumeration_SRCS})
+TARGET_LINK_LIBRARIES(CliqueEnumeration-${Tulip_VERSION} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 IF(NOT TULIP_BUILD_CORE_ONLY)
@@ -44,31 +44,31 @@ SET(ConvolutionClustering_SRCS
   ConvolutionClusteringSetup.cpp
   ConvolutionClusteringSetup.h)
 
-ADD_LIBRARY(ConvolutionClustering-${TulipVersion} SHARED ${ConvolutionClustering_SRCS} ${ConvolutionClustering_UI_SRCS} ${ConvolutionClustering_MOC_SRCS})
-TARGET_LINK_LIBRARIES(ConvolutionClustering-${TulipVersion} ${LibTulipCoreName} ${QT_LIBRARIES})
+ADD_LIBRARY(ConvolutionClustering-${Tulip_VERSION} SHARED ${ConvolutionClustering_SRCS} ${ConvolutionClustering_UI_SRCS} ${ConvolutionClustering_MOC_SRCS})
+TARGET_LINK_LIBRARIES(ConvolutionClustering-${Tulip_VERSION} ${LibTulipCoreName} ${QT_LIBRARIES})
 ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(EqualValueClustering_SRCS
   EqualValueClustering.h
   EqualValueClustering.cpp)
 
-ADD_LIBRARY(EqualValueClustering-${TulipVersion} SHARED ${EqualValueClustering_SRCS})
-TARGET_LINK_LIBRARIES(EqualValueClustering-${TulipVersion} ${LibTulipCoreName})
+ADD_LIBRARY(EqualValueClustering-${Tulip_VERSION} SHARED ${EqualValueClustering_SRCS})
+TARGET_LINK_LIBRARIES(EqualValueClustering-${Tulip_VERSION} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(QuotientClustering_SRCS
     QuotientClustering.cpp
 )
 
-ADD_LIBRARY(QuotientClustering-${TulipVersion} SHARED ${QuotientClustering_SRCS})
-TARGET_LINK_LIBRARIES(QuotientClustering-${TulipVersion} ${LibTulipCoreName})
+ADD_LIBRARY(QuotientClustering-${Tulip_VERSION} SHARED ${QuotientClustering_SRCS})
+TARGET_LINK_LIBRARIES(QuotientClustering-${Tulip_VERSION} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-TULIP_INSTALL_PLUGIN(StrengthClustering-${TulipVersion} ${TulipPluginsInstallDir})
-TULIP_INSTALL_PLUGIN(HierarchicalClustering-${TulipVersion} ${TulipPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(StrengthClustering-${Tulip_VERSION} ${TulipPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(HierarchicalClustering-${Tulip_VERSION} ${TulipPluginsInstallDir})
 IF(NOT TULIP_BUILD_CORE_ONLY)
-TULIP_INSTALL_PLUGIN(ConvolutionClustering-${TulipVersion} ${TulipPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(ConvolutionClustering-${Tulip_VERSION} ${TulipPluginsInstallDir})
 ENDIF(NOT TULIP_BUILD_CORE_ONLY)
-TULIP_INSTALL_PLUGIN(EqualValueClustering-${TulipVersion} ${TulipPluginsInstallDir})
-TULIP_INSTALL_PLUGIN(QuotientClustering-${TulipVersion} ${TulipPluginsInstallDir})
-TULIP_INSTALL_PLUGIN(CliqueEnumeration-${TulipVersion} ${TulipPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(EqualValueClustering-${Tulip_VERSION} ${TulipPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(QuotientClustering-${Tulip_VERSION} ${TulipPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(CliqueEnumeration-${Tulip_VERSION} ${TulipPluginsInstallDir})

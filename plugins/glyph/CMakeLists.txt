@@ -1,9 +1,9 @@
 INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${GLEW_INCLUDE_DIR} ${FTGLInclude} ${FREETYPE_INCLUDE_DIRS})
 
 MACRO(GLYPH name source)
-  ADD_LIBRARY(${name}-${TulipVersion} SHARED ${source})
-  TARGET_LINK_LIBRARIES(${name}-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName})
-  TULIP_INSTALL_PLUGIN(${name}-${TulipVersion} ${TulipGlyphPluginsInstallDir})
+  ADD_LIBRARY(${name}-${Tulip_VERSION} SHARED ${source})
+  TARGET_LINK_LIBRARIES(${name}-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName})
+  TULIP_INSTALL_PLUGIN(${name}-${Tulip_VERSION} ${TulipGlyphPluginsInstallDir})
 ENDMACRO(GLYPH)
 
 GLYPH(Cone cone.cpp)

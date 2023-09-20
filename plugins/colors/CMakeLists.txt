@@ -21,8 +21,8 @@ QTX_WRAP_CPP(ColorMapping_MOC_SRCS
   DoubleStringsListRelationDialog.h
 )
 
-ADD_LIBRARY(ColorMapping-${TulipVersion} SHARED ${ColorMapping_SRCS} ${ColorMapping_UI_SRCS} ${ColorMapping_MOC_SRCS})
-TARGET_LINK_LIBRARIES(ColorMapping-${TulipVersion} ${LibTulipCoreName} ${LibTulipGUIName})
+ADD_LIBRARY(ColorMapping-${Tulip_VERSION} SHARED ${ColorMapping_SRCS} ${ColorMapping_UI_SRCS} ${ColorMapping_MOC_SRCS})
+TARGET_LINK_LIBRARIES(ColorMapping-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipGUIName})
 
 ELSE(NOT TULIP_BUILD_CORE_ONLY)
 
@@ -33,10 +33,10 @@ SET(ColorMapping_SRCS
 SET_SOURCE_FILES_PROPERTIES(ColorMapping.cpp
                             PROPERTIES COMPILE_DEFINITIONS TULIP_BUILD_CORE_ONLY)
 
-ADD_LIBRARY(ColorMapping-${TulipVersion} SHARED ${ColorMapping_SRCS})
-TARGET_LINK_LIBRARIES(ColorMapping-${TulipVersion} ${LibTulipCoreName})
+ADD_LIBRARY(ColorMapping-${Tulip_VERSION} SHARED ${ColorMapping_SRCS})
+TARGET_LINK_LIBRARIES(ColorMapping-${Tulip_VERSION} ${LibTulipCoreName})
 
 ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 
 ##----------------------------------------------------------------------------------------------------------------------------
-TULIP_INSTALL_PLUGIN(ColorMapping-${TulipVersion} ${TulipPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(ColorMapping-${Tulip_VERSION} ${TulipPluginsInstallDir})

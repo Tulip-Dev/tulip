@@ -441,7 +441,7 @@ SET(TULIP_PLUGIN_TARGETS "" CACHE INTERNAL "")
 # Tulip Plugin install macro (its purpose is to disable the installation of MinGW import libraries)
 MACRO(TULIP_INSTALL_PLUGIN plugin_target destination)
   SET(COMPONENT_NAME ${plugin_target})
-  STRING(REPLACE "-${TulipVersion}" "" COMPONENT_NAME "${COMPONENT_NAME}")
+  STRING(REPLACE "-${Tulip_VERSION}" "" COMPONENT_NAME "${COMPONENT_NAME}")
   INSTALL(TARGETS ${plugin_target}
           RUNTIME DESTINATION ${destination}
           LIBRARY DESTINATION ${destination}

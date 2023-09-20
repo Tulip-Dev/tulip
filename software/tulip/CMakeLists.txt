@@ -59,9 +59,9 @@ generate_product_version(
    VersionFiles
    NAME "Tulip Agent"
    ICON ${PROJECT_SOURCE_DIR}/library/tulip-gui/resources/icons/tulip.ico
-   VERSION_MAJOR ${TulipMajorVersion}
-   VERSION_MINOR ${TulipMinorVersion}
-   VERSION_PATCH ${TulipReleaseVersion}
+   VERSION_MAJOR ${PROJECT_VERSION_MAJOR}
+   VERSION_MINOR ${PROJECT_VERSION_MINOR}
+   VERSION_PATCH ${PROJECT_VERSION_PATCH}
    COMPANY_NAME "LaBRI, University of Bordeaux"
    COMPANY_COPYRIGHT "(C) Copyright ${CURRENT_YEAR} David Auber and the Tulip development Team"
    ORIGINAL_FILENAME "tulip.exe"
@@ -87,7 +87,7 @@ IF(LINUX)
   IF(TULIP_LINUX_DESKTOP_REGISTRATION)
 
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/resources/linux_desktop/Tulip.desktop.in
-                   ${CMAKE_CURRENT_BINARY_DIR}/Tulip-${TulipVersion}.desktop)
+                   ${CMAKE_CURRENT_BINARY_DIR}/Tulip-${Tulip_VERSION}.desktop)
 
     INSTALL(CODE
       "EXECUTE_PROCESS(COMMAND mkdir -p ${DESKTOP_CONFIG_INSTALL_PREFIX}/share/mime/packages
@@ -105,7 +105,7 @@ IF(LINUX)
                   ${CMAKE_CURRENT_SOURCE_DIR}/resources/linux_desktop/application-x-tulip-tlpbz.xml
             DESTINATION ${DESKTOP_CONFIG_INSTALL_PREFIX}/share/mime/packages)
 
-    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/Tulip-${TulipVersion}.desktop
+    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/Tulip-${Tulip_VERSION}.desktop
             DESTINATION ${DESKTOP_CONFIG_INSTALL_PREFIX}/share/applications)
 
     INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/resources/icons/tulip-icon.png

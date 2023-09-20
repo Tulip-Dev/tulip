@@ -9,16 +9,16 @@ Function .onInit
   ${If} ${RunningX64}
    Goto Yes
   ${Else}
-    MessageBox MB_OK "You cannot install the 64 bit version of Tulip @TulipVersion@ on a Windows 32 bit system."
+    MessageBox MB_OK "You cannot install the 64 bit version of Tulip @Tulip_VERSION@ on a Windows 32 bit system."
     Abort
   ${Endif}
 Yes:
 FunctionEnd
-  InstallDir "$PROGRAMFILES64\Tulip-@TulipVersion@"
+  InstallDir "$PROGRAMFILES64\Tulip-@Tulip_VERSION@"
   !if ${CHECK_PYTHON} == "ON"
-    Name "Tulip-@TulipVersion@ (x64)"
+    Name "Tulip-@Tulip_VERSION@ (x64)"
   !else
-    Name "Tulip-@TulipVersion@ (x64 without Python Components)"
+    Name "Tulip-@Tulip_VERSION@ (x64 without Python Components)"
   !endif
 
 !define MUI_ICON "files\share\tulip\bitmaps\tulip.ico"
@@ -43,9 +43,9 @@ RequestExecutionLevel admin
 ; Setup file
 !ifndef OUT_FILE
 !if ${CHECK_PYTHON} == "ON"
-!define OUT_FILE "tulip-@TulipVersion@_x64_python@PYTHON_VERSION_NO_DOT@_setup.exe"
+!define OUT_FILE "tulip-@Tulip_VERSION@_x64_python@PYTHON_VERSION_NO_DOT@_setup.exe"
 !else
-!define OUT_FILE "tulip-@TulipVersion@_x64_no_python_setup.exe"
+!define OUT_FILE "tulip-@Tulip_VERSION@_x64_no_python_setup.exe"
 !endif
 !endif
 OutFile "${OUT_FILE}"
@@ -61,7 +61,7 @@ Function CheckAndInstallPython
   IfErrors install 0
   IfFileExists $0\python.exe end install
   install:
-        MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x86-64) installed.$\n$\nIt is now required to run Tulip @TulipVersion@.$\n$\nPress OK to download https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/@PYTHON_INSTALLER@$\n$\nand install Python @PYTHON_VERSION@ (x86-64)."
+        MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x86-64) installed.$\n$\nIt is now required to run Tulip @Tulip_VERSION@.$\n$\nPress OK to download https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/@PYTHON_INSTALLER@$\n$\nand install Python @PYTHON_VERSION@ (x86-64)."
         inetc::get "https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/@PYTHON_INSTALLER@" "python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@"
 !if ${PYTHON_INSTALLER_EXT} == "msi"
         ExecWait '"msiexec" /i "python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@"' $0
@@ -71,7 +71,7 @@ Function CheckAndInstallPython
         Delete python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@
 		${If} $0 != 0
 		   DetailPrint "MSI return code was $0"
-		   MessageBox MB_OK "Python @PYTHON_VERSION@ (x86-64) installation failed. Tulip @TulipVersion@ installation will proceed$\n$\nbut Tulip will not work, until Python @PYTHON_VERSION@ (x86-64) is installed."
+                   MessageBox MB_OK "Python @PYTHON_VERSION@ (x86-64) installation failed. Tulip @Tulip_VERSION@ installation will proceed$\n$\nbut Tulip will not work, until Python @PYTHON_VERSION@ (x86-64) is installed."
 		${EndIf}
   end:  
 FunctionEnd
@@ -104,14 +104,14 @@ Section "Tulip"
 
 File /r files\*.*
 
-  CreateDirectory "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)"
-  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)\Tulip-@TulipVersion@ agent (x64).lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
-  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)\Tulip-@TulipVersion@ (x64).lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
-  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
-  CreateShortCut "$DESKTOP\Tulip-@TulipVersion@ agent (x64).lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
-  CreateShortCut "$DESKTOP\Tulip-@TulipVersion@ (x64).lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@TulipVersion@" "DisplayName" "Tulip-@TulipVersion@ (x64)"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@TulipVersion@" "UninstallString" "$INSTDIR\Uninstall.exe"
+  CreateDirectory "$SMPROGRAMS\Tulip-@Tulip_VERSION@ (x64)"
+  CreateShortCut "$SMPROGRAMS\Tulip-@Tulip_VERSION@ (x64)\Tulip-@Tulip_VERSION@ agent (x64).lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
+  CreateShortCut "$SMPROGRAMS\Tulip-@Tulip_VERSION@ (x64)\Tulip-@Tulip_VERSION@ (x64).lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
+  CreateShortCut "$SMPROGRAMS\Tulip-@Tulip_VERSION@ (x64)\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+  CreateShortCut "$DESKTOP\Tulip-@Tulip_VERSION@ agent (x64).lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
+  CreateShortCut "$DESKTOP\Tulip-@Tulip_VERSION@ (x64).lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@Tulip_VERSION@" "DisplayName" "Tulip-@Tulip_VERSION@ (x64)"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@Tulip_VERSION@" "UninstallString" "$INSTDIR\Uninstall.exe"
   WriteUninstaller "$INSTDIR\Uninstall.exe"
 
  ${registerExtension} "$INSTDIR\bin\tulip.exe" ".tlp" "Tulip.File" "Tulip Graph File" "$INSTDIR\share\tulip\bitmaps\tulip-file-icon.ico"
@@ -127,12 +127,12 @@ SectionEnd
 Section "Uninstall"
   SetShellVarContext all
   SetRegView 64
-  Delete "$DESKTOP\Tulip-@TulipVersion@ agent (x64).lnk"	
-  Delete "$DESKTOP\Tulip-@TulipVersion@ (x64).lnk"	
-  RMDir /r "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)"
+  Delete "$DESKTOP\Tulip-@Tulip_VERSION@ agent (x64).lnk"
+  Delete "$DESKTOP\Tulip-@Tulip_VERSION@ (x64).lnk"
+  RMDir /r "$SMPROGRAMS\Tulip-@Tulip_VERSION@ (x64)"
   RMDir /r "$INSTDIR"
   Delete $INSTDIR\Uninstall.exe
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@TulipVersion@"
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@Tulip_VERSION@"
 
  ${unregisterExtension} ".tlp" "Tulip.File"
  ${unregisterExtension} ".tlpb" "Tulip.BinaryFile"

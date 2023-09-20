@@ -36,7 +36,7 @@ QTX_WRAP_CPP(LIB_MOC_SRCS
 
 QTX_ADD_RESOURCES(RCC_SRCS PixelOrientedView.qrc)
 
-ADD_LIBRARY(PixelOrientedView-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${RCC_SRCS})
-TARGET_LINK_LIBRARIES(PixelOrientedView-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${OPENGL_gl_LIBRARY})
+ADD_LIBRARY(PixelOrientedView-${Tulip_VERSION} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${RCC_SRCS})
+TARGET_LINK_LIBRARIES(PixelOrientedView-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${OPENGL_gl_LIBRARY})
 
-TULIP_INSTALL_PLUGIN(PixelOrientedView-${TulipVersion} ${TulipViewPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(PixelOrientedView-${Tulip_VERSION} ${TulipViewPluginsInstallDir})

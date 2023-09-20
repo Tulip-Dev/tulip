@@ -33,7 +33,7 @@ QTX_ADD_RESOURCES(LIB_RCC_SRCS
 HistogramResource.qrc
 )
 
-ADD_LIBRARY(HistogramView-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
-TARGET_LINK_LIBRARIES(HistogramView-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${OPENGL_gl_LIBRARY})
+ADD_LIBRARY(HistogramView-${Tulip_VERSION} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
+TARGET_LINK_LIBRARIES(HistogramView-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${OPENGL_gl_LIBRARY})
 
-TULIP_INSTALL_PLUGIN(HistogramView-${TulipVersion} ${TulipViewPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(HistogramView-${Tulip_VERSION} ${TulipViewPluginsInstallDir})

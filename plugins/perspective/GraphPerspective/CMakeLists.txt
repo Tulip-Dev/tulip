@@ -62,13 +62,13 @@ INCLUDE_DIRECTORIES(${TulipPythonInclude})
 
 ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 
-ADD_LIBRARY(GraphPerspective-${TulipVersion} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI_SRCS} ${MOC_SRCS})
+ADD_LIBRARY(GraphPerspective-${Tulip_VERSION} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI_SRCS} ${MOC_SRCS})
 
-TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
-TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${QT_LIBRARIES})
+TARGET_LINK_LIBRARIES(GraphPerspective-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
+TARGET_LINK_LIBRARIES(GraphPerspective-${Tulip_VERSION} ${QT_LIBRARIES})
 IF(TULIP_BUILD_PYTHON_COMPONENTS)
-TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${LibTulipPythonName})
+TARGET_LINK_LIBRARIES(GraphPerspective-${Tulip_VERSION} ${LibTulipPythonName})
 ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 
-TULIP_INSTALL_PLUGIN(GraphPerspective-${TulipVersion} ${TulipPerspectivePluginsInstallDir})
+TULIP_INSTALL_PLUGIN(GraphPerspective-${Tulip_VERSION} ${TulipPerspectivePluginsInstallDir})
 

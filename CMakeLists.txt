@@ -1,5 +1,10 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.12)
 
+#Setting project name and version (W.X.Y.Z if necessary)
+CMAKE_POLICY(SET CMP0048 NEW)
+PROJECT(Tulip VERSION 5.7.2)
+message(STATUS "Configuring Tulip ${CMAKE_PROJECT_VERSION}")
+
 # First display CMake version
 MESSAGE(STATUS "Using CMake ${CMAKE_VERSION}")
 
@@ -26,8 +31,6 @@ IF(NOT MSVC)
     ENDIF(CCACHE_PROGRAM)
   ENDIF(TULIP_USE_CCACHE)
 ENDIF(NOT MSVC)
-
-PROJECT(tulip)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
@@ -98,31 +101,22 @@ INCLUDE(cmake/TulipUseFile.cmake)
 ## ========================================================
 ## Tulip version variables
 ## ========================================================
-SET(TulipMajorVersion 5)
-SET(TulipMinorVersion 7)
-SET(TulipReleaseVersion "2")
 SET(TulipVersionSeparator .)
 IF(MSVC) #specific options for Visual Studio
   SET(TulipVersionSeparator _)
 ENDIF()
-SET(TulipVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}${TulipVersionSeparator}${TulipReleaseVersion}")
-SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}")
-SET(TulipMinorVersionTwoDigits "${TulipMinorVersion}")
+SET(TulipMMVersion "${PROJECT_VERSION_MAJOR}${TulipVersionSeparator}${PROJECT_VERSION_MINOR}")
 # Use two digits for the minor version when generating the Tulip integer version number
 # as there was a 4.10 release that breaks preprocessor test like TULIP_INT_VERSION >= 4100 since the 5.0 release
 # (see https://sourceforge.net/p/auber/bugs/869/)
-STRING(LENGTH "${TulipMinorVersion}" TulipMinorVersionNbDigits)
+STRING(LENGTH "${Tulip_VERSION_MINOR}" TulipMinorVersionNbDigits)
 IF(TulipMinorVersionNbDigits LESS 2)
-  SET(TulipMinorVersionTwoDigits "0${TulipMinorVersion}")
+  SET(TulipMinorVersionTwoDigits "0${Tulip_VERSION_MINOR}")
+ELSE(TulipMinorVersionNbDigits LESS 2)
+  SET(TulipMinorVersionTwoDigits "${PROJECT_VERSION_MINOR}")
 ENDIF(TulipMinorVersionNbDigits LESS 2)
-SET(TulipIntMMVersion "${TulipMajorVersion}${TulipMinorVersionTwoDigits}")
-IF(TulipReleaseVersion MATCHES "^[0-9]+$")
-  SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersionTwoDigits}${TulipReleaseVersion}")
-ELSE(TulipReleaseVersion MATCHES "^[0-9]+$")
-  # just a hack to force the display of the full Tulip version in window title bar
-  # when it contains non digit characters (like alpha, beta, dev, ...)
-  SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}1")
-ENDIF(TulipReleaseVersion MATCHES "^[0-9]+$")
+SET(TulipIntMMVersion "${Tulip_VERSION_MAJOR}${TulipMinorVersionTwoDigits}")
+SET(TulipIntVersion "${Tulip_VERSION_MAJOR}${TulipMinorVersionTwoDigits}${PROJECT_VERSION_PATCH}")
 
 ## ========================================================
 ## Tulip libraries names
@@ -505,8 +499,8 @@ SET(exec_prefix "\${prefix}")
 SET(includedir "\${prefix}/${TulipIncludeInstallDir}")
 SET(libdir "\${prefix}/${TulipLibInstallDir}")
 SET(libversion "${TulipMMVersion}")
-SET(VERSION "${TulipVersion}")
-SET(WIN_VERSION "${TulipMajorVersion}.${TulipMinorVersion}")
+SET(VERSION "${Tulip_VERSION}")
+SET(WIN_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
 IF("${OPENGL_INCLUDE_DIR}" STRGREATER "")
   SET(GL_INCLUDES "-I${OPENGL_INCLUDE_DIR}")
 ENDIF("${OPENGL_INCLUDE_DIR}" STRGREATER "")
@@ -633,11 +627,11 @@ IF (NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
 
     IF(LINUX)
       # generate script to make a tar archive of minimal set of tulip core files
-      SET(make_tar_file ${PROJECT_BINARY_DIR}/tar-tulip-${TulipVersion}-corefiles.sh)
+      SET(make_tar_file ${PROJECT_BINARY_DIR}/tar-tulip-${Tulip_VERSION}-corefiles.sh)
       EXECUTE_PROCESS(COMMAND rm ${make_tar_file} OUTPUT_QUIET ERROR_QUIET)
       EXECUTE_PROCESS(COMMAND echo "#!/bin/sh
 if [ $# -eq 0 ]; then
-TAR_FILE=${PROJECT_BINARY_DIR}/tulip-${TulipVersion}-corefiles.tar.gz
+TAR_FILE=${PROJECT_BINARY_DIR}/tulip-${Tulip_VERSION}-corefiles.tar.gz
 else
 TAR_FILE=$1
 fi

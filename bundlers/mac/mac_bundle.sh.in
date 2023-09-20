@@ -39,7 +39,7 @@ fi
 
 echo "Wiping previous bundles into ${DEST_DIR}"
 rm -rf "${DEST_DIR}/application" 2>/dev/null
-rm -f "${DEST_DIR}/${APP_NAME}-@TulipVersion@.dmg" 2>/dev/null
+rm -f "${DEST_DIR}/${APP_NAME}-@Tulip_VERSION@.dmg" 2>/dev/null
 mkdir -p "${DEST_DIR}/application"
 cd "${DEST_DIR}/application"
 mkdir .background
@@ -51,7 +51,7 @@ cd "${DEST_DIR}/application"
 mkdir -p Tulip.app/Contents/{MacOS,Resources,Frameworks}
 cd Tulip.app/Contents
 cp "${SRC_DIR}/tulip.icns" Resources/
-sed -e s"/TLP_VERSION/@TulipVersion@/g" -e s"/ARCH/@CMAKE_SYSTEM_PROCESSOR@/" "${SRC_DIR}/Info.plist" > Info.plist
+sed -e s"/TLP_VERSION/@Tulip_VERSION@/g" -e s"/ARCH/@CMAKE_SYSTEM_PROCESSOR@/" "${SRC_DIR}/Info.plist" > Info.plist
 
 echo 'Copying binaries & libraries'
 cd "${DEST_DIR}/application/Tulip.app/Contents/"
@@ -129,7 +129,7 @@ else
 ${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app -executable=${DEST_DIR}/application/Tulip.app/Contents/bin/tulip_perspective
 fi
 # rename
-mv ${DEST_DIR}/application/Tulip.app ${DEST_DIR}/application/${APP_NAME}-@TulipVersion@${SUFFIX}.app
+mv ${DEST_DIR}/application/Tulip.app ${DEST_DIR}/application/${APP_NAME}-@Tulip_VERSION@${SUFFIX}.app
 
 if [ "$PYTHON_BUILD" = "ON" ]
 then
@@ -151,14 +151,14 @@ fi
 # generate dmg
 echo 'Generating DMG'
 cd "${DEST_DIR}"
-sh "${SRC_DIR}/make_dmg.sh" ${APP_NAME} "@TulipVersion@${SUFFIX}" "${DEST_DIR}/application"
+sh "${SRC_DIR}/make_dmg.sh" ${APP_NAME} "@Tulip_VERSION@${SUFFIX}" "${DEST_DIR}/application"
 
 # rename dmg if needed
 if [ "$PYTHON_BUILD" = "ON" ]
 then
-  DMG_NAME="${APP_NAME}-@TulipVersion@${SUFFIX}_qt@QT_VERSION@_py@PYTHON_VERSION@.dmg"
+  DMG_NAME="${APP_NAME}-@Tulip_VERSION@${SUFFIX}_qt@QT_VERSION@_py@PYTHON_VERSION@.dmg"
 else
-  DMG_NAME="${APP_NAME}-@TulipVersion@${SUFFIX}_qt@QT_VERSION@_no_python.dmg"
+  DMG_NAME="${APP_NAME}-@Tulip_VERSION@${SUFFIX}_qt@QT_VERSION@_no_python.dmg"
 fi
 echo "${DMG_NAME} has been correctly generated in ${DEST_DIR}"
-mv ${APP_NAME}-@TulipVersion@${SUFFIX}.dmg ${DMG_NAME}
+mv ${APP_NAME}-@Tulip_VERSION@${SUFFIX}.dmg ${DMG_NAME}
