@@ -135,9 +135,9 @@ bool PluginLibraryLoader::loadPluginLibrary(const std::string &filename, PluginL
                     nullptr);                       // no inserts
 
       if (!msg) {
-        char scode[128];
-        sprintf(scode, "%s: unable to load(error %d)", filename.c_str(), int(dwErrCode));
-        loader->aborted(filename, std::string(scode));
+        std::string scode(filename);
+        scode += ": unable to load(error " + int(dwErrCode) + ')';
+        loader->aborted(filename, scode);
       } else {
         loader->aborted(filename, filename + ": " + msg);
         LocalFree(msg);

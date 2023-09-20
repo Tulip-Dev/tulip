@@ -48,19 +48,17 @@ int backtrace(void **buffer, int size) {
 
 char *getStackFrameDetails(void *address) {
   Dl_info dli;
-  char tmp[1024];
+  std::stringstream tmp;
 
   if (dladdr(address, &dli)) {
     int64_t function_offset =
         reinterpret_cast<int64_t>(address) - reinterpret_cast<int64_t>(dli.dli_saddr);
-    sprintf(tmp, "%s(%s+%p)[%p]", dli.dli_fname, dli.dli_sname,
-            reinterpret_cast<void *>(function_offset), address);
-  } else {
-    sprintf(tmp, "%s(%s+%s)[%p]", "???", "???", "???", address);
-  }
+    tmp << dli.dli_fname << '(' << dli.dli_sname << '+' << reinterpret_cast<void *>(function_offset) << ")[" << address << ']';
+  } else
+    tmp << "???" << "(???+???" << ")[" << address << ']';
 
-  char *ret = new char[strlen(tmp) + 1];
-  strcpy(ret, tmp);
+  char *ret = new char[tmp.gcount() + 1];
+  strcpy(ret, tmp.str().c_str());
   return ret;
 }
 
