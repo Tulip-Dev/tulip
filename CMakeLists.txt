@@ -355,9 +355,6 @@ SET(TulipPythonInclude ${PROJECT_SOURCE_DIR}/library/tulip-python/include)
 ## ========================================================
 ## Point RPATH to lib folder
 ## ========================================================
-# On MacOS, use rpaths (i.e. the "install_name" field of shared libraries will be @rpath)
-# This is already enabled by default for CMake >= 3.0 (see http://www.cmake.org/cmake/help/v3.0/prop_tgt/MACOSX_RPATH.html)
-SET(CMAKE_MACOSX_RPATH ON)
 FUNCTION(ADD_LIBRARY name)
   _ADD_LIBRARY(${name} ${ARGN})
   IF(APPLE)
