@@ -3,7 +3,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.12)
 #Setting project name and version (W.X.Y.Z if necessary)
 CMAKE_POLICY(SET CMP0048 NEW)
 PROJECT(Tulip VERSION 5.7.2)
-message(STATUS "Configuring Tulip ${CMAKE_PROJECT_VERSION}")
+message(STATUS "Configuring ${CMAKE_PROJECT_NAME} ${Tulip_VERSION}")
 
 # First display CMake version
 MESSAGE(STATUS "Using CMake ${CMAKE_VERSION}")
