@@ -427,7 +427,7 @@ ELSE()
 ENDIF()
 
 ## ========================================================
-## Create library/tulip/include/tulip/TulipRelease.h base on TulipRelease.h.in
+## Create library/tulip/include/tulip/TulipRelease.h based on TulipRelease.h.in
 ## ========================================================
 STRING(COMPARE EQUAL "${CMAKE_BUILD_TYPE}" "Release" result1)
 STRING(COMPARE EQUAL "${CMAKE_BUILD_TYPE}" "RelWithDebInfo" result2)
@@ -461,7 +461,6 @@ IF (NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
     ADD_SUBDIRECTORY(doc)
     ADD_SUBDIRECTORY(textures)
     ADD_SUBDIRECTORY(externalplugins)
-    ADD_SUBDIRECTORY(demos)
     ADD_SUBDIRECTORY(software)
   ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 ENDIF (NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
