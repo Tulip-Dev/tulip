@@ -53,9 +53,12 @@ char *getStackFrameDetails(void *address) {
   if (dladdr(address, &dli)) {
     int64_t function_offset =
         reinterpret_cast<int64_t>(address) - reinterpret_cast<int64_t>(dli.dli_saddr);
-    tmp << dli.dli_fname << '(' << dli.dli_sname << '+' << reinterpret_cast<void *>(function_offset) << ")[" << address << ']';
+    tmp << dli.dli_fname << '(' << dli.dli_sname << '+' << reinterpret_cast<void *>(function_offset)
+        << ")[" << address << ']';
   } else
-    tmp << "???" << "(???+???" << ")[" << address << ']';
+    tmp << "???"
+        << "(???+???"
+        << ")[" << address << ']';
 
   char *ret = new char[tmp.gcount() + 1];
   strcpy(ret, tmp.str().c_str());
