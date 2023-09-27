@@ -92,13 +92,13 @@ public:
           continue;
         double e_w = weight->getEdgeDoubleValue(e);
         double r = e_w + weight->getEdgeDoubleValue(e_inv);
-        if(r==0) {
+        if (r == 0) {
           std::ostringstream ess;
           ess << "Error:\nDivision by zero for edges with ids #" << e.id << " and #" << e_inv.id;
           pluginProgress->setError(ess.str());
           return false;
         } else {
-          r =  e_w / r;
+          r = e_w / r;
           // check if r is really a ratio
           if (r < 0 || r > 1) {
             std::ostringstream ess;
