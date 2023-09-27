@@ -106,10 +106,10 @@ echo "[Paths]" > $QTCONF_FILE
 echo "Prefix=.." >> $QTCONF_FILE
 
 # copy Tulip.png
-cp @tulip_SOURCE_DIR@/bundlers/linux/Tulip.png $BUNDLE_DIR
+cp @Tulip_SOURCE_DIR@/bundlers/linux/Tulip.png $BUNDLE_DIR
 
 # copy tulip.appdata.xml
-cp @tulip_SOURCE_DIR@/bundlers/linux/tulip.appdata.xml $BUNDLE_SHARE_DIR/metainfo
+cp @Tulip_SOURCE_DIR@/bundlers/linux/tulip.appdata.xml $BUNDLE_SHARE_DIR/metainfo
 
 # copy tulip_perspective exe
 cp -v -p $TULIP_INSTALL_DIR/bin/tulip_perspective $BUNDLE_BIN_DIR
