@@ -92,14 +92,21 @@ public:
           continue;
         double e_w = weight->getEdgeDoubleValue(e);
         double r = e_w + weight->getEdgeDoubleValue(e_inv);
-        r = (r == 0) ? -1 : e_w / r;
-        // check if r is really a ratio
-        if (r < 0 || r > 1) {
+        if(r==0) {
           std::ostringstream ess;
-          ess << "Error:\nRatios computed for #" << e.id << " and #" << e_inv.id
-              << " do not belong to [0, 1].";
+          ess << "Error:\nDivision by zero for edges with ids #" << e.id << " and #" << e_inv.id;
           pluginProgress->setError(ess.str());
           return false;
+        } else {
+          r =  e_w / r;
+          // check if r is really a ratio
+          if (r < 0 || r > 1) {
+            std::ostringstream ess;
+            ess << "Error:\nRatio computed for edges with ids " << e.id << " and " << e_inv.id
+                << " do not belong to [0, 1].";
+            pluginProgress->setError(ess.str());
+            return false;
+          }
         }
 
         ratio->setEdgeValue(e, r);
