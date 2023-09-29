@@ -50,9 +50,9 @@ the shorted distance is set to 0.
 
 //===========================================================================================
 
-  double averageClusteringCoefficient(const tlp::Graph *graph);
+  double averageClusteringCoefficient(const tlp::Graph *graph, bool directed=true);
 %Docstring
-tlp.averageClusteringCoefficient(graph)
+tlp.averageClusteringCoefficient(graph, directed)
 
 Returns the clustering coefficient of a graph
 as the average of the local clustering coefficients
@@ -60,14 +60,16 @@ as the average of the local clustering coefficients
 
 :param graph: the graph on which to compute the average clustering coefficient
 :type graph: :class:`tlp.Graph`
+:param directed: Indicates if the graph is directed (default to yes (unusual, for backward compatibility))
+:type directed: bool
 :rtype: float
 %End
 
 //===========================================================================================
 
-  void clusteringCoefficient(const tlp::Graph *g, tlp::DoubleProperty *result, unsigned int maxDepth = 1);
+  void clusteringCoefficient(const tlp::Graph *g, tlp::DoubleProperty *result, unsigned int maxDepth = 1, bool directed=true);
 %Docstring 
-tlp.clusteringCoefficient(graph, result, maxDepth=1)
+tlp.clusteringCoefficient(graph, result, maxDepth=1, directed=true)
 
 Assigns to each node its local clustering coefficient
 that is the proportion of edges between the nodes within its neighbourhood
@@ -80,11 +82,13 @@ This quantifies how close its neighbors are to being a clique.
 :type result: :class:`tlp.DoubleProperty`
 :param maxDepth: the maximum distance between each node and its neighbours.
 :type maxDepth: integer
+:param directed: Indicates if the graph is directed (default to yes (unusual, for backward compatibility))
+:type directed: bool
 %End 
 
 %MethodCode
   tlp::NodeStaticProperty<double> result(a0);
-  tlp::clusteringCoefficient(a0, result, a2);
+  tlp::clusteringCoefficient(a0, result, a2, a3);
   result.copyToProperty(a1);
 %End
  

@@ -43,7 +43,7 @@ TLP_SCOPE double averagePathLength(const Graph *g);
  * (see clusteringCoefficient function) of all the nodes.
  * see http://en.wikipedia.org/wiki/Clustering_coefficient for more details.
  */
-TLP_SCOPE double averageClusteringCoefficient(const Graph *);
+TLP_SCOPE double averageClusteringCoefficient(const Graph *, bool directed=true);
 /*
  * assign to each node its local clustering coefficient
  * that is the proportion of edges between the nodes within its neighbourhood
@@ -52,7 +52,7 @@ TLP_SCOPE double averageClusteringCoefficient(const Graph *);
  * see http://en.wikipedia.org/wiki/Clustering_coefficient for more details
  */
 TLP_SCOPE void clusteringCoefficient(const Graph *g, tlp::NodeStaticProperty<double> &result,
-                                     unsigned int maxDepth = 1);
+                                     unsigned int maxDepth = 1, bool directed=true);
 /*
  * assign to each node of a graph its (in/ou/inout) degree.
  * The weighted degree of a node is the sum of weights of

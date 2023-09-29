@@ -28,10 +28,15 @@ using namespace tlp;
 
 static const char *paramHelp[] = {
     // depth
-    "Maximal depth of a computed cluster."};
+    "Maximal depth of a computed cluster.",
+
+    //oriented
+    "Indicates if the graph is oriented (one edge in each direction)"
+};
 //=================================================
 ClusterMetric::ClusterMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
   addInParameter<unsigned int>("depth", paramHelp[0], "1");
+  addInParameter<bool>("oriented", paramHelp[1], "true");
 }
 //=================================================
 static double clusterGetEdgeValue(Graph *graph, tlp::NodeStaticProperty<double> &clusters,
@@ -50,21 +55,19 @@ static double clusterGetEdgeValue(Graph *graph, tlp::NodeStaticProperty<double> 
 //=================================================
 bool ClusterMetric::run() {
   unsigned int maxDepth = 1;
+  bool directed(true);
 
-  if (dataSet != nullptr)
+  if (dataSet != nullptr) {
     dataSet->get("depth", maxDepth);
+    dataSet->get("directed", directed);
+  }
 
   tlp::NodeStaticProperty<double> clusters(graph);
-  clusteringCoefficient(graph, clusters, maxDepth);
+  clusteringCoefficient(graph, clusters, maxDepth, directed);
   clusters.copyToProperty(result);
 
-  const std::vector<edge> &edges = graph->edges();
-  unsigned int nbEdges = edges.size();
-
-  for (unsigned int i = 0; i < nbEdges; ++i) {
-    edge e = edges[i];
+  for (auto e: graph->edges())
     result->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
-  }
 
   return true;
 }

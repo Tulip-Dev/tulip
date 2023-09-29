@@ -122,9 +122,9 @@ double tlp::averagePathLength(const Graph *graph) {
   return result;
 }
 //================================================================
-double tlp::averageClusteringCoefficient(const Graph *graph) {
+double tlp::averageClusteringCoefficient(const Graph *graph, bool directed) {
   tlp::NodeStaticProperty<double> clusters(graph);
-  tlp::clusteringCoefficient(graph, clusters, UINT_MAX);
+  tlp::clusteringCoefficient(graph, clusters, UINT_MAX,directed);
   unsigned int nbNodes = graph->numberOfNodes();
   double sum = 0;
 
@@ -149,7 +149,7 @@ unsigned int tlp::minDegree(const Graph *graph) {
 }
 //=================================================
 void tlp::clusteringCoefficient(const Graph *graph, tlp::NodeStaticProperty<double> &clusters,
-                                unsigned int maxDepth) {
+                                unsigned int maxDepth, bool directed) {
 
   TLP_MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
     std::unordered_map<node, bool> reachables;
@@ -177,8 +177,10 @@ void tlp::clusteringCoefficient(const Graph *graph, tlp::NodeStaticProperty<doub
 
     if (reachables.size() > 1) {
       //$e(N_v)/(\frac{k*(k-1)}{2}}$
-      clusters[i] = nbEdge / (nNode * (nNode - 1));
-    } else
+      double tNodes = directed?(nNode * (nNode - 1)):((nNode * (nNode - 1))/2);
+      clusters[i] = nbEdge / tNodes;
+    }
+    else
       clusters[i] = 0;
   });
 }
