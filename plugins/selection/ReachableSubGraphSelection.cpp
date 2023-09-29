@@ -118,17 +118,14 @@ bool ReachableSubGraphSelection::run() {
       markReachableNodes(graph, current, reachables, maxDistance, edgeDirection);
     }
 
-    std::unordered_map<node, bool>::const_iterator itr = reachables.begin();
-    std::unordered_map<node, bool>::const_iterator ite = reachables.end();
-
     // select nodes
-    while (itr != ite) {
-      result->setNodeValue(itr->first, true);
-      ++itr;
+    for(auto it:reachables) {
+      result->setNodeValue(it.first, true);
       ++num_nodes;
     }
 
     // select corresponding edges
+    auto ite = reachables.cend();
     for (const edge e : graph->edges()) {
       auto ends = graph->ends(e);
 
