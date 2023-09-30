@@ -19,7 +19,7 @@
 #include <deque>
 #include <stack>
 
-#include <unordered_map>
+#include <unordered_set>
 #include <tulip/GraphMeasure.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphParallelTools.h>
@@ -122,16 +122,16 @@ double tlp::averagePathLength(const Graph *graph) {
   return result;
 }
 //================================================================
-double tlp::averageClusteringCoefficient(const Graph *graph, bool directed) {
+double tlp::averageClusteringCoefficient(const Graph *graph) {
   tlp::NodeStaticProperty<double> clusters(graph);
-  tlp::clusteringCoefficient(graph, clusters, UINT_MAX,directed);
-  unsigned int nbNodes = graph->numberOfNodes();
+  tlp::clusteringCoefficient(graph, clusters);
+
   double sum = 0;
+  for(auto v:clusters) {
+    sum += v;
+  }
 
-  for (unsigned int i = 0; i < nbNodes; ++i)
-    sum += clusters[i];
-
-  return sum / nbNodes;
+  return sum / graph->numberOfNodes();
 }
 //================================================================
 unsigned int tlp::maxDegree(const Graph *graph) {
@@ -148,40 +148,26 @@ unsigned int tlp::minDegree(const Graph *graph) {
   return mindeg;
 }
 //=================================================
-void tlp::clusteringCoefficient(const Graph *graph, tlp::NodeStaticProperty<double> &clusters,
-                                unsigned int maxDepth, bool directed) {
+void tlp::clusteringCoefficient(const Graph *graph, tlp::NodeStaticProperty<double> &clusters, unsigned int) {
 
   TLP_MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
-    std::unordered_map<node, bool> reachables;
-    markReachableNodes(graph, n, reachables, maxDepth);
-    double nbEdge = 0; // e(N_v)*2$
+    unordered_set<node> reachables;
+    for (node nei:graph->getInOutNodes(n)) {
+      reachables.insert(nei);
+    }
 
-    std::unordered_map<node, bool>::const_iterator itr = reachables.begin();
-    std::unordered_map<node, bool>::const_iterator ite = reachables.end();
-
-    while (itr != ite) {
-      node itn = itr->first;
-
-      for (auto e : graph->getInOutEdges(itn)) {
+    unordered_set<edge> seenEdges; //to count edges only once
+    for (node r: reachables) {
+      for (auto e : graph->getInOutEdges(r)) {
         auto eEnds = graph->ends(e);
-
-        if ((reachables.find(eEnds.first) != ite) && (reachables.find(eEnds.second) != ite)) {
-          ++nbEdge;
+        if ((reachables.find(eEnds.first) != reachables.end()) && (reachables.find(eEnds.second) != reachables.end())) {
+          seenEdges.insert(e);
         }
       }
-
-      ++itr;
     }
-
-    double nNode = reachables.size(); //$|N_v|$
-
-    if (reachables.size() > 1) {
-      //$e(N_v)/(\frac{k*(k-1)}{2}}$
-      double tNodes = directed?(nNode * (nNode - 1)):((nNode * (nNode - 1))/2);
-      clusters[i] = nbEdge / tNodes;
-    }
-    else
-      clusters[i] = 0;
+    double nbEdge(graph->deg(n)+seenEdges.size());
+    double nNode = reachables.size()+1;
+    clusters[i] = nbEdge / ((nNode * (nNode - 1))/2);
   });
 }
 //==================================================
