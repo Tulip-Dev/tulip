@@ -119,7 +119,7 @@ bool ReachableSubGraphSelection::run() {
     }
 
     // select nodes
-    for(auto it:reachables) {
+    for (auto it : reachables) {
       result->setNodeValue(it.first, true);
       ++num_nodes;
     }

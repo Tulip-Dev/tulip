@@ -59,7 +59,7 @@ bool ClusterMetric::run() {
   clusteringCoefficient(graph, clusters, maxDepth);
   clusters.copyToProperty(result);
 
-  for (auto e: graph->edges())
+  for (auto e : graph->edges())
     result->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
 
   return true;

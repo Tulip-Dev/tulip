@@ -127,7 +127,7 @@ double tlp::averageClusteringCoefficient(const Graph *graph) {
   tlp::clusteringCoefficient(graph, clusters);
 
   double sum = 0;
-  for(auto v:clusters) {
+  for (auto v : clusters) {
     sum += v;
   }
 
@@ -148,26 +148,28 @@ unsigned int tlp::minDegree(const Graph *graph) {
   return mindeg;
 }
 //=================================================
-void tlp::clusteringCoefficient(const Graph *graph, tlp::NodeStaticProperty<double> &clusters, unsigned int) {
+void tlp::clusteringCoefficient(const Graph *graph, tlp::NodeStaticProperty<double> &clusters,
+                                unsigned int) {
 
   TLP_MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
     unordered_set<node> reachables;
-    for (node nei:graph->getInOutNodes(n)) {
+    for (node nei : graph->getInOutNodes(n)) {
       reachables.insert(nei);
     }
 
-    unordered_set<edge> seenEdges; //to count edges only once
-    for (node r: reachables) {
+    unordered_set<edge> seenEdges; // to count edges only once
+    for (node r : reachables) {
       for (auto e : graph->getInOutEdges(r)) {
         auto eEnds = graph->ends(e);
-        if ((reachables.find(eEnds.first) != reachables.end()) && (reachables.find(eEnds.second) != reachables.end())) {
+        if ((reachables.find(eEnds.first) != reachables.end()) &&
+            (reachables.find(eEnds.second) != reachables.end())) {
           seenEdges.insert(e);
         }
       }
     }
-    double nbEdge(graph->deg(n)+seenEdges.size());
-    double nNode = reachables.size()+1;
-    clusters[i] = nbEdge / ((nNode * (nNode - 1))/2);
+    double nbEdge(graph->deg(n) + seenEdges.size());
+    double nNode = reachables.size() + 1;
+    clusters[i] = nbEdge / ((nNode * (nNode - 1)) / 2);
   });
 }
 //==================================================
