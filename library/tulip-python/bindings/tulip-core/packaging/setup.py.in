@@ -119,7 +119,7 @@ setup(
     # https://packaging.python.org/en/latest/single_source_version.html
     version='@TULIP_PYTHON_WHEEL_VERSION@',
 
-    description='Large graphs analysis and drawing',
+    description='@Tulip_DESCRIPTION@',
     long_description=long_description,
 
     url='https://tulip.labri.fr/',
