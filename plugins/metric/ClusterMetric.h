@@ -21,32 +21,18 @@
 
 #include <tulip/DoubleProperty.h>
 
-/** \addtogroup metric */
-
-/** This plugin computes the Cluster metric described in :
- *
- *  Y. Chiricota. F. Jourdan, an G. Melançon \n
- *  "Software component capture using graph clustering",\n
- *  "Proceedings of the 11th IEEE International Workshop on Program Comprehension, 2003", \n
- *  "doi: 10.1109/WPC.2003.1199205"\n
- *  Extended to unbounded depth (for the neighbors):
- *
- *  \note This algorithm works on general graphs. The algorithm use the parameter
- *  depth in order to determine the depth of the neighbors.
- *
- */
 class ClusterMetric : public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATION(
-      "Cluster", "David Auber", "26/02/2003",
-      "Computes the Cluster metric as described in:<br>"
-      "<b>Software component capture using graph clustering</b>,<br/>Y. Chiricota. "
-      "F. Jourdan, an G. Melancon, Proceedings of the 11th IEEE International Workshop on Program "
-      "Comprehension, 2003,<br/>"
-      "doi: <a href=\"https://doi.org/10.1109/WPC.2003.1199205\">10.1109/WPC.2003.1199205</a>",
-      "1.0", "Graph")
+      "Cluster", "Bruno Pinaud", "03/10/2023",
+      "This plugin computes the local clustering coefficient and its average value for the whole graph as described in: "
+      "Watts, D., Strogatz, S. Collective dynamics of ‘small-world’ networks."
+      " Nature 393, 440–442 (1998).<br> <a href=\"https://doi.org/10.1038/30918\">https://doi.org/10.1038/30918</a><br> "
+      "(note: these algorithms work on general simple graphs).",
+      "2.0", "Graph")
   ClusterMetric(const tlp::PluginContext *context);
   bool run() override;
+  bool check(std::string &err) override;
 };
 
 #endif

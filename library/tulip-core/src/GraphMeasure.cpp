@@ -152,24 +152,27 @@ void tlp::clusteringCoefficient(const Graph *graph, tlp::NodeStaticProperty<doub
                                 unsigned int) {
 
   TLP_MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
-    unordered_set<node> reachables;
-    for (node nei : graph->getInOutNodes(n)) {
-      reachables.insert(nei);
+
+    vector<node> reachables;
+    for (node nei:graph->getInOutNodes(n)) {
+      reachables.push_back(nei);
     }
 
-    unordered_set<edge> seenEdges; // to count edges only once
-    for (node r : reachables) {
-      for (auto e : graph->getInOutEdges(r)) {
-        auto eEnds = graph->ends(e);
-        if ((reachables.find(eEnds.first) != reachables.end()) &&
-            (reachables.find(eEnds.second) != reachables.end())) {
-          seenEdges.insert(e);
+    unsigned nbEdgesN(0);
+    auto itr = reachables.end();
+    for(auto i=reachables.begin();i!=itr-1;++i) {
+      for(auto j=i+1;j!=itr;++j) {
+        if(graph->hasEdge(*i, *j, false)) {
+          ++nbEdgesN;
         }
       }
     }
-    double nbEdge(graph->deg(n) + seenEdges.size());
-    double nNode = reachables.size() + 1;
-    clusters[i] = nbEdge / ((nNode * (nNode - 1)) / 2);
+
+
+    double nbEdge(graph->deg(n)+nbEdgesN);
+    double nNode = reachables.size()+1;
+    clusters[i] = nbEdge / ((nNode * (nNode - 1))/2);
+
   });
 }
 //==================================================

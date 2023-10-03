@@ -78,13 +78,13 @@ This quantifies how close its neighbors are to being a clique.
 :type graph: :class:`tlp.Graph`
 :param result: a graph property in which the results will be stored
 :type result: :class:`tlp.DoubleProperty`
-:param maxDepth: the maximum distance between each node and its neighbours.
+:param maxDepth: Deprecated. This parameter is not used anymore.
 :type maxDepth: integer
 %End 
 
 %MethodCode
   tlp::NodeStaticProperty<double> result(a0);
-  tlp::clusteringCoefficient(a0, result, a2);
+  tlp::clusteringCoefficient(a0, result);
   result.copyToProperty(a1);
 %End
  

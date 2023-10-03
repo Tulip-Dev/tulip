@@ -20,6 +20,7 @@
 
 #include <tulip/StaticProperty.h>
 #include <tulip/GraphMeasure.h>
+#include <tulip/SimpleTest.h>
 
 PLUGIN(ClusterMetric)
 
@@ -28,39 +29,45 @@ using namespace tlp;
 
 static const char *paramHelp[] = {
     // depth
-    "Maximal depth of a computed cluster."};
-//=================================================
+    "Deprecated. This parameter is not used anymore.",
+    // average
+    "Average value of the local clustering coefficient associated to the nodes"};
+
+
 ClusterMetric::ClusterMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
-  addInParameter<unsigned int>("depth", paramHelp[0], "1");
+  addInParameter<unsigned int>("depth (deprecated)", paramHelp[0], "1");
+  addOutParameter<double>("Average clustering coefficient", paramHelp[1]);
 }
-//=================================================
-static double clusterGetEdgeValue(Graph *graph, tlp::NodeStaticProperty<double> &clusters,
-                                  const edge e) {
-  auto eEnds = graph->ends(e);
-  const double v1 = clusters.getNodeValue(eEnds.first);
-  const double v2 = clusters.getNodeValue(eEnds.second);
 
-  double sum = v1 * v1 + v2 * v2;
-
-  if (sum)
-    return 1. - fabs(v1 - v2) / sqrt(sum);
-
-  return 0.;
+bool ClusterMetric::check(string &err) {
+  if(!SimpleTest::isSimple(graph, false)) {
+    err = "The graph is not simple.";
+    return false;
+  }
+  return true;
 }
+
+
 //=================================================
 bool ClusterMetric::run() {
-  unsigned int maxDepth = 1;
 
-  if (dataSet != nullptr) {
-    dataSet->get("depth", maxDepth);
+  unsigned depth;
+
+  if(dataSet!=nullptr) {
+    dataSet->getDeprecated("depth (deprecated)", "depth", depth);  //property not used anymore. Use this line to show a deprecated message to the user.
   }
 
   tlp::NodeStaticProperty<double> clusters(graph);
-  clusteringCoefficient(graph, clusters, maxDepth);
+  clusteringCoefficient(graph, clusters);
+
   clusters.copyToProperty(result);
 
-  for (auto e : graph->edges())
-    result->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
+  //compute average
+  double sum = 0;
+  for(auto v:clusters) {
+    sum += v;
+  }
+  dataSet->set("Average clustering coefficient", sum / graph->numberOfNodes());
 
   return true;
 }
