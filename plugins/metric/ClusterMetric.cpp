@@ -33,28 +33,28 @@ static const char *paramHelp[] = {
     // average
     "Average value of the local clustering coefficient associated to the nodes"};
 
-
 ClusterMetric::ClusterMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
   addInParameter<unsigned int>("depth (deprecated)", paramHelp[0], "1");
   addOutParameter<double>("Average clustering coefficient", paramHelp[1]);
 }
 
 bool ClusterMetric::check(string &err) {
-  if(!SimpleTest::isSimple(graph, false)) {
+  if (!SimpleTest::isSimple(graph, false)) {
     err = "The graph is not simple.";
     return false;
   }
   return true;
 }
 
-
 //=================================================
 bool ClusterMetric::run() {
 
   unsigned depth;
 
-  if(dataSet!=nullptr) {
-    dataSet->getDeprecated("depth (deprecated)", "depth", depth);  //property not used anymore. Use this line to show a deprecated message to the user.
+  if (dataSet != nullptr) {
+    dataSet->getDeprecated("depth (deprecated)", "depth",
+                           depth); // property not used anymore. Use this line to show a deprecated
+                                   // message to the user.
   }
 
   tlp::NodeStaticProperty<double> clusters(graph);
@@ -62,9 +62,9 @@ bool ClusterMetric::run() {
 
   clusters.copyToProperty(result);
 
-  //compute average
+  // compute average
   double sum = 0;
-  for(auto v:clusters) {
+  for (auto v : clusters) {
     sum += v;
   }
   dataSet->set("Average clustering coefficient", sum / graph->numberOfNodes());
