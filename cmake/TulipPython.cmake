@@ -208,7 +208,7 @@ IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
     # as the official one does not repair tulip-gui wheel correctly
     IF(NOT IS_DIRECTORY /tmp/auditwheel)
       EXECUTE_PROCESS(COMMAND bash -c "echo $(dirname $(readlink /usr/local/bin/auditwheel))" OUTPUT_VARIABLE PYBIN OUTPUT_STRIP_TRAILING_WHITESPACE)
-      EXECUTE_PROCESS(COMMAND bash -c "${PYBIN}/pip uninstall -y auditwheel; cd /tmp; curl -LO https://tulip.labri.fr/code/auditwheel.tar.gz; tar zxvf auditwheel.tar.gz; ${PYBIN}/pip install /tmp/auditwheel")
+      EXECUTE_PROCESS(COMMAND bash -c "${PYBIN}/pip uninstall -y auditwheel; cd /tmp; curl -LO ${PROJECT_HOMEPAGE_URL}/code/auditwheel.tar.gz; tar zxvf auditwheel.tar.gz; ${PYBIN}/pip install /tmp/auditwheel")
     ENDIF(NOT IS_DIRECTORY /tmp/auditwheel)
 
     ADD_CUSTOM_COMMAND(TARGET wheel POST_BUILD

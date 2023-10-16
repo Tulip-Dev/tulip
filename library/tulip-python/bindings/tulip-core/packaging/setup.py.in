@@ -122,9 +122,9 @@ setup(
     description='@Tulip_DESCRIPTION@',
     long_description=long_description,
 
-    url='https://tulip.labri.fr/',
+    url='@PROJECT_HOMEPAGE_URL@',
     project_urls={
-        'Documentation': 'https://tulip.labri.fr/Documentation/current/tulip-python/html/index.html',
+        'Documentation': '@PROJECT_HOMEPAGE_URL@/Documentation/current/tulip-python/html/index.html',
         'Issue Tracker': 'https://sourceforge.net/p/auber/bugs/',
         'Sources': 'https://sourceforge.net/projects/auber/files/tulip',
     },
