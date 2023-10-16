@@ -449,6 +449,26 @@ Returns the value of the seed used for further initialization of a random sequen
 %End
 
 //=====================================================================
+unsigned int randomUnsignedInteger(unsigned int max);
+%Docstring
+tlp.randomUnsignedInteger(max)
+
+Returns a random unsigned integer in the range [0, max]
+
+:rtype: integer
+%End
+
+//=====================================================================
+double randomDouble(double max=1.0);
+%Docstring
+tlp.randomDouble(max)
+
+Returns a random double in the range [0, max]
+
+:rtype: double
+%End
+
+//=====================================================================
 
 void setSeedOfRandomSequence(unsigned int seed);
 %Docstring
