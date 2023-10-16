@@ -1032,7 +1032,7 @@ top: -1px;
   connect(_ui->actionAbout_us, SIGNAL(triggered()), this, SLOT(showAboutPage()));
   connect(_ui->actionAbout_us, SIGNAL(triggered()), this, SLOT(showAboutTulipPage()));
 
-  if (QFile(tlpStringToQString(tlp::TulipShareDir) + "../doc/tulip/tulip-user/html/index.html")
+  if (QFile(tlpStringToQString(tlp::TulipShareDir) + "../doc/Tulip/tulip-user/html/index.html")
           .exists()) {
     connect(_ui->actionShowUserDocumentation, SIGNAL(triggered()), this,
             SLOT(showUserDocumentation()));
@@ -1050,7 +1050,7 @@ top: -1px;
     _ui->actionShowPythonDocumentation->setVisible(false);
   }
 
-  if (QFile(tlpStringToQString(tlp::TulipShareDir) + "../doc/tulip/doxygen/html/index.html")
+  if (QFile(tlpStringToQString(tlp::TulipShareDir) + "../doc/Tulip/doxygen/html/index.html")
           .exists()) {
     connect(_ui->actionShowAPIDocumentation, SIGNAL(triggered()), this,
             SLOT(showAPIDocumentation()));
@@ -2161,28 +2161,28 @@ void GraphPerspective::showPythonIDE() {
 void GraphPerspective::showUserDocumentation() {
   UNSET_LD_LIBRARY_PATH();
   QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) +
-                                                "../doc/tulip/tulip-user/html/index.html"));
+                                                "../doc/Tulip/tulip-user/html/index.html"));
   RESTORE_LD_LIBRARY_PATH();
 }
 
 void GraphPerspective::showDevelDocumentation() {
   UNSET_LD_LIBRARY_PATH();
   QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) +
-                                                "../doc/tulip/tulip-dev/html/index.html"));
+                                                "../doc/Tulip/tulip-dev/html/index.html"));
   RESTORE_LD_LIBRARY_PATH();
 }
 
 void GraphPerspective::showPythonDocumentation() {
   UNSET_LD_LIBRARY_PATH();
   QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) +
-                                                "../doc/tulip/tulip-python/html/index.html"));
+                                                "../doc/Tulip/tulip-python/html/index.html"));
   RESTORE_LD_LIBRARY_PATH();
 }
 
 void GraphPerspective::showAPIDocumentation() {
   UNSET_LD_LIBRARY_PATH();
   QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) +
-                                                "../doc/tulip/doxygen/html/index.html"));
+                                                "../doc/Tulip/doxygen/html/index.html"));
   RESTORE_LD_LIBRARY_PATH();
 }
 
