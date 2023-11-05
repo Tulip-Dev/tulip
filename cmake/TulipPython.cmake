@@ -50,7 +50,7 @@ UNSET(Python_FOUND CACHE)
 UNSET(Python_LIBRARIES CACHE)
 UNSET(Python_INCLUDE_DIRS CACHE)
 
-GET_FILENAME_COMPONENT(PYTHON_HOME_PATH ${Python_EXECUTABLE} PATH)
+GET_FILENAME_COMPONENT(PYTHON_HOME_PATH ${Python_EXECUTABLE} DIRECTORY)
 
 # Ensure the detection of Python library installed through a bundle downloaded from Python.org or through a macports installation
 IF(APPLE)
@@ -81,7 +81,7 @@ IF(MINGW)
 
   IF(MSYS2_PYTHON)
     IF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll)
-      SET(Python_LIBRARIES ${PYTHON_HOME_PATH}/libpython${Python_VERSION}.dll CACHE FILEPATH "" FORCE)
+      SET(Python_LIBRARIES ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll CACHE FILEPATH "" FORCE)
     ELSEIF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}m.dll)
       SET(Python_LIBRARIES ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}m.dll CACHE FILEPATH "" FORCE)
     ENDIF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll)
