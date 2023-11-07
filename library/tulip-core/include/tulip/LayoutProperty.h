@@ -50,7 +50,7 @@ typedef MinMaxProperty<tlp::PointType, tlp::LineType> LayoutMinMaxProperty;
 class TLP_SCOPE LayoutProperty : public LayoutMinMaxProperty {
 public:
   LayoutProperty(Graph *graph, const std::string &name = "" /*, bool updateOnEdgeReversal=true*/);
-
+  using LayoutMinMaxProperty::operator=;
   // override some PropertyInterface methods
   PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
@@ -327,6 +327,7 @@ class TLP_SCOPE CoordVectorProperty
 public:
   CoordVectorProperty(Graph *g, const std::string &n = "")
       : AbstractVectorProperty<CoordVectorType, tlp::PointType>(g, n) {}
+  using AbstractVectorProperty<tlp::CoordVectorType, tlp::PointType>::operator=;
   // redefinition of some PropertyInterface methods
   PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;

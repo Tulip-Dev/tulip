@@ -102,8 +102,7 @@ class PluginModel : public tlp::TulipModel {
         std::sort(pluginTree[cat][group].begin(), pluginTree[cat][group].end(), QStringCaseCmp);
 
         for (const QString &alg : pluginTree[cat][group]) {
-          const Plugin &plugin = PluginLister::pluginInformation(tlp::QStringToTlpString(alg));
-          std::string info = plugin.info();
+          std::string info = PluginLister::pluginInformation(tlp::QStringToTlpString(alg)).info();
 
           // set info only if they contain more than one word
           if (info.find(' ') != std::string::npos)
@@ -199,9 +198,7 @@ public:
       return f;
     } else if (role == Qt::DecorationRole && item->children.isEmpty() &&
                tlp::PluginLister::pluginExists(tlp::QStringToTlpString(item->name))) {
-      const tlp::Plugin &p =
-          tlp::PluginLister::pluginInformation(tlp::QStringToTlpString(item->name));
-      QIcon icon(tlp::tlpStringToQString(p.icon()));
+      QIcon icon(tlp::tlpStringToQString(tlp::PluginLister::pluginInformation(tlp::QStringToTlpString(item->name)).icon()));
       return icon;
     }
 

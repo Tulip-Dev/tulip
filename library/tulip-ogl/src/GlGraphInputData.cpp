@@ -76,6 +76,7 @@ public:
     needGraphListener = true;
     graph->addListener(this);
   }
+  using IntegerProperty::operator=;
   void treatEvent(const Event &evt) override {
     Graph *g = static_cast<Graph *>(evt.sender());
 

@@ -54,8 +54,6 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, bool darkBackground
   setProperty("algorithRunnerItem", true);
   _ui->setupUi(this);
   connect(_ui->favoriteCheck, SIGNAL(toggled(bool)), this, SIGNAL(favorized(bool)));
-  const Plugin &plugin = PluginLister::pluginInformation(QStringToTlpString(pluginName));
-  ;
   // a & char in a button text have to be doubled
   // to ensure it is not indicating a shortcut key
   QString name = pluginName;
@@ -71,7 +69,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, bool darkBackground
   _ui->playButton->setStyleSheet("text-align: left");
   QString tooltip(QString("<b>%1</b> <small>(%2 plugin)</small>")
                       .arg(pluginName)
-                      .arg(plugin.programmingLanguage().c_str()));
+                      .arg(PluginLister::pluginInformation(QStringToTlpString(pluginName)).programmingLanguage().c_str()));
   // initialize parameters only if needed
   _ui->parameters->setVisible(false);
   // set foreground colors according to contents background color
@@ -80,13 +78,13 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, bool darkBackground
     _ui->playButton->setStyleSheet("QPushButton { color: white; text-align: left; } ");
   }
 
-  if (!plugin.getParameters().empty()) {
+  if (!PluginLister::pluginInformation(QStringToTlpString(pluginName)).getParameters().empty()) {
     _ui->parameters->setItemDelegate(new TulipItemDelegate(_ui->parameters));
   } else {
     _ui->settingsButton->setVisible(false);
   }
 
-  std::string &&info = plugin.info();
+  std::string &&info = PluginLister::pluginInformation(QStringToTlpString(pluginName)).info();
 
   // show info in tooltip only if it contains more than one word
   if (info.find(' ') != std::string::npos)
@@ -520,8 +518,7 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
   }
 
   QDrag *drag = new QDrag(this);
-  const Plugin &p = PluginLister::pluginInformation(QStringToTlpString(_pluginName).c_str());
-  QPixmap icon(QPixmap(p.icon().c_str()).scaled(64, 64));
+  QPixmap icon(QPixmap(PluginLister::pluginInformation(QStringToTlpString(_pluginName)).icon().c_str()).scaled(64, 64));
   QFont f;
   f.setBold(true);
   QFontMetrics metrics(f);

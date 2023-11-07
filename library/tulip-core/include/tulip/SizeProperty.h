@@ -40,6 +40,7 @@ class TLP_SCOPE SizeProperty : public AbstractSizeProperty {
 
 public:
   SizeProperty(Graph *, const std::string &n = "");
+  using AbstractSizeProperty::operator=;
 
   Size getMax(const Graph *sg = nullptr);
   Size getMin(const Graph *sg = nullptr);
@@ -81,6 +82,7 @@ class TLP_SCOPE SizeVectorProperty
 public:
   SizeVectorProperty(Graph *g, const std::string &n = "")
       : AbstractVectorProperty<SizeVectorType, SizeType>(g, n) {}
+  using AbstractVectorProperty<tlp::SizeVectorType, tlp::SizeType>::operator=;
 
   // redefinition of some PropertyInterface methods
   PropertyInterface *clonePrototype(Graph *, const std::string &) const override;

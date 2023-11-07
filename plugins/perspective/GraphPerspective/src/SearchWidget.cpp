@@ -193,7 +193,7 @@ class ConstStringProperty : public StringProperty {
 
 public:
   ConstStringProperty(Graph *g) : StringProperty(g) {}
-
+  using StringProperty::operator=;
   void setConstValue(const std::string &val) {
     _val = val;
   }

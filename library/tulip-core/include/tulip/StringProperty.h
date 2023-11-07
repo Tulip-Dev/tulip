@@ -36,7 +36,7 @@ typedef AbstractProperty<tlp::StringType, tlp::StringType> AbstractStringPropert
 class TLP_SCOPE StringProperty : public AbstractStringProperty {
 public:
   StringProperty(Graph *g, const std::string &n = "");
-
+  using AbstractStringProperty::operator=;
   // redefinition of some PropertyInterface methods
   PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
@@ -64,7 +64,7 @@ class TLP_SCOPE StringVectorProperty
 public:
   StringVectorProperty(Graph *g, const std::string &n = "")
       : AbstractVectorProperty<StringVectorType, tlp::StringType>(g, n) {}
-
+  using AbstractVectorProperty<tlp::StringVectorType, tlp::StringType>::operator=;
   // redefinition of some PropertyInterface methods
   PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;

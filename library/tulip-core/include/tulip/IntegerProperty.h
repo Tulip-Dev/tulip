@@ -41,7 +41,7 @@ class TLP_SCOPE IntegerProperty : public IntegerMinMaxProperty {
 
 public:
   IntegerProperty(Graph *, const std::string &n = "");
-
+  using IntegerMinMaxProperty::operator=;
   PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
   const std::string &getTypename() const override {
@@ -114,6 +114,7 @@ private:
 class TLP_SCOPE IntegerVectorProperty
     : public AbstractVectorProperty<tlp::IntegerVectorType, tlp::IntegerType> {
 public:
+  using AbstractVectorProperty<tlp::IntegerVectorType, tlp::IntegerType>::operator=;
   IntegerVectorProperty(Graph *g, const std::string &n = "")
       : AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>(g, n) {}
   // redefinition of some PropertyInterface methods

@@ -36,6 +36,7 @@ class TLP_SCOPE BooleanProperty : public AbstractProperty<tlp::BooleanType, tlp:
 public:
   BooleanProperty(Graph *g, const std::string &n = "")
       : AbstractProperty<BooleanType, BooleanType>(g, n) {}
+  using AbstractProperty<tlp::BooleanType, tlp::BooleanType>::operator=;
   // PropertyInterface inherited methods
   PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
@@ -68,6 +69,7 @@ class TLP_SCOPE BooleanVectorProperty
 public:
   BooleanVectorProperty(Graph *g, const std::string &n = "")
       : AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>(g, n) {}
+  using AbstractVectorProperty<tlp::BooleanVectorType, tlp::BooleanType>::operator=;
   // PropertyInterface inherited methods
   PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;

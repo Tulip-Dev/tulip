@@ -62,6 +62,7 @@ public:
   MinMaxProperty(tlp::Graph *graph, const std::string &name, NODE_VALUE NodeMin, NODE_VALUE NodeMax,
                  EDGE_VALUE EdgeMin, EDGE_VALUE EdgeMax);
 
+  using tlp::AbstractProperty<nodeType, edgeType, propType>::operator=;
   void treatEvent(const tlp::Event &ev) override;
 
   /**

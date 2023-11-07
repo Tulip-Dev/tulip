@@ -552,6 +552,7 @@ template <typename vectType, typename eltType, typename propType = VectorPropert
 class TLP_SCOPE AbstractVectorProperty : public AbstractProperty<vectType, vectType, propType> {
 public:
   AbstractVectorProperty(Graph *, const std::string &name = "");
+  using AbstractProperty<vectType, vectType, propType>::operator=;
 
   // 5 methods inherited from VectorPropertyInterface
   bool tokenize(const std::string &str, std::vector<std::string> &vect, char openChar = '(',

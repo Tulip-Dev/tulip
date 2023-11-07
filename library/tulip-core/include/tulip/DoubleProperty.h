@@ -39,7 +39,7 @@ typedef MinMaxProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> D
 class TLP_SCOPE DoubleProperty : public DoubleMinMaxProperty {
 public:
   DoubleProperty(Graph *, const std::string &n = "");
-
+  using DoubleMinMaxProperty::operator=;
   void clone_handler(
       AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> &) override;
 
@@ -126,6 +126,7 @@ public:
   DoubleVectorProperty(Graph *g, const std::string &n = "")
       : AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>(g, n) {}
   // redefinition of some PropertyInterface methods
+  using AbstractVectorProperty<tlp::DoubleVectorType, tlp::DoubleType>::operator=;
   PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
   const std::string &getTypename() const override {
