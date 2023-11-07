@@ -79,7 +79,8 @@ static QSet<QString> getParametersListForPlugin(const QString &pluginName,
 
   if (PluginLister::pluginExists(QStringToTlpString(pluginName))) {
 
-    for (const ParameterDescription &pd : PluginLister::getPluginParameters(QStringToTlpString(pluginName)).getParameters()) {
+    for (const ParameterDescription &pd :
+         PluginLister::getPluginParameters(QStringToTlpString(pluginName)).getParameters()) {
       QString param = tlpStringToQString(pd.getName());
       // remove the special prefixes for files parameters used internally by the Tulip GUI
       param = param.replace("anyfile::", "");

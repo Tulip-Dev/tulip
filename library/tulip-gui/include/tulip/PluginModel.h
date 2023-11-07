@@ -198,7 +198,8 @@ public:
       return f;
     } else if (role == Qt::DecorationRole && item->children.isEmpty() &&
                tlp::PluginLister::pluginExists(tlp::QStringToTlpString(item->name))) {
-      QIcon icon(tlp::tlpStringToQString(tlp::PluginLister::pluginInformation(tlp::QStringToTlpString(item->name)).icon()));
+      QIcon icon(tlp::tlpStringToQString(
+          tlp::PluginLister::pluginInformation(tlp::QStringToTlpString(item->name)).icon()));
       return icon;
     }
 

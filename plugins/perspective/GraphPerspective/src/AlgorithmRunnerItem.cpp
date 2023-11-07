@@ -69,7 +69,9 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, bool darkBackground
   _ui->playButton->setStyleSheet("text-align: left");
   QString tooltip(QString("<b>%1</b> <small>(%2 plugin)</small>")
                       .arg(pluginName)
-                      .arg(PluginLister::pluginInformation(QStringToTlpString(pluginName)).programmingLanguage().c_str()));
+                      .arg(PluginLister::pluginInformation(QStringToTlpString(pluginName))
+                               .programmingLanguage()
+                               .c_str()));
   // initialize parameters only if needed
   _ui->parameters->setVisible(false);
   // set foreground colors according to contents background color
@@ -518,7 +520,9 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
   }
 
   QDrag *drag = new QDrag(this);
-  QPixmap icon(QPixmap(PluginLister::pluginInformation(QStringToTlpString(_pluginName)).icon().c_str()).scaled(64, 64));
+  QPixmap icon(
+      QPixmap(PluginLister::pluginInformation(QStringToTlpString(_pluginName)).icon().c_str())
+          .scaled(64, 64));
   QFont f;
   f.setBold(true);
   QFontMetrics metrics(f);

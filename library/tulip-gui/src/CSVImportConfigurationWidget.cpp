@@ -106,7 +106,8 @@ void PropertyConfigurationWidget::typeCBChanged(const QString &type) {
   int nbItems = ui->nameCB->count();
   for (int i = 1; i < nbItems; ++i)
     ui->nameCB->removeItem(1);
-  for (const std::string &prop : CSVImportConfigurationWidget::getPropsForTypename(propertyTypeLabelToPropertyType(type)))
+  for (const std::string &prop :
+       CSVImportConfigurationWidget::getPropsForTypename(propertyTypeLabelToPropertyType(type)))
     ui->nameCB->addItem(tlpStringToQString(prop));
 }
 
