@@ -208,11 +208,6 @@ PythonInterpreter::PythonInterpreter()
 
   if (!_wasInit) {
 
-    int argc = 1;
-    static const std::wstring argv0 = L"tulip";
-    wchar_t *argv[1];
-    argv[0] = const_cast<wchar_t *>(argv0.c_str());
-
     Py_OptimizeFlag = 1;
     Py_NoSiteFlag = 1;
 
@@ -236,7 +231,13 @@ PythonInterpreter::PythonInterpreter()
 
     Py_InitializeEx(0);
 
+#if PY_MINOR_VERSION < 11
+    int argc = 1;
+    static const std::wstring argv0 = L"tulip";
+    wchar_t *argv[1];
+    argv[0] = const_cast<wchar_t *>(argv0.c_str());
     PySys_SetArgv(argc, argv);
+#endif
 
     mainThreadState = PyEval_SaveThread();
   }
@@ -268,28 +269,7 @@ PythonInterpreter::PythonInterpreter()
     libPythonName += QString(".so.1.0");
 #endif
 
-    if (!dlopen(QStringToTlpString(libPythonName).c_str(), RTLD_LAZY | RTLD_GLOBAL)) {
-
-      // for Python 3.2
-      libPythonName = QString("libpython") + _pythonVersion + QString("mu");
-#ifdef __APPLE__
-      libPythonName += QString(".dylib");
-#else
-      libPythonName += QString(".so.1.0");
-#endif
-
-      if (!dlopen(QStringToTlpString(libPythonName).c_str(), RTLD_LAZY | RTLD_GLOBAL)) {
-        // for Python 3.3
-        libPythonName = QString("libpython") + _pythonVersion + QString("m");
-#ifdef __APPLE__
-        libPythonName += QString(".dylib");
-#else
-        libPythonName += QString(".so.1.0");
-#endif
-        dlopen(QStringToTlpString(libPythonName).c_str(), RTLD_LAZY | RTLD_GLOBAL);
-      }
-    }
-
+    dlopen(QStringToTlpString(libPythonName).c_str(), RTLD_LAZY | RTLD_GLOBAL);
 #endif
 
 #if !defined(_MSC_VER)
