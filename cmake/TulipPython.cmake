@@ -13,11 +13,11 @@ ENDIF(LINUX AND TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 
 FIND_PACKAGE(Python 3.7 REQUIRED COMPONENTS ${PYTHON_COMPONENTS})
 
-EXECUTE_PROCESS(COMMAND ${Python_EXECUTABLE} --version OUTPUT_VARIABLE PYTHON_VERSION_RAW ERROR_VARIABLE PYTHON_VERSION_RAW)
-STRING(REPLACE "\n" "" PYTHON_VERSION_RAW "${PYTHON_VERSION_RAW}")
-STRING(REGEX MATCH "[0-9]\\.[0-9]+" PYTHON_VERSION "${PYTHON_VERSION_RAW}")
-STRING(REGEX MATCH "[0-9]\\.[0-9]+\\.[0-9]+" PYTHON_VERSION_WITH_PATCH "${PYTHON_VERSION_RAW}")
-STRING(REPLACE "." "" PYTHON_VERSION_NO_DOT ${PYTHON_VERSION})
+SET(PYTHON_VERSION_NO_DOT ${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
+SET(PYTHON_VERSION ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR})
+IF(MINGW)
+  SET(PYTHON_VERSION_WITH_PATCH ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}.${Python_VERSION_PATCH})
+ENDIF()
 
 IF(TULIP_PYTHON_SITE_INSTALL)
 
@@ -44,11 +44,15 @@ ELSE(TULIP_PYTHON_SITE_INSTALL)
   SET(TulipPythonModulesInstallDir ${CMAKE_INSTALL_PREFIX}/${TulipLibInstallDir}/tulip/python)
 ENDIF(TULIP_PYTHON_SITE_INSTALL)
 
-# Unset the previous values of the CMake cache variables related to Python libraries
-# in case the value of Python_EXECUTABLE CMake variable changed
-UNSET(Python_FOUND CACHE)
-UNSET(Python_LIBRARIES CACHE)
-UNSET(Python_INCLUDE_DIRS CACHE)
+# When building tulip wheels we make a loop of cmake builds,
+# with only a change of Python_EXECUTABLE CMake variable;
+# so we need to unset the previous values of the CMake Python cache variables
+# to force their recomputation
+IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+  UNSET(Python_FOUND CACHE)
+  UNSET(Python_LIBRARIES CACHE)
+  UNSET(Python_INCLUDE_DIRS CACHE)
+ENDIF()
 
 GET_FILENAME_COMPONENT(PYTHON_HOME_PATH ${Python_EXECUTABLE} DIRECTORY)
 
@@ -71,13 +75,12 @@ ENDIF(WIN32)
 
 IF(MINGW)
   # Check if Python is provided by MSYS2 (it is compiled with GCC in that case instead of MSVC)
-  EXECUTE_PROCESS(COMMAND ${Python_EXECUTABLE} -c "import sys; print(sys.version)" OUTPUT_VARIABLE PYTHON_VERSION_FULL ERROR_VARIABLE PYTHON_VERSION_FULL)
+  EXECUTE_PROCESS(COMMAND ${Python_EXECUTABLE} -VV OUTPUT_VARIABLE PYTHON_VERSION_FULL ERROR_VARIABLE PYTHON_VERSION_FULL)
   STRING(REGEX MATCH "GCC" MSYS2_PYTHON "${PYTHON_VERSION_FULL}")
 
   # Python 64bits does not provide a dll import library for MinGW.
   # Fortunately, we can directly link to the Python dll with that compiler.
   # So find the location of that dll and overwrite the Python_LIBRARIES CMake cache variable with it
-  STRING(REPLACE "\\" "/" WINDIR $ENV{WINDIR})
 
   IF(MSYS2_PYTHON)
     IF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll)
@@ -91,6 +94,7 @@ IF(MINGW)
       SET(Python_LIBRARIES ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
       #If not, the Python dll is located in %WINDIR%/System32 (when Python is installed for all users)
     ELSE(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
+      STRING(REPLACE "\\" "/" WINDIR $ENV{WINDIR})
       IF(NOT WIN_AMD64 OR X64)
         SET(Python_LIBRARIES ${WINDIR}/System32/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
       ELSE(NOT WIN_AMD64 OR X64)
@@ -98,7 +102,6 @@ IF(MINGW)
       ENDIF(NOT WIN_AMD64 OR X64)
     ENDIF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
   ENDIF(MSYS2_PYTHON)
-
 ENDIF(MINGW)
 
 # Ensure headers correspond to the ones associated to the detected Python library on MacOS

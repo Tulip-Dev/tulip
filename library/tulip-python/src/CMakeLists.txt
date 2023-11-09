@@ -54,10 +54,7 @@ QTX_WRAP_CPP(${LibTulipPythonName}_MOC_SRCS ${${LibTulipPythonName}_MOC})
 
 ADD_LIBRARY(${LibTulipPythonName} SHARED ${${LibTulipPythonName}_LIB_SRCS} ${${LibTulipPythonName}_MOC_SRCS} ${${LibTulipPythonName}_UI_SRCS})
 
-TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${LibTulipCoreName})
-TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${LibTulipGUIName})
-TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${QT_LIBRARIES})
-TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${Python_LIBRARIES})
+TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${LibTulipCoreName} ${LibTulipGUIName} ${QT_LIBRARIES} ${Python_LIBRARIES})
 
 INSTALL(TARGETS ${LibTulipPythonName}
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_python

@@ -66,17 +66,17 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
   ## Operating system preprocessor macros
   ## ========================================================
   IF(LINUX)
-    ADD_DEFINITIONS("-D_LINUX")
+    ADD_COMPILE_DEFINITIONS(_LINUX)
   ENDIF(LINUX)
   IF(WIN32)
-    ADD_DEFINITIONS("-D_WIN32")
+    ADD_COMPILE_DEFINITIONS(_WIN32)
     # ensure WIN32 is defined (as it is not the case when compiling with MinGW and C++11 standard activated)
-    ADD_DEFINITIONS("-DWIN32")
+    ADD_COMPILE_DEFINITIONS(WIN32)
     # ensure math defines (e.g. M_PI) are available (as they have been dropped from C++11 standard)
-    ADD_DEFINITIONS("-D_USE_MATH_DEFINES")
+    ADD_COMPILE_DEFINITIONS(_USE_MATH_DEFINES)
   ENDIF(WIN32)
   IF(APPLE)
-    ADD_DEFINITIONS("-D__APPLE__")
+    ADD_COMPILE_DEFINITIONS(__APPLE__)
   ENDIF(APPLE)
 
   IF(NOT MSVC) # Visual Studio does not recognize these options
@@ -283,7 +283,7 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
   ENDIF(NOT CLANG OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 3.7.0 OR CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 3.7.0)
 
   IF(APPLE)
-    ADD_DEFINITIONS(-DGL_SILENCE_DEPRECATION)
+    ADD_COMPILE_DEFINITIONS(GL_SILENCE_DEPRECATION)
   ENDIF(APPLE)
 
 ENDMACRO(TULIP_SET_COMPILER_OPTIONS)
