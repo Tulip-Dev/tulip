@@ -63,6 +63,8 @@ class RandomTreeGeneral : public ImportModule {
       n1 = graph->addNode();
       graph->addEdge(n, n1);
       result = result && buildNode(n1, sizeM, arityMax);
+      if (graph->numberOfNodes() >= sizeM)
+        return true;
     }
 
     return result;
