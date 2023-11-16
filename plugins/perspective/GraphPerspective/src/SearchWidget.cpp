@@ -212,6 +212,7 @@ class ConstDoubleProperty : public DoubleProperty {
 
 public:
   ConstDoubleProperty(Graph *g) : DoubleProperty(g) {}
+  using DoubleProperty::operator=;
 
   void setConstValue(double val) {
     _val = val;
