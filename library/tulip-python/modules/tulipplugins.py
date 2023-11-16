@@ -20,7 +20,7 @@ in Python in the plugins database.
 
 import sys
 import traceback
-from imp import reload # noqa
+from importlib import reload # noqa
 from tulip import tlp # noqa
 
 pluginFactory = {}
