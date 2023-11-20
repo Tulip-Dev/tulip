@@ -443,8 +443,9 @@ bool LouvainClustering::run() {
 
   if (dataSet != nullptr) {
     dataSet->set("modularity", new_mod);
-    dataSet->set("#communities", uint(maxVal + 1)); //+1 => last iteration of the while loop on line 402
-    dataSet->set("# passes", level+1);
+    dataSet->set("#communities",
+                 uint(maxVal + 1)); //+1 => last iteration of the while loop on line 402
+    dataSet->set("# passes", level + 1);
   }
 
   return true;
