@@ -29,7 +29,7 @@ static const char *paramHelp[] = {
     "Sets impred option.",
 
     // number of iterations
-    "The number of iterations. If <=0, the number of iterations will be set as 10 times the number "
+    "The number of iterations. If &lt;= 0, the number of iterations will be set as 10 times the number "
     "of nodes.",
 
     // edge length

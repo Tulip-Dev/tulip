@@ -43,16 +43,16 @@ static const char *paramHelp[] = {
     "The maximum disturbance to x; must be >= 0.",
 
     // rotation angle
-    "The opening angle for rotations to x (0 <= x <= pi / 2).",
+    "The opening angle for rotations to x (0 &lt;= x &lt;= pi / 2).",
 
     // oscillation angle
-    "Sets the opening angle for oscillations to x (0 <= x <= pi / 2).",
+    "Sets the opening angle for oscillations to x (0 &lt;= x &lt;= pi / 2).",
 
     // rotation sensitivity
-    "The rotation sensitivity to x (0 <= x <= 1).",
+    "The rotation sensitivity to x (0 &lt;= x &lt;= 1).",
 
     // oscillation sensitivity
-    "The oscillation sensitivity to x (0 <= x <= 1).",
+    "The oscillation sensitivity to x (0 &lt;= x &lt;= 1).",
 
     // Attraction formula
     "The formula for attraction.",
