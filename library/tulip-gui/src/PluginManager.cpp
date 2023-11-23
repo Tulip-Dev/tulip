@@ -243,15 +243,14 @@ void PluginInformation::fillLocalInfo(const Plugin &info) {
   category = tlp::tlpStringToQString(info.category());
   installedVersion.description = tlp::tlpStringToQString(info.info());
   installedVersion.icon = tlp::tlpStringToQString(info.icon());
-  installedVersion.version = info.release().c_str();
-  installedVersion.date = info.date().c_str();
+  installedVersion.version = tlp::tlpStringToQString(info.release());
+  installedVersion.date = tlp::tlpStringToQString(info.date());
   installedVersion.author = tlp::tlpStringToQString(info.author());
   installedVersion.libraryLocation =
       tlp::tlpStringToQString(PluginLister::getPluginLibrary(info.name()));
-  auto &dependencies = PluginLister::getPluginDependencies(info.name());
 
-  for (auto &dependency : dependencies) {
-    installedVersion.dependencies.push_back(dependency.pluginName.c_str());
+  for (auto dependency : PluginLister::getPluginDependencies(info.name())) {
+    installedVersion.dependencies.push_back(tlp::tlpStringToQString(dependency.pluginName));
   }
 
   installedVersion.isValid = true;
