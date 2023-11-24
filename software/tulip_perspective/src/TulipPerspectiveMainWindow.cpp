@@ -58,7 +58,8 @@ void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString &projec
   else { // all graphs are deleted. Clear project. Useful?
     _project->clearProject();
     wTitle += QString(" - ");
-    tlp::Graph *cg = tlp::Perspective::instance() ? tlp::Perspective::instance()->currentGraph() : nullptr;
+    tlp::Graph *cg =
+        tlp::Perspective::instance() ? tlp::Perspective::instance()->currentGraph() : nullptr;
     if (cg)
       wTitle += QString(cg->getName().c_str()) + ' ';
     wTitle += QString("(unsaved project)");
