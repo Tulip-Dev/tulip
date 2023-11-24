@@ -68,6 +68,7 @@ class GraphHierarchiesEditor : public QWidget, tlp::Observable {
 public:
   explicit GraphHierarchiesEditor(QWidget *parent = nullptr);
   ~GraphHierarchiesEditor() override;
+  tlp::Graph *currentGraph();
   void setModel(tlp::GraphHierarchiesModel *model);
   bool synchronized() const;
   void treatEvents(const std::vector<tlp::Event> &) override;

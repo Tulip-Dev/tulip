@@ -1162,6 +1162,10 @@ tlp::GraphHierarchiesModel *GraphPerspective::model() const {
   return _graphs;
 }
 
+Graph *GraphPerspective::currentGraph() {
+  return _graphs->currentGraph();
+}
+
 void GraphPerspective::refreshDockExpandControls() {
   QList<HeaderFrame *> expandedHeaders, collapsedHeaders;
 

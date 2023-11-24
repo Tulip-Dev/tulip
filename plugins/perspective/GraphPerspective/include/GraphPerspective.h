@@ -32,6 +32,7 @@ class GraphHierarchiesEditor;
 class GraphPerspectiveLogger;
 
 namespace tlp {
+class Graph;
 class GraphHierarchiesModel;
 class View;
 class BooleanProperty;
@@ -81,6 +82,7 @@ public:
   ~GraphPerspective() override;
   void start(tlp::PluginProgress *) override;
   tlp::GraphHierarchiesModel *model() const;
+  tlp::Graph *currentGraph() override;
   void copy(tlp::Graph *, bool deleteAfter = false);
   tlp::Graph *createSubGraph(tlp::Graph *);
   QAction *createPanelAction();

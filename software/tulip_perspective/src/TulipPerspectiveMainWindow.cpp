@@ -21,6 +21,7 @@
 #include <QCloseEvent>
 #include <QShortcut>
 #include <QAction>
+#include <tulip/Graph.h>
 #include <tulip/Perspective.h>
 #include <tulip/TulipProject.h>
 
@@ -45,7 +46,10 @@ void TulipPerspectiveProcessMainWindow::setProject(tlp::TulipProject *project) {
 void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString &projectFile) {
   QString wTitle(_title);
 
-  wTitle += QString(" [") + _project->perspective() + "]";
+  auto perspective = _project->perspective();
+  // add perspective name if is not a GraphPerspective
+  if (perspective != "Tulip")
+    wTitle += QString(" [") + _project->perspective() + "]";
 
   if (!_project->name().isEmpty())
     wTitle += QString(" - ") + _project->name();
@@ -53,7 +57,11 @@ void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString &projec
     wTitle += QString(" - ") + projectFile;
   else { // all graphs are deleted. Clear project. Useful?
     _project->clearProject();
-    wTitle += QString(" - unsaved project");
+    wTitle += QString(" - ");
+    tlp::Graph *cg = tlp::Perspective::instance() ? tlp::Perspective::instance()->currentGraph() : nullptr;
+    if (cg)
+      wTitle += QString(cg->getName().c_str()) + ' ';
+    wTitle += QString("(unsaved project)");
   }
 
   wTitle += "[*]"; // placeholder for window modification

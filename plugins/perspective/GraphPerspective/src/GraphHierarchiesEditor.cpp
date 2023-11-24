@@ -153,6 +153,10 @@ void GraphHierarchiesEditor::setModel(tlp::GraphHierarchiesModel *model) {
           SLOT(currentGraphChanged(tlp::Graph *)));
 }
 
+Graph *GraphHierarchiesEditor::currentGraph() {
+  return _model->currentGraph();
+}
+
 GraphHierarchiesEditor::~GraphHierarchiesEditor() {
   delete _ui;
 }
@@ -283,6 +287,7 @@ void GraphHierarchiesEditor::currentGraphChanged(Graph *graph) {
       selection->addObserver(this);
     _currentSelection = selection;
   }
+  GraphPerspective::typedInstance<GraphPerspective>()->resetTitle();
   updateSelectionInfos();
 }
 

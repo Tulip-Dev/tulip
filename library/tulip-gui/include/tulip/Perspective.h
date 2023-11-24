@@ -34,6 +34,7 @@ class QTcpSocket;
 
 namespace tlp {
 
+class Graph;
 class PluginProgress;
 class TulipProject;
 
@@ -205,6 +206,13 @@ public:
    */
   virtual void usage(std::string &usage_str) const {
     usage_str = "No options for this perspective.";
+  }
+
+  /**
+   * @return The Perspective's current graph.
+   */
+  virtual Graph *currentGraph() {
+    return nullptr;
   }
 
   /**
