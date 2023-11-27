@@ -47,7 +47,8 @@ public:
       "Quality Measure. See:<br/>"
       "<b>Software component capture using graph clustering</b>,<br/>"
       "Y. Chiricota, F.Jourdan, and G. Melancon, "
-      "IWPC '03: Proceedings of the 11th IEEE International Workshop on Program Comprehension",
+      "IWPC '03: Proceedings of the 11th IEEE International Workshop on Program Comprehension<br>"
+      "doi: <a href=\"https://doi.org/10.1109/WPC.2003.1199205\">10.1109/WPC.2003.1199205</a>",
       "2.0", "Clustering")
   StrengthClustering(tlp::PluginContext *context);
   ~StrengthClustering() override;

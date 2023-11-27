@@ -55,7 +55,8 @@ public:
       "Edges partitioning measure used for community detection.<br>"
       "It is an implementation of a fuzzy clustering procedure. First introduced in:<br/>"
       "<b>Link communities reveal multiscale complexity in networks</b>,<br/>"
-      " Ahn, Y.Y. and Bagrow, J.P. and Lehmann, S., Nature vol:466, 761--764 (2010)",
+      " Ahn, Y.Y. and Bagrow, J.P. and Lehmann, S., Nature vol:466, 761--764 (2010)<br>"
+      "doi: <a href=\"https://doi.org/10.1038/nature09182\">10.1038/nature09182</a>",
       "1.1", "Clustering")
 
   LinkCommunities(const tlp::PluginContext *);
