@@ -41,8 +41,7 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
 
   _ui->setupUi(this);
 
-  bool darkBackground =
-      _ui->importModules->palette().color(backgroundRole()) != QColor("white");
+  bool darkBackground = _ui->importModules->palette().color(backgroundRole()) != QColor("white");
   // update foreground colors according to background color
   if (darkBackground) {
     auto ss = _ui->importModules->styleSheet();
@@ -139,7 +138,8 @@ void ImportWizard::moduleSelected(const QModelIndex &index) {
     button(QWizard::HelpButton)->setVisible(true);
     _ui->parametersLabel->setEnabled(true);
     QAbstractItemModel *oldModel = _ui->parameters->model();
-    ParameterListModel::configureTableView(_ui->parameters, PluginLister::getPluginParameters(algs));
+    ParameterListModel::configureTableView(_ui->parameters,
+                                           PluginLister::getPluginParameters(algs));
     delete oldModel;
   } else {
     button(QWizard::HelpButton)->setVisible(false);

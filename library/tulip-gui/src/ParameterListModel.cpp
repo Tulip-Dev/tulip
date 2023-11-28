@@ -29,7 +29,8 @@
 namespace tlp {
 
 ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &params,
-                                       tlp::Graph *graph, QObject *parent, bool showIcons, bool darkBackground)
+                                       tlp::Graph *graph, QObject *parent, bool showIcons,
+                                       bool darkBackground)
     : TulipModel(parent), _graph(graph), _showIcons(showIcons), _darkBackground(darkBackground) {
   std::vector<ParameterDescription> outParams;
   // first add in parameters
@@ -58,12 +59,13 @@ ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &para
 // So with Qt6 the vertical header must be hidden and then the first column
 // is used to display the parameters names and the second on to display/edit
 // the parameters values
-ParameterListModel *ParameterListModel::configureTableView(QTableView *tableView,
-                                                           const tlp::ParameterDescriptionList &params,
-                                                           tlp::Graph *graph,
-                                                           QObject *parent,
-                                                           bool showIcons) {
-  ParameterListModel *model = new ParameterListModel(params, graph, parent, showIcons, tableView->palette().color(tableView->backgroundRole()) != QColor("white"));
+ParameterListModel *
+ParameterListModel::configureTableView(QTableView *tableView,
+                                       const tlp::ParameterDescriptionList &params,
+                                       tlp::Graph *graph, QObject *parent, bool showIcons) {
+  ParameterListModel *model = new ParameterListModel(
+      params, graph, parent, showIcons,
+      tableView->palette().color(tableView->backgroundRole()) != QColor("white"));
   tableView->setModel(model);
 
   auto hHeader = tableView->horizontalHeader();
@@ -211,9 +213,7 @@ Qt::ItemFlags ParameterListModel::flags(const QModelIndex &index) const {
   const ParameterDescription &info = _params[index.row()];
   bool editable = info.isEditable();
 
-  return editable
-    ? (result | Qt::ItemIsEditable)
-    : (result ^ Qt::ItemIsEditable);
+  return editable ? (result | Qt::ItemIsEditable) : (result ^ Qt::ItemIsEditable);
 }
 
 bool ParameterListModel::setData(const QModelIndex &index, const QVariant &value, int role) {

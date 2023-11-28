@@ -93,7 +93,8 @@ void ExportWizard::algorithmSelected(const QModelIndex &index) {
     setButtonText(QWizard::HelpButton, QString("%1 documentation").arg(alg));
     button(QWizard::HelpButton)->setVisible(true);
     QAbstractItemModel *oldModel = _ui->parameters->model();
-    ParameterListModel::configureTableView(_ui->parameters, PluginLister::getPluginParameters(algs), _graph);
+    ParameterListModel::configureTableView(_ui->parameters, PluginLister::getPluginParameters(algs),
+                                           _graph);
     delete oldModel;
   } else
     button(QWizard::HelpButton)->setVisible(false);

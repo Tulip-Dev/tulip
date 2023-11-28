@@ -661,7 +661,9 @@ void AlgorithmRunnerItem::initModel() {
   if (_ui->parameters->model() != nullptr)
     return;
 
-  ParameterListModel *model = ParameterListModel::configureTableView(_ui->parameters, PluginLister::getPluginParameters(QStringToTlpString(_pluginName)), _graph, _ui->parameters, true);
+  ParameterListModel *model = ParameterListModel::configureTableView(
+      _ui->parameters, PluginLister::getPluginParameters(QStringToTlpString(_pluginName)), _graph,
+      _ui->parameters, true);
 
   if (_pluginName == "Color Mapping") {
     colorMappingModel = model;

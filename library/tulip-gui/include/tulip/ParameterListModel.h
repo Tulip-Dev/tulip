@@ -24,7 +24,6 @@
 #include <QTableView>
 #include <vector>
 
-
 #include <tulip/TulipModel.h>
 #include <tulip/WithParameter.h>
 #include <tulip/DataSet.h>
@@ -39,16 +38,13 @@ class TLP_QT_SCOPE ParameterListModel : public TulipModel {
 
 public:
   explicit ParameterListModel(const tlp::ParameterDescriptionList &params,
-                              tlp::Graph *graph = nullptr,
-                              QObject *parent = nullptr,
-                              bool showIcons = false,
-                              bool darkBackground = false);
+                              tlp::Graph *graph = nullptr, QObject *parent = nullptr,
+                              bool showIcons = false, bool darkBackground = false);
 
   static ParameterListModel *configureTableView(QTableView *table,
                                                 const tlp::ParameterDescriptionList &params,
                                                 tlp::Graph *graph = nullptr,
-                                                QObject *parent = nullptr,
-                                                bool showIcons = false);
+                                                QObject *parent = nullptr, bool showIcons = false);
 
   tlp::DataSet parametersValues() const;
   void setParametersValues(const tlp::DataSet &data);
