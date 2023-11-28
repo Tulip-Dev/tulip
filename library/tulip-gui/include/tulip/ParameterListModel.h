@@ -21,7 +21,9 @@
 #ifndef PARAMETERLISTMODEL_H
 #define PARAMETERLISTMODEL_H
 
+#include <QTableView>
 #include <vector>
+
 
 #include <tulip/TulipModel.h>
 #include <tulip/WithParameter.h>
@@ -33,12 +35,21 @@ class TLP_QT_SCOPE ParameterListModel : public TulipModel {
   std::vector<ParameterDescription> _params;
   tlp::DataSet _data;
   tlp::Graph *_graph;
-  bool _showIcons;
+  bool _showIcons, _darkBackground;
 
 public:
   explicit ParameterListModel(const tlp::ParameterDescriptionList &params,
-                              tlp::Graph *graph = nullptr, QObject *parent = nullptr,
-                              bool showIcons = false);
+                              tlp::Graph *graph = nullptr,
+                              QObject *parent = nullptr,
+                              bool showIcons = false,
+                              bool darkBackground = false);
+
+  static ParameterListModel *configureTableView(QTableView *table,
+                                                const tlp::ParameterDescriptionList &params,
+                                                tlp::Graph *graph = nullptr,
+                                                QObject *parent = nullptr,
+                                                bool showIcons = false);
+
   tlp::DataSet parametersValues() const;
   void setParametersValues(const tlp::DataSet &data);
 
@@ -53,6 +64,7 @@ public:
   QString getParameterName(int section);
   QString getParameterHelp(int section);
   bool isMandatory(int section);
+  int parameterColumnMinWidth();
 };
 } // namespace tlp
 

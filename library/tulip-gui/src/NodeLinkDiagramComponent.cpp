@@ -345,13 +345,11 @@ void NodeLinkDiagramComponent::showGridControl() {
     gridParameters.add<bool>("X grid", "", "true", false);
     gridParameters.add<bool>("Y grid", "", "true", false);
     gridParameters.add<bool>("Z grid", "", "true", false);
-    ParameterListModel *model = new ParameterListModel(gridParameters, nullptr, this);
 
     grid_ui = new Ui::GridOptionsWidget;
     _gridOptions = new QDialog(graphicsView());
     grid_ui->setupUi(_gridOptions);
-    grid_ui->tableView->setModel(model);
-    grid_ui->tableView->setItemDelegate(new TulipItemDelegate(grid_ui->tableView));
+    ParameterListModel::configureTableView(grid_ui->tableView, gridParameters, nullptr, this);
   }
   if (_gridOptions->exec() == QDialog::Rejected)
     return;

@@ -203,15 +203,6 @@ image: url(:/tulip/graphperspective/icons/16/favorite-empty.png);
      <property name="dragDropOverwriteMode">
       <bool>false</bool>
      </property>
-     <attribute name="horizontalHeaderVisible">
-      <bool>false</bool>
-     </attribute>
-     <attribute name="horizontalHeaderStretchLastSection">
-      <bool>true</bool>
-     </attribute>
-     <attribute name="verticalHeaderDefaultSectionSize">
-      <number>27</number>
-     </attribute>
     </widget>
    </item>
    <item>

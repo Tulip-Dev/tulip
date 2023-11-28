@@ -18,15 +18,19 @@
  */
 #include <tulip/ParameterListModel.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/TulipItemDelegate.h>
 #include <tulip/TlpQtTools.h>
 
+#include <QFont>
+#include <QFontMetrics>
+#include <QHeaderView>
 #include <QIcon>
 
 namespace tlp {
 
 ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &params,
-                                       tlp::Graph *graph, QObject *parent, bool showIcons)
-    : TulipModel(parent), _graph(graph), _showIcons(showIcons) {
+                                       tlp::Graph *graph, QObject *parent, bool showIcons, bool darkBackground)
+    : TulipModel(parent), _graph(graph), _showIcons(showIcons), _darkBackground(darkBackground) {
   std::vector<ParameterDescription> outParams;
   // first add in parameters
   for (const ParameterDescription &param : params.getParameters()) {
@@ -45,6 +49,45 @@ ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &para
   params.buildDefaultDataSet(_data, graph);
 }
 
+// The method below is used to centralized the configuration of TableView
+// displaying a ParameterDescriptionList.
+// With Qt5 the verticalHeader is used to display the parameters names
+// and there is only one column table to display/edit the parameters values.
+// With Qt6 the vertical header cannot be used because there is a bug
+// which make the parameters names hidden.
+// So with Qt6 the vertical header must be hidden and then the first column
+// is used to display the parameters names and the second on to display/edit
+// the parameters values
+ParameterListModel *ParameterListModel::configureTableView(QTableView *tableView,
+                                                           const tlp::ParameterDescriptionList &params,
+                                                           tlp::Graph *graph,
+                                                           QObject *parent,
+                                                           bool showIcons) {
+  ParameterListModel *model = new ParameterListModel(params, graph, parent, showIcons, tableView->palette().color(tableView->backgroundRole()) != QColor("white"));
+  tableView->setModel(model);
+
+  auto hHeader = tableView->horizontalHeader();
+  auto vHeader = tableView->verticalHeader();
+  hHeader->setVisible(false);
+  hHeader->setStretchLastSection(true);
+  vHeader->setSectionResizeMode(QHeaderView::Fixed);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+  // parameters names are displayed in the vertical header
+  vHeader->setVisible(true);
+  tableView->setItemDelegate(new TulipItemDelegate(tableView));
+#else
+  // parameters are displayed in column 0
+  vHeader->setVisible(false);
+  hHeader->resizeSection(0, model->parameterColumnMinWidth());
+  // only values column needs edition
+  tableView->setItemDelegateForColumn(1, new TulipItemDelegate(tableView));
+  // avoid to show focus on parameters names
+  tableView->setFocusPolicy(Qt::NoFocus);
+#endif
+
+  return model;
+}
+
 QModelIndex ParameterListModel::index(int row, int column, const QModelIndex &) const {
   return createIndex(row, column);
 }
@@ -58,18 +101,38 @@ int ParameterListModel::rowCount(const QModelIndex &) const {
 }
 
 int ParameterListModel::columnCount(const QModelIndex &) const {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
   return 1;
+#else
+  return 2;
+#endif
 }
 
 QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+  if (index.column() == 0) // parameters names
+    return headerData(index.row(), Qt::Vertical, role);
+#endif
+
   if (role == GraphRole)
     return QVariant::fromValue<tlp::Graph *>(_graph);
 
   const ParameterDescription &info = _params[index.row()];
 
-  if (role == Qt::ToolTipRole)
-    return tlp::tlpStringToQString(info.getHelp());
-  else if (role == Qt::WhatsThisRole)
+  if (role == Qt::ToolTipRole) {
+    QString displayName;
+    // remove prefix if any
+    size_t pos = info.getName().find("::");
+
+    if (pos == std::string::npos)
+      displayName = tlpStringToQString(info.getName().c_str());
+    else
+      displayName = tlpStringToQString(info.getName().c_str() + pos + 2);
+    return QString("<b>&quot;%1&quot;</b>%2%3")
+        .arg(displayName)
+        .arg(info.isMandatory() ? "&nbsp;<i>[mandatory]</i>" : "")
+        .arg(info.getHelp().c_str());
+  } else if (role == Qt::WhatsThisRole)
     return tlp::tlpStringToQString(info.getHelp());
   else if (role == Qt::BackgroundRole) {
     if (info.isMandatory() || !_showIcons)
@@ -93,14 +156,14 @@ QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
 }
 
 QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation, int role) const {
-
-  if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-    if (section == 0)
-      return "Name";
-    else
-      return "Value";
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+  // use the standard font for a QHeaderView
+  if (role == Qt::FontRole) {
+    QFont font = QAbstractItemModel::headerData(section, orientation, role).value<QFont>();
+    font.setBold(true);
+    return QVariant::fromValue<QFont>(font);
   }
-
+#endif
   if (orientation == Qt::Vertical) {
     const ParameterDescription &info = _params[section];
 
@@ -113,12 +176,18 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
 
       return tlp::tlpStringToQString(info.getName().c_str());
     } else if (role == Qt::BackgroundRole) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
       if (info.isMandatory())
         return QColor(255, 255, 222);
       else
         return QColor(222, 255, 222);
+#else
+      return QAbstractItemModel::headerData(section, orientation, role);
+    } else if (role == Qt::ForegroundRole) {
+      return _darkBackground ? QColor("white") : QColor("black");
+#endif
     } else if (role == Qt::ToolTipRole) {
-      return tlp::tlpStringToQString(info.getHelp());
+      return data(createIndex(section, -1), role);
     } else if (role == Qt::DecorationRole && _showIcons) {
       if (info.getDirection() == IN_PARAM) {
         return QIcon(":/tulip/gui/icons/32/input.png");
@@ -134,17 +203,17 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
 }
 
 Qt::ItemFlags ParameterListModel::flags(const QModelIndex &index) const {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+  if (index.column() == 0) // parameters names
+    return Qt::ItemIsEnabled;
+#endif
   Qt::ItemFlags result = QAbstractItemModel::flags(index);
   const ParameterDescription &info = _params[index.row()];
   bool editable = info.isEditable();
 
-  if (index.column() == 0) {
-    if (editable)
-      result |= Qt::ItemIsEditable;
-  } else if (!editable)
-    result ^= Qt::ItemIsEditable;
-
-  return result;
+  return editable
+    ? (result | Qt::ItemIsEditable)
+    : (result ^ Qt::ItemIsEditable);
 }
 
 bool ParameterListModel::setData(const QModelIndex &index, const QVariant &value, int role) {
@@ -184,6 +253,25 @@ QString ParameterListModel::getParameterHelp(int section) {
 
 bool ParameterListModel::isMandatory(int section) {
   return _params[section].isMandatory();
+}
+
+int ParameterListModel::parameterColumnMinWidth() {
+  int minWidth = 0;
+
+  // we compute the minimum width needed to display the first column
+  // when it displays the parameters names
+  for (unsigned int i = 0; i < _params.size(); ++i) {
+    // the used font
+    QFont font = QAbstractItemModel::headerData(i, Qt::Vertical, Qt::FontRole).value<QFont>();
+    font.setBold(true);
+    QFontMetrics metrics(font);
+    // add the width of param name
+    int width = metrics.boundingRect(tlpStringToQString(_params[i].getName())).width();
+    if (width > minWidth)
+      minWidth = width;
+  }
+  // add icon width + margin spaces
+  return minWidth + (_showIcons ? 28 : 5);
 }
 
 } // namespace tlp

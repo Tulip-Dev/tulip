@@ -61,8 +61,6 @@ ExportWizard::ExportWizard(Graph *g, const QString &exportFile, QWidget *parent)
   connect(_ui->exportModules->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
           this, SLOT(algorithmSelected(QModelIndex)));
 
-  _ui->parameters->setItemDelegate(new TulipItemDelegate(_ui->parameters));
-  _ui->parameters->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
   connect(_ui->exportModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton),
           SLOT(click()));
 
@@ -89,24 +87,21 @@ void ExportWizard::algorithmSelected(const QModelIndex &index) {
   QString alg(index.data().toString());
   string algs(tlp::QStringToTlpString(alg));
   _ui->parametersFrame->setVisible(!alg.isEmpty());
-  QAbstractItemModel *oldModel = _ui->parameters->model();
-  QAbstractItemModel *newModel = nullptr;
 
   if (PluginLister::pluginExists(algs)) {
     _index = &index;
-    newModel = new ParameterListModel(PluginLister::getPluginParameters(algs), _graph);
     setButtonText(QWizard::HelpButton, QString("%1 documentation").arg(alg));
     button(QWizard::HelpButton)->setVisible(true);
+    QAbstractItemModel *oldModel = _ui->parameters->model();
+    ParameterListModel::configureTableView(_ui->parameters, PluginLister::getPluginParameters(algs), _graph);
+    delete oldModel;
   } else
     button(QWizard::HelpButton)->setVisible(false);
-
-  _ui->parameters->setModel(newModel);
 
   QString parametersText("<b>Parameters</b>");
   parametersText += "&nbsp;<font size=-2>[" + alg + "]</font>";
   _ui->parametersLabel->setText(parametersText);
 
-  delete oldModel;
   updateFinishButton();
 }
 

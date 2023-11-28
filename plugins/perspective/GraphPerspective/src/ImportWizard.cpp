@@ -42,7 +42,7 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
   _ui->setupUi(this);
 
   bool darkBackground =
-      _ui->importModules->palette().color(backgroundRole()) != QColor(255, 255, 255);
+      _ui->importModules->palette().color(backgroundRole()) != QColor("white");
   // update foreground colors according to background color
   if (darkBackground) {
     auto ss = _ui->importModules->styleSheet();
@@ -58,8 +58,6 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
   connect(_ui->importModules->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
           this, SLOT(moduleSelected(QModelIndex)));
 
-  _ui->parameters->setItemDelegate(new TulipItemDelegate(_ui->parameters));
-  _ui->parameters->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
   connect(_ui->importModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton),
           SLOT(click()));
   connect(_ui->searchBox, SIGNAL(textChanged(QString)), this, SLOT(setFilter(QString)));
@@ -130,21 +128,19 @@ void ImportWizard::moduleSelected(const QModelIndex &index) {
   QString alg(index.data().toString());
   string algs = tlp::QStringToTlpString(alg);
   _ui->parametersFrame->setVisible(!alg.isEmpty());
-  QAbstractItemModel *oldModel = _ui->parameters->model();
-  QAbstractItemModel *newModel = nullptr;
   bool isGroup = index.model()->index(0, index.column(), index).isValid();
 
   QString parametersText("<b>Parameters</b>");
 
   if (!isGroup && PluginLister::pluginExists(algs)) {
     _index = &index;
-    newModel = new ParameterListModel(PluginLister::getPluginParameters(algs));
     parametersText += "&nbsp;<font size=-2>[" + alg + "]</font>";
-
     setButtonText(QWizard::HelpButton, QString("%1 documentation").arg(alg));
     button(QWizard::HelpButton)->setVisible(true);
     _ui->parametersLabel->setEnabled(true);
-
+    QAbstractItemModel *oldModel = _ui->parameters->model();
+    ParameterListModel::configureTableView(_ui->parameters, PluginLister::getPluginParameters(algs));
+    delete oldModel;
   } else {
     button(QWizard::HelpButton)->setVisible(false);
     _ui->parametersLabel->setEnabled(false);
@@ -152,9 +148,6 @@ void ImportWizard::moduleSelected(const QModelIndex &index) {
 
   _ui->parametersLabel->setText(parametersText);
 
-  _ui->parameters->setModel(newModel);
-
-  delete oldModel;
   updateFinishButton();
 }
 

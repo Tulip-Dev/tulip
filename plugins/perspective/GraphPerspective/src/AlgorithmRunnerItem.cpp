@@ -80,9 +80,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, bool darkBackground
     _ui->playButton->setStyleSheet("QPushButton { color: white; text-align: left; } ");
   }
 
-  if (!PluginLister::pluginInformation(QStringToTlpString(pluginName)).getParameters().empty()) {
-    _ui->parameters->setItemDelegate(new TulipItemDelegate(_ui->parameters));
-  } else {
+  if (PluginLister::pluginInformation(QStringToTlpString(pluginName)).getParameters().empty()) {
     _ui->settingsButton->setVisible(false);
   }
 
@@ -663,9 +661,7 @@ void AlgorithmRunnerItem::initModel() {
   if (_ui->parameters->model() != nullptr)
     return;
 
-  ParameterListModel *model =
-      new ParameterListModel(PluginLister::getPluginParameters(QStringToTlpString(_pluginName)),
-                             _graph, _ui->parameters, true);
+  ParameterListModel *model = ParameterListModel::configureTableView(_ui->parameters, PluginLister::getPluginParameters(QStringToTlpString(_pluginName)), _graph, _ui->parameters, true);
 
   if (_pluginName == "Color Mapping") {
     colorMappingModel = model;
@@ -674,7 +670,6 @@ void AlgorithmRunnerItem::initModel() {
     model->setParametersValues(data);
   }
 
-  _ui->parameters->setModel(model);
   int h = 10;
 
   for (int i = 0; i < model->rowCount(); ++i)
