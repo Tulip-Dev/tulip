@@ -785,7 +785,7 @@ NEW-WINDOW:650,328:83886324,83886324,14711783,0,0,0:0x0+500+65:0,0:Eccentricity
 7,6,392,339,0,0,0,2386281,9,'Logitech USB-PS/2 Optical Mouse'
 7,6,392,340,0,0,0,2386313,9,'Logitech USB-PS/2 Optical Mouse'
 7,6,392,341,0,0,0,2386321,9,'Logitech USB-PS/2 Optical Mouse'
-7,6,391,341,0,0,0,2386337,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,391,355,0,0,0,2386337,9,'Logitech USB-PS/2 Optical Mouse'
 7,4,0,0,1,0,0,2386657,9,Logitech USB-PS/2 Optical Mouse
 6,4,0,0,1,0,0,2386657,2,Virtual core pointer
 7,5,0,0,1,0,0,2386809,9,Logitech USB-PS/2 Optical Mouse
