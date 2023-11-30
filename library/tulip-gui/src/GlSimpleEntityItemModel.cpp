@@ -78,7 +78,8 @@ QVariant GlSimpleEntityItemModel::headerData(int section, Qt::Orientation orient
       f = p->font();
 
     f.setBold(true);
-    f.setPointSize(f.pointSize() - 1);
+    if (f.pointSize() > 1)
+      f.setPointSize(f.pointSize() - 1);
     return f;
   }
 

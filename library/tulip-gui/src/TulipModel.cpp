@@ -35,7 +35,8 @@ QVariant TulipModel::headerData(int, Qt::Orientation orientation, int role) cons
       f = p->font();
 
     f.setBold(true);
-    f.setPointSize(f.pointSize() - 1);
+    if (f.pointSize() > 1)
+      f.setPointSize(f.pointSize() - 1);
     return f;
   }
 
