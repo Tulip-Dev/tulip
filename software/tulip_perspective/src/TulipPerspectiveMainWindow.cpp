@@ -86,7 +86,7 @@ void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString &projec
   _sti = new QSystemTrayIcon(this);
   _sti->setIcon(QIcon(":/tulip/gui/icons/tulip-file-icon.ico"));
 
-  QMenu* menu = new QMenu(this);
+  QMenu *menu = new QMenu(this);
   menu->addAction(QString(wTitle).replace('_', ' '));
   menu->addSeparator();
   menu->addAction("Show", this, SLOT(showAndActivate()));
