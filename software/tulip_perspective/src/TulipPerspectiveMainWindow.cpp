@@ -21,9 +21,18 @@
 #include <QCloseEvent>
 #include <QShortcut>
 #include <QAction>
+
 #include <tulip/Graph.h>
 #include <tulip/Perspective.h>
 #include <tulip/TulipProject.h>
+
+#if defined(__APPLE__)
+// on MacOS we use a system tray icon
+// in projectFileChanged method
+#include <tulip/TlpTools.h>
+#include <QSystemTrayIcon>
+static QSystemTrayIcon *_sti = nullptr;
+#endif
 
 TulipPerspectiveProcessMainWindow::TulipPerspectiveProcessMainWindow(QString title, QWidget *parent)
     : QMainWindow(parent), _project(nullptr), _title(title) {}
@@ -65,9 +74,38 @@ void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString &projec
     wTitle += QString("(unsaved project)");
   }
 
+#if defined(__APPLE__)
+  // on MacOS the app title displayed in the dock
+  // is not the perspective window title
+  // but the name of the app executable file.
+  // We therefore use a system tray icon to display
+  // the perspective window title and make it easier
+  // to manage the visibility of multiple running perspectives
+  if (_sti)
+    delete _sti;
+  _sti = new QSystemTrayIcon(this);
+  _sti->setIcon(QIcon(":/tulip/gui/icons/tulip-file-icon.ico"));
+
+  QMenu* menu = new QMenu(this);
+  menu->addAction(QString(wTitle).replace('_', ' '));
+  menu->addSeparator();
+  menu->addAction("Show", this, SLOT(showAndActivate()));
+  menu->addAction("Hide", this, SLOT(hide()));
+  menu->addAction("Exit", this, SLOT(close()));
+  _sti->setContextMenu(menu);
+  _sti->setToolTip(wTitle);
+  _sti->show();
+#endif
+
   wTitle += "[*]"; // placeholder for window modification
 #ifndef NDEBUG
   wTitle += " - [ Debug mode ]";
 #endif
   setWindowTitle(wTitle);
+}
+
+void TulipPerspectiveProcessMainWindow::showAndActivate() {
+  show();
+  raise();
+  activateWindow();
 }

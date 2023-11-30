@@ -44,6 +44,7 @@ signals:
 
 public slots:
   void projectFileChanged(const QString &projectFile = QString(""));
+  void showAndActivate();
 
 protected:
   void closeEvent(QCloseEvent *) override;
