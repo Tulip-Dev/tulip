@@ -71,6 +71,11 @@ ADD_LIBRARY(ImportPajek-${Tulip_VERSION} SHARED ${ImportPajek_SRCS})
 TARGET_LINK_LIBRARIES(ImportPajek-${Tulip_VERSION} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+SET(ImportTGF_SRCS ImportTGF.cpp)
+ADD_LIBRARY(ImportTGF-${Tulip_VERSION} SHARED ${ImportTGF_SRCS})
+TARGET_LINK_LIBRARIES(ImportTGF-${Tulip_VERSION} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
 SET(ImportUCINET_SRCS ImportUCINET.cpp)
 ADD_LIBRARY(ImportUCINET-${Tulip_VERSION} SHARED ${ImportUCINET_SRCS})
 TARGET_LINK_LIBRARIES(ImportUCINET-${Tulip_VERSION} ${LibTulipCoreName})
@@ -115,6 +120,7 @@ TULIP_INSTALL_PLUGIN(WebImport-${Tulip_VERSION} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(GEXFImport-${Tulip_VERSION} ${TulipPluginsInstallDir})
 ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 TULIP_INSTALL_PLUGIN(ImportPajek-${Tulip_VERSION} ${TulipPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(ImportTGF-${Tulip_VERSION} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(ImportUCINET-${Tulip_VERSION} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(EmptyGraph-${Tulip_VERSION} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(ERImport-${Tulip_VERSION} ${TulipPluginsInstallDir})
