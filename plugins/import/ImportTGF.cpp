@@ -43,8 +43,7 @@ bool getUnsignedInt(unsigned int &i, const string &str) {
   return (value >= 0) && (*endPtr == 0);
 }
 
-bool nextToken(const string &str, string &token, string::size_type &pos,
-               bool lastToken) {
+bool nextToken(const string &str, string &token, string::size_type &pos, bool lastToken) {
   token.clear();
   auto size = str.size();
   if (pos == size)
@@ -57,7 +56,7 @@ bool nextToken(const string &str, string &token, string::size_type &pos,
 
   // look for the end of the next token
   auto endPos = lastToken ? str.find_last_not_of(' ') : str.find(' ', pos);
-  if (endPos == string::npos) 
+  if (endPos == string::npos)
     endPos = size;
   else if (lastToken)
     ++endPos;
@@ -71,7 +70,7 @@ bool nextToken(const string &str, string &token, string::size_type &pos,
 
   return true;
 }
-  
+
 bool tokenize(const string &str, vector<string> &tokens, unsigned int nbMax) {
   if (str.empty())
     return true;
@@ -105,16 +104,14 @@ public:
       "<p>Supported extensions: tgf</p><p>Imports a new graph from a text file in Trivial Graph Format<br/>as it is described in <a href=\"https://en.wikipedia.org/wiki/Trivial_Graph_Format\">https://en.wikipedia.org/wiki/Trivial_Graph_Format</a></p>",
       "1.0", "File")
   std::list<std::string> fileExtensions() const override {
-    return std::list<std::string> {"tgf"};
+    return std::list<std::string>{"tgf"};
   }
 
-  ImportTGF(const tlp::PluginContext *context)
-    : ImportModule(context) {
+  ImportTGF(const tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<string>("file::filename", paramHelp[0], "");
   }
 
   ~ImportTGF() override {}
-
 
   bool importGraph() override {
     string filename;
@@ -142,8 +139,7 @@ public:
     if (pluginProgress)
       pluginProgress->showPreview(false);
 
-    tlp::StringProperty *labels = 
-      graph->getProperty<StringProperty>("viewLabel");
+    tlp::StringProperty *labels = graph->getProperty<StringProperty>("viewLabel");
     std::unordered_map<unsigned int, tlp::node> nodes;
     vector<std::string> tokens;
     std::string line;
@@ -184,10 +180,8 @@ public:
         }
         unsigned int sid, tid;
         // get source and target nodes
-        if (!getUnsignedInt(sid, tokens[0]) ||
-            (nodes.find(sid) == nodes.end()) ||
-            !getUnsignedInt(tid, tokens[1]) ||
-            (nodes.find(tid) == nodes.end())) {
+        if (!getUnsignedInt(sid, tokens[0]) || (nodes.find(sid) == nodes.end()) ||
+            !getUnsignedInt(tid, tokens[1]) || (nodes.find(tid) == nodes.end())) {
           errors << "invalid node id";
           ok = false;
           break;
@@ -202,7 +196,7 @@ public:
     if (!ok && pluginProgress) {
       errors << " found while parsing file: " << filename << endl;
       errors << "at line " << lineNumber << endl;
-      
+
       if (pluginProgress) {
         pluginProgress->setError(errors.str());
       }
