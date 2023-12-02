@@ -262,6 +262,10 @@ NEW-WINDOW:451,254:54525982,54525982,36401572,0,0,0:0x0+879+458:0,0:Import
 6,2,0,0,0,116,0,695002460,3,Virtual core keyboard
 7,3,0,0,0,116,0,695002572,9,Dell KB216 Wired Keyboard
 6,3,0,0,0,116,0,695002572,3,Virtual core keyboard
+7,2,0,0,0,116,0,695002860,9,Dell KB216 Wired Keyboard
+6,2,0,0,0,116,0,695002860,3,Virtual core keyboard
+7,3,0,0,0,116,0,695002872,9,Dell KB216 Wired Keyboard
+6,3,0,0,0,116,0,695002872,3,Virtual core keyboard
 7,2,0,0,0,36,0,695003548,9,Dell KB216 Wired Keyboard
 6,2,0,0,0,36,0,695003548,3,Virtual core keyboard
 0,21,0,0,0,0,0,695003612
