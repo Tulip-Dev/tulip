@@ -1219,7 +1219,12 @@ void GraphPerspective::exportGraph(Graph *g) {
     // log export plugin call
     if (TulipSettings::logPluginCall() != TulipSettings::NoLog) {
       std::stringstream log;
-      log << exportPluginName.c_str() << " - " << data.toString().c_str();
+      // format plugin parameters to be displayed
+      QString params = tlp::tlpStringToQString(data.toString());
+      // remove words before "::"
+      params.replace(QRegularExpression("[\\w]*::"), "");
+
+      log << exportPluginName << " - " << tlp::QStringToTlpString(params);
 
       if (TulipSettings::logPluginCall() == TulipSettings::LogCallWithExecutionTime)
         log << ": " << start.msecsTo(QTime::currentTime()) << "ms";
@@ -1280,13 +1285,17 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
                                 tlp::tlpStringToQString(msg) + "</b>");
       return;
     }
-
     delete prg;
+
+    // format plugin parameters to be displayed
+    QString params = tlp::tlpStringToQString(data.toString());
+    // remove words before "::"
+    params.replace(QRegularExpression("[\\w]*::"), "");
 
     // log import plugin call
     if (TulipSettings::logPluginCall() != TulipSettings::NoLog) {
       std::stringstream log;
-      log << module.c_str() << " import - " << data.toString().c_str();
+      log << module << " import - " << tlp::QStringToTlpString(params);
 
       if (TulipSettings::logPluginCall() == TulipSettings::LogCallWithExecutionTime)
         log << ": " << start.msecsTo(QTime::currentTime()) << "ms";
@@ -1295,9 +1304,7 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
     }
 
     if (g->getName().empty()) {
-      QString n =
-          tlp::tlpStringToQString(module) + " - " + tlp::tlpStringToQString(data.toString());
-      n.replace(QRegularExpression("[\\w]*::"), ""); // remove words before "::"
+      QString n = tlp::tlpStringToQString(module) + " - " + params;
       g->setName(tlp::QStringToTlpString(n));
     }
   } else {
