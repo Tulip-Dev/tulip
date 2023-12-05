@@ -659,7 +659,7 @@ bool PythonInterpreter::reloadModule(const QString &moduleName) {
   QTextStream oss(&pythonCode);
   oss << "import sys" << QT_ENDL;
   oss << "if sys.version_info[0] == 3:" << QT_ENDL;
-  oss << "  from imp import reload" << QT_ENDL;
+  oss << "  from importlib import reload" << QT_ENDL;
   oss << "mod = __import__(\"" << moduleName << "\")" << QT_ENDL;
   oss << "reload(mod)" << QT_ENDL;
   return runString(pythonCode);
