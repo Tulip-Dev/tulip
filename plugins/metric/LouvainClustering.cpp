@@ -349,7 +349,7 @@ LouvainClustering::LouvainClustering(const tlp::PluginContext *context)
   addInParameter<double>("precision", paramHelp[1], "0.000001", false);
   addOutParameter<double>("modularity", "The computed modularity");
   addOutParameter<unsigned int>("#communities", "The number of communities found");
-  addOutParameter<unsigned int>("# passes", "The number of passes");
+  addOutParameter<unsigned int>("#passes", "The number of passes");
 }
 //========================================================================================
 bool LouvainClustering::run() {
@@ -445,7 +445,7 @@ bool LouvainClustering::run() {
     dataSet->set("modularity", new_mod);
     dataSet->set("#communities",
                  uint(maxVal + 1)); //+1 => last iteration of the while loop on line 402
-    dataSet->set("# passes", level + 1);
+    dataSet->set("#passes", level + 1);
   }
 
   return true;
