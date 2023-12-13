@@ -81,7 +81,7 @@ class TLP_QT_SCOPE GlSimpleEntityItemModel : public QAbstractItemModel {
   Q_ENUMS(SimpleEntityRole)
 
 public:
-  enum SimpleEntityRole { SimpleEntityRole = Qt::UserRole + 1 };
+  enum class SimpleEntityRole { SimpleEntityRole = Qt::UserRole + 1 };
 
   GlSimpleEntityItemModel(GlSimpleEntityItemEditor *itemEditor, QObject *parent = nullptr);
   ~GlSimpleEntityItemModel() override;
