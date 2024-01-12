@@ -154,6 +154,7 @@ QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem,
   connect(_ui->edgeColorButton, SIGNAL(clicked(bool)), this, SLOT(setEdgeColor()));
   connect(_ui->nodeBorderColorButton, SIGNAL(clicked(bool)), this, SLOT(setNodeBorderColor()));
   connect(_ui->edgeBorderColorButton, SIGNAL(clicked(bool)), this, SLOT(setEdgeBorderColor()));
+  connect(_ui->nodeIconButton, SIGNAL(clicked(bool)), this, SLOT(setNodeIcon()));
   connect(_ui->nodeShapeButton, SIGNAL(clicked(bool)), this, SLOT(setNodeShape()));
   connect(_ui->edgeShapeButton, SIGNAL(clicked(bool)), this, SLOT(setEdgeShape()));
   connect(_ui->nodeSizeButton, SIGNAL(clicked(bool)), this, SLOT(setNodeSize()));
