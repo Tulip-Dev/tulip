@@ -3,19 +3,17 @@
 
 #include "ResolutionParameterVertexPartition.h"
 
-class LIBLEIDENALG_EXPORT LinearResolutionParameterVertexPartition : public ResolutionParameterVertexPartition
-{
-  public:
-    LinearResolutionParameterVertexPartition(Graph* graph,
-          vector<size_t> membership, double resolution_parameter);
-    LinearResolutionParameterVertexPartition(Graph* graph,
-          vector<size_t> membership);
-    LinearResolutionParameterVertexPartition(Graph* graph, double resolution_parameter);
-    LinearResolutionParameterVertexPartition(Graph* graph);
-    virtual ~LinearResolutionParameterVertexPartition();
+class LIBLEIDENALG_EXPORT LinearResolutionParameterVertexPartition
+    : public ResolutionParameterVertexPartition {
+public:
+  LinearResolutionParameterVertexPartition(Graph *graph, vector<size_t> membership,
+                                           double resolution_parameter);
+  LinearResolutionParameterVertexPartition(Graph *graph, vector<size_t> membership);
+  LinearResolutionParameterVertexPartition(Graph *graph, double resolution_parameter);
+  LinearResolutionParameterVertexPartition(Graph *graph);
+  virtual ~LinearResolutionParameterVertexPartition();
 
-  private:
-
+private:
 };
 
 #endif // RESOLUTIONPARAMETERVERTEXPARTITION_H

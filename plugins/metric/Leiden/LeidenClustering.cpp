@@ -44,7 +44,8 @@ static const char *paramHelp[] = {
 };
 
 #define DEFAULT_RESOLUTION 0.5
-#define QUALITY_METHODS "Modularity;Constant Potts;Reichardt and Bornholdt;Erdös-Rényi;Significance;Surprise;"
+#define QUALITY_METHODS                                                                            \
+  "Modularity;Constant Potts;Reichardt and Bornholdt;Erdös-Rényi;Significance;Surprise;"
 
 /** \addtogroup clustering */
 /*@{*/
@@ -58,7 +59,7 @@ static const char *paramHelp[] = {
  * "From Louvain to Leiden: guaranteeing well-connected communities." \n
  * (2018). Scientific reports, 9(1), 5233
  *
- * This implementation used an adapted version of 
+ * This implementation used an adapted version of
  * https://github.com/vtraag/libleidenalg source code
  *
  * <b>HISTORY</b>
@@ -79,13 +80,12 @@ public:
       "doi: <a href=\"http://doi.org/10.1088/1742-5468/2008/10/P10008\">"
       "10.1038/s41598-019-41695-z</a>.",
       "1.0", "Clustering")
-  LeidenClustering(const tlp::PluginContext *context)
-  : tlp::DoubleAlgorithm(context) {
+  LeidenClustering(const tlp::PluginContext *context) : tlp::DoubleAlgorithm(context) {
     addInParameter<bool>("directed", paramHelp[0], "true", false);
     addInParameter<tlp::NumericProperty *>("metric", paramHelp[1], "", false);
-    addInParameter<tlp::StringCollection>("quality function", paramHelp[3],
-                                          QUALITY_METHODS, false,
-                                          "Modularity<br/>Constant Potts<br/>Reichardt and Bornholdt<br/>Erdös-Rényi<br/>Significance<br/>Surprise");
+    addInParameter<tlp::StringCollection>(
+        "quality function", paramHelp[3], QUALITY_METHODS, false,
+        "Modularity<br/>Constant Potts<br/>Reichardt and Bornholdt<br/>Erdös-Rényi<br/>Significance<br/>Surprise");
     addInParameter<double>("resolution", paramHelp[2], "0.5", false);
     addOutParameter<double>("quality", "The quality of the partition", "0", false);
     addOutParameter<unsigned int>("#communities", "The number of communities found", "0", false);
