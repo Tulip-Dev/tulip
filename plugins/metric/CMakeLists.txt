@@ -1,5 +1,7 @@
 ADD_CORE_FILES(.)
 
+ADD_SUBDIRECTORY(Leiden)
+
 INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude})
 
 ##----------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,92 @@
+0.11.1
+- Corrected CMake export targets
+
+0.11.0
+- Corrected include paths
+- Removed empty Graph::Graph constructor (PR #6)
+- Explicitly set C++ version (PR #4)
+
+0.10.0
+- Separated C++ core into this external library, Python interface remains available at https://github.com/vtraag/leidenalg.
+
+0.9.0
+- Update C core to 0.10.1
+
+0.8.10
+- Fixed installation from source package (issue #101)
+
+0.8.9
+- Fixed bug with renaming of python-igraph to igraph (issue #93)
+- Removed irrelevant node_sizes argument for RBConfigurationVertexPartition and ModularityVertexPartition
+- Improved documentation
+
+0.8.8
+- Corrected relabeling bug (PR #82)
+- Improved error handling, avoiding some crashses (issue #81)
+
+0.8.7
+- Improved numerical stability
+
+0.8.6
+- Removed accidentally left DEBUG statement
+
+0.8.5
+- Corrected iterating over nodes (PR #70).
+- Fixed segfault with move_nodes_constrained (issue #68)
+- Fixed problem with initial_membership (issue #66)
+
+0.8.4
+- Update C core to 0.9.1
+- Fixed caching problem (issue #62)
+- Fixed missing node_sizes for modularity (issue #60)
+
+0.8.3
+- Fixed missing parameter in find_partition_multiplex by @TomKellyGenetics (PR #50)
+
+0.8.2
+- New option to constrain community size by @orenbenkiki (PR #46)
+- Great performance improvement by @ragibson (PR #40)
+- Minor improvements and clarifications
+
+0.8.1
+- Fixed performance problem (issue #35)
+- Improved documentation
+
+0.8.0
+- New option to keep some nodes "fixed" by @iosonofabio (PR #8, #9)
+- Corrected bipartite clustering
+- Corrected some documentation
+- Several minor bugfixes
+
+0.6.1
+- Minor corrections to documentation
+- Added doctest to examples in documentation
+- Removed trailing semicolons throughout code
+- Corrected some errors in CPMVertexPartition.Bipartite
+
+0.6.0
+- Major API changes, now exposing actual classes and optimisation routine.
+- Improved algorithm, now runs faster and finds better solutions.
+- Improved error handling, doing more type checking.
+- Improved documentation throughout, now done using Sphinx and available from
+  readthedocs.org.
+- Now includes testing module, available through python setup.py test.
+
+0.5.3
+- Fixed bug concerning weights (were rounded to integers).
+- Improved documentation.
+- Included an HOWTO on extending the current package.
+- Fixed some minor bugs.
+
+0.5.2
+- Ensured that random neighbour selection works in O(1) rather than O(k), with
+  k the average number of neighbours.
+- Optimized the calculation of weight from/to community.
+- Included some missing references.
+
+0.5.1
+Corrected some mistakes which prevented it from being properly used on PyPi.
+No serious changes were made.
+
+0.5
+Initial release
