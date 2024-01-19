@@ -37,10 +37,10 @@ static const char *paramHelp[] = {
     "An existing edge weight metric property. If it is not defined all edges have a weight of 1.0.",
 
     // quality function
-    "Specifies the method to be used to compute the quality of the partition."
+    "Specifies the method to be used to compute the quality of the partition.",
 
     // resolution
-    "A sort of threshold: communities should have a density of at least resolution, while the density between communities should be lower than resolution. Higher values lead to more communities and lower values lead to fewer communities.<br/>Not used when quality function is Modularity, Significance or Surprise.",
+    "A sort of threshold: communities should have a density of at least resolution, while the density between communities should be lower than resolution. Higher values lead to more communities and lower values lead to fewer communities.<br/>Not used when quality function is Modularity, Significance or Surprise."
 };
 
 #define DEFAULT_RESOLUTION 0.5
@@ -84,9 +84,9 @@ public:
     addInParameter<bool>("directed", paramHelp[0], "true", false);
     addInParameter<tlp::NumericProperty *>("metric", paramHelp[1], "", false);
     addInParameter<tlp::StringCollection>(
-        "quality function", paramHelp[3], QUALITY_METHODS, false,
+        "quality function", paramHelp[2], QUALITY_METHODS, false,
         "Modularity<br/>Constant Potts<br/>Reichardt and Bornholdt<br/>Erdös-Rényi<br/>Significance<br/>Surprise");
-    addInParameter<double>("resolution", paramHelp[2], "0.5", false);
+    addInParameter<double>("resolution", paramHelp[3], "0.5", false);
     addOutParameter<double>("quality", "The quality of the partition", "0", false);
     addOutParameter<unsigned int>("#communities", "The number of communities found", "0", false);
   }
