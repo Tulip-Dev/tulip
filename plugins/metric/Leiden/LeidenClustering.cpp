@@ -40,8 +40,7 @@ static const char *paramHelp[] = {
     "Specifies the method to be used to compute the quality of the partition.",
 
     // resolution
-    "A sort of threshold: communities should have a density of at least resolution, while the density between communities should be lower than resolution. Higher values lead to more communities and lower values lead to fewer communities.<br/>Not used when quality function is Modularity, Significance or Surprise."
-};
+    "A sort of threshold: communities should have a density of at least resolution, while the density between communities should be lower than resolution. Higher values lead to more communities and lower values lead to fewer communities.<br/>Not used when quality function is Modularity, Significance or Surprise."};
 
 #define DEFAULT_RESOLUTION 0.5
 #define QUALITY_METHODS                                                                            \
