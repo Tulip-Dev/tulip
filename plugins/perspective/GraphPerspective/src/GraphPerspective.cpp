@@ -1405,6 +1405,9 @@ bool GraphPerspective::saveAs(const QString &path) {
     _project->setProjectFile(path);
   }
 
+  // cleanup previous loading or saving infos
+  _project->clearProject();
+
   SimplePluginProgressDialog progress(_mainWindow);
   progress.showPreview(false);
   progress.show();
