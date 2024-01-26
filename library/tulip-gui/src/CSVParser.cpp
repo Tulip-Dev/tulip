@@ -182,22 +182,19 @@ bool CSVSimpleParser::checkForContiguousTdlm(std::istream &is, std::string &str,
     str.push_back(c);
   }
   // check for end of delimited text field
-  if (!tdlm && (c != sep) && !isEol(is, c)) {
+  if (c && !tdlm && (c != sep) && !isEol(is, c)) {
     // not the end of the field
     // add a text delimiter to ensure
     // tokenization consistency
     str.push_back(_textDelimiter);
     tdlm = true;
   }
-  is.unget();
+  if (c)
+    is.unget();
   return tdlm;
 }
 
 bool CSVSimpleParser::multiplatformgetline(istream &is, string &str) {
-  // nothing new to read.
-  if (is.eof())
-    return false;
-
   str.clear();
   str.reserve(2048);
   char c;
@@ -231,7 +228,7 @@ bool CSVSimpleParser::multiplatformgetline(istream &is, string &str) {
   }
 
   // End of line reading.
-  return true;
+  return !str.empty();
 }
 
 void CSVSimpleParser::tokenize(const string &str, vector<CSVToken> &tokens,
@@ -254,12 +251,14 @@ void CSVSimpleParser::tokenize(const string &str, vector<CSVToken> &tokens,
       if (str[pos] == textDelim) {
         considerAsString = _considerAsString;
         do {
-          pos += 1;
-          // go the the next text delimiter .
-          pos = str.find_first_of(textDelim, pos);
+          // get the next text delimiter .
+          auto tdPos = str.find_first_of(textDelim, ++pos);
+          if (tdPos == string::npos)
+            break;
+          pos = tdPos;
         }
         // continue until a single textDelim
-        while (pos != string::npos && str[++pos] == textDelim);
+        while (str[++pos] == textDelim);
       } else
         pos += 1;
     }
