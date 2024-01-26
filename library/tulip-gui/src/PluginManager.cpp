@@ -249,7 +249,8 @@ void PluginInformation::fillLocalInfo(const Plugin &info) {
   installedVersion.libraryLocation =
       tlp::tlpStringToQString(PluginLister::getPluginLibrary(info.name()));
 
-  for (auto dependency : PluginLister::getPluginDependencies(info.name())) {
+  auto dependencies = PluginLister::getPluginDependencies(info.name());
+  for (auto dependency : dependencies) {
     installedVersion.dependencies.push_back(tlp::tlpStringToQString(dependency.pluginName));
   }
 
