@@ -166,7 +166,8 @@ static bool isEol(istream &is, char c) {
   // Carriage return on Windows and mac
   if (c == '\r') {
     // gobble possible consecutive '\r'
-    while (is.get(c) && c == '\r') {}
+    while (is.get(c) && c == '\r') {
+    }
     // Check if the next character is \n and remove it.
     if (c != '\n')
       is.unget();
