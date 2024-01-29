@@ -163,10 +163,12 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
 }
 
 static bool isEol(istream &is, char c) {
-  // Carriage return Windows and mac
+  // Carriage return on Windows and mac
   if (c == '\r') {
+    // gobble possible consecutive '\r'
+    while (is.get(c) && c == '\r') {}
     // Check if the next character is \n and remove it.
-    if (is.get(c) && c != '\n')
+    if (c != '\n')
       is.unget();
     return true;
   }
@@ -232,14 +234,14 @@ bool CSVSimpleParser::multiplatformgetline(istream &is, string &str) {
 }
 
 void CSVSimpleParser::tokenize(const string &str, vector<CSVToken> &tokens,
-                               const QString &delimiters, const bool mergedelim, char textDelim,
+                               const QString &separator, const bool mergeSep, char textDelim,
                                unsigned int) {
-  // Skip delimiters at beginning.
+  // Skip separator at beginning.
   string::size_type lastPos = 0;
   string::size_type pos = 0;
   bool quit = false;
 
-  auto delim = QStringToTlpString(delimiters);
+  auto sep = QStringToTlpString(separator);
 
   while (!quit) {
     bool considerAsString = false;
@@ -247,7 +249,7 @@ void CSVSimpleParser::tokenize(const string &str, vector<CSVToken> &tokens,
     assert(pos != string::npos);
     assert(pos < str.size());
 
-    while (pos < str.size() && ((str[pos] != delim[0]) || (str.find(delim, pos) != pos))) {
+    while (pos < str.size() && ((str[pos] != sep[0]) || (str.find(sep, pos) != pos))) {
       if (str[pos] == textDelim) {
         considerAsString = _considerAsString;
         do {
@@ -263,10 +265,10 @@ void CSVSimpleParser::tokenize(const string &str, vector<CSVToken> &tokens,
         pos += 1;
     }
 
-    // if merge delimiter, skip the next char if it is a delimiter
-    if (mergedelim) {
-      while ((pos < str.length() - delim.size()) && (str.substr(pos + 1, delim.length()) == delim))
-        pos += delim.length();
+    // if merge separators, skip the next char if it is a separator
+    if (mergeSep) {
+      while ((pos < str.length() - sep.size()) && (str.substr(pos + 1, sep.length()) == sep))
+        pos += sep.length();
     }
 
     // Extracting tokens.
@@ -283,7 +285,7 @@ void CSVSimpleParser::tokenize(const string &str, vector<CSVToken> &tokens,
 
     // Go to the begin of the next token.
     if (pos + 1 < str.size()) {
-      // Skip the delimiter.
+      // Skip the field separator
       ++pos;
       assert(pos > lastPos);
       // Store the begin position of the next token
@@ -291,6 +293,10 @@ void CSVSimpleParser::tokenize(const string &str, vector<CSVToken> &tokens,
     } else {
       // End of line found quit
       quit = true;
+      // add an empty token if line ends
+      // with the field separator
+      if (str.find(sep, pos) == pos)
+        tokens.emplace_back("", false);
     }
   }
 }
