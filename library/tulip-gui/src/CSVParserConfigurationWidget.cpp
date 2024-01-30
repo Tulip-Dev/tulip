@@ -170,9 +170,12 @@ void CSVParserConfigurationWidget::setFileToOpen(const QString &fileToOpen) {
             }
           }
           // set current separator
-          // end emit parserChanged as a side effect
+          // and emit parserChanged as a side effect
           ui->fileLineEdit->setText(lastOpenedFile = fileToOpen);
-          ui->separatorComboBox->setCurrentIndex(maxOccurrence);
+          if (maxOccurrence != ui->separatorComboBox->currentIndex())
+            ui->separatorComboBox->setCurrentIndex(maxOccurrence);
+          else
+            emit parserChanged();
           break;
         }
       }
