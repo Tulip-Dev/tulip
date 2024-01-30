@@ -33,7 +33,8 @@ using namespace tlp;
 
 CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage(QWidget *parent)
     : QWizardPage(parent), parserConfigurationWidget(new CSVParserConfigurationWidget(this)),
-      previewTableWidget(new CSVTableWidget(this)), previewLineNumber(6), columnCount(0), validColumnCount(true) {
+      previewTableWidget(new CSVTableWidget(this)), previewLineNumber(6), columnCount(0),
+      validColumnCount(true) {
 
   QVBoxLayout *vbLayout = new QVBoxLayout();
   vbLayout->setContentsMargins(0, 0, 0, 0);
@@ -63,19 +64,20 @@ bool CSVParsingConfigurationQWizardPage::begin() {
   return true;
 }
 
-bool CSVParsingConfigurationQWizardPage::line(unsigned int row, const std::vector<CSVToken> &lineTokens) {
+bool CSVParsingConfigurationQWizardPage::line(unsigned int row,
+                                              const std::vector<CSVToken> &lineTokens) {
   if (!columnCount)
     columnCount = lineTokens.size();
   else if (lineTokens.size() != columnCount) {
     validColumnCount = false;
     if (QMessageBox::warning(
-                             this, "Invalid number of row fields",
-                             QString(
-                                     "row #%1: the number of fields (%2) is different than the number of columns (%3)")
-                             .arg(row + 1)
-                             .arg(lineTokens.size())
-                             .arg(columnCount),
-                             QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok) == QMessageBox::Cancel)
+            this, "Invalid number of row fields",
+            QString(
+                "row #%1: the number of fields (%2) is different than the number of columns (%3)")
+                .arg(row + 1)
+                .arg(lineTokens.size())
+                .arg(columnCount),
+            QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok) == QMessageBox::Cancel)
       return false;
   }
   return true;
@@ -92,8 +94,7 @@ bool CSVParsingConfigurationQWizardPage::isComplete() const {
 bool CSVParsingConfigurationQWizardPage::validatePage() {
   // Fill the preview widget
   int firstLine = parserConfigurationWidget->getFirstLineIndex();
-  CSVParser *parser =
-      parserConfigurationWidget->buildParser(firstLine);
+  CSVParser *parser = parserConfigurationWidget->buildParser(firstLine);
 
   if (parser != nullptr) {
     previewTableWidget->setEnabled(true);
@@ -118,7 +119,6 @@ bool CSVParsingConfigurationQWizardPage::validatePage() {
   delete parser;
   return validColumnCount;
 }
-
 
 void CSVParsingConfigurationQWizardPage::parserChanged() {
   // Fill the preview widget
