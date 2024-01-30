@@ -33,7 +33,7 @@ using namespace tlp;
 
 CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage(QWidget *parent)
     : QWizardPage(parent), parserConfigurationWidget(new CSVParserConfigurationWidget(this)),
-      previewTableWidget(new CSVTableWidget(this)), previewLineNumber(6) {
+      previewTableWidget(new CSVTableWidget(this)), previewLineNumber(6), columnCount(0), validColumnCount(true) {
 
   QVBoxLayout *vbLayout = new QVBoxLayout();
   vbLayout->setContentsMargins(0, 0, 0, 0);
@@ -57,9 +57,68 @@ CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage(QWidget *
   parserConfigurationWidget->initWithLastOpenedFile();
 }
 
+bool CSVParsingConfigurationQWizardPage::begin() {
+  columnCount = 0;
+  validColumnCount = true;
+  return true;
+}
+
+bool CSVParsingConfigurationQWizardPage::line(unsigned int row, const std::vector<CSVToken> &lineTokens) {
+  if (!columnCount)
+    columnCount = lineTokens.size();
+  else if (lineTokens.size() != columnCount) {
+    validColumnCount = false;
+    if (QMessageBox::warning(
+                             this, "Invalid number of row fields",
+                             QString(
+                                     "row #%1: the number of fields (%2) is different than the number of columns (%3)")
+                             .arg(row + 1)
+                             .arg(lineTokens.size())
+                             .arg(columnCount),
+                             QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok) == QMessageBox::Cancel)
+      return false;
+  }
+  return true;
+}
+
+bool CSVParsingConfigurationQWizardPage::end(unsigned int, unsigned int) {
+  return true;
+}
+
 bool CSVParsingConfigurationQWizardPage::isComplete() const {
   return parserConfigurationWidget->isValid();
 }
+
+bool CSVParsingConfigurationQWizardPage::validatePage() {
+  // Fill the preview widget
+  int firstLine = parserConfigurationWidget->getFirstLineIndex();
+  CSVParser *parser =
+      parserConfigurationWidget->buildParser(firstLine);
+
+  if (parser != nullptr) {
+    previewTableWidget->setEnabled(true);
+    SimplePluginProgressDialog progress(this);
+    progress.showPreview(false);
+    progress.setWindowTitle(tr("Parsing file"));
+    if (!parser->parse(this, &progress) && validColumnCount) {
+      QMessageBox::critical(this, QString("CSV Parser failure"),
+                            QString(progress.getError().c_str()));
+      parserConfigurationWidget->clearFile();
+      previewTableWidget->setEnabled(false);
+    } else {
+      unsigned int nbCommentsLines = previewTableWidget->getNbCommentsLines();
+
+      if (nbCommentsLines)
+        parserConfigurationWidget->setNbIgnoredLines(nbCommentsLines);
+    }
+  } else {
+    previewTableWidget->setEnabled(false);
+  }
+
+  delete parser;
+  return validColumnCount;
+}
+
 
 void CSVParsingConfigurationQWizardPage::parserChanged() {
   // Fill the preview widget
@@ -92,10 +151,6 @@ void CSVParsingConfigurationQWizardPage::parserChanged() {
   delete parser;
   emit completeChanged();
 }
-
-// CSVToGraphDataMapping* CSVGraphMappingConfigurationQWizardPage::buildMappingObject()const {
-//  return graphMappingConfigurationWidget->buildMappingObject();
-//}
 
 CSVToGraphDataMapping *CSVGraphMappingConfigurationQWizardPage::buildMappingObject() const {
   return graphMappingConfigurationWidget->buildMappingObject();
