@@ -213,7 +213,7 @@ Qt::ItemFlags ParameterListModel::flags(const QModelIndex &index) const {
   const ParameterDescription &info = _params[index.row()];
   bool editable = info.isEditable();
 
-  return editable ? (result | Qt::ItemIsEditable) : (result ^ Qt::ItemIsEditable);
+  return editable ? (result | Qt::ItemIsEditable) : (result & ~Qt::ItemIsEditable);
 }
 
 bool ParameterListModel::setData(const QModelIndex &index, const QVariant &value, int role) {

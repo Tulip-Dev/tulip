@@ -64,8 +64,7 @@ void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString &projec
     wTitle += QString(" - ") + _project->name();
   else if (!projectFile.isEmpty())
     wTitle += QString(" - ") + projectFile;
-  else { // all graphs are deleted. Clear project. Useful?
-    _project->clearProject();
+  else {
     wTitle += QString(" - ");
     tlp::Graph *cg =
         tlp::Perspective::instance() ? tlp::Perspective::instance()->currentGraph() : nullptr;

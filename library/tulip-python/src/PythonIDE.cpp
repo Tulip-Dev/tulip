@@ -1919,7 +1919,7 @@ bool PythonIDE::closeEditorTabRequested(PythonEditorsTabWidget *tabWidget, int i
             // show the tab text instead
             (fileName.isEmpty() ? curTabText : fileName) +
             QString("\n has been edited but has not been saved to disk.\n"
-                    "Do you want to save it to disk ?"),
+                    "Do you want to save it?"),
         QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel, QMessageBox::Save);
 
     if (button == QMessageBox::Save) {
@@ -2040,7 +2040,7 @@ void PythonIDE::closeScriptTabRequested(int idx) {
     }
     _ui->mainScriptsTabWidget->closeTab(idx);
 
-    if (_ui->mainScriptsTabWidget->count() == 1) {
+    if (_ui->mainScriptsTabWidget->count() == 0) {
       _ui->runScriptButton->setEnabled(false);
     }
   }

@@ -22,6 +22,7 @@
 
 #include <QTextCodec>
 #include <QFileDialog>
+#include <QMessageBox>
 
 #include <tulip/CSVParser.h>
 #include <tulip/TlpTools.h>
@@ -141,42 +142,53 @@ void CSVParserConfigurationWidget::changeFileNameButtonPressed() {
 
 void CSVParserConfigurationWidget::setFileToOpen(const QString &fileToOpen) {
   if (!fileToOpen.isEmpty() && QFile::exists(fileToOpen)) {
-    ui->fileLineEdit->setText(fileToOpen);
-
     // Try to autodetect separator
     QFile file(fileToOpen);
 
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-      // Read the first line
-      QByteArray firstLine = file.readLine();
+      int maxOccurrence = -1;
+      while (!file.atEnd()) {
+        // Read until the first no empty line
+        QByteArray firstLine = file.readLine();
 
-      if (!firstLine.isEmpty()) {
-        QString line(firstLine);
-        // Search for the best matching separator in the default list
-        QVector<int> separatorOccurrence(ui->separatorComboBox->count());
+        if (!firstLine.isEmpty()) {
+          QString line(firstLine);
+          // Search for the best matching separator in the default list
+          QVector<int> separatorOccurrence(ui->separatorComboBox->count());
 
-        for (int i = 0; i < ui->separatorComboBox->count(); ++i) {
-          QString separator = getSeparator(i);
-          // Count the number of occurrence for this separator
-          separatorOccurrence[i] = line.count(separator);
-        }
-
-        int currentMaxOccurrence = -1;
-
-        for (int i = 0; i < ui->separatorComboBox->count(); ++i) {
-          if (separatorOccurrence[i] > currentMaxOccurrence) {
-            currentMaxOccurrence = separatorOccurrence[i];
-            // Set as separator the one with the greatest occurrence number.
-            ui->separatorComboBox->setCurrentIndex(i);
+          for (int i = 0; i < ui->separatorComboBox->count(); ++i) {
+            QString separator = getSeparator(i);
+            // Count the number of occurrence for this separator
+            separatorOccurrence[i] = line.count(separator);
           }
+
+          // Set as separator the one with the greatest occurrence number.
+          maxOccurrence = 0;
+          for (int i = 1; i < ui->separatorComboBox->count(); ++i) {
+            if (separatorOccurrence[i] > separatorOccurrence[maxOccurrence]) {
+              maxOccurrence = i;
+            }
+          }
+          // set current separator
+          // and emit parserChanged as a side effect
+          ui->fileLineEdit->setText(lastOpenedFile = fileToOpen);
+          if (maxOccurrence != ui->separatorComboBox->currentIndex())
+            ui->separatorComboBox->setCurrentIndex(maxOccurrence);
+          else
+            emit parserChanged();
+          break;
         }
       }
 
       file.close();
-    }
-
-    lastOpenedFile = fileToOpen;
-    emit parserChanged();
+      if (maxOccurrence != -1)
+        return;
+      else
+        QMessageBox::critical(this, QString("Open file failure"),
+                              QString("%1\nfile is empty.").arg(fileToOpen));
+    } else
+      QMessageBox::critical(this, QString("Open file failure"),
+                            QString("%1\n%2").arg(fileToOpen).arg(file.errorString()));
   }
 }
 
