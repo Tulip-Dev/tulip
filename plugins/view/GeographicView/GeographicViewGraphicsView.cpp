@@ -228,6 +228,11 @@ static double mercatorToLatitude(double mercator) {
   return atan(sinh(mercator / 360. * M_PI)) / M_PI * 360.;
 }
 
+// latitude and longitude need some conversion
+// to be displayed in a GlScene
+#define GLSCENE_LAT(lat) latitudeToMercator((lat).first * 2.)
+#define GLSCENE_LNG(lng) ((lng).second * 2.)
+
 GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
                                                        QGraphicsScene *graphicsScene,
                                                        QWidget *parent)
@@ -1045,18 +1050,12 @@ void GeographicViewGraphicsView::refreshMap() {
   }
 
   GlOffscreenRenderer::getInstance()->makeOpenGLContextCurrent();
-  BoundingBox bb;
-  Coord rightCoord = leafletMaps->geoPosToScreenPos(180, 180);
-  Coord leftCoord = leafletMaps->geoPosToScreenPos(0, 0);
+  auto sw = leafletMaps->getCurrentSouthWest();
+  auto ne = leafletMaps->getCurrentNorthEast();
+  if (sw.second != ne.second) {
+    BoundingBox bb(Coord(GLSCENE_LNG(sw), GLSCENE_LAT(sw)),
+                   Coord(GLSCENE_LNG(ne), GLSCENE_LAT(ne)));
 
-  if (rightCoord[0] - leftCoord[0]) {
-    float mapWidth = (width() / (rightCoord - leftCoord)[0]) * 180.;
-    float middleLng = leafletMaps->screenPosToGeoPos(width() / 2., height() / 2.).second * 2.;
-    bb.expand(Coord(middleLng - mapWidth / 2.,
-                    latitudeToMercator(leafletMaps->screenPosToGeoPos(0, 0).first * 2.), 0));
-    bb.expand(
-        Coord(middleLng + mapWidth / 2.,
-              latitudeToMercator(leafletMaps->screenPosToGeoPos(width(), height()).first * 2.), 0));
     GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
     sceneZoomAndPan.zoomAndPanAnimationStep(1);
   }
@@ -1198,7 +1197,7 @@ void GeographicViewGraphicsView::switchMapType() {
 
       if (nodeLatLng.find(n) != nodeLatLng.end()) {
         geoLayout->setNodeValue(
-            n, Coord(nodeLatLng[n].second * 2., latitudeToMercator(nodeLatLng[n].first * 2.), 0));
+            n, Coord(GLSCENE_LNG(nodeLatLng[n]), GLSCENE_LAT(nodeLatLng[n])));
       }
     }
 
@@ -1208,7 +1207,7 @@ void GeographicViewGraphicsView::switchMapType() {
         vector<Coord> edgeBendsCoords;
         edgeBendsCoords.reserve(eb.size());
         for (unsigned int i = 0; i < eb.size(); ++i) {
-          edgeBendsCoords.emplace_back(eb[i].second * 2., latitudeToMercator(eb[i].first * 2.), 0);
+          edgeBendsCoords.emplace_back(GLSCENE_LNG(eb[i]), GLSCENE_LAT(eb[i]));
         }
 
         geoLayout->setEdgeValue(e, edgeBendsCoords);

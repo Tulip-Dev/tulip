@@ -263,20 +263,41 @@ void LeafletMaps::setCurrentZoom(int zoom) {
   }
 }
 
+static pair<double, double> QStringToLatLng(QString pointStr) {
+  int pos = pointStr.indexOf('(') + 1;
+  QString xStr = pointStr.mid(pos, pointStr.lastIndexOf(',') - pos);
+  pos = pointStr.lastIndexOf(',') + 1;
+  QString yStr = pointStr.mid(pos, pointStr.lastIndexOf(')') - pos);
+  return make_pair(xStr.toDouble(), yStr.toDouble());
+}
+
 pair<double, double> LeafletMaps::getCurrentMapCenter() {
   QVariant ret = executeJavascript("map.getCenter().toString();");
 
+  if (!ret.isNull())
+    return QStringToLatLng(ret.toString());
+
   pair<double, double> latLng;
+  return latLng;
+}
 
-  if (!ret.isNull()) {
-    QString pointStr = ret.toString();
-    int pos = pointStr.indexOf('(') + 1;
-    QString xStr = pointStr.mid(pos, pointStr.lastIndexOf(',') - pos);
-    pos = pointStr.lastIndexOf(',') + 1;
-    QString yStr = pointStr.mid(pos, pointStr.lastIndexOf(')') - pos);
-    latLng = make_pair(xStr.toDouble(), yStr.toDouble());
-  }
+pair<double, double> LeafletMaps::getCurrentSouthWest() {
+  QVariant ret = executeJavascript("map.getBounds().getSouthWest().toString();");
 
+  if (!ret.isNull())
+    return QStringToLatLng(ret.toString());
+
+  pair<double, double> latLng;
+  return latLng;
+}
+
+pair<double, double> LeafletMaps::getCurrentNorthEast() {
+  QVariant ret = executeJavascript("map.getBounds().getNorthEast().toString();");
+
+  if (!ret.isNull())
+    return QStringToLatLng(ret.toString());
+
+  pair<double, double> latLng;
   return latLng;
 }
 

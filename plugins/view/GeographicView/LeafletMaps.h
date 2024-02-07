@@ -128,6 +128,10 @@ public:
 
   std::pair<double, double> getCurrentMapCenter();
 
+  std::pair<double, double> getCurrentSouthWest();
+
+  std::pair<double, double> getCurrentNorthEast();
+
   Coord geoPosToScreenPos(double lat, double lng);
 
   std::pair<double, double> screenPosToGeoPos(int x, int y);
