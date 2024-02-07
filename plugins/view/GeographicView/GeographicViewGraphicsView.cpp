@@ -1196,8 +1196,7 @@ void GeographicViewGraphicsView::switchMapType() {
       }
 
       if (nodeLatLng.find(n) != nodeLatLng.end()) {
-        geoLayout->setNodeValue(
-            n, Coord(GLSCENE_LNG(nodeLatLng[n]), GLSCENE_LAT(nodeLatLng[n])));
+        geoLayout->setNodeValue(n, Coord(GLSCENE_LNG(nodeLatLng[n]), GLSCENE_LAT(nodeLatLng[n])));
       }
     }
 
