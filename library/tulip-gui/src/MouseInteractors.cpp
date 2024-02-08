@@ -309,17 +309,15 @@ bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
     QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
     GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
 
-    if (qMouseEv->pos().x() != x)
+    auto dx = qMouseEv->pos().x() - x;
+    auto dy = y - qMouseEv->pos().y();
+    if (dx || dy) {
       glMainWidget->getScene()->translateCamera(
-          glMainWidget->screenToViewport(qMouseEv->pos().x() - x), 0, 0);
-
-    if (qMouseEv->pos().y() != y)
-      glMainWidget->getScene()->translateCamera(
-          0, glMainWidget->screenToViewport(y - qMouseEv->pos().y()), 0);
-
+          glMainWidget->screenToViewport(dx), glMainWidget->screenToViewport(dy), 0);
+          glMainWidget->draw(false);
+    }
     x = qMouseEv->pos().x();
     y = qMouseEv->pos().y();
-    glMainWidget->draw(false);
     return true;
   }
 
