@@ -1021,9 +1021,7 @@ void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {
                            height() / 2 - noLayoutMsgBox->sceneBoundingRect().height() / 2);
   }
 
-  if (scene()) {
-    scene()->update();
-  }
+  scene()->update();
 }
 
 #ifdef QT_HAS_WEBENGINE
@@ -1049,15 +1047,17 @@ void GeographicViewGraphicsView::refreshMap() {
     return;
   }
 
-  GlOffscreenRenderer::getInstance()->makeOpenGLContextCurrent();
-  auto sw = leafletMaps->getCurrentSouthWest();
-  auto ne = leafletMaps->getCurrentNorthEast();
-  if (sw.second != ne.second) {
-    BoundingBox bb(Coord(GLSCENE_LNG(sw), GLSCENE_LAT(sw)),
-                   Coord(GLSCENE_LNG(ne), GLSCENE_LAT(ne)));
+  if (geoLayoutComputed) {
+    GlOffscreenRenderer::getInstance()->makeOpenGLContextCurrent();
+    auto sw = leafletMaps->getCurrentSouthWest();
+    auto ne = leafletMaps->getCurrentNorthEast();
+    if (sw.second != ne.second) {
+      BoundingBox bb(Coord(GLSCENE_LNG(sw), GLSCENE_LAT(sw)),
+                     Coord(GLSCENE_LNG(ne), GLSCENE_LAT(ne)));
 
-    GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
-    sceneZoomAndPan.zoomAndPanAnimationStep(1);
+      GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
+      sceneZoomAndPan.zoomAndPanAnimationStep(1);
+    }
   }
 
   updateMapTexture();
