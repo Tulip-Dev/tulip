@@ -238,11 +238,10 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
                                                        QWidget *parent)
     : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(nullptr), leafletMaps(nullptr),
       globeCameraBackup(nullptr, true), mapCameraBackup(nullptr, true), geoLayout(nullptr),
-      geoViewSize(nullptr), geoViewShape(nullptr), geoLayoutBackup(nullptr),
-      geocodingActive(false), abortGeocoding(false),
-      polygonEntity(nullptr), planisphereEntity(nullptr), addressSelectionDialog(nullptr),
-      noLayoutMsgBox(nullptr), firstGlobeSwitch(true), geoLayoutComputed(false), renderFbo(nullptr),
-      latProp(nullptr), lngProp(nullptr) {
+      geoViewSize(nullptr), geoViewShape(nullptr), geoLayoutBackup(nullptr), geocodingActive(false),
+      abortGeocoding(false), polygonEntity(nullptr), planisphereEntity(nullptr),
+      addressSelectionDialog(nullptr), noLayoutMsgBox(nullptr), firstGlobeSwitch(true),
+      geoLayoutComputed(false), renderFbo(nullptr), latProp(nullptr), lngProp(nullptr) {
   mapTextureId = "leafletMap" + to_string(reinterpret_cast<uintptr_t>(this));
   setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing |
                  QPainter::TextAntialiasing);
