@@ -239,7 +239,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
     : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(nullptr), leafletMaps(nullptr),
       globeCameraBackup(nullptr, true), mapCameraBackup(nullptr, true), geoLayout(nullptr),
       geoViewSize(nullptr), geoViewShape(nullptr), geoLayoutBackup(nullptr),
-      mapTranslationBlocked(false), geocodingActive(false), abortGeocoding(false),
+      geocodingActive(false), abortGeocoding(false),
       polygonEntity(nullptr), planisphereEntity(nullptr), addressSelectionDialog(nullptr),
       noLayoutMsgBox(nullptr), firstGlobeSwitch(true), geoLayoutComputed(false), renderFbo(nullptr),
       latProp(nullptr), lngProp(nullptr) {
@@ -1063,10 +1063,6 @@ void GeographicViewGraphicsView::refreshMap() {
   updateMapTexture();
   glWidgetItem->setRedrawNeeded(true);
   scene()->update();
-}
-
-void GeographicViewGraphicsView::setMapTranslationBlocked(const bool translationBlocked) {
-  mapTranslationBlocked = translationBlocked;
 }
 
 void GeographicViewGraphicsView::centerView() {

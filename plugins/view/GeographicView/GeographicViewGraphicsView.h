@@ -76,8 +76,6 @@ public:
     scene()->update();
   }
 
-  void setMapTranslationBlocked(const bool mapTranslationBlocked);
-
   void centerView();
 
   void centerMapOnNode(const node n);
@@ -162,8 +160,6 @@ private:
   SizeProperty *geoViewSize;
   IntegerProperty *geoViewShape;
   LayoutProperty *geoLayoutBackup;
-
-  bool mapTranslationBlocked;
 
   bool geocodingActive;
   bool abortGeocoding;
