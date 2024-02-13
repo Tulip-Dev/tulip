@@ -110,6 +110,10 @@ public:
     centerView();
   }
 
+  bool centeredWhenAddedToWorkspace() {
+    return false;
+  }
+
   GeographicViewGraphicsView *getGeographicViewGraphicsView() const {
     return geoViewGraphicsView;
   }
@@ -125,7 +129,7 @@ public:
 
 public slots:
 
-  void computeGeoLayout();
+  void computeGeoLayout(bool centerView = false);
 
   void draw() override;
 
