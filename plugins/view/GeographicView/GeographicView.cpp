@@ -68,7 +68,8 @@ void GeographicView::setupUi() {
           SLOT(mapToPolygon()));
 
   geolocalisationConfigWidget = new GeolocalisationConfigWidget();
-  connect(geolocalisationConfigWidget, &GeolocalisationConfigWidget::computeGeoLayout, this, [this] { computeGeoLayout(true); });
+  connect(geolocalisationConfigWidget, &GeolocalisationConfigWidget::computeGeoLayout, this,
+          [this] { computeGeoLayout(true); });
 
   sceneConfigurationWidget = new SceneConfigWidget();
   sceneConfigurationWidget->setGlMainWidget(geoViewGraphicsView->getGlMainWidget());
