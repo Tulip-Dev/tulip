@@ -32,8 +32,9 @@
 
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>
-#include <QComboBox>
 
+class QComboBox;
+class QMessageBox;
 class QOpenGLFramebufferObject;
 
 namespace tlp {
@@ -174,7 +175,7 @@ private:
   GlSimpleEntity *planisphereEntity;
 
   AddressSelectionDialog *addressSelectionDialog;
-  QGraphicsProxyWidget *noLayoutMsgBox;
+  QMessageBox *noLayoutMsgBox;
 
   bool firstGlobeSwitch;
 

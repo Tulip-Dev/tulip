@@ -37,6 +37,7 @@
 #include <tulip/Gl2DRect.h>
 #include <tulip/WorkspacePanel.h>
 
+#include <QComboBox>
 #include <QPushButton>
 #include <QTextStream>
 #include <QTimeLine>
@@ -336,21 +337,19 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   frameProxy->setPos(20, 20);
   frameProxy->setZValue(1);
 
-  QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning, "",
-                                        "<font size=\"+1\"><b>The geolocated layout<br/>"
-                                        "has not been initialized yet.</b></font><br/><br/>"
-                                        "Open the <b>Geolocation</b> configuration tab<br/>"
-                                        "to proceed.",
-                                        QMessageBox::Ok);
-  msgBox->setModal(false);
-  auto okButton = msgBox->button(QMessageBox::Ok);
+  noLayoutMsgBox = new QMessageBox(QMessageBox::Warning, "",
+                                   "<font size=\"+1\"><b>The geolocated layout<br/>"
+                                   "has not been initialized yet.</b></font><br/><br/>"
+                                   "Open the <b>Geolocation</b> configuration tab<br/>"
+                                   "to proceed.",
+                                   QMessageBox::Ok);
+  noLayoutMsgBox->setModal(false);
+  auto okButton = noLayoutMsgBox->button(QMessageBox::Ok);
   connect(okButton, SIGNAL(released()), this, SLOT(showGeolocationWidget()));
   // set a specific name before applying style sheet
-  msgBox->setObjectName("needConfigurationMessageBox");
-  Perspective::setStyleSheet(msgBox);
-  noLayoutMsgBox = scene()->addWidget(msgBox);
-  noLayoutMsgBox->setParentItem(_placeholderItem);
-
+  noLayoutMsgBox->setObjectName("needConfigurationMessageBox");
+  Perspective::setStyleSheet(noLayoutMsgBox);
+  scene()->addWidget(noLayoutMsgBox);
   setAcceptDrops(false);
 }
 
@@ -1016,8 +1015,8 @@ void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {
   glWidgetItem->resize(width(), height());
 
   if (noLayoutMsgBox) {
-    noLayoutMsgBox->setPos(width() / 2 - noLayoutMsgBox->sceneBoundingRect().width() / 2,
-                           height() / 2 - noLayoutMsgBox->sceneBoundingRect().height() / 2);
+    noLayoutMsgBox->move(width() / 2 - noLayoutMsgBox->width() / 2,
+                         height() / 2 - noLayoutMsgBox->height() / 2);
   }
 
   scene()->update();
