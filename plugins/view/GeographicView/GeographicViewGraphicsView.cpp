@@ -1054,6 +1054,13 @@ void GeographicViewGraphicsView::refreshMap() {
       BoundingBox bb(Coord(GLSCENE_LNG(sw), GLSCENE_LAT(sw)),
                      Coord(GLSCENE_LNG(ne), GLSCENE_LAT(ne)));
 
+      // A first centering is needed to ensure
+      // the success of the first zoom and pan animation
+      // If not, nothing may be displayed and an assertion may failed
+      // in debug mode
+      Camera &camera = glMainWidget->getScene()->getGraphCamera();
+      if (camera.getCenter() == Coord())
+        camera.setCenter(bb.center());
       GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
       sceneZoomAndPan.zoomAndPanAnimationStep(1);
     }
