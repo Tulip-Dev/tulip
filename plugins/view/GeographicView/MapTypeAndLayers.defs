@@ -87,11 +87,6 @@ ADD_MAPLAYER(CartoDBDark,
 "CartoDB Dark Map", "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
 "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>",
 19),
-// Wikimedia
-ADD_MAPLAYER(WikimediaMap,
-"Wikimedia Map", "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png",
-"<a href=\"https://wikimediafoundation.org/wiki/Maps_Terms_of_Use\">Wikimedia</a>",
-21),
 // the ones below are not really map layers
 // but are needed to populate the GeographicGraphicsView menu
 ADD_PSEUDO_MAPLAYER(LeafletCustomTileLayer, "Leaflet Custom Tile Layer"), 
