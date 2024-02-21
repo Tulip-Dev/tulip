@@ -125,6 +125,9 @@ void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, con
   if (msg.indexOf("QXcbConnection: XCB error") == 0)
     return;
 #endif
+  // hide info message about QtWebEngineProcess
+  if (msg.indexOf("QtWebEngineProcess") != -1)
+    return;
 
   _logType = type;
   _pythonOutput = pyOutput;

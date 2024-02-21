@@ -105,7 +105,8 @@ IF(MINGW)
 ENDIF(MINGW)
 
 # Ensure headers correspond to the ones associated to the detected Python library on MacOS
-IF(APPLE AND NOT "${Python_EXECUTABLE}" MATCHES "^/usr/bin/python.*$")
+IF(APPLE AND NOT "${Python_EXECUTABLE}" MATCHES "^/usr/bin/python.*$"
+   AND EXISTS ${PYTHON_HOME_PATH}/../Headers)
   SET(Python_INCLUDE_DIRS ${PYTHON_HOME_PATH}/../Headers CACHE PATH "" FORCE)
 ENDIF()
 

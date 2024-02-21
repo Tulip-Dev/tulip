@@ -192,7 +192,8 @@ int Workspace::addPanel(tlp::View *view) {
   setFocusedPanel(panel);
   // Slightly delay view content centering as the panel widget
   // can take some time to get correctly resized in the workspace
-  QTimer::singleShot(100, view, SLOT(centerView()));
+  if (view->centeredWhenAddedToWorkspace())
+    QTimer::singleShot(100, view, SLOT(centerView()));
   return _panels.size() - 1;
 }
 

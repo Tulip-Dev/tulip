@@ -32,8 +32,9 @@
 
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>
-#include <QComboBox>
 
+class QComboBox;
+class QMessageBox;
 class QOpenGLFramebufferObject;
 
 namespace tlp {
@@ -75,8 +76,6 @@ public:
     glWidgetItem->setRedrawNeeded(true);
     scene()->update();
   }
-
-  void setMapTranslationBlocked(const bool mapTranslationBlocked);
 
   void centerView();
 
@@ -163,8 +162,6 @@ private:
   IntegerProperty *geoViewShape;
   LayoutProperty *geoLayoutBackup;
 
-  bool mapTranslationBlocked;
-
   bool geocodingActive;
   bool abortGeocoding;
 
@@ -178,7 +175,7 @@ private:
   GlSimpleEntity *planisphereEntity;
 
   AddressSelectionDialog *addressSelectionDialog;
-  QGraphicsProxyWidget *noLayoutMsgBox;
+  QMessageBox *noLayoutMsgBox;
 
   bool firstGlobeSwitch;
 

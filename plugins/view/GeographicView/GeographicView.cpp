@@ -68,7 +68,8 @@ void GeographicView::setupUi() {
           SLOT(mapToPolygon()));
 
   geolocalisationConfigWidget = new GeolocalisationConfigWidget();
-  connect(geolocalisationConfigWidget, SIGNAL(computeGeoLayout()), this, SLOT(computeGeoLayout()));
+  connect(geolocalisationConfigWidget, &GeolocalisationConfigWidget::computeGeoLayout, this,
+          [this] { computeGeoLayout(true); });
 
   sceneConfigurationWidget = new SceneConfigWidget();
   sceneConfigurationWidget->setGlMainWidget(geoViewGraphicsView->getGlMainWidget());
@@ -312,7 +313,7 @@ void GeographicView::refresh() {
   geoViewGraphicsView->draw();
 }
 
-void GeographicView::computeGeoLayout() {
+void GeographicView::computeGeoLayout(bool centerView) {
   if (geolocalisationConfigWidget->geolocateByAddress()) {
     geoViewGraphicsView->createLayoutWithAddresses(
         geolocalisationConfigWidget->getAddressGraphPropertyName(),
@@ -338,7 +339,8 @@ void GeographicView::computeGeoLayout() {
     }
   }
 
-  geoViewGraphicsView->centerView();
+  if (centerView)
+    geoViewGraphicsView->centerView();
   // check for shared properties
   // before computing view layout
   updateSharedProperties();

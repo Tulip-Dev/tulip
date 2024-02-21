@@ -145,6 +145,13 @@ public:
     return false;
   }
 
+  // this method indicates if the view needs to be centered
+  // when added to a Workspace
+  // default is centered
+  virtual bool centeredWhenAddedToWorkspace() {
+    return true;
+  }
+
   /**
     @return The list of interactors installed on this view.
     The list is always the same as the one given when View::setInteractors() was called.
