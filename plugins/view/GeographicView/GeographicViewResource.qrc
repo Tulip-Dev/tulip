@@ -6,8 +6,5 @@
         <file>geographic_view.png</file>
         <file>zoom+.png</file>
         <file>zoom-.png</file>
-        <file>leaflet/leaflet.js</file>
-        <file>leaflet/leaflet.css</file>
-        <file>leaflet/no-tile.png</file>
     </qresource>
 </RCC>

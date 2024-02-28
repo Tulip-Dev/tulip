@@ -189,7 +189,7 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
   GlMainWidget *g = static_cast<GlMainWidget *>(widget);
   QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
-  if (geoView->mapType() <= GeographicView::LeafletCustomTileLayer) {
+  if (geoView->mapType() <= GeographicView::CustomTileLayer) {
     return false;
   } else if (geoView->mapType() == GeographicView::Globe) {
     if (e->type() == QEvent::Wheel) {
@@ -286,7 +286,7 @@ GeographicViewBoxZoomer::GeographicViewBoxZoomer()
 bool GeographicViewBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   GeographicView *geoView = static_cast<GeographicView *>(view());
 
-  if (geoView->mapType() >= GeographicView::LeafletCustomTileLayer)
+  if (geoView->mapType() >= GeographicView::CustomTileLayer)
     return false;
 
   if (e->type() == QEvent::MouseButtonDblClick) {
@@ -297,15 +297,18 @@ bool GeographicViewBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   if (started) {
     bool ok = MouseBoxZoomer::eventFilter(widget, e);
 
-    auto llMap = geoView->getLeafletMaps();
+    auto gmw = geoView->getGeoMapWidget();
     QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
     if (ok && !started && (e->type() == QEvent::MouseButtonRelease) && graph &&
         (qMouseEv->button() & mButton)) {
       GlMainWidget *glw = static_cast<GlMainWidget *>(widget);
-      auto minBound = llMap->screenPosToGeoPos(x, glw->height() - y + h);
-      auto maxBound = llMap->screenPosToGeoPos(x + w, glw->height() - y);
-      llMap->zoomOnRectangle(minBound, maxBound);
+
+      auto tl = gmw->getScreenViewport().topLeft();
+      auto corner1 = gmw->screenToGeoPos(tl.x() + x, tl.y() + glw->height() - y);
+      auto corner2 = gmw->screenToGeoPos(tl.x() + qMouseEv->position().x(),
+                                         tl.y() + qMouseEv->position().y());
+      gmw->zoomOnRectangle(corner1, corner2);
     }
     return ok;
   }

@@ -155,6 +155,15 @@ void GeographicView::fillContextMenu(QMenu *menu, const QPointF &pf) {
   menu->addSeparator();
   menu->addAction("Augmented display")->setEnabled(false);
   menu->addSeparator();
+  QAction *a = menu->addAction("Show cross center", geoViewGraphicsView, SLOT(showCenter(bool)));
+  a->setToolTip(QString("Show/hide a cross on the viewport center"));
+  a->setCheckable(true);
+  a->setChecked(geoViewGraphicsView->centerVisible());
+  a = menu->addAction("Show distance scale", geoViewGraphicsView, SLOT(showScale(bool)));
+  a->setToolTip(QString("Show/hide the distance scale in the left bottom viewport corner"));
+  a->setCheckable(true);
+  a->setChecked(geoViewGraphicsView->scaleVisible());
+
   View::fillContextMenu(menu, pf);
 }
 
@@ -191,7 +200,7 @@ void GeographicView::setState(const DataSet &dataSet) {
       break;
 
     case EsriNatGeoMap: // 4
-      mapType = LeafletCustomTileLayer;
+      mapType = CustomTileLayer;
       break;
 
     case EsriSatellite: // 5
@@ -266,8 +275,9 @@ void GeographicView::setState(const DataSet &dataSet) {
 }
 
 void GeographicView::initMap() {
-  getLeafletMaps()->setMapCenter(mapCenterLatitudeInit, mapCenterLongitudeInit);
-  getLeafletMaps()->setCurrentZoom(mapZoomInit);
+  auto gmw = getGeoMapWidget();
+  gmw->setMapCenter(mapCenterLatitudeInit, mapCenterLongitudeInit);
+  gmw->setCurrentZoom(mapZoomInit);
 }
 
 DataSet GeographicView::state() const {
@@ -275,10 +285,11 @@ DataSet GeographicView::state() const {
   DataSet configurationWidget = geoViewConfigWidget->state();
   dataSet.set("configurationWidget", configurationWidget);
   dataSet.set("mapType", int(_mapType));
-  auto mapCenter = getLeafletMaps()->getCurrentMapCenter();
+  auto gmw = getGeoMapWidget();
+  auto mapCenter = gmw->getMapCenter();
   dataSet.set("mapCenterLatitude", mapCenter.first);
   dataSet.set("mapCenterLongitude", mapCenter.second);
-  dataSet.set("mapZoom", getLeafletMaps()->getCurrentZoom());
+  dataSet.set("mapZoom", gmw->getCurrentZoom());
   dataSet.set("renderingParameters", geoViewGraphicsView->getGlMainWidget()
                                          ->getScene()
                                          ->getGlGraphComposite()
@@ -495,10 +506,17 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
     QGraphicsProxyWidget *gWidget = dynamic_cast<QGraphicsProxyWidget *>(item);
 
     if (gWidget && gWidget->isVisible()) {
+      if (dynamic_cast<QLabel *>(gWidget->widget()))
+        // show attribution label
+        continue;
       gWidget->hide();
       gWidgetsToRestore.push_back(gWidget);
     }
   }
+
+  // hide viewport cross center
+  bool centerVisibility = geoViewGraphicsView->centerVisible();
+  geoViewGraphicsView->showCenter(false);
 
   int width = geoViewGraphicsView->width();
   int height = geoViewGraphicsView->height();
@@ -507,6 +525,9 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
   QPainter painter(&snapshotImage);
   geoViewGraphicsView->scene()->render(&painter);
   painter.end();
+
+  // restore viewport cross center
+  geoViewGraphicsView->showCenter(centerVisibility);
 
   // restore the graphics widgets previously hidden
   for (auto gWidget : gWidgetsToRestore) {
@@ -523,7 +544,7 @@ const char *GeographicView::getViewName(GeographicView::MapType mapType) {
   return mapLayers[mapType].name;
 }
 
-const vector<LeafletMaps::MapLayer> &GeographicView::getMapLayers() {
+const vector<MapLayer> &GeographicView::getMapLayers() {
   return mapLayers;
 }
 

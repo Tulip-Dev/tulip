@@ -48,9 +48,6 @@ if [ "$TRAVIS_BUILD_THIRDPARTY_ONLY" != "ON" ]; then
   if [ "$TULIP_BUILD_CORE_ONLY" != "ON" ]; then
     sudo port -N install freetype glew
     TULIP_GUI_DEFINES="-DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DGLEW_SHARED_LIBRARY_RELEASE=/opt/local/lib/libGLEW.dylib"
-    if [ "$TULIP_GEOVIEW_USE_WEBENGINE" == "ON" ]; then
-      TULIP_GUI_DEFINES="$TULIP_GUI_DEFINES -DTULIP_GEOVIEW_USE_WEBENGINE=ON"
-    fi
     if [ "$Qt5_DIR" != "" ]; then
       CMAKE_PREFIX_PATH_DEFINE="-DCMAKE_PREFIX_PATH=$Qt5_DIR"
     else
@@ -58,15 +55,7 @@ if [ "$TRAVIS_BUILD_THIRDPARTY_ONLY" != "ON" ]; then
       if [ "$Qt5_VERSION" == "" ]; then
         Qt5_VERSION=qt5
       fi
-      if [ "$TULIP_GEOVIEW_USE_WEBENGINE" == "ON" ]; then
-        QT_WEB_PKG=qtwebengine
-      else
-        QT_WEB_PKG=qtwebkit
-      fi
       sudo port -N install $Qt5_VERSION-qtbase $Qt5_VERSION-qttools
-      if [ "$TULIP_BUILD_GEOVIEW" != "OFF" ]; then
-        sudo port -N install $Qt5_VERSION-$QT_WEB_PKG
-      fi
     fi
     if [ "$TULIP_BUILD_DOC" == "ON" ]; then
       $PYTHON_EXECUTABLE -m pip install --user sphinx==1.7.9

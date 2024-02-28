@@ -23,7 +23,7 @@
 #include <unordered_map>
 
 #include "AddressSelectionDialog.h"
-#include "LeafletMaps.h"
+#include "GeoMapWidget.h"
 
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainWidget.h>
@@ -36,6 +36,7 @@
 class QComboBox;
 class QMessageBox;
 class QOpenGLFramebufferObject;
+class QGraphicsItemGroup;
 
 namespace tlp {
 
@@ -85,8 +86,8 @@ public:
     return glMainWidget;
   }
 
-  LeafletMaps *getLeafletMaps() const {
-    return leafletMaps;
+  GeoMapWidget *getGeoMapWidget() const {
+    return _geoMW;
   }
 
   LayoutProperty *getGeoLayout() const {
@@ -127,49 +128,57 @@ public:
 
   void setGeoLayoutComputed();
 
+  bool centerVisible() {
+    return displayCenter;
+  }
+
+  bool scaleVisible() {
+    return displayScale;
+  }
+
 public slots:
 
   void mapToPolygon();
   void zoomIn();
   void zoomOut();
   void currentZoomChanged();
-#ifdef QT_HAS_WEBENGINE
-  void queueMapRefresh();
-#endif
   void refreshMap();
   void showGeolocationWidget();
+  void openUrlInBrowser(const QString &url);
+  void showCenter(bool);
+  void showScale(bool);
 
 protected:
   void cleanup();
   void resizeEvent(QResizeEvent *event) override;
-#ifdef QT_HAS_WEBENGINE
-  int tId;
-  void timerEvent(QTimerEvent *event) override;
-#endif
   void updateMapTexture();
+  void recomputeScale();
+  void resizeAttributionLabel();
 
 private:
   GeographicView *_geoView;
   Graph *graph;
-  LeafletMaps *leafletMaps;
+  GeoMapWidget *_geoMW;
   std::unordered_map<node, std::pair<double, double>> nodeLatLng;
   std::unordered_map<edge, std::vector<std::pair<double, double>>> edgeBendsLatLng;
   Camera globeCameraBackup;
   Camera mapCameraBackup;
 
-  LayoutProperty *geoLayout;
+  DoubleProperty *latProp, *lngProp;
+  LayoutProperty *geoLayout, *geoLayoutBackup;
   SizeProperty *geoViewSize;
   IntegerProperty *geoViewShape;
-  LayoutProperty *geoLayoutBackup;
 
   bool geocodingActive;
   bool abortGeocoding;
 
   GlMainWidget *glMainWidget;
   GlMainWidgetGraphicsItem *glWidgetItem;
+  QGraphicsRectItem *_placeholderItem;
   QComboBox *mapTypeComboBox;
   QPushButton *zoomOutButton;
   QPushButton *zoomInButton;
+  QLabel *attributionLabel;
 
   GlComposite *polygonEntity;
   GlSimpleEntity *planisphereEntity;
@@ -177,16 +186,13 @@ private:
   AddressSelectionDialog *addressSelectionDialog;
   QMessageBox *noLayoutMsgBox;
 
-  bool firstGlobeSwitch;
-
-  QGraphicsRectItem *_placeholderItem;
-
-  bool geoLayoutComputed;
+  bool firstGlobeSwitch, geoLayoutComputed, displayScale, displayCenter;
+  int scaleWidth; // width of the displayed scale
+  QGraphicsItemGroup *scale, *center;
 
   QOpenGLFramebufferObject *renderFbo;
   GlLayer *backgroundLayer;
   std::string mapTextureId;
-  DoubleProperty *latProp, *lngProp;
 };
 } // namespace tlp
 

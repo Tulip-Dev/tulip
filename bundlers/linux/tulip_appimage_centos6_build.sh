@@ -45,7 +45,7 @@ fi
 
 if [ "$3" == "" ]; then
   # install qt5
-  yum install -y qt5-qtbase-devel qt5-qtwebkit-devel
+  yum install -y qt5-qtbase-devel
   QT_PATH=$USR_LIB/qt5
 else
   # we can use our own build of qt5

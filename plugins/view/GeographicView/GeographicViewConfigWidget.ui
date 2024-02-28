@@ -264,7 +264,7 @@
    <item>
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Leaflet Custom Tile Layer</string>
+      <string>Custom Tile Layer</string>
      </property>
      <property name="groupTitle" stdset="0">
       <bool>true</bool>

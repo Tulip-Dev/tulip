@@ -38,6 +38,7 @@
 #include <tulip/WorkspacePanel.h>
 
 #include <QComboBox>
+#include <QDesktopServices>
 #include <QPushButton>
 #include <QTextStream>
 #include <QTimeLine>
@@ -237,36 +238,35 @@ static double mercatorToLatitude(double mercator) {
 GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
                                                        QGraphicsScene *graphicsScene,
                                                        QWidget *parent)
-    : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(nullptr), leafletMaps(nullptr),
-      globeCameraBackup(nullptr, true), mapCameraBackup(nullptr, true), geoLayout(nullptr),
-      geoViewSize(nullptr), geoViewShape(nullptr), geoLayoutBackup(nullptr), geocodingActive(false),
-      abortGeocoding(false), polygonEntity(nullptr), planisphereEntity(nullptr),
-      addressSelectionDialog(nullptr), noLayoutMsgBox(nullptr), firstGlobeSwitch(true),
-      geoLayoutComputed(false), renderFbo(nullptr), latProp(nullptr), lngProp(nullptr) {
-  mapTextureId = "leafletMap" + to_string(reinterpret_cast<uintptr_t>(this));
+    : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(nullptr), _geoMW(nullptr),
+      globeCameraBackup(nullptr, true), mapCameraBackup(nullptr, true),
+      latProp(nullptr), lngProp(nullptr), geoLayout(nullptr),
+      geoLayoutBackup(nullptr), geoViewSize(nullptr), geoViewShape(nullptr),
+      geocodingActive(false), abortGeocoding(false),
+      polygonEntity(nullptr), planisphereEntity(nullptr),
+      addressSelectionDialog(nullptr), noLayoutMsgBox(nullptr),
+      firstGlobeSwitch(true), geoLayoutComputed(false),
+      displayScale(false), displayCenter(false),
+      scaleWidth(0), renderFbo(nullptr) {
+  mapTextureId = "geoMap" + to_string(reinterpret_cast<uintptr_t>(this));
   setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing |
                  QPainter::TextAntialiasing);
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
   setFrameStyle(QFrame::NoFrame);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  leafletMaps = new LeafletMaps(geoView->getMapLayers());
-  leafletMaps->setMouseTracking(false);
-  leafletMaps->resize(512, 512);
-  connect(leafletMaps, SIGNAL(currentZoomChanged()), this, SLOT(currentZoomChanged()));
-#ifdef QT_HAS_WEBENGINE
-  tId = 0;
-  connect(leafletMaps, SIGNAL(refreshMap()), this, SLOT(queueMapRefresh()));
-#else
-  connect(leafletMaps, SIGNAL(refreshMap()), this, SLOT(refreshMap()));
-#endif
+  _geoMW = new GeoMapWidget(geoView->getMapLayers());
+  _geoMW->setMouseTracking(false);
+  _geoMW->resize(QSize(512, 512));
+  connect(_geoMW, SIGNAL(currentZoomChanged()), this, SLOT(currentZoomChanged()));
+  connect(_geoMW, SIGNAL(refreshMap()), this, SLOT(refreshMap()));
 
   _placeholderItem = new QGraphicsRectItem(0, 0, 1, 1);
   _placeholderItem->setBrush(Qt::transparent);
   _placeholderItem->setPen(QPen(Qt::transparent));
   scene()->addItem(_placeholderItem);
 
-  auto proxyGM = scene()->addWidget(leafletMaps);
+  auto proxyGM = scene()->addWidget(_geoMW);
   proxyGM->setPos(0, 0);
   proxyGM->setParentItem(_placeholderItem);
 
@@ -282,7 +282,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   // before allowing some display feedback
   tlp::disableQtUserInput();
 
-  while (!leafletMaps->isInited()) {
+  while (!_geoMW->mapLoaded()) {
     QApplication::processEvents();
   }
 
@@ -350,7 +350,57 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   noLayoutMsgBox->setObjectName("needConfigurationMessageBox");
   Perspective::setStyleSheet(noLayoutMsgBox);
   scene()->addWidget(noLayoutMsgBox);
+
+  // init map attribution label
+  attributionLabel = new QLabel();
+  scene()->addWidget(attributionLabel)->setParentItem(_placeholderItem);
+  attributionLabel->setWordWrap(true);
+  attributionLabel->setStyleSheet("color: black; background-color: rgba(220, 220, 220, 180)");
+  // reduce font size
+  QFont font(attributionLabel->font());
+  auto ps = font.pixelSize();
+  if (ps != -1)
+    font.setPixelSize(ps - 2);
+  else {
+    auto psf = font.pointSizeF();
+    font.setPointSizeF(psf * 0.8);
+  }
+  attributionLabel->setFont(font);
+  // text must be considered as html
+  attributionLabel->setTextFormat(Qt::RichText);
+  // allow to open attribution links in default browser
+  connect(attributionLabel, SIGNAL(linkActivated(const QString &)), this,
+          SLOT(openUrlInBrowser(const QString &)));
+
+  // add scale
+  scale = new QGraphicsItemGroup();
+  scene()->addItem(scale);
+  scale->setParentItem(_placeholderItem);
+  scale->addToGroup(new QGraphicsLineItem(0, 5, 0, 9));
+  scale->addToGroup(new QGraphicsLineItem(0, 10, 20, 10));
+  scale->addToGroup(new QGraphicsLineItem(20, 9, 20, 5));
+  auto distText = new QGraphicsSimpleTextItem("100 m");
+  // display distance with same font as attributionLabel
+  font.setWeight(QFont::ExtraLight);
+  distText->setFont(font);
+  //distText->setPos(25, font.pointSize() - 2);
+  scale->addToGroup(distText);
+  scale->setEnabled(false);
+  recomputeScale();
+
+  // add center
+  center = new QGraphicsItemGroup();
+  scene()->addItem(center);
+  center->setParentItem(_placeholderItem);
+  center->addToGroup(new QGraphicsLineItem(5, 0, 5, 10));
+  center->addToGroup(new QGraphicsLineItem(0, 5, 10, 5));
+  center->setEnabled(false);
+
   setAcceptDrops(false);
+}
+
+void GeographicViewGraphicsView::openUrlInBrowser(const QString &url) {
+  QDesktopServices::openUrl(QUrl(url));
 }
 
 void GeographicViewGraphicsView::showGeolocationWidget() {
@@ -359,15 +409,6 @@ void GeographicViewGraphicsView::showGeolocationWidget() {
 }
 
 GeographicViewGraphicsView::~GeographicViewGraphicsView() {
-#ifdef QT_HAS_WEBENGINE
-  // first kill refreshMap timer if any
-  // and reset tId to try to ensure refreshMap
-  // will not be called later
-  if (tId) {
-    killTimer(tId);
-    tId = 0;
-  }
-#endif
   if (geocodingActive) {
     if (addressSelectionDialog->isVisible()) {
       addressSelectionDialog->accept();
@@ -786,16 +827,19 @@ void GeographicViewGraphicsView::mapToPolygon() {
 }
 
 void GeographicViewGraphicsView::zoomIn() {
-  leafletMaps->setCurrentZoom(leafletMaps->getCurrentZoom() + 1);
+  _geoMW->setCurrentZoom(_geoMW->getCurrentZoom() + 1);
 }
 
 void GeographicViewGraphicsView::zoomOut() {
-  leafletMaps->setCurrentZoom(leafletMaps->getCurrentZoom() - 1);
+  _geoMW->setCurrentZoom(_geoMW->getCurrentZoom() - 1);
 }
 
 void GeographicViewGraphicsView::currentZoomChanged() {
-  zoomInButton->setEnabled(leafletMaps->getCurrentZoom() < leafletMaps->getMaxZoom());
-  zoomOutButton->setEnabled(leafletMaps->getCurrentZoom() != 0);
+  auto currentZoom = _geoMW->getCurrentZoom();
+
+  zoomInButton->setEnabled(currentZoom < _geoMW->getMaxZoom());
+  zoomOutButton->setEnabled(currentZoom != 0);
+  recomputeScale();
 }
 
 GlGraphComposite *GeographicViewGraphicsView::getGlGraphComposite() const {
@@ -1010,48 +1054,111 @@ void GeographicViewGraphicsView::createLayoutWithLatLngs(const std::string &latP
 
 void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {
   QGraphicsView::resizeEvent(event);
+  // resize scene stuff
   scene()->setSceneRect(QRect(QPoint(0, 0), size()));
-  leafletMaps->resize(width(), height());
+  _geoMW->resize(width(), height());
   glWidgetItem->resize(width(), height());
+  resizeAttributionLabel();
 
+  // update scene items position
   if (noLayoutMsgBox) {
     noLayoutMsgBox->move(width() / 2 - noLayoutMsgBox->width() / 2,
                          height() / 2 - noLayoutMsgBox->height() / 2);
   }
+  center->setPos((width() - 10)/2, (height() - 10)/2);
+  scale->setPos(3, height() - 12);
 
   scene()->update();
 }
 
-#ifdef QT_HAS_WEBENGINE
-void GeographicViewGraphicsView::queueMapRefresh() {
-  tId = startTimer(10);
+void GeographicViewGraphicsView::recomputeScale() {
+  static std::vector<double> distances {
+    5000000, 2000000, 1000000, 1000000, 1000000, 100000, 100000, 50000, 50000,
+    10000, 10000, 10000, 1000, 1000, 500, 200, 100, 50, 25, 25, 10 };
+
+  // we assume that currentZoom < distances.size()
+  auto currentZoom = _geoMW->getCurrentZoom();
+  auto currentDistance = distances[currentZoom];
+  double line = currentDistance / pow(2.0, 18 - currentZoom) / 0.597164;
+
+  // configure scale
+  // horizontal line
+  QGraphicsLineItem *lineItem =
+    qgraphicsitem_cast<QGraphicsLineItem *>(scale->childItems()[1]);
+  lineItem->setLine(0, 10, line, 10);
+  // right vertical line
+  lineItem = qgraphicsitem_cast<QGraphicsLineItem *>(scale->childItems()[2]);
+  lineItem->setLine(line, 9, line, 5);
+  // distance text
+  QGraphicsSimpleTextItem *textItem =
+    qgraphicsitem_cast<QGraphicsSimpleTextItem *>(scale->childItems()[3]);
+  QString distance;
+  if (currentDistance >= 1000)
+    distance = QString::number(currentDistance/1000) + " km";
+  else
+    distance = QString::number(currentDistance) + " m";
+  textItem->setText(distance);
+  QFontMetrics fm(textItem->font());
+  auto br = fm.boundingRect(distance);
+  double dy = 12 - br.height();
+  /*auto dy = (attributionLabel->devicePixelRatioF() != 1.0)
+    ? textItem->font().pointSizeF()/attributionLabel->devicePixelRatioF()/2
+    : 2. - textItem->font().pointSize()/2;*/
+  textItem->setPos(line + 5, dy);
+
+  // record scale width
+  scaleWidth = line + br.width() + 10;
 }
 
-void GeographicViewGraphicsView::timerEvent(QTimerEvent *event) {
-  killTimer(event->timerId());
-  // call refreshMap if needed
-  // accessing this->tId may result in a Free Memory Read
-  // because surprisingly this method may be called
-  // after this has been deleted
-  if (tId == event->timerId()) {
-    tId = 0;
-    refreshMap();
+void GeographicViewGraphicsView::resizeAttributionLabel() {
+  // remove html infos before computing
+  // the bounding rect
+  auto label = attributionLabel->text();
+  label.replace("&copy;", QChar(169)); //169 => ©
+  label.replace("&mdash;", QChar(8212)); //8212 => —
+  int pos = label.indexOf('<');
+  while (pos != -1) {
+    int endPos = label.indexOf('>', pos);
+    if (endPos != -1) {
+      label.remove(pos, endPos + 1 - pos);
+      pos = label.indexOf('<', pos);
+    } else
+      break;
   }
+
+  QFontMetrics fm(attributionLabel->font());
+  auto br = fm.boundingRect(label);
+  // workaround for display of reduced size font
+  br.setWidth(br.width() + 5);
+
+  // if needed enlarge display rect of attributionLabel
+  // to ensure attribution text visibility
+  auto sz = size();
+  int margin = 3;
+  auto maxWidth = sz.width() - (displayScale ? scaleWidth : 0);
+  if (br.width() > maxWidth) {
+    // multiline display
+    int nl = br.width()/maxWidth + 1;
+    br.setSize(QSize(maxWidth, (br.height() * br.width())/maxWidth + br.height() + (nl - 1) * margin));
+  }
+
+  br.moveTopLeft(QPoint(sz.width() - br.width(), sz.height() - br.height()));
+  attributionLabel->setGeometry(br);
 }
-#endif
 
 void GeographicViewGraphicsView::refreshMap() {
-  if (!leafletMaps->isVisible() || !leafletMaps->mapLoaded()) {
+  if (!_geoMW->isVisible() || !_geoMW->mapLoaded() ||
+      !glMainWidget->getScene()->getLayer("Main")) {
     return;
   }
 
   if (geoLayoutComputed) {
     GlOffscreenRenderer::getInstance()->makeOpenGLContextCurrent();
-    auto sw = leafletMaps->getCurrentSouthWest();
-    auto ne = leafletMaps->getCurrentNorthEast();
+    auto sw = _geoMW->getMapSouthWest();
+    auto ne = _geoMW->getMapNorthEast();
     if (sw.second != ne.second) {
-      BoundingBox bb(Coord(GLSCENE_LNG(sw), GLSCENE_LAT(sw)),
-                     Coord(GLSCENE_LNG(ne), GLSCENE_LAT(ne)));
+      BoundingBox bb(Coord(GLSCENE_LNG(sw), GLSCENE_LAT(sw), 0),
+                     Coord(GLSCENE_LNG(ne), GLSCENE_LAT(ne), 0));
 
       // A first centering is needed to ensure
       // the success of the first zoom and pan animation
@@ -1061,7 +1168,7 @@ void GeographicViewGraphicsView::refreshMap() {
       if (camera.getCenter() == Coord())
         camera.setCenter(bb.center());
       GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
-      sceneZoomAndPan.zoomAndPanAnimationStep(1);
+        sceneZoomAndPan.zoomAndPanAnimationStep(1);
     }
   }
 
@@ -1071,15 +1178,16 @@ void GeographicViewGraphicsView::refreshMap() {
 }
 
 void GeographicViewGraphicsView::centerView() {
-  if (leafletMaps->isVisible()) {
-    leafletMaps->setMapBounds(graph, nodeLatLng);
+  if (_geoMW->isVisible()) {
+    _geoMW->setMapBounds(graph, nodeLatLng);
   } else {
     glMainWidget->centerScene();
   }
 }
+
 void GeographicViewGraphicsView::centerMapOnNode(const node n) {
   if (nodeLatLng.find(n) != nodeLatLng.end()) {
-    leafletMaps->setMapCenter(nodeLatLng[n].first, nodeLatLng[n].second);
+    _geoMW->setMapCenter(nodeLatLng[n].first, nodeLatLng[n].second);
   }
 }
 
@@ -1122,24 +1230,40 @@ void GeographicViewGraphicsView::treatEvent(const Event &ev) {
   }
 }
 
+void setChildItemsPen(QGraphicsItemGroup *group, bool darkBackground) {
+  QPen pen(QColor(darkBackground ? Qt::white : Qt::black));
+  for (auto item : group->childItems()) {
+    switch (item->type()) {
+    case QGraphicsLineItem::Type :
+      qgraphicsitem_cast<QGraphicsLineItem *>(item)->setPen(pen);
+      break;
+    case QGraphicsSimpleTextItem::Type :
+      qgraphicsitem_cast<QGraphicsSimpleTextItem *>(item)->setPen(pen);
+    default:
+      break;
+    }
+  }
+}
+
 void GeographicViewGraphicsView::switchMapType() {
   GeographicView::MapType mapType = _geoView->mapType();
 
-  bool enableLeafletMap = false;
+  bool enableGeoMap = false;
   bool enablePolygon = false;
   bool enablePlanisphere = false;
+  QString attribution;
 
   switch (mapType) {
 
-  case GeographicView::LeafletCustomTileLayer: {
-    enableLeafletMap = true;
+  case GeographicView::CustomTileLayer: {
+    enableGeoMap = true;
     QString url = _geoView->getConfigWidget()->getCustomTileLayerUrl();
-    QString attribution = _geoView->getConfigWidget()->getCustomTilesAttribution();
+    attribution = _geoView->getConfigWidget()->getCustomTilesAttribution();
     // if attribution is empty or fill with white spaces
     // set it to url
     if (attribution.simplified().isEmpty())
       attribution = url;
-    leafletMaps->switchToCustomTileLayer(url, attribution);
+    _geoMW->switchToCustomTileLayer(url, attribution);
     break;
   }
 
@@ -1155,8 +1279,29 @@ void GeographicViewGraphicsView::switchMapType() {
   }
 
   default:
-    enableLeafletMap = true;
-    leafletMaps->switchToMapLayer(mapType);
+    enableGeoMap = true;
+    _geoMW->switchToMapLayer(mapType);
+    const MapLayer &mapLayer = _geoView->getMapLayers()[mapType];
+    attribution = mapLayer.attrib;
+  }
+
+  if (enableGeoMap) {
+    // setup attribution label
+    auto label = attribution;
+    // set color and suppress underline of links
+    label.replace("<a", "<a style=\"color: rgb(0, 85, 255); text-decoration: none;\"");
+    attributionLabel->setText(label);
+    resizeAttributionLabel();
+    bool darkBackground = _geoView->getMapLayers()[mapType].dark;
+    // configure center and scale
+    center->setVisible(displayCenter);
+    setChildItemsPen(center, darkBackground);
+    scale->setVisible(displayScale);
+    setChildItemsPen(scale, darkBackground);
+  } else {
+    // hide center and scale
+    center->setVisible(false);
+    scale->setVisible(false);
   }
 
   if (planisphereEntity && planisphereEntity->isVisible()) {
@@ -1178,8 +1323,8 @@ void GeographicViewGraphicsView::switchMapType() {
 
   Observable::holdObservers();
 
-  leafletMaps->setVisible(enableLeafletMap);
-  backgroundLayer->setVisible(enableLeafletMap);
+  _geoMW->setVisible(enableGeoMap);
+  backgroundLayer->setVisible(enableGeoMap);
 
   if (polygonEntity)
     polygonEntity->setVisible(enablePolygon);
@@ -1344,13 +1489,21 @@ void GeographicViewGraphicsView::setGeoLayoutComputed() {
   glMainWidget->getScene()->getGlGraphComposite()->setVisible(true);
 }
 
+void GeographicViewGraphicsView::showScale(bool show) {
+  scale->setVisible(displayScale = show);
+}
+
+void GeographicViewGraphicsView::showCenter(bool show) {
+  center->setVisible(displayCenter = show);
+}
+
 void GeographicViewGraphicsView::updateMapTexture() {
-  int width = leafletMaps->geometry().width();
-  int height = leafletMaps->geometry().height();
+  int width = _geoMW->geometry().width();
+  int height = _geoMW->geometry().height();
 
   QImage image(width, height, QImage::Format_RGB32);
   QPainter painter(&image);
-  leafletMaps->render(&painter);
+  _geoMW->render(&painter);
   painter.end();
 
   GlOffscreenRenderer::getInstance()->makeOpenGLContextCurrent();

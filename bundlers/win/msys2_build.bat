@@ -67,7 +67,6 @@ rem install_complete_tulip_build_dependencies
   pacman --noconfirm -S --needed mingw-w64-x86_64-freetype
   pacman --noconfirm -S --needed mingw-w64-x86_64-glew
   pacman --noconfirm -S --needed mingw-w64-x86_64-qt5
-  pacman --noconfirm -S --needed mingw-w64-x86_64-qtwebkit
 ) else (
   set TULIP_BUILD_DOC=""
 )

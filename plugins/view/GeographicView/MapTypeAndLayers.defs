@@ -17,9 +17,9 @@
 
 // then when included in GeographicView.cpp
 // this defines the mapLayers contents
-#define BEGIN_MAPLAYERS() static const std::vector<LeafletMaps::MapLayer> mapLayers = {
-#define ADD_MAPLAYER(enum_val, name, url, attrib, maxZoom) LeafletMaps::MapLayer(name, url, attrib, maxZoom)
-#define ADD_PSEUDO_MAPLAYER(enum_val, name) LeafletMaps::MapLayer(name)
+#define BEGIN_MAPLAYERS() static const std::vector<MapLayer> mapLayers = {
+#define ADD_MAPLAYER(enum_val, name, url, attrib, maxZoom) MapLayer(name, url, attrib, maxZoom)
+#define ADD_PSEUDO_MAPLAYER(enum_val, name) MapLayer(name)
 
 #endif
 
@@ -29,13 +29,13 @@ BEGIN_MAPLAYERS()
 // OpenStreetMap is the default one
 ADD_MAPLAYER(OpenStreetMap=0,
 "OpenStreetMap",
-"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+"https://tile.openstreetmap.org/{z}/{x}/{y}.png",
 "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
 19),
 // OpenTopoMap
 ADD_MAPLAYER(OpenTopoMap,
 "OpenTopoMap",
-"https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+"https://tile.opentopomap.org/{z}/{x}/{y}.png",
 "Map data: {attribution.OpenStreetMap}, <a href=\"http://viewfinderpanoramas.org\">SRTM</a> | Map style: &copy; <a href=\"https://opentopomap.org\">OpenTopoMap</a> (<a href=\"https://creativecommons.org/licenses/by-sa/3.0/\">CC-BY-SA</a>)",
 17),
 // Esri World Street Map
@@ -74,22 +74,22 @@ ADD_MAPLAYER(EsriDarkGrayCanvas,
 "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ", 16),
 // CartoDB Voyager
 ADD_MAPLAYER(CartoDB,
-"CartoDB Map", "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+"CartoDB Map", "https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
 "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>",
 19),
 // Carto DB Light Gray Map
 ADD_MAPLAYER(CartoDBLight,
-"CartoDB Light Map", "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+"CartoDB Light Map", "https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
 "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>",
 19),
 // Carto DB Dark Gray Map
 ADD_MAPLAYER(CartoDBDark,
-"CartoDB Dark Map", "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+"CartoDB Dark Map", "https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
 "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>",
 19),
 // the ones below are not really map layers
 // but are needed to populate the GeographicGraphicsView menu
-ADD_PSEUDO_MAPLAYER(LeafletCustomTileLayer, "Leaflet Custom Tile Layer"), 
+ADD_PSEUDO_MAPLAYER(CustomTileLayer, "Custom Tile Layer"),
 ADD_PSEUDO_MAPLAYER(Polygon, "Polygon"),
 ADD_PSEUDO_MAPLAYER(Globe, "Globe")
 END_MAPLAYERS()

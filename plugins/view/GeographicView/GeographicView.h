@@ -34,7 +34,6 @@
 
 #include "GeographicViewConfigWidget.h"
 #include "GeolocalisationConfigWidget.h"
-#include "LeafletMaps.h"
 #include "GeographicViewGraphicsView.h"
 
 #include "../../utils/PluginNames.h"
@@ -94,8 +93,8 @@ public:
 
   QGraphicsItem *centralItem() const override;
 
-  inline LeafletMaps *getLeafletMaps() const {
-    return geoViewGraphicsView->getLeafletMaps();
+  inline GeoMapWidget *getGeoMapWidget() const {
+    return geoViewGraphicsView->getGeoMapWidget();
   }
 
   void registerTriggers();
@@ -152,7 +151,7 @@ public slots:
 
   void mapTypeChanged(int);
 
-  static const std::vector<LeafletMaps::MapLayer> &getMapLayers();
+  static const std::vector<MapLayer> &getMapLayers();
   static const char *getViewName(MapType mapType);
 
 protected slots:
