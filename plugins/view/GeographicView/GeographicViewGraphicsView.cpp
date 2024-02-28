@@ -239,14 +239,11 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
                                                        QGraphicsScene *graphicsScene,
                                                        QWidget *parent)
     : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(nullptr), _geoMW(nullptr),
-      globeCameraBackup(nullptr, true), mapCameraBackup(nullptr, true),
-      latProp(nullptr), lngProp(nullptr), geoLayout(nullptr),
-      geoLayoutBackup(nullptr), geoViewSize(nullptr), geoViewShape(nullptr),
-      geocodingActive(false), abortGeocoding(false),
-      polygonEntity(nullptr), planisphereEntity(nullptr),
-      addressSelectionDialog(nullptr), noLayoutMsgBox(nullptr),
-      firstGlobeSwitch(true), geoLayoutComputed(false),
-      displayScale(false), displayCenter(false),
+      globeCameraBackup(nullptr, true), mapCameraBackup(nullptr, true), latProp(nullptr),
+      lngProp(nullptr), geoLayout(nullptr), geoLayoutBackup(nullptr), geoViewSize(nullptr),
+      geoViewShape(nullptr), geocodingActive(false), abortGeocoding(false), polygonEntity(nullptr),
+      planisphereEntity(nullptr), addressSelectionDialog(nullptr), noLayoutMsgBox(nullptr),
+      firstGlobeSwitch(true), geoLayoutComputed(false), displayScale(false), displayCenter(false),
       scaleWidth(0), renderFbo(nullptr) {
   mapTextureId = "geoMap" + to_string(reinterpret_cast<uintptr_t>(this));
   setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing |
@@ -383,7 +380,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   // display distance with same font as attributionLabel
   font.setWeight(QFont::ExtraLight);
   distText->setFont(font);
-  //distText->setPos(25, font.pointSize() - 2);
+  // distText->setPos(25, font.pointSize() - 2);
   scale->addToGroup(distText);
   scale->setEnabled(false);
   recomputeScale();
@@ -1065,16 +1062,16 @@ void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {
     noLayoutMsgBox->move(width() / 2 - noLayoutMsgBox->width() / 2,
                          height() / 2 - noLayoutMsgBox->height() / 2);
   }
-  center->setPos((width() - 10)/2, (height() - 10)/2);
+  center->setPos((width() - 10) / 2, (height() - 10) / 2);
   scale->setPos(3, height() - 12);
 
   scene()->update();
 }
 
 void GeographicViewGraphicsView::recomputeScale() {
-  static std::vector<double> distances {
-    5000000, 2000000, 1000000, 1000000, 1000000, 100000, 100000, 50000, 50000,
-    10000, 10000, 10000, 1000, 1000, 500, 200, 100, 50, 25, 25, 10 };
+  static std::vector<double> distances{5000000, 2000000, 1000000, 1000000, 1000000, 100000, 100000,
+                                       50000,   50000,   10000,   10000,   10000,   1000,   1000,
+                                       500,     200,     100,     50,      25,      25,     10};
 
   // we assume that currentZoom < distances.size()
   auto currentZoom = _geoMW->getCurrentZoom();
@@ -1083,18 +1080,17 @@ void GeographicViewGraphicsView::recomputeScale() {
 
   // configure scale
   // horizontal line
-  QGraphicsLineItem *lineItem =
-    qgraphicsitem_cast<QGraphicsLineItem *>(scale->childItems()[1]);
+  QGraphicsLineItem *lineItem = qgraphicsitem_cast<QGraphicsLineItem *>(scale->childItems()[1]);
   lineItem->setLine(0, 10, line, 10);
   // right vertical line
   lineItem = qgraphicsitem_cast<QGraphicsLineItem *>(scale->childItems()[2]);
   lineItem->setLine(line, 9, line, 5);
   // distance text
   QGraphicsSimpleTextItem *textItem =
-    qgraphicsitem_cast<QGraphicsSimpleTextItem *>(scale->childItems()[3]);
+      qgraphicsitem_cast<QGraphicsSimpleTextItem *>(scale->childItems()[3]);
   QString distance;
   if (currentDistance >= 1000)
-    distance = QString::number(currentDistance/1000) + " km";
+    distance = QString::number(currentDistance / 1000) + " km";
   else
     distance = QString::number(currentDistance) + " m";
   textItem->setText(distance);
@@ -1114,8 +1110,8 @@ void GeographicViewGraphicsView::resizeAttributionLabel() {
   // remove html infos before computing
   // the bounding rect
   auto label = attributionLabel->text();
-  label.replace("&copy;", QChar(169)); //169 => ©
-  label.replace("&mdash;", QChar(8212)); //8212 => —
+  label.replace("&copy;", QChar(169));   // 169 => ©
+  label.replace("&mdash;", QChar(8212)); // 8212 => —
   int pos = label.indexOf('<');
   while (pos != -1) {
     int endPos = label.indexOf('>', pos);
@@ -1138,8 +1134,9 @@ void GeographicViewGraphicsView::resizeAttributionLabel() {
   auto maxWidth = sz.width() - (displayScale ? scaleWidth : 0);
   if (br.width() > maxWidth) {
     // multiline display
-    int nl = br.width()/maxWidth + 1;
-    br.setSize(QSize(maxWidth, (br.height() * br.width())/maxWidth + br.height() + (nl - 1) * margin));
+    int nl = br.width() / maxWidth + 1;
+    br.setSize(
+        QSize(maxWidth, (br.height() * br.width()) / maxWidth + br.height() + (nl - 1) * margin));
   }
 
   br.moveTopLeft(QPoint(sz.width() - br.width(), sz.height() - br.height()));
@@ -1147,8 +1144,7 @@ void GeographicViewGraphicsView::resizeAttributionLabel() {
 }
 
 void GeographicViewGraphicsView::refreshMap() {
-  if (!_geoMW->isVisible() || !_geoMW->mapLoaded() ||
-      !glMainWidget->getScene()->getLayer("Main")) {
+  if (!_geoMW->isVisible() || !_geoMW->mapLoaded() || !glMainWidget->getScene()->getLayer("Main")) {
     return;
   }
 
@@ -1168,7 +1164,7 @@ void GeographicViewGraphicsView::refreshMap() {
       if (camera.getCenter() == Coord())
         camera.setCenter(bb.center());
       GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
-        sceneZoomAndPan.zoomAndPanAnimationStep(1);
+      sceneZoomAndPan.zoomAndPanAnimationStep(1);
     }
   }
 
@@ -1234,10 +1230,10 @@ void setChildItemsPen(QGraphicsItemGroup *group, bool darkBackground) {
   QPen pen(QColor(darkBackground ? Qt::white : Qt::black));
   for (auto item : group->childItems()) {
     switch (item->type()) {
-    case QGraphicsLineItem::Type :
+    case QGraphicsLineItem::Type:
       qgraphicsitem_cast<QGraphicsLineItem *>(item)->setPen(pen);
       break;
-    case QGraphicsSimpleTextItem::Type :
+    case QGraphicsSimpleTextItem::Type:
       qgraphicsitem_cast<QGraphicsSimpleTextItem *>(item)->setPen(pen);
     default:
       break;

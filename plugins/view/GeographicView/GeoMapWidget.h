@@ -57,16 +57,14 @@ struct MapLayer {
   int maxZoom;
   bool dark;
 
-  MapLayer(const char *name, const char *url = nullptr,
-           const char *attrib = nullptr,
+  MapLayer(const char *name, const char *url = nullptr, const char *attrib = nullptr,
            int maxZoom = 21)
-    : name(name), url(url), attrib(attrib), maxZoom(maxZoom) {
+      : name(name), url(url), attrib(attrib), maxZoom(maxZoom) {
     dark = std::string(name).find(" Dark ") != std::string::npos;
   }
 };
 
-class GeoMapWidget : public QWidget
-{
+class GeoMapWidget : public QWidget {
   Q_OBJECT
 
 public:
@@ -80,9 +78,8 @@ public:
    * @param parent QWidget parent
    * @param windowFlags QWidget Window flags
    */
-  GeoMapWidget(const std::vector<MapLayer> &mapLayers, 
-               QSize size = QSize(0, 0), QWidget * parent = 0,
-               Qt::WindowFlags windowFlags = Qt::WindowFlags());
+  GeoMapWidget(const std::vector<MapLayer> &mapLayers, QSize size = QSize(0, 0),
+               QWidget *parent = 0, Qt::WindowFlags windowFlags = Qt::WindowFlags());
 
   ~GeoMapWidget() {
     delete http;
@@ -155,9 +152,8 @@ public:
   void translateView(const QPoint &offset);
 
   // map layer management
-  void setMapLayer(QString name, QString templUrl,
-		   QString attribution, int minZoom, int maxZoom,
-		   bool darkBackground = false);
+  void setMapLayer(QString name, QString templUrl, QString attribution, int minZoom, int maxZoom,
+                   bool darkBackground = false);
 
   void switchToMapLayer(unsigned int layer);
 
@@ -170,7 +166,7 @@ public:
 private:
   void init();
 
-  void draw(QPainter* painter, const QPoint &wCenterM);
+  void draw(QPainter *painter, const QPoint &wCenterM);
   bool isTileValid(int x, int y, int z) const;
   double nbZoomTiles() const;
 
@@ -189,7 +185,7 @@ private:
   QSize size; // size of the widget
 
   bool mousePressed;
-  /*  
+  /*
   int steps; // used by method moveTo()
   QMutex moveMutex; // used for method moveTo()
   QPointF target; // used for method moveTo()
@@ -220,8 +216,8 @@ private:
   QPixmap emptyTile;
   QPixmap loadingTile;
 
-  QNetworkAccessManager* http;
-  QList<QNetworkReply*> replyList;
+  QNetworkAccessManager *http;
+  QList<QNetworkReply *> replyList;
 
   QHash<QString, QDateTime> failedFetches;
 
@@ -231,7 +227,7 @@ private:
   void newOffscreenImage(bool clearImage = true, bool showZoomImage = true);
   void centerMap(const QList<QPointF> &coordinates);
 
-  protected:
+protected:
   void mousePressEvent(QMouseEvent *ev);
   void mouseReleaseEvent(QMouseEvent *ev);
   void mouseMoveEvent(QMouseEvent *ev);
@@ -257,6 +253,6 @@ public slots:
 
 private slots:
   void requestFinished(QNetworkReply *reply);
-  //void moveStep();
+  // void moveStep();
 };
 #endif

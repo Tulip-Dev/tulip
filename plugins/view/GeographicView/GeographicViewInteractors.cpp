@@ -306,8 +306,8 @@ bool GeographicViewBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 
       auto tl = gmw->getScreenViewport().topLeft();
       auto corner1 = gmw->screenToGeoPos(tl.x() + x, tl.y() + glw->height() - y);
-      auto corner2 = gmw->screenToGeoPos(tl.x() + qMouseEv->position().x(),
-                                         tl.y() + qMouseEv->position().y());
+      auto corner2 =
+          gmw->screenToGeoPos(tl.x() + qMouseEv->position().x(), tl.y() + qMouseEv->position().y());
       gmw->zoomOnRectangle(corner1, corner2);
     }
     return ok;
