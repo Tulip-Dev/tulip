@@ -351,9 +351,6 @@ bool GraphPerspective::terminated() {
     }
   }
 
-  // force workspace and views destruction here to avoid hanging on exit
-  // when linking against QtWebEngine binaries provided by qt.io
-  destroyWorkspace();
   return true;
 }
 
