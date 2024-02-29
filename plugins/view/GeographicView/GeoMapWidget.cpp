@@ -201,9 +201,9 @@ void GeoMapWidget::mouseMoveEvent(QMouseEvent *ev) {
 
 void GeoMapWidget::wheelEvent(QWheelEvent *ev) {
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-    auto evPos = ev->pos();
+  auto evPos = ev->pos();
 #else
-    auto evPos = ev->position().toPoint();
+  auto evPos = ev->position().toPoint();
 #endif
   if (ev->angleDelta().y()) {
     // zoom in/out
