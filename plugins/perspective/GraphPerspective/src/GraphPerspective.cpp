@@ -351,6 +351,10 @@ bool GraphPerspective::terminated() {
     }
   }
 
+  // ensure a well ordered cleanup
+  // preventing a possible crash on exit
+  destroyWorkspace();
+
   return true;
 }
 
