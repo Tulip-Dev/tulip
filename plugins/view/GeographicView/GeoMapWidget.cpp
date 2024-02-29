@@ -173,7 +173,11 @@ void GeoMapWidget::paintEvent(QPaintEvent *) {
 void GeoMapWidget::mousePressEvent(QMouseEvent *ev) {
   if (ev->button() == Qt::LeftButton) {
     mousePressed = true;
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     mousePreviousPos = ev->pos();
+#else
+    mousePreviousPos = ev->position().toPoint();
+#endif
   }
 }
 
@@ -183,24 +187,34 @@ void GeoMapWidget::mouseReleaseEvent(QMouseEvent *) {
 
 void GeoMapWidget::mouseMoveEvent(QMouseEvent *ev) {
   if (mousePressed) {
-    translateView(mousePreviousPos - ev->pos());
-    mousePreviousPos = ev->pos();
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    auto evPos = ev->pos();
+#else
+    auto evPos = ev->position().toPoint();
+#endif
+    translateView(mousePreviousPos - evPos);
+    mousePreviousPos = evPos;
     update();
     emit refreshMap();
   }
 }
 
 void GeoMapWidget::wheelEvent(QWheelEvent *ev) {
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
+    auto evPos = ev->pos();
+#else
+    auto evPos = ev->position().toPoint();
+#endif
   if (ev->angleDelta().y()) {
     // zoom in/out
     if (ev->angleDelta().y() > 0) {
       zoomIn();
       // ensure the map point under mouse cursor stay fixed
-      QPoint newCenter = wCenterM + (ev->position().toPoint() - wCenter);
+      QPoint newCenter = wCenterM + (evPos - wCenter);
       setMapCenter(screenToGeoPos(newCenter));
     } else {
       // ensure the map point under mouse cursor stay fixed
-      QPoint newCenter = wCenterM - (ev->position().toPoint() - wCenter);
+      QPoint newCenter = wCenterM - (evPos - wCenter);
       setMapCenter(screenToGeoPos(newCenter));
       zoomOut();
     }
