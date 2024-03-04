@@ -111,10 +111,10 @@ QStringList TulipSettings::recentDocuments() {
 }
 
 void TulipSettings::checkRecentDocuments() {
-  QList<QVariant> recentDocumentsValue = instance().value(TS_RecentDocuments).toList();
+  auto recentDocumentsValue = recentDocuments();
 
-  for (const QVariant &doc : recentDocumentsValue) {
-    if (!QFileInfo(doc.toString()).exists())
+  for (auto doc : recentDocumentsValue) {
+    if (!QFileInfo(doc).exists())
       recentDocumentsValue.removeAll(doc);
   }
 
@@ -122,7 +122,7 @@ void TulipSettings::checkRecentDocuments() {
 }
 
 void TulipSettings::addToRecentDocuments(const QString &name) {
-  QList<QVariant> recentDocumentsValue = instance().value(TS_RecentDocuments).toList();
+  auto recentDocumentsValue = recentDocuments();
 
   if (recentDocumentsValue.contains(name))
     recentDocumentsValue.removeAll(name);
