@@ -163,6 +163,7 @@ SimplePluginProgressDialog *createProgress(QString &iconPath, QString &title) {
   progress->setStopButtonVisible(false);
   progress->setCancelButtonVisible(false);
   progress->showPreview(false);
+  progress->showLogo(true);
 
   progress->resize(500, std::min(50, progress->height()));
   progress->setComment(QString("Initializing ") + title);
@@ -280,6 +281,8 @@ int main(int argc, char **argv) {
 
   // Init tulip
   try {
+    // show progress
+    tulip_perspective.processEvents();
     PluginLoaderToProgress loader(progress, debugPluginLoad);
     tlp::initTulipSoftware(&loader);
   } catch (tlp::TulipException &e) {
@@ -295,9 +298,6 @@ int main(int argc, char **argv) {
     if (!projectFilePath.isEmpty() && (!fileInfo.exists() || fileInfo.isDir())) {
       usage("File " + projectFilePath + " not found or is a directory");
     }
-
-    if (!progress)
-      progress = createProgress(iconPath, title);
 
     TulipProject *project = nullptr;
     if (!projectFilePath.isEmpty() && projectFilePath.endsWith(".tlpx")) {

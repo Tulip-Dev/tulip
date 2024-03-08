@@ -54,6 +54,11 @@ IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   UNSET(Python_INCLUDE_DIRS CACHE)
 ENDIF()
 
+# resolve possible symlinks
+# this may be needed when Python_EXECUTABLE is defined
+# on the cmake configuration command line
+GET_FILENAME_COMPONENT(Python_EXECUTABLE ${Python_EXECUTABLE} REALPATH)
+
 GET_FILENAME_COMPONENT(PYTHON_HOME_PATH ${Python_EXECUTABLE} DIRECTORY)
 
 # Ensure the detection of Python library installed through a bundle downloaded from Python.org or through a macports installation
