@@ -14,7 +14,7 @@ ADD_CUSTOM_COMMAND(OUTPUT ${LLA_DIR}/include/GraphHelper.h
   VERBATIM)
 
 # hide compilation warnings coming from libleidenalg source code
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-old-style-cast -Wno-unused-parameter")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-old-style-cast -Wno-unused-parameter -Wno-unused-but-set-variable")
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${LLA_DIR}/include ${TulipCoreBuildInclude} ${TulipCoreInclude})
 
