@@ -2,7 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.12)
 
 #Setting project name and version (W.X.Y.Z if necessary)
 CMAKE_POLICY(SET CMP0048 NEW)
-PROJECT(Tulip VERSION 5.7.3 DESCRIPTION "Large graphs analysis and drawing" HOMEPAGE_URL "https://tulip.labri.fr")
+PROJECT(Tulip VERSION 5.7.4 DESCRIPTION "Large graphs analysis and drawing" HOMEPAGE_URL "https://tulip.labri.fr")
 message(STATUS "Configuring ${CMAKE_PROJECT_NAME} ${Tulip_VERSION}")
 
 # First display CMake version
