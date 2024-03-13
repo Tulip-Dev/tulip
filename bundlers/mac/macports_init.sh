@@ -30,6 +30,9 @@ case $MACOS_VERSION in
     13)
 	MACOS_NAME=Ventura
 	;;
+    14)
+	MACOS_NAME=Sonoma
+	;;
     *)
 	echo "Unknown MACOSX version $MACOS_VERSION"
         exit 1
@@ -49,9 +52,9 @@ MACPORTS_INSTALLER_URL=https://github.com/macports/macports-base/releases/downlo
 curl -LO ${MACPORTS_INSTALLER_URL}
 # install MacPorts
 sudo installer -store -pkg ${MACPORTS_INSTALLER} -target /
-# update it
+# synchronize port trees if needed
 export PATH=/opt/local/bin:$PATH
-sudo port -d -N selfupdate
+sudo port sync
 
 # remove downloaded files
 rm latest ${MACPORTS_INSTALLER}
