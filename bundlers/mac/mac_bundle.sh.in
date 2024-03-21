@@ -37,6 +37,12 @@ then
     exit 1
 fi
 
+# since macdeployqt from latest qt5 macports release crashes in our vms
+# we now use a working precompiled macdeployqt which takes a -qtdir parameter
+# and forces to adjust the links to libc++.1.dylib
+curl -L -o /tmp/macdeployqt https://github.com/crystalidea/macdeployqt-universal/raw/main/bin/macdeployqt
+chmod 755 /tmp/macdeployqt
+
 echo "Wiping previous bundles into ${DEST_DIR}"
 rm -rf "${DEST_DIR}/application" 2>/dev/null
 rm -f "${DEST_DIR}/${APP_NAME}-@Tulip_VERSION@.dmg" 2>/dev/null
@@ -52,6 +58,8 @@ mkdir -p Tulip.app/Contents/{MacOS,Resources,Frameworks}
 cd Tulip.app/Contents
 cp "${SRC_DIR}/tulip.icns" Resources/
 sed -e s"/TLP_VERSION/@Tulip_VERSION@/g" -e s"/ARCH/@CMAKE_SYSTEM_PROCESSOR@/" "${SRC_DIR}/Info.plist" > Info.plist
+# build with precompiled macdeployqt needs a link to /usr/lib/libc++.1.dylib
+ln -s /usr/lib/libc++.1.dylib Frameworks/libc++.1.dylib
 
 echo 'Copying binaries & libraries'
 cd "${DEST_DIR}/application/Tulip.app/Contents/"
@@ -95,15 +103,19 @@ mv bin/tulip MacOS/Tulip
 # they are suffixed by .so instead of .dylib)
 if [ "$PYTHON_BUILD" = "ON" ]
 then
-${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app -executable=${DEST_DIR}/application/Tulip.app/Contents/bin/tulip_perspective -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_tulip.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_stl.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/sip.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulipgui/native/_tulipgui.so -executable=${DEST_DIR}/application/Tulip.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python -executable=${DEST_DIR}/application/Tulip.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Resources/Python.app/Contents/MacOS/Python
+/tmp/macdeployqt ${DEST_DIR}/application/Tulip.app -qtdir=/opt/local/libexec/qt5 -executable=${DEST_DIR}/application/Tulip.app/Contents/bin/tulip_perspective -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_tulip.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_stl.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/sip.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulipgui/native/_tulipgui.so -executable=${DEST_DIR}/application/Tulip.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python -executable=${DEST_DIR}/application/Tulip.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Resources/Python.app/Contents/MacOS/Python
 # ensure embedded python framework will be found
 # when loading all libs related to python
-# update tulip python specific libs
+# update tulip python specific libs (update libc++.1.dylib path too)
 install_name_tool -change $PYTHON_DIR_PATH/Python ${AROBASE}loader_path/Python.framework/Versions/@PYTHON_VERSION@/Python ${DEST_DIR}/application/Tulip*.app/Contents/Frameworks/libtulip-python-*.dylib
 install_name_tool -change $PYTHON_DIR_PATH/Python ${AROBASE}loader_path/../../../../../Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/python/tulip/native/_tulip.so
+install_name_tool -change ${AROBASE}rpath/libc++.1.dylib /usr/lib/libc++.1.dylib ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/python/tulip/native/_tulip.so
 install_name_tool -change $PYTHON_DIR_PATH/Python ${AROBASE}loader_path/../../../../../Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/python/tulip/native/sip.so
+install_name_tool -change ${AROBASE}rpath/libc++.1.dylib /usr/lib/libc++.1.dylib ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/python/tulip/native/sip.so
 install_name_tool -change $PYTHON_DIR_PATH/Python ${AROBASE}loader_path/../../../../../Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/python/tulip/native/_stl.so
+install_name_tool -change ${AROBASE}rpath/libc++.1.dylib /usr/lib/libc++.1.dylib ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/python/tulip/native/_stl.so
 install_name_tool -change $PYTHON_DIR_PATH/Python ${AROBASE}loader_path/../../../../../Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/python/tulipgui/native/_tulipgui.so
+install_name_tool -change ${AROBASE}rpath/libc++.1.dylib /usr/lib/libc++.1.dylib ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/python/tulipgui/native/_tulipgui.so
 
 # do the same for the python linked libs in lib/tulip
 for DYLIB in $(find ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip -name '*.dylib' -print)
@@ -124,10 +136,27 @@ done
 # to ensure they can be used safely to install
 # the external modules needed by the user
 install_name_tool -change $PYTHON_DIR_PATH/Python ${AROBASE}executable_path/../Python ${DEST_DIR}/application/Tulip*.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/bin/python@PYTHON_VERSION@
-install_name_tool -change $PYTHON_DIR_PATH/Python @executable_path/../../../../Python ${DEST_DIR}/application/Tulip*.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Resources/Python.app/Contents/MacOS/Python
+install_name_tool -change $PYTHON_DIR_PATH/Python ${AROBASE}executable_path/../../../../Python ${DEST_DIR}/application/Tulip*.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Resources/Python.app/Contents/MacOS/Python
 else
-${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app -executable=${DEST_DIR}/application/Tulip.app/Contents/bin/tulip_perspective
+/tmp/macdeployqt ${DEST_DIR}/application/Tulip.app -qtdir=/opt/local/libexec/qt5 -executable=${DEST_DIR}/application/Tulip.app/Contents/bin/tulip_perspective
 fi
+
+# ensure Tulip and tulip_perspective are linked against /usr/lib/libc++.1.dylib
+install_name_tool -change ${AROBASE}rpath/libc++.1.dylib /usr/lib/libc++.1.dylib ${DEST_DIR}/application/Tulip.app/Contents/MacOS/Tulip
+install_name_tool -change ${AROBASE}rpath/libc++.1.dylib /usr/lib/libc++.1.dylib ${DEST_DIR}/application/Tulip.app/Contents/bin/tulip_perspective
+
+# do the same for the tulip libs in Frameworks
+for DYLIB in $(find ${DEST_DIR}/application/Tulip*.app/Contents/Frameworks -name 'libtulip-*.dylib' -print)
+do
+  install_name_tool -change ${AROBASE}rpath/libc++.1.dylib /usr/lib/libc++.1.dylib ${DYLIB}
+done
+
+# and the libs in lib/tulip
+for DYLIB in $(find ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip -name '*.dylib' -print)
+do
+  install_name_tool -change ${AROBASE}rpath/libc++.1.dylib /usr/lib/libc++.1.dylib ${DYLIB}
+done
+
 # rename
 mv ${DEST_DIR}/application/Tulip.app ${DEST_DIR}/application/${APP_NAME}-@Tulip_VERSION@${SUFFIX}.app
 
