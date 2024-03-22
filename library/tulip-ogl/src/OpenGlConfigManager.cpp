@@ -40,15 +40,18 @@ void OpenGlConfigManager::initExtensions() {
 }
 
 string OpenGlConfigManager::getOpenGLVersionString() {
-  return reinterpret_cast<const char *>(glGetString(GL_VERSION));
+  auto glstring = reinterpret_cast<const char *>(glGetString(GL_VERSION));
+  return glstring ? glstring : "??.??";
 }
 
 double OpenGlConfigManager::getOpenGLVersion() {
-  return std::stod(getOpenGLVersionString());
+  auto glstring = reinterpret_cast<const char *>(glGetString(GL_VERSION));
+  return glstring ? std::stod(glstring) : 0.0;
 }
 
 string OpenGlConfigManager::getOpenGLVendor() {
-  return string(reinterpret_cast<const char *>(glGetString(GL_VENDOR)));
+  auto glstring = reinterpret_cast<const char *>(glGetString(GL_VENDOR));
+  return glstring ? glstring : "unknown GL vendor";
 }
 
 bool OpenGlConfigManager::isExtensionSupported(const string &extensionName) {
