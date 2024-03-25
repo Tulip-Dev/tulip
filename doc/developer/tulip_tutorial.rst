@@ -24,12 +24,12 @@ The second needed element is the *tulip-config* file. If you have followed the s
 
   /usr/local/bin
 
-along with *tulip* and *tulip_perspective*.
+along with *tulip*.
 If you have, however, followed the customized installation procedures, the files should be in the directory
 
 .. code-block:: bash
 
-  [...]/Tulip-4.3/install-[debug,release]/bin/*
+  [...]/Tulip-x.y/install-[debug,release]/bin/*
 
 You can either add this folder address to the path or specify the whole address in the compilation command line.
 

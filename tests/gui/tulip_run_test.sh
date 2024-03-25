@@ -64,7 +64,7 @@ mv $tmp_conf ~/.config/TulipSoftware/Tulip.conf
 
 # check for a crash
 if [ ! -f tulip.pid ]; then
-  echo "$TEST_NAME test failed: tulip_perspective execution aborted"
+  echo "$TEST_NAME test failed: tulip execution aborted"
   exit
 fi
 

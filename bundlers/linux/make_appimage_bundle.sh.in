@@ -84,10 +84,10 @@ echo "export TLP_DIR=\${BUNDLE_DIR}/usr/lib" >> $APPRUN_FILE
 echo "export OPENSSL_CONF=" >> $APPRUN_FILE
 echo "if [ \"\$1\" = \"-no-output-filtering\" ]; then" >> $APPRUN_FILE
 # for debugging purpose, allow to run without filtering of console output
-echo "  \${BUNDLE_DIR}/usr/bin/tulip_perspective -p ${PERSPECTIVE} \"\$2\"" >> $APPRUN_FILE
+echo "  \${BUNDLE_DIR}/usr/bin/tulip -p ${PERSPECTIVE} \"\$2\"" >> $APPRUN_FILE
 echo "else" >> $APPRUN_FILE
 # run with gtk output hidden
-echo "  \${BUNDLE_DIR}/usr/bin/tulip_perspective -p ${PERSPECTIVE} \"\$1\" 2>&1 | sed -e '/Gtk-/d' -e '/GTK+/d' -e '/invalid style override passed/d'" >> $APPRUN_FILE
+echo "  \${BUNDLE_DIR}/usr/bin/tulip -p ${PERSPECTIVE} \"\$1\" 2>&1 | sed -e '/Gtk-/d' -e '/GTK+/d' -e '/invalid style override passed/d'" >> $APPRUN_FILE
 echo "fi" >> $APPRUN_FILE
 chmod 755 $APPRUN_FILE
 
@@ -96,7 +96,7 @@ DESKTOP_FILE=$BUNDLE_DIR/tulip.desktop
 echo "[Desktop Entry]" > $DESKTOP_FILE
 echo "Name=Tulip" >> $DESKTOP_FILE
 echo "Type=Application" >> $DESKTOP_FILE
-echo "Exec=tulip_perspective" >> $DESKTOP_FILE
+echo "Exec=tulip" >> $DESKTOP_FILE
 echo "Icon=Tulip" >> $DESKTOP_FILE
 echo "Categories=Science;" >> $DESKTOP_FILE
 
@@ -111,8 +111,8 @@ cp @Tulip_SOURCE_DIR@/bundlers/linux/Tulip.png $BUNDLE_DIR
 # copy tulip.appdata.xml
 cp @Tulip_SOURCE_DIR@/bundlers/linux/tulip.appdata.xml $BUNDLE_SHARE_DIR/metainfo
 
-# copy tulip_perspective exe
-cp -v -p $TULIP_INSTALL_DIR/bin/tulip_perspective $BUNDLE_BIN_DIR
+# copy tulip exe
+cp -v -p $TULIP_INSTALL_DIR/bin/tulip $BUNDLE_BIN_DIR
 # copy all lib and share installed files (no include)
 echo "copying $TULIP_INSTALL_DIR/lib files into $BUNDLE_LIB_DIR"
 cp -Rp $TULIP_INSTALL_DIR/@CMAKE_INSTALL_LIBDIR@/* $BUNDLE_LIB_DIR
@@ -143,9 +143,9 @@ fi
 export QT_INSTALL_LIBS_DIR=$(${QMAKE} -query QT_INSTALL_LIBS)
 export LD_LIBRARY_PATH=${QT_INSTALL_LIBS_DIR}:${LD_LIBRARY_PATH}
 
-# copy tulip_perspective needed libs
+# copy tulip needed libs
 pushd $BUNDLE_DIR > /dev/null 2>&1
-ldd $BUNDLE_BIN_DIR/tulip_perspective | grep "=> /" | awk '{print $3}' | grep -v tulip | xargs -I '{}' cp -v '{}' ./usr/lib || true
+ldd $BUNDLE_BIN_DIR/tulip | grep "=> /" | awk '{print $3}' | grep -v tulip | xargs -I '{}' cp -v '{}' ./usr/lib || true
 popd > /dev/null 2>&1
 
 # if PYTHON_LIBRARY is specified to indicate the Python installation

@@ -16,9 +16,9 @@ Yes:
 FunctionEnd
   InstallDir "$PROGRAMFILES64\Tulip-@Tulip_VERSION@"
   !if ${CHECK_PYTHON} == "ON"
-    Name "Tulip-@Tulip_VERSION@ (x64)"
+    Name "Tulip-@Tulip_VERSION@"
   !else
-    Name "Tulip-@Tulip_VERSION@ (x64 without Python Components)"
+    Name "Tulip-@Tulip_VERSION@ (without Python Components)"
   !endif
 
 !define MUI_ICON "files\share\tulip\bitmaps\tulip.ico"
@@ -104,13 +104,10 @@ Section "Tulip"
 
 File /r files\*.*
 
-  CreateDirectory "$SMPROGRAMS\Tulip-@Tulip_VERSION@ (x64)"
-  CreateShortCut "$SMPROGRAMS\Tulip-@Tulip_VERSION@ (x64)\Tulip-@Tulip_VERSION@ agent (x64).lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
-  CreateShortCut "$SMPROGRAMS\Tulip-@Tulip_VERSION@ (x64)\Tulip-@Tulip_VERSION@ (x64).lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
-  CreateShortCut "$SMPROGRAMS\Tulip-@Tulip_VERSION@ (x64)\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
-  CreateShortCut "$DESKTOP\Tulip-@Tulip_VERSION@ agent (x64).lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
-  CreateShortCut "$DESKTOP\Tulip-@Tulip_VERSION@ (x64).lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@Tulip_VERSION@" "DisplayName" "Tulip-@Tulip_VERSION@ (x64)"
+  CreateDirectory "$SMPROGRAMS\Tulip-@Tulip_VERSION@"
+  CreateShortCut "$SMPROGRAMS\Tulip-@Tulip_VERSION@\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+  CreateShortCut "$DESKTOP\Tulip-@Tulip_VERSION@.lnk" "$INSTDIR\bin\tulip.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@Tulip_VERSION@" "DisplayName" "Tulip-@Tulip_VERSION@"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@Tulip_VERSION@" "UninstallString" "$INSTDIR\Uninstall.exe"
   WriteUninstaller "$INSTDIR\Uninstall.exe"
 
@@ -127,9 +124,8 @@ SectionEnd
 Section "Uninstall"
   SetShellVarContext all
   SetRegView 64
-  Delete "$DESKTOP\Tulip-@Tulip_VERSION@ agent (x64).lnk"
-  Delete "$DESKTOP\Tulip-@Tulip_VERSION@ (x64).lnk"
-  RMDir /r "$SMPROGRAMS\Tulip-@Tulip_VERSION@ (x64)"
+  Delete "$DESKTOP\Tulip-@Tulip_VERSION@.lnk"
+  RMDir /r "$SMPROGRAMS\Tulip-@Tulip_VERSION@"
   RMDir /r "$INSTDIR"
   Delete $INSTDIR\Uninstall.exe
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@Tulip_VERSION@"

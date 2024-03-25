@@ -95,10 +95,10 @@ protected:
   /**
    * @brief The project associated to this perspective. This project can be empty or contain data
    * depending on how the Perspective was launched:
-   * To launch a perspective, the tulip_perspective executable is called with the following
+   * To launch a perspective, the tulip executable is called with the following
    * arguments:
    * @code
-   * tulip_perspective [--perspective=Name] [file_path]
+   * tulip exe [--perspective=Name] [file_path]
    * @endcode
    * @list
    * @li The --perspective argument forces Tulip to start the "Name" perspective. Even if the
@@ -121,7 +121,7 @@ protected:
   QMainWindow *_mainWindow;
 
   /**
-   * If the user provided a file to the tulip_perspective but this file is not recognized as a valid
+   * If the user provided a file to the tulip exe but this file is not recognized as a valid
    * TulipProject, the full path of the file will be stored into the _externalFile member.
    * @note Remember that perspectives should always store their data into TulipProject in order to
    * keep a consistent workflow.
@@ -152,7 +152,7 @@ public:
   }
 
   /**
-   * @brief Called at the beginning of the tulip_perspective to set the Perspective singleton.
+   * @brief Called at the beginning of the tulip exe to set the Perspective singleton.
    * @see instance()
    */
   static void setInstance(tlp::Perspective *);
@@ -202,7 +202,7 @@ public:
   progress(ProgressOptions options = ProgressOptions(IsPreviewable | IsStoppable | IsCancellable));
 
   /**
-   * @brief usage Displays a usage message when called from the tulip_perspective executable
+   * @brief usage Displays a usage message when called from the tulip executable
    */
   virtual void usage(std::string &usage_str) const {
     usage_str = "No options for this perspective.";

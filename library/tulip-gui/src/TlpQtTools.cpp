@@ -333,7 +333,7 @@ public:
   }
 };
 
-void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
+void initTulipSoftware(tlp::PluginLoader *loader) {
 
   QLocale::setDefault(QLocale(QLocale::English));
   TulipSettings::applyProxySettings();
@@ -371,15 +371,6 @@ void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
 #endif
 #endif
 #endif
-
-  if (removeDiscardedPlugins) {
-    for (const QString &plugin : tlp::PluginManager::markedForRemoval()) {
-      QFile f(plugin);
-      f.remove();
-      tlp::PluginManager::unmarkForRemoval(
-          plugin); // whether or not the removal succeeded, do not try again
-    }
-  }
 
   tlp::initTulipLib();
   initQTypeSerializers();

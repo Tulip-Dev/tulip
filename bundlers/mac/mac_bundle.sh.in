@@ -96,14 +96,13 @@ cp "@QT_QTCLUCENE_LIBRARY@" . 2>/dev/null
 
 # use macdeployqt to configure exe & libraries
 cd ..
-# configure tulip & tulip_perspective
+# configure tulip
 mv bin/tulip MacOS/Tulip
-# run macdeployqt with tulip_perspective as an other executable to update
-# but also the Tulip Python dynamic modules (not processed by macdeployqt as
-# they are suffixed by .so instead of .dylib)
+# run macdeployqt with the Tulip Python dynamic modules
+# (not processed by macdeployqt as they are suffixed by .so instead of .dylib)
 if [ "$PYTHON_BUILD" = "ON" ]
 then
-/tmp/macdeployqt ${DEST_DIR}/application/Tulip.app -qtdir=/opt/local/libexec/qt5 -executable=${DEST_DIR}/application/Tulip.app/Contents/bin/tulip_perspective -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_tulip.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_stl.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/sip.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulipgui/native/_tulipgui.so -executable=${DEST_DIR}/application/Tulip.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python -executable=${DEST_DIR}/application/Tulip.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Resources/Python.app/Contents/MacOS/Python
+/tmp/macdeployqt ${DEST_DIR}/application/Tulip.app -qtdir=/opt/local/libexec/qt5 -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_tulip.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_stl.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/sip.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulipgui/native/_tulipgui.so -executable=${DEST_DIR}/application/Tulip.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python -executable=${DEST_DIR}/application/Tulip.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Resources/Python.app/Contents/MacOS/Python
 # ensure embedded python framework will be found
 # when loading all libs related to python
 # update tulip python specific libs (update libc++.1.dylib path too)
@@ -138,7 +137,7 @@ done
 install_name_tool -change $PYTHON_DIR_PATH/Python ${AROBASE}executable_path/../Python ${DEST_DIR}/application/Tulip*.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/bin/python@PYTHON_VERSION@
 install_name_tool -change $PYTHON_DIR_PATH/Python ${AROBASE}executable_path/../../../../Python ${DEST_DIR}/application/Tulip*.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Resources/Python.app/Contents/MacOS/Python
 else
-/tmp/macdeployqt ${DEST_DIR}/application/Tulip.app -qtdir=/opt/local/libexec/qt5 -executable=${DEST_DIR}/application/Tulip.app/Contents/bin/tulip_perspective
+/tmp/macdeployqt ${DEST_DIR}/application/Tulip.app -qtdir=/opt/local/libexec/qt5
 fi
 
 # ensure Tulip and tulip_perspective are linked against /usr/lib/libc++.1.dylib

@@ -107,12 +107,10 @@ TLP_QT_SCOPE QString localPluginsPath();
  This method performs basic operations when starting a software using Tulip:
  @list
  @li It initializes the tulip library
- @li it checks plugins to be discarded and uninstalls them
  @li It loads plugins from the application path
  @endlist
  */
-extern TLP_QT_SCOPE void initTulipSoftware(PluginLoader *loader = nullptr,
-                                           bool removeDiscardedPlugins = false);
+extern TLP_QT_SCOPE void initTulipSoftware(PluginLoader *loader = nullptr);
 
 /**
  * @brief redirect tlp::debug() to qDebug()
