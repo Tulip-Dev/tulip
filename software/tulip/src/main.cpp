@@ -125,9 +125,9 @@ void usage(const QString &error) {
          "meta-information. If the \"--perspective\" flag is used, tulip will try to "
          "open the file with the given perspective (the project meta-information is ignored)."
       << endl
-      << "List of OPTIONS:" << endl
+      << "List of optional OPTIONS:" << endl
       << "  --perspective=<perspective_name> (-p perspective_name)\tStart the perspective "
-         "specified by perspective_name."
+         "specified by perspective_name. If not specified, starts the Tulip default perspective."
       << endl
       << "  --geometry=<X,Y,width,height>\tSet the given rectangle as geometry for the main window."
       << endl
