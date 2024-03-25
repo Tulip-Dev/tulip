@@ -235,7 +235,7 @@ void Graph::init_admin() {
 void Graph::cache_neighbour_edges(size_t v, igraph_neimode_t mode) {
   size_t degree = this->degree(v, mode);
 
-  vector<size_t> *_cached_neigh_edges;
+  vector<size_t> *_cached_neigh_edges=nullptr;
   tlp::Iterator<tlp::edge> *it = nullptr;
   switch (mode) {
   case IGRAPH_IN:
@@ -293,7 +293,7 @@ vector<size_t> const &Graph::get_neighbour_edges(size_t v, igraph_neimode_t mode
 void Graph::cache_neighbours(size_t v, igraph_neimode_t mode) {
   size_t degree = this->degree(v, mode);
 
-  vector<size_t> *_cached_neighs;
+  vector<size_t> *_cached_neighs=nullptr;
   tlp::Iterator<tlp::node> *it = nullptr;
   switch (mode) {
   case IGRAPH_IN:
