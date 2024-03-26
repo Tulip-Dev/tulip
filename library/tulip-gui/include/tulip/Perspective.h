@@ -30,8 +30,6 @@
 #include <QMenu>
 #include <QMainWindow>
 
-class QTcpSocket;
-
 namespace tlp {
 
 class Graph;
@@ -48,12 +46,11 @@ static const std::string PERSPECTIVE_CATEGORY = "Perspective";
  */
 class TLP_QT_SCOPE PerspectiveContext : public tlp::PluginContext {
 public:
-  PerspectiveContext() : mainWindow(nullptr), project(nullptr), tulipPort(0) {}
+  PerspectiveContext() : mainWindow(nullptr), project(nullptr) {}
   QMainWindow *mainWindow;
   TulipProject *project;
   QString externalFile;
   QVariantMap parameters;
-  quint64 tulipPort;
   unsigned int id;
 };
 
@@ -63,13 +60,10 @@ public:
  *
  * A Perspective aims at using the multiple features available in Tulip to create a complete,
  * coherent workflow dedicated to a particular use-case.
- * Perspectives are chosen by the user when first running the Tulip agent. The main perspective is
- * called "Tulip". This perspective unveils all the Tulip features and aims at being a protyping and
+ * The main perspective is called "Tulip". This perspective unveils all the Tulip features and aims at being a protyping and
  * researching platform.
  *
- * A Perspective always acts in its own process and communicate with the Tulip agent via TCP
- * sockets.
- * Thus, it is the Perspective's responsibility to offer the possibility to display graphs, run
+ * It is the Perspective's responsibility to offer the possibility to display graphs, run
  * plugins, etc. A lot of helper classes can be found into the tulip-gui API like pre-made widgets,
  * Qt models, etc.
  *
@@ -85,11 +79,8 @@ class TLP_QT_SCOPE Perspective : public QObject, public tlp::Plugin {
 
   static tlp::Perspective *_instance;
   QSet<QString> _reservedProperties;
-  QTcpSocket *_agentSocket;
   unsigned int _perspectiveId;
   bool _maximised;
-  void sendAgentMessage(const QString &);
-  void notifyProjectLocation(const QString &path);
 
 protected:
   /**
@@ -133,7 +124,6 @@ protected:
    * considered to be Perspective-specific and are forwarded into this variable.
    */
   QVariantMap _parameters;
-  bool checkSocketConnected();
 
 public:
   enum ProgressOption {
@@ -320,49 +310,20 @@ signals:
 
 protected slots:
   /**
-   * @brief Send a message to the Tulip agent to make him display the Plugins Center page.
-   */
-  void showPluginsCenter();
-
-  /**
    * @brief Call this slot to switch to full screen or windowed mode
    * @param f is true, switch to full screen mode. If false, switch to windowed mode
    */
   void showFullScreen(bool f);
 
-  /**
-   * @brief Send a message to the Tulip agent to make him display the Projects page.
-   */
-  void showProjectsPage();
 
   /**
-   * @brief Send a message to the Tulip agent to make him display the "About us" page.
-   */
-  void showAboutPage();
-
-  /**
-   * @brief Send a message to the Tulip agent to make him display a message in the system
-   * notification area.
-   * @param s The message to display.
-   */
-  void showTrayMessage(const QString &s);
-
-  /**
-   * @brief Send a message to the Tulip agent to make him display an error message that will be
-   * shown in the system notification as well as on the welcome page.
-   * @param title The message's title.
-   * @param s The message to display.
-   */
-  void showErrorMessage(const QString &title, const QString &s);
-
-  /**
-   * @brief Send a message to the Tulip agent to make him open a new Tulip Project.
+   * @brief Open a new Tulip Project.
    * @param path the absolute path of the project file.
    */
   virtual void openProjectFile(const QString &path);
 
   /**
-   * @brief Send a message to the Tulip agent to make him open a new Perspective without a project.
+   * @brief Open a new Perspective without a project.
    * @param name The name of the Perspective to create.
    */
   void createPerspective(const QString &name);

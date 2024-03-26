@@ -1022,9 +1022,6 @@ top: -1px;
           SLOT(displayColorScalesDialog()));
   _ui->exportButton->setDefaultAction(_ui->actionExport);
 
-  // Agent actions
-  connect(_ui->actionPlugins_Center, SIGNAL(triggered()), this, SLOT(showPluginsCenter()));
-  connect(_ui->actionAbout_us, SIGNAL(triggered()), this, SLOT(showAboutPage()));
   connect(_ui->actionAbout_us, SIGNAL(triggered()), this, SLOT(showAboutTulipPage()));
 
   if (QFile(tlpStringToQString(tlp::TulipShareDir) + "../doc/Tulip/tulip-user/html/index.html")
@@ -1117,8 +1114,6 @@ top: -1px;
 
   // fill menu with recent documents
   buildRecentDocumentsMenu();
-
-  showTrayMessage("GraphPerspective started");
 
   // for former user who has never launched Tulip 5.3
   // we show a message to ask him if he wants to use
@@ -2224,17 +2219,15 @@ void GraphPerspective::displayColorScalesDialog() {
 }
 
 void GraphPerspective::showAboutTulipPage() {
-  if (!checkSocketConnected()) {
-    tlp::AboutTulipPage *aboutPage = new tlp::AboutTulipPage;
-    QDialog aboutDialog(mainWindow(), Qt::Window);
-    aboutDialog.setWindowTitle("About Tulip");
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(aboutPage);
-    layout->setContentsMargins(0, 0, 0, 0);
-    aboutDialog.setLayout(layout);
-    aboutDialog.resize(800, 600);
-    aboutDialog.exec();
-  }
+  tlp::AboutTulipPage *aboutPage = new tlp::AboutTulipPage;
+  QDialog aboutDialog(mainWindow(), Qt::Window);
+  aboutDialog.setWindowTitle("About Tulip");
+  QVBoxLayout *layout = new QVBoxLayout;
+  layout->addWidget(aboutPage);
+  layout->setContentsMargins(0, 0, 0, 0);
+  aboutDialog.setLayout(layout);
+  aboutDialog.resize(800, 600);
+  aboutDialog.exec();
 }
 
 void GraphPerspective::resetLoggerDialogPosition() {
