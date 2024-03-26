@@ -1,10 +1,10 @@
 .. _gui:
 
-*********************************************
-A Quick Presentation of the Tulip Perspective
-*********************************************
+************************************************
+A Quick Presentation of the Tulip User Interface
+************************************************
 
-Here are the components of Tulip Perspective's main window:
+Here are the components of Tulip main window:
 
 .. image:: _images/i_interface.png
     :width: 900
@@ -27,7 +27,6 @@ Here are the components of Tulip Perspective's main window:
 
 |l_blu| Workspace view
 
-From this point and even if it is no fully correct, we refer to the Tulip perspective by simply using the term Tulip. Differentiating one (Tulip perspective) from the other (Tulip agent) is quite simple as the perspective window proposes the visualization actions and the Tulip agent window only offers plugin management and choosing the project to open.
 
 
 .. _menu:
@@ -84,8 +83,6 @@ When overviews are displayed, you can then double-click on a panel icon to open 
 * |icon_csv| **CSV**: opens the CSV data importing wizard (more information in :ref:`csv`).
 
 * |icon_import| **Import**: opens the graph importing wizard (learn more about it in :ref:`first_create`).
-
-* |icon_plugin| **Plugins**: only available on Mac and Windows platform, opens the plugins center of the Tulip agent (see in :ref:`plugin` for more information).
 
 
 .. _algo_window:
