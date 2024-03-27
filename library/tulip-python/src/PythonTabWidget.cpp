@@ -53,10 +53,9 @@ void PythonTabWidget::paintEvent(QPaintEvent *event) {
   auto pyVersion = QString("Python ") + pythonVersion;
   int labelWidth = QFontMetrics(painter.font()).boundingRect(pyVersion).width();
   int offset = tabBar()->height() - imageWidth;
-  QRectF rect(width() - (imageWidth + labelWidth + 10),
-              tabBar()->pos().y() + offset / 2, imageWidth, imageWidth);
-  QRectF rect2(width() - labelWidth - 5, tabBar()->pos().y(), labelWidth,
-               tabBar()->height());
+  QRectF rect(width() - (imageWidth + labelWidth + 10), tabBar()->pos().y() + offset / 2,
+              imageWidth, imageWidth);
+  QRectF rect2(width() - labelWidth - 5, tabBar()->pos().y(), labelWidth, tabBar()->height());
   painter.drawImage(rect, pythonLogoImg);
   painter.drawText(rect2, Qt::AlignCenter, pyVersion);
 }

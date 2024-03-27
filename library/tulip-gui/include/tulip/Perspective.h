@@ -60,8 +60,8 @@ public:
  *
  * A Perspective aims at using the multiple features available in Tulip to create a complete,
  * coherent workflow dedicated to a particular use-case.
- * The main perspective is called "Tulip". This perspective unveils all the Tulip features and aims at being a protyping and
- * researching platform.
+ * The main perspective is called "Tulip". This perspective unveils all the Tulip features and aims
+ * at being a protyping and researching platform.
  *
  * It is the Perspective's responsibility to offer the possibility to display graphs, run
  * plugins, etc. A lot of helper classes can be found into the tulip-gui API like pre-made widgets,
@@ -314,7 +314,6 @@ protected slots:
    * @param f is true, switch to full screen mode. If false, switch to windowed mode
    */
   void showFullScreen(bool f);
-
 
   /**
    * @brief Open a new Tulip Project.

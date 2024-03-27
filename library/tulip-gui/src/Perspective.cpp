@@ -38,8 +38,8 @@ void Perspective::setInstance(Perspective *p) {
 }
 
 Perspective::Perspective(const tlp::PluginContext *c)
-    : _maximised(false), _project(nullptr), _mainWindow(nullptr),
-      _externalFile(QString()), _parameters(QVariantMap()), _restartNeeded(false) {
+    : _maximised(false), _project(nullptr), _mainWindow(nullptr), _externalFile(QString()),
+      _parameters(QVariantMap()), _restartNeeded(false) {
   if (c != nullptr) {
     const PerspectiveContext *perspectiveContext = static_cast<const PerspectiveContext *>(c);
     _mainWindow = perspectiveContext->mainWindow;
@@ -47,7 +47,6 @@ Perspective::Perspective(const tlp::PluginContext *c)
     _externalFile = perspectiveContext->externalFile;
     _parameters = perspectiveContext->parameters;
     _perspectiveId = perspectiveContext->id;
-
   }
 }
 
@@ -96,11 +95,12 @@ bool Perspective::isReservedPropertyName(QString s) {
 }
 
 void Perspective::openProjectFile(const QString &path) {
-    QProcess::startDetached(QApplication::applicationFilePath(), QStringList() << path);
+  QProcess::startDetached(QApplication::applicationFilePath(), QStringList() << path);
 }
 
 void Perspective::createPerspective(const QString &name) {
-    QProcess::startDetached(QApplication::applicationFilePath(), QStringList() << "--perspective=" + name);
+  QProcess::startDetached(QApplication::applicationFilePath(), QStringList()
+                                                                   << "--perspective=" + name);
 }
 
 void Perspective::redirectStatusTipOfMenu(QMenu *menu) {
