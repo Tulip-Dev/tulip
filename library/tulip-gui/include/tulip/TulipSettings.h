@@ -68,33 +68,6 @@ public:
     */
   static void checkRecentDocuments();
 
-  /**
-   * @brief Adds a remote location from which to list plugins.
-   *
-   * @param remoteLocation The URL of the plugin server.
-   * @return void
-   **/
-  static void addRemoteLocation(const QString &remoteLocation);
-
-  /**
-   * @brief Removes a location from which to list plugins.
-   *
-   * @param remoteLocation The URL of the plugin server.
-   * @return void
-   **/
-  static void removeRemoteLocation(const QString &remoteLocation);
-
-  /**
-   * @brief Retrieves the list of locations from which to list plugins.
-   *
-   * @return const QStringList
-   **/
-  static const QStringList remoteLocations();
-  static const QStringList pluginsToRemove();
-
-  static void markPluginForRemoval(const QString &pluginLibrary);
-  static void unmarkPluginForRemoval(const QString &pluginLibrary);
-
   static tlp::Color defaultColor(tlp::ElementType elem, bool tulipDefault = false);
   static void setDefaultColor(tlp::ElementType elem, const tlp::Color &color);
 

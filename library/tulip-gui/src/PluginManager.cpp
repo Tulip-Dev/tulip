@@ -34,11 +34,6 @@
 
 using namespace tlp;
 
-const QString PluginManager::STABLE_LOCATION =
-    QString("https://tulip.labri.fr/pluginserver/stable/") + TULIP_MM_VERSION;
-const QString PluginManager::TESTING_LOCATION =
-    QString("https://tulip.labri.fr/pluginserver/testing/") + TULIP_MM_VERSION;
-
 QDebug operator<<(QDebug dbg, const PluginVersionInformation &c) {
   dbg.nospace() << "(author " << c.author << ") "
                 << "(version " << c.version << ") "
@@ -146,20 +141,6 @@ public:
   }
 };
 
-void PluginManager::addRemoteLocation(const QString &location) {
-  TulipSettings::addRemoteLocation(location);
-}
-
-void PluginManager::removeRemoteLocation(const QString &location) {
-  TulipSettings::removeRemoteLocation(location);
-}
-
-QStringList PluginManager::remoteLocations() {
-  return TulipSettings::remoteLocations();
-}
-
-QStringList PluginManager::_markedForInstallation = QStringList();
-
 PluginManager::PluginInformationList PluginManager::listPlugins(PluginLocations locations,
                                                                 const QString &nameFilter,
                                                                 const QString &categoryFilter) {
@@ -178,55 +159,12 @@ PluginManager::PluginInformationList PluginManager::listPlugins(PluginLocations 
     }
   }
 
-  if (locations.testFlag(Remote)) {
-    for (const QString &loc : remoteLocations()) {
-      PluginServerClient client(loc);
-
-      for (const PluginInformation &info : client.list(nameFilter, categoryFilter)) {
-        PluginInformation storedInfo = nameToInfo[info.name];
-        storedInfo.name = info.name;
-        storedInfo.category = info.category;
-        storedInfo.availableVersion = info.availableVersion;
-        nameToInfo[info.name] = storedInfo;
-      }
-    }
-  }
-
   PluginInformationList result;
 
   for (const PluginInformation &i : nameToInfo.values())
     result.push_back(i);
 
   return result;
-}
-
-void PluginManager::markForRemoval(const QString &plugin) {
-  TulipSettings::markPluginForRemoval(plugin);
-}
-
-void PluginManager::markForInstallation(const QString &plugin, QObject *recv,
-                                        const char *progressSlot) {
-  PluginInformationList lst = listPlugins(Remote, plugin);
-
-  if (lst.empty() || !lst.first().availableVersion.isValid)
-    return;
-
-  PluginVersionInformation version = lst.first().availableVersion;
-  PluginServerClient clt(version.libraryLocation);
-  clt.fetch(plugin, recv, progressSlot);
-  _markedForInstallation.push_back(plugin);
-}
-
-QStringList PluginManager::markedForInstallation() {
-  return _markedForInstallation;
-}
-
-QStringList PluginManager::markedForRemoval() {
-  return TulipSettings::pluginsToRemove();
-}
-
-void PluginManager::unmarkForRemoval(const QString &file) {
-  TulipSettings::unmarkPluginForRemoval(file);
 }
 
 PluginInformation::PluginInformation() {}

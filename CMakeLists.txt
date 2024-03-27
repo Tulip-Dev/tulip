@@ -140,10 +140,6 @@ STRING(TIMESTAMP CurrentYear "%Y")
 
 TULIP_SET_COMPILER_OPTIONS()
 
-
-## plugin server
-OPTION(TULIP_GENERATE_PLUGINSERVER "Compile and install plugin server" OFF)
-
 ## ========================================================
 ## CORE ONLY
 ## this used to have a minimal build of Tulip without

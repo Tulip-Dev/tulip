@@ -339,11 +339,6 @@ void initTulipSoftware(tlp::PluginLoader *loader) {
   TulipSettings::applyProxySettings();
   TulipSettings::initSeedOfRandomSequence();
 
-  if (TulipSettings::isFirstTulipMMRun()) {
-    TulipSettings::addRemoteLocation(PluginManager::STABLE_LOCATION);
-    TulipSettings::addRemoteLocation(PluginManager::TESTING_LOCATION);
-  }
-
   QDir::home().mkpath(tlp::localPluginsPath());
   QLocale::setDefault(QLocale(QLocale::English));
 

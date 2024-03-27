@@ -38,9 +38,7 @@ using namespace std;
 
 TulipSettings *TulipSettings::_instance = nullptr;
 
-static const QString TS_RemoteLocations = "app/remote_locations";
 static const QString TS_RecentDocuments = "app/recent_documents";
-static const QString TS_PluginsToRemove = "app/pluginsToRemove";
 static const QString TS_DefaultColor = "graph/defaults/color/";
 static const QString TS_DefaultLabelColor = "graph/defaults/color/labels";
 static const QString TS_DefaultSize = "graph/defaults/size/";
@@ -133,54 +131,6 @@ void TulipSettings::addToRecentDocuments(const QString &name) {
     recentDocumentsValue.pop_back();
 
   _instance->setValue(TS_RecentDocuments, recentDocumentsValue);
-}
-
-void TulipSettings::addRemoteLocation(const QString &remoteLocation) {
-  QStringList remoteLocations = instance().value(TS_RemoteLocations).toStringList();
-
-  if (!remoteLocations.contains(remoteLocation)) {
-    remoteLocations.append(remoteLocation);
-  }
-
-  _instance->setValue(TS_RemoteLocations, remoteLocations);
-}
-
-void TulipSettings::removeRemoteLocation(const QString &remoteLocation) {
-  QStringList remoteLocations = instance().value(TS_RemoteLocations).toStringList();
-
-  if (remoteLocations.contains(remoteLocation)) {
-    remoteLocations.removeOne(remoteLocation);
-  }
-
-  _instance->setValue(TS_RemoteLocations, remoteLocations);
-}
-
-const QStringList TulipSettings::remoteLocations() {
-  return instance().value(TS_RemoteLocations).toStringList();
-}
-
-const QStringList TulipSettings::pluginsToRemove() {
-  return instance().value(TS_PluginsToRemove).toStringList();
-}
-
-void TulipSettings::markPluginForRemoval(const QString &pluginLibrary) {
-  QStringList markedPlugins = instance().value(TS_PluginsToRemove).toStringList();
-
-  if (!markedPlugins.contains(pluginLibrary)) {
-    markedPlugins.append(pluginLibrary);
-  }
-
-  _instance->setValue(TS_PluginsToRemove, markedPlugins);
-}
-
-void TulipSettings::unmarkPluginForRemoval(const QString &pluginLibrary) {
-  QStringList markedPlugins = instance().value(TS_PluginsToRemove).toStringList();
-
-  if (markedPlugins.contains(pluginLibrary)) {
-    markedPlugins.removeAll(pluginLibrary);
-  }
-
-  _instance->setValue(TS_PluginsToRemove, markedPlugins);
 }
 
 QString TulipSettings::elementKey(const QString &configEntry, tlp::ElementType elem) {

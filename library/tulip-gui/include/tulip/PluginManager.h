@@ -69,27 +69,13 @@ public:
   enum PluginLocation { Remote = 0x01, Local = 0x02 };
   Q_DECLARE_FLAGS(PluginLocations, PluginLocation)
 
-  static const QString STABLE_LOCATION;
-  static const QString TESTING_LOCATION;
-
   typedef QList<PluginVersionInformation> PluginVersionInformationList;
 
   typedef QList<PluginInformation> PluginInformationList;
 
-  static void addRemoteLocation(const QString &location);
-  static void removeRemoteLocation(const QString &location);
-  static QStringList remoteLocations();
-
   static PluginInformationList listPlugins(PluginLocations locations,
                                            const QString &nameFilter = QString(),
                                            const QString &categoryFilter = QString());
-
-  static void markForRemoval(const QString &plugin);
-  static void markForInstallation(const QString &plugin, QObject *recv, const char *progressSlot);
-
-  static QStringList markedForInstallation();
-  static QStringList markedForRemoval();
-  static void unmarkForRemoval(const QString &file);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PluginManager::PluginLocations)
