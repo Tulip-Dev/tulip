@@ -52,12 +52,6 @@ else
   QT_PATH=$3
 fi
 
-# install Python 3.6 needed packages
-if [ "$PYTHON_EXECUTABLE" == "" ]; then
-  yum -y install rh-python36-python rh-python36-python-devel rh-python36-python-sphinx
-  PYTHON_EXECUTABLE=$(scl enable rh-python36 'which python3.6')
-fi
-
 # build and install tulip
 if [ -d /tulip/build ]; then
   rm -rf /tulip/build/*
