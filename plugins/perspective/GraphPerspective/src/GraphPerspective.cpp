@@ -862,7 +862,6 @@ top: -1px;
   _ui->loggerMessageError->setToolTip(_ui->loggerMessageInfo->toolTip());
   SET_TIPS(_ui->csvImportButton, "Import data in the current graph using a csv formatted file");
   SET_TIPS(_ui->importButton, "Display the Graph import wizard");
-  SET_TIPS(_ui->pluginsButton, "Display the Plugin center");
   SET_TIPS(_ui->sidebarButton, "Hide the Algorithms/Graphs panels");
   SET_TIPS(_ui->menubarButton, "Hide the menu bar");
   SET_TIPS(_ui->singleModeButton, "Switch to 1 panel mode");
@@ -880,7 +879,6 @@ top: -1px;
   SET_TOOLTIP(_ui->actionFull_screen, "Display the Tulip perspective in full screen [F11]");
   SET_TOOLTIP(_ui->actionShow_Menubar, "Show/Hide the main menu bar [Ctrl+Shift+M]");
   SET_TOOLTIP(_ui->actionAbout_us, "Display the 'About Tulip' information dialog [F1]");
-  SET_TOOLTIP(_ui->actionPlugins_Center, _ui->pluginsButton->toolTip());
   SET_TOOLTIP(_ui->actionImport_CSV, _ui->csvImportButton->toolTip());
   SET_TOOLTIP(_ui->actionSave_graph_to_file, "Write the current graph into a file");
   SET_TOOLTIP(_ui->actionCreate_empty_sub_graph, "Create an empty subgraph of the current graph");
@@ -938,7 +936,6 @@ top: -1px;
     _ui->developButton->setMinimumSize(75, 75);
     _ui->csvImportButton->setMinimumSize(75, 75);
     _ui->importButton->setMinimumSize(75, 75);
-    _ui->pluginsButton->setMinimumSize(75, 75);
   }
 
   connect(_logger, SIGNAL(cleared()), this, SLOT(logCleared()));
@@ -1097,20 +1094,6 @@ top: -1px;
 
   connect(_ui->sidebarButton, SIGNAL(clicked()), this, SLOT(showHideSideBar()));
   connect(_ui->menubarButton, SIGNAL(clicked()), this, SLOT(showHideMenuBar()));
-
-#if !defined(__APPLE__) && !defined(_WIN32)
-  // Hide plugins center when not on MacOS or Windows
-  _ui->pluginsButton->hide();
-  _ui->menuHelp->removeAction(_ui->actionPlugins_Center);
-#else
-#if defined(__APPLE__)
-  // the menu cannot be hidden on Mac
-  _ui->menubarButton->hide();
-#endif
-  // show the 'Plugins center' menu entry and button only if connected to the Tulip agent
-  _ui->pluginsButton->setVisible(checkSocketConnected());
-  _ui->actionPlugins_Center->setVisible(checkSocketConnected());
-#endif
 
   // fill menu with recent documents
   buildRecentDocumentsMenu();

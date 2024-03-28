@@ -708,38 +708,6 @@ color: white;
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QToolButton" name="pluginsButton">
-         <property name="minimumSize">
-          <size>
-           <width>50</width>
-           <height>75</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>75</width>
-           <height>75</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Plugins</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>:/tulip/graphperspective/icons/32/system-software-install.png</normaloff>:/tulip/graphperspective/icons/32/system-software-install.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="toolButtonStyle">
-          <enum>Qt::ToolButtonTextUnderIcon</enum>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
     </item>
@@ -1387,7 +1355,6 @@ border: 0px;
     <addaction name="actionShowAPIDocumentation"/>
     <addaction name="actionShowPythonDocumentation"/>
     <addaction name="actionAbout_us"/>
-    <addaction name="actionPlugins_Center"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -1937,12 +1904,12 @@ border: 0px;
    </property>
   </action>
   <action name="actionGroup_unique_edge">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/group.png</normaloff>:/tulip/graphperspective/icons/16/group.png</iconset>
+   </property>
    <property name="text">
     <string>Group with &amp;unique meta-edges</string>
-   </property>
-   <property name="icon">
-     <iconset>
-     <normaloff>:/tulip/graphperspective/icons/16/group.png</normaloff>:/tulip/graphperspective/icons/16/group.png</iconset>
    </property>
    <property name="shortcut">
     <string>Ctrl+G</string>
@@ -2010,22 +1977,6 @@ border: 0px;
     <hint type="sourcelabel">
      <x>37</x>
      <y>584</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pluginsButton</sender>
-   <signal>clicked()</signal>
-   <receiver>actionPlugins_Center</receiver>
-   <slot>trigger()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>37</x>
-     <y>663</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>
