@@ -28,6 +28,8 @@
 #include <tulip/tulipconf.h>
 
 class QTabWidget;
+class QComboBox;
+class QLineEdit;
 
 namespace Ui {
 class PythonIDE;
@@ -65,6 +67,9 @@ class TLP_PYTHON_SCOPE PythonIDE : public QFrame {
   QWidget *_scriptEditorsWidget, *_scriptControlWidget;
   QWidget *_pluginEditorsWidget, *_pluginControlWidget;
   QWidget *_moduleEditorsWidget, *_moduleControlWidget;
+  QFrame *_pipFrame;
+  QLineEdit *_pipPackage;
+  QComboBox *_pipCombo;
 
   bool loadPythonPlugin(const QString &fileName, bool clear = true);
   bool loadPythonPluginFromSrcCode(const QString &moduleName, const QString &pluginSrcCode,
@@ -111,6 +116,7 @@ protected:
   void dragEnterEvent(QDragEnterEvent *) override;
   void dropEvent(QDropEvent *) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
+  void executePipCommand(int command, const QString &packageName);
 
 private:
   int addMainScriptEditor(const QString &fileName = "");

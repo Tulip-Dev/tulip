@@ -343,6 +343,18 @@ tulipplugins.registerPluginOfGroup('%1', '%2', '%3', '%4', '%5', '%6', '%7')
   return pluginSkeleton.mid(1);
 }
 
+// the possible pip commands to deal with python packages
+static std::vector<std::pair<QString, std::string>> pipCommands {
+  // install a package in the user private space
+  {"install",  "install', '--user"},
+  // list the package installed in the user private space
+  {"list", "list', '--user"},
+  // show package infos
+  {"show", "show"},
+  // uninstall a package
+  {"uninstall",  "uninstall', '--yes"}
+};
+
 PythonIDE::PythonIDE(QWidget *parent)
     : QFrame(parent), _ui(new Ui::PythonIDE), _pythonInterpreter(PythonInterpreter::getInstance()),
       _pythonPanel(new PythonPanel()), _dontTreatFocusIn(false), _project(nullptr),
@@ -357,6 +369,46 @@ PythonIDE::PythonIDE(QWidget *parent)
   layout->addWidget(_pythonPanel);
   layout->setContentsMargins(0, 0, 0, 0);
   _ui->interpreterTab->setLayout(layout);
+
+  // add pip command gui
+  _pipFrame = new QFrame();
+  auto pipLayout = new QHBoxLayout(_pipFrame);
+  pipLayout->setContentsMargins(0, 0, 3, 0);
+  pipLayout->setSpacing(3);
+  // add a vertical line to separate from tabs
+  auto vLine = new QFrame();
+  vLine->setFrameShape(QFrame::VLine);
+  vLine->setFrameShadow(QFrame::Sunken);
+  pipLayout->addWidget(vLine);
+  // indicate it involves the pip command
+  auto pipLabel = new QLabel("pip");
+  pipLabel->setToolTip("pip is the package installer for Python; here's a simple graphical interface for using it\nto manage the packages available for the current Python environment.");
+  QFont f = pipLabel->font();
+  f.setPointSize(f.pointSize() - 2);
+  f.setWeight(QFont::DemiBold);
+  pipLabel->setFont(f);
+  pipLayout->addWidget(pipLabel);
+  // add QComboBox to choose pip sub-command
+  _pipCombo = new QComboBox();
+  _pipCombo->setToolTip("Choose the pip command to execute:\n- install (a package),\n- list (the installed packages),\n- show (information about a package)\n- uninstall (a package).");
+  pipLayout->addWidget(_pipCombo);
+  _pipCombo->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+  for (auto pipCommand : pipCommands) {
+    _pipCombo->addItem(pipCommand.first);
+  }
+  // add QLineEdit to give package name
+  _pipPackage = new QLineEdit();
+  _pipPackage->setPlaceholderText("package name");
+  _pipPackage->setToolTip("Type the package name and hit [Enter]\nto execute the choosen pip command.");
+  f = _pipPackage->font();
+  f.setPointSize(f.pointSize() - 2);
+  _pipPackage->setFont(f);
+  connect(_pipPackage, &QLineEdit::returnPressed, [this] { this->executePipCommand(this->_pipCombo->currentIndex(), this->_pipPackage->text()); });
+  pipLayout->addWidget(_pipPackage);
+  // add pip command gui
+  _ui->consoleTab->setCornerWidget(_pipFrame, Qt::TopRightCorner);
+  // show pip command gui only when 'Python output' is visible
+  connect(_ui->consoleTab, &QTabWidget::currentChanged, [this](int index) { this->_pipFrame->setVisible(index == 0); });
 
   QList<int> sizes;
   sizes.push_back(550);
@@ -1784,6 +1836,52 @@ void PythonIDE::dropEvent(QDropEvent *dropEv) {
   }
 }
 
+void PythonIDE::executePipCommand(int command, const QString &packageName) {
+  auto name = packageName.trimmed();
+  // nothing to if moduke name is empty
+  if (name.isEmpty() && pipCommands[command].first != QString("list"))
+    return;
+  _ui->consoleWidget->clear();
+  _pythonInterpreter->clearOutputBuffers();
+  clearErrorIndicators();
+  _pythonInterpreter->setConsoleWidget(_ui->consoleWidget);
+  // construct the script to execute
+  std::string pipScript("import subprocess;import sys");
+  // set the execution environment
+#ifdef APPIMAGE_BUILD
+  // appimage needs a specific LD_LIBRARY_PATH configuration
+  std::string pyEnv(R"(
+import os
+ld_library_path=sys.exec_prefix + '/lib'
+exec_env=dict(os.environ, LD_LIBRARY_PATH=ld_library_path)
+)");
+#else
+  std::string pyEnv("\nexec_env=None");
+#endif
+  pipScript += pyEnv;
+  // set the subprocess command to run
+  pipScript += std::string(R"(
+result = subprocess.run([sys.exec_prefix + '/bin/)");
+  // with the right python exe
+#ifdef _WIN32
+  // on windows we use pythonw exe to avoid the display of a command shell
+  pipScript += std::string("pythonw");
+#else
+  pipScript += std::string("python3");
+#endif
+  // set the pip command to run
+  std::string pipCommand =
+    std::string("', '-m', 'pip', '") + pipCommands[command].second + "', '" + QStringToTlpString(name) + "'";
+   pipScript += pipCommand;
+  // the end of the script
+  pipScript += std::string(R"(], capture_output=True, text=True, env=exec_env)
+print(result.stdout)
+if result.returncode != 0:
+    print(result.stderr))");
+  // execute script
+  _pythonInterpreter->runString(pipScript.c_str());
+}
+
 void PythonIDE::executeCurrentScript() {
 
   Graph *graph = getSelectedGraph();
@@ -1842,6 +1940,7 @@ void PythonIDE::executeCurrentScript() {
   _ui->pauseScriptButton->setEnabled(true);
   _ui->progressBar->show();
   _ui->useUndoCB->setEnabled(false);
+  _pipFrame->setEnabled(false);
 
   QApplication::processEvents();
 
@@ -1887,6 +1986,7 @@ void PythonIDE::executeCurrentScript() {
 
   _ui->useUndoCB->setEnabled(true);
   _ui->progressBar->hide();
+  _pipFrame->setEnabled(true);
   _scriptStopped = false;
 }
 

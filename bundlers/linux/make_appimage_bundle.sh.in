@@ -161,6 +161,7 @@ if [ -n "@PYTHON_LIBRARY@" ]; then
 fi
 
 # add Python environment
+cp -v -p $PYTHON_EXECUTABLE $BUNDLE_BIN_DIR/python3
 PYTHON_LIB=$(ldd $(ls $BUNDLE_LIB_DIR/libtulip-python*) | grep libpython | awk '{print $3}')
 # we need to create a symlink as the libtulip-python*.so
 # performs a dlopen on libpythonX.Y.so when it is loaded
