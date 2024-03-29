@@ -344,16 +344,15 @@ tulipplugins.registerPluginOfGroup('%1', '%2', '%3', '%4', '%5', '%6', '%7')
 }
 
 // the possible pip commands to deal with python packages
-static std::vector<std::pair<QString, std::string>> pipCommands {
-  // install a package in the user private space
-  {"install",  "install', '--user"},
-  // list the package installed in the user private space
-  {"list", "list', '--user"},
-  // show package infos
-  {"show", "show"},
-  // uninstall a package
-  {"uninstall",  "uninstall', '--yes"}
-};
+static std::vector<std::pair<QString, std::string>> pipCommands{
+    // install a package in the user private space
+    {"install", "install', '--user"},
+    // list the package installed in the user private space
+    {"list", "list', '--user"},
+    // show package infos
+    {"show", "show"},
+    // uninstall a package
+    {"uninstall", "uninstall', '--yes"}};
 
 PythonIDE::PythonIDE(QWidget *parent)
     : QFrame(parent), _ui(new Ui::PythonIDE), _pythonInterpreter(PythonInterpreter::getInstance()),
@@ -382,7 +381,8 @@ PythonIDE::PythonIDE(QWidget *parent)
   pipLayout->addWidget(vLine);
   // indicate it involves the pip command
   auto pipLabel = new QLabel("pip");
-  pipLabel->setToolTip("pip is the package installer for Python; here's a simple graphical interface for using it\nto manage the packages available for the current Python environment.");
+  pipLabel->setToolTip(
+      "pip is the package installer for Python; here's a simple graphical interface for using it\nto manage the packages available for the current Python environment.");
   QFont f = pipLabel->font();
   f.setPointSize(f.pointSize() - 2);
   f.setWeight(QFont::DemiBold);
@@ -390,7 +390,8 @@ PythonIDE::PythonIDE(QWidget *parent)
   pipLayout->addWidget(pipLabel);
   // add QComboBox to choose pip sub-command
   _pipCombo = new QComboBox();
-  _pipCombo->setToolTip("Choose the pip command to execute:\n- install (a package),\n- list (the installed packages),\n- show (information about a package)\n- uninstall (a package).");
+  _pipCombo->setToolTip(
+      "Choose the pip command to execute:\n- install (a package),\n- list (the installed packages),\n- show (information about a package)\n- uninstall (a package).");
   pipLayout->addWidget(_pipCombo);
   _pipCombo->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
   for (auto pipCommand : pipCommands) {
@@ -399,16 +400,20 @@ PythonIDE::PythonIDE(QWidget *parent)
   // add QLineEdit to give package name
   _pipPackage = new QLineEdit();
   _pipPackage->setPlaceholderText("package name");
-  _pipPackage->setToolTip("Type the package name and hit [Enter]\nto execute the choosen pip command.");
+  _pipPackage->setToolTip(
+      "Type the package name and hit [Enter]\nto execute the choosen pip command.");
   f = _pipPackage->font();
   f.setPointSize(f.pointSize() - 2);
   _pipPackage->setFont(f);
-  connect(_pipPackage, &QLineEdit::returnPressed, [this] { this->executePipCommand(this->_pipCombo->currentIndex(), this->_pipPackage->text()); });
+  connect(_pipPackage, &QLineEdit::returnPressed, [this] {
+    this->executePipCommand(this->_pipCombo->currentIndex(), this->_pipPackage->text());
+  });
   pipLayout->addWidget(_pipPackage);
   // add pip command gui
   _ui->consoleTab->setCornerWidget(_pipFrame, Qt::TopRightCorner);
   // show pip command gui only when 'Python output' is visible
-  connect(_ui->consoleTab, &QTabWidget::currentChanged, [this](int index) { this->_pipFrame->setVisible(index == 0); });
+  connect(_ui->consoleTab, &QTabWidget::currentChanged,
+          [this](int index) { this->_pipFrame->setVisible(index == 0); });
 
   QList<int> sizes;
   sizes.push_back(550);
@@ -1870,9 +1875,9 @@ result = subprocess.run([sys.exec_prefix + '/bin/)");
   pipScript += std::string("python3");
 #endif
   // set the pip command to run
-  std::string pipCommand =
-    std::string("', '-m', 'pip', '") + pipCommands[command].second + "', '" + QStringToTlpString(name) + "'";
-   pipScript += pipCommand;
+  std::string pipCommand = std::string("', '-m', 'pip', '") + pipCommands[command].second + "', '" +
+                           QStringToTlpString(name) + "'";
+  pipScript += pipCommand;
   // the end of the script
   pipScript += std::string(R"(], capture_output=True, text=True, env=exec_env)
 print(result.stdout)
