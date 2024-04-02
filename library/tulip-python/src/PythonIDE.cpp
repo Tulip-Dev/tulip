@@ -263,7 +263,7 @@ class %2(%3):
         # This method is the entry point of the algorithm when it is called
         # and must contain its implementation.
         #
-        # The graph on which the algorithm is applied can be accessed through
+vvv        # The graph on which the algorithm is applied can be accessed through
         # the 'graph' class attribute (see documentation of class tlp.Graph).
         #
         # The parameters provided by the user are stored in a dictionary
@@ -345,14 +345,47 @@ tulipplugins.registerPluginOfGroup('%1', '%2', '%3', '%4', '%5', '%6', '%7')
 
 // the possible pip commands to deal with python packages
 static std::vector<std::pair<QString, std::string>> pipCommands{
-    // install a package in the user private space
+    // install a package in the user directory
     {"install", "install', '--user"},
-    // list the package installed in the user private space
+    // list the package installed in the user directory
     {"list", "list', '--user"},
+    // list the installed packages
+    {"list all", "list"},
     // show package infos
     {"show", "show"},
     // uninstall a package
     {"uninstall", "uninstall', '--yes"}};
+
+// the name of the python exe
+#ifdef _WIN32
+  // on windows we use pythonw exe to avoid the display of a command shell
+static std::string pyExe("pythonw");
+#else
+static std::string pyExe("python3");
+#endif
+
+// beginning of a pip invokation through python
+static std::string beginPipScript() {
+  // construct the script to execute
+  std::string pipScript("import subprocess;import sys");
+  // set the execution environment
+#ifdef APPIMAGE_BUILD
+  // appimage needs a specific LD_LIBRARY_PATH configuration
+  std::string pyEnv(R"(
+import os
+ld_library_path=sys.exec_prefix + '/lib'
+exec_env=dict(os.environ, LD_LIBRARY_PATH=ld_library_path)
+)");
+#else
+  std::string pyEnv("\nexec_env=None");
+#endif
+  pipScript += pyEnv;
+  // set the subprocess command to run
+  pipScript += std::string(R"(
+result = subprocess.run([sys.exec_prefix + '/bin/)");
+  // with the right python exe and the pip command beginning
+  return pipScript + pyExe + std::string("', '-m', 'pip', '");
+}
 
 PythonIDE::PythonIDE(QWidget *parent)
     : QFrame(parent), _ui(new Ui::PythonIDE), _pythonInterpreter(PythonInterpreter::getInstance()),
@@ -380,18 +413,14 @@ PythonIDE::PythonIDE(QWidget *parent)
   vLine->setFrameShadow(QFrame::Sunken);
   pipLayout->addWidget(vLine);
   // indicate it involves the pip command
-  auto pipLabel = new QLabel("pip");
+  auto pipLabel = new QLabel("<b>pip</b>");
   pipLabel->setToolTip(
       "pip is the package installer for Python; here's a simple graphical interface for using it\nto manage the packages available for the current Python environment.");
-  QFont f = pipLabel->font();
-  f.setPointSize(f.pointSize() - 2);
-  f.setWeight(QFont::DemiBold);
-  pipLabel->setFont(f);
   pipLayout->addWidget(pipLabel);
   // add QComboBox to choose pip sub-command
   _pipCombo = new QComboBox();
   _pipCombo->setToolTip(
-      "Choose the pip command to execute:\n- install (a package),\n- list (the installed packages),\n- show (information about a package)\n- uninstall (a package).");
+      "Choose the pip command to execute:\n- install (a package in the user directory),\n- list (packages in the user directory),\n- list all (the installed packages),\n- show (information about a package)\n- uninstall (a package).");
   pipLayout->addWidget(_pipCombo);
   _pipCombo->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
   for (auto pipCommand : pipCommands) {
@@ -402,9 +431,6 @@ PythonIDE::PythonIDE(QWidget *parent)
   _pipPackage->setPlaceholderText("package name");
   _pipPackage->setToolTip(
       "Type the package name and hit [Enter]\nto execute the choosen pip command.");
-  f = _pipPackage->font();
-  f.setPointSize(f.pointSize() - 2);
-  _pipPackage->setFont(f);
   connect(_pipPackage, &QLineEdit::returnPressed, [this] {
     this->executePipCommand(this->_pipCombo->currentIndex(), this->_pipPackage->text());
   });
@@ -431,6 +457,14 @@ PythonIDE::PythonIDE(QWidget *parent)
 
   connect(_pythonInterpreter, SIGNAL(scriptExecutionPaused()), this, SLOT(currentScriptPaused()));
   _pythonInterpreter->runString(utilityFunctions);
+  // ensure pip is installed
+  std::string pipScript = beginPipScript();
+  pipScript += std::string(R"(--version'], capture_output=True, text=True, env=exec_env)
+if result.returncode != 0:
+   result = subprocess.run([sys.exec_prefix + '/bin/)") + pyExe;
+  // if it is not, try to install it
+  pipScript += std::string(", '-m, 'ensurepip', '--default-pip'], capture_output=True, text=True, env=exec_env)");
+  _pythonInterpreter->runString(pipScript.c_str());
 
   connect(_ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
 
@@ -1842,47 +1876,31 @@ void PythonIDE::dropEvent(QDropEvent *dropEv) {
 }
 
 void PythonIDE::executePipCommand(int command, const QString &packageName) {
-  auto name = packageName.trimmed();
-  // nothing to if moduke name is empty
-  if (name.isEmpty() && pipCommands[command].first != QString("list"))
-    return;
   _ui->consoleWidget->clear();
   _pythonInterpreter->clearOutputBuffers();
   clearErrorIndicators();
   _pythonInterpreter->setConsoleWidget(_ui->consoleWidget);
+  auto name = QStringToTlpString(packageName.trimmed());
+  bool listCommand = pipCommands[command].first.indexOf("list") == 0;
+  // nothing to do if package name is empty when it is not a list command
+  if (name.empty() && !listCommand) {
+    _pythonInterpreter->runString("print('warning: you must specified a package name')");
+    return;
+  }
   // construct the script to execute
-  std::string pipScript("import subprocess;import sys");
-  // set the execution environment
-#ifdef APPIMAGE_BUILD
-  // appimage needs a specific LD_LIBRARY_PATH configuration
-  std::string pyEnv(R"(
-import os
-ld_library_path=sys.exec_prefix + '/lib'
-exec_env=dict(os.environ, LD_LIBRARY_PATH=ld_library_path)
-)");
-#else
-  std::string pyEnv("\nexec_env=None");
-#endif
-  pipScript += pyEnv;
-  // set the subprocess command to run
-  pipScript += std::string(R"(
-result = subprocess.run([sys.exec_prefix + '/bin/)");
-  // with the right python exe
-#ifdef _WIN32
-  // on windows we use pythonw exe to avoid the display of a command shell
-  pipScript += std::string("pythonw");
-#else
-  pipScript += std::string("python3");
-#endif
+  std::string pipScript = beginPipScript();
   // set the pip command to run
-  std::string pipCommand = std::string("', '-m', 'pip', '") + pipCommands[command].second + "', '" +
-                           QStringToTlpString(name) + "'";
-  pipScript += pipCommand;
+  pipScript += pipCommands[command].second + "', '" + name + "'";
   // the end of the script
   pipScript += std::string(R"(], capture_output=True, text=True, env=exec_env)
 print(result.stdout)
 if result.returncode != 0:
     print(result.stderr))");
+  if (listCommand)
+    // display a message when the list is empty
+    pipScript += std::string(R"(
+elif result.stdout == '':
+    print('no package'))");
   // execute script
   _pythonInterpreter->runString(pipScript.c_str());
 }
