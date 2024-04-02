@@ -358,7 +358,7 @@ static std::vector<std::pair<QString, std::string>> pipCommands{
 
 // the name of the python exe
 #ifdef _WIN32
-  // on windows we use pythonw exe to avoid the display of a command shell
+// on windows we use pythonw exe to avoid the display of a command shell
 static std::string pyExe("pythonw");
 #else
 static std::string pyExe("python3");
@@ -461,9 +461,11 @@ PythonIDE::PythonIDE(QWidget *parent)
   std::string pipScript = beginPipScript();
   pipScript += std::string(R"(--version'], capture_output=True, text=True, env=exec_env)
 if result.returncode != 0:
-   result = subprocess.run([sys.exec_prefix + '/bin/)") + pyExe;
+   result = subprocess.run([sys.exec_prefix + '/bin/)") +
+               pyExe;
   // if it is not, try to install it
-  pipScript += std::string(", '-m, 'ensurepip', '--default-pip'], capture_output=True, text=True, env=exec_env)");
+  pipScript += std::string(
+      ", '-m, 'ensurepip', '--default-pip'], capture_output=True, text=True, env=exec_env)");
   _pythonInterpreter->runString(pipScript.c_str());
 
   connect(_ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
