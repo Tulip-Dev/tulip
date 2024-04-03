@@ -473,7 +473,8 @@ PythonIDE::PythonIDE(QWidget *parent)
   std::string pipScript = beginPipScript();
   pipScript += std::string(R"(--version'], capture_output=True, text=True, env=exec_env)
 if result.returncode != 0:
-   result = subprocess.run([)") + pyExe;
+   result = subprocess.run([)") +
+               pyExe;
   // if it is not, try to install it
   pipScript += std::string(
       ", '-m', 'ensurepip', '--default-pip'], capture_output=True, text=True, env=exec_env)");
