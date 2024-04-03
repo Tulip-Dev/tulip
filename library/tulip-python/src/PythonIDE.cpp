@@ -357,12 +357,7 @@ static std::vector<std::pair<QString, std::string>> pipCommands{
     {"uninstall", "uninstall', '--yes"}};
 
 // the name of the python exe
-#ifdef _WIN32
-// on windows we use pythonw exe to avoid the display of a command shell
-static std::string pyExe("pythonw");
-#else
-static std::string pyExe("python3");
-#endif
+static std::string pyExe;
 
 // beginning of a pip invokation through python
 static std::string beginPipScript() {
@@ -382,9 +377,9 @@ exec_env=dict(os.environ, LD_LIBRARY_PATH=ld_library_path)
   pipScript += pyEnv;
   // set the subprocess command to run
   pipScript += std::string(R"(
-result = subprocess.run([sys.exec_prefix + '/bin/)");
+result = subprocess.run([)");
   // with the right python exe and the pip command beginning
-  return pipScript + pyExe + std::string("', '-m', 'pip', '");
+  return pipScript + pyExe + std::string(", '-m', 'pip', '");
 }
 
 PythonIDE::PythonIDE(QWidget *parent)
@@ -457,16 +452,33 @@ PythonIDE::PythonIDE(QWidget *parent)
 
   connect(_pythonInterpreter, SIGNAL(scriptExecutionPaused()), this, SLOT(currentScriptPaused()));
   _pythonInterpreter->runString(utilityFunctions);
-  // ensure pip is installed
+  // init pyExe
+  if (pyExe.empty()) {
+    auto pyPath = _pythonInterpreter->getSysVariable("exec_prefix");
+    if (QFile::exists(pyPath + "/bin"))
+      pyPath.append("/bin");
+#ifdef _WIN32
+    // on windows we use pythonw exe to avoid the display of a command shell
+    pyExe = std::string("'") + QStringToTlpString(pyPath) + "/pythonw'";
+#else
+    pyExe = std::string("'") + QStringToTlpString(pyPath) + "/python3'";
+#endif
+  }
+
+#ifdef _WIN32
+  // on windows we must ensure that pip is installed at this time
+  // because Python may have been installed when installing tulip
+  // and then we have no guarantee about pip installation was checked or not
+  // so first get pip version to check if it installed
   std::string pipScript = beginPipScript();
   pipScript += std::string(R"(--version'], capture_output=True, text=True, env=exec_env)
 if result.returncode != 0:
-   result = subprocess.run([sys.exec_prefix + '/bin/)") +
-               pyExe;
+   result = subprocess.run([)") + pyExe;
   // if it is not, try to install it
   pipScript += std::string(
-      ", '-m, 'ensurepip', '--default-pip'], capture_output=True, text=True, env=exec_env)");
+      ", '-m', 'ensurepip', '--default-pip'], capture_output=True, text=True, env=exec_env)");
   _pythonInterpreter->runString(pipScript.c_str());
+#endif
 
   connect(_ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
 

@@ -147,6 +147,8 @@ public:
 
   QString getVariableType(const QString &varName);
 
+  QString getSysVariable(const QString &varName);
+
   void setDefaultConsoleWidget(QPlainTextEdit *consoleWidget);
   void setDefaultConsoleWidget(QTextBrowser *consoleWidget);
 

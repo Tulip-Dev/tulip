@@ -777,6 +777,20 @@ QString PythonInterpreter::getVariableType(const QString &varName) {
     return "";
 }
 
+QString PythonInterpreter::getSysVariable(const QString &varName) {
+  setOutputEnabled(false);
+  setErrorOutputEnabled(false);
+  consoleOuputString = "";
+  bool ok = runString(QString("import sys; print(sys.") + varName + ')');
+  setOutputEnabled(true);
+  setErrorOutputEnabled(true);
+
+  if (ok)
+    return consoleOuputString.mid(0, consoleOuputString.size() - 1);
+  else
+    return "";
+}
+
 QVector<QString> PythonInterpreter::getObjectDictEntries(const QString &objectName,
                                                          const QString &prefixFilter) {
   QVector<QString> ret;
