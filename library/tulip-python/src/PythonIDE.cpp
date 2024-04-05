@@ -350,19 +350,18 @@ struct _pipCommand {
   bool needPackage;
 };
 
-static std::vector<_pipCommand> pipCommands {
-  // install a package in the user directory
-  {"install", "install', '--user", true},
-  // list the package installed in the user directory
-  {"list", "list', '--user", false},
-  // list the installed packages
-  {"list all", "list", false},
-  // show package infos
-  {"show", "show", true},
-  // uninstall a package
-  {"uninstall", "uninstall', '--yes", false},
-  // upgrade a package
-  {"upgrade", "install', '--upgrade", true}};
+static std::vector<_pipCommand> pipCommands{// install a package in the user directory
+                                            {"install", "install', '--user", true},
+                                            // list the package installed in the user directory
+                                            {"list", "list', '--user", false},
+                                            // list the installed packages
+                                            {"list all", "list", false},
+                                            // show package infos
+                                            {"show", "show", true},
+                                            // uninstall a package
+                                            {"uninstall", "uninstall', '--yes", false},
+                                            // upgrade a package
+                                            {"upgrade", "install', '--upgrade", true}};
 
 // the name of the python exe
 static std::string pyExe;
@@ -484,7 +483,9 @@ PythonIDE::PythonIDE(QWidget *parent)
 if result.returncode != 0:
    subprocess.run([)";
   // if it is not, try to install it
-  pipScript += pyExe + ", '-m', 'ensurepip', '--default-pip'], capture_output=True, text=True, env=exec_env)";
+  pipScript +=
+      pyExe +
+      ", '-m', 'ensurepip', '--default-pip'], capture_output=True, text=True, env=exec_env)";
   _pythonInterpreter->runString(pipScript.c_str());
 #endif
 
