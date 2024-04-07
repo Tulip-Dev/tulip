@@ -116,21 +116,22 @@ void usage(const QString &error) {
     returnCode = 1;
   }
 
-  std::cout << "Usage: tulip [OPTION] [FILE]\n"
-      "Run a Tulip Perspective plugin into its dedicated process.\n\n"
-      "FILE: a Tulip project file to open. The perspective to use will be read from the project "
-      "meta-information. If the \"--perspective\" flag is used, tulip will try to "
-      "open the file with the given perspective (the project meta-information is ignored).\n"
-      "List of optional OPTIONS:\n"
-      "  --perspective=<perspective_name> (-p perspective_name)\tStart the perspective "
-      "specified by perspective_name. If not specified, starts the Tulip default perspective.\n"
-      "  --geometry=<X,Y,width,height>\tSet the given rectangle as geometry for the main window.\n"
-      "  --title=<title>\tDisplay a specific name in the loading dialog.\n"
-      "  --icon=<relative path>\tChoose the icon in the loading dialog by providing a path "
-      "relative to Tulip bitmap directory.\n"
-      "  --help (-h)\tDisplay this help message and ignore other options.\n\n"
-      "Other options (written as --<option_name>=<value>) will be passed to the perspective.\n"
-      "Available perspectives:\n";
+  std::cout
+      << "Usage: tulip [OPTION] [FILE]\n"
+         "Run a Tulip Perspective plugin into its dedicated process.\n\n"
+         "FILE: a Tulip project file to open. The perspective to use will be read from the project "
+         "meta-information. If the \"--perspective\" flag is used, tulip will try to "
+         "open the file with the given perspective (the project meta-information is ignored).\n"
+         "List of optional OPTIONS:\n"
+         "  --perspective=<perspective_name> (-p perspective_name)\tStart the perspective "
+         "specified by perspective_name. If not specified, starts the Tulip default perspective.\n"
+         "  --geometry=<X,Y,width,height>\tSet the given rectangle as geometry for the main window.\n"
+         "  --title=<title>\tDisplay a specific name in the loading dialog.\n"
+         "  --icon=<relative path>\tChoose the icon in the loading dialog by providing a path "
+         "relative to Tulip bitmap directory.\n"
+         "  --help (-h)\tDisplay this help message and ignore other options.\n\n"
+         "Other options (written as --<option_name>=<value>) will be passed to the perspective.\n"
+         "Available perspectives:\n";
   tlp::initTulipSoftware();
   list<string> perspectives = PluginLister::availablePlugins<Perspective>();
 
