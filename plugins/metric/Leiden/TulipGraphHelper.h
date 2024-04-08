@@ -50,7 +50,7 @@ T sum(vector<T> vec) {
   for (T x : vec)
     sum_of_elems += x;
   return sum_of_elems;
-};
+}
 
 class Exception : public std::exception {
 public:
@@ -75,7 +75,7 @@ namespace tlp {
 class Graph;
 class NumericProperty;
 
-}; // namespace tlp
+} // namespace tlp
 
 #include <tulip/vectorgraph.h>
 
