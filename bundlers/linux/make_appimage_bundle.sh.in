@@ -161,6 +161,7 @@ if [ -n "@PYTHON_LIBRARY@" ]; then
 fi
 
 # add Python environment
+# python exe is needed to execute pip commands
 cp -v -p $PYTHON_EXECUTABLE $BUNDLE_BIN_DIR/python3
 PYTHON_LIB=$(ldd $(ls $BUNDLE_LIB_DIR/libtulip-python*) | grep libpython | awk '{print $3}')
 # we need to create a symlink as the libtulip-python*.so
@@ -171,7 +172,7 @@ if [ "$PYTHON_LIB" != "" ]; then
   PYTHON_LIB_SYMLINK_NAME=$(echo $PYTHON_LIB | sed 's/^.*libpython\(.*\.so\).*$/libpython\1/')
   pushd $BUNDLE_LIB_DIR
   # check for a non standard python lib name coming from a rh package
-  ls $PYTHON_LIB_SYMLINK_NAME.rh*
+  ls $PYTHON_LIB_SYMLINK_NAME.rh* > /dev/null 2>&1
   if [ $? -eq 0 ]; then
     # tweak libs to have a standard python lib name
     # this fix a crash on openSUSE Leap 15
@@ -182,7 +183,7 @@ if [ "$PYTHON_LIB" != "" ]; then
   ln -s $PYTHON_LIB_NAME $PYTHON_LIB_SYMLINK_NAME
   popd
   # get pythonX.Y
-  PYTHON_PACKAGE_NAME=$(echo $PYTHON_LIB | sed 's/^.*libpython\(.*\).so.*$/python\1/')
+  PYTHON_PACKAGE_NAME=python@PYTHON_VERSION@
   PYTHON_PACKAGE_BUNDLE_DIR=$BUNDLE_LIB_DIR/$PYTHON_PACKAGE_NAME/
   mkdir -p $PYTHON_PACKAGE_BUNDLE_DIR
   PYTHON_PACKAGE_DIR=$(dirname $PYTHON_LIB)/$PYTHON_PACKAGE_NAME
