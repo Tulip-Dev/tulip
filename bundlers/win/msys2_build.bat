@@ -16,8 +16,8 @@ echo TULIP_SRC=%TULIP_SRC%
 rem Install minimal Python 3 and pip if needed
 if not defined PYTHON3_HOME (
   cd %WORKSPACE%
-  wget https://aka.ms/nugetclidl -O nuget.exe
-  nuget.exe install python -Version 3.10.10 -ExcludeVersion -OutputDirectory .
+  curl -o nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+  nuget.exe install python -Version 3.11.9 -ExcludeVersion -OutputDirectory .
   curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
   python\tools\python.exe get-pip.py
   set PYTHON3_HOME=%WORKSPACE%\python\tools
