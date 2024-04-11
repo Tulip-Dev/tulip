@@ -29,7 +29,7 @@ using namespace tlp;
 using namespace std;
 
 // Current Python versions
-static const char *pythonVersion[] = {"3.12", "3.11", "3.10", "3.9", "3.8", "3.7", nullptr};
+static const char *pythonVersion[] = {"3.12", "3.11", "3.10", "3.9", "3.8", nullptr};
 
 // Windows specific functions
 #ifdef WIN32

@@ -33,9 +33,10 @@ TULIP_PYTHON_TEST="from tulip import tlp; from platform import python_version; s
 # iterate on available Python versions
 for CPYBIN in /opt/python/cp*/bin
 do
-  PYTHON_MAJOR_MINOR=$(${CPYBIN}/python -c "print(__import__('sys').version.split(' ')[0])" | cut -d'.' -f '1 2')
-  # Python 3.5, 3.6 no longer supported, 3.12 not yet supported
-  if [[ "$PYTHON_MAJOR_MINOR" = "3.5" ]] || [[ "$PYTHON_MAJOR_MINOR" = "3.6" ]] || [[ "$PYTHON_MAJOR_MINOR" = "3.12" ]]
+  PY_VERSION=$(${CPYBIN}/python -c "from platform import python_version; print(python_version())")
+  IFS='.' read -a PY_VERSION <<< "$PY_VERSION"
+  # Python < 3.8 no longer supported, 3.12 not yet supported
+  if [[ ${PY_VERSION[0]} -ne 3 ]] || [[ ${PY_VERSION[1]} -lt 8 ]] || [[ ${PY_VERSION[1]} -ge 12 ]]
   then
      continue
   fi
