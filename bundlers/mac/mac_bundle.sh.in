@@ -142,7 +142,6 @@ fi
 
 # ensure Tulip and tulip_perspective are linked against /usr/lib/libc++.1.dylib
 install_name_tool -change ${AROBASE}rpath/libc++.1.dylib /usr/lib/libc++.1.dylib ${DEST_DIR}/application/Tulip.app/Contents/MacOS/Tulip
-install_name_tool -change ${AROBASE}rpath/libc++.1.dylib /usr/lib/libc++.1.dylib ${DEST_DIR}/application/Tulip.app/Contents/bin/tulip_perspective
 
 # do the same for the tulip libs in Frameworks
 for DYLIB in $(find ${DEST_DIR}/application/Tulip*.app/Contents/Frameworks -name 'libtulip-*.dylib' -print)
