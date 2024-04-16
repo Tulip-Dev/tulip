@@ -103,6 +103,7 @@ mv bin/tulip MacOS/Tulip
 if [ "$PYTHON_BUILD" = "ON" ]
 then
 /tmp/macdeployqt ${DEST_DIR}/application/Tulip.app -qtdir=/opt/local/libexec/qt5 -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_tulip.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_stl.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/sip.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulipgui/native/_tulipgui.so -executable=${DEST_DIR}/application/Tulip.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python -executable=${DEST_DIR}/application/Tulip.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Resources/Python.app/Contents/MacOS/Python
+
 # ensure embedded python framework will be found
 # when loading all libs related to python
 # update tulip python specific libs (update libc++.1.dylib path too)
@@ -136,11 +137,30 @@ done
 # the external modules needed by the user
 install_name_tool -change $PYTHON_DIR_PATH/Python ${AROBASE}executable_path/../Python ${DEST_DIR}/application/Tulip*.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/bin/python@PYTHON_VERSION@
 install_name_tool -change $PYTHON_DIR_PATH/Python ${AROBASE}executable_path/../../../../Python ${DEST_DIR}/application/Tulip*.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Resources/Python.app/Contents/MacOS/Python
+
+# ensure Python.Frameworks lib/*.dylib embedded libs are linked to lib/*.dylib
+for DYLIB in $(find ${DEST_DIR}/application/Tulip*.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/lib -name '*.dylib' -a -type f)
+do
+  for LLIB in $(otool -L $DYLIB | grep Python.framework | cut -d '(' -s -f 1)
+  do
+    install_name_tool -change $LLIB ${AROBASE}loader_path/$(basename $LLIB) $DYLIB
+  done
+done
+
+# do the same for pythonX.Y/lib-dynload/*.so
+for SOLIB in $(ls ${DEST_DIR}/application/Tulip*.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/lib/python*/lib-dynload/*.so)
+do
+  for DYLIB in $(otool -L $SOLIB | grep Python.framework | cut -d '(' -s -f 1)
+  do
+    install_name_tool -change $DYLIB ${AROBASE}loader_path/../../$(basename $DYLIB) $SOLIB
+  done
+done
+
 else
 /tmp/macdeployqt ${DEST_DIR}/application/Tulip.app -qtdir=/opt/local/libexec/qt5
 fi
 
-# ensure Tulip and tulip_perspective are linked against /usr/lib/libc++.1.dylib
+# ensure Tulip is linked against /usr/lib/libc++.1.dylib
 install_name_tool -change ${AROBASE}rpath/libc++.1.dylib /usr/lib/libc++.1.dylib ${DEST_DIR}/application/Tulip.app/Contents/MacOS/Tulip
 
 # do the same for the tulip libs in Frameworks
@@ -157,23 +177,6 @@ done
 
 # rename
 mv ${DEST_DIR}/application/Tulip.app ${DEST_DIR}/application/${APP_NAME}-@Tulip_VERSION@${SUFFIX}.app
-
-if [ "$PYTHON_BUILD" = "ON" ]
-then
-# create pip external modules installer
-   cat > bin/pip_install <<EOF
-#!/bin/bash
-wd="\${0%/*}"
-cd "\$wd/.."
-PY_VERSION=\$(ls ./Frameworks/Python.framework/Versions)
-export PATH="\$(pwd)/Frameworks/Python.framework/Versions/\$PY_VERSION/bin:\$PATH"
-export DYLD_LIBRARY_PATH="\$(pwd)/Frameworks/Python.framework/Versions/\$PY_VERSION/lib"
-export DYLD_FALLBACK_LIBRARY_PATH="\$(pwd)/Frameworks"
-python3 -m pip install --user \$1
-EOF
-# make it executable
-  chmod +x bin/pip_install
-fi
 
 # generate dmg
 echo 'Generating DMG'
