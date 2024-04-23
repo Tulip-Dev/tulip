@@ -122,7 +122,7 @@ public:
       }
 
       if (dataSet->getDeprecated("fix y coordinates", "fixYCoordinates", bval)) {
-        stressm->fixXCoordinates(bval);
+        stressm->fixYCoordinates(bval);
       }
 
       if (dataSet->getDeprecated("fix z coordinates", "fixZCoordinates", bval)) {

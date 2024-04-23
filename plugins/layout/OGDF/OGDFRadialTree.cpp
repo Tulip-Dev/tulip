@@ -80,8 +80,8 @@ public:
       if (dataSet->get("levels distance", dval))
         layout->levelDistance(dval);
 
-      if (dataSet->get("trees distance", dval))
-        layout->connectedComponentDistance(dval);
+     // if (dataSet->get("trees distance", dval))
+     //   layout->connectedComponentDistance(dval);
 
       if (dataSet->getDeprecated("root selection", "Root selection", sc)) {
         switch (sc.getCurrent()) {
