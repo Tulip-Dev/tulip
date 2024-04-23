@@ -60,7 +60,6 @@ Toolbar
 .. |icon_csv| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/spreadsheet.png
 .. |icon_import| image:: ../../library/tulip-gui/resources/icons/64/document-import.png
     :width: 32
-.. |icon_plugin| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/system-software-install.png
 .. |icon_search| image:: ../../plugins/perspective/GraphPerspective/resources/icons/48/search.png
     :width: 32
 

@@ -9,20 +9,20 @@ project(libzip
   VERSION 1.9.2
   LANGUAGES C)
 
-option(ENABLE_COMMONCRYPTO "Enable use of CommonCrypto" OFF)
-option(ENABLE_GNUTLS "Enable use of GnuTLS" OFF)
-option(ENABLE_MBEDTLS "Enable use of mbed TLS" OFF)
-option(ENABLE_OPENSSL "Enable use of OpenSSL" OFF)
-option(ENABLE_WINDOWS_CRYPTO "Enable use of Windows cryptography libraries" OFF)
+option(LIBZIP_ENABLE_COMMONCRYPTO "Enable use of CommonCrypto" OFF)
+option(LIBZIP_ENABLE_GNUTLS "Enable use of GnuTLS" OFF)
+option(LIBZIP_ENABLE_MBEDTLS "Enable use of mbed TLS" OFF)
+option(LIBZIP_ENABLE_OPENSSL "Enable use of OpenSSL" OFF)
+option(LIBZIP_ENABLE_WINDOWS_CRYPTO "Enable use of Windows cryptography libraries" OFF)
 
-option(ENABLE_BZIP2 "Enable use of BZip2" OFF)
-option(ENABLE_LZMA "Enable use of LZMA" OFF)
-option(ENABLE_ZSTD "Enable use of Zstandard" OFF)
+option(LIBZIP_ENABLE_BZIP2 "Enable use of BZip2" OFF)
+option(LIBZIP_ENABLE_LZMA "Enable use of LZMA" OFF)
+option(LIBZIP_ENABLE_ZSTD "Enable use of Zstandard" OFF)
 
-option(BUILD_TOOLS "Build tools in the src directory (zipcmp, zipmerge, ziptool)" OFF)
-option(BUILD_REGRESS "Build regression tests" OFF)
-option(BUILD_EXAMPLES "Build examples" OFF)
-option(BUILD_DOC "Build documentation" OFF)
+option(LIBZIP_BUILD_TOOLS "Build tools in the src directory (zipcmp, zipmerge, ziptool)" OFF)
+option(LIBZIP_BUILD_REGRESS "Build regression tests" OFF)
+option(LIBZIP_BUILD_EXAMPLES "Build examples" OFF)
+option(LIBZIP_BUILD_DOC "Build documentation" OFF)
 
 include(CheckFunctionExists)
 include(CheckIncludeFiles)
