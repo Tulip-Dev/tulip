@@ -19,6 +19,7 @@
 #include <vector>
 
 #include <ogdf/basic/internal/config.h>
+#include <zipconf.h>
 #include <tulip/AboutTulipPage.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipRelease.h>
@@ -106,6 +107,9 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "<li><b>Color Brewer</b> "
       ": <a href=\"http://colorbrewer2.org\" style=\"color:" HTML_LINK_COLOR
       ";\">colorbrewer2.org</a></li>"
+      "<li><b>Libzip "+LIBZIP_VERSION+"</b>"
+      ": <a href=\"http://https://libzip.org/\" style=\"color:" HTML_LINK_COLOR
+      ";\">libzip.org/</a></li>"
       "</ul>"
       "</p>";
 
