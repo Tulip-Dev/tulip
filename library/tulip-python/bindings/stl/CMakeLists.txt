@@ -24,7 +24,7 @@ ADD_CUSTOM_COMMAND(OUTPUT ${STL_PYTHON_BINDINGS_SRC}
                    COMMENT "Generating Python Bindings for stl"
                    DEPENDS ${STL_SIP_FILES} VERBATIM)
            
-DISABLE_COMPILER_WARNINGS()
+TULIP_DISABLE_COMPILER_WARNINGS()
 
 # Force to use SIP and headers located in thirdparty
 # instead of those installed in the system

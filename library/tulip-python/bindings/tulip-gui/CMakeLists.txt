@@ -24,7 +24,7 @@ QTX_ADD_RESOURCES(tulipgui_RCC_SRCS TulipGui.qrc)
 
 SET(TULIP_GUI_PYTHON_BINDINGS_SRC ${TULIP_GUI_PYTHON_BINDINGS_SRC} TulipViewsUtils.cpp ${tulipguiutils_MOC} ${tulipgui_RCC_SRCS})
 
-DISABLE_COMPILER_WARNINGS()
+TULIP_DISABLE_COMPILER_WARNINGS()
 
 # Force to use SIP headers located in thirdparty
 # instead of those installed in the system

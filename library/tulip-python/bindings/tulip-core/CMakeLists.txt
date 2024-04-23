@@ -85,7 +85,7 @@ ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_PYTHON_BINDINGS_SRC}
                    COMMENT "Generating Python Bindings for libtulip"
                    DEPENDS ${TULIP_SIP_FILES} ${STL_SIP_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/../../include/tulip/PythonCppTypesConverter.h VERBATIM)
            
-DISABLE_COMPILER_WARNINGS()
+TULIP_DISABLE_COMPILER_WARNINGS()
 
 # Force to use SIP and headers located in thirdparty
 # instead of those installed in the system

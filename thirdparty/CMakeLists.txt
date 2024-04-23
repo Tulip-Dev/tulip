@@ -1,10 +1,12 @@
-DISABLE_COMPILER_WARNINGS()
+TULIP_DISABLE_COMPILER_WARNINGS()
 
 ADD_CORE_FILES(CMakeLists.txt
                utf8-cpp/source/utf8.h
                utf8-cpp/source/utf8/checked.h
                utf8-cpp/source/utf8/core.h
                utf8-cpp/source/utf8/unchecked.h
+               utf8-cpp/source/utf8/cpp11.h
+               utf8-cpp/source/utf8/cpp17.h
 )
 
 ADD_SUBDIRECTORY(gzstream)
