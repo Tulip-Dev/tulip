@@ -3,7 +3,7 @@
 .\" Copyright (C) 2012-2021 Dieter Baron and Thomas Klausner
 .\"
 .\" This file is part of libzip, a library to manipulate ZIP files.
-.\" The authors can be contacted at <libzip@nih.at>
+.\" The authors can be contacted at <info@libzip.org>
 .\"
 .\" Redistribution and use in source and binary forms, with or without
 .\" modification, are permitted provided that the following conditions
@@ -30,7 +30,7 @@
 .\" OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 .\" IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 .\"
-.TH "ZIP_SET_FILE_COMPRESSION" "3" "June 18, 2021" "NiH" "Library Functions Manual"
+.TH "ZIP_SET_FILE_COMPRESSION" "3" "February 2, 2023" "NiH" "Library Functions Manual"
 .nh
 .if n .ad l
 .SH "NAME"
@@ -115,7 +115,8 @@ For
 possible values are
 ZSTD_minCLevel(3)
 to
-ZSTD_maxCLevel(3).
+ZSTD_maxCLevel(3); negative values must be cast to
+\fIzip_uint32_t\fR.
 .PP
 Further compression method specific flags might be added over time.
 .PP

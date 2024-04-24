@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.5.0)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 if (${CMAKE_VERSION} VERSION_LESS "3.17.0")
@@ -6,23 +6,25 @@ if (${CMAKE_VERSION} VERSION_LESS "3.17.0")
 endif()
 
 project(libzip
-  VERSION 1.9.2
+  VERSION 1.10.1
   LANGUAGES C)
 
-option(LIBZIP_ENABLE_COMMONCRYPTO "Enable use of CommonCrypto" OFF)
-option(LIBZIP_ENABLE_GNUTLS "Enable use of GnuTLS" OFF)
-option(LIBZIP_ENABLE_MBEDTLS "Enable use of mbed TLS" OFF)
-option(LIBZIP_ENABLE_OPENSSL "Enable use of OpenSSL" OFF)
-option(LIBZIP_ENABLE_WINDOWS_CRYPTO "Enable use of Windows cryptography libraries" OFF)
+option(LIBZIP_ENABLE_COMMONCRYPTO "Enable use of CommonCrypto" ON)
+option(LIBZIP_ENABLE_GNUTLS "Enable use of GnuTLS" ON)
+option(LIBZIP_ENABLE_MBEDTLS "Enable use of mbed TLS" ON)
+option(LIBZIP_ENABLE_OPENSSL "Enable use of OpenSSL" ON)
+option(LIBZIP_ENABLE_WINDOWS_CRYPTO "Enable use of Windows cryptography libraries" ON)
 
-option(LIBZIP_ENABLE_BZIP2 "Enable use of BZip2" OFF)
-option(LIBZIP_ENABLE_LZMA "Enable use of LZMA" OFF)
-option(LIBZIP_ENABLE_ZSTD "Enable use of Zstandard" OFF)
+option(LIBZIP_ENABLE_BZIP2 "Enable use of BZip2" ON)
+option(LIBZIP_ENABLE_LZMA "Enable use of LZMA" ON)
+option(LIBZIP_ENABLE_ZSTD "Enable use of Zstandard" ON)
 
-option(LIBZIP_BUILD_TOOLS "Build tools in the src directory (zipcmp, zipmerge, ziptool)" OFF)
-option(LIBZIP_BUILD_REGRESS "Build regression tests" OFF)
-option(LIBZIP_BUILD_EXAMPLES "Build examples" OFF)
-option(LIBZIP_BUILD_DOC "Build documentation" OFF)
+option(LIBZIP_ENABLE_FDOPEN "Enable zip_fdopen, which is not allowed in Microsoft CRT secure libraries" ON)
+
+option(LIBZIP_BUILD_TOOLS "Build tools in the src directory (zipcmp, zipmerge, ziptool)" ON)
+option(LIBZIP_BUILD_REGRESS "Build regression tests" ON)
+option(LIBZIP_BUILD_EXAMPLES "Build examples" ON)
+option(LIBZIP_BUILD_DOC "Build documentation" ON)
 
 include(CheckFunctionExists)
 include(CheckIncludeFiles)
@@ -35,29 +37,29 @@ include(CheckStructHasMember)
 include(TestBigEndian)
 include(GNUInstallDirs)
 
-if(ENABLE_COMMONCRYPTO)
+if(LIBZIP_ENABLE_COMMONCRYPTO)
   check_include_files(CommonCrypto/CommonCrypto.h COMMONCRYPTO_FOUND)
 endif()
-if(ENABLE_GNUTLS)
+if(LIBZIP_ENABLE_GNUTLS)
   find_package(Nettle 3.0)
   find_package(GnuTLS)
 endif()
-if(ENABLE_MBEDTLS)
+if(LIBZIP_ENABLE_MBEDTLS)
   find_package(MbedTLS 1.0)
 endif()
-if(ENABLE_OPENSSL)
+if(LIBZIP_ENABLE_OPENSSL)
   find_package(OpenSSL)
 endif()
 if(WIN32)
-  if(ENABLE_WINDOWS_CRYPTO)
+  if(LIBZIP_ENABLE_WINDOWS_CRYPTO)
     set(WINDOWS_CRYPTO_FOUND TRUE)
   endif()
 endif()
 
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
-option(LIBZIP_DO_INSTALL "Install libzip and the related files" OFF)
+option(LIBZIP_BUILD_SHARED_LIBS "Build shared libraries" ON)
+option(LIBZIP_DO_INSTALL "Install libzip and the related files" ON)
 
-option(SHARED_LIB_VERSIONNING "Add SO version in .so build" ON)
+option(LIBZIP_SHARED_LIB_VERSIONNING "Add SO version in .so build" ON)
 
 find_program(MDOCTOOL NAMES mandoc groff)
 if (MDOCTOOL)
@@ -79,7 +81,7 @@ Dist(${CMAKE_PROJECT_NAME}-${CMAKE_PROJECT_VERSION})
 #  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 #  )
 
-if(BUILD_SHARED_LIBS)
+if(LIBZIP_BUILD_SHARED_LIBS)
   set(HAVE_SHARED TRUE)
 else()
   set(ZIP_STATIC TRUE)
@@ -87,12 +89,17 @@ endif()
 
 # Checks
 
+# Request ISO C secure library functions (memcpy_s &c)
+list(APPEND CMAKE_REQUIRED_DEFINITIONS -D__STDC_WANT_LIB_EXT1__=1)
+
 check_function_exists(_close HAVE__CLOSE)
 check_function_exists(_dup HAVE__DUP)
 check_function_exists(_fdopen HAVE__FDOPEN)
 check_function_exists(_fileno HAVE__FILENO)
 check_function_exists(_setmode HAVE__SETMODE)
 check_symbol_exists(_snprintf stdio.h HAVE__SNPRINTF)
+check_symbol_exists(_snprintf_s stdio.h HAVE__SNPRINTF_S)
+check_symbol_exists(_snwprintf_s stdio.h HAVE__SNWPRINTF_S)
 check_function_exists(_strdup HAVE__STRDUP)
 check_symbol_exists(_stricmp string.h HAVE__STRICMP)
 check_function_exists(_strtoi64 HAVE__STRTOI64)
@@ -107,12 +114,19 @@ check_function_exists(fileno HAVE_FILENO)
 check_function_exists(fseeko HAVE_FSEEKO)
 check_function_exists(ftello HAVE_FTELLO)
 check_function_exists(getprogname HAVE_GETPROGNAME)
-check_function_exists(localtime_r HAVE_LOCALTIME_R)
+check_symbol_exists(localtime_r time.h HAVE_LOCALTIME_R)
+check_symbol_exists(localtime_s time.h HAVE_LOCALTIME_S)
+check_function_exists(memcpy_s HAVE_MEMCPY_S)
+check_function_exists(random HAVE_RANDOM)
 check_function_exists(setmode HAVE_SETMODE)
 check_symbol_exists(snprintf stdio.h HAVE_SNPRINTF)
+check_symbol_exists(snprintf_s stdio.h HAVE_SNPRINTF_S)
 check_symbol_exists(strcasecmp strings.h HAVE_STRCASECMP)
 check_function_exists(strdup HAVE_STRDUP)
+check_function_exists(strerror_s HAVE_STRERROR_S)
+check_function_exists(strerrorlen_s HAVE_STRERRORLEN_S)
 check_function_exists(stricmp HAVE_STRICMP)
+check_function_exists(strncpy_s HAVE_STRNCPY_S)
 check_function_exists(strtoll HAVE_STRTOLL)
 check_function_exists(strtoull HAVE_STRTOULL)
 
@@ -177,33 +191,66 @@ int main(int argc, char *argv[]) { }" HAVE_NULLABLE)
 test_big_endian(WORDS_BIGENDIAN)
 
 find_package(ZLIB 1.1.2 REQUIRED)
+# so developers on systems where zlib is named differently (Windows, sometimes)
+# can override the name used in the pkg-config file
+if (NOT ZLIB_LINK_LIBRARY_NAME)
+  set(ZLIB_LINK_LIBRARY_NAME "z")
 
-if(ENABLE_BZIP2)
+  # Get the correct name in common cases
+  list(LENGTH ZLIB_LIBRARIES N_ZLIB_LIBRARIES)
+  if(N_ZLIB_LIBRARIES EQUAL 1)
+    set(ZLIB_FILENAME ${ZLIB_LIBRARIES})
+  elseif(N_ZLIB_LIBRARIES EQUAL 4)
+    # ZLIB_LIBRARIES might have the target_link_library() format like
+    # "optimized;path/to/zlib.lib;debug;path/to/zlibd.lib". Use the 'optimized'
+    # case unless we know we are in a Debug build.
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+      list(FIND ZLIB_LIBRARIES "debug" ZLIB_LIBRARIES_INDEX_OF_CONFIG)
+    else()
+      list(FIND ZLIB_LIBRARIES "optimized" ZLIB_LIBRARIES_INDEX_OF_CONFIG)
+    endif()
+    if(ZLIB_LIBRARIES_INDEX_OF_CONFIG GREATER_EQUAL 0)
+      math(EXPR ZLIB_FILENAME_INDEX "${ZLIB_LIBRARIES_INDEX_OF_CONFIG}+1")
+      list(GET ZLIB_LIBRARIES ${ZLIB_FILENAME_INDEX} ZLIB_FILENAME)
+    endif()
+  endif()
+  if(ZLIB_FILENAME)
+    get_filename_component(ZLIB_FILENAME ${ZLIB_FILENAME} NAME_WE)
+    string(REGEX REPLACE "^lib" "" ZLIB_LINK_LIBRARY_NAME ${ZLIB_FILENAME})
+  endif()
+endif(NOT ZLIB_LINK_LIBRARY_NAME)
+
+if(LIBZIP_ENABLE_BZIP2)
   find_package(BZip2)
   if(BZIP2_FOUND)
     set(HAVE_LIBBZ2 1)
   else()
     message(WARNING "-- bzip2 library not found; bzip2 support disabled")
   endif(BZIP2_FOUND)
-endif(ENABLE_BZIP2)
+endif(LIBZIP_ENABLE_BZIP2)
 
-if(ENABLE_LZMA)
+if(LIBZIP_ENABLE_LZMA)
   find_package(LibLZMA 5.2)
   if(LIBLZMA_FOUND)
     set(HAVE_LIBLZMA 1)
   else()
     message(WARNING "-- lzma library not found; lzma/xz support disabled")
   endif(LIBLZMA_FOUND)
-endif(ENABLE_LZMA)
+endif(LIBZIP_ENABLE_LZMA)
 
-if(ENABLE_ZSTD)
-  find_package(Zstd 1.3.6)
-  if(Zstd_FOUND)
+if(LIBZIP_ENABLE_ZSTD)
+  find_package(zstd 1.3.6)
+  if(zstd_FOUND)
     set(HAVE_LIBZSTD 1)
+    if(TARGET zstd::libzstd_shared)
+      set(zstd_TARGET zstd::libzstd_shared)
+    else()
+      set(zstd_TARGET zstd::libzstd_static)
+    endif()
   else()
     message(WARNING "-- zstd library not found; zstandard support disabled")
-  endif(Zstd_FOUND)
-endif(ENABLE_ZSTD)
+  endif(zstd_FOUND)
+endif(LIBZIP_ENABLE_ZSTD)
 
 if (COMMONCRYPTO_FOUND)
   set(HAVE_CRYPTO 1)
@@ -211,18 +258,18 @@ if (COMMONCRYPTO_FOUND)
 elseif (WINDOWS_CRYPTO_FOUND)
   set(HAVE_CRYPTO 1)
   set(HAVE_WINDOWS_CRYPTO 1)
-elseif (GNUTLS_FOUND AND NETTLE_FOUND)
-  set(HAVE_CRYPTO 1)
-  set(HAVE_GNUTLS 1)
 elseif (OPENSSL_FOUND)
   set(HAVE_CRYPTO 1)
   set(HAVE_OPENSSL 1)
+elseif (GNUTLS_FOUND AND NETTLE_FOUND)
+  set(HAVE_CRYPTO 1)
+  set(HAVE_GNUTLS 1)
 elseif (MBEDTLS_FOUND)
   set(HAVE_CRYPTO 1)
   set(HAVE_MBEDTLS 1)
 endif()
 
-if ((ENABLE_COMMONCRYPTO OR ENABLE_GNUTLS OR ENABLE_MBEDTLS OR ENABLE_OPENSSL OR ENABLE_WINDOWS_CRYPTO) AND NOT HAVE_CRYPTO)
+if ((LIBZIP_ENABLE_COMMONCRYPTO OR LIBZIP_ENABLE_GNUTLS OR LIBZIP_ENABLE_MBEDTLS OR LIBZIP_ENABLE_OPENSSL OR LIBZIP_ENABLE_WINDOWS_CRYPTO) AND NOT HAVE_CRYPTO)
   message(WARNING "-- neither Common Crypto, GnuTLS, mbed TLS, OpenSSL, nor Windows Cryptography found; AES support disabled")
 endif()
 
@@ -252,31 +299,31 @@ ENABLE_TESTING()
 # Targets
 ADD_SUBDIRECTORY(lib)
 
-if(BUILD_DOC)
+if(LIBZIP_BUILD_DOC)
   ADD_SUBDIRECTORY(man)
 endif()
 
-if(BUILD_TOOLS)
+if(LIBZIP_BUILD_TOOLS)
   ADD_SUBDIRECTORY(src)
-else(BUILD_TOOLS)
-  if(BUILD_REGRESS)
+else(LIBZIP_BUILD_TOOLS)
+  if(LIBZIP_BUILD_REGRESS)
     message(WARNING "-- tools build has been disabled, but they are needed for regression tests; regression testing disabled")
-    set(BUILD_REGRESS OFF)
-  endif(BUILD_REGRESS)
+    set(LIBZIP_BUILD_REGRESS OFF)
+  endif(LIBZIP_BUILD_REGRESS)
 endif()
 
-include(FindPerl)
+find_program(NIHTEST nihtest)
 
-if(BUILD_REGRESS AND NOT PERL_FOUND)
-  message(WARNING "-- perl not found, regression testing disabled")
-  set(BUILD_REGRESS OFF)
+if(LIBZIP_BUILD_REGRESS AND NOT NIHTEST)
+  message(WARNING "-- nihtest not found, regression testing disabled")
+  set(LIBZIP_BUILD_REGRESS OFF)
 endif()
 
-if(BUILD_REGRESS)
+if(LIBZIP_BUILD_REGRESS)
   add_subdirectory(regress)
 endif()
 
-if(BUILD_EXAMPLES)
+if(LIBZIP_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 
@@ -299,11 +346,14 @@ foreach(LIB ${LIBS_PRIVATE})
   endif()
   set(LIBS "${LIBS} -l${LIB}")
 endforeach()
+STRING(CONCAT zlib_link_name "-l" ${ZLIB_LINK_LIBRARY_NAME})
 string(REGEX REPLACE "-lBZip2::BZip2" "-lbz2" LIBS ${LIBS})
 string(REGEX REPLACE "-lLibLZMA::LibLZMA" "-llzma" LIBS ${LIBS})
-string(REGEX REPLACE "-lZstd::Zstd" "-lzstd" LIBS ${LIBS})
+if(LIBZIP_ENABLE_ZSTD)
+  string(REGEX REPLACE "-l${zstd_TARGET}" "-lzstd" LIBS ${LIBS})
+endif()
 string(REGEX REPLACE "-lOpenSSL::Crypto" "-lssl -lcrypto" LIBS ${LIBS})
-string(REGEX REPLACE "-lZLIB::ZLIB" "-lz" LIBS ${LIBS})
+string(REGEX REPLACE "-lZLIB::ZLIB" ${zlib_link_name} LIBS ${LIBS})
 string(REGEX REPLACE "-lGnuTLS::GnuTLS" "-lgnutls" LIBS ${LIBS})
 string(REGEX REPLACE "-lNettle::Nettle" "-lnettle" LIBS ${LIBS})
 configure_file(libzip.pc.in libzip.pc @ONLY)
@@ -413,17 +463,6 @@ set(srcdir ${CMAKE_CURRENT_SOURCE_DIR}/regress)
 set(abs_srcdir ${CMAKE_CURRENT_SOURCE_DIR}/regress)
 set(top_builddir ${PROJECT_BINARY_DIR}) # used to find config.h
 
-configure_file(regress/nihtest.conf.in ${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/nihtest.conf @ONLY)
-file(COPY ${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/nihtest.conf
-  DESTINATION ${PROJECT_BINARY_DIR}/regress
-  FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-
-configure_file(regress/runtest.in ${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/runtest @ONLY)
-file(COPY ${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/runtest
-  DESTINATION ${PROJECT_BINARY_DIR}/regress
-  FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
-  )
-
 # create package config file
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file("${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
@@ -431,6 +470,15 @@ write_basic_package_version_file("${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config-v
 
 configure_package_config_file("${PROJECT_NAME}-config.cmake.in" "${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
   INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/libzip)
+
+# Install Find* modules, they are required by libzip-config.cmake to resolve dependencies
+install(FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindNettle.cmake
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Findzstd.cmake
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindMbedTLS.cmake
+  DESTINATION
+    ${CMAKE_INSTALL_LIBDIR}/cmake/libzip/modules
+  )  
 
 if(LIBZIP_DO_INSTALL)
   # Add targets to the build-tree export set

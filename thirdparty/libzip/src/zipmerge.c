@@ -3,7 +3,7 @@
   Copyright (C) 2004-2021 Dieter Baron and Thomas Klausner
 
   This file is part of libzip, a library to manipulate ZIP archives.
-  The authors can be contacted at <libzip@nih.at>
+  The authors can be contacted at <info@libzip.org>
 
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions
@@ -50,7 +50,7 @@ char *progname;
 
 #define PROGRAM "zipmerge"
 
-#define USAGE "usage: %s [-DhIiSsV] target-zip zip...\n"
+#define USAGE "usage: %s [-DhIikSsV] target-zip zip...\n"
 
 char help_head[] = PROGRAM " (" PACKAGE ") by Dieter Baron and Thomas Klausner\n\n";
 
@@ -60,16 +60,17 @@ char help[] = "\n\
   -D       ignore directory component in file names\n\
   -I       ignore case in file names\n\
   -i       ask before overwriting files\n\
+  -k       don't compress when adding uncompressed files\n\
   -S       don't overwrite identical files\n\
   -s       overwrite identical files without asking\n\
 \n\
-Report bugs to <libzip@nih.at>.\n";
+Report bugs to <info@libzip.org>.\n";
 
 char version_string[] = PROGRAM " (" PACKAGE " " VERSION ")\n\
-Copyright (C) 2004-2021 Dieter Baron and Thomas Klausner\n\
+Copyright (C) 2004-2022 Dieter Baron and Thomas Klausner\n\
 " PACKAGE " comes with ABSOLUTELY NO WARRANTY, to the extent permitted by law.\n";
 
-#define OPTIONS "hVDiIsS"
+#define OPTIONS "hVDiIksS"
 
 #define CONFIRM_ALL_YES 0x001
 #define CONFIRM_ALL_NO 0x002
@@ -78,8 +79,11 @@ Copyright (C) 2004-2021 Dieter Baron and Thomas Klausner\n\
 
 int confirm;
 zip_flags_t name_flags;
+int keep_stored;
 
 static int confirm_replace(zip_t *, const char *, zip_uint64_t, zip_t *, const char *, zip_uint64_t);
+static void copy_extra_fields(zip_t *destination_archive, zip_uint64_t destination_index, zip_t *source_archive, zip_uint64_t source_index, zip_flags_t flags);
+static int copy_file(zip_t *destination_archive, zip_int64_t destination_index, zip_t *source_archive, zip_uint64_t source_index, const char* name);
 static zip_t *merge_zip(zip_t *, const char *, const char *);
 
 
@@ -95,25 +99,29 @@ main(int argc, char *argv[]) {
 
     confirm = CONFIRM_ALL_YES;
     name_flags = 0;
+    keep_stored = 0;
 
     while ((c = getopt(argc, argv, OPTIONS)) != -1) {
         switch (c) {
         case 'D':
             name_flags |= ZIP_FL_NODIR;
             break;
-        case 'i':
-            confirm &= ~CONFIRM_ALL_YES;
-            break;
         case 'I':
             name_flags |= ZIP_FL_NOCASE;
             break;
-        case 's':
-            confirm &= ~CONFIRM_SAME_NO;
-            confirm |= CONFIRM_SAME_YES;
+        case 'i':
+            confirm &= ~CONFIRM_ALL_YES;
+            break;
+        case 'k':
+            keep_stored = 1;
             break;
         case 'S':
             confirm &= ~CONFIRM_SAME_YES;
             confirm |= CONFIRM_SAME_NO;
+            break;
+        case 's':
+            confirm &= ~CONFIRM_SAME_NO;
+            confirm |= CONFIRM_SAME_YES;
             break;
 
         case 'h':
@@ -216,7 +224,6 @@ confirm_replace(zip_t *za, const char *tname, zip_uint64_t it, zip_t *zs, const 
 static zip_t *
 merge_zip(zip_t *za, const char *tname, const char *sname) {
     zip_t *zs;
-    zip_source_t *source;
     zip_int64_t ret, idx;
     zip_uint64_t i;
     int err;
@@ -244,8 +251,7 @@ merge_zip(zip_t *za, const char *tname, const char *sname) {
                 break;
 
             case 1:
-                if ((source = zip_source_zip(za, zs, i, 0, 0, 0)) == NULL || zip_replace(za, (zip_uint64_t)idx, source) < 0) {
-                    zip_source_free(source);
+                if (copy_file(za, idx, zs, i, NULL) < 0) {
                     fprintf(stderr, "%s: cannot replace '%s' in `%s': %s\n", progname, fname, tname, zip_strerror(za));
                     zip_close(zs);
                     return NULL;
@@ -266,8 +272,7 @@ merge_zip(zip_t *za, const char *tname, const char *sname) {
             }
         }
         else {
-            if ((source = zip_source_zip(za, zs, i, 0, 0, 0)) == NULL || zip_add(za, fname, source) < 0) {
-                zip_source_free(source);
+            if (copy_file(za, -1, zs, i, fname) < 0) {
                 fprintf(stderr, "%s: cannot add '%s' to `%s': %s\n", progname, fname, tname, zip_strerror(za));
                 zip_close(zs);
                 return NULL;
@@ -276,4 +281,56 @@ merge_zip(zip_t *za, const char *tname, const char *sname) {
     }
 
     return zs;
+}
+
+
+static int copy_file(zip_t *destination_archive, zip_int64_t destination_index, zip_t *source_archive, zip_uint64_t source_index, const char* name) {
+    zip_source_t *source = zip_source_zip_file(destination_archive, source_archive, source_index, ZIP_FL_COMPRESSED, 0, -1, NULL);
+
+    if (source == NULL) {
+        return -1;
+    }
+
+    if (destination_index >= 0) {
+        if (zip_file_replace(destination_archive, (zip_uint64_t)destination_index, source, 0) < 0) {
+            zip_source_free(source);
+            return -1;
+        }
+    }
+    else {
+        destination_index = zip_file_add(destination_archive, name, source, 0);
+        if (destination_index < 0) {
+            zip_source_free(source);
+            return -1;
+        }
+    }
+
+    copy_extra_fields(destination_archive, (zip_uint64_t)destination_index, source_archive, source_index, ZIP_FL_CENTRAL);
+    copy_extra_fields(destination_archive, (zip_uint64_t)destination_index, source_archive, source_index, ZIP_FL_LOCAL);
+    if (keep_stored) {
+        zip_stat_t st;
+        if (zip_stat_index(source_archive, source_index, 0, &st) == 0 && (st.valid & ZIP_STAT_COMP_METHOD) && st.comp_method == ZIP_CM_STORE) {
+            zip_set_file_compression(destination_archive, destination_index, ZIP_CM_STORE, 0);
+        }
+    }
+
+    return 0;
+}
+
+
+static void copy_extra_fields(zip_t *destination_archive, zip_uint64_t destination_index, zip_t *source_archive, zip_uint64_t source_index, zip_flags_t flags) {
+    zip_int16_t n;
+    zip_uint16_t i, id, length;
+    const zip_uint8_t *data;
+
+    if ((n = zip_file_extra_fields_count(source_archive, source_index, flags)) < 0) {
+        return;
+    }
+
+    for (i = 0; i < n; i++) {
+        if ((data = zip_file_extra_field_get(source_archive, source_index, i, &id, &length, flags)) == NULL) {
+            continue;
+        }
+        zip_file_extra_field_set(destination_archive, destination_index, id, ZIP_EXTRA_FIELD_NEW, data, length, flags);
+    }
 }

@@ -3,6 +3,7 @@ and some other general information gathered from their sources.
 
 Thanks to these people for suggestions, testing, and bug reports:
 
+ag2s20150909
 Agostino Sarubbo
 Alberto Spin
 Alexander Galanin <al@galanin.nnov.ru>
@@ -21,15 +22,20 @@ Beuc <beuc@beuc.net>
 Boaz Stolk <bstolk@aweta.nl>
 Bogdan <bogiebog@gmail.com>
 Brian 'geeknik' Carpenter <geeknik@protonmail.ch>
+BruceFan <fanrong_1992@163.com>
 Carl Mastrangelo <notcarl@google.com>
 Cédric Tabin
 celan69
+chaoticgd
 Charlie Li <git@vishwin.info>
 Chris Nehren <cnehren+libzip@pobox.com>
 Christoph Cullmann <cullmann@kde.org>
 Christoph M. Becker <cmbecker69@gmx.de>
 Coverity <info@coverity.com>
+cryi <cryi@tutanota.com>
+ctenter-scs
 Dane Springmeyer <dane.springmeyer@gmail.com>
+Daniel Russel <drussel@gmail.com>
 Ларионов Даниил <scumcoder@yandex.ru>
 David Demelier <demelier.david@gmail.com>
 Dean Ellis <dellis1972@googlemail.com>
@@ -37,6 +43,8 @@ Declan Moran
 Del Merritt <del@alum.mit.edu>
 Devin Davila <daviladsoftware@gmail.com>
 Dmytro Rybachenko <atmoliton@gmail.com>
+Dylan T. <dktapps@pmmp.io>
+Eelco Dolstra
 Elvis Angelaccio
 Erwin Haid <erwin.haid@gmx.de>
 Eun-cheol Joo
@@ -46,13 +54,15 @@ Florian Delizy <florian.delizy@gmail.com>
 Force Charlie <charlieio@outlook.com>
 François Simon <AT.GFI.Francois.SIMON@sesam-vitale.fr>
 Frederik Ramm <frederik@remote.org>
-gk7huki <gk7huki@gmail.com>
+Gabriela Gutierrez <gabigutierrez@google.com>
 Gerard ODonnell
 Giovanni
+gk7huki <gk7huki@gmail.com>
 Hanno Böck <hanno@hboeck.de>
 HeeMyung
 Heiko Becker
 Heiko Hund <heiko@ist.eigentlich.net>
+hongjunwang
 Ilya Voronin
 Info-ZIP group
 Ivan Kolesnikov <kiv.apple@gmail.com>
@@ -65,6 +75,7 @@ Joel Ebrahimi <joel.ebrahimi@gmail.com>
 Jono Spiro <jono.spiro@gmail.com>
 Julien Matthey <julien@turtlespeak.net>
 Julien Schueller <schueller@phimeca.com>
+Justin Cohen <justincohen@google.com>
 kensington <kensington@gentoo.org>
 Keith Jones <keith@keithjjones.com>
 Khaled Mardam-Bey
@@ -72,7 +83,13 @@ Kohei Yoshida <kohei.yoshida@gmail.com>
 Krzesimir Nowak <qdlacz@gmail.com>
 Leith Bade <leith@mapbox.com>
 Lubomir I. Ivanov <neolit123@gmail.com>
+Lucas Bustamante
+Ludovic LANGE
+M. Reiningħaus
 Maël Nison
+Manuel Massing <m.massing@virtualities.de>
+Marcin Kowalczyk <QrczakMK@gmail.com>
+Mark A. Tsuchida <marktsuchida@gmail.com>
 Martin Buchholz <martinrb@google.com>
 Martin Herkt <lachs0r@srsfckn.biz>
 Martin Szulecki <m.szulecki@libimobiledevice.org>
@@ -95,9 +112,11 @@ Paul Harris <harris.pc@gmail.com>
 Paul Sheppard <shepsoft@googlemail.com>
 Pavel Raiskup <praiskup@redhat.com>
 Pierre Joye <pierre.php@gmail.com>
+Pierre Wendling <pierre.wendling.4@gmail.com>
 Pierre-Louis Cabelguen <plcabelguen@googlemail.com>
 PW Hu <jlu.hpw@foxmail.com>
 Rafał Mikrut
+ralfjunker
 Randy <randy408@protonmail.com>
 Remi Collet <remi@fedoraproject.org>
 rezso <rezso@rezso.net>
@@ -109,12 +128,15 @@ Roberto Tirabassi <rtirabassi@3di.it>
 robhz786 <robhz786@gmail.com>
 Roland Ortloff <Ortloff.R@gmx.de>
 Rosen Penev <rosenp@gmail.com>
+Rudi Heitbaum
 Ryan Burns <rtburns@protonmail.com>
+Sam Sappenfield
 scribam
 Sebastian Kemper <sebastian_ml@gmx.net>
 Sebastian Schmitt <sebastian.schmitt@auvesy.de>
 Sergei Ozerov <ru.programmist@gmail.com>
 shenlebantongying
+Shimi
 Simon Talbot <simont@nse.co.uk>
 SpaceIm
 Stephen Bryant <steve@bawue.de>
@@ -122,6 +144,7 @@ Tabata Shintaro <tabata.shintaro@gmail.com>
 Tarmo Pikaro <tapika@yahoo.com>
 Taylor C. Richberger
 TC
+Thomas Debesse <dev@illwieckz.net>
 Tim Lunn <Tim@feathertop.org>
 Timo Warns <warns@pre-sense.de>
 Timofey
@@ -131,6 +154,7 @@ Tomáš Malý <malytomas@ucpu.cz>
 Torsten Paul <Torsten.Paul@gmx.de>
 Transporter <ogre.transporter@gmail.com>
 Vassili Courzakis <vcoxvco@googlemail.com>
+Vinpasso
 Vitaly Murashev <vitaly.murashev@gmail.com>
 William Lee
 William Ouwehand <mail@syncoda.nl>

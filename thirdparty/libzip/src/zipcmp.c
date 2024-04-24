@@ -3,7 +3,7 @@
   Copyright (C) 2003-2022 Dieter Baron and Thomas Klausner
 
   This file is part of libzip, a library to manipulate ZIP archives.
-  The authors can be contacted at <libzip@nih.at>
+  The authors can be contacted at <info@libzip.org>
 
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions
@@ -199,7 +199,7 @@ char help[] = "\n\
   -V       display version number\n\
   -v       be verbose (print differences, default)\n\
 \n\
-Report bugs to <libzip@nih.at>.\n";
+Report bugs to <info@libzip.org>.\n";
 
 char version_string[] = PROGRAM " (" PACKAGE " " VERSION ")\n\
 Copyright (C) 2003-2022 Dieter Baron and Thomas Klausner\n\
@@ -487,12 +487,13 @@ list_directory(const char *name, struct archive *a) {
                         break;
                     }
                     
-                    dir_name = malloc(strlen(ent->fts_path + prefix_length) + 2);
+                    size_t dir_name_size = strlen(ent->fts_path + prefix_length) + 2;
+                    dir_name = malloc(dir_name_size);
                     if (dir_name == NULL) {
                         fprintf(stderr, "%s: malloc failure\n", progname);
                         exit(1);
                     }
-                    sprintf(dir_name, "%s/", ent->fts_path + prefix_length);
+                    snprintf(dir_name, dir_name_size, "%s/", ent->fts_path + prefix_length);
                     a->entry[a->nentry].name = dir_name;
                     a->entry[a->nentry].size = 0;
                     a->entry[a->nentry].crc = 0;

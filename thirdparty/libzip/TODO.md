@@ -1,10 +1,13 @@
-## Before next release
+### Torrentzip
+
+- Handle data sources with unknown uncompressed size.
+- Handle when uncompressed size < 4GB but compressed size > 4GB.
 
 ## Other
 
-- Support extended timestamp extra field (0x5455): mtime overrides dos mtime from dirent, function to get/set all three.  
-
-- reconsider zip_source_zip (uncompressed data for whole file not easy to get)
+- split `zip_source_t` in main part and reference so we can keep track which reference called open and we can invalidate references if the underlying source gets invalidated (e. g. by `zip_close`).
+- Support extended timestamp extra field (0x5455): mtime overrides dos mtime from dirent, function to get/set all three.
+- Check UTF-8 code against https://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-test.txt
 
 ## Prefixes
 
@@ -21,6 +24,8 @@ const zip_uint8_t *zip_get_archive_prefix(struct zip *za, zip_uint64_t *lengthp)
 
 ## API Issues
 
+* Add `zip_file_use_password` to set per-file password to use if libzip needs to decrypt the file (e.g. when changing encryption or compression method).
+
 * `zip_get_archive_comment` has `int *lenp` argument.  Cleaner would be `zip_uint32_t *`.
   rename and fix.  which other functions for naming consistency?
 * rename remaining `zip_XXX_{file,archive}_*` to `zip_{file,archive}_XXX_*`?
@@ -29,8 +34,6 @@ const zip_uint8_t *zip_get_archive_prefix(struct zip *za, zip_uint64_t *lengthp)
 
 ## Features
 
-* add flag `ZIP_FL_SUPPORT_MULTIPLE_OPENS` and allow zip_fopen (perhaps other functions) on added/replaced files with such sources
-* add seek support for AES-encrypted files
 * consistently use `_zip_crypto_clear()` for passwords
 * support setting extra fields from `zip_source`
   * introduce layers of extra fields:
@@ -92,11 +95,12 @@ const zip_uint8_t *zip_get_archive_prefix(struct zip *za, zip_uint64_t *lengthp)
 
 ## Infrastructure
 
+* add coverage reports, e.g. using gcovr or https://github.com/eddyxu/cpp-coveralls (coveralls.io)
 * review guidelines/community standards
   - [Linux Foundation Core Infrastructure Initiative Best Practices](https://bestpractices.coreinfrastructure.org/)
   - [Readme Maturity Level](https://github.com/LappleApple/feedmereadmes/blob/master/README-maturity-model.md)
   - [Github Community Profile](https://github.com/nih-at/libzip/community)
-* test different crypto backends with TravisCI.
+* test different crypto backends with GitHub actions.
 * improve man page formatting of tagged lists on webpage (`<dl>`)
 * rewrite `make_zip_errors.sh` in cmake
 * script to check if all exported symbols are marked with `ZIP_EXTERN`, add to `make distcheck`
@@ -107,7 +111,7 @@ const zip_uint8_t *zip_get_archive_prefix(struct zip *za, zip_uint64_t *lengthp)
 
 ## Test Case Issues
 
-* add test cases for all ZIP_INCONS detail errors
+* add test cases for all `ZIP_INCONS` detail errors
 * `incons-local-filename-short.zzip` doesn't test short filename, since extra fields fail to parse.
 * test error cases with special source
   - tell it which command should fail
@@ -125,7 +129,7 @@ const zip_uint8_t *zip_get_archive_prefix(struct zip *za, zip_uint64_t *lengthp)
 	  - state of source (opened, EOF reached, ...)
 * test for zipcmp reading directory (requires fts)
 * add test case for clone with files > 4k
-* consider testing for malloc/realloc failures
+* consider testing for `malloc`/`realloc` failures
 * Winzip AES support
   * test cases decryption: <=20, >20, stat for both
   * test cases encryption: no password, default password, file-specific password, 128/192/256, <=20, >20
@@ -162,7 +166,7 @@ const zip_uint8_t *zip_get_archive_prefix(struct zip *za, zip_uint64_t *lengthp)
   * close
   * zipcmp copy expected
   * remove copy
-* (`error_get)
+* (`error_get`)
 * (`error_get_sys_type`)
 * (`error_to_str`)
 * (`extra_fields`)
@@ -182,3 +186,4 @@ const zip_uint8_t *zip_get_archive_prefix(struct zip *za, zip_uint64_t *lengthp)
 * I/O abstraction layer
   * `zip_open_from_source`
 * read two zip entries interleaved
+* test `zip_file_is_seekable` (via `ziptool`?)

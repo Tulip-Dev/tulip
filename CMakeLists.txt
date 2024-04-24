@@ -288,7 +288,7 @@ ENDIF(TULIP_BUILD_GL_TEX_LOADER)
 
   # Libzip
   IF(NOT TULIP_USE_THIRDPARTY_LIBZIP)
-    FIND_PACKAGE(libzip 1.0 QUIET)
+    FIND_PACKAGE(libzip 1.10.1 QUIET)
     IF(libzip_DIR)
       SET(LIBZIP_FOUND TRUE)
       MESSAGE(STATUS "Found Libzip (found version \" ${libzip_VERSION}\")")

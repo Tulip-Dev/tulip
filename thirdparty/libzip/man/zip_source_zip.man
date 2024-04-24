@@ -3,7 +3,7 @@
 .\" Copyright (C) 2004-2021 Dieter Baron and Thomas Klausner
 .\"
 .\" This file is part of libzip, a library to manipulate ZIP archives.
-.\" The authors can be contacted at <libzip@nih.at>
+.\" The authors can be contacted at <info@libzip.org>
 .\"
 .\" Redistribution and use in source and binary forms, with or without
 .\" modification, are permitted provided that the following conditions
@@ -30,13 +30,13 @@
 .\" OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 .\" IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 .\"
-.TH "ZIP_SOURCE_ZIP" "3" "April 4, 2021" "NiH" "Library Functions Manual"
+.TH "ZIP_SOURCE_ZIP" "3" "January 23, 2023" "NiH" "Library Functions Manual"
 .nh
 .if n .ad l
 .SH "NAME"
 \fBzip_source_zip\fR,
 \fBzip_source_zip_create\fR
-\- create data source from zip file
+\- create data source from zip file (obsolete interface)
 .SH "LIBRARY"
 libzip (-lzip)
 .SH "SYNOPSIS"
@@ -56,6 +56,20 @@ libzip (-lzip)
 \fBzip_source_zip_create\fR(\fIzip_t\ *srcarchive\fR, \fIzip_uint64_t\ srcidx\fR, \fIzip_flags_t\ flags\fR, \fIzip_uint64_t\ start\fR, \fIzip_int64_t\ len\fR, \fIzip_error_t\ *error\fR);
 .PD
 .SH "DESCRIPTION"
+The functions
+\fBzip_source_zip\fR()
+and
+\fBzip_source_zip_create\fR()
+are the obsolete versions of
+zip_source_zip_file(3)
+or
+zip_source_zip_file_create(3)
+respectively.
+If you want to get the compressed data of the complete file, use
+.RS 6n
+zip_source_zip_file(za, source_archive, source_index, ZIP_FL_COMPRESSED, 0, -1, NULL)
+.RE
+.PP
 The functions
 \fBzip_source_zip\fR()
 and
@@ -82,18 +96,11 @@ is zero and
 is \-1, the whole file will be copied without decompressing it.
 .PP
 Supported flags are:
-.TP 23n
-\fRZIP_FL_UNCHANGED\fR
+.br
 Try to get the original data without any changes that may have been
 made to
 \fIsrcarchive\fR
 after opening it.
-.TP 23n
-\fRZIP_FL_RECOMPRESS\fR
-When adding the data from
-\fIsrcarchive\fR,
-re-compress it using the current settings instead of copying the
-compressed data.
 .SH "RETURN VALUES"
 Upon successful completion, the created source is returned.
 Otherwise,
@@ -139,6 +146,11 @@ zip_source(3)
 was added in libzip 1.0.
 \fBzip_source_zip_create\fR()
 was added in libzip 1.8.0.
+Both were deprecated in libzip 1.10.0.
+Use
+\fBzip_source_zip_file\fR()
+or
+instead.
 .SH "AUTHORS"
 Dieter Baron <\fIdillo@nih.at\fR>
 and

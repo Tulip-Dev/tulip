@@ -66,6 +66,7 @@ static zip_int64_t _zip_stdio_op_remove(zip_source_file_context_t *ctx);
 static void _zip_stdio_op_rollback_write(zip_source_file_context_t *ctx);
 static char *_zip_stdio_op_strdup(zip_source_file_context_t *ctx, const char *string);
 static zip_int64_t _zip_stdio_op_write(zip_source_file_context_t *ctx, const void *data, zip_uint64_t len);
+static FILE *_zip_fopen_close_on_exec(const char *name, bool writeable);
 
 /* clang-format off */
 static zip_source_file_operations_t ops_stdio_named = {
@@ -100,7 +101,7 @@ zip_source_file(zip_t *za, const char *fname, zip_uint64_t start, zip_int64_t le
 
 ZIP_EXTERN zip_source_t *
 zip_source_file_create(const char *fname, zip_uint64_t start, zip_int64_t length, zip_error_t *error) {
-    if (fname == NULL || length < -1) {
+    if (fname == NULL || length < ZIP_LENGTH_UNCHECKED) {
         zip_error_set(error, ZIP_ER_INVAL, 0);
         return NULL;
     }
@@ -290,7 +291,7 @@ static int create_temp_file(zip_source_file_context_t *ctx, bool create_file) {
     char *temp;
     int mode;
     struct stat st;
-    int fd;
+    int fd = 0;
     char *start, *end;
     
     if (stat(ctx->fname, &st) == 0) {
@@ -300,11 +301,12 @@ static int create_temp_file(zip_source_file_context_t *ctx, bool create_file) {
         mode = -1;
     }
     
-    if ((temp = (char *)malloc(strlen(ctx->fname) + 13)) == NULL) {
+    size_t temp_size = strlen(ctx->fname) + 13;
+    if ((temp = (char *)malloc(temp_size)) == NULL) {
         zip_error_set(&ctx->error, ZIP_ER_MEMORY, 0);
         return -1;
     }
-    sprintf(temp, "%s.XXXXXX.part", ctx->fname);
+    snprintf_s(temp, temp_size, "%s.XXXXXX.part", ctx->fname);
     end = temp + strlen(temp) - 5;
     start = end - 6;
     
@@ -357,5 +359,34 @@ static int create_temp_file(zip_source_file_context_t *ctx, bool create_file) {
     
     ctx->tmpname = temp;
     
-    return create_file ? fd : 0;
+    return fd; /* initialized to 0 if !create_file */
+}
+
+
+/*
+ * fopen replacement that sets the close-on-exec flag
+ * some implementations support an fopen 'e' flag for that,
+ * but e.g. macOS doesn't.
+ */
+static FILE *_zip_fopen_close_on_exec(const char *name, bool writeable) {
+    int fd;
+    int flags;
+    FILE *fp;
+
+    flags = O_CLOEXEC;
+    if (writeable) {
+        flags |= O_RDWR;
+    }
+    else {
+        flags |= O_RDONLY;
+    }
+
+    /* mode argument needed on Windows */
+    if ((fd = open(name, flags, 0666)) < 0) {
+        return NULL;
+    }
+    if ((fp = fdopen(fd, writeable ? "r+b" : "rb")) == NULL) {
+        return NULL;
+    }
+    return fp;
 }

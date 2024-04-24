@@ -3,7 +3,7 @@
   Copyright (C) 2004-2021 Dieter Baron and Thomas Klausner
 
   This file is part of libzip, a library to manipulate ZIP archives.
-  The authors can be contacted at <libzip@nih.at>
+  The authors can be contacted at <info@libzip.org>
 
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions
@@ -122,12 +122,12 @@ main(int argc, char *argv[]) {
         fail++;
     }
     else {
-        if (zip_replace(z, (zip_uint64_t)idx, zs) < 0) {
+        if (zip_file_replace(z, (zip_uint64_t)idx, zs, 0) < 0) {
             fprintf(stderr, "%s: can't replace 'storedok' in zip archive '%s': %s\n", progname, archive, zip_strerror(z));
             fail++;
         }
         else {
-            fail += do_read(z, "storedok", 0, WHEN_OPEN, ZIP_ER_CHANGED, 0);
+            fail += do_read(z, "storedok", 0, WHEN_NEVER, 0, 0);
             fail += do_read(z, "storedok", ZIP_FL_UNCHANGED, WHEN_NEVER, 0, 0);
         }
     }
@@ -151,7 +151,7 @@ main(int argc, char *argv[]) {
         fail++;
     }
     else {
-        fail += do_read(z, "new_file", 0, WHEN_OPEN, ZIP_ER_CHANGED, 0);
+        fail += do_read(z, "new_file", 0, WHEN_NEVER, 0, 0);
     }
 
     zip_unchange_all(z);

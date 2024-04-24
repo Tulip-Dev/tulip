@@ -3,7 +3,7 @@
   Copyright (C) 2012-2021 Dieter Baron and Thomas Klausner
 
   This file is part of libzip, a library to manipulate ZIP archives.
-  The authors can be contacted at <libzip@nih.at>
+  The authors can be contacted at <info@libzip.org>
 
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions
@@ -68,7 +68,7 @@ main(int argc, char *argv[]) {
         exit(1);
     }
 
-    if (zip_add(za, file, zs) == -1) {
+    if (zip_file_add(za, file, zs, 0) == -1) {
         fprintf(stderr, "can't add file '%s': %s\n", file, zip_strerror(za));
         (void)zip_source_free(zs);
         (void)zip_close(za);

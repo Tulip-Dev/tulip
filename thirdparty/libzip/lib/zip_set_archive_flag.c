@@ -39,15 +39,26 @@ ZIP_EXTERN int
 zip_set_archive_flag(zip_t *za, zip_flags_t flag, int value) {
     unsigned int new_flags;
 
-    if (value)
+    if (flag == ZIP_AFL_IS_TORRENTZIP) {
+        zip_error_set(&za->error, ZIP_ER_INVAL, 0);
+        return -1;
+    }
+
+    /* TODO: when setting ZIP_AFL_WANT_TORRENTZIP, we should error out if any changes have been made that are not allowed for torrentzip. */
+
+    if (value) {
         new_flags = za->ch_flags | flag;
-    else
+    }
+    else {
         new_flags = za->ch_flags & ~flag;
+    }
 
-    if (new_flags == za->ch_flags)
+    if (new_flags == za->ch_flags) {
         return 0;
+    }
 
-    if (ZIP_IS_RDONLY(za)) {
+    /* Allow removing ZIP_AFL_RDONLY if manually set, not if archive was opened read-only. */
+    if (za->flags & ZIP_AFL_RDONLY) {
         zip_error_set(&za->error, ZIP_ER_RDONLY, 0);
         return -1;
     }
