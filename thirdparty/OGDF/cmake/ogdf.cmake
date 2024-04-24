@@ -82,10 +82,11 @@ endif()
 file(GLOB_RECURSE ogdf_headers include/ogdf/*.h)
 #file(GLOB_RECURSE ogdf_sources src/ogdf/*.cpp)
 # compile only files needed for tulip build
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 file(STRINGS cmake/ogdf_files_for_tlp.txt ogdf_sources)
 set(ogdf_sources "${ogdf_sources};${ogdf_headers}")
 add_library(OGDF "${ogdf_sources}")
+SET_TARGET_PROPERTIES(OGDF PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(OGDF PUBLIC COIN)
 group_files(ogdf_sources "ogdf")
 target_compile_features(OGDF PUBLIC cxx_range_for)

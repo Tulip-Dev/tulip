@@ -14,7 +14,6 @@ endif()
 # compilation
 #file(GLOB_RECURSE COIN_SOURCES src/coin/*.cpp)
 # compile only files needed for tulip build
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 file(STRINGS cmake/coin_files_for_tlp.txt COIN_SOURCES)
 if(NOT COIN_SOLVER STREQUAL "GRB")
   list(REMOVE_ITEM COIN_SOURCES "${PROJECT_SOURCE_DIR}/src/coin/Osi/OsiGrbSolverInterface.cpp")
@@ -24,6 +23,7 @@ if(NOT COIN_SOLVER STREQUAL "CPX")
 endif()
 #add_library(COIN ${COIN_LIBRARY_TYPE} ${COIN_SOURCES})
 add_library(COIN STATIC ${COIN_SOURCES})
+SET_TARGET_PROPERTIES(COIN PROPERTIES POSITION_INDEPENDENT_CODE ON)
 group_files(COIN_SOURCES "coin")
 target_include_directories(COIN SYSTEM PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/coin>
