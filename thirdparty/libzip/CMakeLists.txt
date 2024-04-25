@@ -9,6 +9,7 @@ project(libzip
   VERSION 1.10.1
   LANGUAGES C)
 
+# LIBZIP_ENABLE_... options are disabled for Tulip build
 option(LIBZIP_ENABLE_COMMONCRYPTO "Enable use of CommonCrypto" OFF)
 option(LIBZIP_ENABLE_GNUTLS "Enable use of GnuTLS" OFF)
 option(LIBZIP_ENABLE_MBEDTLS "Enable use of mbed TLS" OFF)
@@ -21,6 +22,7 @@ option(LIBZIP_ENABLE_ZSTD "Enable use of Zstandard" OFF)
 
 option(LIBZIP_ENABLE_FDOPEN "Enable zip_fdopen, which is not allowed in Microsoft CRT secure libraries" OFF)
 
+# LIBZIP_BULID_... options are disabled for Tulip build
 option(LIBZIP_BUILD_TOOLS "Build tools in the src directory (zipcmp, zipmerge, ziptool)" OFF)
 option(LIBZIP_BUILD_REGRESS "Build regression tests" OFF)
 option(LIBZIP_BUILD_EXAMPLES "Build examples" OFF)
@@ -56,8 +58,9 @@ if(WIN32)
   endif()
 endif()
 
-option(LIBZIP_BUILD_SHARED_LIBS "Build shared libraries" ON)
-option(LIBZIP_DO_INSTALL "Install libzip and the related files" ON)
+# Tulip build do not need to build shared libs or perform any installation
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+option(LIBZIP_DO_INSTALL "Install libzip and the related files" OFF)
 
 option(LIBZIP_SHARED_LIB_VERSIONNING "Add SO version in .so build" ON)
 
