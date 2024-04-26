@@ -606,14 +606,20 @@ selection-background-color: #C0C0C0;
 }
 
 QPushButton, QComboBox {
-color: black;
+color: %FG_COLOR%;
+background-color: %PB_COLOR%;
+border-radius: 10;
+border-width: 4;
+padding: 4px;
+font-size: 12px;
 }
 
-QPushButton, QComboBox {
-border-image: url(:/tulip/gui/ui/btn_26.png) 4;
-border-width: 4;
-padding: 0px 6px;
-font-size: 12px;
+QPushButton:hover, QComboBox:hover {
+background-color: #C0C0C0;
+}
+
+QPushButton:pressed, QComboBox:pressed {
+background-color: #808080;
 }
 
 QPushButton::flat {
@@ -621,32 +627,14 @@ border-width: 0;
 background-color: transparent;
 }
 
-QPushButton:hover {
-border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
-border-width: 4;
-}
-
-QComboBox:hover, QToolButton:hover {
-border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
-}
-
 QPushButton:disabled, QComboBox::disabled, QToolButton::disabled {
 color:gray;
-}
-
-QPushButton:pressed, QToolButton:pressed{
-border-image: url(:/tulip/gui/ui/btn_26_pressed.png) 4;
 }
 
 QPushButton::menu-indicator{
 subcontrol-origin: margin;
 subcontrol-position: center right;
 right: 4px;
-}
-
-QPushButton {
-outline: none;
-margin: 2
 }
 
 QComboBox::down-arrow {
@@ -691,9 +679,7 @@ stop:1 rgb(70,70,70));
 }
 
 #bottomFrame QPushButton:pressed, #bottomFrame .QPushButton:checked, #bottomFrame QToolButton:pressed {
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1,
-stop:0 rgb(65,65,65),
-stop:1 rgb(50,50,50));
+background-color: #D0D0D0;
 }
 
 #bottomFrame QToolButton {
@@ -721,11 +707,43 @@ border-width: 0px;
 }
 
 QScrollBar {
-background-color: #D0D0D0;
+background: #D0D0D0;
+border-radius: 5px;
+padding: 0px;
 }
 
-QScrollBar::sub-page, QScrollBar::add-page {
-background-color: #A0A0A0;
+QScrollBar:vertical {
+width: 10px;
+}
+
+QScrollBar:horizontal {
+height: 10px;
+}
+
+QScrollBar::handle {
+background: #B0B0B0;
+border-radius: 5px;
+min-height: 25px;
+min-width: 25px;
+}
+
+QScrollBar::handle:hover {
+background: #909090;
+}
+
+QScrollBar::handle:pressed {
+background: #808080;
+}
+
+QScrollBar::sub-page, QScrollBar::add-page, QScrollBar::sub-line, QScrollBar::add-line  {
+background: none;
+}
+
+QSlider::handle:horizontal {
+border: 1px solid lightgray;
+margin: -6px 0;
+border-radius: 5px;
+background: white;
 }
 
 QTableWidget, QTableView {
@@ -735,8 +753,8 @@ gridline-color: #808080;
 QTabBar::tab {
 background: #A0A0A0;
 border: 1px solid #808080;
-border-top-left-radius: 2px;
-border-top-right-radius: 2px;
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
 font-weight: 100;
 min-width: 8ex;
 padding: 5px;
@@ -765,9 +783,9 @@ top: -1px;
 )");
 
   if (TulipSettings::isDisplayInDarkMode())
-    s_sheet.replace("%BG_COLOR%", "#323232").replace("%FG_COLOR%", "white");
+    s_sheet.replace("%BG_COLOR%", "#323232").replace("%FG_COLOR%", "white").replace("%PB_COLOR%", "#4F4F4F");
   else
-    s_sheet.replace("%BG_COLOR%", "white").replace("%FG_COLOR%", "black");
+    s_sheet.replace("%BG_COLOR%", "white").replace("%FG_COLOR%", "black").replace("%PB_COLOR%", "#E2E2E2");
   _mainWindow->setStyleSheet(s_sheet);
 
   _ui = new Ui::GraphPerspectiveMainWindowData;

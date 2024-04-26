@@ -77,7 +77,6 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, bool darkBackground
   // set foreground colors according to contents background color
   if (darkBackground) {
     _ui->parameters->setStyleSheet("QHeaderView::section { color: white }");
-    _ui->playButton->setStyleSheet("QPushButton { color: white; text-align: left; } ");
   }
 
   if (PluginLister::pluginInformation(QStringToTlpString(pluginName)).getParameters().empty()) {

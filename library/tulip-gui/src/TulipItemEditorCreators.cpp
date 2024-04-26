@@ -98,9 +98,10 @@ bool ColorEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem &op
                                const QVariant &v, const QModelIndex &index) const {
   TulipItemEditorCreator::paint(painter, option, v, index);
   painter->setBrush(colorToQColor(v.value<tlp::Color>()));
-  painter->setPen(Qt::black);
-  painter->drawRect(option.rect.x() + 6, option.rect.y() + 6, option.rect.width() - 12,
-                    option.rect.height() - 12);
+  painter->setPen(QColor(207, 207, 207));
+  painter->setRenderHint(QPainter::Antialiasing, true);
+  painter->drawRoundedRect(option.rect.x() + 6, option.rect.y() + 6, option.rect.width() - 12,
+                           option.rect.height() - 12, 6, 6);
   return true;
 }
 

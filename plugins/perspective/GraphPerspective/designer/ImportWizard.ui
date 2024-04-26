@@ -78,6 +78,9 @@ border: 0px;
          </sizepolicy>
         </property>
         <layout class="QVBoxLayout" name="leftLayout">
+         <property name="spacing">
+          <number>0</number>
+         </property>
          <property name="leftMargin">
           <number>0</number>
          </property>
@@ -190,7 +193,7 @@ border: 0px;
            <widget class="QFrame" name="parametersFrame">
             <layout class="QVBoxLayout" name="rLayout2">
              <property name="spacing">
-              <number>10</number>
+              <number>0</number>
              </property>
              <property name="leftMargin">
               <number>0</number>

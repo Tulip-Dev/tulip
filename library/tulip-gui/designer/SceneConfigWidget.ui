@@ -93,7 +93,7 @@ font-weight: bold; font-size: 18px; color: #A0A0A0A0</string>
         <x>0</x>
         <y>0</y>
         <width>387</width>
-        <height>635</height>
+        <height>638</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -836,6 +836,12 @@ font-weight: bold; font-size: 18px; color: #A0A0A0A0</string>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>23</height>
+                </size>
+               </property>
                <property name="toolTip">
                 <string>specify the quantity of labels to be displayed</string>
                </property>
@@ -1316,7 +1322,7 @@ of the scene remains unchanged.</string>
   <slot>applySettings()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="buttonGroup1"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup1"/>
  </buttongroups>
 </ui>

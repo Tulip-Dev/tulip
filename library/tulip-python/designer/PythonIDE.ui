@@ -37,6 +37,7 @@ font: bold 10px;
 }
 
 QToolButton:hover {
+border-radius: 4;
 border: 1px solid #A0A0A0;
 }
 

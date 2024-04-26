@@ -125,7 +125,7 @@ QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem,
       delegate(new TulipItemDelegate(this)), _oldFontScale(1), _oldNodeScale(1),
       _captionsInitialized(false) {
   QString ss = Perspective::styleSheet();
-  ss.append("#QuickAccessBar { background-color: rgba(255,255,255,100); }");
+  ss.append("#QuickAccessBar { background-color: rgba(255,255,255,100); } QPushButton:hover { border: 1px solid #A0A0A0; border-radius: 4; } QPushButton:pressed { background-color: #A0A0A0;}");
   setStyleSheet(ss);
   _ui->setupUi(this);
 

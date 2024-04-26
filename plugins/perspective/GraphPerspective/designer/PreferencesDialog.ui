@@ -246,6 +246,12 @@ If not, a new random seed will be set to initialize each new random sequence.&lt
          </item>
          <item>
           <widget class="QComboBox" name="displayModeCombo">
+           <property name="minimumSize">
+            <size>
+             <width>55</width>
+             <height>0</height>
+            </size>
+           </property>
            <item>
             <property name="text">
              <string>Light</string>
@@ -320,16 +326,11 @@ font: 12px;
            <attribute name="horizontalHeaderDefaultSectionSize">
             <number>200</number>
            </attribute>
-           <row>
-           </row>
-           <row>
-           </row>
-           <row>
-           </row>
-           <row>
-           </row>
-           <row>
-           </row>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
            <column>
             <property name="text">
              <string>Drawing defaults</string>
@@ -439,6 +440,18 @@ font: 12px;
          </item>
          <item>
           <widget class="QPushButton" name="resetAllDrawingDefaultsButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string>&lt;p&gt;Reset all drawing defaults to their Tulip predefined values.&lt;br/&gt;You can also reset row specific default values in using a contextual menu displayed by a left click on the title of the corresponding row.&lt;/p&gt;</string>
            </property>
@@ -592,24 +605,24 @@ font: 12px;
             </item>
             <item>
              <widget class="QLineEdit" name="proxyUser">
-              <property name="placeholderText">
-               <string>name</string>
-              </property>
               <property name="enabled">
                <bool>false</bool>
+              </property>
+              <property name="placeholderText">
+               <string>name</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QLineEdit" name="proxyPassword">
-              <property name="placeholderText">
-               <string>password</string>
-              </property>
               <property name="enabled">
                <bool>false</bool>
               </property>
               <property name="echoMode">
                <enum>QLineEdit::Password</enum>
+              </property>
+              <property name="placeholderText">
+               <string>password</string>
               </property>
              </widget>
             </item>

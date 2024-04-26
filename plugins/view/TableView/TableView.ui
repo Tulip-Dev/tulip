@@ -73,11 +73,11 @@
            <string>Show/Hide table settings</string>
           </property>
           <property name="styleSheet">
-           <string>QToolButton {
+           <string notr="true">QToolButton {
 border: none;
 }
 QToolButton:checked {
-  border: 1px solid lightgray;
+  border: 1px solid lightgray; border-radius: 7px
 }
 </string>
           </property>

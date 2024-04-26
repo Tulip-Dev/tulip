@@ -44,21 +44,20 @@
       <string notr="true">
 QPushButton {
 border-image: none;
-border: 1px solid #E9E9E9;
 }
 
 #settingsButton {
 border: 0px;
+background-color: transparent;
 }
 
-QPushButton:hover, #settingsButton:hover {
+#settingsButton:hover {
 border-image: none;
 border: 1px solid #C9C9C9;
 }
 
-QPushButton:pressed, #settingsButton:pressed {
+#settingsButton:pressed {
 border-image: none;
-background-color: #E9E9E9;
 border: 1px solid #C9C9C9;
 }</string>
      </property>
@@ -152,29 +151,30 @@ Right click: display plugin documentation</string>
          <string>Add to Favorites</string>
         </property>
         <property name="styleSheet">
-         <string notr="true">QCheckBox {
+         <string notr="true">#favoriteCheck {
 spacing: 0px;
 }
-QCheckBox::indicator {
+#favoriteCheck::indicator {
+border: none;
 width: 16px;
 height: 16px;
 }
-QCheckBox::indicator:unchecked {
+#favoriteCheck::indicator:unchecked {
 image: url(:/tulip/graphperspective/icons/16/favorite-empty.png);
 }
-QCheckBox::indicator:unchecked:hover {
+#favoriteCheck::indicator:unchecked:hover {
 image: url(:/tulip/graphperspective/icons/16/favorite-hover.png);
 }
-QCheckBox::indicator:unchecked:pressed {
+#favoriteCheck::indicator:unchecked:pressed {
 image: url(:/tulip/graphperspective/icons/16/favorite.png);
 }
-QCheckBox::indicator:checked {
+#favoriteCheck::indicator:checked {
 image: url(:/tulip/graphperspective/icons/16/favorite.png);
 }
-QCheckBox::indicator:checked:hover {
+#favoriteCheck::indicator:checked:hover {
 image: url(:/tulip/graphperspective/icons/16/favorite-hover.png);
 }
-QCheckBox::indicator:checked:pressed {
+#favoriteCheck::indicator:checked:pressed {
 image: url(:/tulip/graphperspective/icons/16/favorite-empty.png);
 }</string>
         </property>

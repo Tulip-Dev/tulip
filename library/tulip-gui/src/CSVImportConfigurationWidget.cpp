@@ -23,6 +23,7 @@
 
 #include <QPainter>
 #include <QPushButton>
+#include <QCheckBox>
 #include <QStyleOptionButton>
 #include <QStylePainter>
 
@@ -225,10 +226,15 @@ void CSVTableHeader::paintSection(QPainter *painter, const QRect &rect, int logi
   QHeaderView::paintSection(painter, rect, logicalIndex);
   painter->restore();
   QStyleOptionButton cb;
+  auto bpal = parentWidget()->palette();
+  auto pal = bpal;
+  pal.setColor(QPalette::Window, QColor("lightgray"));
+  parentWidget()->setPalette(pal);
   cb.initFrom(parentWidget());
+  parentWidget()->setPalette(bpal);
   cb.state = QStyle::State_Enabled |
              (widgets[logicalIndex]->isUsed() ? QStyle::State_On : QStyle::State_Off);
-  auto cbRect = style()->subElementRect(QStyle::SE_CheckBoxIndicator, &cb);
+  auto cbRect = style()->subElementRect(QStyle::SE_CheckBoxClickRect, &cb);
   cb.rect =
       QRect(rect.x() + (rect.width() - cbRect.width()) / 2,
             rect.y() + (rect.height() - cbRect.height()) / 2, cbRect.width(), cbRect.height());
