@@ -783,9 +783,13 @@ top: -1px;
 )");
 
   if (TulipSettings::isDisplayInDarkMode())
-    s_sheet.replace("%BG_COLOR%", "#323232").replace("%FG_COLOR%", "white").replace("%PB_COLOR%", "#4F4F4F");
+    s_sheet.replace("%BG_COLOR%", "#323232")
+        .replace("%FG_COLOR%", "white")
+        .replace("%PB_COLOR%", "#4F4F4F");
   else
-    s_sheet.replace("%BG_COLOR%", "white").replace("%FG_COLOR%", "black").replace("%PB_COLOR%", "#E2E2E2");
+    s_sheet.replace("%BG_COLOR%", "white")
+        .replace("%FG_COLOR%", "black")
+        .replace("%PB_COLOR%", "#E2E2E2");
   _mainWindow->setStyleSheet(s_sheet);
 
   _ui = new Ui::GraphPerspectiveMainWindowData;
