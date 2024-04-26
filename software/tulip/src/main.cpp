@@ -330,9 +330,7 @@ int main(int argc, char **argv) {
 
     mainWindow->setWindowIcon(progress->windowIcon());
     mainWindow->show();
-
-    delete progress;
-    progress = nullptr;
+    progress->hide();
 
     // the delay of geometry update until perspective execution
     // seems to ensure that the four parameters (x,y,w,h)
@@ -358,6 +356,7 @@ int main(int argc, char **argv) {
     delete perspective;
     delete mainWindow;
   }
+  delete progress;
   delete context;
 
   // We need to clear allocated OpenGL resources
