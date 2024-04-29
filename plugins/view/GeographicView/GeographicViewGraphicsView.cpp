@@ -303,11 +303,15 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   // 2 push buttons
   // zoom +
   bool darkMode = TulipSettings::isDisplayInDarkMode();
-  zoomInButton = new QPushButton(QIcon(darkMode ? ":/tulip/view/geographic/white-zoom+.png" : ":/tulip/view/geographic/zoom+.png"), "");
+  zoomInButton = new QPushButton(QIcon(darkMode ? ":/tulip/view/geographic/white-zoom+.png"
+                                                : ":/tulip/view/geographic/zoom+.png"),
+                                 "");
   zoomInButton->setFixedSize(24, 24);
   connect(zoomInButton, SIGNAL(pressed()), this, SLOT(zoomIn()));
   // zoom -
-  zoomOutButton = new QPushButton(QIcon(darkMode ? ":/tulip/view/geographic/white-zoom-.png" :":/tulip/view/geographic/zoom-.png"), "");
+  zoomOutButton = new QPushButton(QIcon(darkMode ? ":/tulip/view/geographic/white-zoom-.png"
+                                                 : ":/tulip/view/geographic/zoom-.png"),
+                                  "");
   zoomOutButton->setFixedSize(24, 24);
   connect(zoomOutButton, SIGNAL(pressed()), this, SLOT(zoomOut()));
 

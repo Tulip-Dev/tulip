@@ -491,8 +491,7 @@ if result.returncode != 0:
   // on macos if in bundle we must ensure that default Root certificates
   // are installed for the ssl module
   auto pyPath = _pythonInterpreter->getSysVariable("exec_prefix");
-  if (pyPath.contains(".app/Contents/") &&
-      !QFile::exists(pyPath + "/etc/openssl/cert.pem")) {
+  if (pyPath.contains(".app/Contents/") && !QFile::exists(pyPath + "/etc/openssl/cert.pem")) {
     std::string pipScript = beginPipScript();
     // use the certificates provided by the certifi package
     pipScript += R"(install', '--user', 'certifi'], capture_output=True, text=True, env=exec_env)
