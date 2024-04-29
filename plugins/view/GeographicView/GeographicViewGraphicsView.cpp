@@ -30,6 +30,7 @@
 #include <tulip/GlSceneZoomAndPan.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/GlTextureManager.h>
+#include <tulip/TulipSettings.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/Perspective.h>
@@ -301,11 +302,12 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
 
   // 2 push buttons
   // zoom +
-  zoomInButton = new QPushButton(QIcon(":/tulip/view/geographic/zoom+.png"), "");
+  bool darkMode = TulipSettings::isDisplayInDarkMode();
+  zoomInButton = new QPushButton(QIcon(darkMode ? ":/tulip/view/geographic/white-zoom+.png" : ":/tulip/view/geographic/zoom+.png"), "");
   zoomInButton->setFixedSize(24, 24);
   connect(zoomInButton, SIGNAL(pressed()), this, SLOT(zoomIn()));
   // zoom -
-  zoomOutButton = new QPushButton(QIcon(":/tulip/view/geographic/zoom-.png"), "");
+  zoomOutButton = new QPushButton(QIcon(darkMode ? ":/tulip/view/geographic/white-zoom-.png" :":/tulip/view/geographic/zoom-.png"), "");
   zoomOutButton->setFixedSize(24, 24);
   connect(zoomOutButton, SIGNAL(pressed()), this, SLOT(zoomOut()));
 
