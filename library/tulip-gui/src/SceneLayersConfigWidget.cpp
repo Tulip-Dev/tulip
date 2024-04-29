@@ -39,6 +39,7 @@ void SceneLayersConfigWidget::setGlMainWidget(GlMainWidget *glMainWidget) {
   _glMainWidget = glMainWidget;
   SceneLayersModel *model = new SceneLayersModel(_glMainWidget->getScene(), _ui->treeView);
   _ui->treeView->setModel(model);
+  _ui->treeView->setAlternatingRowColors(true);
   connect(model, SIGNAL(drawNeeded(tlp::GlScene *)), this, SIGNAL(drawNeeded()));
   connect(_ui->treeView, SIGNAL(collapsed(const QModelIndex &)), this, SLOT(resizeFirstColumn()));
   connect(_ui->treeView, SIGNAL(expanded(const QModelIndex &)), this, SLOT(resizeFirstColumn()));
