@@ -22,7 +22,6 @@
 #include "ui_AddressSelectionDialog.h"
 #include <tulip/TlpQtTools.h>
 
-
 namespace tlp {
 
 AddressSelectionDialog::AddressSelectionDialog(QWidget *parent)

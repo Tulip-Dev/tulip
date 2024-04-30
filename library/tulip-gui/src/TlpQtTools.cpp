@@ -611,7 +611,6 @@ const QCursor &QtWhatsThisCursor() {
 }
 #endif
 
-
 #ifdef _LINUX
 // define a specific class to fix the display of QCheckBox and QRadioButton
 // when in dark mode
@@ -629,8 +628,7 @@ public:
   }
 
   void fixCBRBs(QWidget *parent) {
-    if (dynamic_cast<QCheckBox *>(parent) ||
-        dynamic_cast<QRadioButton *>(parent)) {
+    if (dynamic_cast<QCheckBox *>(parent) || dynamic_cast<QRadioButton *>(parent)) {
       // because their indicator border is displayed in black
       // we must use lightgray instead
       QPalette p = parent->palette();
@@ -657,10 +655,10 @@ public:
           for (auto id : wz->pageIds())
             fixCBRBs(wz->page(id));
         } else {
-        // loop on widgets
-        QList<QWidget *> widgets = parent->findChildren<QWidget *>();
-        for (auto widget : widgets)
-          fixCBRBs(widget);
+          // loop on widgets
+          QList<QWidget *> widgets = parent->findChildren<QWidget *>();
+          for (auto widget : widgets)
+            fixCBRBs(widget);
         }
       }
     }
