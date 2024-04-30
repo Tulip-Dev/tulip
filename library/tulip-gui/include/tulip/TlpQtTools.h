@@ -160,6 +160,13 @@ TLP_QT_SCOPE const QCursor &QtWhatsThisCursor();
 #define qtWhatsThisCursor Qt::WhatsThisCursor
 #endif
 
+#ifdef _LINUX
+// fix display of QCheckBox and QRadioButton in dark mode
+void tlpFixCBRBs(QWidget *parent);
+#else
+#define tlpFixCBRBs(arg)
+#endif
+
 } // namespace tlp
 
 // QDebug extension

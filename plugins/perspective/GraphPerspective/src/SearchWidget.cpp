@@ -230,6 +230,9 @@ public:
 SearchWidget::SearchWidget(QWidget *parent)
     : QFrame(parent), _ui(new Ui::SearchWidget), _graph(nullptr) {
   _ui->setupUi(this);
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(this);
+
   _ui->tableWidget->hide();
   _ui->tableWidget->setItemDelegate(new TulipItemDelegate(_ui->tableWidget));
 

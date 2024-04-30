@@ -148,6 +148,9 @@ void TableView::setupWidget() {
   QWidget *centralWidget = new QWidget();
   Perspective::setStyleSheet(centralWidget);
   _ui->setupUi(centralWidget);
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(centralWidget);
+
   activateTooltipAndUrlManager(_ui->table->viewport());
   // no need to display standard View context menu
   setShowContextMenu(false);

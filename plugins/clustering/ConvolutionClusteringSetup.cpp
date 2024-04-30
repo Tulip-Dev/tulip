@@ -21,6 +21,8 @@
 #include "ConvolutionClustering.h"
 
 #include <QPainter>
+#include <tulip/TlpQtTools.h>
+#include <tulip/Perspective.h>
 
 using namespace std;
 
@@ -117,7 +119,10 @@ ConvolutionClusteringSetup::ConvolutionClusteringSetup(ConvolutionClustering *co
                                                        QWidget *parent)
     : QDialog(parent), _ui(new Ui::ConvolutionClusteringSetupData), convolPlugin(convolPlugin),
       useLogarithmicScale(false) {
+  Perspective::setStyleSheet(this);
   _ui->setupUi(this);
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(this);
 
   connect(_ui->widthSlider, SIGNAL(valueChanged(int)), this, SLOT(update()));
   connect(_ui->okButton, SIGNAL(pressed()), this, SLOT(accept()));

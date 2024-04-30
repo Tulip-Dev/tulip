@@ -27,6 +27,7 @@
 #include <tulip/GlMainView.h>
 #include <tulip/MouseShowElementInfo.h>
 #include <tulip/Perspective.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -37,6 +38,9 @@ MouseShowElementInfo::MouseShowElementInfo(const bool showVisualPropButton)
   _informationWidget->installEventFilter(this);
   Perspective::setStyleSheet(_informationWidget);
   _ui->setupUi(_informationWidget);
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(_informationWidget);
+
 // workaround to get rid of Qt5 warnings : QMacCGContext:: Unsupported painter devtype type 1
 // see https://bugreports.qt.io/browse/QTBUG-32639
 #if defined(__APPLE__)

@@ -288,6 +288,8 @@ QTabBar::close-button:!selected:hover {
       w->installEventFilter(this);
       w->resize(w->width(), w->sizeHint().height());
       viewConfigurationTabs->addTab(w, w->windowTitle());
+      // fix display of QCheckBox and QRadioButton children
+      tlpFixCBRBs(w);
     }
 
     _viewConfigurationWidgets = new QGraphicsProxyWidget(_view->centralItem());

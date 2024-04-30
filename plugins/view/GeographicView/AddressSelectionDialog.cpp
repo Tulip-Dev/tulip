@@ -20,12 +20,17 @@
 
 #include "AddressSelectionDialog.h"
 #include "ui_AddressSelectionDialog.h"
+#include <tulip/TlpQtTools.h>
+
 
 namespace tlp {
 
 AddressSelectionDialog::AddressSelectionDialog(QWidget *parent)
     : QDialog(parent), _ui(new Ui::AddressSelectionDialogData) {
   _ui->setupUi(this);
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(this);
+
   _ui->buttonBox->button(QDialogButtonBox::Abort)->setToolTip("abort the Geolocation process");
 }
 

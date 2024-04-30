@@ -28,6 +28,7 @@
 #include <tulip/CSVGraphMappingConfigurationWidget.h>
 #include <tulip/SimplePluginProgressWidget.h>
 #include <tulip/CSVParser.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace tlp;
 
@@ -218,6 +219,8 @@ CSVImportWizard::CSVImportWizard(QWidget *parent) : QWizard(parent), ui(new Ui::
   // ensure there is a Cancel button (may be hidden on Mac)
   setOptions(options() & ~QWizard::NoCancelButton);
   ui->setupUi(this);
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(this);
 }
 
 CSVImportWizard::~CSVImportWizard() {

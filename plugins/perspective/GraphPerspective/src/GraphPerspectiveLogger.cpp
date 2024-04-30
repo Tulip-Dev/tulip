@@ -39,6 +39,9 @@ GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget *parent)
     : QDialog(parent), _logType(QtDebugMsg), _ui(new Ui::GraphPerspectiveLogger),
       _pythonOutput(false) {
   _ui->setupUi(this);
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(this);
+
   _ui->listWidget->installEventFilter(this);
   _ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
   // ensure vertical scroll bar is displayed as soon as

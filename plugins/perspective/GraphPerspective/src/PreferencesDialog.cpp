@@ -23,6 +23,7 @@
 
 #include <tulip/Perspective.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/TulipMetaTypes.h>
@@ -34,6 +35,7 @@ using namespace tlp;
 PreferencesDialog::PreferencesDialog(QWidget *parent)
     : QDialog(parent), _ui(new Ui::PreferencesDialog) {
   _ui->setupUi(this);
+  tlpFixCBRBs(this);
 #ifdef __APPLE__
   resize(width(), 455);
 #endif

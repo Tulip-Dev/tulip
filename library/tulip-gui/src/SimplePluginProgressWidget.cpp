@@ -34,6 +34,7 @@ SimplePluginProgressWidget::SimplePluginProgressWidget(QWidget *parent, Qt::Wind
       _lastUpdate(QTime::currentTime()), _state(tlp::TLP_CONTINUE) {
 
   _ui->setupUi(this);
+  tlpFixCBRBs(this);
   showLogo(false);
   _ui->cancelButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogCancelButton));
   _ui->stopButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaStop));

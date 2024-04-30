@@ -21,6 +21,7 @@
 #include "tulip/PythonCodeEditor.h"
 #include "tulip/PythonCodeHighlighter.h"
 #include "tulip/ParenMatcherHighlighter.h"
+#include "tulip/TlpQtTools.h"
 
 #include <tulip/Perspective.h>
 #include <tulip/TulipSettings.h>
@@ -258,6 +259,9 @@ FindReplaceDialog::FindReplaceDialog(QPlainTextEdit *editor, QWidget *parent)
                                            Qt::WindowTitleHint | Qt::WindowCloseButtonHint)),
       _ui(new Ui::FindReplaceDialogData), _editor(editor) {
   _ui->setupUi(this);
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(this);
+
   _findButton = _ui->buttonBox->button(QDialogButtonBox::Reset);
   _findButton->setText("Find");
   connect(_findButton, SIGNAL(clicked()), this, SLOT(doFind()));

@@ -395,6 +395,8 @@ PythonIDE::PythonIDE(QWidget *parent)
       _graphsModel(nullptr), _scriptStopped(false), _saveFilesToProject(true),
       _notifyProjectModified(false) {
   _ui->setupUi(this);
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(this);
 
   _ui->mainScriptsTabWidget->clear();
   _ui->modulesTabWidget->clear();

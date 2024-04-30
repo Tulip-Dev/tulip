@@ -36,6 +36,10 @@
 #if defined(__MINGW32__) && defined(TULIP_BUILD_PYTHON_COMPONENTS)
 #include <QSslSocket>
 #endif
+#include <QWidget>
+#include <QCheckBox>
+#include <QRadioButton>
+#include <QWizard>
 
 #include <tulip/TulipSettings.h>
 #include <tulip/Interactor.h>
@@ -604,6 +608,71 @@ void convertLikeFilter(QString &filter) {
 const QCursor &QtWhatsThisCursor() {
   static QCursor wtCursor(QPixmap(":/tulip/gui/icons/i_select.png"), 2, 4);
   return wtCursor;
+}
+#endif
+
+
+#ifdef _LINUX
+// define a specific class to fix the display of QCheckBox and QRadioButton
+// when in dark mode
+class CBRBsFixer : public QObject {
+public:
+  // QCheckBox and QRadioButton children must be fixed
+  // at first show time
+  bool eventFilter(QObject *obj, QEvent *ev) override {
+    if (ev->type() == QEvent::Show) {
+      QWidget *w = dynamic_cast<QWidget *>(obj);
+      fixCBRBs(w);
+      removeEventFilter(this);
+    }
+    return false;
+  }
+
+  void fixCBRBs(QWidget *parent) {
+    if (dynamic_cast<QCheckBox *>(parent) ||
+        dynamic_cast<QRadioButton *>(parent)) {
+      // because their indicator border is displayed in black
+      // we must use lightgray instead
+      QPalette p = parent->palette();
+      p.setColor(QPalette::Window, Qt::lightGray);
+      parent->setPalette(p);
+    } else {
+      // a loop on children does not work when a QCheckBox or a QRadioButton
+      // is a child of a non current page of a QTabWidget
+      // so we must do a loop on the different pages
+      // if parent is a QTabWidget
+      QTabWidget *tw = dynamic_cast<QTabWidget *>(parent);
+      if (tw) {
+        auto current = tw->currentIndex();
+        auto cnt = tw->count();
+        for (int i = 0; i < cnt; i++) {
+          tw->setCurrentIndex(i);
+          fixCBRBs(tw->widget(i));
+        }
+        tw->setCurrentIndex(current);
+      } else {
+        // same with QWizard
+        QWizard *wz = dynamic_cast<QWizard *>(parent);
+        if (wz) {
+          for (auto id : wz->pageIds())
+            fixCBRBs(wz->page(id));
+        } else {
+        // loop on widgets
+        QList<QWidget *> widgets = parent->findChildren<QWidget *>();
+        for (auto widget : widgets)
+          fixCBRBs(widget);
+        }
+      }
+    }
+  }
+};
+
+// fix display of QCheckBox and QRadioButton in dark mode
+// because their indicator border is display in black
+// we must use lightgray instead
+void tlpFixCBRBs(QWidget *parent) {
+  static CBRBsFixer fixer;
+  parent->installEventFilter(&fixer);
 }
 #endif
 

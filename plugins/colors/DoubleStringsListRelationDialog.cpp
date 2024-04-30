@@ -35,6 +35,8 @@ DoubleStringsListRelationDialog::DoubleStringsListRelationDialog(
     : QDialog(parent), _ui(new Ui::DoubleStringsListRelationDialogData),
       lastNonInterpolateValues(secondValues) {
   _ui->setupUi(this);
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(this);
 
   for (auto &val : firstValues) {
     _ui->firstListWidget->addItem(val.c_str());

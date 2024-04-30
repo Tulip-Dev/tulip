@@ -1,6 +1,6 @@
 ADD_CORE_DIRECTORY_EXCEPT(ConvolutionClustering*.*)
 
-INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${CMAKE_CURRENT_BINARY_DIR})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR})
 
 ADD_SUBDIRECTORY(Delaunay)
 
@@ -45,7 +45,7 @@ SET(ConvolutionClustering_SRCS
   ConvolutionClusteringSetup.h)
 
 ADD_LIBRARY(ConvolutionClustering-${Tulip_VERSION} SHARED ${ConvolutionClustering_SRCS} ${ConvolutionClustering_UI_SRCS} ${ConvolutionClustering_MOC_SRCS})
-TARGET_LINK_LIBRARIES(ConvolutionClustering-${Tulip_VERSION} ${LibTulipCoreName} ${QT_LIBRARIES})
+TARGET_LINK_LIBRARIES(ConvolutionClustering-${Tulip_VERSION} ${LibTulipCoreName}  ${LibTulipGUIName} ${QT_LIBRARIES})
 ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(EqualValueClustering_SRCS

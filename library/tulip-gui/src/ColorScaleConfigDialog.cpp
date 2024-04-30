@@ -42,6 +42,9 @@ map<QString, vector<Color>> ColorScaleConfigDialog::tulipImageColorScales;
 ColorScaleConfigDialog::ColorScaleConfigDialog(const ColorScale &colorScale, QWidget *parent)
     : QDialog(parent), _ui(new Ui::ColorScaleDialog), colorScale(colorScale) {
   _ui->setupUi(this);
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(this);
+
   _ui->colorsTable->setColumnWidth(0, _ui->colorsTable->width());
   _ui->colorsTable->horizontalHeader()->setHidden(true);
   QPalette palette;
