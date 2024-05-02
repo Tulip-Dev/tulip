@@ -23,6 +23,7 @@
 #include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/SceneLayersModel.h>
+#include <tulip/TulipSettings.h>
 
 using namespace tlp;
 
@@ -38,6 +39,11 @@ SceneLayersConfigWidget::~SceneLayersConfigWidget() {
 void SceneLayersConfigWidget::setGlMainWidget(GlMainWidget *glMainWidget) {
   _glMainWidget = glMainWidget;
   SceneLayersModel *model = new SceneLayersModel(_glMainWidget->getScene(), _ui->treeView);
+#ifdef _LINUX
+  if (TulipSettings::isDisplayInDarkMode())
+    // change background to ensure visibility of QCheckBox indicator border
+    _ui->treeView->setStyleSheet("QTreeView { background: #606060; }");
+#endif
   _ui->treeView->setModel(model);
   _ui->treeView->setAlternatingRowColors(true);
   connect(model, SIGNAL(drawNeeded(tlp::GlScene *)), this, SIGNAL(drawNeeded()));
