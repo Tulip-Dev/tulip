@@ -649,15 +649,14 @@ public:
         }
         tw->setCurrentIndex(current);
       } else {
-        // same with QWizard
+        // with QWizard we must do a loop on its pages
         QWizard *wz = dynamic_cast<QWizard *>(parent);
         if (wz) {
           for (auto id : wz->pageIds())
             fixCBRBs(wz->page(id));
         } else {
-          // loop on widgets
-          QList<QWidget *> widgets = parent->findChildren<QWidget *>();
-          for (auto widget : widgets)
+          // loop on QWidget children
+          for (auto widget : parent->findChildren<QWidget *>(QString(), Qt::FindDirectChildrenOnly))
             fixCBRBs(widget);
         }
       }
