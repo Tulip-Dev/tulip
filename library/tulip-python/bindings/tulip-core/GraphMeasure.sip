@@ -30,7 +30,10 @@
 
 namespace tlp {
 
-  enum EDGE_TYPE {DIRECTED = 0, INV_DIRECTED = 1, UNDIRECTED = 2};
+  enum EDGE_TYPE /BaseType=IntEnum/ {
+                                         DIRECTED = Edge_Type::DIRECTED,
+                                         INV_DIRECTED = Edge_Type::INV_DIRECTED,
+                                         UNDIRECTED = Edge_Type::UNDIRECTED};
 
 //===========================================================================================
 

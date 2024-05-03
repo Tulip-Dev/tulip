@@ -25,7 +25,7 @@
 
 namespace tlp {
 
-template<TYPE> 
+template<TYPE>
 class Iterator /Abstract/ {
 %TypeHeaderCode
 #include <tulip/Iterator.h>

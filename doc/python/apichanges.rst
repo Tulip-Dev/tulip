@@ -464,7 +464,7 @@ For instance, the sample code below sets multiple graph view properties values f
     return minSize + random.random() * (maxSize - minSize)
 
   for n in graph.getNodes():
-    values = {'viewShape': tlp.NodeShape.FontAwesomeIcon,
+    values = {'viewShape': tlp.NodeShape.NodeShapes.FontAwesomeIcon,
               'viewColor' : getRandomColor(),
               'viewSize' : getRandomSize(tlp.Size(0.1), tlp.Size(1)),
               'viewIcon' : getRandomFontAwesomeIcon()}

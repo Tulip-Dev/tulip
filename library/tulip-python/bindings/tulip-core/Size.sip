@@ -203,7 +203,7 @@ typedef tlp::PySize Size;
     if (!PyList_Check(sipPy)) {
       return 0;
     }
-    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+    for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
       PyObject *item = PyList_GET_ITEM(sipPy, i);
       if (!sipCanConvertToType(item, kpTypeDef, SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
         return 0;
@@ -214,7 +214,7 @@ typedef tlp::PySize Size;
 
   std::vector<tlp::PySize> *v = new std::vector<tlp::PySize>();
   v->reserve(PyList_GET_SIZE(sipPy));
-  for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+  for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
     int state;
     tlp::PySize* p = reinterpret_cast<tlp::PySize*>(sipConvertToType(PyList_GET_ITEM(sipPy, i), kpTypeDef, sipTransferObj, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, sipIsErr));
 

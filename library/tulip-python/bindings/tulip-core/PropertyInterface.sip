@@ -22,7 +22,9 @@
 // | inspired from bindings by the Booggie project development team          |
 // | (https://sourceforge.net/projects/booggie/)                             |
 // +-------------------------------------------------------------------------+
-
+%ModuleHeaderCode
+#include <tulip/PropertyInterface.h>
+    %End
 namespace tlp {
 
 // the enum below is used in DoubleProperty class
@@ -30,12 +32,12 @@ namespace tlp {
 // in python bindings with enum values;
 // because sip cannot handle the ones declared
 // in DoubleProperty::PredefinedMetaValueCalculator enumeration
-enum StandardMetaValueCalculator {
-  NO_CALC = 0,
-  AVG_CALC = 1,
-  SUM_CALC = 2,
-  MAX_CALC = 3,
-  MIN_CALC = 4
+enum StandardMetaValueCalculator /BaseType=UIntEnum/ {
+  NO_CALC = StandardMetaValueCalculator::NO_CALC,
+  AVG_CALC = StandardMetaValueCalculator::AVG_CALC,
+  SUM_CALC = StandardMetaValueCalculator::SUM_CALC,
+  MAX_CALC = StandardMetaValueCalculator::MAX_CALC,
+  MIN_CALC = StandardMetaValueCalculator::MIN_CALC
 };
 
 class PropertyInterface : tlp::Observable /Abstract/ {

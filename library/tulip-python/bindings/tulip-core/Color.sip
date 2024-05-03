@@ -42,7 +42,7 @@ class Color {
       return 0;
     }
 
-    for (SIP_SSIZE_T i = 0; i < PyTuple_GET_SIZE(sipPy); ++i) {
+    for (Py_ssize_t i = 0; i < PyTuple_GET_SIZE(sipPy); ++i) {
       PyObject *item = PyTuple_GET_ITEM(sipPy, i);
       if (PyBool_Check(item)) {
         return 0;

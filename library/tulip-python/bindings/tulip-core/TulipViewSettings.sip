@@ -35,32 +35,30 @@ class NodeShape /NoDefaultCtors/ {
 %End
 
 public:
-
-  enum NodeShapes {
-    Billboard=7,
-    Circle=14,
-    Cone=3,
-    Cross=8,
-    Cube=0,
-    CubeOutlined=1,
-    CubeOutlinedTransparent=9,
-    Cylinder=6,
-    Diamond=5,
-    GlowSphere=16,
-    HalfCylinder=10,
-    Hexagon=13,
-    Pentagon=12,
-    Ring=15,
-    RoundedBox=18,
-    Sphere=2 ,
-    Square=4,
-    Triangle=11,
-    Window=17,
-    Star=19,
-    FontAwesomeIcon=20,
-    Icon=20
+  enum NodeShapes /BaseType=IntEnum/ {
+    Billboard=NodeShape::Billboard,
+    Circle=NodeShape::Circle,
+    Cone=NodeShape::Cone,
+    Cross=NodeShape::Cross,
+    Cube=NodeShape::Cube,
+    CubeOutlined=NodeShape::CubeOutlined,
+    CubeOutlinedTransparent=NodeShape::CubeOutlinedTransparent,
+    Cylinder=NodeShape::Cylinder,
+    Diamond=NodeShape::Diamond,
+    GlowSphere=NodeShape::GlowSphere,
+    HalfCylinder=NodeShape::HalfCylinder,
+    Hexagon=NodeShape::Hexagon,
+    Pentagon=NodeShape::Pentagon,
+    Ring=NodeShape::Ring,
+    RoundedBox=NodeShape::RoundedBox,
+    Sphere=NodeShape::Sphere,
+    Square=NodeShape::Square,
+    Triangle=NodeShape::Triangle,
+    Window=NodeShape::Window,
+    Star=NodeShape::Star,
+    FontAwesomeIcon=NodeShape::FontAwesomeIcon,
+    Icon=NodeShape::Icon
   };
-  
 };
 
 class EdgeShape /NoDefaultCtors/ {
@@ -69,15 +67,15 @@ class EdgeShape /NoDefaultCtors/ {
 %End
 
 public:
-
-  enum EdgeShapes {
-    Polyline=0,
-    BezierCurve=4,
-    CatmullRomCurve=8,
-    CubicBSplineCurve=16
+ enum EdgeShapes /BaseType=IntEnum/ {
+    Polyline=EdgeShape::EdgeShapes::Polyline,
+    BezierCurve=EdgeShape::EdgeShapes::BezierCurve,
+    CatmullRomCurve=EdgeShape::EdgeShapes::CatmullRomCurve,
+    CubicBSplineCurve=EdgeShape::EdgeShapes::CubicBSplineCurve
   };
-  
 };
+
+
 
 class EdgeExtremityShape /NoDefaultCtors/ {
 %TypeHeaderCode
@@ -86,27 +84,26 @@ class EdgeExtremityShape /NoDefaultCtors/ {
 
 public:
 
-  enum EdgeExtremityShapes {
-    None=-1,
-    Arrow=50,
-    Circle=14,
-    Cone=3,
-    Cross=8,
-    Cube=0,
-    CubeOutlinedTransparent=9,
-    Cylinder=6,
-    Diamond=5,
-    GlowSphere=16,
-    Hexagon=13,
-    Pentagon=12,
-    Ring=15,
-    Sphere=2 ,
-    Square=4,
-    Star=19,
-    FontAwesomeIcon=20,
-    Icon=20
+  enum EdgeExtremityShapes /BaseType=IntEnum/ {
+    None=EdgeExtremityShape::None,
+    Arrow=EdgeExtremityShape::Arrow,
+    Circle=EdgeExtremityShape::Circle,
+    Cone=EdgeExtremityShape::Cone,
+    Cross=EdgeExtremityShape::Cross,
+    Cube=EdgeExtremityShape::Cube,
+    CubeOutlinedTransparent=EdgeExtremityShape::CubeOutlinedTransparent,
+    Cylinder=EdgeExtremityShape::Cylinder,
+    Diamond=EdgeExtremityShape::Diamond,
+    GlowSphere=EdgeExtremityShape::GlowSphere,
+    Hexagon=EdgeExtremityShape::Hexagon,
+    Pentagon=EdgeExtremityShape::Pentagon,
+    Ring=EdgeExtremityShape::Ring,
+    Sphere=EdgeExtremityShape::Sphere,
+    Square=EdgeExtremityShape::Square,
+    Star=EdgeExtremityShape::Star,
+    FontAwesomeIcon=EdgeExtremityShape::FontAwesomeIcon,
+    Icon=EdgeExtremityShape::Icon
   };
-  
 };
 
 class LabelPosition /NoDefaultCtors/ {
@@ -116,14 +113,13 @@ class LabelPosition /NoDefaultCtors/ {
 
 public:
 
-  enum LabelPositions {
-    Center=0,
-    Top,
-    Bottom,
-    Left,
-    Right
+enum LabelPositions /BaseType=IntEnum/ {
+    Center=LabelPosition::Center,
+    Top=LabelPosition::Top,
+    Bottom=LabelPosition::Bottom,
+    Left=LabelPosition::Left,
+    Right=LabelPosition::Right
   };
-  
 };
 
 class TulipViewSettings : tlp::Observable {
@@ -216,7 +212,7 @@ class ViewSettingsEvent : public tlp::Event /NoDefaultCtors/ {
 
 public:
 
-  enum ViewSettingsEventType {
+  enum ViewSettingsEventType /BaseType=IntEnum/ {
     TLP_DEFAULT_COLOR_MODIFIED,
     TLP_DEFAULT_SHAPE_MODIFIED,
     TLP_DEFAULT_SIZE_MODIFIED,

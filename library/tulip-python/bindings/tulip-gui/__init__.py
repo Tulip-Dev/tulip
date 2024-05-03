@@ -13,8 +13,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # See the GNU General Public License for more details.
 
-# -*- coding: utf-8 -*-
-
 import os
 import os.path
 import sys
@@ -40,20 +38,18 @@ sys.path.append(_tulipGuiNativeLibsPath)
 if platform.system() == 'Windows':
     os.environ['PATH'] = '%s;%s../../../;%s' % (
         _tulipGuiNativeLibsPath, _tulipGuiNativeLibsPath, os.environ['PATH'])
-    # see https://docs.python.org/3/library/os.html#os.add_dll_directory
-    if sys.version_info >= (3, 8):
-        dirs = []
-        paths = os.environ['PATH'].split(";")
-        for p in paths:
-            if os.path.isdir(p):
-                dirs.append(os.add_dll_directory(p))
+    dirs = []
+    paths = os.environ['PATH'].split(";")
+    for p in paths:
+        if os.path.isdir(p):
+            dirs.append(os.add_dll_directory(p))
 
 from tulip import tlp
 
 import _tulipgui # noqa
 
 sys.path.pop()
-if platform.system() == 'Windows' and sys.version_info >= (3, 8):
+if platform.system() == 'Windows':
     for d in dirs:
         d.close()
 

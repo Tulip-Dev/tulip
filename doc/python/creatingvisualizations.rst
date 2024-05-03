@@ -144,7 +144,7 @@ the script execution). :ref:`Figure 1<fig1a>` introduces a screenshot of the cre
     viewBorderWidth.setAllEdgeValue(1)
 
     # Sets nodes shapes to circle
-    viewShape.setAllNodeValue(tlp.NodeShape.Circle)
+    viewShape.setAllNodeValue(tlp.NodeShape.NodeShapes.Circle)
 
     # Create a Node Link Diagram view and set some rendering parameters
     nodeLinkView = tlpgui.createNodeLinkDiagramView(graph)

@@ -68,7 +68,11 @@ Here is a sample code below::
 
 public:
 
-  enum EventType {TLP_DELETE = 0, TLP_MODIFICATION, TLP_INFORMATION, TLP_INVALID};
+             enum EventType /BaseType=IntEnum/ {
+                          TLP_DELETE = Event::EventType::TLP_DELETE,
+                          TLP_MODIFICATION = Event::EventType::TLP_MODIFICATION,
+                          TLP_INFORMATION = Event::EventType::TLP_INFORMATION,
+                          TLP_INVALID = Event::EventType::TLP_INVALID};
   
   Event(const tlp::Observable &sender, tlp::Event::EventType type);
 

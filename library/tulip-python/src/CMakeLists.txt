@@ -1,14 +1,8 @@
 IF(Python_FOUND)
-IF(SIP_OK)
 
 IF(WIN32)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDLL_TULIP_PYTHON")
 ENDIF(WIN32)
-
-INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${Python_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(BEFORE ${TulipCoreBuildInclude})
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipPythonInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
 QTX_SET_INCLUDES_AND_DEFINITIONS()
 
@@ -53,6 +47,14 @@ QTX_WRAP_UI(${LibTulipPythonName}_UI_SRCS ${${LibTulipPythonName}_UI})
 QTX_WRAP_CPP(${LibTulipPythonName}_MOC_SRCS ${${LibTulipPythonName}_MOC})
 
 ADD_LIBRARY(${LibTulipPythonName} SHARED ${${LibTulipPythonName}_LIB_SRCS} ${${LibTulipPythonName}_MOC_SRCS} ${${LibTulipPythonName}_UI_SRCS})
+TARGET_INCLUDE_DIRECTORIES(${LibTulipPythonName}
+    PUBLIC ${Python_INCLUDE_DIRS} ${SIP_INCLUDE_DIR}
+    # PUBLIC ${OPENGL_INCLUDE_DIR}
+    PUBLIC ${TulipCoreBuildInclude}
+    PUBLIC ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipPythonInclude}
+    ${CMAKE_CURRENT_BINARY_DIR}
+    # ${CMAKE_CURRENT_SOURCE_DIR}
+)
 
 TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${LibTulipCoreName} ${LibTulipGUIName} ${QT_LIBRARIES} ${Python_LIBRARIES})
 
@@ -61,5 +63,4 @@ INSTALL(TARGETS ${LibTulipPythonName}
   LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python
   ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python)
 
-ENDIF(SIP_OK)
 ENDIF(Python_FOUND)

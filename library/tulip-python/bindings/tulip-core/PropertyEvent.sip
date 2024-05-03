@@ -57,15 +57,16 @@ Below is an exhaustive list of those types :
 
 public:
 
-  enum PropertyEventType {TLP_BEFORE_SET_NODE_VALUE = 0,
-                          TLP_AFTER_SET_NODE_VALUE,
-                          TLP_BEFORE_SET_ALL_NODE_VALUE,
-                          TLP_AFTER_SET_ALL_NODE_VALUE,
-                          TLP_BEFORE_SET_ALL_EDGE_VALUE,
-                          TLP_AFTER_SET_ALL_EDGE_VALUE,
-                          TLP_BEFORE_SET_EDGE_VALUE,
-                          TLP_AFTER_SET_EDGE_VALUE
-                         };
+  enum PropertyEventType /BaseType=IntEnum/ {
+          TLP_BEFORE_SET_NODE_VALUE = PropertyEvent::PropertyEventType::TLP_BEFORE_SET_NODE_VALUE,
+          TLP_AFTER_SET_NODE_VALUE = PropertyEvent::PropertyEventType::TLP_AFTER_SET_NODE_VALUE,
+          TLP_BEFORE_SET_ALL_NODE_VALUE = PropertyEvent::PropertyEventType::TLP_BEFORE_SET_ALL_NODE_VALUE,
+          TLP_AFTER_SET_ALL_NODE_VALUE = PropertyEvent::PropertyEventType::TLP_AFTER_SET_ALL_NODE_VALUE,
+          TLP_BEFORE_SET_ALL_EDGE_VALUE = PropertyEvent::PropertyEventType::TLP_BEFORE_SET_ALL_EDGE_VALUE,
+          TLP_AFTER_SET_ALL_EDGE_VALUE = PropertyEvent::PropertyEventType::TLP_AFTER_SET_ALL_EDGE_VALUE,
+          TLP_BEFORE_SET_EDGE_VALUE = PropertyEvent::PropertyEventType::TLP_BEFORE_SET_EDGE_VALUE,
+          TLP_AFTER_SET_EDGE_VALUE = PropertyEvent::PropertyEventType::TLP_AFTER_SET_EDGE_VALUE
+          };
 
   PropertyEvent(const tlp::PropertyInterface& prop, PropertyEventType propEvtType,
                 tlp::Event::EventType evtType = tlp::Event::TLP_MODIFICATION,

@@ -60,9 +60,9 @@ Returns :const:`True` if the node is a valid one, meaning it is attached to a gr
   sipRes = new std::string(oss.str());
 %End
  
-  long __hash__() const;
+  Py_hash_t __hash__() const;
 %MethodCode
-  return static_cast<long>(sipCpp->id);
+  return static_cast<Py_hash_t>(sipCpp->id);
 %End
 
   SIP_PYOBJECT __copy__() const;

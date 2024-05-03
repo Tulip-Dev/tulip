@@ -23,8 +23,8 @@
 #endif
 
 #include <unordered_map>
-#include "tulip/PythonIncludes.h"
-#include "tulip/PythonCppTypesConverter.h"
+#include <tulip/PythonIncludes.h>
+#include <tulip/PythonCppTypesConverter.h>
 
 static std::unordered_map<std::string, std::string> &getTypenamesMap() {
   static std::unordered_map<std::string, std::string> ret;
@@ -372,12 +372,6 @@ PyObject *getPyObjectFromDataType(const tlp::DataType *dataType, bool noCopy) {
     }                                                                                              \
   }
 
-#define CHECK_SIP_ENUM_CONVERSION(SIP_TYPE_STR)                                                    \
-  if (sipCanConvertToEnum(pyObj, sipFindType(SIP_TYPE_STR))) {                                     \
-    valSetter.setValue(int(PyLong_AsLong(pyObj)));                                                 \
-    return true;                                                                                   \
-  }
-
 #define CHECK_SIP_POINTER_TYPE_CONVERSION(CPP_TYPE, SIP_TYPE_STR)                                  \
   if (sipCanConvertToType(pyObj, sipFindType(SIP_TYPE_STR), 0)) {                                  \
     if (!dataType || dataType->getTypeName() == std::string(typeid(CPP_TYPE *).name())) {          \
@@ -529,11 +523,6 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
 
     return true;
   }
-
-  CHECK_SIP_ENUM_CONVERSION("tlp::NodeShape::NodeShapes")
-  CHECK_SIP_ENUM_CONVERSION("tlp::EdgeShape::EdgeShapes")
-  CHECK_SIP_ENUM_CONVERSION("tlp::EdgeExtremityShape::EdgeExtremityShapes")
-  CHECK_SIP_ENUM_CONVERSION("tlp::LabelPosition::LabelPositions")
 
   CHECK_SIP_TYPE_CONVERSION(std::string, "std::string")
   CHECK_SIP_TYPE_CONVERSION(tlp::node, "tlp::node")

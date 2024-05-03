@@ -54,7 +54,7 @@ MACRO(UNIT_TEST)
     SET(NEWPATH "$ENV{PATH}")
   ENDIF(WIN32)
   # add Tulip modules path to PYTHONPATH in order to run the Python tests
-  SET(PYTHONPATH "${CMAKE_BINARY_DIR}/library/tulip-python/modules/;${TULIP_PYTHON_ROOT_FOLDER};${TULIPGUI_PYTHON_ROOT_FOLDER};${CMAKE_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_STR}/siplib")
+  SET(PYTHONPATH "${CMAKE_BINARY_DIR}/library/tulip-python/modules/;${TULIP_PYTHON_ROOT_FOLDER};${TULIPGUI_PYTHON_ROOT_FOLDER}")
   IF(WIN32)
     STRING(REPLACE "\\;" ";" PYTHONPATH "${PYTHONPATH}")
     STRING(REPLACE ";" "\\;" PYTHONPATH "${PYTHONPATH}")

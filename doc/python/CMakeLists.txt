@@ -1,4 +1,4 @@
-IF(Python_FOUND AND SIP_OK)
+IF(Python_FOUND)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/conf.py.in ${CMAKE_CURRENT_BINARY_DIR}/conf.py)
 
@@ -28,7 +28,6 @@ ADD_CUSTOM_TARGET(pythonBindingsDoc ALL ${CMAKE_COMMAND} -DSPHINX_EXECUTABLE=${S
                                                          -DBIN_DIR=${CMAKE_CURRENT_BINARY_DIR}
                                                          -DTULIP_SOURCE_DIR=${CMAKE_SOURCE_DIR}
                                                          -DTULIP_BUILD_DIR=${CMAKE_BINARY_DIR}
-                                                         -DSYSTEM_SIP=${SYSTEM_SIP} -DSIP_VERSION=${SIP_VERSION_STR}
                                                          -DQT_BIN_DIR=${QT_BINARY_DIR}
                                                          -DAPPLE=${APPLE} -DWIN32=${WIN32}
                                                          -DCMAKE_LIBRARY_PATH=${CMAKE_LIBRARY_PATH_STR}
@@ -41,10 +40,10 @@ ADD_CUSTOM_TARGET(pythonBindingsDoc ALL ${CMAKE_COMMAND} -DSPHINX_EXECUTABLE=${S
 					    copyTulipPluginsPyInBuild
                                     VERBATIM)
 
-SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "doc;doctrees") 
+SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_CLEAN_FILES "doc;doctrees")
 
 INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html 
         DESTINATION ${CMAKE_INSTALL_DOCDIR}/tulip-python
         COMPONENT tulip_python_doc)
 
-ENDIF(Python_FOUND AND SIP_OK)
+ENDIF(Python_FOUND)

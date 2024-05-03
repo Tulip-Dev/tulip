@@ -38,10 +38,8 @@
 #include <fstream>
 namespace tlp {
 typedef tlp::Iterator<std::string> IteratorString;
-typedef tlp::Graph* GraphPointer;
-typedef tlp::Iterator<tlp::GraphPointer> IteratorGraph;
-typedef tlp::PropertyInterface* PropertyPointer;
-typedef tlp::Iterator<tlp::PropertyPointer> IteratorProperty;
+typedef tlp::Iterator<tlp::Graph*> IteratorGraph;
+typedef tlp::Iterator<tlp::PropertyInterface*> IteratorProperty;
 }
 typedef std::pair<tlp::node, tlp::node> pairNodeNode;
 
@@ -257,12 +255,10 @@ typedef std::pair<tlp::node, tlp::node> pairNodeNode;
 
 namespace tlp {
 typedef tlp::Iterator<std::string> IteratorString;
-typedef tlp::Graph* GraphPointer;
-typedef tlp::Iterator<tlp::GraphPointer> IteratorGraph;
-typedef tlp::PropertyInterface* PropertyPointer;
-typedef tlp::Iterator<tlp::PropertyPointer> IteratorProperty;
+typedef tlp::Iterator<tlp::Graph*> IteratorGraph;
+typedef tlp::Iterator<tlp::PropertyInterface*> IteratorProperty;
 
-enum ElementType {NODE=0, EDGE};
+enum ElementType /BaseType=IntEnum/ {NODE=Graph::ElementType::NODE, EDGE=Graph::ElementType::EDGE};
 
 class Graph : tlp::Observable /Abstract/ {
 %TypeHeaderCode
@@ -4374,9 +4370,9 @@ while the values must be typed according to those of the available Tulip propert
 
 //===========================================================================================
 
-  long __hash__() const;
+  Py_hash_t __hash__() const;
 %MethodCode
-  return static_cast<long>(sipCpp->getId());
+  return static_cast<Py_hash_t>(sipCpp->getId());
 %End
 
 };

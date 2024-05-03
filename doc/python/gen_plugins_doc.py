@@ -1,11 +1,6 @@
 # automatically generates the file tulippluginsdocumentation.rst
 # by dynamically introspecting the Tulip plugins metadata
 
-from __future__ import print_function
-import sys
-if sys.version_info[0] == 2:
-    reload(sys) # noqa
-    sys.setdefaultencoding('utf8')
 from tulip import tlp # noqa
 import tulipgui # noqa
 import tabulate # noqa
@@ -18,14 +13,6 @@ def safeprint(s, file=None):
         print(s, file=file)
     except UnicodeEncodeError:
         print(s.encode('utf8'), file=file)
-
-
-def utf8len(s):
-    if sys.version_info >= (3,):
-        return len(s)
-    else:
-        return len(s.encode('utf8'))
-
 
 tulip_build_dir = os.environ['TULIP_BUILD_DIR']
 tlp.loadTulipPluginsFromDir('%s/plugins/clustering' % tulip_build_dir)
@@ -42,10 +29,7 @@ tlp.loadTulipPluginsFromDir('%s/plugins/test' % tulip_build_dir)
 tlp.loadTulipPluginsFromDir(os.environ['TULIP_PYTHON_PLUGINS_DIR'])
 tlp.loadTulipPluginsFromDir(os.environ['TULIPGUI_PYTHON_PLUGINS_DIR'])
 
-if sys.version_info >= (3,):
-    f = open('tulippluginsdocumentation.rst', 'w', encoding='utf-8')
-else:
-    f = open('tulippluginsdocumentation.rst', 'w')
+f = open('tulippluginsdocumentation.rst', 'w', encoding='utf-8')
 
 safeprint("""
 .. |br| raw:: html
@@ -102,7 +86,7 @@ safeprint('.. _tulippluginsdoc:\n', file=f)
 def writeSection(title, sectionChar):
     safeprint(title, file=f)
     underline = ''
-    for i in range(utf8len(title)):
+    for i in range(len(title)):
         underline += sectionChar
     safeprint(underline+'\n', file=f)
 
@@ -303,10 +287,10 @@ for cat in sorted(plugins.keys()):
             if param.getName() == 'result' and 'Property' in paramType:
                 continue
             paramDir = 'input / output'
-            if param.getDirection() == tlp.IN_PARAM:
+            if param.getDirection() == tlp.ParameterDirection.IN_PARAM:
                 paramDir = 'input'
                 nbInParams = nbInParams+1
-            elif param.getDirection() == tlp.OUT_PARAM:
+            elif param.getDirection() == tlp.ParameterDirection.OUT_PARAM:
                 paramDir = 'output'
             else:
                 nbInParams = nbInParams+1
@@ -336,12 +320,6 @@ for cat in sorted(plugins.keys()):
             paramType = getTulipPythonType(
                 paramType.replace(' ', nonBreakingSpace))
             paramDir = paramDir.replace(' ', nonBreakingSpace)
-            if sys.version_info[0] == 2:
-                paramName = paramName.decode('utf-8')
-                paramType = paramType.decode('utf-8')
-                paramDefValue = paramDefValue.decode('utf-8')
-                paramDir = paramDir.decode('utf-8')
-                paramHelp = paramHelp.decode('utf-8').replace('\n', ' |br| ')
             paramsTable.append([paramName, paramType, paramDefValue, paramDir,
                                 paramHelp])
         if len(paramsTable) > 0:

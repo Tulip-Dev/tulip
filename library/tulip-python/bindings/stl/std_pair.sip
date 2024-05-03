@@ -516,9 +516,6 @@ template<T1, T2*>
   itm1 = PyTuple_GetItem(sipPy, 0);
   itm2 = PyTuple_GetItem(sipPy, 1);
 
-  int t1State = 0;
-  int t2State = 0;
-
   unsigned int ui1 = 0;
   unsigned int ui2 = 0;
 

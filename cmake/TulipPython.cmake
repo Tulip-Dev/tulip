@@ -3,15 +3,13 @@ The selected folder path will be the first in the list returned by site.getsitep
 If no such folder is found, the path will be the one returned by site.getusersitepackages().
 This should only be used when packaging Tulip for a Linux distribution or MSYS2. [OFF|ON]")
 
-# After finding the Python interpreter, try to find if SIP and its dev tools are installed on the host system.
-# If not, compile the SIP version located in thirdparty.
 IF(LINUX AND TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   SET(PYTHON_COMPONENTS Interpreter)
 ELSE(LINUX AND TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   SET(PYTHON_COMPONENTS Interpreter Development)
 ENDIF(LINUX AND TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 
-FIND_PACKAGE(Python 3.8...3.12 REQUIRED COMPONENTS ${PYTHON_COMPONENTS})
+FIND_PACKAGE(Python 3.8...<3.13 REQUIRED COMPONENTS ${PYTHON_COMPONENTS})
 
 SET(PYTHON_VERSION_NO_DOT ${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
 SET(PYTHON_VERSION ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR})
@@ -22,7 +20,6 @@ ENDIF()
 IF(TULIP_PYTHON_SITE_INSTALL)
 
   EXECUTE_PROCESS(COMMAND ${Python_EXECUTABLE} -c "
-from __future__ import print_function
 import site
 import sys
 from distutils.sysconfig import get_python_lib
@@ -115,59 +112,84 @@ IF(APPLE AND NOT "${Python_EXECUTABLE}" MATCHES "^/usr/bin/python.*$"
   SET(Python_INCLUDE_DIRS ${PYTHON_HOME_PATH}/../Headers CACHE PATH "" FORCE)
 ENDIF()
 
+#check if pip is installed (it is up to the user to install it)
+execute_process(
+        COMMAND ${Python_EXECUTABLE} -m pip show pip
+        RESULT_VARIABLE EXIT_CODE
+        OUTPUT_QUIET
+)
+
+if (NOT ${EXIT_CODE} EQUAL 0)
+    message(FATAL_ERROR
+            "The \"pip\" Python package is not installed. Please install it using a command like this one: \"python -m ensurepip --default-pip \".")
+endif()
+
+#check if sip is installed (it is up to the user to install it)
+execute_process(
+        COMMAND ${Python_EXECUTABLE} -m pip show sip
+        RESULT_VARIABLE EXIT_CODE
+        OUTPUT_QUIET
+)
+
+if (NOT ${EXIT_CODE} EQUAL 0)
+    message(FATAL_ERROR
+            "The \"sip\" Python package is not installed. Please install it using a command like this one: \"python -m pip install sip\".")
+endif()
+
+# this code broke my Python installation => defer to the user to install pip
 # install pip if it is not already installed
-EXECUTE_PROCESS(COMMAND ${Python_EXECUTABLE} -m pip --version OUTPUT_VARIABLE PIP_OUTPUT ERROR_QUIET)
-IF(PIP_OUTPUT)
-  STRING(FIND ${PIP_OUTPUT} "from" VLENGTH)
-  STRING(SUBSTRING ${PIP_OUTPUT} 0 ${VLENGTH} PIP_OUTPUT)
-  MESSAGE(STATUS "Found ${PIP_OUTPUT}")
+# EXECUTE_PROCESS(COMMAND ${Python_EXECUTABLE} -m pip --version OUTPUT_VARIABLE PIP_OUTPUT ERROR_QUIET)
+# IF(PIP_OUTPUT)
+#   STRING(FIND ${PIP_OUTPUT} "from" VLENGTH)
+#   STRING(SUBSTRING ${PIP_OUTPUT} 0 ${VLENGTH} PIP_OUTPUT)
+#   MESSAGE(STATUS "Found ${PIP_OUTPUT}")
+# ELSE()
+#   EXECUTE_PROCESS(COMMAND ${Python_EXECUTABLE} -m ensurepip --default-pip OUTPUT_VARIABLE PIP_OUTPUT ERROR_VARIABLE PIP_OUTPUT)
+#   MESSAGE(STATUS "${PIP_OUTPUT}")
+# ENDIF()
+
+SET(SIP_VERSION 6.8.3)
+SET(SIP_API 13.7)
+
+#use the detected python interpreter to call sip instead of the command line tool
+#to be sure to use the correct version (command line tool may not be in the PATH)
+SET(SIP_BUILD ${Python_EXECUTABLE} -m sipbuild.tools.build) #instead of sip-build
+find_program(SIP_MODULE_PROG sip-module REQUIRED) # sipbuild.module.main not working (does nothing in fact)
+
+#check sip version
+EXECUTE_PROCESS(COMMAND ${SIP_BUILD} --version OUTPUT_VARIABLE SIP_MODULE_OUTPUT)
+IF(${SIP_MODULE_OUTPUT} VERSION_GREATER_EQUAL ${SIP_VERSION})
+    MESSAGE(STATUS "Found SIP version ${SIP_MODULE_OUTPUT}")
 ELSE()
-  EXECUTE_PROCESS(COMMAND ${Python_EXECUTABLE} -m ensurepip --default-pip OUTPUT_VARIABLE PIP_OUTPUT ERROR_VARIABLE PIP_OUTPUT)
-  MESSAGE(STATUS "${PIP_OUTPUT}")
+    MESSAGE(FATAL_ERROR "SIP Python package at least version ${SIP_VERSION} not found.")
 ENDIF()
 
-SET(SIP_VERSION_THIRDPARTY 4.19.25)
-SET(SIP_OK FALSE CACHE INTERNAL "")
-FIND_PACKAGE(SIP)
-SET(SIP_OK ${SIP_FOUND})
-IF(SIP_OK AND NOT ${SIP_VERSION_STR} VERSION_LESS ${SIP_VERSION_THIRDPARTY})
-  SET(SIP_EXE "${SIP_EXECUTABLE}")
-  SET(SYSTEM_SIP TRUE)
-  SET(SIP_MODULE "sip")
-ELSE(SIP_OK AND NOT ${SIP_VERSION_STR} VERSION_LESS ${SIP_VERSION_THIRDPARTY})
-  SET(SIP_LIB sip)
-  SET(SYSTEM_SIP FALSE)
-  SET(SIP_MODULE "tulip.native.sip")
-  IF(SIP_OK)
-    IF(NOT "${SIP_VERSION}" STREQUAL "${LAST_FOUND_SIP_VERSION}")
-      MESSAGE(STATUS "SIP was found on the system but its version is lesser than the required one (${SIP_VERSION_THIRDPARTY}).")
-    ENDIF(NOT "${SIP_VERSION}" STREQUAL "${LAST_FOUND_SIP_VERSION}")
-    SET(SIP_FOUND FALSE)
-  ENDIF(SIP_OK)
+ IF(WIN32)
+   SET(SIP_LIB_SUFFIX ".pyd")
+ ELSE(WIN32)
+   SET(SIP_LIB_SUFFIX ".so")
+ ENDIF(WIN32)
 
-  TRY_COMPILE(SIP_OK ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen sip
-    CMAKE_FLAGS -DCMAKE_OSX_SYSROOT=${CMAKE_OSX_SYSROOT} -DPython_EXECUTABLE=${Python_EXECUTABLE}
-    -DPYTHON_INCLUDE_DIR=${Python_INCLUDE_DIRS} -DPYTHON_LIBRARY=${Python_LIBRARIES} -DSIP_LIB=${SIP_LIB}
-    OUTPUT_VARIABLE SIP_COMPILE_OUTPUT)
+SET(SIP_MODULE tulip.native.sip)
+SET(SIP_LIB sip.${Python_SOABI}${SIP_LIB_SUFFIX})
 
-  IF(SIP_OK)
-    SET(SIP_VERSION_STR "${SIP_VERSION_THIRDPARTY}")
-    IF(WIN32 AND EXISTS "${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen/Debug/sip.exe")
-      SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen/Debug/sip.exe)
-    ELSE()
-      SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen/sip)
-    ENDIF()
-    SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/siplib/)
-  ELSE(SIP_OK)
-    MESSAGE(FATAL_ERROR "SIP build failed:\n${SIP_COMPILE_OUTPUT}")
-  ENDIF(SIP_OK)
-ENDIF(SIP_OK AND NOT ${SIP_VERSION_STR} VERSION_LESS ${SIP_VERSION_THIRDPARTY})
+SET(SIP_INCLUDE_DIR ${PROJECT_BINARY_DIR}/thirdparty/sip)
+FILE(MAKE_DIRECTORY ${SIP_INCLUDE_DIR})
+SET(SIP_H sip.h)
 
-IF (NOT "${SIP_VERSION_STR}${SYSTEM_SIP}" STREQUAL "${LAST_FOUND_SIP_CONFIG}")
-  MESSAGE(STATUS "Found SIP ${SIP_VERSION_STR}: ${SIP_EXE}")
-ENDIF (NOT "${SIP_VERSION_STR}${SYSTEM_SIP}" STREQUAL "${LAST_FOUND_SIP_CONFIG}")
+#generate, compile and install sip.h and the sip module
+EXECUTE_PROCESS(COMMAND ${SIP_MODULE_PROG} --sdist --abi-version=${SIP_API} --sip-h --target-dir=${SIP_INCLUDE_DIR} ${SIP_MODULE})
+EXECUTE_PROCESS(COMMAND ${Python_EXECUTABLE} -m pip install --upgrade -t ${TULIP_PYTHON_ROOT_FOLDER} ${SIP_INCLUDE_DIR}/tulip_native_sip-${SIP_API}.0.tar.gz
+                ERROR_VARIABLE SDIST_ERROR
+                ECHO_ERROR_VARIABLE)
 
-SET(LAST_FOUND_SIP_CONFIG "${SIP_VERSION_STR}${SYSTEM_SIP}" CACHE INTERNAL "")
+TULIP_INSTALL_PYTHON_FILES(tulip/native ${TULIP_PYTHON_NATIVE_FOLDER}/${SIP_LIB})
+
+IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+  TULIP_COPY_TARGET_LIBRARY_POST_BUILD(${TULIP_PYTHON_NATIVE_FOLDER}/${SIP_LIB} ${TULIP_PYTHON_ROOT_FOLDER} wheel)
+ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+
+
 
 IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   STRING(REGEX REPLACE "[^0-9.]" "" TULIP_PYTHON_WHEEL_VERSION "${Tulip_VERSION}")

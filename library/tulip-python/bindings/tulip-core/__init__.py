@@ -12,9 +12,6 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # See the GNU General Public License for more details.
-
-# -*- coding: utf-8 -*-
-
 import os
 import os.path
 import sys
@@ -29,19 +26,17 @@ if platform.system() == 'Windows':
         _tulipNativeLibsPath,
         os.path.join(_tulipNativeLibsPath, '../../..'),
         os.environ['PATH'])
-    # see https://docs.python.org/3/library/os.html#os.add_dll_directory
-    if sys.version_info >= (3, 8):
-        dirs = []
-        paths = os.environ['PATH'].split(";")
-        for p in paths:
-            if os.path.isdir(p):
-                dirs.append(os.add_dll_directory(p))
+    dirs = []
+    paths = os.environ['PATH'].split(";")
+    for p in paths:
+        if os.path.isdir(p):
+            dirs.append(os.add_dll_directory(p))
 
 import _tulip # noqa
 
 # cleanup
 sys.path.pop()
-if platform.system() == 'Windows' and sys.version_info >= (3, 8):
+if platform.system() == 'Windows':
     for d in dirs:
         d.close()
 
@@ -175,11 +170,7 @@ _tulipNativePluginsPath = os.path.join(_tulipNativeLibsPath, 'plugins')
 # installed with the pip tool
 if platform.system() == 'Linux' and os.path.exists(_tulipNativePluginsPath):
     dlOpenFlagsBackup = sys.getdlopenflags()
-    if sys.version_info < (3, 6):
-        import DLFCN
-        dlOpenFlags = DLFCN.RTLD_NOW | DLFCN.RTLD_GLOBAL
-    else:
-        dlOpenFlags = os.RTLD_NOW | os.RTLD_GLOBAL
+    dlOpenFlags = os.RTLD_NOW | os.RTLD_GLOBAL
     sys.setdlopenflags(dlOpenFlags)
 
 tlp.loadTulipPluginsFromDir(_tulipNativePluginsPath)

@@ -323,7 +323,7 @@ bool isTupleAndCanConvertToVec3fType(PyObject *pyObj) {
     return false;
   }
 
-  for (SIP_SSIZE_T i = 0; i < PyTuple_GET_SIZE(pyObj); ++i) {
+  for (Py_ssize_t i = 0; i < PyTuple_GET_SIZE(pyObj); ++i) {
     PyObject *item = PyTuple_GET_ITEM(pyObj, i);
     bool canConvert = false;
     if (!PyBool_Check(item) && PyLong_Check(item)) {

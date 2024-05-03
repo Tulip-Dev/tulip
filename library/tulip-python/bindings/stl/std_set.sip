@@ -81,7 +81,7 @@ template<TYPE>
     PyObject *iterator = PyObject_GetIter(sipPy);
     PyObject *item = NULL;
 
-    while (item = PyIter_Next(iterator)) {
+    while ((item = PyIter_Next(iterator))) {
       if (!sipCanConvertToType(item, kpTypeDef, SIP_NOT_NONE)) {
         //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to TYPE");
         Py_DECREF(item);
@@ -253,7 +253,7 @@ template<TYPE*>
       return 0;
     }
     PyObject *iterator = PyObject_GetIter(sipPy);
-    PyObject *item = NULL;
+    PyObject *item = nullptr;
     while (item = PyIter_Next(iterator)) {
       if (!PyNumber_Check(item)) {
         //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to double");

@@ -115,8 +115,13 @@ containing the nodes of the graph in the order they have been visited.
 
 //========================================================================================
 
-enum ShortestPathType { OnePath = 0, OneDirectedPath = 1 , OneReversedPath = 2,
-			AllPaths = 3, AllDirectedPaths = 4, AllReversedPaths = 5 };
+enum ShortestPathType /BaseType=IntEnum/ {
+OnePath = ShortestPathType::OnePath,
+OneDirectedPath = ShortestPathType::OneDirectedPath ,
+OneReversedPath = ShortestPathType::OneReversedPath,
+AllPaths = ShortestPathType::AllPaths,
+AllDirectedPaths = ShortestPathType::AllDirectedPaths,
+AllReversedPaths = ShortestPathType::AllReversedPaths };
 
 bool selectShortestPaths(const tlp::Graph *graph, tlp::node src, tlp::node tgt, tlp::ShortestPathType pathType,
                          const tlp::DoubleProperty *weights, tlp::BooleanProperty* selection);

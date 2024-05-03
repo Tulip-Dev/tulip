@@ -22,10 +22,17 @@
 // | inspired from bindings by the Booggie project development team          |
 // | (https://sourceforge.net/projects/booggie/)                             |
 // +-------------------------------------------------------------------------+
+%ModuleHeaderCode
+#include <tulip/PluginProgress.h>
+%End
 
 namespace tlp {
 
-enum ProgressState{TLP_CONTINUE, TLP_CANCEL , TLP_STOP };
+enum ProgressState /BaseType=IntEnum/ {
+                                      TLP_CONTINUE=ProgressState::TLP_CONTINUE,
+                                      TLP_CANCEL=ProgressState::TLP_CANCEL,
+                                      TLP_STOP=ProgressState::TLP_STOP
+                                      };
 
 class PluginProgress /Abstract/ {
 %TypeHeaderCode

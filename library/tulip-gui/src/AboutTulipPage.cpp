@@ -17,7 +17,11 @@
  *
  */
 #include <vector>
-
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+#include <sip.h>
+#else
+#define SIP_VERSION_STR ""
+#endif
 #include <ogdf/basic/internal/config.h>
 #include <zipconf.h>
 #include <tulip/AboutTulipPage.h>
@@ -38,14 +42,6 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QXmlStreamReader>
-
-static QString getSipVersion() {
-#ifdef SIP_VERSION
-  return SIP_VERSION;
-#else
-  return QString();
-#endif
-}
 
 static const QString RSS_URL = "https://tulip.labri.fr/site/?q=newsFeed.xml";
 static const unsigned RSS_LIMIT = 3;
@@ -93,7 +89,7 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
                  ": <a href=\"https://www.python.org\" style=\"color:" HTML_LINK_COLOR
                  ";\">www.python.org</a> </li>"
                  "  <li> <b> SIP </b> " +
-                 getSipVersion() +
+                 SIP_VERSION_STR +
                  ": <a href=\"https://www.riverbankcomputing.com/software/sip\"  style=\"color:" HTML_LINK_COLOR
                  ";\">www.riverbankcomputing.com/software/sip</a></li>"
            : "") +

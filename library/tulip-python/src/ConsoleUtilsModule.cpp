@@ -125,12 +125,6 @@ static PyObject *consoleutils_ConsoleOutput_flush(PyObject *self, PyObject *) {
   Py_RETURN_NONE;
 }
 
-// T_BOOL is not defined for older versions of Python (2.5 for instance)
-// define it as T_INT in that case
-#ifndef T_BOOL
-#define T_BOOL T_INT
-#endif
-
 static PyMemberDef consoleutils_ConsoleOutput_members[] = {
     {const_cast<char *>("stderrflag"), T_BOOL, offsetof(consoleutils_ConsoleOutput, stderrflag), 0,
      const_cast<char *>("flag for stderr")},
@@ -197,22 +191,16 @@ static PyTypeObject consoleutils_ConsoleOutputType = {
     0,
     0,
     0,
-    0
-#if PY_MAJOR_VERSION == 3
-#if PY_MINOR_VERSION >= 8
-    ,
+    0,
     0
 #if PY_MINOR_VERSION < 9 || PY_MINOR_VERSION >= 12
     ,
     0
 #endif
-#endif
 #if PY_MINOR_VERSION >= 13
 #error Python version PY_MAJOR_VERSION.PY_MINOR_VERSION not supported
 #endif
-#else
-#error Python major version PY_MAJOR_VERSION not supported
-#endif
+
 };
 
 typedef struct {
@@ -294,20 +282,14 @@ static PyTypeObject consoleutils_ConsoleInputType = {
     0,
     0,
     0,
-    0
-#if PY_MAJOR_VERSION == 3
-#if PY_MINOR_VERSION >= 8
-    ,
+    0,
     0
 #if PY_MINOR_VERSION < 9 || PY_MINOR_VERSION >= 12
     ,
     0
 #endif
-#endif
-#endif
 };
 
-#if PY_MAJOR_VERSION >= 3
 static struct PyModuleDef consoleutilsModuleDef = {
     PyModuleDef_HEAD_INIT,
     "consoleutils", /* m_name */
@@ -319,7 +301,6 @@ static struct PyModuleDef consoleutilsModuleDef = {
     NULL,           /* m_clear */
     NULL,           /* m_free */
 };
-#endif
 
 // This is called via the PyImport_AppendInittab mechanism called
 // during interpreter initialization, to make the built-in consoleutils
