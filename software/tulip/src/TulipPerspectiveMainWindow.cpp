@@ -32,6 +32,12 @@
 #include <tulip/TlpTools.h>
 #include <QSystemTrayIcon>
 static QSystemTrayIcon *_sti = nullptr;
+
+TulipPerspectiveProcessMainWindow::~TulipPerspectiveProcessMainWindow() {
+  delete _sti;
+  _sti = nullptr;
+}
+
 #endif
 
 TulipPerspectiveProcessMainWindow::TulipPerspectiveProcessMainWindow(QString title, QWidget *parent)
@@ -80,8 +86,7 @@ void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString &projec
   // We therefore use a system tray icon to display
   // the perspective window title and make it easier
   // to manage the visibility of multiple running perspectives
-  if (_sti)
-    delete _sti;
+  delete _sti;
   _sti = new QSystemTrayIcon(this);
   _sti->setIcon(QIcon(":/tulip/gui/icons/tulip-file-icon.ico"));
 

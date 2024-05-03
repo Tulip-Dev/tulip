@@ -38,6 +38,10 @@ class TulipPerspectiveProcessMainWindow : public QMainWindow {
 
 public:
   explicit TulipPerspectiveProcessMainWindow(QString title, QWidget *parent = nullptr);
+#ifdef __APPLE__
+  ~TulipPerspectiveProcessMainWindow();
+#endif
+
   void setProject(tlp::TulipProject *project);
 
 signals:
