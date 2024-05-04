@@ -154,7 +154,14 @@ SET(SIP_API 13.7)
 #use the detected python interpreter to call sip instead of the command line tool
 #to be sure to use the correct version (command line tool may not be in the PATH)
 SET(SIP_BUILD ${Python_EXECUTABLE} -m sipbuild.tools.build) #instead of sip-build
-find_program(SIP_MODULE_PROG sip-module REQUIRED) # sipbuild.module.main not working (does nothing in fact)
+
+# sipbuild.module.main not working (does nothing in fact)
+#hack to find sip-module which is not available via the Python executable.
+#This will be fixed in a future version of SIP (problem reported to the SIP maintener)
+get_filename_component(PYTHONEXE_PATH ${Python_EXECUTABLE} DIRECTORY)
+find_program(SIP_MODULE_PROG sip-module
+    HINTS ${Python_STDLIB}/../Scripts ${PYTHONEXE_PATH}
+    REQUIRED)
 
 #check sip version
 EXECUTE_PROCESS(COMMAND ${SIP_BUILD} --version OUTPUT_VARIABLE SIP_MODULE_OUTPUT)
