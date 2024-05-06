@@ -314,8 +314,10 @@ IF(WIN32)
 ENDIF(WIN32)
 
 MACRO(TULIP_COPY_TARGET_LIBRARY_POST_BUILD target_name destination)
-  STRING(MD5 DESTINATION_HASH "${destination}")
-  SET(COPY_TARGET_NAME copy-${target_name}-${DESTINATION_HASH})
+  GET_FILENAME_COMPONENT(destination_file ${destination} NAME )
+  STRING(MD5 DESTINATION_HASH "${destination_file}")
+
+  SET(COPY_TARGET_NAME copy-${destination_file}-${DESTINATION_HASH})
 
   IF(WIN32)
     ADD_CUSTOM_TARGET(${COPY_TARGET_NAME} ALL
