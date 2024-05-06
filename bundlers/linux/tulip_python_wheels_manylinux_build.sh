@@ -1,4 +1,6 @@
 #!/bin/bash
+#magic command: docker run --name manylinux_2_28_x86_64 -v /home/bruno/tulip:/tulip -v /home/bruno/compil/docker_manylinux2010_x86_64:/tulip_build --rm quay.io/pypa/manylinux_2_28_x86_64 bash -xc "bash -x /tulip/bundlers/linux/tulip_python_wheels_manylinux_build.sh dev0"
+
 
 # This script is only intended to be run using
 # a pypa/manylinux2010 docker image (based on Centos 6.10)
@@ -6,9 +8,8 @@ TULIP_PYTHON_TEST_WHEEL_SUFFIX=$1
 
 # install tulip-core wheel deps
 # yum -y install epel-release
-yum -y install zlib-devel qhull-devel ccache python-devel
+yum -y install ccache libffi-devel
 # install wheels build deps
-yum -y install libffi-devel
 
 # get tulip source dir
 if [ -d /tulip ]
@@ -35,8 +36,8 @@ for CPYBIN in /opt/python/cp*/bin
 do
   PY_VERSION=$(${CPYBIN}/python -c "from platform import python_version; print(python_version())")
   IFS='.' read -a PY_VERSION <<< "$PY_VERSION"
-  # Python < 3.8 no longer supported, 3.12 not yet supported
-  if [[ ${PY_VERSION[0]} -ne 3 ]] || [[ ${PY_VERSION[1]} -lt 8 ]] || [[ ${PY_VERSION[1]} -ge 12 ]]
+  # Python < 3.8 no longer supported, 3.13 not yet supported
+  if [[ ${PY_VERSION[0]} -ne 3 ]] || [[ ${PY_VERSION[1]} -lt 8 ]] || [[ ${PY_VERSION[1]} -ge 13 ]]
   then
      continue
   fi

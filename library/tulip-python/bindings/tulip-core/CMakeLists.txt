@@ -85,7 +85,7 @@ ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_PYTHON_BINDINGS_SRC}
     COMMAND ${CMAKE_COMMAND} -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR} -DBINARY_DIR=${CMAKE_CURRENT_BINARY_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/generatePropertiesBindings.cmake
     COMMAND ${SIP_BUILD} --verbose --protected-is-public --concatenate 8 --pep484-pyi --api-dir=${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Generating Python Bindings and API file for libtulip"
-    DEPENDS ${SIP_INCLUDE_DIR}/${SIP_H} ${TULIP_SIP_FILES} ${STL_SIP_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/../../include/tulip/PythonCppTypesConverter.h VERBATIM)
+    DEPENDS ${SIPLIB_TARGET} ${SIP_INCLUDE_DIR}/${SIP_H} ${TULIP_SIP_FILES} ${STL_SIP_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/../../include/tulip/PythonCppTypesConverter.h VERBATIM)
 
 TULIP_DISABLE_COMPILER_WARNINGS()
 
@@ -94,7 +94,9 @@ SET(TULIP_PYTHON_BINDINGS_SRC
      ${CMAKE_CURRENT_SOURCE_DIR}/../../src/PythonCppTypesConverter.cpp)
 
 Python_add_library(${LibTulipCorePythonBindingsName} MODULE WITH_SOABI ${TULIP_PYTHON_BINDINGS_SRC})
-
+IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+  ADD_DEPENDENCIES(wheel ${LibTulipCorePythonBindingsName})
+ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 
 TARGET_COMPILE_DEFINITIONS(${LibTulipCorePythonBindingsName} PUBLIC "protected=public")
 TARGET_COMPILE_DEFINITIONS(${LibTulipCorePythonBindingsName} PUBLIC "SIP_PROTECTED_IS_PUBLIC")
@@ -111,7 +113,10 @@ SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES RUNTIME_OUTPU
 
 ADD_DEPENDENCIES(${LibTulipCorePythonBindingsName} ${LibStlPythonBindingsName})
 
-ADD_CUSTOM_TARGET(copyTulipInitPy ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py ${TULIP_PYTHON_FOLDER}/__init__.py)
+ADD_CUSTOM_TARGET(copyTulipInitPy ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py ${TULIP_PYTHON_FOLDER}/__init__.py
+    COMMENT "Copying tulip-core module __init__.py file"
+    DEPENDS ${LibTulipCorePythonBindingsName}
+    VERBATIM)
 
 IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   ADD_DEPENDENCIES(wheel copyTulipInitPy)

@@ -314,10 +314,10 @@ IF(WIN32)
 ENDIF(WIN32)
 
 MACRO(TULIP_COPY_TARGET_LIBRARY_POST_BUILD target_name destination)
-  GET_FILENAME_COMPONENT(destination_file ${destination} NAME )
-  STRING(MD5 DESTINATION_HASH "${destination_file}")
 
-  SET(COPY_TARGET_NAME copy-${destination_file}-${DESTINATION_HASH})
+  STRING(MD5 DESTINATION_HASH "${destination}")
+  SET(COPY_TARGET_NAME copy-${target_name}-${DESTINATION_HASH})
+  STRING(REPLACE "/" "" COPY_TARGET_NAME ${COPY_TARGET_NAME})
 
   IF(WIN32)
     ADD_CUSTOM_TARGET(${COPY_TARGET_NAME} ALL
@@ -370,7 +370,7 @@ MACRO(TULIP_INSTALL_PYTHON_FILES install_suffix)
               RUNTIME DESTINATION ${TulipPythonModulesInstallDir}/${install_suffix} COMPONENT tulip_python
               LIBRARY DESTINATION ${TulipPythonModulesInstallDir}/${install_suffix} COMPONENT tulip_python)
     ELSEIF(IS_DIRECTORY ${PYTHON_FILE})
-      INSTALL(DIRECTORY ${PYTHON_FILE} DESTINATION ${TulipPythonModulesInstallDir}/${install_suffix} COMPONENT tulip_python PATTERN ".svn" EXCLUDE)
+      INSTALL(DIRECTORY ${PYTHON_FILE} DESTINATION ${TulipPythonModulesInstallDir}/${install_suffix} COMPONENT tulip_python)
     ELSE()
       INSTALL(FILES ${PYTHON_FILE} DESTINATION ${TulipPythonModulesInstallDir}/${install_suffix} COMPONENT tulip_python)
     ENDIF(TARGET ${PYTHON_FILE})

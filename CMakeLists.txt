@@ -216,8 +216,8 @@ IF (NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
 	SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
       ELSEIF(LINUX)
         FILE(READ /etc/centos-release LINUX_ISSUE)
-	IF((NOT "${LINUX_ISSUE}" MATCHES ".*CentOS release 6\\.10 \\(Final\\).*" AND NOT "${LINUX_ISSUE}" MATCHES ".*CentOS Linux release 7\\.9.*") OR NOT EXISTS /usr/local/bin/auditwheel)
-          MESSAGE(FATAL_ERROR "Python binary wheels for Linux platform must be compiled using the CentOS (6.10 or 7.9) docker images provided by the manylinux project from the Python Packaging Authority.\nSee https://github.com/pypa/manylinux for more details.")
+        IF((NOT "${LINUX_ISSUE}" MATCHES ".*AlmaLinux release 8\\.9 \\(Midnight Oncilla\\).*" AND NOT "${LINUX_ISSUE}" MATCHES ".*CentOS Linux release 7\\.9.*") OR NOT EXISTS /usr/local/bin/auditwheel)
+          MESSAGE(FATAL_ERROR "Python binary wheels for Linux platform must be compiled using the CentOS (6.10 or 7.9) or AlmaLinux (8.9) docker images provided by the manylinux project from the Python Packaging Authority.\nSee https://github.com/pypa/manylinux for more details.")
 	ENDIF()
 	# build binaries with install rpath when generating Tulip Python wheels for Linux
 	# as we don't install the project in that case
