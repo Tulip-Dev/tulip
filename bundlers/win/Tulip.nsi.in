@@ -61,14 +61,14 @@ Function CheckAndInstallPython
   IfErrors install 0
   IfFileExists $0\python.exe end install
   install:
-        MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x86-64) installed.$\n$\nIt is now required to run Tulip @Tulip_VERSION@.$\n$\nPress OK to download https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/@PYTHON_INSTALLER@$\n$\nand install Python @PYTHON_VERSION@ (x86-64)."
-        inetc::get "https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/@PYTHON_INSTALLER@" "python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@"
+        MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x86-64) installed.$\n$\nIt is now required to run Tulip @Tulip_VERSION@.$\n$\nPress OK to download https://www.python.org/ftp/python/@Python_VERSION@/@PYTHON_INSTALLER@$\n$\nand install Python @PYTHON_VERSION@ (x86-64)."
+        inetc::get "https://www.python.org/ftp/python/@Python_VERSION@/@PYTHON_INSTALLER@" "python-@Python_VERSION@.@PYTHON_INSTALLER_EXT@"
 !if ${PYTHON_INSTALLER_EXT} == "msi"
-        ExecWait '"msiexec" /i "python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@"' $0
+        ExecWait '"msiexec" /i "python-@Python_VERSION@.@PYTHON_INSTALLER_EXT@"' $0
 !else
-	ExecWait '"python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@"' $0
+        ExecWait '"python-@Python_VERSION@.@PYTHON_INSTALLER_EXT@"' $0
 !endif
-        Delete python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@
+        Delete python-@Python_VERSION@.@PYTHON_INSTALLER_EXT@
 		${If} $0 != 0
 		   DetailPrint "MSI return code was $0"
                    MessageBox MB_OK "Python @PYTHON_VERSION@ (x86-64) installation failed. Tulip @Tulip_VERSION@ installation will proceed$\n$\nbut Tulip will not work, until Python @PYTHON_VERSION@ (x86-64) is installed."
