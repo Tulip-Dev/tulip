@@ -156,12 +156,19 @@ SET(SIP_API 13.7)
 SET(SIP_BUILD ${Python_EXECUTABLE} -m sipbuild.tools.build) #instead of sip-build
 
 # sipbuild.module.main not working (does nothing in fact)
-#hack to find sip-module which is not available via the Python executable.
-#This will be fixed in a future version of SIP (problem reported to the SIP maintener)
-get_filename_component(PYTHONEXE_PATH ${Python_EXECUTABLE} DIRECTORY)
-find_program(SIP_MODULE_PROG sip-module
-    HINTS ${Python_STDLIB}/../Scripts ${PYTHONEXE_PATH}
-    REQUIRED)
+# hack to find sip-module which is not available via the Python executable.
+# This will be fixed in a future version of SIP (problem reported to the SIP maintener)
+# get sip-module possible paths
+GET_FILENAME_COMPONENT(PYTHON_EXE_PATH ${Python_EXECUTABLE} DIRECTORY)
+EXECUTE_PROCESS(COMMAND ${Python_EXECUTABLE} -m site --user-base OUTPUT_VARIABLE USER_EXE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+IF(LINUX OR APPLE)
+  SET(USER_EXE_PATH "${USER_EXE_PATH}/bin")
+ELSE()
+  SET(USER_EXE_PATH "${USER_EXE_PATH}/../Scripts")
+  SET(PYTHON_EXE_PATH "${PYTHON_EXE_PATH}/Scripts")
+ENDIF()
+
+FIND_PROGRAM(SIP_MODULE_PROG sip-module HINTS ${USER_EXE_PATH} ${PYTHON_EXE_PATH} REQUIRED)
 
 #check sip version
 EXECUTE_PROCESS(COMMAND ${SIP_BUILD} --version OUTPUT_VARIABLE SIP_MODULE_OUTPUT)
