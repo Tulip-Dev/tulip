@@ -40,6 +40,8 @@ do
   then
      continue
   fi
+  # install sip
+  ${CPYBIN}/python -m pip install sip
   pushd $CPYBIN
   cd ..
   CPYDIR=$(basename $PWD)
