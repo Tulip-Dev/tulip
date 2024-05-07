@@ -207,15 +207,15 @@ PythonInterpreter::PythonInterpreter()
   }
 
   if (!_wasInit) {
-  #if PY_MINOR_VERSION < 11
+#if PY_MINOR_VERSION < 11
     Py_OptimizeFlag = 1;
     Py_NoSiteFlag = 1;
-  #else
+#else
     PyConfig config;
     PyConfig_InitPythonConfig(&config);
     config.site_import = 1;
-    config.optimization_level =1;
-  #endif
+    config.optimization_level = 1;
+#endif
 
 // Fix for GDB debugging on windows when compiling with MinGW.
 // GDB contains an embedded Python interpreter that messes up Python Home value.
@@ -228,11 +228,11 @@ PythonInterpreter::PythonInterpreter()
     if (!pythonHome.isEmpty()) {
       static std::wstring pythonHomeWString = pythonHome.toStdWString();
       auto homestr = const_cast<wchar_t *>(pythonHomeWString.c_str());
-      #if PY_MINOR_VERSION < 11
-        Py_SetPythonHome(homestr);
-      #else
-        config.home = homestr;
-      #endif
+#if PY_MINOR_VERSION < 11
+      Py_SetPythonHome(homestr);
+#else
+      config.home = homestr;
+#endif
     }
 #endif
 
