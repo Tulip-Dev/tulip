@@ -310,7 +310,10 @@ ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 
 #generate, compile and install sip.h and the sip module
 EXECUTE_PROCESS(COMMAND ${SIP_MODULE_PROG} --sdist --abi-version=${SIP_API} --sip-h --target-dir=${SIP_INCLUDE_DIR} ${SIP_MODULE})
+#remove forbidden characters to produce a correct target name
 STRING(REPLACE "/" "" SIPLIB_TARGET "${TULIP_PYTHON_NATIVE_FOLDER}/${SIP_LIB}" )
+STRING(REPLACE ":" "" SIPLIB_TARGET ${SIPLIB_TARGET})
+
 ADD_CUSTOM_TARGET(${SIPLIB_TARGET} ALL  ${Python_EXECUTABLE} -m pip install --upgrade -t ${TULIP_PYTHON_ROOT_FOLDER} ${SIP_INCLUDE_DIR}/tulip_native_sip-${SIP_API}.0.tar.gz
                 COMMENT "Installing Python SIP module"
                 VERBATIM)
