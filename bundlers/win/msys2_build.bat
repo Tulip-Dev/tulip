@@ -63,6 +63,8 @@ rem Install Inetc plugin for NSIS
 rem Install sphinx for Python 3
   set PATH=%PYTHON3_HOME%;%PYTHON3_HOME%/Scripts;%PATH%
   pip install sphinx
+rem Install sip
+  pip install sip
 rem install_complete_tulip_build_dependencies
   pacman --noconfirm -S --needed mingw-w64-x86_64-freetype
   pacman --noconfirm -S --needed mingw-w64-x86_64-glew
