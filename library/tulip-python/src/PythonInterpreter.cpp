@@ -207,9 +207,15 @@ PythonInterpreter::PythonInterpreter()
   }
 
   if (!_wasInit) {
-
+  #if PY_MINOR_VERSION < 11
     Py_OptimizeFlag = 1;
     Py_NoSiteFlag = 1;
+  #else
+    PyConfig config;
+    PyConfig_InitPythonConfig(&config);
+    config.site_import = 1;
+    config.optimization_level =1;
+  #endif
 
 // Fix for GDB debugging on windows when compiling with MinGW.
 // GDB contains an embedded Python interpreter that messes up Python Home value.
@@ -221,7 +227,12 @@ PythonInterpreter::PythonInterpreter()
 
     if (!pythonHome.isEmpty()) {
       static std::wstring pythonHomeWString = pythonHome.toStdWString();
-      Py_SetPythonHome(const_cast<wchar_t *>(pythonHomeWString.c_str()));
+      auto homestr = const_cast<wchar_t *>(pythonHomeWString.c_str());
+      #if PY_MINOR_VERSION < 11
+        Py_SetPythonHome(homestr);
+      #else
+        config.home = homestr;
+      #endif
     }
 #endif
 
@@ -231,12 +242,16 @@ PythonInterpreter::PythonInterpreter()
 
     Py_InitializeEx(0);
 
-#if PY_MINOR_VERSION < 11
     int argc = 1;
     static const std::wstring argv0 = L"tulip";
     wchar_t *argv[1];
     argv[0] = const_cast<wchar_t *>(argv0.c_str());
+#if PY_MINOR_VERSION < 11
     PySys_SetArgv(argc, argv);
+#else
+    PyConfig_SetArgv(&config, argc, argv);
+    Py_InitializeFromConfig(&config);
+    PyConfig_Clear(&config);
 #endif
 
     mainThreadState = PyEval_SaveThread();
