@@ -249,9 +249,16 @@ PythonInterpreter::PythonInterpreter()
 #if PY_MINOR_VERSION < 11
     PySys_SetArgv(argc, argv);
 #else
-    PyConfig_SetArgv(&config, argc, argv);
-    Py_InitializeFromConfig(&config);
+    PyStatus status;
+    status = PyConfig_SetArgv(&config, argc, argv);
+    if (PyStatus_Exception(status)) {
+      Py_ExitStatusException(status);
+    }
+    status = Py_InitializeFromConfig(&config);
     PyConfig_Clear(&config);
+    if (PyStatus_Exception(status)) {
+      Py_ExitStatusException(status);
+    }
 #endif
 
     mainThreadState = PyEval_SaveThread();
