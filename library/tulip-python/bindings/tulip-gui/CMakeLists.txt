@@ -25,7 +25,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/pyproject.toml.in ${CMAKE_CURRENT_BIN
 ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_GUI_PYTHON_BINDINGS_SRC}
 COMMAND ${SIP_BUILD} --verbose --protected-is-public --concatenate 3 --api-dir=${CMAKE_CURRENT_BINARY_DIR}
   COMMENT "Generating Python Bindings and API file for libtulip-gui"
-  DEPENDS ${SIPLIB_TARGET} ${SIP_INCLUDE_DIR}/${SIP_H} ${TULIP_GUI_SIP_FILES} ${TULIP_SIP_FILES} ${STL_SIP_FILES} ${tulipguiutils_MOC} ${tulipgui_RCC_SRCS}  VERBATIM)
+  DEPENDS ${SIP_LIB} ${TULIP_GUI_SIP_FILES} ${TULIP_SIP_FILES} ${STL_SIP_FILES} ${tulipguiutils_MOC} ${tulipgui_RCC_SRCS}  VERBATIM)
 
 SET(TULIP_GUI_PYTHON_BINDINGS_SRC ${TULIP_GUI_PYTHON_BINDINGS_SRC} TulipViewsUtils.cpp ${tulipguiutils_MOC} ${tulipgui_RCC_SRCS})
 
