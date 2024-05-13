@@ -125,7 +125,6 @@ GraphPerspective::GraphPerspective(const tlp::PluginContext *c)
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   _pythonIDE = nullptr;
   _pythonIDEDialog = nullptr;
-  _pythonPanel = nullptr;
 #endif
 }
 

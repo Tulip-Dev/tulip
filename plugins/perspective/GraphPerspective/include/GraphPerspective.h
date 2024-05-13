@@ -44,7 +44,6 @@ class GraphPerspectiveMainWindowData;
 }
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-class PythonPanel;
 namespace tlp {
 class PythonIDE;
 }
@@ -184,7 +183,6 @@ protected:
 
   QDialog *_searchDialog;
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  PythonPanel *_pythonPanel;
   tlp::PythonIDE *_pythonIDE;
   QDialog *_pythonIDEDialog;
 #endif
