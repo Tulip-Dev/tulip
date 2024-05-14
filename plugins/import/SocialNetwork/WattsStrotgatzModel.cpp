@@ -32,7 +32,7 @@ static const char *paramHelp[] = {
     "This parameter defines the amount of nodes used to build the scale-free graph.",
 
     // k
-    "Number of edges added to each node in the initial ring lattice. Be careful that #nodes > k >  ln(#nodes)",
+    "Number of edges added to each node in the initial ring lattice. Be careful that #nodes &ge; k &ge; ln(#nodes)",
 
     // p
     "Probability in [0,1] to rewire an edge.",
@@ -60,9 +60,9 @@ struct WattsStrogatzModel : public ImportModule {
 
   WattsStrogatzModel(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "200");
-    addInParameter<unsigned int>("k", paramHelp[1], "3");
+    addInParameter<unsigned int>("k", paramHelp[1], "6");
     addInParameter<double>("p", paramHelp[2], "0.02");
-    addInParameter<bool>("original model", paramHelp[3], "false");
+    addInParameter<bool>("original model", paramHelp[3], "true");
   }
 
   bool importGraph() override {
@@ -80,15 +80,15 @@ struct WattsStrogatzModel : public ImportModule {
 
     // check arguments
     if (p < 0 || p > 1) {
-      pluginProgress->setError("p is not a probability,\nit does not belong to [0, 1]");
+      pluginProgress->setError("The p parameter does not belong to [0, 1]");
       return false;
     }
     if (k >= nbNodes) {
-      pluginProgress->setError("The k parameter cannot be greater than the number of nodes.");
+      pluginProgress->setError("The k parameter cannot be greater than or equal to the number of nodes.");
       return false;
     }
-    if (original_model && (nbNodes >= log(float(k)))) {
-      pluginProgress->setError("The number of nodes cannot be greater than ln(k)");
+    if (original_model && (k < log(float(nbNodes)))) {
+      pluginProgress->setError("The k cannot be lesser than ln(number of nodes)");
       return false;
     }
 
