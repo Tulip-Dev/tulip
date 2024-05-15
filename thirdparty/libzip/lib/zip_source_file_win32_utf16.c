@@ -43,13 +43,13 @@ DONT_WARN_INCOMPATIBLE_FN_PTR_BEGIN
 
 zip_win32_file_operations_t ops_utf16 = {
     utf16_allocate_tempname,
-    utf16_create_file,
-    DeleteFileW,
-    GetFileAttributesW,
-    GetFileAttributesExW,
+    (void * (*)(const void *, DWORD,  DWORD,  struct _SECURITY_ATTRIBUTES *, DWORD,  DWORD,  void *)) utf16_create_file,
+    (BOOL (*)(const void *)) DeleteFileW,
+    (DWORD (*)(const void *)) GetFileAttributesW,
+     (BOOL (*)(const void *, GET_FILEEX_INFO_LEVELS,  void *)) GetFileAttributesExW,
     utf16_make_tempname,
-    MoveFileExW,
-    SetFileAttributesW,
+    (BOOL (*)(const void *, const void *, DWORD)) MoveFileExW,
+     (BOOL (*)(const void *, DWORD)) SetFileAttributesW,
     utf16_strdup
 };
 

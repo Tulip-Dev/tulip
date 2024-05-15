@@ -41,13 +41,13 @@ DONT_WARN_INCOMPATIBLE_FN_PTR_BEGIN
 
 zip_win32_file_operations_t ops_ansi = {
     ansi_allocate_tempname,
-    CreateFileA,
-    DeleteFileA,
-    GetFileAttributesA,
-    GetFileAttributesExA,
+    (void * (*)(const void *, DWORD,  DWORD,  struct _SECURITY_ATTRIBUTES *, DWORD,  DWORD,  void *)) CreateFileA,
+    (BOOL (*)(const void *)) DeleteFileA,
+    (DWORD (*)(const void *)) GetFileAttributesA,
+    (BOOL (*)(const void *, GET_FILEEX_INFO_LEVELS,  void *)) GetFileAttributesExA,
     ansi_make_tempname,
-    MoveFileExA,
-    SetFileAttributesA,
+    (BOOL (*)(const void *, const void *, DWORD)) MoveFileExA,
+    (BOOL (*)(const void *, DWORD)) SetFileAttributesA,
     strdup
 };
 
