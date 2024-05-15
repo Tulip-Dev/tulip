@@ -323,6 +323,8 @@ IF(NOT EXISTS ${SIP_MODULE_SRC} OR NOT EXISTS ${SIP_INCLUDE_DIR}/${SIP_H} OR NOT
     endif(WIN32)
     execute_process(
         COMMAND ${SIP_MODULE_PROG} --sdist --abi-version=${SIP_API} --sip-h --target-dir=${SIP_INCLUDE_DIR} ${SIP_MODULE}
+        COMMAND_ERROR_IS_FATAL ANY)
+    execute_process(
         COMMAND ${Python_EXECUTABLE} -m pip install --upgrade -t ${SIP_INCLUDE_DIR}/install ${SIP_MODULE_SRC}
         COMMAND_ERROR_IS_FATAL ANY)
 ENDIF()
