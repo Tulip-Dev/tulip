@@ -59,8 +59,9 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
   STRING(FIND "${CMAKE_CXX_COMPILER_ID}" "Clang" CLANG_POS)
   STRING(COMPARE NOTEQUAL "${CLANG_POS}" "-1" CLANG)
 
-  # enable C++17
+  # enable C++17 (required for Qt6 at least)
   SET(CMAKE_CXX_STANDARD 17)
+  SET(CXX_STANDARD_REQUIRED ON)
 
   ## ========================================================
   ## Operating system preprocessor macros

@@ -318,6 +318,9 @@ SET(SIP_MODULE_SRC ${SIP_INCLUDE_DIR}/tulip_native_sip-${SIP_API}.0.tar.gz)
 SET(SIP_MODULE_OUTPUT ${SIP_INCLUDE_DIR}/install/tulip/native/${SIP_LIB})
 IF(NOT EXISTS ${SIP_MODULE_SRC} OR NOT EXISTS ${SIP_INCLUDE_DIR}/${SIP_H} OR NOT EXISTS ${SIP_MODULE_OUTPUT} )
     MESSAGE(STATUS "Generating SIP module and include file")
+    if(WIN32)
+        file(TO_NATIVE_PATH ${SIP_MODULE_SRC} SIP_MODULE_SRC)
+    endif(WIN32)
     execute_process(
         COMMAND ${SIP_MODULE_PROG} --sdist --abi-version=${SIP_API} --sip-h --target-dir=${SIP_INCLUDE_DIR} ${SIP_MODULE}
         COMMAND ${Python_EXECUTABLE} -m pip install --upgrade -t ${SIP_INCLUDE_DIR}/install ${SIP_MODULE_SRC}
