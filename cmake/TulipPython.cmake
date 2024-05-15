@@ -313,15 +313,23 @@ ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 #because of the upgrade option of pip (necessary), pip removes the target directory. We do not want the target directory to be cleaned.
 #so install the sip module in a temporary directory first and copy the file
 #to the install tree
+SET(SIP_LIB_PATH ${TULIP_PYTHON_NATIVE_FOLDER}/${SIP_LIB})
+SET(SIP_MODULE_SRC ${SIP_INCLUDE_DIR}/tulip_native_sip-${SIP_API}.0.tar.gz)
+SET(SIP_MODULE_OUTPUT ${SIP_INCLUDE_DIR}/install/tulip/native/${SIP_LIB})
+IF(NOT EXISTS ${SIP_MODULE_SRC} OR NOT EXISTS ${SIP_INCLUDE_DIR}/${SIP_H} OR NOT EXISTS ${SIP_MODULE_OUTPUT} )
+    MESSAGE(STATUS "Generating SIP module and include file")
+    execute_process(
+        COMMAND ${SIP_MODULE_PROG} --sdist --abi-version=${SIP_API} --sip-h --target-dir=${SIP_INCLUDE_DIR} ${SIP_MODULE}
+        COMMAND ${Python_EXECUTABLE} -m pip install --upgrade -t ${SIP_INCLUDE_DIR}/install ${SIP_MODULE_SRC}
+        COMMAND_ERROR_IS_FATAL ANY)
+ENDIF()
 ADD_CUSTOM_TARGET(${SIP_LIB} ALL
-                ${SIP_MODULE_PROG} --sdist --abi-version=${SIP_API} --sip-h --target-dir=${SIP_INCLUDE_DIR} ${SIP_MODULE}
-                COMMAND  ${Python_EXECUTABLE} -m pip install --upgrade -t ${SIP_INCLUDE_DIR}/install ${SIP_INCLUDE_DIR}/tulip_native_sip-${SIP_API}.0.tar.gz
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SIP_INCLUDE_DIR}/install/tulip/native/${SIP_LIB} ${TULIP_PYTHON_NATIVE_FOLDER}
-                COMMENT "Compiling and installing the Python SIP module"
+                COMMAND ${CMAKE_COMMAND} -E copy ${SIP_MODULE_OUTPUT} ${TULIP_PYTHON_NATIVE_FOLDER}
+                COMMENT "Installing the Python SIP module in the build tree"
                 VERBATIM)
 
-TULIP_INSTALL_PYTHON_FILES(tulip/native ${TULIP_PYTHON_NATIVE_FOLDER}/${SIP_LIB})
+TULIP_INSTALL_PYTHON_FILES(tulip/native ${SIP_LIB_PATH})
 
 IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
-  ADD_DEPENDENCIES(wheel ${SIP_LIB})
+  ADD_DEPENDENCIES(wheel ${SIP_LIB_PATH})
 ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)

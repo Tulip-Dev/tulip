@@ -116,7 +116,7 @@ X being the major version, Y the minor version, and Z the patch version.
 %End
 
 %MethodCode
-  sipRes = new std::string(TULIP_RELEASE);
+  sipRes = new std::string(TULIP_VERSION);
 %End
 
 //=====================================================================

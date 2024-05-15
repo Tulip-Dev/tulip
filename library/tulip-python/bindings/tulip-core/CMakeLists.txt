@@ -85,7 +85,7 @@ ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_PYTHON_BINDINGS_SRC}
     COMMAND ${CMAKE_COMMAND} -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR} -DBINARY_DIR=${CMAKE_CURRENT_BINARY_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/generatePropertiesBindings.cmake
     COMMAND ${SIP_BUILD} --verbose --protected-is-public --concatenate 8 --pep484-pyi --api-dir=${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Generating Python Bindings and API file for libtulip"
-    DEPENDS ${SIP_LIB} ${TULIP_SIP_FILES} ${STL_SIP_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/../../include/tulip/PythonCppTypesConverter.h VERBATIM)
+    DEPENDS ${TULIP_SIP_FILES} ${STL_SIP_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/../../include/tulip/PythonCppTypesConverter.h VERBATIM)
 
 TULIP_DISABLE_COMPILER_WARNINGS()
 
