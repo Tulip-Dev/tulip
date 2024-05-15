@@ -65,38 +65,38 @@ inline double tlpsqrt<double, long double>(long double a) {
 template <typename TYPE, size_t SIZE, typename OTYPE = double, typename DTYPE = TYPE>
 class Vector : public Array<TYPE, SIZE> {
 public:
-  inline VECTOR() {
+  inline Vector() {
     memset(this->data(), 0, SIZE * sizeof(TYPE));
   }
-  inline VECTOR(const Vector<TYPE, SIZE, OTYPE> &v) {
+  inline Vector(const Vector<TYPE, SIZE, OTYPE> &v) {
     set(v);
   }
-  inline VECTOR(const Vector<TYPE, SIZE + 1, OTYPE> &v) {
+  inline Vector(const Vector<TYPE, SIZE + 1, OTYPE> &v) {
     set(v);
   }
-  inline VECTOR(const TYPE x) {
+  inline Vector(const TYPE x) {
     fill(x);
   }
-  inline VECTOR(const TYPE x, const TYPE y) {
+  inline Vector(const TYPE x, const TYPE y) {
     if (int(SIZE) - 2 > 0)
       memset(this->data() + 2, 0, (SIZE - 2) * sizeof(TYPE));
     set(x, y);
   }
-  inline VECTOR(const TYPE x, const TYPE y, const TYPE z) {
+  inline Vector(const TYPE x, const TYPE y, const TYPE z) {
     if (int(SIZE) - 3 > 0)
       memset(this->data() + 3, 0, (SIZE - 3) * sizeof(TYPE));
     set(x, y, z);
   }
-  inline VECTOR(const Vector<TYPE, 2, OTYPE> &v, const TYPE z) {
+  inline Vector(const Vector<TYPE, 2, OTYPE> &v, const TYPE z) {
     set(v, z);
   }
-  inline VECTOR(const TYPE x, const TYPE y, const TYPE z, const TYPE w) {
+  inline Vector(const TYPE x, const TYPE y, const TYPE z, const TYPE w) {
     set(x, y, z, w);
   }
-  inline VECTOR(const Vector<TYPE, 2, OTYPE> &v, const TYPE z, const TYPE w) {
+  inline Vector(const Vector<TYPE, 2, OTYPE> &v, const TYPE z, const TYPE w) {
     set(v, z, w);
   }
-  inline VECTOR(const Vector<TYPE, 3, OTYPE> &v, const TYPE w) {
+  inline Vector(const Vector<TYPE, 3, OTYPE> &v, const TYPE w) {
     set(v, w);
   }
 
