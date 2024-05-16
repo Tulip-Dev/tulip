@@ -207,15 +207,17 @@ PythonInterpreter::PythonInterpreter()
   }
 
   if (!_wasInit) {
-#if PY_MINOR_VERSION < 11
-    Py_OptimizeFlag = 1;
-    Py_NoSiteFlag = 1;
-#else
     PyConfig config;
+    PyStatus status;
     PyConfig_InitPythonConfig(&config);
-    config.site_import = 1;
+    config.isolated = 1;
+
+    status = PyConfig_SetString(&config, &config.program_name, L"tulip");
+    if (PyStatus_Exception(status)) {
+      Py_ExitStatusException(status);
+    }
+    config.site_import = 0;
     config.optimization_level = 1;
-#endif
 
 // Fix for GDB debugging on windows when compiling with MinGW.
 // GDB contains an embedded Python interpreter that messes up Python Home value.
@@ -224,15 +226,9 @@ PythonInterpreter::PythonInterpreter()
 // So reset correct one to be able to debug it.
 #ifdef __MINGW32__
     QString pythonHome = PythonVersionChecker::getPythonHome();
-
     if (!pythonHome.isEmpty()) {
       static std::wstring pythonHomeWString = pythonHome.toStdWString();
-      auto homestr = const_cast<wchar_t *>(pythonHomeWString.c_str());
-#if PY_MINOR_VERSION < 11
-      Py_SetPythonHome(homestr);
-#else
-      config.home = homestr;
-#endif
+      config.home = const_cast<wchar_t *>(pythonHomeWString.c_str());
     }
 #endif
 
@@ -240,26 +236,12 @@ PythonInterpreter::PythonInterpreter()
     PyImport_AppendInittab("consoleutils", initconsoleutils);
     PyImport_AppendInittab("tuliputils", inittuliputils);
 
-    Py_InitializeEx(0);
-
-    int argc = 1;
-    static const std::wstring argv0 = L"tulip";
-    wchar_t *argv[1];
-    argv[0] = const_cast<wchar_t *>(argv0.c_str());
-#if PY_MINOR_VERSION < 11
-    PySys_SetArgv(argc, argv);
-#else
-    PyStatus status;
-    status = PyConfig_SetArgv(&config, argc, argv);
-    if (PyStatus_Exception(status)) {
-      Py_ExitStatusException(status);
-    }
     status = Py_InitializeFromConfig(&config);
-    PyConfig_Clear(&config);
     if (PyStatus_Exception(status)) {
       Py_ExitStatusException(status);
     }
-#endif
+    PyConfig_Clear(&config);
+
 
     mainThreadState = PyEval_SaveThread();
   }
@@ -364,7 +346,7 @@ PythonInterpreter::~PythonInterpreter() {
     // avoid display of invalid read/use of uninitialised value
     // when debugging with valgrind
     if (!TulipProgramExiting)
-      Py_Finalize();
+      Py_FinalizeEx();
   }
 
   delete consoleOuputEmitter;
