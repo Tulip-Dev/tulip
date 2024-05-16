@@ -242,7 +242,6 @@ PythonInterpreter::PythonInterpreter()
     }
     PyConfig_Clear(&config);
 
-
     mainThreadState = PyEval_SaveThread();
   }
 

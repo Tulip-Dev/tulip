@@ -63,9 +63,8 @@ static QString pythonHome(const QString &pythonVersion) {
 
   // Check if a path is a valid Python Home, meaning it is not empty
   // and contains the python executable
-  auto validPythonHome = [] (const QString &pythonHome) {
-    return !pythonHome.isEmpty() &&
-      QFileInfo(pythonHome + "/python.exe").exists();
+  auto validPythonHome = [](const QString &pythonHome) {
+    return !pythonHome.isEmpty() && QFileInfo(pythonHome + "/python.exe").exists();
   };
   if (validPythonHome(pythonHomeCurrentUser)) {
     return pythonHomeCurrentUser;
