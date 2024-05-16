@@ -19,31 +19,18 @@
 
 #include <tulip/PythonVersionChecker.h>
 
-#include <QProcess>
-#include <QRegularExpression>
-#include <QSettings>
-
-#include <iostream>
-
 using namespace tlp;
+
+// Windows specific functions
+#ifdef WIN32
+#include <QSettings>
 
 // Current Python versions
 static const char *pythonVersion[] = {"3.12", "3.11", "3.10", "3.9", "3.8", nullptr};
 
-// Windows specific functions
-#ifdef WIN32
-
 #include <QFileInfo>
 
 #include <windows.h>
-
-#ifndef MSYS2_PYTHON
-// Check if a path is a valid Python Home, meaning it is not empty and contains the python
-// executable
-static bool validPythonHome(const QString &pythonHome) {
-  return !pythonHome.isEmpty() && QFileInfo(pythonHome + "/python.exe").exists();
-}
-#endif
 
 // Function to get the path to Python home directory for a specific Python version.
 // Returns an empty string if the provided version is not installed on the host system.
@@ -74,6 +61,12 @@ static QString pythonHome(const QString &pythonVersion) {
   QString pythonHomeCurrentUser =
       winSettingsCurrentUser.value("Default").toString().replace("\\", "/");
 
+  // Check if a path is a valid Python Home, meaning it is not empty
+  // and contains the python executable
+  auto validPythonHome = [] (const QString &pythonHome) {
+    return !pythonHome.isEmpty() &&
+      QFileInfo(pythonHome + "/python.exe").exists();
+  };
   if (validPythonHome(pythonHomeCurrentUser)) {
     return pythonHomeCurrentUser;
   } else if (validPythonHome(pythonHomeAllUsers)) {
@@ -84,101 +77,24 @@ static QString pythonHome(const QString &pythonVersion) {
 
 #endif
 }
+#endif
 
-// Linux and Mac OS specific
+QStringList _installedVersions;
+bool _installedVersionsChecked(false);
+
+QString PythonVersionChecker::compiledVersion() {
+#ifdef TLP_PYTHON
+  return TLP_PYTHON;
 #else
-
-// Function which tries to run a specific version of the python interpreter.
-static bool runPython(const QString &version) {
-  QProcess pythonProcess;
-  pythonProcess.setProcessEnvironment(QProcessEnvironment::systemEnvironment());
-  pythonProcess.start(QString("python") + version, QStringList() << "--version");
-  return pythonProcess.waitForFinished(-1) && pythonProcess.exitStatus() == QProcess::NormalExit;
+  return QString();
+#endif
 }
 
-#endif
-
-#ifndef WIN32
-// Function to get the default Python version if any by running the python process.
-static QString getDefaultPythonVersionIfAny() {
-  QString defaultPythonVersion;
-  QProcess pythonProcess;
-
-  QString pythonCommand = "python3";
-
-  // Starting Python 3.4 the version number is printed on the standard output.
-  pythonProcess.setReadChannel(QProcess::StandardOutput);
-  pythonProcess.start(pythonCommand, QStringList() << "--version");
-  pythonProcess.waitForFinished(-1);
-
-  if (pythonProcess.exitStatus() == QProcess::NormalExit) {
-
-    QString result = pythonProcess.readAll();
-    if (result.isEmpty()) {
-      // no python3 exe, try with python
-      pythonCommand = "python";
-      pythonProcess.start(pythonCommand, QStringList() << "--version");
-      pythonProcess.waitForFinished(-1);
-      if (pythonProcess.exitStatus() != QProcess::NormalExit)
-        return defaultPythonVersion;
-
-      result = pythonProcess.readAll();
-    }
-
-    // looking for 3.X.Y
-    QRegularExpression versionRegexp("(3\\.[0-9]*\\.[0-9]*)");
-    QRegularExpressionMatch match;
-
-    if (result.indexOf(versionRegexp, 0, &match) != -1) {
-      defaultPythonVersion = match.captured(0);
-
-      // Check the binary type of the python executable (32 or 64 bits)
-      pythonProcess.start(
-          pythonCommand,
-          QStringList()
-              << "-c"
-              << "import struct;import sys;sys.stdout.write(str(struct.calcsize('P')*8))");
-      pythonProcess.waitForFinished(-1);
-      if (pythonProcess.readAll() != "64")
-        defaultPythonVersion = "";
-    }
-  }
-
-  return defaultPythonVersion;
-}
-#endif
-
-QStringList PythonVersionChecker::_installedVersions;
-bool PythonVersionChecker::_installedVersionsChecked(false);
-
-QStringList PythonVersionChecker::installedVersions() {
+#ifdef WIN32
+QString PythonVersionChecker::getPythonHome() {
+  QString pythonHomeDir;
 
   if (!_installedVersionsChecked) {
-
-// On Linux and Mac OS, we check the presence of Python by trying to
-// run the interpreter on a separate process
-#ifndef WIN32
-
-    int i = 0;
-
-    // Try to run pythonX.Y executable
-    while (pythonVersion[i]) {
-      if (runPython(pythonVersion[i])) {
-        _installedVersions.append(pythonVersion[i]);
-      }
-
-      ++i;
-    }
-
-    // Also try to run python executable
-    QString defaultPythonVersion = getDefaultPythonVersionIfAny();
-
-    if (!defaultPythonVersion.isEmpty() && !_installedVersions.contains(defaultPythonVersion)) {
-      _installedVersions.append(defaultPythonVersion);
-    }
-
-// On windows, we check the presence of Python by looking into the registry
-#else
 
     int i = 0;
 
@@ -189,31 +105,10 @@ QStringList PythonVersionChecker::installedVersions() {
 
       ++i;
     }
-
-#endif
-
     _installedVersionsChecked = true;
   }
 
-  return _installedVersions;
-}
-
-QString PythonVersionChecker::compiledVersion() {
-#ifdef TLP_PYTHON
-  return TLP_PYTHON;
-#else
-  return QString();
-#endif
-}
-
-bool PythonVersionChecker::isPythonVersionMatching() {
-  return installedVersions().contains(compiledVersion());
-}
-
-#ifdef WIN32
-QString PythonVersionChecker::getPythonHome() {
-  QString pythonHomeDir;
-  if (isPythonVersionMatching()) {
+  if (_installedVersions.contains(compiledVersion())) {
     pythonHomeDir = pythonHome(compiledVersion());
 // This is a hack for MinGW to allow the debugging of Tulip through GDB when compiled with Python
 // 3.X installed in a non standard way.

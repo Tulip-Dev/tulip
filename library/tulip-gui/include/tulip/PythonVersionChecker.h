@@ -29,15 +29,10 @@
 namespace tlp {
 class TLP_QT_SCOPE PythonVersionChecker {
 public:
-  static QStringList installedVersions();
   static QString compiledVersion();
-  static bool isPythonVersionMatching();
 #ifdef WIN32
   static QString getPythonHome();
 #endif
-private:
-  static QStringList _installedVersions;
-  static bool _installedVersionsChecked;
 };
 } // namespace tlp
 
