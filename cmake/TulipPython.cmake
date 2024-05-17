@@ -3,11 +3,11 @@ The selected folder path will be the first in the list returned by site.getsitep
 If no such folder is found, the path will be the one returned by site.getusersitepackages().
 This should only be used when packaging Tulip for a Linux distribution or MSYS2. [OFF|ON]")
 
-IF(LINUX AND TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   SET(PYTHON_COMPONENTS Interpreter Development.Module)
-ELSE(LINUX AND TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+ELSE(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   SET(PYTHON_COMPONENTS Interpreter Development)
-ENDIF(LINUX AND TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 
 FIND_PACKAGE(Python 3.8...<3.13 REQUIRED COMPONENTS ${PYTHON_COMPONENTS})
 
