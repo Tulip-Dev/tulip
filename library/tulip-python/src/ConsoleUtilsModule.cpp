@@ -125,10 +125,14 @@ static PyObject *consoleutils_ConsoleOutput_flush(PyObject *self, PyObject *) {
   Py_RETURN_NONE;
 }
 
+#if PY_MINOR<12
+#define Py_T_BOOL T_BOOL
+#endif
+
 static PyMemberDef consoleutils_ConsoleOutput_members[] = {
-    {const_cast<char *>("stderrflag"), T_BOOL, offsetof(consoleutils_ConsoleOutput, stderrflag), 0,
+    {const_cast<char *>("stderrflag"), Py_T_BOOL, offsetof(consoleutils_ConsoleOutput, stderrflag), 0,
      const_cast<char *>("flag for stderr")},
-    {const_cast<char *>("writeToConsole"), T_BOOL,
+    {const_cast<char *>("writeToConsole"), Py_T_BOOL,
      offsetof(consoleutils_ConsoleOutput, writeToConsole), 0,
      const_cast<char *>("flag for enabling/disabling console output")},
     {NULL, 0, 0, 0, NULL} /* Sentinel */

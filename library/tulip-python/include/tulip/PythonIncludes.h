@@ -30,7 +30,9 @@
 #if PY_MINOR < 11
 #include <frameobject.h>
 #endif
+#if PY_MINOR < 12
 #include <structmember.h>
+#endif
 #include <sip.h>
 
 #include <tulip/tulipconf.h>

@@ -38,6 +38,11 @@ ELSE(TULIP_PYTHON_SITE_INSTALL)
   SET(TulipPythonModulesInstallDir ${CMAKE_INSTALL_PREFIX}/${TulipLibInstallDir}/tulip/python)
 ENDIF(TULIP_PYTHON_SITE_INSTALL)
 
+MACRO(TULIP_DISABLE_COMPILER_WARNINGS_PYTHON)
+    TULIP_SET_CXX_COMPILER_FLAG("-Wno-old-style-cast -Wno-deprecated-copy -Wno-unused-variable")
+    TULIP_SET_C_COMPILER_FLAG("-Wno-old-style-cast -Wno-deprecated-copy -Wno-unused-variable")
+ENDMACRO(TULIP_DISABLE_COMPILER_WARNINGS_PYTHON)
+
 # When building tulip wheels we make a loop of cmake builds,
 # with only a change of Python_EXECUTABLE CMake variable;
 # so we need to unset the previous values of the CMake Python cache variables
