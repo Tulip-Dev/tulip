@@ -23,12 +23,13 @@
 // Need to include cmath before Python.h when compiling with MinGW and C++11 standard
 // to avoid a compilation error (see http://stackoverflow.com/questions/28683358/)
 #if defined(__MINGW32__)
-#include <math.h>
 #include <cmath>
 #endif
 
 #include <Python.h>
+#if PY_MINOR < 11
 #include <frameobject.h>
+#endif
 #include <structmember.h>
 #include <sip.h>
 
