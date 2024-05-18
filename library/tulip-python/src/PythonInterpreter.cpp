@@ -210,7 +210,7 @@ PythonInterpreter::PythonInterpreter()
     PyConfig config;
     PyStatus status;
     PyConfig_InitPythonConfig(&config);
-    config.install_signal_handlers=0;
+    config.install_signal_handlers = 0;
 
     status = PyConfig_SetString(&config, &config.program_name, L"tulip");
     if (PyStatus_Exception(status)) {
