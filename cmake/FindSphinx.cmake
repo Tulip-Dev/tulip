@@ -19,6 +19,10 @@
 # (To distribute this file outside of CMake, substitute the full
 #  License text for the above reference.)
 
+IF(NOT TULIP_BUILD_PYTHON_COMPONENTS)
+    FIND_PACKAGE(Python REQUIRED COMPONENTS Interpreter)
+ENDIF()
+
 IF(WIN32)
 STRING(REPLACE "python.exe" "Scripts/" SPHINX_PATH "${Python_EXECUTABLE}")
 ELSEIF(LINUX)
@@ -31,7 +35,7 @@ ELSE()
 SET(SPHINX_PATH "$ENV{HOME}/Library/Python/${Python_VERSION}")
 ENDIF()
 
-FIND_PROGRAM(SPHINX_EXECUTABLE NAMES sphinx-build${Python_VERSION_MAJOR} sphinx-build
+FIND_PROGRAM(SPHINX_EXECUTABLE NAMES sphinx-build3 sphinx-build
   HINTS ${SPHINX_PATH}
   PATHS /usr /usr/local /opt/local
   PATH_SUFFIXES bin
