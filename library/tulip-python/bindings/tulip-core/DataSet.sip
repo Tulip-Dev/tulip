@@ -131,7 +131,7 @@ bool setDataSetEntryFromPyObject(tlp::DataSet *dataSet, const std::string &key, 
 
 namespace tlp {
 
-struct DataSet /TypeHint="Dict[str, Any]", TypeHintValue="{}"/ {
+struct DataSet /TypeHint="Dict[str, Any]", TypeHintValue="{}", Deprecated/ {
 
 %TypeCode
 #include <tulip/PythonCppTypesConverter.h>

@@ -25,7 +25,7 @@
 
 namespace tlp {
 
-class StringCollection {
+class StringCollection /Deprecated/ {
 %TypeHeaderCode
 #include <tulip/StringCollection.h>
 %End
