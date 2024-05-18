@@ -125,7 +125,7 @@ static PyObject *consoleutils_ConsoleOutput_flush(PyObject *self, PyObject *) {
   Py_RETURN_NONE;
 }
 
-#if PY_MINOR < 12
+#if PY_MINOR_VERSION < 12
 #define Py_T_BOOL T_BOOL
 #endif
 

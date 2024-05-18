@@ -27,10 +27,10 @@
 #endif
 
 #include <Python.h>
-#if PY_MINOR < 11
+#if PY_MINOR_VERSION < 11
 #include <frameobject.h>
 #endif
-#if PY_MINOR < 12
+#if PY_MINOR_VERSION < 12
 #include <structmember.h>
 #endif
 #include <sip.h>
