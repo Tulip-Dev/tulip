@@ -1,5 +1,7 @@
 PATH c:\msys64\mingw64\bin;c:\msys64\usr\bin;c:\Windows\System32;%PATH%
 
+echo on
+
 rem first download nuget.exe needed to install mininaml version of python
 curl -o nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
 
