@@ -30,8 +30,8 @@ template<T1, T2>
 %End
 
 %ConvertToTypeCode
-  PyObject *itm1 = NULL;
-  PyObject *itm2 = NULL;
+  PyObject *itm1 = SIP_NULLPTR;
+  PyObject *itm2 = SIP_NULLPTR;
 
   const sipTypeDef* kpTypeDef1 = getSipType("T1");
 
@@ -45,7 +45,7 @@ template<T1, T2>
     return 0;
   }
 
-  if (sipIsErr == NULL) {
+  if (sipIsErr == SIP_NULLPTR) {
     if (!(PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2))
       return 0;
     
@@ -91,23 +91,23 @@ template<T1, T2>
   const sipTypeDef* kpTypeDef1 = getSipType("T1");
 
   if (!kpTypeDef1) {
-    return NULL;
+    return SIP_NULLPTR;
   }
 
   const sipTypeDef* kpTypeDef2 = getSipType("T2");
 
   if (!kpTypeDef2) {
-    return NULL;
+    return SIP_NULLPTR;
   }
 
   PyObject *pyTuple = PyTuple_New(2);
 
-  if (pyTuple == NULL) {
-    return NULL;
+  if (pyTuple == SIP_NULLPTR) {
+    return SIP_NULLPTR;
   }
 
-  PyObject *pyFirst = NULL;
-  PyObject *pySecond = NULL;
+  PyObject *pyFirst = SIP_NULLPTR;
+  PyObject *pySecond = SIP_NULLPTR;
 
   T1 *first = new T1(sipCpp->first);
   T2 *second = new T2(sipCpp->second);
@@ -115,7 +115,7 @@ template<T1, T2>
   pyFirst = sipConvertFromNewType(first, kpTypeDef1, sipTransferObj);
   pySecond = sipConvertFromNewType(second, kpTypeDef2, sipTransferObj);
 
-  if (pyFirst == NULL || pySecond == NULL || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
+  if (pyFirst == SIP_NULLPTR || pySecond == SIP_NULLPTR || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
     if (pyFirst) 
       Py_XDECREF(pyFirst);
     else
@@ -126,14 +126,14 @@ template<T1, T2>
       delete second;
     Py_XDECREF(pyTuple);
     
-    return NULL;
+    return SIP_NULLPTR;
   }
 
   if (PyTuple_SetItem(pyTuple, 1, pySecond)) {
     Py_XDECREF(pySecond);
     Py_XDECREF(pyTuple);
     
-    return NULL;
+    return SIP_NULLPTR;
   }
 
   return pyTuple;
@@ -147,8 +147,8 @@ template<T1*, T2*>
 %End
 
 %ConvertToTypeCode
-  PyObject *itm1 = NULL;
-  PyObject *itm2 = NULL;
+  PyObject *itm1 = SIP_NULLPTR;
+  PyObject *itm2 = SIP_NULLPTR;
 
   const sipTypeDef* kpTypeDef1 = getSipType("T1");
 
@@ -162,7 +162,7 @@ template<T1*, T2*>
     return 0;
   }
 
-  if (sipIsErr == NULL) {
+  if (sipIsErr == SIP_NULLPTR) {
     if (!(PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2))
       return 0;
     
@@ -185,8 +185,8 @@ template<T1*, T2*>
   int t1State = 0;
   int t2State = 0;
 
-  T1 *t1 = static_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, NULL, SIP_NOT_NONE, &t1State, sipIsErr));
-  T2 *t2 = static_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, NULL, SIP_NOT_NONE, &t2State, sipIsErr));
+  T1 *t1 = static_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, SIP_NULLPTR, SIP_NOT_NONE, &t1State, sipIsErr));
+  T2 *t2 = static_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, SIP_NULLPTR, SIP_NOT_NONE, &t2State, sipIsErr));
 
   if (*sipIsErr) {
     sipReleaseType(t1, kpTypeDef1, t1State);
@@ -212,21 +212,21 @@ template<T1*, T2*>
   const sipTypeDef* kpTypeDef1 = getSipType("T1");
 
   if (!kpTypeDef1) {
-    return NULL;
+    return SIP_NULLPTR;
   }
 
   const sipTypeDef* kpTypeDef2 = getSipType("T2");
 
   if (!kpTypeDef2) {
-    return NULL;
+    return SIP_NULLPTR;
   }
 
-  if (pyTuple == NULL) {
-    return NULL;
+  if (pyTuple == SIP_NULLPTR) {
+    return SIP_NULLPTR;
   }
 
-  PyObject *pyFirst = NULL;
-  PyObject *pySecond = NULL;
+  PyObject *pyFirst = SIP_NULLPTR;
+  PyObject *pySecond = SIP_NULLPTR;
 
   T1 *first = sipCpp->first;
   T2 *second = sipCpp->second;
@@ -234,21 +234,21 @@ template<T1*, T2*>
   pyFirst = sipConvertFromType(first, kpTypeDef1, sipTransferObj);
   pySecond = sipConvertFromType(second, kpTypeDef2, sipTransferObj);
 
-  if (pyFirst == NULL || pySecond == NULL || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
+  if (pyFirst == SIP_NULLPTR || pySecond == SIP_NULLPTR || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
     if (pyFirst) 
       Py_XDECREF(pyFirst);
     if (pySecond)
       Py_XDECREF(pySecond);
     Py_XDECREF(pyTuple);
     
-    return NULL;
+    return SIP_NULLPTR;
   }
 
   if (PyTuple_SetItem(pyTuple, 1, pySecond)) {
     Py_XDECREF(pySecond);
     Py_XDECREF(pyTuple);
     
-    return NULL;
+    return SIP_NULLPTR;
   }
 
   return pyTuple;
@@ -262,8 +262,8 @@ template<T1*, T2>
 %End
 
 %ConvertToTypeCode
-  PyObject *itm1 = NULL;	
-  PyObject *itm2 = NULL;
+  PyObject *itm1 = SIP_NULLPTR;
+  PyObject *itm2 = SIP_NULLPTR;
 
   const sipTypeDef* kpTypeDef1 = getSipType("T1");
 
@@ -277,7 +277,7 @@ template<T1*, T2>
     return 0;
   }
 
-  if (sipIsErr == NULL) {
+  if (sipIsErr == SIP_NULLPTR) {
     if (!(PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2))
       return 0;
     
@@ -300,7 +300,7 @@ template<T1*, T2>
   int t1State = 0;
   int t2State = 0;
 
-  T1 *t1 = static_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, NULL, SIP_NOT_NONE, &t1State, sipIsErr));
+  T1 *t1 = static_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, SIP_NULLPTR, SIP_NOT_NONE, &t1State, sipIsErr));
   T2 *t2 = static_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
 
   if (*sipIsErr) {
@@ -326,21 +326,21 @@ template<T1*, T2>
   const sipTypeDef* kpTypeDef1 = getSipType("T1");
 
   if (!kpTypeDef1) {
-    return NULL;
+    return SIP_NULLPTR;
   }
 
   const sipTypeDef* kpTypeDef2 = getSipType("T2");
 
   if (!kpTypeDef2) {
-    return NULL;
+    return SIP_NULLPTR;
   }
 
-  if (pyTuple == NULL) {
-    return NULL;
+  if (pyTuple == SIP_NULLPTR) {
+    return SIP_NULLPTR;
   }
 
-  PyObject *pyFirst = NULL;
-  PyObject *pySecond = NULL;
+  PyObject *pyFirst = SIP_NULLPTR;
+  PyObject *pySecond = SIP_NULLPTR;
 
   T1 *first = sipCpp->first;
   T2 *second = new T2(sipCpp->second);
@@ -348,7 +348,7 @@ template<T1*, T2>
   pyFirst = sipConvertFromType(first, kpTypeDef1, sipTransferObj);
   pySecond = sipConvertFromNewType(second, kpTypeDef2, sipTransferObj);
 
-  if (pyFirst == NULL || pySecond == NULL || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
+  if (pyFirst == SIP_NULLPTR || pySecond == SIP_NULLPTR || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
     if (pyFirst) 
       Py_XDECREF(pyFirst);
     if (pySecond)
@@ -357,13 +357,13 @@ template<T1*, T2>
       delete second;
     Py_XDECREF(pyTuple);
     
-    return NULL;
+    return SIP_NULLPTR;
   }
 
   if (PyTuple_SetItem(pyTuple, 1, pySecond)) {
     Py_XDECREF(pySecond);
     Py_XDECREF(pyTuple);
-    return NULL;
+    return SIP_NULLPTR;
   }
 
   return pyTuple;
@@ -377,8 +377,8 @@ template<T1, T2*>
 %End
 
 %ConvertToTypeCode
-  PyObject *itm1 = NULL;
-  PyObject *itm2 = NULL;
+  PyObject *itm1 = SIP_NULLPTR;
+  PyObject *itm2 = SIP_NULLPTR;
 
   const sipTypeDef* kpTypeDef1 = getSipType("T1");
 
@@ -392,7 +392,7 @@ template<T1, T2*>
     return 0;
   }
 
-  if (sipIsErr == NULL) {
+  if (sipIsErr == SIP_NULLPTR) {
     if (!(PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2))
       return 0;
     
@@ -416,7 +416,7 @@ template<T1, T2*>
   int t2State = 0;
 
   T1 *t1 = static_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
-  T2 *t2 = static_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, NULL, SIP_NOT_NONE, &t2State, sipIsErr));
+  T2 *t2 = static_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, SIP_NULLPTR, SIP_NOT_NONE, &t2State, sipIsErr));
 
   if (*sipIsErr) {
     sipReleaseType(t1, kpTypeDef1, t1State);
@@ -441,21 +441,21 @@ template<T1, T2*>
   const sipTypeDef* kpTypeDef1 = getSipType("T1");
 
   if (!kpTypeDef1) {
-    return NULL;
+    return SIP_NULLPTR;
   }
 
   const sipTypeDef* kpTypeDef2 = getSipType("T2");
 
   if (!kpTypeDef2) {
-    return NULL;
+    return SIP_NULLPTR;
   }
 
-  if (pyTuple == NULL) {
-    return NULL;
+  if (pyTuple == SIP_NULLPTR) {
+    return SIP_NULLPTR;
   }
 
-  PyObject *pyFirst = NULL;
-  PyObject *pySecond = NULL;
+  PyObject *pyFirst = SIP_NULLPTR;
+  PyObject *pySecond = SIP_NULLPTR;
 
   T1 *first = new T1(sipCpp->first);
   T2 *second = sipCpp->second;
@@ -463,7 +463,7 @@ template<T1, T2*>
   pyFirst = sipConvertFromNewType(first, kpTypeDef1, sipTransferObj);
   pySecond = sipConvertFromType(second, kpTypeDef2, sipTransferObj);
 
-  if (pyFirst == NULL || pySecond == NULL || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
+  if (pyFirst == SIP_NULLPTR || pySecond == SIP_NULLPTR || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
     if (pyFirst) 
       Py_XDECREF(pyFirst);
     else
@@ -472,14 +472,14 @@ template<T1, T2*>
       Py_XDECREF(pySecond);
     Py_XDECREF(pyTuple);
     
-    return NULL;
+    return SIP_NULLPTR;
   }
 
   if (PyTuple_SetItem(pyTuple, 1, pySecond)) {
     Py_XDECREF(pySecond);
     Py_XDECREF(pyTuple);
     
-    return NULL;
+    return SIP_NULLPTR;
   }
 
   return pyTuple;
@@ -492,10 +492,10 @@ template<T1, T2*>
 %End
 
 %ConvertToTypeCode
-  PyObject *itm1 = NULL;
-  PyObject *itm2 = NULL;
+  PyObject *itm1 = SIP_NULLPTR;
+  PyObject *itm2 = SIP_NULLPTR;
 
-  if (sipIsErr == NULL) {
+  if (sipIsErr == SIP_NULLPTR) {
     if (!(PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2))
       return 0;
     
@@ -531,17 +531,17 @@ template<T1, T2*>
 %ConvertFromTypeCode
   PyObject *pyTuple = PyTuple_New(2);
 
-  if (pyTuple == NULL) {
+  if (pyTuple == SIP_NULLPTR) {
     return 0;
   }
 
-  PyObject *pyFirst = NULL;
-  PyObject *pySecond = NULL;
+  PyObject *pyFirst = SIP_NULLPTR;
+  PyObject *pySecond = SIP_NULLPTR;
 
   pyFirst = PyLong_FromUnsignedLong(sipCpp->first);
   pySecond = PyLong_FromUnsignedLong(sipCpp->second);
 
-  if (pyFirst == NULL || pySecond == NULL || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
+  if (pyFirst == SIP_NULLPTR || pySecond == SIP_NULLPTR || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
     if (pyFirst)
       Py_XDECREF(pyFirst);
     

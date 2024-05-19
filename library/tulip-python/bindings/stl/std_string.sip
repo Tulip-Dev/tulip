@@ -31,7 +31,7 @@
 %End
 
 %ConvertToTypeCode
-  if (sipIsErr == NULL) {
+  if (sipIsErr == SIP_NULLPTR) {
     return PyUnicode_Check(sipPy);
   }
 

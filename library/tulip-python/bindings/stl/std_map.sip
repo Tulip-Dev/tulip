@@ -31,8 +31,8 @@ template<T1, T2>
 
 %ConvertToTypeCode
 
-  PyObject *key = NULL;
-  PyObject *val = NULL;
+  PyObject *key = SIP_NULLPTR;
+  PyObject *val = SIP_NULLPTR;
   Py_ssize_t pos = 0;
 
   const sipTypeDef* kpTypeDef1 = getSipType("T1");
@@ -47,7 +47,7 @@ template<T1, T2>
     return 0;
   }
 
-  if (sipIsErr == NULL) {
+  if (sipIsErr == SIP_NULLPTR) {
     if (!PyDict_Check(sipPy)) {
       return 0;
     }
@@ -92,31 +92,31 @@ template<T1, T2>
   const sipTypeDef* kpTypeDef1 = getSipType("T1");
 
   if (!kpTypeDef1) {
-    return NULL;
+    return SIP_NULLPTR;
   }
 
   const sipTypeDef* kpTypeDef2 = getSipType("T2");
 
   if (!kpTypeDef2) {
-    return NULL;
+    return SIP_NULLPTR;
   }
 
-  PyObject *pyDict = NULL;
+  PyObject *pyDict = SIP_NULLPTR;
   pyDict = PyDict_New();
-  if (pyDict == NULL) {
-    return NULL;
+  if (pyDict == SIP_NULLPTR) {
+    return SIP_NULLPTR;
   }
 
   for (std::map<T1, T2>::const_iterator it = sipCpp->begin(); it != sipCpp->end(); ++it) {
-    PyObject *key = NULL;
-    PyObject *val = NULL;
+    PyObject *key = SIP_NULLPTR;
+    PyObject *val = SIP_NULLPTR;
     T1 *cppKey = new T1(it->first);
     T2 *cppVal = new T2(it->second);
     
     key = sipConvertFromNewType(cppKey, kpTypeDef1, sipTransferObj);
     val = sipConvertFromNewType(cppVal, kpTypeDef2, sipTransferObj);
     
-    if (key == NULL || val == NULL || PyDict_SetItem(pyDict, key, val) < 0) {
+    if (key == SIP_NULLPTR || val == SIP_NULLPTR || PyDict_SetItem(pyDict, key, val) < 0) {
       Py_DECREF(pyDict);
 
       if (key) {
@@ -125,13 +125,13 @@ template<T1, T2>
         delete cppKey;
       }
 
-      if (val != NULL) {
+      if (val != SIP_NULLPTR) {
         Py_DECREF(val);
       } else {
         delete cppVal;
       }
 
-      return NULL;
+      return SIP_NULLPTR;
     }
     
     Py_DECREF(key);
@@ -149,8 +149,8 @@ template<T1, T2>
 %End
 
 %ConvertToTypeCode
-  PyObject *key = NULL;
-  PyObject *val = NULL;
+  PyObject *key = SIP_NULLPTR;
+  PyObject *val = SIP_NULLPTR;
   Py_ssize_t pos = 0;
 
   const sipTypeDef* kpTypeDef1 = getSipType("T1");
@@ -165,7 +165,7 @@ template<T1, T2>
     return 0;
   }
 
-  if (sipIsErr == NULL) {
+  if (sipIsErr == SIP_NULLPTR) {
     if (!PyDict_Check(sipPy)) {
       return 0;
     }
@@ -186,7 +186,7 @@ template<T1, T2>
     int t2State = 0;
     
     T1 *t1 = static_cast<T1 *>(sipConvertToType(key, kpTypeDef1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
-    T2 *t2 = static_cast<T2 *>(sipConvertToType(val, kpTypeDef2, NULL, SIP_NOT_NONE, &t2State, sipIsErr));
+    T2 *t2 = static_cast<T2 *>(sipConvertToType(val, kpTypeDef2, SIP_NULLPTR, SIP_NOT_NONE, &t2State, sipIsErr));
     
     if (*sipIsErr) {
       delete map;
@@ -212,31 +212,31 @@ template<T1, T2>
   const sipTypeDef* kpTypeDef1 = getSipType("T1");
 
   if (!kpTypeDef1) {
-    return NULL;
+    return SIP_NULLPTR;
   }
 
   const sipTypeDef* kpTypeDef2 = getSipType("T2");
 
   if (!kpTypeDef2) {
-    return NULL;
+    return SIP_NULLPTR;
   }
 
-  PyObject *pyDict = NULL;
+  PyObject *pyDict = SIP_NULLPTR;
   pyDict = PyDict_New();
-  if (pyDict == NULL) {
-    return NULL;
+  if (pyDict == SIP_NULLPTR) {
+    return SIP_NULLPTR;
   }
 
   for (std::map<T1, T2 *>::const_iterator it = sipCpp->begin(); it != sipCpp->end(); ++it) {
-    PyObject *key = NULL;
-    PyObject *val = NULL;
+    PyObject *key = SIP_NULLPTR;
+    PyObject *val = SIP_NULLPTR;
     T1 *cppKey = new T1(it->first);
     T2 *cppVal = it->second;
 
     key = sipConvertFromNewType(cppKey, kpTypeDef1, sipTransferObj);
     val = sipConvertFromType(cppVal, kpTypeDef2, sipTransferObj);
 
-    if (key == NULL || val == NULL || PyDict_SetItem(pyDict, key, val) < 0) {
+    if (key == SIP_NULLPTR || val == SIP_NULLPTR || PyDict_SetItem(pyDict, key, val) < 0) {
       Py_DECREF(pyDict);
       
       if (key) {
@@ -245,11 +245,11 @@ template<T1, T2>
         delete cppKey;
       }
       
-      if (val != NULL) {
+      if (val != SIP_NULLPTR) {
         Py_DECREF(val);
       }
       
-      return NULL;
+      return SIP_NULLPTR;
     }
 
     Py_DECREF(key);
@@ -268,8 +268,8 @@ template<T2>
 
 %ConvertToTypeCode
 
-  PyObject *key = NULL;
-  PyObject *val = NULL;
+  PyObject *key = SIP_NULLPTR;
+  PyObject *val = SIP_NULLPTR;
   Py_ssize_t pos = 0;
 
   const sipTypeDef* kpTypeDef2 = getSipType("T2");
@@ -278,7 +278,7 @@ template<T2>
       return 0;
   }
 
-  if (sipIsErr == NULL) {
+  if (sipIsErr == SIP_NULLPTR) {
     if (!PyDict_Check(sipPy)) {
       return 0;
     }
@@ -321,38 +321,38 @@ template<T2>
   const sipTypeDef* kpTypeDef2 = getSipType("T2");
 
   if (!kpTypeDef2) {
-      return NULL;
+      return SIP_NULLPTR;
   }
 
-  PyObject *pyDict = NULL;
+  PyObject *pyDict = SIP_NULLPTR;
   pyDict = PyDict_New();
-  if (pyDict == NULL) {
-    return NULL;
+  if (pyDict == SIP_NULLPTR) {
+    return SIP_NULLPTR;
   }
 
   for (std::map<float, T2>::const_iterator it = sipCpp->begin(); it != sipCpp->end(); ++it) {
-    PyObject *key = NULL;
-    PyObject *val = NULL;
+    PyObject *key = SIP_NULLPTR;
+    PyObject *val = SIP_NULLPTR;
     float cppKey = it->first;
     T2 *cppVal = new T2(it->second);
     
     key = PyFloat_FromDouble(cppKey);
     val = sipConvertFromNewType(cppVal, kpTypeDef2, sipTransferObj);
     
-    if (key == NULL || val == NULL || PyDict_SetItem(pyDict, key, val) < 0) {
+    if (key == SIP_NULLPTR || val == SIP_NULLPTR || PyDict_SetItem(pyDict, key, val) < 0) {
       Py_DECREF(pyDict);
       
       if (key) {
         Py_DECREF(key);
       } 
       
-      if (val != NULL) {
+      if (val != SIP_NULLPTR) {
         Py_DECREF(val);
       } else {
         delete cppVal;
       }
       
-      return NULL;
+      return SIP_NULLPTR;
     }
     
     Py_DECREF(key);
