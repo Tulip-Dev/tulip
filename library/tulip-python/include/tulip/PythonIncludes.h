@@ -26,6 +26,7 @@
 #include <cmath>
 #endif
 
+#define PY_SSIZE_T_CLEAN
 #include <Python.h>
 #if PY_MINOR_VERSION < 11
 #include <frameobject.h>
