@@ -1,4 +1,4 @@
-PATH c:\msys64\mingw64\bin;c:\msys64\usr\bin;c:\Windows\System32;%PATH%
+PATH c:\msys64\ucrt64\bin;c:\msys64\usr\bin;c:\Windows\System32;%PATH%
 
 echo on
 
@@ -20,13 +20,13 @@ pacman --noconfirm -S --needed base-devel
 
 rem Always install latest GCC toolchain in order to detect possible build failures
 rem when its version evolves
-pacman --noconfirm -S --needed mingw-w64-x86_64-toolchain
+pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-toolchain
 
 rem Install the relevant native dependencies
-pacman --noconfirm -S --needed mingw-w64-x86_64-cmake
-pacman --noconfirm -S --needed mingw-w64-x86_64-ccache
-pacman --noconfirm -S --needed mingw-w64-x86_64-yajl
-pacman --noconfirm -S --needed mingw-w64-x86_64-qhull
+pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-cmake
+pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-ccache
+pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-yajl
+pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-qhull
 
 rem Install supported version of python with nuget
 

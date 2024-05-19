@@ -1,5 +1,5 @@
 rem add the needed paths
-PATH C:\msys64\mingw64\bin;C:\msys64\usr\bin;%PATH%
+PATH C:\msys64\ucrt64\bin;C:\msys64\usr\bin;%PATH%
 
 echo on
 
@@ -39,15 +39,15 @@ pacman --noconfirm -S --needed base-devel
 
 rem Always install latest GCC toolchain in order to detect possible build failures
 rem when its version evolves
-pacman --noconfirm -S --needed mingw-w64-x86_64-toolchain
+pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-toolchain
 
 rem Install the relevant native dependencies
-pacman --noconfirm -S --needed mingw-w64-x86_64-cmake
-pacman --noconfirm -S --needed mingw-w64-x86_64-ccache
-pacman --noconfirm -S --needed mingw-w64-x86_64-yajl
-pacman --noconfirm -S --needed mingw-w64-x86_64-qhull
-pacman --noconfirm -S --needed mingw-w64-x86_64-cppunit
-pacman --noconfirm -S --needed mingw-w64-x86_64-zstd
+pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-cmake
+pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-ccache
+pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-yajl
+pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-qhull
+pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-cppunit
+pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-zstd
 
 if not defined TULIP_BUILD_CORE_ONLY (
   set TULIP_BUILD_CORE_ONLY=OFF
@@ -66,10 +66,10 @@ rem Install sphinx for Python 3
 rem Install sip
   pip install sip
 rem install_complete_tulip_build_dependencies
-  pacman --noconfirm -S --needed mingw-w64-x86_64-freetype
-  pacman --noconfirm -S --needed mingw-w64-x86_64-glew
-  pacman --noconfirm -S --needed mingw-w64-x86_64-qt5-base
-  pacman --noconfirm -S --needed mingw-w64-x86_64-qt5-tools
+  pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-freetype
+  pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-glew
+  pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-qt5-base
+  pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-qt5-tools
 ) else (
   set TULIP_BUILD_DOC=""
 )
