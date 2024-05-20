@@ -98,6 +98,7 @@ if platform.system() == 'Windows':
     # to import the modules and copy them to the wheel native folder
     command = ('"${CMAKE_COMMAND}" -DCWD=%s '
                '-DLIBRARY_PATHS=${CMAKE_LIBRARY_PATH} '
+               '-DPython_SOABI=@Python_SOABI@ '
                '-P copyTulipCoreDllDependencies.cmake') % os.getcwd()
     p = subprocess.call(command, shell=True)
 elif platform.system() == 'Darwin':
