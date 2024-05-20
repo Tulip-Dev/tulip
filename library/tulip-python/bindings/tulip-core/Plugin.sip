@@ -144,7 +144,7 @@ class PluginFactory {
 public:
 
   virtual tlp::Plugin* createPluginObject(tlp::PluginContext* context) = 0 /Factory/;
-
+  virtual ~PluginFactory();
   void registerFactory();
 %MethodCode
   tlp::PluginFactory::registerFactory(sipCpp);

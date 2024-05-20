@@ -267,6 +267,7 @@ class TLP_SCOPE PluginFactory {
 public:
   virtual tlp::Plugin *createPluginObject(tlp::PluginContext *context) = 0;
   static void registerFactory(PluginFactory *);
+  virtual ~PluginFactory() {}
 };
 ///@endcond
 
