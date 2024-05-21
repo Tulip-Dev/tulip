@@ -237,7 +237,19 @@ PythonInterpreter::PythonInterpreter()
     if (PyStatus_Exception(status)) {
       Py_ExitStatusException(status);
     }
-    PyConfig_Clear(&config);
+#ifdef WIN32
+    // crash on windows 10, but not on windows 11
+    // so check for windows 10.
+    // According to https://ss64.com/nt/ver.html
+    // the "Major version.build" of windows 10 versions
+    // always begins with 10.0.1
+    QProcess proc;
+    proc.start("cmd.exe", {"/C", "ver"});
+    proc.waitForFinished();
+    QString version(proc.readAllStandardOutput());
+    if (version.indexOf("windows") > 0 && version.indexOf("10.0.1") == -1)
+#endif
+      PyConfig_Clear(&config);
 
     mainThreadState = PyEval_SaveThread();
   }
