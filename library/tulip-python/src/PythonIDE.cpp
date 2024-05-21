@@ -108,11 +108,7 @@ static QString cleanPropertyName(const QString &propertyName) {
     }
   }
 
-  QString builtinModName = "__builtin__";
-
-  if (PythonInterpreter::getInstance()->getPythonVersion() >= 3.0) {
-    builtinModName = "builtins";
-  }
+  QString builtinModName = "builtins";
 
   PythonInterpreter::getInstance()->importModule(builtinModName);
   static QVector<QString> builtinDictContent =

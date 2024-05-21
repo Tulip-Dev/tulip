@@ -147,7 +147,7 @@ The plug-ins directory can be defined in different ways, given by order of preva
 
 //=====================================================================
 
-void loadPlugins(tlp::PluginLoader *plug=0);
+void loadPlugins(tlp::PluginLoader *plug=SIP_NULLPTR);
 %Docstring
 tlp.loadPlugins()
 
@@ -163,7 +163,7 @@ by calling the :func:`tlp.initTulipLib` function.
 
 //=====================================================================
 
-void loadPluginsFromDir(const std::string &pluginsDir, tlp::PluginLoader *plug=0, bool loadPythonPlugins=true);
+void loadPluginsFromDir(const std::string &pluginsDir, tlp::PluginLoader *plug=SIP_NULLPTR, bool loadPythonPlugins=true);
 %Docstring
 tlp.loadPluginsFromDir(pluginsDir)
 
@@ -191,7 +191,7 @@ each subdirectory will be visited to search for plugins to load.
 
 //=====================================================================
 
-bool loadPlugin(const std::string &filename, tlp::PluginLoader *plug=0);
+bool loadPlugin(const std::string &filename, tlp::PluginLoader *plug=SIP_NULLPTR);
 %Docstring
 tlp.loadPlugin(filename)
 
@@ -219,7 +219,7 @@ Returns :const:`True` if the plugin was correctly loaded.
 
 //=====================================================================
 
-void loadPluginsCheckDependencies(tlp::PluginLoader* loader=0);
+void loadPluginsCheckDependencies(tlp::PluginLoader* loader=SIP_NULLPTR);
 %Docstring
 tlp.loadPluginsCheckDependencies()
 
@@ -234,7 +234,7 @@ it is unloaded and removed from the current plugins database.
 
 //=====================================================================
 
-SIP_PYOBJECT getDefaultPluginParameters(const std::string &pluginName, tlp::Graph *graph = 0);
+SIP_PYOBJECT getDefaultPluginParameters(const std::string &pluginName, tlp::Graph *graph = SIP_NULLPTR);
 %Docstring
 tlp.getDefaultPluginParameters(pluginName, graph=None)
 

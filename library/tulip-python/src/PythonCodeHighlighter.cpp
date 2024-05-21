@@ -91,11 +91,7 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent, bool /*darkB
                        << "\\^"
                        << "\\|";
 
-  QString builtinModName = "__builtin__";
-
-  if (PythonInterpreter::getInstance()->getPythonVersion() >= 3.0) {
-    builtinModName = "builtins";
-  }
+  QString builtinModName = "builtins";
 
   if (PythonInterpreter::getInstance()->runString(QString("import ") + builtinModName)) {
     QVector<QString> builtinDictContent =

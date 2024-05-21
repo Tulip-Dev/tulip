@@ -23,7 +23,7 @@
 // | (https://sourceforge.net/projects/booggie/)                             |
 // +-------------------------------------------------------------------------+
 
-%Module(name=_tulip, keyword_arguments="Optional")
+%Module(name=_tulip, all_raise_py_exception = True, py_ssize_t_clean = True, keyword_arguments="Optional")
 
 // we define the NO_LIMIT_DOC feature
 // to deal with the limit for string constants length of Visual Studio
@@ -135,7 +135,7 @@ inline const std::vector<tlp::Vec3f>& getValue(const std::vector<tlp::Vec3f> *va
 }
 
 template <typename T>
-bool pluginExists(std::string pluginName) {
+bool pluginExists(const std::string &pluginName) {
   if (typeid(T).name() == typeid(tlp::Algorithm).name()) {
     std::list<std::string> algoList = tlp::PluginLister::availablePlugins<tlp::Algorithm>();
     std::list<std::string> propAlgoList = tlp::PluginLister::availablePlugins<tlp::PropertyAlgorithm>();
@@ -296,10 +296,7 @@ bool isValidGraphSelection(const tlp::Graph *graph, tlp::BooleanProperty *select
 }
 
 std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
-  PyObject *utf8Str = PyUnicode_AsUTF8String(pyUnicodeObj);
-  std::string ret(PyBytes_AsString(utf8Str));
-  Py_DECREF(utf8Str);
-  return ret;
+  return std::string(PyUnicode_AsUTF8(pyUnicodeObj));
 }
 
 PyObject* evalPythonStatement(const std::string &pythonStatement) {

@@ -226,7 +226,7 @@ static int consoleutils_ConsoleInput_init(consoleutils_ConsoleInput *, PyObject 
 /* This redirects stdin from the calling script. */
 static PyObject *consoleutils_ConsoleInput_readline(PyObject *, PyObject *) {
   QString line = PythonInterpreter::getInstance()->readLineFromConsole();
-  return PyUnicode_FromString(line.toLatin1().data());
+  return PyUnicode_FromString(line.toUtf8().data());
 }
 
 static PyMemberDef consoleutils_ConsoleInput_members[] = {

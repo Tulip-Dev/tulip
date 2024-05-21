@@ -4,13 +4,6 @@ IF(WIN32)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDLL_TULIP_PYTHON")
 ENDIF(WIN32)
 
-# Visual Studio has a limit for string constants length
-# so we define the sip feature NO_LIMIT_DOC in Module.sip
-# to avoid the compiler error (fatal error C1091)
-IF(MSVC)
-  SET(SIP_FLAGS -x NO_LIMIT_DOC)
-ENDIF()
-
 SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/AcyclicTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/AbstractProperty.sip.in

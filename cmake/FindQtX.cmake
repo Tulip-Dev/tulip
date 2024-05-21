@@ -165,9 +165,3 @@ ELSE()
     QT_ADD_RESOURCES(${outfiles} ${ARGN})
   ENDMACRO()
 ENDIF()
-
-# With MinGW, remove the -fPIC compiler option as it is not needed and
-# generates a lot of warnings
-IF(MINGW)
-  STRING(REPLACE "-fPIC" "" ${QT}Widgets_EXECUTABLE_COMPILE_FLAGS "${${QT}Widgets_EXECUTABLE_COMPILE_FLAGS}")
-ENDIF(MINGW)

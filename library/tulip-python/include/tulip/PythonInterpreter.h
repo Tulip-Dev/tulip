@@ -130,8 +130,6 @@ public:
 
   QString getPythonFullVersionStr() const;
 
-  double getPythonVersion() const;
-
   QString getPythonShellBanner();
 
   void setDefaultSIGINTHandler();

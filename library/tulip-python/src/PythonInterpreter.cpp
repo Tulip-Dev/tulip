@@ -92,10 +92,7 @@ def printObjectClass(obj):
 )";
 
 static QString convertPythonUnicodeObjectToQString(PyObject *pyUnicodeObj) {
-  PyObject *utf8Str = PyUnicode_AsUTF8String(pyUnicodeObj);
-  QString ret = QString::fromUtf8(PyBytes_AsString(utf8Str));
-  decrefPyObject(utf8Str);
-  return ret;
+  return QString(PyUnicode_AsUTF8(pyUnicodeObj));
 }
 
 static bool scriptPaused = false;
@@ -944,10 +941,6 @@ void PythonInterpreter::setErrorOutputEnabled(const bool enableOutput) {
 
 bool PythonInterpreter::errorOutputEnabled() const {
   return _errorOutputEnabled;
-}
-
-double PythonInterpreter::getPythonVersion() const {
-  return atof(QStringToTlpString(_pythonVersion).c_str());
 }
 
 QString PythonInterpreter::getPythonFullVersionStr() const {
