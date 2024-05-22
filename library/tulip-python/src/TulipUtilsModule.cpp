@@ -119,7 +119,7 @@ static PyObject *tuliputils_setProcessQtEvents(PyObject *, PyObject *o) {
   int i;
 
   if (!PyArg_ParseTuple(o, "i", &i))
-    return NULL;
+    return nullptr;
 
   PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(i > 0);
 
@@ -135,7 +135,7 @@ static PyMethodDef tulipUtilsMethods[] = {
     {"runGraphScript", tuliputils_runGraphScript, METH_VARARGS,
      "Allow to execute a script from a script."},
     {"setProcessQtEvents", tuliputils_setProcessQtEvents, METH_VARARGS, ""},
-    {NULL, NULL, 0, NULL} /* Sentinel */
+    {nullptr, nullptr, 0, nullptr} /* Sentinel */
 };
 
 static struct PyModuleDef tulipUtilsModuleDef = {
@@ -144,10 +144,10 @@ static struct PyModuleDef tulipUtilsModuleDef = {
     "",                /* m_doc */
     -1,                /* m_size */
     tulipUtilsMethods, /* m_methods */
-    NULL,              /* m_reload */
-    NULL,              /* m_traverse */
-    NULL,              /* m_clear */
-    NULL,              /* m_free */
+    nullptr,              /* m_reload */
+    nullptr,              /* m_traverse */
+    nullptr,              /* m_clear */
+    nullptr,              /* m_free */
 };
 
 // This is called via the PyImport_AppendInittab mechanism called

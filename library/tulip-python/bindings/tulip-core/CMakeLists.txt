@@ -172,7 +172,7 @@ TULIP_INSTALL_PYTHON_FILES(tulip/native ${LibTulipCorePythonBindingsName})
 
 
 IF(NOT TULIP_BUILD_CORE_ONLY)
-  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
+  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/build/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
 ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 
 SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_CLEAN_FILES "build;tulip_module;BooleanProperty.sip;ColorProperty.sip;DoubleProperty.sip;IntegerProperty.sip;LayoutProperty.sip;SizeProperty.sip;StringProperty.sip")

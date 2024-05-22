@@ -574,12 +574,12 @@ os.symlink(certifi.where(), openssl_cafile))";
           SLOT(saveAllPlugins()));
 
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) +
-                                          "/apiFiles/_tulip.api");
+                                          "/apiFiles/tulip.api");
   APIDataBase::getInstance()->loadApiFile(
       tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/Python-" +
       PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) +
-                                          "/apiFiles/_tulipgui.api");
+                                          "/apiFiles/tulipgui.api");
 }
 
 PythonIDE::~PythonIDE() {

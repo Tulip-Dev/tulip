@@ -82,6 +82,6 @@ TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} PUBLIC ${LibTulipCoreName
 TULIP_INSTALL_PYTHON_FILES(tulipgui ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py)
 TULIP_INSTALL_PYTHON_FILES(tulipgui/native ${LibTulipGUIPythonBindingsName})
 
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/build/_tulipgui.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/build/tulipgui.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
 
 SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_CLEAN_FILES "build;tulipgui_module")
