@@ -50,10 +50,11 @@ Python-310\tools\python.exe -m pip install --upgrade pip
 Python-310\tools\python.exe -m pip install wheel sip
 
 rem Python 3.11.9
-nuget.exe install python -Version 3.11.9 -ExcludeVersion -OutputDirectory .
-mv python Python-311
-Python-311\tools\python.exe -m pip install --upgrade pip
-Python-311\tools\python.exe -m pip install wheel sip
+rem temporarily removed to test the other versions
+rem nuget.exe install python -Version 3.11.9 -ExcludeVersion -OutputDirectory .
+rem mv python Python-311
+rem Python-311\tools\python.exe -m pip install --upgrade pip
+rem Python-311\tools\python.exe -m pip install wheel sip
 
 rem Python 3.12.3
 nuget.exe install python -Version 3.12.3 -ExcludeVersion -OutputDirectory .
