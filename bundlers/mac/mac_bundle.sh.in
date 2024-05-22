@@ -102,7 +102,7 @@ mv bin/tulip MacOS/Tulip
 # (not processed by macdeployqt as they are suffixed by .so instead of .dylib)
 if [ "$PYTHON_BUILD" = "ON" ]
 then
-/tmp/macdeployqt ${DEST_DIR}/application/Tulip.app -qtdir=/opt/local/libexec/qt5 -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_tulip.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_stl.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/sip.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulipgui/native/_tulipgui.so -executable=${DEST_DIR}/application/Tulip.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python -executable=${DEST_DIR}/application/Tulip.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Resources/Python.app/Contents/MacOS/Python
+/tmp/macdeployqt ${DEST_DIR}/application/Tulip.app -qtdir=/opt/local/libexec/qt5 -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_tulip.cpython*.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_stl.cpython*.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/sip.cpython*.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulipgui/native/_tulipgui.cpython*.so -executable=${DEST_DIR}/application/Tulip.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python -executable=${DEST_DIR}/application/Tulip.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Resources/Python.app/Contents/MacOS/Python
 
 # ensure embedded python framework will be found
 # when loading all libs related to python
