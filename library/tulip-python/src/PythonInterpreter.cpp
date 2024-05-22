@@ -47,6 +47,7 @@
 #include <dlfcn.h>
 #else
 #include <windows.h>
+#include <QProcess>
 #endif
 
 using namespace tlp;
