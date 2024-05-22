@@ -299,11 +299,11 @@ static struct PyModuleDef consoleutilsModuleDef = {
     "consoleutils", /* m_name */
     "",             /* m_doc */
     -1,             /* m_size */
-    nullptr,           /* m_methods */
-    nullptr,           /* m_reload */
-    nullptr,           /* m_traverse */
-    nullptr,           /* m_clear */
-    nullptr,           /* m_free */
+    nullptr,        /* m_methods */
+    nullptr,        /* m_reload */
+    nullptr,        /* m_traverse */
+    nullptr,        /* m_clear */
+    nullptr,        /* m_free */
 };
 
 // This is called via the PyImport_AppendInittab mechanism called
