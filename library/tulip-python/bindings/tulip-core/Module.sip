@@ -179,8 +179,6 @@ extern bool isValidGraphSelection(const tlp::Graph *graph, tlp::BooleanProperty 
 
 extern PyObject* evalPythonStatement(const std::string &pythonStatement);
 
-extern std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj);
-
 extern bool isTupleAndCanConvertToVec3fType(PyObject *pyObj);
 
 template <typename VEC_TYPE>
@@ -295,10 +293,6 @@ bool isValidGraphSelection(const tlp::Graph *graph, tlp::BooleanProperty *select
   return true;
 }
 
-std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
-  return std::string(PyUnicode_AsUTF8(pyUnicodeObj));
-}
-
 PyObject* evalPythonStatement(const std::string &pythonStatement) {
   PyObject *pName = PyUnicode_FromString("__main__");
   PyObject *pMainModule = PyImport_Import(pName);
@@ -339,7 +333,7 @@ bool isTupleAndCanConvertToVec3fType(PyObject *pyObj) {
 
 %End
 
-%Import ../stl/Module.sip
+%Include stl.sip
 
 %Include Iterator.sip
 %Include MapIterator.sip

@@ -5,7 +5,7 @@ build-backend = "sipbuild.api"
 
 # Specify the PEP 566 metadata for the project.
 [project]
-name = "_tulipgui"
+name = "tulipgui"
 version = "@Tulip_VERSION@"
 
 [tool.sip.bindings._tulipgui]
@@ -15,5 +15,5 @@ sip-file="Module.sip"
 abi-version="@SIP_API@"
 compile=false
 sip-files-dir="@CMAKE_CURRENT_SOURCE_DIR@"
-sip-include-dirs=["@CMAKE_CURRENT_BINARY_DIR@/../tulip-core"]
+sip-include-dirs=["@CMAKE_CURRENT_BINARY_DIR@/../tulip-core", "@CMAKE_CURRENT_SOURCE_DIR@/../stl"]
 sip-module="@SIP_MODULE@"

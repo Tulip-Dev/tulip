@@ -17,34 +17,14 @@
  *
  */
 
-// +-------------------------------------------------------------------------+
-// | Tulip Python Bindings                                                   |
-// | inspired from bindings by the Booggie project development team          |
-// | (https://sourceforge.net/projects/booggie/)                             |
-// +-------------------------------------------------------------------------+
-
-%Module ( name = _stl, all_raise_py_exception = True, py_ssize_t_clean = True)
-
 %ModuleHeaderCode
 #include <string>
-
-extern void printErrorMessage(const std::string &errMsg);
 
 extern std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj);
 
 %End
 
 %ModuleCode
-#include <string>
-void printErrorMessage(const std::string &errMsg) {
-  std::string pythonCode = 
-  "import sys\n"
-  "sys.stderr.write(\"";
-  pythonCode += errMsg;
-  pythonCode += "\\n\")";
-  PyRun_SimpleString(pythonCode.c_str());
-}
-
 std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
   return std::string(PyUnicode_AsUTF8(pyUnicodeObj));
 }

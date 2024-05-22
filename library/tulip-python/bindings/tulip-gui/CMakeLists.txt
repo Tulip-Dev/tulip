@@ -14,6 +14,7 @@ SET(TULIP_GUI_PYTHON_BINDINGS_SRC
     ${TULIPGUI_BINDINGS_DIR}/sip_tulipguipart0.cpp
     ${TULIPGUI_BINDINGS_DIR}/sip_tulipguipart1.cpp
     ${TULIPGUI_BINDINGS_DIR}/sip_tulipguipart2.cpp
+    ${TULIPGUI_BINDINGS_DIR}/sip_tulipguipart3.cpp
 )
 
 QTX_SET_INCLUDES_AND_DEFINITIONS()
@@ -24,9 +25,9 @@ QTX_ADD_RESOURCES(tulipgui_RCC_SRCS TulipGui.qrc)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/pyproject.toml.in ${CMAKE_CURRENT_BINARY_DIR}/pyproject.toml @ONLY)
 
 ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_GUI_PYTHON_BINDINGS_SRC}
-COMMAND ${SIP_BUILD} --verbose --protected-is-public --concatenate 3 --api-dir=${CMAKE_CURRENT_BINARY_DIR}
+COMMAND ${SIP_BUILD} --verbose --protected-is-public --concatenate 4 --api-dir=${CMAKE_CURRENT_BINARY_DIR}
   COMMENT "Generating Python Bindings and API file for libtulip-gui"
-  DEPENDS ${TULIP_GUI_SIP_FILES} ${TULIP_SIP_FILES} ${STL_SIP_FILES} ${tulipguiutils_MOC} ${tulipgui_RCC_SRCS}  VERBATIM)
+  DEPENDS ${TULIP_GUI_SIP_FILES} ${TULIP_SIP_FILES} ${tulipguiutils_MOC} ${tulipgui_RCC_SRCS}  VERBATIM)
 
 SET(TULIP_GUI_PYTHON_BINDINGS_SRC ${TULIP_GUI_PYTHON_BINDINGS_SRC} TulipViewsUtils.cpp ${tulipguiutils_MOC} ${tulipgui_RCC_SRCS})
 

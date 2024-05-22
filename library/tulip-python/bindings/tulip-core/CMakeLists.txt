@@ -54,6 +54,15 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Vector.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/WithDependency.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/WithParameter.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/../stl/stl.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/../stl/std_vector.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/../stl/std_string.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/../stl/std_set.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/../stl/std_pair.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/../stl/std_ostream.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/../stl/std_map.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/../stl/std_list.sip
+
     CACHE INTERNAL ""
 )
 
@@ -66,15 +75,19 @@ SET(TULIP_PYTHON_BINDINGS_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart5.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart6.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart7.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart8.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart9.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart10.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart11.cpp
 )
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/pyproject.toml.in ${CMAKE_CURRENT_BINARY_DIR}/pyproject.toml @ONLY)
 
 ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_PYTHON_BINDINGS_SRC}
     COMMAND ${CMAKE_COMMAND} -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR} -DBINARY_DIR=${CMAKE_CURRENT_BINARY_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/generatePropertiesBindings.cmake
-    COMMAND ${SIP_BUILD} --verbose --protected-is-public --concatenate 8 --pep484-pyi --api-dir=${CMAKE_CURRENT_BINARY_DIR}
+    COMMAND ${SIP_BUILD} --verbose --protected-is-public --concatenate 12 --pep484-pyi --api-dir=${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Generating Python Bindings and API file for libtulip"
-    DEPENDS ${TULIP_SIP_FILES} ${STL_SIP_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/../../include/tulip/PythonCppTypesConverter.h VERBATIM)
+    DEPENDS ${TULIP_SIP_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/../../include/tulip/PythonCppTypesConverter.h VERBATIM)
 
 TULIP_DISABLE_COMPILER_WARNINGS_PYTHON()
 
@@ -102,8 +115,6 @@ SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES RUNTIME_OUTPU
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL ${TULIP_PYTHON_NATIVE_FOLDER})
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${TULIP_PYTHON_NATIVE_FOLDER})
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${TULIP_PYTHON_NATIVE_FOLDER})
-
-ADD_DEPENDENCIES(${LibTulipCorePythonBindingsName} ${LibStlPythonBindingsName})
 
 ADD_CUSTOM_TARGET(copyTulipInitPy ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py ${TULIP_PYTHON_FOLDER}/__init__.py
     COMMENT "Copying tulip-core module __init__.py file"

@@ -5,7 +5,7 @@ build-backend = "sipbuild.api"
 
 # Specify the PEP 566 metadata for the project.
 [project]
-name = "_tulip"
+name = "tulip"
 version = "@Tulip_VERSION@"
 
 [tool.sip.bindings._tulip]
