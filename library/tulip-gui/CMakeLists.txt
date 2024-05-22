@@ -1,7 +1,6 @@
 IF(WIN32)
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDLL_TULIP_QT")
+    add_compile_definitions("DLL_TULIP_QT")
 ENDIF(WIN32)
-
 
 INSTALL(DIRECTORY samplePictures colorscales
         DESTINATION ${TulipBitmapInstallDir})

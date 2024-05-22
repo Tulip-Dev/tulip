@@ -1,5 +1,5 @@
 IF(WIN32)
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDLL_TULIP_GL")
+   add_compile_definitions("DLL_TULIP_GL")
 ENDIF(WIN32)
 
 ADD_SUBDIRECTORY(include)

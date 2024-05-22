@@ -77,22 +77,22 @@ TLPBExport.cpp
 TLPBImport.cpp
 )
 
-IF(EMSCRIPTEN)
-SET(tulip_LIB_SRCS ${tulip_LIB_SRCS}
-                    ../../../plugins/layout/DatasetTools.cpp
-                    ../../../plugins/layout/OrientableCoord.cpp
-                    ../../../plugins/layout/OrientableLayout.cpp
-                    ../../../plugins/layout/OrientableSize.cpp
-                    ../../../plugins/layout/OrientableSizeProxy.cpp
-                    ../../../plugins/layout/Orientation.cpp)
-ENDIF(EMSCRIPTEN)
+# IF(EMSCRIPTEN)
+# SET(tulip_LIB_SRCS ${tulip_LIB_SRCS}
+#                     ../../../plugins/layout/DatasetTools.cpp
+#                     ../../../plugins/layout/OrientableCoord.cpp
+#                     ../../../plugins/layout/OrientableLayout.cpp
+#                     ../../../plugins/layout/OrientableSize.cpp
+#                     ../../../plugins/layout/OrientableSizeProxy.cpp
+#                     ../../../plugins/layout/Orientation.cpp)
+# ENDIF(EMSCRIPTEN)
 
-IF(HAVE_REENTRANT_QHULL)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_REENTRANT_QHULL")
-ENDIF(HAVE_REENTRANT_QHULL)
 INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${PROJECT_SOURCE_DIR} ${ZLIB_INCLUDE_DIR} ${YajlInclude} ${QhullInclude} ${GZStreamInclude} ${UTF8CppInclude})
 
 ADD_LIBRARY(${LibTulipCoreName} SHARED ${tulip_LIB_SRCS})
+IF(HAVE_REENTRANT_QHULL)
+  TARGET_COMPILE_DEFINITIONS(${LibTulipCoreName} PUBLIC "HAVE_REENTRANT_QHULL")
+ENDIF(HAVE_REENTRANT_QHULL)
 TARGET_LINK_LIBRARIES(${LibTulipCoreName} ${GZStreamLibrary} ${YajlLibrary} ${QhullLibrary} ${CMAKE_DL_LIBS})
 IF(WIN32)
   IF(MSVC)

@@ -1,9 +1,5 @@
 IF(Python_FOUND)
 
-IF(WIN32)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDLL_TULIP_PYTHON")
-ENDIF(WIN32)
-
 QTX_SET_INCLUDES_AND_DEFINITIONS()
 
 SET(${LibTulipPythonName}_LIB_SRCS
@@ -49,13 +45,13 @@ QTX_WRAP_CPP(${LibTulipPythonName}_MOC_SRCS ${${LibTulipPythonName}_MOC})
 ADD_LIBRARY(${LibTulipPythonName} SHARED ${${LibTulipPythonName}_LIB_SRCS} ${${LibTulipPythonName}_MOC_SRCS} ${${LibTulipPythonName}_UI_SRCS})
 TARGET_INCLUDE_DIRECTORIES(${LibTulipPythonName}
     PUBLIC ${Python_INCLUDE_DIRS} ${SIP_INCLUDE_DIR}
-    # PUBLIC ${OPENGL_INCLUDE_DIR}
     PUBLIC ${TulipCoreBuildInclude}
     PUBLIC ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipPythonInclude}
     ${CMAKE_CURRENT_BINARY_DIR}
-    # ${CMAKE_CURRENT_SOURCE_DIR}
 )
-
+IF(WIN32)
+  TARGET_COMPILE_DEFINITIONS(${LibTulipPythonName} PUBLIC "DLL_TULIP_PYTHON")
+ENDIF(WIN32)
 TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${LibTulipCoreName} ${LibTulipGUIName} ${QT_LIBRARIES} ${Python_LIBRARIES})
 
 INSTALL(TARGETS ${LibTulipPythonName}
