@@ -85,7 +85,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/pyproject.toml.in ${CMAKE_CURRENT_BIN
 
 ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_PYTHON_BINDINGS_SRC}
     COMMAND ${CMAKE_COMMAND} -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR} -DBINARY_DIR=${CMAKE_CURRENT_BINARY_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/generatePropertiesBindings.cmake
-    COMMAND ${SIP_BUILD} --verbose --protected-is-public --concatenate 12 --pep484-pyi --api-dir=${CMAKE_CURRENT_BINARY_DIR}
+    COMMAND ${SIP_BUILD} --verbose --protected-is-public --concatenate 12 --api-dir=${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Generating Python Bindings and API file for libtulip"
     DEPENDS ${TULIP_SIP_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/../../include/tulip/PythonCppTypesConverter.h VERBATIM)
 

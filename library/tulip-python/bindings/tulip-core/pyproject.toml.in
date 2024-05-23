@@ -3,10 +3,8 @@
 requires = ["sip >=6.8, <7"]
 build-backend = "sipbuild.api"
 
-# Specify the PEP 566 metadata for the project.
 [project]
 name = "tulip"
-version = "@Tulip_VERSION@"
 
 [tool.sip.bindings.tulip]
 sip-file="Module.sip"
