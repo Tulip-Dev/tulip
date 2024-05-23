@@ -29,7 +29,7 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/LayoutPropertySpecific.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/MapIterator.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Matrix.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/tulip.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Node.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/NumericProperty.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Observable.sip

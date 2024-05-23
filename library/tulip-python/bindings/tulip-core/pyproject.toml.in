@@ -1,17 +1,14 @@
 # Specify the build system.
 [build-system]
-requires = ["sip >=6.8, <7"]
+requires = ["sip>=6.8, <7"]
 build-backend = "sipbuild.api"
 
 [project]
 name = "tulip"
 
-[tool.sip.bindings.tulip]
-sip-file="Module.sip"
 
 [tool.sip.project]
 abi-version="@SIP_API@"
 compile=false
-sip-files-dir="@CMAKE_CURRENT_SOURCE_DIR@"
 sip-include-dirs=["@CMAKE_CURRENT_BINARY_DIR@", "@CMAKE_CURRENT_SOURCE_DIR@/../stl"]
 sip-module="@SIP_MODULE@"

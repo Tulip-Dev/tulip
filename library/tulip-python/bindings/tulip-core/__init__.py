@@ -14,31 +14,27 @@
 # See the GNU General Public License for more details.
 import os
 import os.path
+import platform
 import sys
 import traceback
-import platform
+
 
 _tulipNativeLibsPath = os.path.join(os.path.dirname(__file__), 'native')
 sys.path.append(_tulipNativeLibsPath)
 
 if platform.system() == 'Windows':
-    os.environ['PATH'] = '%s;%s;%s' % (
-        _tulipNativeLibsPath,
+    os.environ['PATH'] = '%s;%s' % (
         os.path.join(_tulipNativeLibsPath, '../../..'),
         os.environ['PATH'])
-    dirs = []
-    paths = os.environ['PATH'].split(";")
-    for p in paths:
-        if os.path.isdir(p):
-            dirs.append(os.add_dll_directory(p))
+
+    for p in os.environ['PATH'].split(";"):
+        if os.path.exists(p):
+            os.add_dll_directory(p)
 
 import _tulip # noqa
 
 # cleanup
 sys.path.pop()
-if platform.system() == 'Windows':
-    for d in dirs:
-        d.close()
 
 class tlpType(_tulip.tlp.__class__):
 
@@ -77,32 +73,30 @@ class tlp(with_metaclass(tlpType, _tulip.tlp)):
                   pluginFilePath)
             return False
 
-        try:
-            pluginFile = open(pluginFilePath)
+
+        with open(pluginFilePath) as pluginFile:
             pluginFileContent = pluginFile.read()
-            pluginFile.close()
-        except Exception:
-            return False
 
-        if 'tulipplugins.register' not in pluginFileContent:
-            return False
+            if 'tulipplugins.register' not in pluginFileContent:
+                return False
 
-        modulePath = os.path.dirname(pluginFilePath)
-        moduleName = os.path.basename(pluginFilePath)[:-3]
+            modulePath = os.path.dirname(pluginFilePath)
+            moduleName = os.path.basename(pluginFilePath)[:-3]
 
-        if modulePath not in sys.path:
-            sys.path.append(modulePath)
+            if modulePath not in sys.path:
+                sys.path.append(modulePath)
 
-        try:
-            __import__(moduleName)
-        except ImportError:
-            sys.stdout.write(('There was an error when trying to load the'
+            try:
+                __import__(moduleName)
+            except ImportError:
+                sys.stdout.write(('There was an error when trying to load the'
                               ' Tulip Python plugin from the file %s. See '
                               'stack trace below.\\n') % pluginFilePath)
-            traceback.print_exc()
-            return False
+                traceback.print_exc()
+                return False
 
-        return True
+            return True
+        return False
 
     @staticmethod
     def loadTulipPluginsFromDir(pluginsDirPath, loadCppPlugin=True,
@@ -147,10 +141,9 @@ def runStartupScripts(scriptsPath):
     for file in files:
         filePath = os.path.join(scriptsPath, file)
         if os.path.isfile(filePath) and filePath.endswith('.py'):
-            fd = open(filePath)
-            exec(compile(fd.read(), filePath, 'exec'),
+            with  open(filePath) as fd:
+                exec(compile(fd.read(), filePath, 'exec'),
                  globals(), locals())
-            fd.close()
 
 
 runStartupScripts(startupScriptsPath)

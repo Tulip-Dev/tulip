@@ -36,22 +36,17 @@ _tulipGuiPluginsPath = '%s/plugins/' % os.path.dirname(__file__)
 sys.path.append(_tulipGuiNativeLibsPath)
 
 if platform.system() == 'Windows':
-    os.environ['PATH'] = '%s;%s../../../;%s' % (
-        _tulipGuiNativeLibsPath, _tulipGuiNativeLibsPath, os.environ['PATH'])
-    dirs = []
-    paths = os.environ['PATH'].split(";")
-    for p in paths:
-        if os.path.isdir(p):
-            dirs.append(os.add_dll_directory(p))
+    os.environ['PATH'] = '%s../../../;%s' % (
+        _tulipGuiNativeLibsPath, os.environ['PATH'])
+    for p in os.environ['PATH'].split(";"):
+        if os.path.exists(p):
+            os.add_dll_directory(p)
 
 from tulip import tlp
 
 import _tulipgui # noqa
 
 sys.path.pop()
-if platform.system() == 'Windows':
-    for d in dirs:
-        d.close()
 
 class tlpgui(_tulipgui.tlpgui):
     pass

@@ -230,17 +230,17 @@ static PyObject *consoleutils_ConsoleInput_readline(PyObject *, PyObject *) {
 }
 
 static PyMemberDef consoleutils_ConsoleInput_members[] = {
-    {NULL, 0, 0, 0, NULL} /* Sentinel */
+    {nullptr, 0, 0, 0, nullptr} /* Sentinel */
 };
 
 static PyMethodDef consoleutils_ConsoleInput_methods[] = {
     {"readline", static_cast<PyCFunction>(consoleutils_ConsoleInput_readline), METH_VARARGS,
      "read an input line from the console"},
-    {NULL, NULL, 0, NULL} /* Sentinel */
+    {nullptr, nullptr, 0, nullptr} /* Sentinel */
 };
 
 static PyTypeObject consoleutils_ConsoleInputType = {
-    PyVarObject_HEAD_INIT(NULL, 0) "consoleutils.ConsoleInput",      /*tp_name*/
+    PyVarObject_HEAD_INIT(nullptr, 0) "consoleutils.ConsoleInput",      /*tp_name*/
     sizeof(consoleutils_ConsoleInput),                               /*tp_basicsize*/
     0,                                                               /*tp_itemsize*/
     reinterpret_cast<destructor>(consoleutils_ConsoleInput_dealloc), /*tp_dealloc*/

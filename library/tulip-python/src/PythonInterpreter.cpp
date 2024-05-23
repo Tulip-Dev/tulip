@@ -304,10 +304,10 @@ PythonInterpreter::PythonInterpreter()
       // otherwise Py_InitializeEx can crash if Py_NoSiteFlag is not set
       // and if the site module is not present on the host system
       // Disable output while trying to import the module to not confuse the user
-      runString("import site");
-      runString("site.main()");
-      runString("from tulip import tlp");
-      runString("from tulipgui import tlpgui");
+      runString("import site;"
+                "site.main();"
+                "from tulip import tlp;"
+                "from tulipgui import tlpgui\n");
 
       // When importing the tulip module, Tulip Python plugins and
       // startup scripts will be possibly loaded and other Python modules can be loaded as a side
