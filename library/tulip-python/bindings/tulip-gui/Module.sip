@@ -184,7 +184,7 @@ namespace tlp {
 %Include ColorScalesManager.sip
 
 
-%Import ../tulip-core/Module.sip
+%Import ../tulip-core/tulip.sip
 
 
 
