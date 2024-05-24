@@ -12,15 +12,18 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # See the GNU General Public License for more details.
-import os
+
 import os.path
 import platform
 import sys
 import traceback
-
+import importlib
 
 _tulipNativeLibsPath = os.path.join(os.path.dirname(__file__), 'native')
 sys.path.append(_tulipNativeLibsPath)
+
+#import os here to inherit the system modified system path
+import os
 
 if platform.system() == 'Windows':
     os.environ['PATH'] = '%s;%s' % (
@@ -70,7 +73,7 @@ class tlp(with_metaclass(tlpType, _tulip.tlp)):
     def loadTulipPythonPlugin(pluginFilePath):
         if not os.path.isfile(pluginFilePath):
             print('[tulip] Error: Path %s is not a valid file' %
-                  pluginFilePath)
+                  pluginFilePath, file=sys.stderr)
             return False
 
 
@@ -87,15 +90,14 @@ class tlp(with_metaclass(tlpType, _tulip.tlp)):
                 sys.path.append(modulePath)
 
             try:
-                __import__(moduleName)
+                importlib.import_module(moduleName)
             except ImportError:
-                sys.stdout.write(('There was an error when trying to load the'
-                              ' Tulip Python plugin from the file %s. See '
-                              'stack trace below.\\n') % pluginFilePath)
+                print('There was an error when trying to load the tulip Python plugin from '+pluginFilePath, file=sys.stderr)
                 traceback.print_exc()
                 return False
-
             return True
+        print("Error: Cannot open "+pluginFilePath, file=sys.stderr)
+        traceback.print_exc()
         return False
 
     @staticmethod
