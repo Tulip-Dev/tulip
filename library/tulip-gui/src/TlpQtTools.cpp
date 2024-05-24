@@ -362,8 +362,13 @@ void initTulipSoftware(tlp::PluginLoader *loader) {
   // So add the Python home directory in the Dll search paths in order to be able to load plugins
   // depending on Python.
   auto pythonHome = tlp::PythonVersionChecker::getPythonHome();
-  if (!pythonHome.isEmpty())
+  if (!pythonHome.isEmpty()) {
+#if (QT_VERSION > QT_VERSION_CHECK(6, 6, 0))
+    SetDllDirectory(const_cast<wchar_t *>(pythonHome.toStdWString().c_str()));
+#else
     SetDllDirectory(pythonHome.toUtf8().data());
+#endif
+  }
 #endif
 #endif
 
