@@ -240,7 +240,7 @@ static PyMethodDef consoleutils_ConsoleInput_methods[] = {
 };
 
 static PyTypeObject consoleutils_ConsoleInputType = {
-    PyVarObject_HEAD_INIT(nullptr, 0) "consoleutils.ConsoleInput",      /*tp_name*/
+    PyVarObject_HEAD_INIT(nullptr, 0) "consoleutils.ConsoleInput",   /*tp_name*/
     sizeof(consoleutils_ConsoleInput),                               /*tp_basicsize*/
     0,                                                               /*tp_itemsize*/
     reinterpret_cast<destructor>(consoleutils_ConsoleInput_dealloc), /*tp_dealloc*/
