@@ -39,8 +39,8 @@ ELSE(TULIP_PYTHON_SITE_INSTALL)
 ENDIF(TULIP_PYTHON_SITE_INSTALL)
 
 MACRO(TULIP_DISABLE_COMPILER_WARNINGS_PYTHON)
-    TULIP_SET_CXX_COMPILER_FLAG("-Wno-old-style-cast -Wno-deprecated-copy -Wno-unused-variable")
-    TULIP_SET_C_COMPILER_FLAG("-Wno-old-style-cast -Wno-deprecated-copy -Wno-unused-variable")
+    TULIP_SET_CXX_COMPILER_FLAG("-Wno-old-style-cast -Wno-deprecated-copy -Wno-unused-variable -Wno-overloaded-virtual")
+    TULIP_SET_C_COMPILER_FLAG("-Wno-old-style-cast -Wno-deprecated-copy -Wno-unused-variable -Wno-overloaded-virtual")
 ENDMACRO(TULIP_DISABLE_COMPILER_WARNINGS_PYTHON)
 
 # When building tulip wheels we make a loop of cmake builds,
