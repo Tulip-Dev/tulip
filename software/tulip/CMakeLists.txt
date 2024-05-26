@@ -33,10 +33,12 @@ generate_product_version(
 )
 
 SET(SRCS ${SRCS} ${VersionFiles})
-
+ADD_EXECUTABLE(tulip WIN32 ${SRCS} ${MOC_SRCS})
+ELSE(WIN32)
+    ADD_EXECUTABLE(tulip ${SRCS} ${MOC_SRCS})
 ENDIF(WIN32)
 
-ADD_EXECUTABLE(tulip ${SRCS} ${MOC_SRCS})
+
 
 TARGET_LINK_LIBRARIES(tulip crash_handling ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES})
 

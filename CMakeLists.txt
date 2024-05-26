@@ -1,7 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.20)
 
 #Setting project name and version (W.X.Y.Z if necessary)
-CMAKE_POLICY(SET CMP0048 NEW)
 PROJECT(Tulip
     VERSION 6.0.0
     DESCRIPTION "Large graphs analysis and drawing"
@@ -10,16 +9,6 @@ message(STATUS "Configuring ${CMAKE_PROJECT_NAME} ${Tulip_VERSION}")
 
 # First display CMake version
 MESSAGE(STATUS "Using CMake ${CMAKE_VERSION}")
-
-# Remove CMake warnings related to Qt5
-CMAKE_POLICY(SET CMP0020 NEW)
-
-# Needed by clang compiler provided by MacPorts or homebrew
-CMAKE_POLICY(SET CMP0025 NEW)
-
-# Remove CMake warnings related to rpath on MacOS
-CMAKE_POLICY(SET CMP0042 NEW)
-CMAKE_POLICY(SET CMP0068 NEW)
 
 # allow FindOpenGL to use GLVND when available
 CMAKE_POLICY(SET CMP0072 NEW)
@@ -130,11 +119,6 @@ SET(LibTulipPythonName "tulip-python-${TulipMMVersion}")
 SET(LibTulipCorePythonBindingsName "tulip-core-python-bindings")
 SET(LibTulipGUIPythonBindingsName "tulip-gui-python-bindings")
 SET(TulipLibs ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
-
-## ========================================================
-## Current year (used in documentation config files)
-## ========================================================
-STRING(TIMESTAMP CurrentYear "%Y")
 
 ## ========================================================
 ## Compiler-specific options

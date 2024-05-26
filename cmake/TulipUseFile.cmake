@@ -51,14 +51,6 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
 
   STRING(COMPARE EQUAL "${CMAKE_SIZEOF_VOID_P}" "8" X64)
 
-  # When CMake policy CMP0025 (https://cmake.org/cmake/help/v3.0/policy/CMP0025.html)
-  # is set to NEW, CMAKE_CXX_COMPILER_ID is equal to "AppleClang" when using clang
-  # compilers bundled with XCode while it is equal to "Clang" when using upstream
-  # clang compilers provided by MacPorts or Homebrew.
-  # So we need to handle both cases to avoid build issues.
-  STRING(FIND "${CMAKE_CXX_COMPILER_ID}" "Clang" CLANG_POS)
-  STRING(COMPARE NOTEQUAL "${CLANG_POS}" "-1" CLANG)
-
   # enable C++17 (required for Qt6 at least)
   SET(CMAKE_CXX_STANDARD 17)
   SET(CXX_STANDARD_REQUIRED ON)
@@ -100,19 +92,7 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
     ENDIF(BSD)
   ENDIF(NOT MSVC)
 
-  IF(WIN32)
-    IF(NOT MSVC) #visual studio does not recognize these options
-      # Dynamic ling against libstdc++ on win32/MinGW
-      # The second test is for the case where ccache is used (CMAKE_CXX_COMPILER_ARG1 contains the path to the g++ compiler)
-      IF(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ARG1}" MATCHES ".*[g][+][+].*")
-          SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--subsystem,windows")
-          SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -shared-libgcc -Wl,--allow-multiple-definition")
-          SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -shared-libgcc  -Wl,--allow-multiple-definition")
-          SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -shared-libgcc  -Wl,--allow-multiple-definition")
-      ENDIF()
-    ENDIF(NOT MSVC)
-
-    IF(MSVC)
+  IF(MSVC)
       # Tells VS to use multiple threads to compile
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
       # Makes VS define M_PI
@@ -141,16 +121,7 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
         SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /MACHINE:X86")
         SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /MACHINE:X86")
       ENDIF(X64)
-
     ENDIF(MSVC)
-
-    # Need to use response files with MSYS Makefiles and recent CMake version (>= 3.7) bundled by MSYS2
-    # otherwise OGDF library in thirdparty fails to link
-    IF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*")
-      SET(CMAKE_NEED_RESPONSE TRUE CACHE BOOL "" FORCE)
-    ENDIF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*")
-
-  ENDIF(WIN32)
 
   # OpenMP (only available with clang starting the 3.7 version with libomp installed)
     FIND_PACKAGE(Threads)
@@ -250,7 +221,7 @@ IF(WIN32)
 
   IF(MINGW)
     # get paths to MINGW binaries, libraries and headers
-    STRING(REPLACE "ar.exe" "" MINGW_BIN_PATH ${CMAKE_AR})
+    cmake_path(GET CMAKE_AR ROOT_PATH MINGW_BIN_PATH)
     SET(MINGW_LIB_PATH ${MINGW_BIN_PATH}/../lib)
     SET(MINGW_LIB64_PATH ${MINGW_BIN_PATH}/../lib64)
     SET(MINGW_INCLUDE_PATH ${MINGW_BIN_PATH}/../include)

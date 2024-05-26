@@ -12,7 +12,8 @@ ADD_SUBDIRECTORY(plugins)
 
 # libtulip-python is not needed when not building tulip gui
 IF(NOT TULIP_BUILD_CORE_ONLY)
-  ADD_SUBDIRECTORY(api)
+  INSTALL(DIRECTORY "api/" DESTINATION ${TulipShareInstallDir}/apiFiles/
+          COMPONENT tulip_python)
   ADD_SUBDIRECTORY(include)
   ADD_SUBDIRECTORY(src)
 ENDIF(NOT TULIP_BUILD_CORE_ONLY)
