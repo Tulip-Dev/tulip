@@ -64,9 +64,7 @@
 using namespace std;
 using namespace tlp;
 
-#ifndef __EMSCRIPTEN__
 static const char *TULIP_PLUGINS_PATH_VARIABLE = "TLP_PLUGINS_PATH";
-#endif
 
 // the relative path (a string), from the install dir
 // of the directory where the tulip libraries are installed
@@ -98,7 +96,6 @@ const char tlp::PATH_DELIMITER = ';';
 const char tlp::PATH_DELIMITER = ':';
 #endif
 
-#ifndef __EMSCRIPTEN__
 // A function that retrieves the Tulip libraries directory based on
 // the path of the loaded shared library libtulip-core-X.Y.[dll, so, dylib]
 extern "C" {
@@ -314,16 +311,6 @@ std::string tlp::demangleClassName(const char *className, bool hideTlp) {
 #else
 #error define symbols demangling function
 #endif
-
-#else // __EMSCRIPTEN__
-
-void initTulipLib(const char *) {}
-
-std::string tlp::demangleClassName(const char *className, bool) {
-  return std::string(className);
-}
-
-#endif // __EMSCRIPTEN__
 
 //=========================================================
 std::istream *tlp::getIgzstream(const std::string &name, int open_mode) {

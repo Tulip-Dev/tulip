@@ -16,14 +16,10 @@ SET(LayoutUtils_SRCS
   Orientation.cpp
 )
 
-IF(NOT EMSCRIPTEN)
 SET(LayoutUtilsLibraryName LayoutUtils)
 ADD_LIBRARY(${LayoutUtilsLibraryName} STATIC ${LayoutUtils_SRCS})
 # allow the static library to be used to build shared libs
 SET_TARGET_PROPERTIES(${LayoutUtilsLibraryName} PROPERTIES POSITION_INDEPENDENT_CODE ON)
-ELSE(NOT EMSCRIPTEN)
-SET(LayoutUtilsLibraryName "")
-ENDIF(NOT EMSCRIPTEN)
 
 ##----------------------------------------------------------------------------------------------------------------------------
 ADD_LIBRARY(MixedModel-${Tulip_VERSION} SHARED MixedModel.cpp)

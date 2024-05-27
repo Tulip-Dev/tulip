@@ -117,12 +117,12 @@ SET(ftlayout_SRCS
     FTLayout/FTSimpleLayoutImpl.h
 )
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${Tess2Include} ${FREETYPE_INCLUDE_DIRS} ${GLEW_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${Tess2Include} ${FREETYPE_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS})
 
 ADD_LIBRARY(${FTGLLibrary} STATIC ${ftgl_SRCS} ${ftgl_headers_SRCS} ${ftglyph_SRCS} ${ftfont_SRCS} ${ftlayout_SRCS} $<TARGET_OBJECTS:${Tess2Library}>)
 # allow the object files to be used to build shared libs
 SET_TARGET_PROPERTIES(${FTGLLibrary} PROPERTIES POSITION_INDEPENDENT_CODE ON)
-TARGET_LINK_LIBRARIES(${FTGLLibrary} ${OPENGL_gl_LIBRARY} ${FREETYPE_LIBRARY} ${GLEW_LIBRARY})
+TARGET_LINK_LIBRARIES(${FTGLLibrary} ${OPENGL_gl_LIBRARY} ${FREETYPE_LIBRARY} ${GLEW_LIBRARIES})
 # Prevent link issues with MSVC when freetype is dynamically linked
 # against zlib and libpng
 IF(MSVC)

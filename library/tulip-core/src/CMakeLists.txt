@@ -77,16 +77,6 @@ TLPBExport.cpp
 TLPBImport.cpp
 )
 
-# IF(EMSCRIPTEN)
-# SET(tulip_LIB_SRCS ${tulip_LIB_SRCS}
-#                     ../../../plugins/layout/DatasetTools.cpp
-#                     ../../../plugins/layout/OrientableCoord.cpp
-#                     ../../../plugins/layout/OrientableLayout.cpp
-#                     ../../../plugins/layout/OrientableSize.cpp
-#                     ../../../plugins/layout/OrientableSizeProxy.cpp
-#                     ../../../plugins/layout/Orientation.cpp)
-# ENDIF(EMSCRIPTEN)
-
 INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${PROJECT_SOURCE_DIR} ${ZLIB_INCLUDE_DIR} ${YajlInclude} ${QhullInclude} ${GZStreamInclude} ${UTF8CppInclude})
 
 ADD_LIBRARY(${LibTulipCoreName} SHARED ${tulip_LIB_SRCS})
