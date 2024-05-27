@@ -46,7 +46,7 @@ QTX_WRAP_CPP(${LibTulipPythonName}_MOC_SRCS ${${LibTulipPythonName}_MOC})
 
 ADD_LIBRARY(${LibTulipPythonName}-${Tulip_VERSION} SHARED ${${LibTulipPythonName}_LIB_SRCS} ${${LibTulipPythonName}_MOC_SRCS} ${${LibTulipPythonName}_UI_SRCS})
 TARGET_INCLUDE_DIRECTORIES(${LibTulipPythonName}-${Tulip_VERSION}
-    PUBLIC ${Python_INCLUDE_DIRS} ${SIP_INCLUDE_DIR}
+    PUBLIC ${Python_INCLUDE_DIRS} ${SIP_H_DIR}
     PUBLIC ${TulipCoreBuildInclude}
     PUBLIC ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipPythonInclude}
     ${CMAKE_CURRENT_BINARY_DIR}
