@@ -1,5 +1,3 @@
-IF(Python_FOUND)
-
 QTX_SET_INCLUDES_AND_DEFINITIONS()
 
 SET(LibTulipPythonName "tulip-python")
@@ -52,10 +50,8 @@ TARGET_INCLUDE_DIRECTORIES(${LibTulipPythonName}-${Tulip_VERSION}
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 IF(WIN32)
-  TARGET_COMPILE_DEFINITIONS(${LibTulipPythonName} PUBLIC "DLL_TULIP_PYTHON")
+  TARGET_COMPILE_DEFINITIONS(${LibTulipPythonName}-${Tulip_VERSION} PUBLIC "DLL_TULIP_PYTHON")
 ENDIF(WIN32)
 TARGET_LINK_LIBRARIES(${LibTulipPythonName}-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipGUIName} ${QT_LIBRARIES} ${Python_LIBRARIES})
 
 TULIP_INSTALL_PLUGIN(${LibTulipPythonName}-${Tulip_VERSION} ${TulipPluginsInstallDir})
-
-ENDIF(Python_FOUND)

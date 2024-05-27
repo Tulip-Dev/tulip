@@ -1,5 +1,3 @@
-IF(Python_FOUND)
-
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/conf.py.in ${CMAKE_CURRENT_BINARY_DIR}/conf.py)
 
 # On windows, it is required that the paths to the dll dependencies (e.g. zlib, libpng, ...) are contained
@@ -44,5 +42,3 @@ SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_CLEAN_FILES "doc;doctrees")
 INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html 
         DESTINATION ${CMAKE_INSTALL_DOCDIR}/tulip-python
         COMPONENT tulip_python_doc)
-
-ENDIF(Python_FOUND)

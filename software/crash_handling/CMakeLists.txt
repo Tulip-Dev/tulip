@@ -15,22 +15,20 @@ IF(LINUX OR MINGW)
 
   IF(MINGW)
     # ensure correct bfd header file is selected with MSYS2
-    SET(CMAKE_INCLUDE_PATH ${MINGW_INCLUDE_PATH}/binutils ${CMAKE_INCLUDE_PATH})
+    # SET(CMAKE_INCLUDE_PATH ${MINGW_INCLUDE_PATH}/binutils ${CMAKE_INCLUDE_PATH})
     # ensure correct binutils libraries are selected with MSYS2
-    SET(CMAKE_LIBRARY_PATH ${MINGW_LIB_PATH}/binutils ${CMAKE_LIBRARY_PATH})
+    # SET(CMAKE_LIBRARY_PATH ${MINGW_LIB_PATH}/binutils ${CMAKE_LIBRARY_PATH})
     # ensure correct iberty header file is selected with MSYS2
-    SET(CMAKE_INCLUDE_PATH ${MINGW_INCLUDE_PATH}/libiberty ${CMAKE_INCLUDE_PATH})
+    # SET(CMAKE_INCLUDE_PATH ${MINGW_INCLUDE_PATH}/libiberty ${CMAKE_INCLUDE_PATH})
 
     # Check if libintl is present in the MinGW build environment
     FIND_PACKAGE(Intl)
     # the switch from binutils 2.39 to 2.40 added the two dependencies below
     # for libbfd.a which is needed by crashandling static library
     # Check if libsframe is present in the MinGW build environment
-    FIND_LIBRARY(SFRAME_LIBRARY sframe PATHS ${MINGW_LIB_PATH} ${MINGW_LIB64_PATH} NO_DEFAULT_PATH)
-    IF(SFRAME_LIBRARY)
-      FIND_PACKAGE(Zstd)
-      MARK_AS_ADVANCED(SFRAME_LIBRARY)
-    ENDIF()
+    FIND_LIBRARY(SFRAME_LIBRARY sframe PATHS ${MINGW_LIB_PATH} ${MINGW_LIB64_PATH} REQUIRED)
+    FIND_PACKAGE(Zstd)
+    MARK_AS_ADVANCED(SFRAME_LIBRARY)
   ENDIF(MINGW)
 
   IF(UNIX)
