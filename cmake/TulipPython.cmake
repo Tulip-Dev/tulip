@@ -1,8 +1,3 @@
-SET(TULIP_PYTHON_SITE_INSTALL OFF CACHE BOOL "Do you want to install Tulip Python modules in a Python standard module folder on your system ?
-The selected folder path will be the first in the list returned by site.getsitepackages() whose prefix equals ${CMAKE_INSTALL_PREFIX}.
-If no such folder is found, the path will be the one returned by site.getusersitepackages().
-This should only be used when packaging Tulip for a Linux distribution or MSYS2. [OFF|ON]")
-
 IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   SET(PYTHON_COMPONENTS Interpreter Development.Module)
 ELSE(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
@@ -13,30 +8,7 @@ FIND_PACKAGE(Python 3.8...<3.13 REQUIRED COMPONENTS ${PYTHON_COMPONENTS})
 
 SET(PYTHON_VERSION_NO_DOT ${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
 SET(PYTHON_VERSION ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR})
-
-IF(TULIP_PYTHON_SITE_INSTALL)
-
-  EXECUTE_PROCESS(COMMAND ${Python_EXECUTABLE} -c "
-import site
-import sys
-from distutils.sysconfig import get_python_lib
-py_version = str(sys.version_info[0]) + '.' + str(sys.version_info[1])
-for path in site.getsitepackages():
-  # check that we select a valid install path
-  if path.startswith('${CMAKE_INSTALL_PREFIX}') and py_version in path:
-    # avoid to install in /usr/local when CMAKE_INSTALL_PREFIX is /usr on debian
-    if '${CMAKE_INSTALL_PREFIX}' == '/usr' and '/usr/local' in path:
-      continue
-    print(path)
-    exit()
-print(site.getusersitepackages())
-"
-                  OUTPUT_VARIABLE TulipPythonModulesInstallDir)
-  STRING(REPLACE "\n" "" TulipPythonModulesInstallDir "${TulipPythonModulesInstallDir}")
-
-ELSE(TULIP_PYTHON_SITE_INSTALL)
-  SET(TulipPythonModulesInstallDir ${CMAKE_INSTALL_PREFIX}/${TulipLibInstallDir}/tulip/python)
-ENDIF(TULIP_PYTHON_SITE_INSTALL)
+SET(TulipPythonModulesInstallDir ${CMAKE_INSTALL_PREFIX}/${TulipLibInstallDir}/tulip/python)
 
 MACRO(TULIP_DISABLE_COMPILER_WARNINGS_PYTHON)
     TULIP_SET_CXX_COMPILER_FLAG("-Wno-old-style-cast -Wno-deprecated-copy -Wno-unused-variable -Wno-overloaded-virtual")
