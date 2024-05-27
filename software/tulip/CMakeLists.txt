@@ -22,7 +22,7 @@ STRING(TIMESTAMP CURRENT_YEAR "%Y")
 INCLUDE(generate_product_version)
 generate_product_version(
    VersionFiles
-   NAME "Tulip"
+   NAME ${CMAKE_PROJECT_NAME}
    ICON ${PROJECT_SOURCE_DIR}/library/tulip-gui/resources/icons/tulip.ico
    VERSION_MAJOR ${PROJECT_VERSION_MAJOR}
    VERSION_MINOR ${PROJECT_VERSION_MINOR}
@@ -37,8 +37,6 @@ ADD_EXECUTABLE(tulip WIN32 ${SRCS} ${MOC_SRCS})
 ELSE(WIN32)
     ADD_EXECUTABLE(tulip ${SRCS} ${MOC_SRCS})
 ENDIF(WIN32)
-
-
 
 TARGET_LINK_LIBRARIES(tulip crash_handling ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES})
 
