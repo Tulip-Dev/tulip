@@ -31,21 +31,21 @@ IF(LINUX OR MINGW)
     MARK_AS_ADVANCED(SFRAME_LIBRARY)
   ENDIF(MINGW)
 
-  IF(UNIX)
-    SET(LIB_SRCS ${LIB_SRCS} UnixSignalInterposer.cpp)
-  ENDIF(UNIX)
+ENDIF(LINUX OR MINGW)
+
+IF(UNIX)
+  SET(LIB_SRCS ${LIB_SRCS} UnixSignalInterposer.cpp)
+ENDIF(UNIX)
 
 ADD_LIBRARY(crash_handling STATIC ${LIB_SRCS})
 
-  IF(BFD_FOUND)
-    target_COMPILE_DEFINITIONS(crash_handling PUBLIC HAVE_BFD)
-    # workaround for latest versions of GNU binutils
-    target_COMPILE_DEFINITIONS(crash_handling PUBLIC PACKAGE)
-    target_COMPILE_DEFINITIONS(crash_handling PUBLIC PACKAGE_VERSION)
-    target_include_directories(crash_handling BEFORE PUBLIC ${BFD_INCLUDE_DIR})
-  ENDIF(BFD_FOUND)
-
-ENDIF(LINUX OR MINGW)
+IF(BFD_FOUND)
+  target_COMPILE_DEFINITIONS(crash_handling PUBLIC HAVE_BFD)
+  # workaround for latest versions of GNU binutils
+  target_COMPILE_DEFINITIONS(crash_handling PUBLIC PACKAGE)
+  target_COMPILE_DEFINITIONS(crash_handling PUBLIC PACKAGE_VERSION)
+  target_include_directories(crash_handling BEFORE PUBLIC ${BFD_INCLUDE_DIR})
+ENDIF(BFD_FOUND)
 
 target_INCLUDE_DIRECTORIES(crash_handling BEFORE PUBLIC ${TulipCoreBuildInclude} ${TulipCoreInclude})
 
