@@ -13,6 +13,13 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # See the GNU General Public License for more details.
 
+__all__ = ['tlpgui']
+__author__ = 'David Auber and the Tulip development Team'
+__license__ = 'LGPLv3'
+__version__ = "@Tulip_VERSION@"
+__email__ = 'tulipdev@labri.fr'
+__status__ = 'Production'
+
 import os
 import os.path
 import sys
@@ -68,10 +75,3 @@ if not hasattr(sys, 'ps1') and not sys.flags.interactive:
 
 import signal # noqa
 signal.signal(signal.SIGINT, signal.SIG_DFL)
-
-__all__ = ['tlpgui']
-__author__ = 'David Auber, and the Tulip development Team'
-__license__ = 'LGPLv3'
-__version__ = tlp.getTulipRelease()
-__email__ = 'tulipdev@labri.fr'
-__status__ = 'Production'

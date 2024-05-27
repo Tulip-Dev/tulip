@@ -13,6 +13,13 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # See the GNU General Public License for more details.
 
+__all__ = ['tlp']
+__author__ = 'David Auber and the Tulip development Team'
+__license__ = 'LGPLv3'
+__version__ = "@Tulip_VERSION@"
+__email__ = 'tulipdev@labri.fr'
+__status__ = 'Production'
+
 import os.path
 import platform
 import sys
@@ -178,10 +185,3 @@ if not sys.argv[0] == 'tulip':
 
 if platform.system() == 'Linux' and os.path.exists(_tulipNativePluginsPath):
     sys.setdlopenflags(dlOpenFlagsBackup)
-
-__all__ = ['tlp']
-__author__ = 'David Auber and the Tulip development Team'
-__license__ = 'LGPLv3'
-__version__ = tlp.getTulipRelease()
-__email__ = 'tulipdev@labri.fr'
-__status__ = 'Production'
