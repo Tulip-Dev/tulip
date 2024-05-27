@@ -80,7 +80,7 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "<li><b>OGDF</b> v" +
       OGDF_VERSION +
       ": <a href=\"http://ogdf.net/\" style=\"color: " HTML_LINK_COLOR ";\">ogdf.net</a> </li>" +
-    (PythonIDEInterface::exists()
+      (PythonIDEInterface::exists()
            ? QString("  <li> <b> Python </b> ") + PythonIDEInterface::compiledVersion() +
                  ": <a href=\"https://www.python.org\" style=\"color:" HTML_LINK_COLOR
                  ";\">www.python.org</a> </li>"

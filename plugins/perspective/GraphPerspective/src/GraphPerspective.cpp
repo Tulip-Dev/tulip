@@ -18,7 +18,6 @@
  *
  */
 
-
 #include <list>
 #include "GraphPerspective.h"
 
@@ -490,8 +489,7 @@ protected:
 #define SET_TOOLTIP(a, tt) a->setToolTip(QString(tt))
 
 void GraphPerspective::buildPythonIDE() {
-  if ((_pythonIDE == nullptr) &&
-      (_pythonIDE = PythonIDEInterface::newIDE(_graphs))) {
+  if ((_pythonIDE == nullptr) && (_pythonIDE = PythonIDEInterface::newIDE(_graphs))) {
     QVBoxLayout *dialogLayout = new QVBoxLayout();
     dialogLayout->addWidget(_pythonIDE);
     dialogLayout->setContentsMargins(0, 0, 0, 0);
@@ -782,8 +780,8 @@ top: -1px;
     PythonIDEInterface::loadPlugins();
     pluginsListChanged();
   } else {
-  _ui->developButton->setVisible(false);
-  _ui->actionPython_IDE->setVisible(false);
+    _ui->developButton->setVisible(false);
+    _ui->actionPython_IDE->setVisible(false);
   }
 
   currentGraphChanged(nullptr);
@@ -1035,7 +1033,7 @@ top: -1px;
       connect(_ui->actionShowPythonDocumentation, SIGNAL(triggered()), this,
               SLOT(showPythonDocumentation()));
     else
-    _ui->actionShowPythonDocumentation->setVisible(false);
+      _ui->actionShowPythonDocumentation->setVisible(false);
   } else {
     _ui->actionShowUserDocumentation->setVisible(false);
     _ui->actionShowDevelDocumentation->setVisible(false);

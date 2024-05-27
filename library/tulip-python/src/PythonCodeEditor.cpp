@@ -1180,14 +1180,13 @@ void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
 
 void PythonCodeEditor::wheelEvent(QWheelEvent *event) {
   if (!_autoCompletionList->isVisible()) {
-    if(event->modifiers() == Qt::ControlModifier) {
-      if(event->angleDelta().y()>0)
+    if (event->modifiers() == Qt::ControlModifier) {
+      if (event->angleDelta().y() > 0)
         zoomIn();
       else
         zoomOut();
       event->accept();
-    }
-    else
+    } else
       QPlainTextEdit::wheelEvent(event);
   }
 }

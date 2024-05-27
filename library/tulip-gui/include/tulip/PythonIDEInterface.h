@@ -42,26 +42,28 @@ public:
 
   virtual ~PythonIDEInterface() {}
 
-  virtual bool projectNeedsPythonIDE(TulipProject *project)=0;
-  virtual void setProject(tlp::TulipProject *project)=0;
-  virtual void savePythonFilesAndWriteToProject(bool notifyProjectModified = false)=0;
-  virtual void clearPythonCodeEditors()=0;
-  virtual bool isCurrentScriptExecuting()=0;
-  virtual void executeCurrentScript()=0;
-  virtual void stopCurrentScript()=0;
-  virtual void pauseCurrentScript()=0;
-  virtual void deleteStaticResources()=0;
+  virtual bool projectNeedsPythonIDE(TulipProject *project) = 0;
+  virtual void setProject(tlp::TulipProject *project) = 0;
+  virtual void savePythonFilesAndWriteToProject(bool notifyProjectModified = false) = 0;
+  virtual void clearPythonCodeEditors() = 0;
+  virtual bool isCurrentScriptExecuting() = 0;
+  virtual void executeCurrentScript() = 0;
+  virtual void stopCurrentScript() = 0;
+  virtual void pauseCurrentScript() = 0;
+  virtual void deleteStaticResources() = 0;
 
   // this class is used to really create a Python IDE
   // it must be derived in the tulip-python library
   // to ensure a usable PythonIDE exists
   class TLP_QT_SCOPE Builder {
     friend PythonIDEInterface;
+
   public:
     Builder();
+
   protected:
-    virtual PythonIDEInterface *newIDE(GraphHierarchiesModel *model)=0;
-    virtual void loadPlugins()=0;
+    virtual PythonIDEInterface *newIDE(GraphHierarchiesModel *model) = 0;
+    virtual void loadPlugins() = 0;
   };
 
   // indicates if a Python IDE can be build

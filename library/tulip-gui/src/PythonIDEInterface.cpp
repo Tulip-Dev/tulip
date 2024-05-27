@@ -21,7 +21,6 @@
 
 using namespace tlp;
 
-
 static PythonIDEInterface::Builder *_builder = nullptr;
 
 PythonIDEInterface::Builder::Builder() {
