@@ -51,8 +51,7 @@ public:
     if (event->type() == QEvent::ShortcutOverride) {
       // do not override decrease/increase font size shortcuts
       QKeyEvent *ke = static_cast<QKeyEvent *>(event);
-      if ((ke->modifiers() & Qt::ControlModifier) &&
-          (ke->key() == Qt::Key_Minus || ke->key() == Qt::Key_Plus))
+      if ((ke->matches(QKeySequence::ZoomIn)) || (ke->matches(QKeySequence::ZoomOut)))
         return false;
       event->accept();
       return true;
@@ -1181,7 +1180,15 @@ void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
 
 void PythonCodeEditor::wheelEvent(QWheelEvent *event) {
   if (!_autoCompletionList->isVisible()) {
-    QPlainTextEdit::wheelEvent(event);
+    if(event->modifiers() == Qt::ControlModifier) {
+      if(event->angleDelta().y()>0)
+        zoomIn();
+      else
+        zoomOut();
+      event->accept();
+    }
+    else
+      QPlainTextEdit::wheelEvent(event);
   }
 }
 
