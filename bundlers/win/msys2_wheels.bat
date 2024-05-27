@@ -50,11 +50,10 @@ Python-310\tools\python.exe -m pip install --upgrade pip
 Python-310\tools\python.exe -m pip install wheel sip
 
 rem Python 3.11.9
-rem temporarily removed to test the other versions
-rem nuget.exe install python -Version 3.11.9 -ExcludeVersion -OutputDirectory .
-rem mv python Python-311
-rem Python-311\tools\python.exe -m pip install --upgrade pip
-rem Python-311\tools\python.exe -m pip install wheel sip
+nuget.exe install python -Version 3.11.9 -ExcludeVersion -OutputDirectory .
+mv python Python-311
+Python-311\tools\python.exe -m pip install --upgrade pip
+Python-311\tools\python.exe -m pip install wheel sip
 
 rem Python 3.12.3
 nuget.exe install python -Version 3.12.3 -ExcludeVersion -OutputDirectory .
@@ -75,7 +74,7 @@ for /D %%G in ("C:\Tulip5\Python-*") do (
   rd /s /q build
   mkdir build
   cd build
-  cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./install -DCMAKE_COLOR_MAKEFILE=OFF -DPython_EXECUTABLE=!pyexe! -DPython_INCLUDE_DIRS=!pydir!/include -DTULIP_ACTIVATE_PYTHON_WHEEL_TARGET=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_DOC=OFF Z:
+  cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./install -DCMAKE_COLOR_MAKEFILE=OFF -DPython_EXECUTABLE=!pyexe! -DPython_INCLUDE_DIRS=!pydir!/include -DTULIP_ACTIVATE_PYTHON_WHEEL_TARGET=ON -DTULIP_USE_CCACHE=ON Z:
   if !ERRORLEVEL! NEQ 0 exit /B 1
   make -j4
   if !ERRORLEVEL! NEQ 0 exit /B 1
