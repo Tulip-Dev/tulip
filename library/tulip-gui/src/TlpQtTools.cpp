@@ -33,7 +33,7 @@
 #include <QApplication>
 #include <QDir>
 #include <QStandardPaths>
-#if defined(__MINGW32__) && defined(TULIP_BUILD_PYTHON_COMPONENTS)
+#if defined(__MINGW32__)
 #include <QSslSocket>
 #endif
 #include <QWidget>
@@ -51,7 +51,7 @@
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlTextureManager.h>
-#include <tulip/PythonVersionChecker.h>
+#include <tulip/PythonIDEInterface.h>
 #include <tulip/TulipItemEditorCreators.h>
 #include <tulip/GlOffscreenRenderer.h>
 /**
@@ -350,7 +350,6 @@ void initTulipSoftware(tlp::PluginLoader *loader) {
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../");
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../lib/");
 #elif defined(WIN32)
-#if defined(TULIP_BUILD_PYTHON_COMPONENTS)
 #if defined(__MINGW32__)
   // When using MSYS2 platform to compile Tulip, force the dynamic loading of
   // OpenSSL libraries Qt was compiled against before Python initialization to
@@ -361,7 +360,7 @@ void initTulipSoftware(tlp::PluginLoader *loader) {
   // In that case, the Python dll is not located in system path but in the Python home directory.
   // So add the Python home directory in the Dll search paths in order to be able to load plugins
   // depending on Python.
-  auto pythonHome = tlp::PythonVersionChecker::getPythonHome();
+  auto pythonHome = tlp::PythonIDEInterface::getPythonHome();
   if (!pythonHome.isEmpty()) {
 #if (QT_VERSION > QT_VERSION_CHECK(6, 6, 0))
     SetDllDirectory(const_cast<wchar_t *>(pythonHome.toStdWString().c_str()));
@@ -369,7 +368,6 @@ void initTulipSoftware(tlp::PluginLoader *loader) {
     SetDllDirectory(pythonHome.toUtf8().data());
 #endif
   }
-#endif
 #endif
 
   tlp::initTulipLib();

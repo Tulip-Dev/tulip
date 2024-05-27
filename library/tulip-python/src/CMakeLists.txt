@@ -2,6 +2,8 @@ IF(Python_FOUND)
 
 QTX_SET_INCLUDES_AND_DEFINITIONS()
 
+SET(LibTulipPythonName "tulip-python")
+
 SET(${LibTulipPythonName}_LIB_SRCS
     ConsoleUtilsModule.cpp
     PythonCodeEditor.cpp
@@ -42,8 +44,8 @@ SET(${LibTulipPythonName}_MOC
 QTX_WRAP_UI(${LibTulipPythonName}_UI_SRCS ${${LibTulipPythonName}_UI})
 QTX_WRAP_CPP(${LibTulipPythonName}_MOC_SRCS ${${LibTulipPythonName}_MOC})
 
-ADD_LIBRARY(${LibTulipPythonName} SHARED ${${LibTulipPythonName}_LIB_SRCS} ${${LibTulipPythonName}_MOC_SRCS} ${${LibTulipPythonName}_UI_SRCS})
-TARGET_INCLUDE_DIRECTORIES(${LibTulipPythonName}
+ADD_LIBRARY(${LibTulipPythonName}-${Tulip_VERSION} SHARED ${${LibTulipPythonName}_LIB_SRCS} ${${LibTulipPythonName}_MOC_SRCS} ${${LibTulipPythonName}_UI_SRCS})
+TARGET_INCLUDE_DIRECTORIES(${LibTulipPythonName}-${Tulip_VERSION}
     PUBLIC ${Python_INCLUDE_DIRS} ${SIP_INCLUDE_DIR}
     PUBLIC ${TulipCoreBuildInclude}
     PUBLIC ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipPythonInclude}
@@ -52,11 +54,8 @@ TARGET_INCLUDE_DIRECTORIES(${LibTulipPythonName}
 IF(WIN32)
   TARGET_COMPILE_DEFINITIONS(${LibTulipPythonName} PUBLIC "DLL_TULIP_PYTHON")
 ENDIF(WIN32)
-TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${LibTulipCoreName} ${LibTulipGUIName} ${QT_LIBRARIES} ${Python_LIBRARIES})
+TARGET_LINK_LIBRARIES(${LibTulipPythonName}-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipGUIName} ${QT_LIBRARIES} ${Python_LIBRARIES})
 
-INSTALL(TARGETS ${LibTulipPythonName}
-  RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_python
-  LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python
-  ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python)
+TULIP_INSTALL_PLUGIN(${LibTulipPythonName}-${Tulip_VERSION} ${TulipPluginsInstallDir})
 
 ENDIF(Python_FOUND)

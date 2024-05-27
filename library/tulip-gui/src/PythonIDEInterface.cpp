@@ -17,9 +17,31 @@
  *
  */
 
-#include <tulip/PythonVersionChecker.h>
+#include <tulip/PythonIDEInterface.h>
 
 using namespace tlp;
+
+
+static PythonIDEInterface::Builder *_builder = nullptr;
+
+PythonIDEInterface::Builder::Builder() {
+  _builder = this;
+}
+
+bool PythonIDEInterface::exists() {
+  return _builder != nullptr;
+}
+
+PythonIDEInterface *PythonIDEInterface::newIDE(GraphHierarchiesModel *model) {
+  if (_builder)
+    return _builder->newIDE(model);
+  return nullptr;
+}
+
+void PythonIDEInterface::loadPlugins() {
+  if (_builder)
+    _builder->loadPlugins();
+}
 
 // Windows specific functions
 #ifdef WIN32
@@ -81,16 +103,12 @@ static QString pythonHome(const QString &pythonVersion) {
 QStringList _installedVersions;
 bool _installedVersionsChecked(false);
 
-QString PythonVersionChecker::compiledVersion() {
-#ifdef TLP_PYTHON
-  return TLP_PYTHON;
-#else
-  return QString();
-#endif
+QString PythonIDEInterface::compiledVersion() {
+  return PYTHON_VERSION;
 }
 
 #ifdef WIN32
-QString PythonVersionChecker::getPythonHome() {
+QString PythonIDEInterface::getPythonHome() {
   QString pythonHomeDir;
 
   if (!_installedVersionsChecked) {

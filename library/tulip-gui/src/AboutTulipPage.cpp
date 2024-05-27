@@ -17,18 +17,14 @@
  *
  */
 #include <vector>
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
 #include <sip.h>
-#else
-#define SIP_VERSION_STR ""
-#endif
 #include <ogdf/basic/internal/config.h>
 #include <zipconf.h>
 #include <tulip/AboutTulipPage.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/OpenGlConfigManager.h>
-#include <tulip/PythonVersionChecker.h>
+#include <tulip/PythonIDEInterface.h>
 #include <tulip/GlOffscreenRenderer.h>
 #include <tulip/TulipFontAwesome.h>
 #include <tulip/TulipMaterialDesignIcons.h>
@@ -84,8 +80,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "<li><b>OGDF</b> v" +
       OGDF_VERSION +
       ": <a href=\"http://ogdf.net/\" style=\"color: " HTML_LINK_COLOR ";\">ogdf.net</a> </li>" +
-      (!PythonVersionChecker::compiledVersion().isNull()
-           ? QString("  <li> <b> Python </b> ") + PythonVersionChecker::compiledVersion() +
+    (PythonIDEInterface::exists()
+           ? QString("  <li> <b> Python </b> ") + PythonIDEInterface::compiledVersion() +
                  ": <a href=\"https://www.python.org\" style=\"color:" HTML_LINK_COLOR
                  ";\">www.python.org</a> </li>"
                  "  <li> <b> SIP </b> " +

@@ -39,7 +39,9 @@
 
 #include <tulip/TulipRelease.h>
 #include <tulip/TlpTools.h>
-#include <tulip/PythonVersionChecker.h>
+#ifdef __MINGW32__
+#include <tulip/PythonIDEInterface.h>
+#endif
 #include <tulip/TlpQtTools.h>
 
 #include <cstdio>
@@ -223,7 +225,7 @@ PythonInterpreter::PythonInterpreter()
 // it crashes at startup when running it through GDB.
 // So reset correct one to be able to debug it.
 #ifdef __MINGW32__
-    QString pythonHome = PythonVersionChecker::getPythonHome();
+    QString pythonHome = PythonIDEInterface::getPythonHome();
     if (!pythonHome.isEmpty()) {
       static std::wstring pythonHomeWString = pythonHome.toStdWString();
       config.home = const_cast<wchar_t *>(pythonHomeWString.c_str());

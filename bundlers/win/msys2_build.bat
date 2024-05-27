@@ -89,10 +89,6 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 
 if "%TULIP_BUILD_CORE_ONLY%" == "OFF" (
   make bundle
-rem Build Tulip without Python, and package it
-  cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_COLOR_MAKEFILE=OFF -DCMAKE_NEED_RESPONSE=ON -DCMAKE_INSTALL_PREFIX=./install -DTULIP_BUILD_CORE_ONLY=%TULIP_BUILD_CORE_ONLY% %TULIP_BUILD_DOC% -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_PYTHON_COMPONENTS=OFF %TULIP_SRC%
-  if %errorlevel% neq 0 exit /b %errorlevel%
-  make -j4 install
-  if %errorlevel% neq 0 exit /b %errorlevel%
-  make bundle
+rem package Tulip without python
+  make no_python_bundle
 )

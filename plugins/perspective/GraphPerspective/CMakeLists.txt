@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${OPENGL_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipPythonInclude} ${OPENGL_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 SET(LIB_SRCS
 src/AlgorithmRunner.cpp
@@ -35,10 +35,6 @@ designer/SearchWidget.ui
 designer/PluginDocDialog.ui
 )
 
-IF(TULIP_BUILD_PYTHON_COMPONENTS)
-  ADD_COMPILE_DEFINITIONS(TULIP_BUILD_PYTHON_COMPONENTS)
-ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
-  
 QTX_WRAP_CPP(MOC_SRCS
 include/AlgorithmRunner.h
 include/AlgorithmRunnerItem.h
@@ -54,19 +50,9 @@ include/PreferencesDialog.h
 include/SearchWidget.h
 )
 
-IF(TULIP_BUILD_PYTHON_COMPONENTS)
-
-INCLUDE_DIRECTORIES(${TulipPythonInclude})
-
-ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
-
 ADD_LIBRARY(GraphPerspective-${Tulip_VERSION} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI_SRCS} ${MOC_SRCS})
 
 TARGET_LINK_LIBRARIES(GraphPerspective-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 TARGET_LINK_LIBRARIES(GraphPerspective-${Tulip_VERSION} ${QT_LIBRARIES})
-IF(TULIP_BUILD_PYTHON_COMPONENTS)
-TARGET_LINK_LIBRARIES(GraphPerspective-${Tulip_VERSION} ${LibTulipPythonName})
-ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 
 TULIP_INSTALL_PLUGIN(GraphPerspective-${Tulip_VERSION} ${TulipPerspectivePluginsInstallDir})
-

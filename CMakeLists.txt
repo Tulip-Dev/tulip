@@ -115,7 +115,6 @@ SET(TulipIntVersion "${Tulip_VERSION_MAJOR}${TulipMinorVersionTwoDigits}${PROJEC
 SET(LibTulipCoreName "tulip-core-${TulipMMVersion}")
 SET(LibTulipOGLName "tulip-ogl-${TulipMMVersion}")
 SET(LibTulipGUIName "tulip-gui-${TulipMMVersion}")
-SET(LibTulipPythonName "tulip-python-${TulipMMVersion}")
 SET(LibTulipCorePythonBindingsName "tulip-core-python-bindings")
 SET(LibTulipGUIPythonBindingsName "tulip-gui-python-bindings")
 SET(TulipLibs ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
@@ -182,32 +181,29 @@ ELSE()
 ENDIF()
 
 IF (NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
-  SET(TULIP_BUILD_PYTHON_COMPONENTS ON CACHE BOOL "Do you want to build Tulip Python components ? [ON|OFF]")
-  IF(TULIP_BUILD_PYTHON_COMPONENTS)
-    SET(TULIP_PYTHON_ROOT_FOLDER ${CMAKE_BINARY_DIR}/library/tulip-python/bindings/tulip-core/tulip_module)
-    SET(TULIP_PYTHON_FOLDER ${TULIP_PYTHON_ROOT_FOLDER}/tulip)
-    SET(TULIPGUI_PYTHON_ROOT_FOLDER ${CMAKE_BINARY_DIR}/library/tulip-python/bindings/tulip-gui/tulipgui_module)
-    SET(TULIPGUI_PYTHON_FOLDER ${TULIPGUI_PYTHON_ROOT_FOLDER}/tulipgui)
-    SET(TULIP_PYTHON_NATIVE_FOLDER ${TULIP_PYTHON_FOLDER}/native)
-    SET(TULIPGUI_PYTHON_NATIVE_FOLDER ${TULIPGUI_PYTHON_FOLDER}/native)
-    SET(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET OFF CACHE BOOL "Add a wheel make target for generating Python tulip-core module wheel ? [ON|OFF]")
-    IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
-      SET(TULIP_BUILD_CORE_ONLY ON)
-      IF(APPLE)
-	# build binaries with install rpath when generating Tulip Python wheels
-	# for MacOs as we don't install the project in that case
-	SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
-      ELSEIF(LINUX)
-        FILE(READ /etc/centos-release LINUX_ISSUE)
-        IF((NOT "${LINUX_ISSUE}" MATCHES ".*AlmaLinux release 8\\.9 \\(Midnight Oncilla\\).*" AND NOT "${LINUX_ISSUE}" MATCHES ".*CentOS Linux release 7\\.9.*") OR NOT EXISTS /usr/local/bin/auditwheel)
-          MESSAGE(FATAL_ERROR "Python binary wheels for Linux platform must be compiled using the CentOS (6.10 or 7.9) or AlmaLinux (8.9) docker images provided by the manylinux project from the Python Packaging Authority.\nSee https://github.com/pypa/manylinux for more details.")
-	ENDIF()
-	# build binaries with install rpath when generating Tulip Python wheels for Linux
-	# as we don't install the project in that case
-	SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
-      ENDIF(APPLE)
-    ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
-  ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
+  SET(TULIP_PYTHON_ROOT_FOLDER ${CMAKE_BINARY_DIR}/library/tulip-python/bindings/tulip-core/tulip_module)
+  SET(TULIP_PYTHON_FOLDER ${TULIP_PYTHON_ROOT_FOLDER}/tulip)
+  SET(TULIPGUI_PYTHON_ROOT_FOLDER ${CMAKE_BINARY_DIR}/library/tulip-python/bindings/tulip-gui/tulipgui_module)
+  SET(TULIPGUI_PYTHON_FOLDER ${TULIPGUI_PYTHON_ROOT_FOLDER}/tulipgui)
+  SET(TULIP_PYTHON_NATIVE_FOLDER ${TULIP_PYTHON_FOLDER}/native)
+  SET(TULIPGUI_PYTHON_NATIVE_FOLDER ${TULIPGUI_PYTHON_FOLDER}/native)
+  SET(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET OFF CACHE BOOL "Add a wheel make target for generating Python tulip-core module wheel ? [ON|OFF]")
+  IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+    SET(TULIP_BUILD_CORE_ONLY ON)
+    IF(APPLE)
+      # build binaries with install rpath when generating Tulip Python wheels
+      # for MacOs as we don't install the project in that case
+      SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
+    ELSEIF(LINUX)
+      FILE(READ /etc/centos-release LINUX_ISSUE)
+      IF((NOT "${LINUX_ISSUE}" MATCHES ".*AlmaLinux release 8\\.9 \\(Midnight Oncilla\\).*" AND NOT "${LINUX_ISSUE}" MATCHES ".*CentOS Linux release 7\\.9.*") OR NOT EXISTS /usr/local/bin/auditwheel)
+        MESSAGE(FATAL_ERROR "Python binary wheels for Linux platform must be compiled using the CentOS (6.10 or 7.9) or AlmaLinux (8.9) docker images provided by the manylinux project from the Python Packaging Authority.\nSee https://github.com/pypa/manylinux for more details.")
+      ENDIF()
+      # build binaries with install rpath when generating Tulip Python wheels for Linux
+      # as we don't install the project in that case
+      SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
+    ENDIF(APPLE)
+  ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 
   ## ========================================================
   ## Required packages
@@ -284,9 +280,7 @@ ENDIF(TULIP_BUILD_GL_TEX_LOADER)
 ENDIF(NOT TULIP_BUILD_CORE_ONLY AND NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
 
 # Python
-IF(TULIP_BUILD_PYTHON_COMPONENTS)
-  INCLUDE(cmake/TulipPython.cmake)
-ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
+INCLUDE(cmake/TulipPython.cmake)
 
 ## ========================================================
 ## Include and library paths
@@ -551,7 +545,7 @@ IF (NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
 
       IF(NOT NSIS_PATH_EMPTY)
 
-	IF(NOT TULIP_BUILD_PYTHON_COMPONENTS OR EXISTS "${NSIS_PATH}/Plugins/inetc.dll" OR EXISTS "${NSIS_PATH}/Plugins/x86-ansi/inetc.dll")
+	IF(EXISTS "${NSIS_PATH}/Plugins/inetc.dll" OR EXISTS "${NSIS_PATH}/Plugins/x86-ansi/inetc.dll")
 
           STRING(REPLACE "/" "\\" NSIS_PATH "${NSIS_PATH}")
           STRING(REPLACE "/" "\\" BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
@@ -569,15 +563,23 @@ IF (NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
                             COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/bundlers/win/win_bundle.bat ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win/win_bundle.bat
                             COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/bundlers/win/FileAssociation.nsh ${CMAKE_CURRENT_BINARY_DIR}/FileAssociation.nsh
                             COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/COPYING.LESSER ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win/COPYING.LESSER
-                            COMMAND cmd //C win_bundle.bat \"${NSIS_PATH}\" \"${TLP_DIR}\" \"${BINARY_DIR}\" ${DEBUG_MODE}
+                            COMMAND cmd //C win_bundle.bat \"${NSIS_PATH}\" \"${TLP_DIR}\" \"${BINARY_DIR}\" "TRUE" ${DEBUG_MODE}
                             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win)
 
-        ELSE(NOT TULIP_BUILD_PYTHON_COMPONENTS OR EXISTS "${NSIS_PATH}/Plugins/inetc.dll" OR EXISTS "${NSIS_PATH}/Plugins/x86-ansi/inetc.dll")
+           ADD_CUSTOM_TARGET(no_python_bundle
+                            COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_install.cmake
+                            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/bundlers/win/win_bundle.bat ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win/win_bundle.bat
+                            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/bundlers/win/FileAssociation.nsh ${CMAKE_CURRENT_BINARY_DIR}/FileAssociation.nsh
+                            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/COPYING.LESSER ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win/COPYING.LESSER
+                            COMMAND cmd //C win_bundle.bat \"${NSIS_PATH}\" \"${TLP_DIR}\" \"${BINARY_DIR}\" "FALSE" ${DEBUG_MODE}
+                            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win)
+
+        ELSE(EXISTS "${NSIS_PATH}/Plugins/inetc.dll" OR EXISTS "${NSIS_PATH}/Plugins/x86-ansi/inetc.dll")
 
           MESSAGE("NSIS Inetc plugin is required to build the Tulip installer.")
           MESSAGE("Extract ${CMAKE_CURRENT_SOURCE_DIR}/bundlers/win/Inetc.zip in ${NSIS_PATH}.")
 
-        ENDIF(NOT TULIP_BUILD_PYTHON_COMPONENTS OR EXISTS "${NSIS_PATH}/Plugins/inetc.dll" OR EXISTS "${NSIS_PATH}/Plugins/x86-ansi/inetc.dll")
+        ENDIF(EXISTS "${NSIS_PATH}/Plugins/inetc.dll" OR EXISTS "${NSIS_PATH}/Plugins/x86-ansi/inetc.dll")
 
       ELSE(NOT NSIS_PATH_EMPTY)
 
@@ -590,10 +592,17 @@ IF (NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
 
     IF(APPLE)
 
+      SET(TULIP_PYTHON_BUNDLE ON)
       CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/bundlers/mac/mac_bundle.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/bundlers/mac/mac_bundle.sh" @ONLY)
       ADD_CUSTOM_TARGET(bundle
                         COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_install.cmake
                         COMMAND sh mac_bundle.sh ${CMAKE_CURRENT_BINARY_DIR}
+                        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bundlers/mac)
+      SET(TULIP_PYTHON_BUNDLE OFF)
+      CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/bundlers/mac/mac_bundle.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/bundlers/mac/mac_no_python_bundle.sh" @ONLY)
+      ADD_CUSTOM_TARGET(no_python_bundle
+                        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_install.cmake
+                        COMMAND sh mac_no_python_bundle.sh ${CMAKE_CURRENT_BINARY_DIR}
                         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bundlers/mac)
 
     ENDIF(APPLE)

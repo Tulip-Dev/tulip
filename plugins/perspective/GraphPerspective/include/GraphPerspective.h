@@ -43,11 +43,9 @@ namespace Ui {
 class GraphPerspectiveMainWindowData;
 }
 
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
 namespace tlp {
-class PythonIDE;
+class PythonIDEInterface;
 }
-#endif
 
 class GraphPerspective : public tlp::Perspective, tlp::Observable {
   Q_OBJECT
@@ -182,10 +180,8 @@ protected:
   void group(bool);
 
   QDialog *_searchDialog;
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  tlp::PythonIDE *_pythonIDE;
+  tlp::PythonIDEInterface *_pythonIDE;
   QDialog *_pythonIDEDialog;
-#endif
 };
 
 #endif // GRAPHPERSPECTIVE_H

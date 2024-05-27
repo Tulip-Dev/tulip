@@ -22,7 +22,7 @@ fi
 TULIP_DIR=@CMAKE_INSTALL_PREFIX@
 DEST_DIR=$1
 SRC_DIR=@Tulip_SOURCE_DIR@/bundlers/mac
-PYTHON_BUILD=@TULIP_BUILD_PYTHON_COMPONENTS@
+PYTHON_BUILD=@TULIP_PYTHON_BUNDLE@
 QT_BINARY_DIR=@QT_BINARY_DIR@
 AROBASE=$(printf "\\100")
 
@@ -156,6 +156,8 @@ done
 
 else
 /tmp/macdeployqt ${DEST_DIR}/application/Tulip.app -qtdir=/opt/local/libexec/qt5
+# no need to tulip-python lib
+rm ${DEST_DIR}/application/Tulip.app/lib/tulip/libtulip-python*.dylib
 fi
 
 # ensure Tulip is linked against /usr/lib/libc++.1.dylib

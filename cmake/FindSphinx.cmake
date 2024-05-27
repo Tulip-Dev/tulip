@@ -19,10 +19,6 @@
 # (To distribute this file outside of CMake, substitute the full
 #  License text for the above reference.)
 
-IF(NOT TULIP_BUILD_PYTHON_COMPONENTS)
-    FIND_PACKAGE(Python REQUIRED COMPONENTS Interpreter)
-ENDIF()
-
 IF(WIN32)
 STRING(REPLACE "python.exe" "Scripts/" SPHINX_PATH "${Python_EXECUTABLE}")
 ELSEIF(LINUX)

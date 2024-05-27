@@ -18,12 +18,6 @@
  *
  */
 
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-#include <tulip/PythonInterpreter.h>
-#include <tulip/APIDataBase.h>
-#include <tulip/PythonIDE.h>
-#include <tulip/PythonCodeEditor.h>
-#endif
 
 #include <list>
 #include "GraphPerspective.h"
@@ -59,6 +53,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/TulipSettings.h>
 #include <tulip/PluginLister.h>
+#include <tulip/PythonIDEInterface.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipProject.h>
 #include <tulip/GraphTools.h>
@@ -121,11 +116,8 @@ GraphPerspective::GraphPerspective(const tlp::PluginContext *c)
     // from any relative tests/gui directory
     _lastOpenLocation = QDir::currentPath();
   }
-
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
   _pythonIDE = nullptr;
   _pythonIDEDialog = nullptr;
-#endif
 }
 
 void GraphPerspective::reserveDefaultProperties() {
@@ -285,13 +277,10 @@ GraphPerspective::~GraphPerspective() {
     delete graph;
   }
 
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  delete _pythonIDEDialog;
-  if (Perspective::instance() == this) {
-    PythonCodeEditor::deleteStaticResources();
+  if (Perspective::instance() == this && _pythonIDE) {
+    _pythonIDE->deleteStaticResources();
   }
-#endif
-
+  delete _pythonIDEDialog;
   delete _searchDialog;
   delete _ui;
 }
@@ -313,8 +302,6 @@ void GraphPerspective::destroyWorkspace() {
 }
 
 bool GraphPerspective::terminated() {
-
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
   if (_pythonIDE) {
     if (_pythonIDE->isCurrentScriptExecuting()) {
       _pythonIDE->pauseCurrentScript();
@@ -331,15 +318,13 @@ bool GraphPerspective::terminated() {
     _pythonIDE->savePythonFilesAndWriteToProject(true);
     _pythonIDEDialog->hide();
   }
-#endif
 
   if (_graphs->needsSaving() || mainWindow()->isWindowModified()) {
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-    QString message("The project has been modified (loaded graphs or Python files opened in the "
-                    "IDE).\nDo you want to save your changes?");
-#else
+    if (_pythonIDE)
+      QString message("The project has been modified (loaded graphs or Python files opened in the "
+                      "IDE).\nDo you want to save your changes?");
     QString message("The project has been modified.\nDo you want to save your changes?");
-#endif
+
     QMessageBox::StandardButton answer = QMessageBox::question(
         _mainWindow, "Save", message,
         QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
@@ -505,10 +490,8 @@ protected:
 #define SET_TOOLTIP(a, tt) a->setToolTip(QString(tt))
 
 void GraphPerspective::buildPythonIDE() {
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  if (_pythonIDE == nullptr) {
-    _pythonIDE = new PythonIDE();
-    _pythonIDE->setGraphsModel(_graphs);
+  if ((_pythonIDE == nullptr) &&
+      (_pythonIDE = PythonIDEInterface::newIDE(_graphs))) {
     QVBoxLayout *dialogLayout = new QVBoxLayout();
     dialogLayout->addWidget(_pythonIDE);
     dialogLayout->setContentsMargins(0, 0, 0, 0);
@@ -516,7 +499,6 @@ void GraphPerspective::buildPythonIDE() {
     _pythonIDEDialog->setLayout(dialogLayout);
     _pythonIDEDialog->resize(800, 600);
   }
-#endif
 }
 
 void GraphPerspective::start(tlp::PluginProgress *progress) {
@@ -794,15 +776,16 @@ top: -1px;
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
 
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  // ensure the loading of python plugins
-  // before instantiating PythonIDE
-  PythonInterpreter::getInstance();
-  pluginsListChanged();
-#else
+  if (PythonIDEInterface::exists()) {
+    // ensure the loading of python plugins
+    // before instantiating PythonIDE
+    PythonIDEInterface::loadPlugins();
+    pluginsListChanged();
+  } else {
   _ui->developButton->setVisible(false);
   _ui->actionPython_IDE->setVisible(false);
-#endif
+  }
+
   currentGraphChanged(nullptr);
   // set win/Mac dependent tooltips with ctrl shortcut
   SET_TIPS_WITH_CTRL_SHORTCUT(_ui->previousPageButton, "Show previous panel", "Shift+Left");
@@ -1048,12 +1031,11 @@ top: -1px;
             SLOT(showUserDocumentation()));
     connect(_ui->actionShowDevelDocumentation, SIGNAL(triggered()), this,
             SLOT(showDevelDocumentation()));
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-    connect(_ui->actionShowPythonDocumentation, SIGNAL(triggered()), this,
-            SLOT(showPythonDocumentation()));
-#else
+    if (PythonIDEInterface::exists())
+      connect(_ui->actionShowPythonDocumentation, SIGNAL(triggered()), this,
+              SLOT(showPythonDocumentation()));
+    else
     _ui->actionShowPythonDocumentation->setVisible(false);
-#endif
   } else {
     _ui->actionShowUserDocumentation->setVisible(false);
     _ui->actionShowDevelDocumentation->setVisible(false);
@@ -1098,12 +1080,11 @@ top: -1px;
   if (!rootIds.empty())
     _ui->workspace->readProject(_project, rootIds, progress);
 
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(showPythonIDE()));
+  if (PythonIDEInterface::exists())
+    connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(showPythonIDE()));
   tlp::PluginEvent::addListener(this);
-  if (_pythonIDE || PythonIDE::projectNeedsPythonIDE(_project))
+  if (_pythonIDE && _pythonIDE->projectNeedsPythonIDE(_project))
     QTimer::singleShot(100, this, SLOT(initPythonIDE()));
-#endif
 
   if (!_externalFile.isEmpty() && QFileInfo(_externalFile).exists()) {
     open(_externalFile);
@@ -1407,10 +1388,8 @@ bool GraphPerspective::saveAs(const QString &path) {
   progress.show();
   QMap<Graph *, QString> rootIds = _graphs->writeProject(_project, &progress);
   _ui->workspace->writeProject(_project, rootIds, &progress);
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
   if (_pythonIDE)
     _pythonIDE->savePythonFilesAndWriteToProject();
-#endif
   bool ret = _project->write(_project->projectFile(), &progress);
 
   if (ret)
@@ -1498,10 +1477,8 @@ void GraphPerspective::openProjectFile(const QString &path) {
     if (_project->openProjectFile(path, prg)) {
       QMap<QString, tlp::Graph *> rootIds = _graphs->readProject(_project, prg);
       _ui->workspace->readProject(_project, rootIds, prg);
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-      if (_pythonIDE || PythonIDE::projectNeedsPythonIDE(_project))
+      if (_pythonIDE && _pythonIDE->projectNeedsPythonIDE(_project))
         QTimer::singleShot(100, this, SLOT(initPythonIDE()));
-#endif
     } else {
       auto msg = prg->getError();
       delete prg;
@@ -1518,10 +1495,9 @@ void GraphPerspective::openProjectFile(const QString &path) {
 }
 
 void GraphPerspective::initPythonIDE() {
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
   buildPythonIDE();
-  _pythonIDE->setProject(_project);
-#endif
+  if (_pythonIDE)
+    _pythonIDE->setProject(_project);
 }
 
 void GraphPerspective::deleteSelectedElementsFromRootGraph() {
@@ -1864,21 +1840,19 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->actionExposePanels->setEnabled(!_ui->workspace->empty());
   _ui->action_Remove_All->setEnabled(!_ui->workspace->empty());
 
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-
-  if (_graphs->empty()) {
-    if (_pythonIDE) {
-      _pythonIDE->clearPythonCodeEditors();
-      _pythonIDEDialog->hide();
+  if (PythonIDEInterface::exists()) {
+    if (_graphs->empty()) {
+      if (_pythonIDE) {
+        _pythonIDE->clearPythonCodeEditors();
+        _pythonIDEDialog->hide();
+      }
+      _ui->developButton->setEnabled(false);
+      _ui->actionPython_IDE->setEnabled(false);
+    } else {
+      _ui->developButton->setEnabled(true);
+      _ui->actionPython_IDE->setEnabled(true);
     }
-    _ui->developButton->setEnabled(false);
-    _ui->actionPython_IDE->setEnabled(false);
-  } else {
-    _ui->developButton->setEnabled(true);
-    _ui->actionPython_IDE->setEnabled(true);
   }
-
-#endif
 }
 
 void GraphPerspective::CSVImport() {
@@ -2146,11 +2120,11 @@ void GraphPerspective::treatEvent(const tlp::Event &ev) {
 }
 
 void GraphPerspective::showPythonIDE() {
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
   buildPythonIDE();
-  _pythonIDEDialog->show();
-  _pythonIDEDialog->raise();
-#endif
+  if (_pythonIDEDialog) {
+    _pythonIDEDialog->show();
+    _pythonIDEDialog->raise();
+  }
 }
 
 #ifdef APPIMAGE_BUILD

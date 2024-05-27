@@ -26,6 +26,8 @@
 #include <QUrl>
 
 #include <tulip/tulipconf.h>
+#include <tulip/PythonIDEInterface.h>
+#include <tulip/PythonCodeEditor.h>
 
 class QTabWidget;
 class QComboBox;
@@ -47,7 +49,7 @@ class PythonInterpreter;
 class PythonEditorsTabWidget;
 class DataSet;
 
-class TLP_PYTHON_SCOPE PythonIDE : public QFrame {
+class TLP_PYTHON_SCOPE PythonIDE : public PythonIDEInterface {
 
   Q_OBJECT
   Ui::PythonIDE *_ui;
@@ -93,24 +95,34 @@ class TLP_PYTHON_SCOPE PythonIDE : public QFrame {
                                        const QStringList &existingFilenames);
 
 public:
-  explicit PythonIDE(QWidget *parent = nullptr);
+  explicit PythonIDE();
   ~PythonIDE() override;
 
-  static bool projectNeedsPythonIDE(tlp::TulipProject *project);
-  void setProject(tlp::TulipProject *project);
-  void savePythonFilesAndWriteToProject(bool notifyProjectModified = false);
+  bool projectNeedsPythonIDE(tlp::TulipProject *project) override;
+  void setProject(tlp::TulipProject *project) override;
+  void savePythonFilesAndWriteToProject(bool notifyProjectModified = false) override;
   void setGraphsModel(tlp::GraphHierarchiesModel *model);
-  void clearPythonCodeEditors();
+  void clearPythonCodeEditors() override;
 
   void setScriptEditorsVisible(bool visible);
   void setPluginEditorsVisible(bool visible);
   void setModuleEditorsVisible(bool visible);
-  bool isCurrentScriptExecuting();
+  bool isCurrentScriptExecuting() override;
+  void deleteStaticResources() override {
+    PythonCodeEditor::deleteStaticResources();
+  }
+
+  // the Builder class used to instantiate PythonIDE
+  class Builder : public PythonIDEInterface::Builder {
+  public:
+    PythonIDEInterface *newIDE(GraphHierarchiesModel *model) override;
+    void loadPlugins() override;
+  };
 
 public slots:
-  void executeCurrentScript();
-  void stopCurrentScript();
-  void pauseCurrentScript();
+  void executeCurrentScript() override;
+  void stopCurrentScript() override;
+  void pauseCurrentScript() override;
 
 protected:
   void dragEnterEvent(QDragEnterEvent *) override;

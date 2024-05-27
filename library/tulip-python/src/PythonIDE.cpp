@@ -385,8 +385,23 @@ result = subprocess.run([)";
   return pipScript + pyExe + ", '-m', 'pip', '";
 }
 
-PythonIDE::PythonIDE(QWidget *parent)
-    : QFrame(parent), _ui(new Ui::PythonIDE), _pythonInterpreter(PythonInterpreter::getInstance()),
+PythonIDEInterface *PythonIDE::Builder::newIDE(GraphHierarchiesModel *model) {
+  auto ide = new PythonIDE();
+  ide->setGraphsModel(model);
+  return ide;
+}
+
+void PythonIDE::Builder::loadPlugins() {
+  // side effect to ensure python plugins loading
+  PythonInterpreter::getInstance();
+}
+
+// instantiate a PythonIDE::Builder to ensure GraphPerspective
+// can create a PythonIDE
+static PythonIDE::Builder builder;
+
+PythonIDE::PythonIDE()
+    : _ui(new Ui::PythonIDE), _pythonInterpreter(PythonInterpreter::getInstance()),
       _pythonPanel(new PythonPanel()), _dontTreatFocusIn(false), _project(nullptr),
       _graphsModel(nullptr), _scriptStopped(false), _saveFilesToProject(true),
       _notifyProjectModified(false) {
