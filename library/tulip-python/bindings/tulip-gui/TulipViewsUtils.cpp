@@ -41,9 +41,9 @@ std::vector<std::string> TulipViewsManager::getTulipViews() {
   std::vector<std::string> ret;
   std::list<std::string> views = PluginLister::availablePlugins<View>();
 
-  for (std::list<std::string>::iterator it = views.begin(); it != views.end(); ++it) {
-    if (*it != "Python Script view") {
-      ret.push_back(*it);
+  for (const string & v:views) {
+    if (v != "Python Script view") {
+      ret.push_back(v);
     }
   }
 
@@ -66,21 +66,16 @@ TulipViewsManager::TulipViewsManager() {
 
 std::vector<tlp::View *> TulipViewsManager::getOpenedViews() {
   tlp::Workspace *workspace = tlpWorkspace();
-
-  if (workspace) {
-    return workspace->panels();
-  } else {
-    return openedViews;
-  }
+  return workspace?workspace->panels():openedViews;
 }
 
 std::vector<tlp::View *> TulipViewsManager::getOpenedViewsWithName(const std::string &viewName) {
   std::vector<tlp::View *> views = getOpenedViews();
   std::vector<tlp::View *> ret;
 
-  for (size_t i = 0; i < views.size(); ++i) {
-    if (views[i]->name() == viewName) {
-      ret.push_back(views[i]);
+  for (tlp::View *v: views) {
+    if (v->name() == viewName) {
+      ret.push_back(v);
     }
   }
 
@@ -146,22 +141,12 @@ std::vector<tlp::View *> TulipViewsManager::getViewsOfGraph(tlp::Graph *graph) {
   tlp::Workspace *workspace = tlpWorkspace();
   std::vector<tlp::View *> ret;
 
-  if (workspace) {
-    std::vector<tlp::View *> views = workspace->panels();
-
-    for (unsigned int i = 0; i < views.size(); ++i) {
-      if (views[i]->graph() == graph) {
-        ret.push_back(views[i]);
+  std::vector<tlp::View *> views = workspace?workspace->panels():openedViews;
+  for (tlp::View *v:views) {
+      if (v->graph() == graph) {
+        ret.push_back(v);
       }
     }
-  } else {
-    for (size_t i = 0; i < openedViews.size(); ++i) {
-      if (openedViews[i]->graph() == graph) {
-        ret.push_back(openedViews[i]);
-      }
-    }
-  }
-
   return ret;
 }
 
@@ -252,9 +237,9 @@ bool TulipViewsManager::areViewsVisible() {
   tlp::Workspace *workspace = tlpWorkspace();
 
   if (!workspace) {
-    for (size_t i = 0; i < openedViews.size(); ++i) {
-      ret = ret || (viewToWindow.find(openedViews[i]) != viewToWindow.end() &&
-                    viewToWindow[openedViews[i]]->isVisible());
+    for (tlp::View *o:openedViews) {
+      ret = ret || (viewToWindow.find(o) != viewToWindow.end() &&
+                    viewToWindow[o]->isVisible());
     }
   }
 
