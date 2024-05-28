@@ -40,8 +40,11 @@ fi
 # since macdeployqt from latest qt5 macports release crashes in our vms
 # we now use a working precompiled macdeployqt which takes a -qtdir parameter
 # and forces to adjust the links to libc++.1.dylib
+if [ ! -f /tmp/macdeployqt ]
+then
 curl -L -o /tmp/macdeployqt https://github.com/crystalidea/macdeployqt-universal/raw/main/bin/macdeployqt
 chmod 755 /tmp/macdeployqt
+fi
 
 echo "Wiping previous bundles into ${DEST_DIR}"
 rm -rf "${DEST_DIR}/application" 2>/dev/null
@@ -81,7 +84,13 @@ if [ -L $PYTHON_DIR_PATH ]; then
 fi
 mkdir -p Frameworks/Python.framework/Versions
 cp -a $PYTHON_DIR_PATH Frameworks/Python.framework/Versions
+# cleanup Python.framework
 find Frameworks/Python.framework \( -name '*.pyc' -o -name '*.pyo' \) | xargs rm -rf
+rm -rf Frameworks/Python.framework/Versions/@PYTHON_VERSION@/include
+rm -rf Frameworks/Python.framework/Versions/@PYTHON_VERSION@/share
+pushd Frameworks/Python.framework/Versions/@PYTHON_VERSION@/lib/python@PYTHON_VERSION@/site-packages
+rm -rf packaging* setuptools* sip*
+popd
 fi
 
 echo 'Copying license'
