@@ -65,7 +65,7 @@ Use this method to notify the progression of the process.
 :type step: integer
 :param maxStep: the total number of steps
 :type maxStep: integer
-:rtype: a value indicating whether the progress has been stopped (:const:`tlp.TLP_STOP`), cancelled (:const:`tlp.TLP_CANCEL`), or will continue (:const:`tlp.TLP_CONTINUE`).
+:rtype: a value indicating whether the progress has been stopped (:const:`tlp.ProgressState.TLP_STOP`), cancelled (:const:`tlp.ProgressState.TLP_CANCEL`), or will continue (:const:`tlp.ProgressState.TLP_CONTINUE`).
 %End
 
 

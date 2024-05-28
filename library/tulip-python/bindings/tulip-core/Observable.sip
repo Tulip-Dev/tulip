@@ -35,13 +35,13 @@ This class is the base one for representing an event in Tulip.
 Events are objects sent by objects whose classes derives from the :class:`tlp.Observable` one.
 An event is characterized by its type. The base :class:`tlp.Event` class only carries information as to the type of event, nothing specific :
 
-  * :const:`tlp.Event.TLP_DELETE` : send directly to all observers/listeners, not affected by :meth:`tlp.Observable.holdObservers`.
+  * :const:`tlp.Event.EventType.TLP_DELETE` : send directly to all observers/listeners, not affected by :meth:`tlp.Observable.holdObservers`.
 
-  * :const:`tlp.Event.TLP_MODIFICATION` : sent to all observers/listeners. That type of event is first sent to observers then to listeners.
+  * :const:`tlp.Event.EventType.TLP_MODIFICATION` : sent to all observers/listeners. That type of event is first sent to observers then to listeners.
 
-  * :const:`tlp.Event.TLP_INFORMATION` : sent only to listeners.
+  * :const:`tlp.Event.EventType.TLP_INFORMATION` : sent only to listeners.
 
-  * :const:`tlp.Event.TLP_INVALID` : never sent, used internally for delaying events.
+  * :const:`tlp.Event.EventType.TLP_INVALID` : never sent, used internally for delaying events.
 
 Implement a class derived from :class:`tlp.Event` to add custom events.
 Here is a sample code below::
@@ -50,7 +50,7 @@ Here is a sample code below::
 
     # sender must be an instance deriving from tlp.Observable
     def __init__(self, sender, data):
-      tlp.Event.__init__(self, sender, tlp.Event.TLP_MODIFICATION)
+      tlp.Event.__init__(self, sender, tlp.Event.EventType.TLP_MODIFICATION)
       self.data = data
 
     def getData(self):
@@ -97,7 +97,7 @@ tlp.Event.type()
 
 Returns the type of the event.
 
-:rtype: :const:`tlp.Event.TLP_DELETE` or :const:`tlp.Event.TLP_MODIFICATION` or :const:`tlp.Event.TLP_INFORMATION` or :const:`tlp.Event.TLP_INVALID`
+:rtype: :const:`tlp.Event.EventType.TLP_DELETE` or :const:`tlp.Event.EventType.TLP_MODIFICATION` or :const:`tlp.Event.EventType.TLP_INFORMATION` or :const:`tlp.Event.EventType.TLP_INVALID`
 %End
 };
     
@@ -130,7 +130,7 @@ sheer quantity of events sent by these algortithms would cause a big performance
 This is avoided by using the static method :meth:`tlp.Observable.holdObservers`.
 This holds all events in a queue and only sends them when the static method :meth:`tlp.Observable.unholdObservers` is called.
 
-The only exception to this mechanism is the :const:`tlp.Event.TLP_DELETE` kind of event, that is never held back.
+The only exception to this mechanism is the :const:`tlp.Event.EventType.TLP_DELETE` kind of event, that is never held back.
 Think of it as an unmaskable POSIX signal; whatever the connection to the object and the state of holdObserver, this event will get through.
 This is used to prevent crashes in the case where and object is listened or observed and is deleted, as it is likely the recipient
 keeps a pointer to the now deleted object.
@@ -184,7 +184,7 @@ tlp.Observable.holdObservers()
 
 Holds back all events until :meth:`tlp.Observable.unholObservers` is called.
 Listeners are not affected by this function.
-Once this function is called, all events heading to an Observer will be held, except :const:`tlp.Event.TLP_DELETE` events.
+Once this function is called, all events heading to an Observer will be held, except :const:`tlp.Event.EventType.TLP_DELETE` events.
 The events are stored in a queue, and will be sent once :meth:`tlp.Observable.unholObservers` is called.
 It is possible to nest calls to :meth:`tlp.Observable.holObservers` and  :meth:`tlp.Observable.unholObservers`,
 and in this case the events will only be sent when there have been as many calls to  :meth:`tlp.Observable.unholObservers` as to  :meth:`tlp.Observable.holObservers`.

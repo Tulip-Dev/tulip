@@ -61,13 +61,10 @@ Graph measures and functions
     :noindex:
 
 .. autofunction:: tulip::tlp.maxDistance
-    :noindex:
 
 .. autofunction:: tulip::tlp.maxDistanceWeighted
-    :noindex:
 
 .. autofunction:: tulip::tlp.reachableNodes
-    :noindex:
 
 .. autofunction:: tulip::tlp.bfs
     :noindex:
@@ -82,7 +79,6 @@ Graph measures and functions
     :noindex:
 
 .. autofunction:: tulip::tlp.selectShortestPaths
-    :noindex:
 
 Geometry
 ^^^^^^^^
@@ -972,6 +968,8 @@ tlp.DoubleProperty
   .. automethod:: tulip::tlp.DoubleProperty.setNodeDefaultValue
 
   .. automethod:: tulip::tlp.DoubleProperty.setEdgeDefaultValue
+
+  .. automethod:: tulip::tlp.DoubleProperty.setMetaValueCalculator
 
 tlp.IntegerProperty
 ^^^^^^^^^^^^^^^^^^^

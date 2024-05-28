@@ -3,6 +3,61 @@
 Release notes and API changes
 =============================
 
+Tulip-Python 6.0.0
+------------------
+Code breaking changes
+^^^^^^^^^^^^^^^^^^^^^
+
+Due to the upgrade of the SIP build tool, C++ enums are now bind to Python enums. This change breaks code compatibility with Tulip 5.X.
+The changes are:
+
+   * tlp.NodeShape.* becomes tlp.NodeShape.NodeShapes.* (replace * by the shape name, e.g., Circle, Cross)
+   * tlp.EdgeShape.* becomes tlp.EdgeShape.EdgeShapes.*
+   * tlp.EdgeExtremityShape.* becomes tlp.EdgeExtremityShape.EdgeExtremityShapes.*
+
+See :ref:`Shapes of graph elements <graph-shapes>` for more details.
+
+   * tlp.LabelPosition.* becomes tlp.LabelPosition.LabelPositions.*
+
+See :ref:`Labels of graph elements <graph-labels>` for more details.
+
+    * tlp.GraphEvent.TLP_* becomes tlp.GraphEvent.GraphEventType.TLP_*
+
+See :class:`tlp.GraphEvent` for more details.
+
+    * tlp.DIRECTED becomes tlp.EDGE_TYPE.DIRECTED
+    * tlp.INV_DIRECTED becomes tlp.EDGE_TYPE.INV_DIRECTED,
+    * tlp.UNDIRECTED becomes tlp.EDGE_TYPE.UNDIRECTED;
+
+See :func:`tlp.maxDistance`, :func:`tlp.maxDistanceWeighted` and, :func:`tlp.reachableNodes` for more details.
+
+    * tlp.Event.* becomes tlp.Event.EventType.*
+
+See :class:`tlp.Event` for more details.
+
+    * tlp.OnePath becomes tlp.ShortestPathType.OnePath
+    * tlp.OneDirectedPath becomes tlp.ShortestPathType.OneDirectedPath
+    * and so on for the other values.
+
+See :func:`tlp.selectShortestPaths` for more details.
+
+    * tlp.TLP_CONTINUE becomes tlp.ProgressState.TLP_CONTINUE
+    * tlp.TLP_CANCEL becomes tlp.ProgressState.TLP_CANCEL
+    * tlp.TLP_STOP becomes tlp.ProgressState.TLP_STOP
+
+See :meth:`tlp.PluginProgress.progress` for more details.
+
+    * PropertyEvent::TLP_* becomes PropertyEvent::PropertyEventType::TLP_*
+
+See :class:`tlp.PropertyEvent` for more details.
+
+    * TLP.NO_CALC becomes tlp.DoubleProperty.StandardMetaValueCalculator.NO_CALC
+    * TLP.AVG_CALC becomes tlp.DoubleProperty.StandardMetaValueCalculator.AVG_CALC
+    * and so on for the other values.
+
+See :meth:`tlp.DoubleProperty.setMetaValueCalculator` for more details.
+
+
 Tulip-Python 5.3.1
 ------------------
 

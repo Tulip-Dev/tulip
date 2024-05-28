@@ -213,10 +213,10 @@ class ViewSettingsEvent : public tlp::Event /NoDefaultCtors/ {
 public:
 
   enum ViewSettingsEventType /BaseType=IntEnum/ {
-    TLP_DEFAULT_COLOR_MODIFIED,
-    TLP_DEFAULT_SHAPE_MODIFIED,
-    TLP_DEFAULT_SIZE_MODIFIED,
-    TLP_DEFAULT_LABEL_COLOR_MODIFIED
+    TLP_DEFAULT_COLOR_MODIFIED = tlp::ViewSettingsEvent::ViewSettingsEventType::TLP_DEFAULT_COLOR_MODIFIED,
+    TLP_DEFAULT_SHAPE_MODIFIED = tlp::ViewSettingsEvent::ViewSettingsEventType::TLP_DEFAULT_SHAPE_MODIFIED,
+    TLP_DEFAULT_SIZE_MODIFIED = tlp::ViewSettingsEvent::ViewSettingsEventType::TLP_DEFAULT_SIZE_MODIFIED,
+    TLP_DEFAULT_LABEL_COLOR_MODIFIED = tlp::ViewSettingsEvent::ViewSettingsEventType::TLP_DEFAULT_LABEL_COLOR_MODIFIED
   };
 
   ViewSettingsEventType getType() const;

@@ -60,7 +60,7 @@ namespace tlp {
 #include <tulip/ColorProperty.h>
 %End
 
-enum ParameterDirection /BaseType=IntEnum/ { IN_PARAM=0, OUT_PARAM = 1, INOUT_PARAM = 2 };
+      enum ParameterDirection /BaseType=IntEnum/ { IN_PARAM=tlp::ParameterDirection::IN_PARAM, OUT_PARAM = tlp::ParameterDirection::OUT_PARAM, INOUT_PARAM = tlp::ParameterDirection::INOUT_PARAM };
 
 class ParameterDescription {
 

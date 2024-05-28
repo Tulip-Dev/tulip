@@ -207,10 +207,10 @@ public:
 
     // set specific meta value calculators
     // for most properties
-    DoubleProperty::PredefinedMetaValueCalculator nodeFn =
-        static_cast<DoubleProperty::PredefinedMetaValueCalculator>(nodeFunctions.getCurrent());
-    DoubleProperty::PredefinedMetaValueCalculator edgeFn =
-        static_cast<DoubleProperty::PredefinedMetaValueCalculator>(edgeFunctions.getCurrent());
+    DoubleProperty::StandardMetaValueCalculator nodeFn =
+        static_cast<DoubleProperty::StandardMetaValueCalculator>(nodeFunctions.getCurrent());
+    DoubleProperty::StandardMetaValueCalculator edgeFn =
+        static_cast<DoubleProperty::StandardMetaValueCalculator>(edgeFunctions.getCurrent());
     QuotientLabelCalculator viewLabelCalc(metaLabel, useSubGraphName);
     std::unordered_map<PropertyInterface *, PropertyInterface::MetaValueCalculator *> prevCalcs;
     for (const string &pName : quotientGraph->getProperties()) {

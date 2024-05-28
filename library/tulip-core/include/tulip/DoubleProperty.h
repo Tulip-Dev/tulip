@@ -60,18 +60,18 @@ public:
   void setValueToGraphEdges(tlp::StoredType<double>::ReturnedConstValue v,
                             const Graph *graph) override;
 
-  enum PredefinedMetaValueCalculator : unsigned int {
-    NO_CALC = StandardMetaValueCalculator::NO_CALC,
-    AVG_CALC = StandardMetaValueCalculator::AVG_CALC,
-    SUM_CALC = StandardMetaValueCalculator::SUM_CALC,
-    MAX_CALC = StandardMetaValueCalculator::MAX_CALC,
-    MIN_CALC = StandardMetaValueCalculator::MIN_CALC
+  enum StandardMetaValueCalculator : unsigned int {
+    NO_CALC = 0,
+    AVG_CALC = 1,
+    SUM_CALC = 2,
+    MAX_CALC = 3,
+    MIN_CALC = 4
   };
 
   // setMetaValueCalculator overloading
   void setMetaValueCalculator(PropertyInterface::MetaValueCalculator *calc) override;
-  void setMetaValueCalculator(PredefinedMetaValueCalculator nodeCalc = AVG_CALC,
-                              PredefinedMetaValueCalculator edgeCalc = AVG_CALC);
+  void setMetaValueCalculator(StandardMetaValueCalculator nodeCalc = AVG_CALC,
+                              StandardMetaValueCalculator edgeCalc = AVG_CALC);
 
   // NumericProperty interface
   double getNodeDoubleValue(const node n) const override {

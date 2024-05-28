@@ -209,8 +209,8 @@ class DoublePropertyPredefinedCalculator
 
 public:
   DoublePropertyPredefinedCalculator(
-      DoubleProperty::PredefinedMetaValueCalculator nCalc = DoubleProperty::AVG_CALC,
-      DoubleProperty::PredefinedMetaValueCalculator eCalc = DoubleProperty::AVG_CALC)
+      DoubleProperty::StandardMetaValueCalculator nCalc = DoubleProperty::StandardMetaValueCalculator::AVG_CALC,
+      DoubleProperty::StandardMetaValueCalculator eCalc = DoubleProperty::StandardMetaValueCalculator::AVG_CALC)
       : AbstractProperty<tlp::DoubleType, tlp::DoubleType,
                          tlp::NumericProperty>::MetaValueCalculator(),
         nodeCalc(nodeCalculators[nCalc]), edgeCalc(edgeCalculators[eCalc]) {}
@@ -343,8 +343,8 @@ PropertyInterface *DoubleVectorProperty::clonePrototype(Graph *g, const std::str
   return p;
 }
 //=============================================================
-void DoubleProperty::setMetaValueCalculator(PredefinedMetaValueCalculator nodeCalc,
-                                            PredefinedMetaValueCalculator edgeCalc) {
+void DoubleProperty::setMetaValueCalculator(StandardMetaValueCalculator nodeCalc,
+                                            StandardMetaValueCalculator edgeCalc) {
   setMetaValueCalculator(new DoublePropertyPredefinedCalculator(nodeCalc, edgeCalc));
 }
 //=============================================================

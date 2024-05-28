@@ -157,7 +157,7 @@ Computes the distances from a node to all the other nodes of a graph and return 
 :param result: a graph property in which the results will be stored
 :type result: :class:`tlp.IntegerProperty`
 :param direction: specify if the graph must be directed or not
-:type direction: tlp.DIRECTED, tlp.INV_DIRECTED, tlp.UNDIRECTED
+:type direction: tlp.EDGE_TYPE.DIRECTED, tlp.EDGE_TYPE.INV_DIRECTED, tlp.EDGE_TYPE.UNDIRECTED
 :rtype: integer
 :throws: an exception if the node does not belong to the graph
 %End
@@ -189,7 +189,7 @@ Computes the distances from a node to all the other nodes of a weighted graph an
 :param result: a graph property in which edges lengths are stored
 :type result: :class:`tlp.DoubleProperty`
 :param direction: specify if the graph must be directed or not
-:type direction: tlp.DIRECTED, tlp.INV_DIRECTED, tlp.UNDIRECTED
+:type direction: tlp.EDGE_TYPE.DIRECTED, tlp.EDGE_TYPE.INV_DIRECTED, tlp.EDGE_TYPE.UNDIRECTED
 :rtype: double
 :throws: an exception if the node does not belong to the graph
 %End
@@ -221,7 +221,7 @@ at distance less or equal to a maximum one.
 :param maxDistance: the maximum distance to reach nodes
 :type maxDistance: integer
 :param direction: specify if the graph must be directed or not
-:type direction: tlp.DIRECTED, tlp.INV_DIRECTED, tlp.UNDIRECTED  
+:type direction: tlp.EDGE_TYPE.DIRECTED, tlp.EDGE_TYPE.INV_DIRECTED, tlp.EDGE_TYPE.UNDIRECTED
 :rtype: set of :class:`tlp.node`
 :throws: an exception if the node does not belong to the graph
 %End 
