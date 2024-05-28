@@ -43,7 +43,6 @@ pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-toolchain
 
 rem Install the relevant native dependencies
 pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-cmake
-pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-ccache
 pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-yajl
 pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-qhull
 pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-cppunit
@@ -80,7 +79,7 @@ mkdir tulip_build
 cd tulip_build
 
 rem Build Tulip with Python 3, run its unit tests and package it
-cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_COLOR_MAKEFILE=OFF -DCMAKE_NEED_RESPONSE=ON -DCMAKE_INSTALL_PREFIX=./install -DTULIP_BUILD_CORE_ONLY=%TULIP_BUILD_CORE_ONLY% %TULIP_BUILD_DOC% -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DPython_EXECUTABLE=%PYTHON3_HOME%/python.exe %TULIP_SRC%
+cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_COLOR_MAKEFILE=OFF -DCMAKE_NEED_RESPONSE=ON -DCMAKE_INSTALL_PREFIX=./install -DTULIP_BUILD_CORE_ONLY=%TULIP_BUILD_CORE_ONLY% %TULIP_BUILD_DOC% -DTULIP_BUILD_TESTS=ON -DPython_EXECUTABLE=%PYTHON3_HOME%/python.exe %TULIP_SRC%
 if %errorlevel% neq 0 exit /b %errorlevel%
 make -j4 install
 if %errorlevel% neq 0 exit /b %errorlevel%
