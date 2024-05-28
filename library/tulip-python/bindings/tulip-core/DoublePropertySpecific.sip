@@ -54,16 +54,6 @@ and meta-edge based on the aggregated nodes and edges. The available calculators
 :type edgeCalc: tlp.DoubleProperty.StandardMetaValueCalculator
 %End
 
-%MethodCode
-  if (a0 >= tlp::DoubleProperty::NO_CALC && a0 <= tlp::DoubleProperty::MIN_CALC
-   && a1 >= tlp::DoubleProperty::NO_CALC && a1 < tlp::DoubleProperty::MIN_CALC) {
-    sipCpp->setMetaValueCalculator(static_cast<tlp::DoubleProperty::StandardMetaValueCalculator>(a0), static_cast<tlp::DoubleProperty::StandardMetaValueCalculator>(a1));
-  } else {
-    sipIsErr = -1;
-    PyErr_SetString(PyExc_Exception, "one of the values provided as MetaValueCalculator is invalid");
-  }
-%End
-
 //===========================================================================================
   double getNodeMin(const tlp::Graph *subgraph=0);
 %Docstring
