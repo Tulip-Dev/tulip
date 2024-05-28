@@ -208,9 +208,10 @@ class DoublePropertyPredefinedCalculator
   DoubleEdgePredefinedCalculator edgeCalc;
 
 public:
-  DoublePropertyPredefinedCalculator(
-      DoubleProperty::StandardMetaValueCalculator nCalc = DoubleProperty::StandardMetaValueCalculator::AVG_CALC,
-      DoubleProperty::StandardMetaValueCalculator eCalc = DoubleProperty::StandardMetaValueCalculator::AVG_CALC)
+  DoublePropertyPredefinedCalculator(DoubleProperty::StandardMetaValueCalculator nCalc =
+                                         DoubleProperty::StandardMetaValueCalculator::AVG_CALC,
+                                     DoubleProperty::StandardMetaValueCalculator eCalc =
+                                         DoubleProperty::StandardMetaValueCalculator::AVG_CALC)
       : AbstractProperty<tlp::DoubleType, tlp::DoubleType,
                          tlp::NumericProperty>::MetaValueCalculator(),
         nodeCalc(nodeCalculators[nCalc]), edgeCalc(edgeCalculators[eCalc]) {}

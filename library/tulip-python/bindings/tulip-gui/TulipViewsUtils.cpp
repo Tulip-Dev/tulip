@@ -41,7 +41,7 @@ std::vector<std::string> TulipViewsManager::getTulipViews() {
   std::vector<std::string> ret;
   std::list<std::string> views = PluginLister::availablePlugins<View>();
 
-  for (const string & v:views) {
+  for (const string &v : views) {
     if (v != "Python Script view") {
       ret.push_back(v);
     }
@@ -66,14 +66,14 @@ TulipViewsManager::TulipViewsManager() {
 
 std::vector<tlp::View *> TulipViewsManager::getOpenedViews() {
   tlp::Workspace *workspace = tlpWorkspace();
-  return workspace?workspace->panels():openedViews;
+  return workspace ? workspace->panels() : openedViews;
 }
 
 std::vector<tlp::View *> TulipViewsManager::getOpenedViewsWithName(const std::string &viewName) {
   std::vector<tlp::View *> views = getOpenedViews();
   std::vector<tlp::View *> ret;
 
-  for (tlp::View *v: views) {
+  for (tlp::View *v : views) {
     if (v->name() == viewName) {
       ret.push_back(v);
     }
@@ -141,12 +141,12 @@ std::vector<tlp::View *> TulipViewsManager::getViewsOfGraph(tlp::Graph *graph) {
   tlp::Workspace *workspace = tlpWorkspace();
   std::vector<tlp::View *> ret;
 
-  std::vector<tlp::View *> views = workspace?workspace->panels():openedViews;
-  for (tlp::View *v:views) {
-      if (v->graph() == graph) {
-        ret.push_back(v);
-      }
+  std::vector<tlp::View *> views = workspace ? workspace->panels() : openedViews;
+  for (tlp::View *v : views) {
+    if (v->graph() == graph) {
+      ret.push_back(v);
     }
+  }
   return ret;
 }
 
@@ -237,9 +237,8 @@ bool TulipViewsManager::areViewsVisible() {
   tlp::Workspace *workspace = tlpWorkspace();
 
   if (!workspace) {
-    for (tlp::View *o:openedViews) {
-      ret = ret || (viewToWindow.find(o) != viewToWindow.end() &&
-                    viewToWindow[o]->isVisible());
+    for (tlp::View *o : openedViews) {
+      ret = ret || (viewToWindow.find(o) != viewToWindow.end() && viewToWindow[o]->isVisible());
     }
   }
 
