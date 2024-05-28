@@ -37,7 +37,7 @@ void setMetaValueCalculator(tlp::DoubleProperty::StandardMetaValueCalculator nod
                             tlp::DoubleProperty::StandardMetaValueCalculator edgeCalc = tlp::DoubleProperty::StandardMetaValueCalculator::AVG_CALC);
 
 %Docstring
-tlp.DoubleProperty.setMetaValueCalculator(nodeCalc, edgeCalc)
+tlp.DoubleProperty.setMetaValueCalculator(nodeCalc = tlp.DoubleProperty.StandardMetaValueCalculator.AVG_CALC, edgeCalc = tlp.DoubleProperty.StandardMetaValueCalculator.AVG_CALC)
 
 Sets the predefined calculator for meta-nodes and meta-edges. It is used to compute the value of a double property for each meta-node
 and meta-edge based on the aggregated nodes and edges. The available calculators are:
