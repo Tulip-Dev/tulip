@@ -667,15 +667,9 @@ bool TulipFontIconCreator::paint(QPainter *painter, const QStyleOptionViewItem &
     return true;
   }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
   QStyleOptionViewItem opt = option;
   opt.features |= QStyleOptionViewItem::HasDecoration;
   opt.features |= QStyleOptionViewItem::HasDisplay;
-#else
-  QStyleOptionViewItemV4 opt = option;
-  opt.features |= QStyleOptionViewItemV2::HasDecoration;
-  opt.features |= QStyleOptionViewItemV2::HasDisplay;
-#endif
 
   opt.icon.addPixmap(TulipFontIconEngine::pixmap(iconName, 16));
 
@@ -737,15 +731,10 @@ bool NodeShapeEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem
                                    const QVariant &data, const QModelIndex &index) const {
   TulipItemEditorCreator::paint(painter, option, data, index);
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
   QStyleOptionViewItem opt = option;
   opt.features |= QStyleOptionViewItem::HasDecoration;
   opt.features |= QStyleOptionViewItem::HasDisplay;
-#else
-  QStyleOptionViewItemV4 opt = option;
-  opt.features |= QStyleOptionViewItemV2::HasDecoration;
-  opt.features |= QStyleOptionViewItemV2::HasDisplay;
-#endif
+
 
   QPixmap pixmap = GlyphRenderer::render(data.value<NodeShape::NodeShapes>());
   opt.icon = QIcon(pixmap);
@@ -791,15 +780,10 @@ bool EdgeExtremityShapeEditorCreator::paint(QPainter *painter, const QStyleOptio
                                             const QVariant &data, const QModelIndex &index) const {
   TulipItemEditorCreator::paint(painter, option, data, index);
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
   QStyleOptionViewItem opt = option;
   opt.features |= QStyleOptionViewItem::HasDecoration;
   opt.features |= QStyleOptionViewItem::HasDisplay;
-#else
-  QStyleOptionViewItemV4 opt = option;
-  opt.features |= QStyleOptionViewItemV2::HasDecoration;
-  opt.features |= QStyleOptionViewItemV2::HasDisplay;
-#endif
+
 
   QPixmap pixmap =
       EdgeExtremityGlyphRenderer::render(data.value<EdgeExtremityShape::EdgeExtremityShapes>());

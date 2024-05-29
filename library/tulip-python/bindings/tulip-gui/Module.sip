@@ -47,7 +47,7 @@ if (!QApplication::instance() && initQt) {
   // Hack for MacOS to avoid importing the qt_menu.nib file as it is
   // not needed for our purpose and it forbids the tulipgui module to
   // be imported when it has been installed through pip
-  QApplication::setAttribute(Qt::AA_MacPluginApplication);
+  QApplication::setAttribute(Qt::AA_PluginApplication);
 #endif
   new QApplication(argc, argv);
 
