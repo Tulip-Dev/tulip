@@ -735,7 +735,6 @@ bool NodeShapeEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem
   opt.features |= QStyleOptionViewItem::HasDecoration;
   opt.features |= QStyleOptionViewItem::HasDisplay;
 
-
   QPixmap pixmap = GlyphRenderer::render(data.value<NodeShape::NodeShapes>());
   opt.icon = QIcon(pixmap);
   opt.decorationSize = pixmap.size();
@@ -783,7 +782,6 @@ bool EdgeExtremityShapeEditorCreator::paint(QPainter *painter, const QStyleOptio
   QStyleOptionViewItem opt = option;
   opt.features |= QStyleOptionViewItem::HasDecoration;
   opt.features |= QStyleOptionViewItem::HasDisplay;
-
 
   QPixmap pixmap =
       EdgeExtremityGlyphRenderer::render(data.value<EdgeExtremityShape::EdgeExtremityShapes>());
