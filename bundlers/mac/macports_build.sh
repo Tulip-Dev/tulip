@@ -27,7 +27,7 @@ if [ "$TULIP_USE_CCACHE" == "ON" ]; then
 fi
 
 # install Tulip core build dependencies
-sudo port -N install cmake $CLANG_COMPILER_PKG $CCACHE_PKG qhull
+sudo port -N install cmake $CLANG_COMPILER_PKG $CCACHE_PKG libzip qhull yajl
 
 # check for more dependencies
 if [ "$TRAVIS_BUILD_THIRDPARTY_ONLY" != "ON" ]; then
