@@ -47,6 +47,7 @@ pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-yajl
 pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-qhull
 pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-cppunit
 pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-zstd
+pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-libzip
 
 if not defined TULIP_BUILD_CORE_ONLY (
   set TULIP_BUILD_CORE_ONLY=OFF
