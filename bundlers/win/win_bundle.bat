@@ -39,7 +39,7 @@ if "%NO_PYTHON%" == "TRUE" (
 echo 'Removing tulip-python lib'
 del /Q /F /S "%DEST_DIR%\\files\\lib\\tulip\\libtulip-python*.dll" >nul 2>&1
 echo 'Removing lib/tulip/python directory'
-del /Q /F /S "%DEST_DIR%\\files\\lib\\tulip\\python" >nul 2>&1
+rmdir /Q /S "%DEST_DIR%\\files\\lib\\tulip\\python" >nul 2>&1
 )
 
 echo 'Removing non dll files from lib directory'
