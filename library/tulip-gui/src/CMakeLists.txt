@@ -30,7 +30,6 @@ SET(SRCS
   NodeLinkDiagramComponentInteractor.cpp
   ShapeDialog.cpp
   Perspective.cpp
-  PluginManager.cpp
   PropertyCreationDialog.cpp
   QtGlSceneZoomAndPanAnimator.cpp
   ZIPFacade.cpp

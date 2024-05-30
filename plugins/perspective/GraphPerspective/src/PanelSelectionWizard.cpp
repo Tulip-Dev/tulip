@@ -22,7 +22,6 @@
 #include <QAbstractButton>
 #include <QMouseEvent>
 
-#include <tulip/PluginManager.h>
 #include <tulip/View.h>
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/GraphHierarchiesModel.h>

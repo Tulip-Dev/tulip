@@ -46,7 +46,6 @@
 #include <tulip/SystemDefinition.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginLister.h>
-#include <tulip/PluginManager.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/OpenGlConfigManager.h>
