@@ -70,27 +70,30 @@ cp -r "${TULIP_DIR}"/* .
 mv lib/*.dylib Frameworks/
 rm -rf include
 rm -rf lib/cmake
-if [ -d lib/tulip/python ]
-then
-    find lib/tulip/python  \( -name '*.pyc' -o -name '*.pyo' \) | xargs rm -rf
-fi
 
-if [ "$PYTHON_BUILD" = "ON" ]  && [ -d @PYTHON_DIR_PATH@ ]
+if [ "$PYTHON_BUILD" != "ON" ]
 then
-echo 'Copying Python Framework'
-PYTHON_DIR_PATH=@PYTHON_DIR_PATH@
-if [ -L $PYTHON_DIR_PATH ]; then
-  PYTHON_DIR_PATH=$(dirname $PYTHON_DIR_PATH)/$(readlink $PYTHON_DIR_PATH)
-fi
-mkdir -p Frameworks/Python.framework/Versions
-cp -a $PYTHON_DIR_PATH Frameworks/Python.framework/Versions
-# cleanup Python.framework
-find Frameworks/Python.framework \( -name '*.pyc' -o -name '*.pyo' \) | xargs rm -rf
-rm -rf Frameworks/Python.framework/Versions/@PYTHON_VERSION@/include
-rm -rf Frameworks/Python.framework/Versions/@PYTHON_VERSION@/share
-pushd Frameworks/Python.framework/Versions/@PYTHON_VERSION@/lib/python@PYTHON_VERSION@/site-packages
-rm -rf packaging* setuptools* sip*
-popd
+   echo 'Removing Tulip libs linked to Python'
+   rm -rf lib/tulip/python lib/tulip/libtulip-python*.dylib
+else
+    find lib/tulip/python  \( -name '*.pyc' -o -name '*.pyo' \) | xargs rm -rf
+ if [ -d @PYTHON_DIR_PATH@ ]
+ then
+     echo 'Copying Python Framework'
+     PYTHON_DIR_PATH=@PYTHON_DIR_PATH@
+     if [ -L $PYTHON_DIR_PATH ]; then
+         PYTHON_DIR_PATH=$(dirname $PYTHON_DIR_PATH)/$(readlink $PYTHON_DIR_PATH)
+     fi
+     mkdir -p Frameworks/Python.framework/Versions
+     cp -a $PYTHON_DIR_PATH Frameworks/Python.framework/Versions
+     # cleanup Python.framework
+     find Frameworks/Python.framework \( -name '*.pyc' -o -name '*.pyo' \) | xargs rm -rf
+     rm -rf Frameworks/Python.framework/Versions/@PYTHON_VERSION@/include
+     rm -rf Frameworks/Python.framework/Versions/@PYTHON_VERSION@/share
+     pushd Frameworks/Python.framework/Versions/@PYTHON_VERSION@/lib/python@PYTHON_VERSION@/site-packages
+     rm -rf packaging* setuptools* sip*
+     popd
+ fi
 fi
 
 echo 'Copying license'
@@ -111,7 +114,7 @@ mv bin/tulip MacOS/Tulip
 # (not processed by macdeployqt as they are suffixed by .so instead of .dylib)
 if [ "$PYTHON_BUILD" = "ON" ]
 then
-echo 'Deploying Python stuff'
+echo 'Deploying Tulip and Python stuff'
 /tmp/macdeployqt ${DEST_DIR}/application/Tulip.app -qtdir=/opt/local/libexec/qt5 -executable=${DEST_DIR}/application/Tulip.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python -executable=${DEST_DIR}/application/Tulip.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Resources/Python.app/Contents/MacOS/Python
 
 for SOLIB in $(find ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/python -name '*.so' -print)
@@ -171,9 +174,8 @@ do
 done
 
 else
+echo 'Deploying Tulip'
 /tmp/macdeployqt ${DEST_DIR}/application/Tulip.app -qtdir=/opt/local/libexec/qt5
-# no need to tulip-python lib
-rm ${DEST_DIR}/application/Tulip.app/lib/tulip/libtulip-python*.dylib
 fi
 
 # ensure Tulip is linked against /usr/lib/libc++.1.dylib
