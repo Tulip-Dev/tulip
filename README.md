@@ -95,27 +95,23 @@ depending on your system configuration.
 
 The following dependencies are required to build Tulip:
 
-  * [CMake](https://cmake.org) >= 3.19
+  * [CMake](https://cmake.org) >= 3.20
   * A [C++17](https://en.wikipedia.org/wiki/C%2B%2B11) compiler : [GCC](https://gcc.gnu.org/) >= 8.0,
   [Clang](https://clang.llvm.org/) >= 5.0 or 
   [Microsoft Visual Studio](https://www.visualstudio.com/) >= 2017
   * [FreeType](https://www.freetype.org) 
   * [zlib](http://zlib.net)
-  * [Qt](https://www.qt.io) >= 5.6
-  * [libzip](https://libzip.org) >= 1.1
+  * [Qt](https://www.qt.io) >= 5.7
   * [OpenGL](https://www.opengl.org) >= 2.0
   * [GLEW](http://glew.sourceforge.net/) >= 1.4
-
-In order to build the Python components, the following dependencies are needed:
-
   * [Python](https://www.python.org) >= 3.8
   * [Pip] (https://pypi.org/project/pip/) >= 24.0
-  * [SIP](https://www.riverbankcomputing.com/software/sip/intro) >= 6.8.3 (to be installed via pip)
-  
+  * [SIP](https://www.riverbankcomputing.com/software/sip/) >= 6.8.3 (to be installed via pip or on Debian/Ubuntu packages sipbuild and sip-tools)
   
 The following dependencies are also needed but they will be compiled from the Tulip
 source tree if they can not be found on your system:
 
+  * [libzip](https://libzip.org) >= 1.1
   * [Qhull](http://www.qhull.org/)
   * [yajl](https://lloyd.github.io/yajl/) >= 2.0
   
@@ -128,7 +124,7 @@ If you are a Linux user, all these dependencies can be installed with the packag
 
 If you are a MacOS user, we recommend to use [MacPorts](https://www.macports.org/) or [Homebrew](https://brew.sh/) in order to easily install all these dependencies. Hints on how to build Tulip for these two environments can also be found in the old continuous integration setup file [.travis.yml](travis.yml). A dedicated script is also available for MacPorts [macports_build.sh](bundlers/mac/macports_build.sh).
 
-If you are a Windows user, we recommend to use [MSYS2](http://www.msys2.org/) as it greatly facilitates the build of Tulip on
+If you are a Windows user, we recommend to use the UCRT version of [MSYS2](http://www.msys2.org/) as it greatly facilitates the build of Tulip on
 that platform (notably by providing up to date compilers and precompiled dependencies). A dedicated batch file [msys2_build.bat](bundlers/win/msys2_build.bat) is available for MSYS2 build.
 
 Hints on how to build Tulip for MSVC can be found in [appveyor_msvc.bat](appveyor_msvc.bat) currently used for continuous integration on [AppVeyor](https://www.appveyor.com/).
