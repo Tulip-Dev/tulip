@@ -198,13 +198,13 @@ void GraphPerspectiveLogger::showContextMenu(const QPoint &pos) {
   QMenu m;
   if (_ui->listWidget->count() > 0) {
     m.addAction("Clear", this, SLOT(clear()));
- #if QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
+#if QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
     m.addAction("Copy selection", this, SLOT(copy()), QKeySequence::Copy);
     m.addAction("Remove selection", this, SLOT(remove()), QKeySequence::Cut);
- #else
+#else
     m.addAction("Copy selection", QKeySequence::Copy, this, SLOT(copy()));
     m.addAction("Remove selection", QKeySequence::Cut, this, SLOT(remove()));
- #endif
+#endif
     m.addSeparator();
   }
   m.addAction("Close", this, SLOT(close()));

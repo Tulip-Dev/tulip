@@ -534,7 +534,6 @@ QVariant GraphModel::edgeValue(unsigned int id, PropertyInterface *prop) {
     const auto &vb = static_cast<BooleanVectorProperty *>(prop)->getEdgeValue(e);
 
     return QVariant::fromValue<QVector<bool>>(QVector<bool>(vb.begin(), vb.end()));
-
   }
 
   STANDARD_EDGE_CHECKS(GET_EDGE_VALUE)
