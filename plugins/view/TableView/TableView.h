@@ -63,7 +63,7 @@ public:
 
   // Qt bug workaround
   // see void WorkspacePanel::showEvent(QShowEvent *event);
-#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0)) || defined(__APPLE__)
+#if defined(__APPLE__)
   bool rebuildSceneOnShowEvent() override {
     return true;
   }

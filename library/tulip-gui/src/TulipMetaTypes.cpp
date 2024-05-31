@@ -177,11 +177,8 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string
 
     if (dm)
       result = *(static_cast<tlp::BooleanVectorType::RealType *>(dm->value));
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-    return QVariant::fromValue<QVector<bool>>(QVector<bool>::fromStdVector(result));
-#else
+
     return QVariant::fromValue<QVector<bool>>(QVector<bool>(result.begin(), result.end()));
-#endif
   }
 
   CHECK_DATATYPE(tlp::PointType::RealType);

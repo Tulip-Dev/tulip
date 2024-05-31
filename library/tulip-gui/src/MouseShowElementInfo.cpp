@@ -67,11 +67,7 @@ void MouseShowElementInfo::showVisualProp(bool show) {
     _model->setFilterFixedString("");
   } else {
     // filter out properties whose name starts with "view"
-#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
-    _model->setFilterRegExp("^(?!view[A-Z]).?");
-#else
     _model->setFilterRegularExpression("^(?!view[A-Z]).?");
-#endif
   }
   _show = show;
 }
@@ -105,11 +101,7 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
     QRectF widgetRect(_informationWidget->geometry());
     QPointF cursorPos;
     if (e->type() == QEvent::Wheel) {
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
-      cursorPos = static_cast<QWheelEvent *>(e)->pos();
-#else
       cursorPos = static_cast<QWheelEvent *>(e)->position();
-#endif
     } else {
       cursorPos = static_cast<QMouseEvent *>(e)->pos();
     }

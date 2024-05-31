@@ -217,11 +217,8 @@ void TulipSettings::setDefaultSelectionColor(const tlp::Color &color) {
 
 QSet<QString> TulipSettings::favoriteAlgorithms() {
   auto ls = instance().value(TS_FavoriteAlgorithms, QStringList()).toStringList();
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-  return ls.toSet();
-#else
+
   return QSet<QString>(ls.begin(), ls.end());
-#endif
 }
 
 void TulipSettings::addFavoriteAlgorithm(const QString &name) {
@@ -366,11 +363,7 @@ void TulipSettings::setViewOrtho(bool f) {
 }
 
 void TulipSettings::setFavoriteAlgorithms(const QSet<QString> &lst) {
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-  instance().setValue(TS_FavoriteAlgorithms, static_cast<QStringList>(lst.toList()));
-#else
   instance().setValue(TS_FavoriteAlgorithms, QStringList(lst.begin(), lst.end()));
-#endif
 }
 
 bool TulipSettings::isResultPropertyStored() {

@@ -180,7 +180,6 @@ ELSE()
   ENDMACRO()
 ENDIF()
 
-IF (NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
   SET(TULIP_PYTHON_ROOT_FOLDER ${CMAKE_BINARY_DIR}/library/tulip-python/bindings/tulip-core/tulip_module)
   SET(TULIP_PYTHON_FOLDER ${TULIP_PYTHON_ROOT_FOLDER}/tulip)
   SET(TULIPGUI_PYTHON_ROOT_FOLDER ${CMAKE_BINARY_DIR}/library/tulip-python/bindings/tulip-gui/tulipgui_module)
@@ -208,15 +207,8 @@ IF (NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
   ## ========================================================
   ## Required packages
   ## ========================================================
-  IF(MINGW)
-    # Set some common libraries and headers search paths for MinGW
-    SET(CMAKE_LIBRARY_PATH "${MINGW_BIN_PATH};${MINGW_LIB_PATH};${MINGW_LIB64_PATH};${CMAKE_LIBRARY_PATH}")
-    SET(CMAKE_INCLUDE_PATH "${MINGW_INCLUDE_PATH};${MINGW_INCLUDE_PATH}/freetype2;${MINGW_INCLUDE_PATH}/libpng*;${CMAKE_INCLUDE_PATH}")
-  ENDIF()
 
   FIND_PACKAGE(ZLIB REQUIRED)
-
-ENDIF(NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
 
 # use thirdparty static libs when needed
 IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET OR TULIP_BUILD_FOR_APPIMAGE)

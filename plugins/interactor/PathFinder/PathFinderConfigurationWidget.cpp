@@ -25,30 +25,18 @@
 using namespace tlp;
 using namespace std;
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-#define textActivated activated
-#endif
 
 PathFinderConfigurationWidget::PathFinderConfigurationWidget(QWidget *parent)
     : QWidget(parent), _ui(new Ui::PathFinderConfigWidget) {
   Interactor::setupConfigWidget(this);
   _ui->setupUi(this);
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-  connect(_ui->weightCombo, SIGNAL(activated(const QString &)), this,
-          SIGNAL(setWeightMetric(const QString &)));
-  connect(_ui->edgeOrientationCombo, SIGNAL(activated(const QString &)), this,
-          SIGNAL(setEdgeOrientation(const QString &)));
-  connect(_ui->pathsTypeCombo, SIGNAL(activated(const QString &)), this,
-          SIGNAL(setPathsType(const QString &)));
-#else
   connect(_ui->weightCombo, SIGNAL(textActivated(const QString &)), this,
           SIGNAL(setWeightMetric(const QString &)));
   connect(_ui->edgeOrientationCombo, SIGNAL(textActivated(const QString &)), this,
           SIGNAL(setEdgeOrientation(const QString &)));
   connect(_ui->pathsTypeCombo, SIGNAL(textActivated(const QString &)), this,
           SIGNAL(setPathsType(const QString &)));
-#endif
   connect(_ui->toleranceCheck, SIGNAL(clicked(bool)), this, SIGNAL(activateTolerance(bool)));
   connect(_ui->toleranceSpin, SIGNAL(valueChanged(int)), this, SIGNAL(setTolerance(int)));
 }

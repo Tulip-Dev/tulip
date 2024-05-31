@@ -535,12 +535,12 @@ void PythonInterpreter::addModuleSearchPath(const QString &path, const bool befo
   if (_currentImportPaths.find(path) == _currentImportPaths.end()) {
     QString pythonCode;
     QTextStream oss(&pythonCode);
-    oss << "import sys" << QT_ENDL;
+    oss << "import sys" << Qt::endl;
 
     if (beforeOtherPaths) {
-      oss << "sys.path.insert(0, \"" << path << "\")" << QT_ENDL;
+      oss << "sys.path.insert(0, \"" << path << "\")" << Qt::endl;
     } else {
-      oss << "sys.path.append(\"" << path << "\")" << QT_ENDL;
+      oss << "sys.path.append(\"" << path << "\")" << Qt::endl;
     }
 
     runString(pythonCode);
@@ -663,18 +663,18 @@ void PythonInterpreter::stopCurrentScript() {
 void PythonInterpreter::deleteModule(const QString &moduleName) {
   QString pythonCode;
   QTextStream oss(&pythonCode);
-  oss << "import sys" << QT_ENDL;
-  oss << "if \"" << moduleName << "\" in sys.modules:" << QT_ENDL;
-  oss << "  del sys.modules[\"" << moduleName << "\"]" << QT_ENDL;
+  oss << "import sys" << Qt::endl;
+  oss << "if \"" << moduleName << "\" in sys.modules:" << Qt::endl;
+  oss << "  del sys.modules[\"" << moduleName << "\"]" << Qt::endl;
   runString(pythonCode);
 }
 
 bool PythonInterpreter::reloadModule(const QString &moduleName) {
   QString pythonCode;
   QTextStream oss(&pythonCode);
-  oss << "from importlib import reload" << QT_ENDL;
-  oss << "mod = __import__(\"" << moduleName << "\")" << QT_ENDL;
-  oss << "reload(mod)" << QT_ENDL;
+  oss << "from importlib import reload" << Qt::endl;
+  oss << "mod = __import__(\"" << moduleName << "\")" << Qt::endl;
+  oss << "reload(mod)" << Qt::endl;
   return runString(pythonCode);
 }
 

@@ -188,12 +188,8 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
 
   if (e->type() == QEvent::Wheel && centralNodeLocked && !circleLayoutSet) {
     QWheelEvent *we = static_cast<QWheelEvent *>(e);
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-    auto wePos = we->pos();
-#else
     auto wePos = we->position();
-#endif
+
     if (selectInAugmentedDisplayGraph(wePos.x(), wePos.y(), selectedEntity) &&
         selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
       if (selectedEntity.getComplexEntityId() == neighborhoodGraphCentralNode.id) {

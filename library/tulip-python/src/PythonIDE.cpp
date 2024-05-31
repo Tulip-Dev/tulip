@@ -164,7 +164,7 @@ def main(graph):
       if (cleanPropName != "viewMetaGraph")
 #endif
         oss << "    " << cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph['"
-            << cleanPropName << "']" << QT_ENDL;
+            << cleanPropName << "']" << Qt::endl;
     }
   }
 
@@ -1114,7 +1114,7 @@ void PythonIDE::registerPythonPlugin(bool clear) {
   QString pythonCode;
   QTextStream oss(&pythonCode);
 
-  oss << "import " << moduleName << QT_ENDL;
+  oss << "import " << moduleName << Qt::endl;
   oss << "plugin = " << moduleName << "." << pluginClassName << "(tlp.AlgorithmContext())";
 
   if (codeOk && _pythonInterpreter->runString(pythonCode)) {

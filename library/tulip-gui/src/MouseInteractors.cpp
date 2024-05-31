@@ -42,11 +42,7 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 
     auto vDelta = we->angleDelta().y();
     if (vDelta != 0 && we->modifiers() == Qt::NoModifier) {
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-      auto wePos = we->pos();
-#else
       auto wePos = we->position();
-#endif
       g->getScene()->zoomXY(g->screenToViewport(vDelta) / WHEEL_DELTA,
                             g->screenToViewport(wePos.x()), g->screenToViewport(wePos.y()));
       g->draw(false);

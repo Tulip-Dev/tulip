@@ -316,11 +316,8 @@ QVariant GraphModel::nodeValue(unsigned int id, PropertyInterface *prop) {
         tlpStringToQString(static_cast<StringProperty *>(prop)->getNodeValue(n)));
   } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr) {
     const auto &vb = static_cast<BooleanVectorProperty *>(prop)->getNodeValue(n);
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-    return QVariant::fromValue<QVector<bool>>(QVector<bool>::fromStdVector(vb));
-#else
+
     return QVariant::fromValue<QVector<bool>>(QVector<bool>(vb.begin(), vb.end()));
-#endif
   }
 
   STANDARD_NODE_CHECKS(GET_NODE_VALUE)
@@ -359,11 +356,8 @@ QVariant GraphModel::nodeDefaultValue(PropertyInterface *prop) {
         tlpStringToQString(static_cast<StringProperty *>(prop)->getNodeDefaultValue()));
   } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr) {
     const auto &vb = static_cast<BooleanVectorProperty *>(prop)->getNodeDefaultValue();
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-    return QVariant::fromValue<QVector<bool>>(QVector<bool>::fromStdVector(vb));
-#else
+
     return QVariant::fromValue<QVector<bool>>(QVector<bool>(vb.begin(), vb.end()));
-#endif
   }
 
   STANDARD_NODE_CHECKS(GET_NODE_DEFAULT_VALUE)
@@ -538,11 +532,9 @@ QVariant GraphModel::edgeValue(unsigned int id, PropertyInterface *prop) {
         tlpStringToQString(static_cast<StringProperty *>(prop)->getEdgeValue(e)));
   } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr) {
     const auto &vb = static_cast<BooleanVectorProperty *>(prop)->getEdgeValue(e);
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-    return QVariant::fromValue<QVector<bool>>(QVector<bool>::fromStdVector(vb));
-#else
+
     return QVariant::fromValue<QVector<bool>>(QVector<bool>(vb.begin(), vb.end()));
-#endif
+
   }
 
   STANDARD_EDGE_CHECKS(GET_EDGE_VALUE)
@@ -591,11 +583,8 @@ QVariant GraphModel::edgeDefaultValue(PropertyInterface *prop) {
         tlpStringToQString(static_cast<StringProperty *>(prop)->getEdgeDefaultValue()));
   } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr) {
     const auto &vb = static_cast<BooleanVectorProperty *>(prop)->getEdgeDefaultValue();
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-    return QVariant::fromValue<QVector<bool>>(QVector<bool>::fromStdVector(vb));
-#else
+
     return QVariant::fromValue<QVector<bool>>(QVector<bool>(vb.begin(), vb.end()));
-#endif
   }
 
   STANDARD_EDGE_CHECKS(GET_EDGE_DEFAULT_VALUE)
@@ -873,21 +862,12 @@ bool GraphSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInde
   if (!selected)
     return false;
 
-#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
-  if (filterRegExp().isEmpty())
-    return true;
-  for (auto pi : _properties) {
-    if (graphModel->stringValue(id, pi).contains(filterRegExp()))
-      return true;
-  }
-#else
   if (filterRegularExpression().pattern().isEmpty())
     return true;
   for (auto pi : _properties) {
     if (graphModel->stringValue(id, pi).contains(filterRegularExpression()))
       return true;
   }
-#endif
 
   return false;
 }

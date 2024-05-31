@@ -115,27 +115,6 @@ static map<QString, string> buildPropertyTypeLabelToPropertyTypeMap() {
 static const map<QString, string> &propertyTypeLabelToPropertyTypeMap =
     buildPropertyTypeLabelToPropertyTypeMap();
 
-#if (QT_VERSION < QT_VERSION_CHECK(5, 8, 0))
-// Allow to print a human readable representation of Qt events,
-// for debugging purpose (through the use of qDebug() )
-QDebug operator<<(QDebug str, const QEvent *ev) {
-  str << "QEvent";
-
-  if (ev) {
-    static int eventEnumIndex = QEvent::staticMetaObject.indexOfEnumerator("Type");
-    QString name = QEvent::staticMetaObject.enumerator(eventEnumIndex).valueToKey(ev->type());
-
-    if (!name.isEmpty()) {
-      str << name;
-    } else {
-      str << ev->type();
-    }
-  }
-
-  return str.maybeSpace();
-}
-#endif
-
 namespace tlp {
 
 bool getColorDialog(const QColor &color, QWidget *parent, const QString &title, QColor &result) {

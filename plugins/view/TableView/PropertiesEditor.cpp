@@ -152,15 +152,10 @@ void PropertiesEditor::setPropertiesFilter(QString filter) {
     // convert the sql like filter
     convertLikeFilter(filter);
 
-#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
-  static_cast<QSortFilterProxyModel *>(_ui->propertiesTableView->model())
-      ->setFilterRegExp(QRegExp(filter, _caseSensitiveSearch));
-#else
   static_cast<QSortFilterProxyModel *>(_ui->propertiesTableView->model())
       ->setFilterRegularExpression(filter);
   static_cast<QSortFilterProxyModel *>(_ui->propertiesTableView->model())
       ->setFilterCaseSensitivity(_caseSensitiveSearch);
-#endif
   filteringProperties = false;
 }
 

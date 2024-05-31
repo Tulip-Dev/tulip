@@ -374,7 +374,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     case ALIGN_VERTICALLY:
     case ALIGN_HORIZONTALLY:
     default:
-      qWarning() << "[Error] : " << __FUNCTION__ << " should not have been called" << QT_ENDL;
+      qWarning() << "[Error] : " << __FUNCTION__ << " should not have been called" << Qt::endl;
       break;
     }
   }
