@@ -76,8 +76,8 @@ QToolButton {
 
 QToolButton:hover {
 background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1,
-stop:0 rgb(85,85,85),
-stop:1 rgb(70,70,70));
+stop:0 rgb(155,155,155),
+stop:1 rgb(130,130,130));
 }
 
 QToolButton:checked, QToolButton:checked:pressed, QToolButton:pressed {

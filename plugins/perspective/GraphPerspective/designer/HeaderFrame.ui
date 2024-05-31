@@ -39,18 +39,13 @@ color: white;
 QComboBox:hover, QToolButton:hover, QPushButton:hover {
 border-image:none;
 background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1,
-stop:0 rgb(85,85,85),
-stop:1 rgb(70,70,70));
+stop:0 rgb(155,155,155),
+stop:1 rgb(130,130,130));
 border: 0px;
 color: white;
 }
 QToolButton:pressed, QPushButton:pressed {
-border-image:none;
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1,
-stop:0 rgb(65,65,65),
-stop:1 rgb(50,50,50));
-border: 0px;
-color: white;
+background-color: #D0D0D0;
 }
 
 #expandButton {

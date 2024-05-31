@@ -653,8 +653,8 @@ border-image: none;
 
 #bottomFrame QPushButton:hover, #bottomFrame QToolButton:hover {
 background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1,
-stop:0 rgb(85,85,85),
-stop:1 rgb(70,70,70));
+stop:0 rgb(155,155,155),
+stop:1 rgb(130,130,130));
 }
 
 #bottomFrame QPushButton:pressed, #bottomFrame .QPushButton:checked, #bottomFrame QToolButton:pressed {
@@ -2186,7 +2186,7 @@ void GraphPerspective::showHideMenuBar() {
     SET_TIPS(_ui->menubarButton, "Show the menu bar");
   } else {
     _mainWindow->menuBar()->setVisible(true);
-    SET_TIPS(_ui->menubarButton, "Hide the manu bar");
+    SET_TIPS(_ui->menubarButton, "Hide the menu bar");
   }
 }
 

@@ -49,7 +49,7 @@ border-image: none;
 background-color: transparent;
 }
 QPushButton:hover {
-border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
+background-color: #D0D0D0;
 }
 PlaceHolderWidget {
 background-color: white;
