@@ -189,19 +189,20 @@ ENDIF()
   SET(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET OFF CACHE BOOL "Add a wheel make target for generating Python tulip-core module wheel ? [ON|OFF]")
   IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
     SET(TULIP_BUILD_CORE_ONLY ON)
-    IF(APPLE)
-      # build binaries with install rpath when generating Tulip Python wheels
-      # for MacOs as we don't install the project in that case
-      SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
-    ELSEIF(LINUX)
-      FILE(READ /etc/centos-release LINUX_ISSUE)
-      IF((NOT "${LINUX_ISSUE}" MATCHES ".*AlmaLinux release 8\\.9 \\(Midnight Oncilla\\).*" AND NOT "${LINUX_ISSUE}" MATCHES ".*CentOS Linux release 7\\.9.*") OR NOT EXISTS /usr/local/bin/auditwheel)
-        MESSAGE(FATAL_ERROR "Python binary wheels for Linux platform must be compiled using the CentOS (6.10 or 7.9) or AlmaLinux (8.9) docker images provided by the manylinux project from the Python Packaging Authority.\nSee https://github.com/pypa/manylinux for more details.")
-      ENDIF()
-      # build binaries with install rpath when generating Tulip Python wheels for Linux
-      # as we don't install the project in that case
-      SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
-    ENDIF(APPLE)
+    # build binaries with install rpath when generating Tulip Python wheels
+    # as we don't install the project in that case
+    SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
+    IF(LINUX)
+        #check we are running under manylinux
+        execute_process(
+            COMMAND manylinux-interpreters list
+            RESULT_VARIABLE EXIT_CODE
+            OUTPUT_QUIET
+    )
+    if (NOT ${EXIT_CODE} EQUAL 0)
+        MESSAGE(FATAL_ERROR "Python binary wheels for Linux platform must be compiled using manylinux from the Python Packaging Authority.\nSee https://github.com/pypa/manylinux for more details.")
+    endif()
+    ENDIF(LINUX)
   ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 
   ## ========================================================

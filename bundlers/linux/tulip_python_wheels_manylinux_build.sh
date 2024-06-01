@@ -8,7 +8,7 @@ TULIP_PYTHON_TEST_WHEEL_SUFFIX=$1
 
 # install tulip-core wheel deps
 # yum -y install epel-release
-yum -y install ccache libffi-devel
+yum -y install libffi-devel
 # install wheels build deps
 
 # get tulip source dir
@@ -41,15 +41,16 @@ do
   then
      continue
   fi
-  # install sip
+  # install sip and wheel (to be removed soon from manylinux with Python >= 3.12)
   ${CPYBIN}/python -m pip install sip
+  ${CPYBIN}/python -m pip install -U wheel
   pushd $CPYBIN
   cd ..
   CPYDIR=$(basename $PWD)
   popd
   CPYINC=/opt/python/$CPYDIR/include/$(ls ${CPYBIN}/../include)
   # configure and build python wheel with specific Python version
-  cmake ${TULIP_SRC} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INCLUDE_PATH=${CPYINC} -DCMAKE_INSTALL_PREFIX=/tmp/tulip_install -DPython_EXECUTABLE=${CPYBIN}/python -DPYTHON_INCLUDE_DIR=${CPYINC} -DTULIP_ACTIVATE_PYTHON_WHEEL_TARGET=ON -DTULIP_PYTHON_TEST_WHEEL_SUFFIX=${TULIP_PYTHON_TEST_WHEEL_SUFFIX} -DTULIP_USE_CCACHE=ON
+  cmake ${TULIP_SRC} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INCLUDE_PATH=${CPYINC} -DCMAKE_INSTALL_PREFIX=/tmp/tulip_install -DPython_EXECUTABLE=${CPYBIN}/python -DPython_INCLUDE_DIRS=${CPYINC} -DTULIP_ACTIVATE_PYTHON_WHEEL_TARGET=ON -DTULIP_PYTHON_TEST_WHEEL_SUFFIX=${TULIP_PYTHON_TEST_WHEEL_SUFFIX} -DTULIP_USE_CCACHE=ON
   TULIP_VERSION=$(bash ./tulip-config --version)
   make -j4
   make test-wheel
