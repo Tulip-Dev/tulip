@@ -23,28 +23,24 @@ depending on your system configuration.
 
 The following dependencies are required to build Tulip:
 
-* `CMake <https://cmake.org>`_ >= 3.1
-* A `C++11 <https://en.wikipedia.org/wiki/C%2B%2B11>`_ compiler : `GCC <https://gcc.gnu.org/>`_ >= 4.8.1,
-  `Clang <https://clang.llvm.org/>`_ >= 3.3 or 
-  `Microsoft Visual Studio <https://www.visualstudio.com/>`_ >= 2013
+* `CMake <https://cmake.org>`_ >= 3.20
+* A `C++17 <https://en.wikipedia.org/wiki/C%2B%2B17>`_ compiler : `GCC <https://gcc.gnu.org/>`_ > 8.0,
+  `Clang <https://clang.llvm.org/>`_ > 5.0 or
+  `Microsoft Visual Studio <https://www.visualstudio.com/>`_ >= 2017
 * `FreeType <https://www.freetype.org>`_ 
 * `zlib <http://zlib.net>`_
-* `Qt <https://www.qt.io>`_ >= 5.6
+* `libzip <https://libzip.org/>`_
+* `Qt <https://www.qt.io>`_ >= 5.15
 * `OpenGL <https://www.opengl.org>`_ >= 2.0
 * `GLEW <http://glew.sourceforge.net/>`_ >= 1.4
+* `Python <https://www.python.org>`_ >= 3.8
+* `SIP Python Module <https://www.riverbankcomputing.com/software/sip/intro>`_ >= 6.8.3
+* `Pip Python module <https://pypi.org/project/pip/>`_
 
-In order to build the Python components, the following dependencies are needed:
-
-* `Python <https://www.python.org>`_ >= 3.7
-* `SIP <https://www.riverbankcomputing.com/software/sip/intro>`_ >= 4.19.14
-  (if SIP can not be found or its version does not meet the minimum requirements,
-  it will be compiled using the existing copy of its source code in the Tulip tree).
-  
 The following dependencies are also needed but they will be compiled from the Tulip
 source tree if they can not be found on your system:
 
 * `Qhull <http://www.qhull.org/>`_
-* `libzip <https://libzip.org/>`_
 * `yajl <https://lloyd.github.io/yajl/>`_ >= 2.0
   
 In order to generate the documentation, the following tools must be installed:
