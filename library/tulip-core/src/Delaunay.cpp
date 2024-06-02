@@ -31,13 +31,8 @@
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
 
-extern "C" {
-#ifdef HAVE_REENTRANT_QHULL
-#include <qhull_ra.h>
-#else
-#include <qhull_a.h>
-#endif
-}
+
+#include <libqhull_r/libqhull_r.h>
 
 using namespace std;
 using namespace tlp;
@@ -59,28 +54,21 @@ static bool runQHull(int dim, vector<double> &points,
   string qhullCommand = string("qhull d ") + qhullOptions;
 
 // initialize qhull
-#ifdef HAVE_REENTRANT_QHULL
   qhT qh_qh;
   qhT *qh = &qh_qh;
   QHULL_LIB_CHECK
   qh_zero(qh, stderr);
   int qhullKo = qh_new_qhull(qh, dim, points.size() / dim, &points[0], false,
                              const_cast<char *>(qhullCommand.c_str()), nullptr, stderr);
-#else
-  int qhullKo = qh_new_qhull(dim, points.size() / dim, &points[0], false,
-                             const_cast<char *>(qhullCommand.c_str()), nullptr, stderr);
-#endif
+
 
   if (!qhullKo) {
 
     set<pair<unsigned int, unsigned int>> placedEdges;
 
 // call qhull delaunay triangulation
-#ifdef HAVE_REENTRANT_QHULL
     qh_triangulate(qh);
-#else
-    qh_triangulate();
-#endif
+
 
     facetT *facet = nullptr;
     vertexT *vertex = nullptr, **vertexp;
@@ -93,8 +81,6 @@ static bool runQHull(int dim, vector<double> &points,
         int pointId0 = 0, pointId1 = 0, pointId2 = 0, pointId3 = -1;
         int i = 0;
         FOREACHvertex_(facet->vertices) {
-#ifdef HAVE_REENTRANT_QHULL
-
           if (i == 0) {
             pointId0 = qh_pointid(qh, vertex->point);
           } else if (i == 1) {
@@ -105,19 +91,6 @@ static bool runQHull(int dim, vector<double> &points,
             pointId3 = qh_pointid(qh, vertex->point);
           }
 
-#else
-
-          if (i == 0) {
-            pointId0 = qh_pointid(vertex->point);
-          } else if (i == 1) {
-            pointId1 = qh_pointid(vertex->point);
-          } else if (i == 2) {
-            pointId2 = qh_pointid(vertex->point);
-          } else {
-            pointId3 = qh_pointid(vertex->point);
-          }
-
-#endif
           ++i;
         }
 
@@ -181,13 +154,9 @@ static bool runQHull(int dim, vector<double> &points,
 
   // free memory allocated by qhull
   int curlong, totlong;
-#ifdef HAVE_REENTRANT_QHULL
   qh_freeqhull(qh, !qh_ALL);
   qh_memfreeshort(qh, &curlong, &totlong);
-#else
-  qh_freeqhull(!qh_ALL);
-  qh_memfreeshort(&curlong, &totlong);
-#endif
+
 
   return !qhullKo;
 }

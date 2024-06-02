@@ -8,7 +8,8 @@ TULIP_PYTHON_TEST_WHEEL_SUFFIX=$1
 
 # install tulip-core wheel deps
 # yum -y install epel-release
-yum -y install libffi-devel
+yum -y upgrade
+# yum -y install qhull-devel #this package does not work with manylinux_2_28
 # install wheels build deps
 
 # get tulip source dir
@@ -42,7 +43,8 @@ do
      continue
   fi
   # install sip and wheel (to be removed soon from manylinux with Python >= 3.12)
-  ${CPYBIN}/python -m pip install sip
+  #cmeel-qhull is a qhull release which is installed via pip. it works but the configuration is a bit tough!!
+  ${CPYBIN}/python -m pip install sip cmeel-qhull
   ${CPYBIN}/python -m pip install -U wheel
   pushd $CPYBIN
   cd ..

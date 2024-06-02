@@ -36,11 +36,11 @@ The following dependencies are required to build Tulip:
 * `Python <https://www.python.org>`_ >= 3.8
 * `SIP Python Module <https://www.riverbankcomputing.com/software/sip/intro>`_ >= 6.8.3
 * `Pip Python module <https://pypi.org/project/pip/>`_
+* `Qhull <http://www.qhull.org/>`_
 
 The following dependencies are also needed but they will be compiled from the Tulip
 source tree if they can not be found on your system:
 
-* `Qhull <http://www.qhull.org/>`_
 * `yajl <https://lloyd.github.io/yajl/>`_ >= 2.0
   
 In order to generate the documentation, the following tools must be installed:

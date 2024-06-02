@@ -28,13 +28,7 @@
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
 
-extern "C" {
-#ifdef HAVE_REENTRANT_QHULL
-#include <qhull_ra.h>
-#else
-#include <qhull_a.h>
-#endif
-}
+#include <libqhull_r/libqhull_r.h>
 
 using namespace std;
 using namespace tlp;
@@ -52,17 +46,13 @@ static bool runQHull(int dim, vector<double> &points, vector<vector<unsigned int
   qhullCommand += qhullOptions;
 
 // run qhull convex hull computation
-#ifdef HAVE_REENTRANT_QHULL
   qhT qh_qh;
   qhT *qh = &qh_qh;
   QHULL_LIB_CHECK
   qh_zero(qh, stderr);
   int qhullKo = qh_new_qhull(qh, dim, points.size() / dim, &points[0], false,
                              const_cast<char *>(qhullCommand.c_str()), nullptr, stderr);
-#else
-  int qhullKo = qh_new_qhull(dim, points.size() / dim, &points[0], false,
-                             const_cast<char *>(qhullCommand.c_str()), nullptr, stderr);
-#endif
+
 
   if (!qhullKo) {
     facetT *facet = nullptr;
@@ -73,11 +63,8 @@ static bool runQHull(int dim, vector<double> &points, vector<vector<unsigned int
       std::vector<unsigned int> facetV;
       std::vector<unsigned int> neighborsV;
       FOREACHvertex_(facet->vertices) {
-#ifdef HAVE_REENTRANT_QHULL
         facetV.push_back(qh_pointid(qh, vertex->point));
-#else
-        facetV.push_back(qh_pointid(vertex->point));
-#endif
+
       }
       faceIds[getid_(facet)] = facets.size();
       facets.push_back(facetV);
@@ -97,13 +84,8 @@ static bool runQHull(int dim, vector<double> &points, vector<vector<unsigned int
 
   int curlong, totlong;
 // free memory allocated by qhull
-#ifdef HAVE_REENTRANT_QHULL
   qh_freeqhull(qh, !qh_ALL);
   qh_memfreeshort(qh, &curlong, &totlong);
-#else
-  qh_freeqhull(!qh_ALL);
-  qh_memfreeshort(&curlong, &totlong);
-#endif
 
   return !qhullKo;
 }

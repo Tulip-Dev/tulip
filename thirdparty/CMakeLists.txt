@@ -12,14 +12,6 @@ ADD_CORE_FILES(CMakeLists.txt
 ADD_SUBDIRECTORY(gzstream)
 ADD_SUBDIRECTORY(OGDF)
 
-IF(NOT QHULL_FOUND)
-  IF (TULIP_USE_THIRDPARTY_STATIC_LIBS)
-    MESSAGE(STATUS "Qhull static library located in thirdparty will be used.")
-  ELSE()
-    MESSAGE(STATUS "Qhull library was not found on the system, the static version located in thirdparty will be used.")
-  ENDIF()
-  ADD_SUBDIRECTORY(libqhull)
-ENDIF(NOT QHULL_FOUND)
 ADD_SUBDIRECTORY(yajl)
 
 ADD_SUBDIRECTORY(antlr)

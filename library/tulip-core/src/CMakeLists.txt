@@ -77,13 +77,10 @@ TLPBExport.cpp
 TLPBImport.cpp
 )
 
-INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${PROJECT_SOURCE_DIR} ${ZLIB_INCLUDE_DIR} ${YajlInclude} ${QhullInclude} ${GZStreamInclude} ${UTF8CppInclude})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${PROJECT_SOURCE_DIR} ${ZLIB_INCLUDE_DIR} ${YajlInclude} ${Qhull_INCLUDE_DIRS} ${GZStreamInclude} ${UTF8CppInclude})
 
 ADD_LIBRARY(${LibTulipCoreName} SHARED ${tulip_LIB_SRCS})
-IF(HAVE_REENTRANT_QHULL)
-  TARGET_COMPILE_DEFINITIONS(${LibTulipCoreName} PUBLIC "HAVE_REENTRANT_QHULL")
-ENDIF(HAVE_REENTRANT_QHULL)
-TARGET_LINK_LIBRARIES(${LibTulipCoreName} ${GZStreamLibrary} ${YajlLibrary} ${QhullLibrary} ${CMAKE_DL_LIBS})
+TARGET_LINK_LIBRARIES(${LibTulipCoreName} ${GZStreamLibrary} ${YajlLibrary} ${Qhull_LINK_LIBRARIES} ${CMAKE_DL_LIBS})
 IF(WIN32)
   IF(MSVC)
     TARGET_LINK_LIBRARIES(${LibTulipCoreName} Dbghelp)

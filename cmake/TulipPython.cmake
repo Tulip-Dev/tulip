@@ -159,21 +159,24 @@ IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
 
   IF(LINUX)
+  #use cmeel-qhull Python package while package from manylinux does not work (compiles but does not run)
+  SET(ENV_QHULL ${Qhull_LIBRARY_DIRS}:$ENV{LD_LIBRARY_PATH})
   #check for auditwheel (installed by default on manylinux)
   find_program(AUDITWHEEL_CMD auditwheel REQUIRED)
-
     ADD_CUSTOM_COMMAND(TARGET wheel POST_BUILD
-      COMMAND bash -c "{AUDITWHEEL_CMD} repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
+
+      COMMAND ${CMAKE_COMMAND} -E env LD_LIBRARY_PATH=${ENV_QHULL} bash -c "${AUDITWHEEL_CMD} repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
       COMMAND bash -c "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
       WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
-      COMMENT "patching linux tulip-core wheel" VERBATIM)
+      COMMENT "Repairing tulip-core wheel" VERBATIM)
 
-    IF(TULIP_GENERATE_TESTPYPI_WHEEL)
+  IF(TULIP_GENERATE_TESTPYPI_WHEEL)
       ADD_CUSTOM_COMMAND(TARGET test-wheel POST_BUILD
-        COMMAND bash -c "{AUDITWHEEL_CMD} repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
+        COMMAND ${CMAKE_COMMAND} -E env LD_LIBRARY_PATH=${ENV_QHULL} bash -c "${AUDITWHEEL_CMD} repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
         COMMAND bash -c "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
         WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
-        COMMENT "patching linux tulip-core test wheel" VERBATIM)
+        COMMENT "Repairing tulip-core test wheel"  VERBATIM
+        )
     ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
 
   ENDIF(LINUX)
@@ -220,7 +223,7 @@ IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   # ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
 ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 ##########################################################
-#generate the sip module sources and sip.h
+#generate the sip module sources
 SET(SIP_INCLUDE_DIR ${PROJECT_BINARY_DIR}/thirdparty/sip)
 SET (SIP_H_DIR ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-${SIP_API_FULL})
 SET(SIP_MODULE_SRC ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-${SIP_API_FULL}.tar.gz)

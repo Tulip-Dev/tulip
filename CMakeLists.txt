@@ -211,20 +211,18 @@ ENDIF()
 
   FIND_PACKAGE(ZLIB REQUIRED)
 
-# use thirdparty static libs when needed
-IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET OR TULIP_BUILD_FOR_APPIMAGE)
-  SET(TULIP_USE_THIRDPARTY_STATIC_LIBS ON)
-ELSE(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET OR TULIP_BUILD_FOR_APPIMAGE)
-  SET(TULIP_USE_THIRDPARTY_STATIC_LIBS OFF)
-ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET OR TULIP_BUILD_FOR_APPIMAGE)
+# Python
+INCLUDE(cmake/TulipPython.cmake)
 
 # Qhull
-SET(TULIP_USE_THIRDPARTY_QHULL ${TULIP_USE_THIRDPARTY_STATIC_LIBS} CACHE BOOL "If activated, force the use of reentrant qhull library located in thirdparty instead of trying to find it on the system.")
-IF(NOT TULIP_USE_THIRDPARTY_QHULL)
-  FIND_PACKAGE(Qhull)
-ELSE(NOT TULIP_USE_THIRDPARTY_QHULL)
-  UNSET(QHULL_FOUND CACHE)
-ENDIF(NOT TULIP_USE_THIRDPARTY_QHULL)
+FIND_PACKAGE(PkgConfig REQUIRED)
+IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+#QHULL bundled with manylinux 2.28 is not working
+#use the cmeel-qhull package from Pypi
+SET(PKG_CONFIG_ARGN "--with-path=${Python_SITELIB}/cmeel.prefix/lib/pkgconfig")
+ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+PKG_search_module(Qhull REQUIRED qhull_r>8 IMPORTED_TARGET)
+
 
 IF(NOT TULIP_BUILD_CORE_ONLY AND NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
   # OpenGL
@@ -253,9 +251,6 @@ ENDIF(TULIP_BUILD_GL_TEX_LOADER)
 
 ENDIF(NOT TULIP_BUILD_CORE_ONLY AND NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
 
-# Python
-INCLUDE(cmake/TulipPython.cmake)
-
 ## ========================================================
 ## Include and library paths
 ## ========================================================
@@ -273,15 +268,6 @@ ENDIF(NOT TULIP_BUILD_CORE_ONLY AND NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
 SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF/include)
 SET(OGDFBuildInclude ${PROJECT_BINARY_DIR}/thirdparty/OGDF/include)
 SET(OGDFLibrary OGDF)
-
-IF(QHULL_FOUND)
-  SET(QhullInclude ${QHULL_INCLUDE_DIRS})
-  SET(QhullLibrary ${QHULL_LIBRARIES})
-ELSE(QHULL_FOUND)
-  SET(HAVE_REENTRANT_QHULL TRUE)
-  SET(QhullInclude ${PROJECT_SOURCE_DIR}/thirdparty/libqhull)
-  SET(QhullLibrary qhullstatic)
-ENDIF(QHULL_FOUND)
 
 # use thirdparty/yajl to ensure the static lib can be used to build shared libs
 SET(YajlInclude ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src/api ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/yajl/yajl-2.1.0/include)
