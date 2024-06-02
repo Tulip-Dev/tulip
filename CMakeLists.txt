@@ -211,18 +211,26 @@ ENDIF()
 
   FIND_PACKAGE(ZLIB REQUIRED)
 
-# Python
-INCLUDE(cmake/TulipPython.cmake)
+# Python (need to put this here to initialize Qhull properly when compiling Python wheels
+#qhull libs from manylinux-2.28 (Almalinux 8) does not work. Paclage cmeel-qhull should be used instead
+IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+  SET(PYTHON_COMPONENTS Interpreter Development.Module)
+ELSE(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+  SET(PYTHON_COMPONENTS Interpreter Development)
+ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+FIND_PACKAGE(Python 3.8...<3.13 REQUIRED COMPONENTS ${PYTHON_COMPONENTS})
 
-# Qhull
 FIND_PACKAGE(PkgConfig REQUIRED)
 IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 #QHULL bundled with manylinux 2.28 is not working
-#use the cmeel-qhull package from Pypi
+#use the cmeel-qhull package from Pypi (need to be installed before running cmake)
 SET(PKG_CONFIG_ARGN "--with-path=${Python_SITELIB}/cmeel.prefix/lib/pkgconfig")
 ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 PKG_search_module(Qhull REQUIRED qhull_r>8 IMPORTED_TARGET)
+PKG_search_module(Yajl REQUIRED yajl>2 IMPORTED_TARGET)
 
+#Python
+INCLUDE(cmake/TulipPython.cmake)
 
 IF(NOT TULIP_BUILD_CORE_ONLY AND NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
   # OpenGL
@@ -268,10 +276,6 @@ ENDIF(NOT TULIP_BUILD_CORE_ONLY AND NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
 SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF/include)
 SET(OGDFBuildInclude ${PROJECT_BINARY_DIR}/thirdparty/OGDF/include)
 SET(OGDFLibrary OGDF)
-
-# use thirdparty/yajl to ensure the static lib can be used to build shared libs
-SET(YajlInclude ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src/api ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/yajl/yajl-2.1.0/include)
-SET(YajlLibrary yajl_s)
 
 SET(UTF8CppInclude ${PROJECT_SOURCE_DIR}/thirdparty/utf8-cpp/source)
 

@@ -37,12 +37,8 @@ The following dependencies are required to build Tulip:
 * `SIP Python Module <https://www.riverbankcomputing.com/software/sip/intro>`_ >= 6.8.3
 * `Pip Python module <https://pypi.org/project/pip/>`_
 * `Qhull <http://www.qhull.org/>`_
-
-The following dependencies are also needed but they will be compiled from the Tulip
-source tree if they can not be found on your system:
-
 * `yajl <https://lloyd.github.io/yajl/>`_ >= 2.0
-  
+
 In order to generate the documentation, the following tools must be installed:
 
 * `Sphinx <http://www.sphinx-doc.org/en/stable/>`_ to build the `User Manual <https://tulip.labri.fr/Documentation/current/tulip-user/html/index.html>`_, `Developer Handbook <https://tulip.labri.fr/Documentation/current/tulip-dev/html/index.html>`_ and `Python bindings documentation <https://tulip.labri.fr/Documentation/current/tulip-python/html/index.html>`_

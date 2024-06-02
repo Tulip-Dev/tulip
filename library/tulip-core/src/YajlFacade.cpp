@@ -20,11 +20,9 @@
 #include <tulip/YajlFacade.h>
 #include <tulip/TlpTools.h>
 
-extern "C" {
 #include <yajl/yajl_parse.h>
 #include <yajl/yajl_gen.h>
-}
-//#include <cstdlib>
+
 #include <iostream>
 #include <fstream>
 #include <sstream>

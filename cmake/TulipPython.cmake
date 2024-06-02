@@ -1,11 +1,3 @@
-IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
-  SET(PYTHON_COMPONENTS Interpreter Development.Module)
-ELSE(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
-  SET(PYTHON_COMPONENTS Interpreter Development)
-ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
-
-FIND_PACKAGE(Python 3.8...<3.13 REQUIRED COMPONENTS ${PYTHON_COMPONENTS})
-
 SET(PYTHON_VERSION_NO_DOT ${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
 SET(PYTHON_VERSION ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR})
 SET(TulipPythonModulesInstallDir ${CMAKE_INSTALL_PREFIX}/${TulipLibInstallDir}/tulip/python)
@@ -159,21 +151,19 @@ IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
 
   IF(LINUX)
-  #use cmeel-qhull Python package while package from manylinux does not work (compiles but does not run)
-  SET(ENV_QHULL ${Qhull_LIBRARY_DIRS}:$ENV{LD_LIBRARY_PATH})
+
   #check for auditwheel (installed by default on manylinux)
   find_program(AUDITWHEEL_CMD auditwheel REQUIRED)
     ADD_CUSTOM_COMMAND(TARGET wheel POST_BUILD
-
-      COMMAND ${CMAKE_COMMAND} -E env LD_LIBRARY_PATH=${ENV_QHULL} bash -c "${AUDITWHEEL_CMD} repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
-      COMMAND bash -c "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
+      COMMAND bash -xc "LD_LIBRARY_PATH=${Qhull_LIBDIR}:$ENV{LD_LIBRARY_PATH} ${AUDITWHEEL_CMD} repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
+      COMMAND bash -xc "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
       WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
       COMMENT "Repairing tulip-core wheel" VERBATIM)
 
   IF(TULIP_GENERATE_TESTPYPI_WHEEL)
       ADD_CUSTOM_COMMAND(TARGET test-wheel POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E env LD_LIBRARY_PATH=${ENV_QHULL} bash -c "${AUDITWHEEL_CMD} repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
-        COMMAND bash -c "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
+        COMMAND bash -xc "LD_LIBRARY_PATH=${Qhull_LIBDIR}:$ENV{LD_LIBRARY_PATH} ${AUDITWHEEL_CMD} repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
+        COMMAND bash -xc "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
         WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
         COMMENT "Repairing tulip-core test wheel"  VERBATIM
         )

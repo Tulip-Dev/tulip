@@ -108,12 +108,8 @@ The following dependencies are required to build Tulip:
   * [Pip] (https://pypi.org/project/pip/)
   * [SIP](https://www.riverbankcomputing.com/software/sip/) >= 6.8.3 (to be installed via pip or on Debian/Ubuntu packages sipbuild and sip-tools)
   * [libzip](https://libzip.org)
-  
-The following dependencies are also needed but they will be compiled from the Tulip
-source tree if they can not be found on your system:
-
   * [Qhull](http://www.qhull.org/)
-  * [yajl](https://lloyd.github.io/yajl/) >= 2.0
+  * [yajl](https://lloyd.github.io/yajl/) >= 2.0  
   
 In order to generate the documentation, the following tools must be installed:
 
