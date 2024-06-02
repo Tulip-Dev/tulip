@@ -31,7 +31,6 @@
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
 
-
 #include <libqhull_r/libqhull_r.h>
 
 using namespace std;
@@ -53,7 +52,7 @@ static bool runQHull(int dim, vector<double> &points,
   // build qhull command
   string qhullCommand = string("qhull d ") + qhullOptions;
 
-// initialize qhull
+  // initialize qhull
   qhT qh_qh;
   qhT *qh = &qh_qh;
   QHULL_LIB_CHECK
@@ -61,14 +60,12 @@ static bool runQHull(int dim, vector<double> &points,
   int qhullKo = qh_new_qhull(qh, dim, points.size() / dim, &points[0], false,
                              const_cast<char *>(qhullCommand.c_str()), nullptr, stderr);
 
-
   if (!qhullKo) {
 
     set<pair<unsigned int, unsigned int>> placedEdges;
 
-// call qhull delaunay triangulation
+    // call qhull delaunay triangulation
     qh_triangulate(qh);
-
 
     facetT *facet = nullptr;
     vertexT *vertex = nullptr, **vertexp;
@@ -156,7 +153,6 @@ static bool runQHull(int dim, vector<double> &points,
   int curlong, totlong;
   qh_freeqhull(qh, !qh_ALL);
   qh_memfreeshort(qh, &curlong, &totlong);
-
 
   return !qhullKo;
 }

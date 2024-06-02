@@ -45,14 +45,13 @@ static bool runQHull(int dim, vector<double> &points, vector<vector<unsigned int
   string qhullCommand = "qhull ";
   qhullCommand += qhullOptions;
 
-// run qhull convex hull computation
+  // run qhull convex hull computation
   qhT qh_qh;
   qhT *qh = &qh_qh;
   QHULL_LIB_CHECK
   qh_zero(qh, stderr);
   int qhullKo = qh_new_qhull(qh, dim, points.size() / dim, &points[0], false,
                              const_cast<char *>(qhullCommand.c_str()), nullptr, stderr);
-
 
   if (!qhullKo) {
     facetT *facet = nullptr;
@@ -64,7 +63,6 @@ static bool runQHull(int dim, vector<double> &points, vector<vector<unsigned int
       std::vector<unsigned int> neighborsV;
       FOREACHvertex_(facet->vertices) {
         facetV.push_back(qh_pointid(qh, vertex->point));
-
       }
       faceIds[getid_(facet)] = facets.size();
       facets.push_back(facetV);
@@ -83,7 +81,7 @@ static bool runQHull(int dim, vector<double> &points, vector<vector<unsigned int
   }
 
   int curlong, totlong;
-// free memory allocated by qhull
+  // free memory allocated by qhull
   qh_freeqhull(qh, !qh_ALL);
   qh_memfreeshort(qh, &curlong, &totlong);
 
