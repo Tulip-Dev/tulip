@@ -218,7 +218,7 @@ QTX_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
 
 INCLUDE_DIRECTORIES(${TulipGUIBuildInclude} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} ${ZLIB_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS} ${OGDFInclude} ${OGDFBuildInclude} zip)
 ADD_LIBRARY(${LibTulipGUIName} SHARED ${SRCS} ${MOC_SRCS} ${RCC_SRCS} ${UI_HEADERS})
-TARGET_LINK_LIBRARIES(${LibTulipGUIName} ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOGLName} zip)
+TARGET_LINK_LIBRARIES(${LibTulipGUIName} ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOGLName} libzip::zip)
 
 INSTALL(TARGETS ${LibTulipGUIName}
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_gui
