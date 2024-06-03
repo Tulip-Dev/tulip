@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.20)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.22)
 
 #Setting project name and version (W.X.Y.Z if necessary)
 PROJECT(Tulip
@@ -214,6 +214,17 @@ ENDIF()
 # Python (need to put this here to initialize Qhull properly when compiling Python wheels
 #qhull libs from manylinux-2.28 (Almalinux 8) does not work. Paclage cmeel-qhull should be used instead
 IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+# When building tulip wheels we make a loop of cmake builds,
+# with only a change of Python_EXECUTABLE CMake variable;
+# so we need to unset the previous values of the CMake Python cache variables
+# to force their recomputation
+  UNSET(Python_FOUND CACHE)
+  UNSET(Python_LIBRARIES CACHE)
+  UNSET(Python_INCLUDE_DIRS CACHE)
+  #force to rediscover Qhull for each build (use the cmeel package from the same Python version)
+  UNSET(PKG_CONFIG_ARGN CACHE)
+  UNSET(Qhull_FOUND CACHE)
+  UNSET(Qhull_LIBDIR CACHE)
   SET(PYTHON_COMPONENTS Interpreter Development.Module)
 ELSE(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   SET(PYTHON_COMPONENTS Interpreter Development)

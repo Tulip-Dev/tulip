@@ -7,16 +7,6 @@ MACRO(TULIP_DISABLE_COMPILER_WARNINGS_PYTHON)
     TULIP_SET_C_COMPILER_FLAG("-Wno-old-style-cast -Wno-deprecated-copy -Wno-unused-variable -Wno-overloaded-virtual")
 ENDMACRO(TULIP_DISABLE_COMPILER_WARNINGS_PYTHON)
 
-# When building tulip wheels we make a loop of cmake builds,
-# with only a change of Python_EXECUTABLE CMake variable;
-# so we need to unset the previous values of the CMake Python cache variables
-# to force their recomputation
-IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
-  UNSET(Python_FOUND CACHE)
-  UNSET(Python_LIBRARIES CACHE)
-  UNSET(Python_INCLUDE_DIRS CACHE)
-ENDIF()
-
 GET_FILENAME_COMPONENT(PYTHON_HOME_PATH ${Python_EXECUTABLE} DIRECTORY)
 
 # Ensure the detection of Python library installed through a bundle downloaded from Python.org or through a macports installation
@@ -27,21 +17,21 @@ IF(APPLE)
   ENDIF()
 ENDIF(APPLE)
 
-IF(MINGW)
+# IF(MINGW)
   # Check if Python is provided by MSYS2 (it is compiled with GCC in that case instead of MSVC)
-  EXECUTE_PROCESS(COMMAND ${Python_EXECUTABLE} -VV OUTPUT_VARIABLE PYTHON_VERSION_FULL ERROR_VARIABLE PYTHON_VERSION_FULL)
-  STRING(REGEX MATCH "GCC" MSYS2_PYTHON "${PYTHON_VERSION_FULL}")
+  # EXECUTE_PROCESS(COMMAND ${Python_EXECUTABLE} -VV OUTPUT_VARIABLE PYTHON_VERSION_FULL ERROR_VARIABLE PYTHON_VERSION_FULL)
+  # STRING(REGEX MATCH "GCC" MSYS2_PYTHON "${PYTHON_VERSION_FULL}")
 
   # Python 64bits does not provide a dll import library for MinGW.
   # Fortunately, we can directly link to the Python dll with that compiler.
   # So find the location of that dll and overwrite the Python_LIBRARIES CMake cache variable with it
 
-  IF(MSYS2_PYTHON)
-    IF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll)
-      SET(Python_LIBRARIES ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll CACHE FILEPATH "" FORCE)
-    ELSEIF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}m.dll)
-      SET(Python_LIBRARIES ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}m.dll CACHE FILEPATH "" FORCE)
-    ENDIF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll)
+  # IF(MSYS2_PYTHON)
+    # IF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll)
+      # SET(Python_LIBRARIES ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll CACHE FILEPATH "" FORCE)
+    # ELSEIF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}m.dll)
+      # SET(Python_LIBRARIES ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}m.dll CACHE FILEPATH "" FORCE)
+    # ENDIF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll)
   # ELSE(MSYS2_PYTHON)
   #   # Check if the Python dll is located in the Python home directory (when Python is installed for current user only)
   #   IF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
@@ -55,8 +45,8 @@ IF(MINGW)
   #       SET(Python_LIBRARIES ${WINDIR}/SysWOW64/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
   #     ENDIF(NOT WIN_AMD64 OR X64)
   #   ENDIF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
-  ENDIF(MSYS2_PYTHON)
-ENDIF(MINGW)
+  # ENDIF(MSYS2_PYTHON)
+# ENDIF(MINGW)
 
 # Ensure headers correspond to the ones associated to the detected Python library on MacOS
 IF(APPLE AND NOT "${Python_EXECUTABLE}" MATCHES "^/usr/bin/python.*$"
@@ -151,18 +141,21 @@ IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
 
   IF(LINUX)
-
+  #where to put wheel after having it repaired
+  IF(NOT TULIP_WHEELS_PREFIX)
+    SET(TULIP_WHEELS_PREFIX ./dist)
+  ENDIF()
   #check for auditwheel (installed by default on manylinux)
   find_program(AUDITWHEEL_CMD auditwheel REQUIRED)
     ADD_CUSTOM_COMMAND(TARGET wheel POST_BUILD
-      COMMAND bash -xc "LD_LIBRARY_PATH=${Qhull_LIBDIR}:$ENV{LD_LIBRARY_PATH} ${AUDITWHEEL_CMD} repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
+      COMMAND bash -xc "LD_LIBRARY_PATH=${Qhull_LIBDIR}:$ENV{LD_LIBRARY_PATH} ${AUDITWHEEL_CMD} repair -L native -w ${TULIP_WHEELS_PREFIX} ./dist/$(ls -t ./dist/ | head -1)"
       COMMAND bash -xc "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
       WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
       COMMENT "Repairing tulip-core wheel" VERBATIM)
 
   IF(TULIP_GENERATE_TESTPYPI_WHEEL)
       ADD_CUSTOM_COMMAND(TARGET test-wheel POST_BUILD
-        COMMAND bash -xc "LD_LIBRARY_PATH=${Qhull_LIBDIR}:$ENV{LD_LIBRARY_PATH} ${AUDITWHEEL_CMD} repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
+        COMMAND bash -xc "LD_LIBRARY_PATH=${Qhull_LIBDIR}:$ENV{LD_LIBRARY_PATH} ${AUDITWHEEL_CMD} repair -L native -w ${TULIP_WHEELS_PREFIX} ./dist/$(ls -t ./dist/ | head -1)"
         COMMAND bash -xc "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
         WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
         COMMENT "Repairing tulip-core test wheel"  VERBATIM

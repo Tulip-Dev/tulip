@@ -3,7 +3,7 @@
 
 
 # This script is only intended to be run using
-# a pypa/manylinux2010 docker image (based on Centos 6.10)
+# a pypa/manylinux-2.28 docker image (based on Almalinux 8)
 TULIP_PYTHON_TEST_WHEEL_SUFFIX=$1
 
 # install tulip-core wheel deps
@@ -25,9 +25,10 @@ fi
 # build tulip
 if [ -d /tulip_build ]
 then
-  cd /tulip_build; rm -rf *;
+  rm -rf /tulip_build/*; mkdir -p /tulip_build/build /tulip_build/wheels;cd build; TULIP_WHEELS_PREFIX=/tulip_build/wheels
+
 else
-  mkdir /tmp/tulip_build; cd /tmp/tulip_build
+  mkdir -p /tmp/tulip_build/build /tmp/tulip_build/wheels; cd /tmp/tulip_build/build; TULIP_WHEELS_PREFIX=/tmp/tulip_build/wheels
 fi
 
 TULIP_PYTHON_TEST="from tulip import tlp; from platform import python_version; str = '==> Tulip ' + tlp.getTulipRelease() + ' successfully imported in Python ' + python_version(); print(str)"
@@ -51,7 +52,7 @@ do
   popd
   CPYINC=/opt/python/$CPYDIR/include/$(ls ${CPYBIN}/../include)
   # configure and build python wheel with specific Python version
-  cmake -S ${TULIP_SRC} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INCLUDE_PATH=${CPYINC} -DCMAKE_INSTALL_PREFIX=/tmp/tulip_install -DPython_EXECUTABLE=${CPYBIN}/python -DPython_INCLUDE_DIRS=${CPYINC} -DTULIP_ACTIVATE_PYTHON_WHEEL_TARGET=ON -DTULIP_PYTHON_TEST_WHEEL_SUFFIX=${TULIP_PYTHON_TEST_WHEEL_SUFFIX} -DTULIP_USE_CCACHE=ON
+  cmake -S ${TULIP_SRC} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INCLUDE_PATH=${CPYINC} -DCMAKE_INSTALL_PREFIX=/tmp/tulip_install -DTULIP_WHEELS_PREFIX=${TULIP_WHEELS_PREFIX} -DPython_EXECUTABLE=${CPYBIN}/python -DPython_INCLUDE_DIRS=${CPYINC} -DTULIP_ACTIVATE_PYTHON_WHEEL_TARGET=ON -DTULIP_PYTHON_TEST_WHEEL_SUFFIX=${TULIP_PYTHON_TEST_WHEEL_SUFFIX} -DTULIP_USE_CCACHE=ON
   TULIP_VERSION=$(bash ./tulip-config --version)
   cmake --build . -j4
   cmake --build . -t test-wheel -j4
@@ -60,7 +61,7 @@ do
      break
   fi
   # check the test wheel
-  pushd ./library/tulip-python/bindings/tulip-core/tulip_module/dist
+  pushd ${TULIP_WHEELS_PREFIX}
   ${CPYBIN}/pip install $(ls *${TULIP_VERSION}.${TULIP_PYTHON_TEST_WHEEL_SUFFIX}-${CPYDIR}-*.whl)
   ${CPYBIN}/python -c "$TULIP_PYTHON_TEST"
   if [ $? -ne 0 ]
@@ -72,12 +73,17 @@ do
   ${CPYBIN}/pip uninstall -y tulip-python
 
   # check the tulip-core wheel
-  pushd ./library/tulip-python/bindings/tulip-core/tulip_module/dist
+  pushd ${TULIP_WHEELS_PREFIX}
   ${CPYBIN}/pip install $(ls *${TULIP_VERSION}-${CPYDIR}-*.whl)
   ${CPYBIN}/python -c "$TULIP_PYTHON_TEST"
   if [ $? -ne 0 ]
   then
      break
   fi
+  popd
+
+  #clean tulip_python folder before using another Python version
+  pushd ./library/tulip-python
+  cmake --build . -t clean
   popd
 done
