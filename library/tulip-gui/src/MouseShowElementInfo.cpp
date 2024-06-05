@@ -89,13 +89,16 @@ QTableView *MouseShowElementInfo::tableView() const {
 }
 
 bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
+  static QPointF oldPos(-1, -1);
+  static SelectedEntity selectedEntity;
 
   if (widget == _informationWidget &&
       (e->type() == QEvent::Wheel || e->type() == QEvent::MouseButtonPress)) {
     return true;
   }
 
-  // ensure the info window stays visible while using the wheel or clicking in it
+  // ensure the info window stays visible
+  // while using the wheel or clicking in it
   if (_informationWidget->isVisible() &&
       (e->type() == QEvent::Wheel || e->type() == QEvent::MouseButtonPress)) {
     QRectF widgetRect(_informationWidget->geometry());
@@ -106,6 +109,7 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
       cursorPos = static_cast<QMouseEvent *>(e)->pos();
     }
 
+    oldPos = cursorPos;
     if (!widgetRect.contains(cursorPos)) {
       _informationWidgetItem->setVisible(false);
       return false;
@@ -122,75 +126,64 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
 
     assert(glMainWidget);
 
-    SelectedEntity selectedEntity;
-
     if (e->type() == QEvent::MouseMove) {
+      selectedEntity = SelectedEntity();
       if (pick(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity)) {
         glMainWidget->setCursor(qtWhatsThisCursor);
       } else {
         glMainWidget->setCursor(QCursor());
       }
-
-      return false;
     } else if (e->type() == QEvent::MouseButtonPress && qMouseEv->button() == Qt::LeftButton) {
+      oldPos = qMouseEv->pos();
       if (_informationWidgetItem->isVisible()) {
         // Hide widget if we click outside it
         _informationWidgetItem->setVisible(false);
       }
+    } else if (e->type() == QEvent::MouseButtonRelease && qMouseEv->button() == Qt::LeftButton) {
+      if (oldPos != qMouseEv->pos())
+        return false;
+      // Show widget if we click on node or edge
+      if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
+          selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
+        QLabel *title = _informationWidget->findChild<QLabel *>();
 
-      if (!_informationWidgetItem->isVisible()) {
+        ElementType eltType =
+          selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ? NODE : EDGE;
 
-        // Show widget if we click on node or edge
-        if (pick(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity)) {
-          if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
-              selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
+        // set the table view as the parent of the models as it
+        // takes ownership of them in that case (and thus
+        _model = new QSortFilterProxyModel(tableView());
+        _model->setFilterRole(GraphEdgeElementModel::PropertyNameRole);
+        _model->setSourceModel(
+                               buildModel(eltType, selectedEntity.getComplexEntityId(), tableView()));
+        showVisualProp(_show);
+        tableView()->setModel(_model);
+        title->setText(elementName(eltType, selectedEntity.getComplexEntityId()));
 
-            QLabel *title = _informationWidget->findChild<QLabel *>();
+        QPoint position = qMouseEv->pos();
 
-            ElementType eltType =
-                selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ? NODE : EDGE;
+        if (position.x() + _informationWidgetItem->rect().width() >
+            _view->graphicsView()->sceneRect().width() - 5)
+          position.setX(_view->graphicsView()->sceneRect().width() -
+                        _informationWidgetItem->rect().width() - 5);
 
-            // set the table view as the parent of the models as it
-            // takes ownership of them in that case (and thus
-            _model = new QSortFilterProxyModel(tableView());
-            _model->setFilterRole(GraphEdgeElementModel::PropertyNameRole);
-            _model->setSourceModel(
-                buildModel(eltType, selectedEntity.getComplexEntityId(), tableView()));
-            showVisualProp(_show);
-            tableView()->setModel(_model);
-            title->setText(elementName(eltType, selectedEntity.getComplexEntityId()));
+        if (position.y() + _informationWidgetItem->rect().height() >
+            _view->graphicsView()->sceneRect().height() - 5)
+          position.setY(_view->graphicsView()->sceneRect().height() -
+                        _informationWidgetItem->rect().height() - 5);
 
-            QPoint position = qMouseEv->pos();
-
-            if (position.x() + _informationWidgetItem->rect().width() >
-                _view->graphicsView()->sceneRect().width() - 5)
-              position.setX(_view->graphicsView()->sceneRect().width() -
-                            _informationWidgetItem->rect().width() - 5);
-
-            if (position.y() + _informationWidgetItem->rect().height() >
-                _view->graphicsView()->sceneRect().height() - 5)
-              position.setY(_view->graphicsView()->sceneRect().height() -
-                            _informationWidgetItem->rect().height() - 5);
-
-            _informationWidgetItem->setPos(position);
-            _informationWidgetItem->setVisible(true);
-            QPropertyAnimation *animation =
-                new QPropertyAnimation(_informationWidgetItem, "opacity");
-            connect(animation, SIGNAL(finished()), animation, SLOT(deleteLater()));
-            animation->setDuration(100);
-            animation->setStartValue(0.);
-            animation->setEndValue(1);
-            animation->start();
-
-            return true;
-          } else {
-            return false;
-          }
-        }
+        _informationWidgetItem->setPos(position);
+        _informationWidgetItem->setVisible(true);
+        QPropertyAnimation *animation =
+          new QPropertyAnimation(_informationWidgetItem, "opacity");
+        connect(animation, SIGNAL(finished()), animation, SLOT(deleteLater()));
+        animation->setDuration(100);
+        animation->setStartValue(0.);
+        animation->setEndValue(1);
+        animation->start();
       }
     }
   }
-
   return false;
 }
 
