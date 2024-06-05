@@ -470,7 +470,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
       else if (qMouseEv->modifiers() & Qt::ShiftModifier)
         currentMouse = new MouseRotXRotY();
       else {
-        currentMouse = new MouseMove();        
+        currentMouse = new MouseMove();
         e->accept();
       }
 

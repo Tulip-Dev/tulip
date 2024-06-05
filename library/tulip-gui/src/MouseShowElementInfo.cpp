@@ -148,14 +148,14 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
         QLabel *title = _informationWidget->findChild<QLabel *>();
 
         ElementType eltType =
-          selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ? NODE : EDGE;
+            selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ? NODE : EDGE;
 
         // set the table view as the parent of the models as it
         // takes ownership of them in that case (and thus
         _model = new QSortFilterProxyModel(tableView());
         _model->setFilterRole(GraphEdgeElementModel::PropertyNameRole);
         _model->setSourceModel(
-                               buildModel(eltType, selectedEntity.getComplexEntityId(), tableView()));
+            buildModel(eltType, selectedEntity.getComplexEntityId(), tableView()));
         showVisualProp(_show);
         tableView()->setModel(_model);
         title->setText(elementName(eltType, selectedEntity.getComplexEntityId()));
@@ -174,8 +174,7 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
 
         _informationWidgetItem->setPos(position);
         _informationWidgetItem->setVisible(true);
-        QPropertyAnimation *animation =
-          new QPropertyAnimation(_informationWidgetItem, "opacity");
+        QPropertyAnimation *animation = new QPropertyAnimation(_informationWidgetItem, "opacity");
         connect(animation, SIGNAL(finished()), animation, SLOT(deleteLater()));
         animation->setDuration(100);
         animation->setStartValue(0.);
