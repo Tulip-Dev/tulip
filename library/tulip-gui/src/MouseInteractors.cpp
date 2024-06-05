@@ -310,6 +310,7 @@ bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
     if (dx || dy) {
       glMainWidget->getScene()->translateCamera(glMainWidget->screenToViewport(dx),
                                                 glMainWidget->screenToViewport(dy), 0);
+      glMainWidget->setCursor(QCursor(Qt::ClosedHandCursor));
       glMainWidget->draw(false);
     }
     x = qMouseEv->pos().x();
@@ -469,8 +470,8 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
       else if (qMouseEv->modifiers() & Qt::ShiftModifier)
         currentMouse = new MouseRotXRotY();
       else {
-        currentMouse = new MouseMove();
-        glmainwidget->setCursor(QCursor(Qt::ClosedHandCursor));
+        currentMouse = new MouseMove();        
+        e->accept();
       }
 
       bool result = currentMouse->eventFilter(widget, e);
