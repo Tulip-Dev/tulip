@@ -184,7 +184,9 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
       if (!dynamic_cast<NodeLinkDiagramComponent *>(_view))
         buildAndShowInfos(selectedEntity, qMouseEv->pos());
     } else if (e->type() == QEvent::MouseButtonRelease && qMouseEv->button() == Qt::LeftButton && dynamic_cast<NodeLinkDiagramComponent *>(_view)) {
-      if (oldPos != qMouseEv->pos())
+      if (oldPos != qMouseEv->pos() ||
+          // used to ease the meta node navigation (cf MouseInteractors.cpp)
+          qMouseEv->modifiers())
         return false;
       buildAndShowInfos(selectedEntity, qMouseEv->pos());
     }

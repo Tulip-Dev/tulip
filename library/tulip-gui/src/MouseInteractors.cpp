@@ -373,7 +373,9 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
 
     Graph *graph = glmainwidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
 
-    if (qMouseEv->modifiers() == Qt::NoModifier) {
+    if (qMouseEv->modifiers() == Qt::NoModifier ||
+        // used to ease the meta node navigation
+        qMouseEv->modifiers() == Qt::ShiftModifier) {
       vector<SelectedEntity> tmpNodes;
       vector<SelectedEntity> tmpEdges;
       glmainwidget->pickNodesEdges(qMouseEv->pos().x() - 1, qMouseEv->pos().y() - 1, 3, 3, tmpNodes,
