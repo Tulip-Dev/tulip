@@ -94,6 +94,8 @@ protected:
    */
   virtual QString elementName(ElementType elementType, unsigned int elementId) const;
 
+  void buildAndShowInfos(const SelectedEntity &selectedEntity, QPoint position);                            
+
 private slots:
 
   void showVisualProp(bool show);
