@@ -89,21 +89,21 @@ QTableView *MouseShowElementInfo::tableView() const {
   return _informationWidget->findChild<QTableView *>();
 }
 
-void MouseShowElementInfo::buildAndShowInfos(const SelectedEntity &selectedEntity, QPoint position) {
+void MouseShowElementInfo::buildAndShowInfos(const SelectedEntity &selectedEntity,
+                                             QPoint position) {
   // Show widget if we click on node or edge
   if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
       selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
     QLabel *title = _informationWidget->findChild<QLabel *>();
 
     ElementType eltType =
-      selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ? NODE : EDGE;
+        selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ? NODE : EDGE;
 
     // set the table view as the parent of the models as it
     // takes ownership of them in that case (and thus
     _model = new QSortFilterProxyModel(tableView());
     _model->setFilterRole(GraphEdgeElementModel::PropertyNameRole);
-    _model->setSourceModel(
-                           buildModel(eltType, selectedEntity.getComplexEntityId(), tableView()));
+    _model->setSourceModel(buildModel(eltType, selectedEntity.getComplexEntityId(), tableView()));
     showVisualProp(_show);
     tableView()->setModel(_model);
     title->setText(elementName(eltType, selectedEntity.getComplexEntityId()));
@@ -120,8 +120,7 @@ void MouseShowElementInfo::buildAndShowInfos(const SelectedEntity &selectedEntit
 
     _informationWidgetItem->setPos(position);
     _informationWidgetItem->setVisible(true);
-    QPropertyAnimation *animation =
-      new QPropertyAnimation(_informationWidgetItem, "opacity");
+    QPropertyAnimation *animation = new QPropertyAnimation(_informationWidgetItem, "opacity");
     connect(animation, SIGNAL(finished()), animation, SLOT(deleteLater()));
     animation->setDuration(100);
     animation->setStartValue(0.);
@@ -183,7 +182,8 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
       }
       if (!dynamic_cast<NodeLinkDiagramComponent *>(_view))
         buildAndShowInfos(selectedEntity, qMouseEv->pos());
-    } else if (e->type() == QEvent::MouseButtonRelease && qMouseEv->button() == Qt::LeftButton && dynamic_cast<NodeLinkDiagramComponent *>(_view)) {
+    } else if (e->type() == QEvent::MouseButtonRelease && qMouseEv->button() == Qt::LeftButton &&
+               dynamic_cast<NodeLinkDiagramComponent *>(_view)) {
       if (oldPos != qMouseEv->pos() ||
           // used to ease the meta node navigation (cf MouseInteractors.cpp)
           qMouseEv->modifiers())
