@@ -25,6 +25,7 @@
 #include <tulip/GraphElementModel.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/GlMainView.h>
+#include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/MouseShowElementInfo.h>
 #include <tulip/Perspective.h>
 #include <tulip/TlpQtTools.h>
@@ -88,6 +89,47 @@ QTableView *MouseShowElementInfo::tableView() const {
   return _informationWidget->findChild<QTableView *>();
 }
 
+void MouseShowElementInfo::buildAndShowInfos(const SelectedEntity &selectedEntity, QPoint position) {
+  // Show widget if we click on node or edge
+  if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
+      selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
+    QLabel *title = _informationWidget->findChild<QLabel *>();
+
+    ElementType eltType =
+      selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ? NODE : EDGE;
+
+    // set the table view as the parent of the models as it
+    // takes ownership of them in that case (and thus
+    _model = new QSortFilterProxyModel(tableView());
+    _model->setFilterRole(GraphEdgeElementModel::PropertyNameRole);
+    _model->setSourceModel(
+                           buildModel(eltType, selectedEntity.getComplexEntityId(), tableView()));
+    showVisualProp(_show);
+    tableView()->setModel(_model);
+    title->setText(elementName(eltType, selectedEntity.getComplexEntityId()));
+
+    if (position.x() + _informationWidgetItem->rect().width() >
+        _view->graphicsView()->sceneRect().width() - 5)
+      position.setX(_view->graphicsView()->sceneRect().width() -
+                    _informationWidgetItem->rect().width() - 5);
+
+    if (position.y() + _informationWidgetItem->rect().height() >
+        _view->graphicsView()->sceneRect().height() - 5)
+      position.setY(_view->graphicsView()->sceneRect().height() -
+                    _informationWidgetItem->rect().height() - 5);
+
+    _informationWidgetItem->setPos(position);
+    _informationWidgetItem->setVisible(true);
+    QPropertyAnimation *animation =
+      new QPropertyAnimation(_informationWidgetItem, "opacity");
+    connect(animation, SIGNAL(finished()), animation, SLOT(deleteLater()));
+    animation->setDuration(100);
+    animation->setStartValue(0.);
+    animation->setEndValue(1);
+    animation->start();
+  }
+}
+
 bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
   static QPointF oldPos(-1, -1);
   static SelectedEntity selectedEntity;
@@ -139,48 +181,12 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
         // Hide widget if we click outside it
         _informationWidgetItem->setVisible(false);
       }
-    } else if (e->type() == QEvent::MouseButtonRelease && qMouseEv->button() == Qt::LeftButton) {
+      if (!dynamic_cast<NodeLinkDiagramComponent *>(_view))
+        buildAndShowInfos(selectedEntity, qMouseEv->pos());
+    } else if (e->type() == QEvent::MouseButtonRelease && qMouseEv->button() == Qt::LeftButton && dynamic_cast<NodeLinkDiagramComponent *>(_view)) {
       if (oldPos != qMouseEv->pos())
         return false;
-      // Show widget if we click on node or edge
-      if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
-          selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
-        QLabel *title = _informationWidget->findChild<QLabel *>();
-
-        ElementType eltType =
-            selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ? NODE : EDGE;
-
-        // set the table view as the parent of the models as it
-        // takes ownership of them in that case (and thus
-        _model = new QSortFilterProxyModel(tableView());
-        _model->setFilterRole(GraphEdgeElementModel::PropertyNameRole);
-        _model->setSourceModel(
-            buildModel(eltType, selectedEntity.getComplexEntityId(), tableView()));
-        showVisualProp(_show);
-        tableView()->setModel(_model);
-        title->setText(elementName(eltType, selectedEntity.getComplexEntityId()));
-
-        QPoint position = qMouseEv->pos();
-
-        if (position.x() + _informationWidgetItem->rect().width() >
-            _view->graphicsView()->sceneRect().width() - 5)
-          position.setX(_view->graphicsView()->sceneRect().width() -
-                        _informationWidgetItem->rect().width() - 5);
-
-        if (position.y() + _informationWidgetItem->rect().height() >
-            _view->graphicsView()->sceneRect().height() - 5)
-          position.setY(_view->graphicsView()->sceneRect().height() -
-                        _informationWidgetItem->rect().height() - 5);
-
-        _informationWidgetItem->setPos(position);
-        _informationWidgetItem->setVisible(true);
-        QPropertyAnimation *animation = new QPropertyAnimation(_informationWidgetItem, "opacity");
-        connect(animation, SIGNAL(finished()), animation, SLOT(deleteLater()));
-        animation->setDuration(100);
-        animation->setStartValue(0.);
-        animation->setEndValue(1);
-        animation->start();
-      }
+      buildAndShowInfos(selectedEntity, qMouseEv->pos());
     }
   }
   return false;
