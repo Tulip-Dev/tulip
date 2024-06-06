@@ -70,7 +70,7 @@ public:
   void construct() override {
     setConfigurationWidgetText(
         QString("<h3>Display node or edge properties</h3>") +
-        "When the mouse cursor appears like <img src=\":/tulip/gui/icons/i_information.png\">, "
+        "When the mouse cursor looks like <img src=\":/tulip/gui/icons/i_information.png\">, "
         "indicating it is on top of a graph element (node or edge), "
         "<b>Mouse left click</b> to display a panel showing the element properties.<br/>"
         "As the panel is displayed, <b>Mouse left click</b> in a property row to edit the "
