@@ -84,8 +84,24 @@ public:
    * Construct chain of responsibility
    */
   void construct() override {
-    setConfigurationWidgetText(QString("<h3>Get information interactor</h3>") +
-                               "<b>Mouse left</b> click on an element to display its properties");
+    setConfigurationWidgetText(QString("<h3>Display node or edge properties</h3>") +
+        "When the mouse cursor looks like <img src=\":/tulip/gui/icons/i_information.png\">, "
+        "indicating it is on top of a graph element (node or edge), "
+        "<b>Mouse left click</b> to display a panel showing the element properties.<br/>"
+        "As the panel is displayed, <b>Mouse left click</b> in a property row to edit the "
+        "corresponding value.<br/>"
+        "The visible properties can be filtered using the list of properties displayed in the "
+        "<b>Options</b> tab.<br/>"
+        "If none is filtered, when the element properties panel is displayed, the display of the "
+        "visual rendering properties can be then toggled using a dedicated check box.<br/><br/>" +
+        "<u>2D Navigation in the graph</u><br/><br/>" +
+        "Translation: <ul><li><b>Mouse left</b> down + moves</li></ul>" +
+#if defined(__APPLE__)
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li></ul>"
+#else
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li></ul>"
+#endif
+    );
     push_back(new GeographicViewNavigator);
     push_back(new GeographicViewShowElementInfo);
   }
@@ -97,25 +113,20 @@ public:
 
 PLUGIN(GeographicViewInteractorGetInformation)
 
-GeographicViewShowElementInfo::GeographicViewShowElementInfo() : _editor(nullptr) {
-  Ui::ElementInformationWidget ui;
-  _informationWidget = new QWidget();
-  _informationWidget->installEventFilter(this);
-  Perspective::setStyleSheet(_informationWidget);
-  ui.setupUi(_informationWidget);
-  ui.displayTulipProp->hide();
-  connect(ui.closeButton, SIGNAL(clicked()), this, SLOT(hideInfos()));
-  tableView()->setItemDelegate(new TulipItemDelegate(tableView()));
-  _informationWidgetItem = new QGraphicsProxyWidget();
-  _informationWidgetItem->setWidget(_informationWidget);
-  _informationWidgetItem->setVisible(false);
+GeographicViewShowElementInfo::GeographicViewShowElementInfo() : MouseShowElementInfo(), _editor(nullptr) {
 }
 
-GeographicViewShowElementInfo::~GeographicViewShowElementInfo() {
-  delete _informationWidgetItem;
+void GeographicViewShowElementInfo::init() {
+  auto gmw = static_cast<GeographicView *>(view())
+    ->getGeographicViewGraphicsView()->getGeoMapWidget();
+  connect(gmw, SIGNAL(mouseMove()), this, SLOT(mouseMove()));
 }
 
 void GeographicViewShowElementInfo::clear() {
+  auto gmw = static_cast<GeographicView *>(view())
+    ->getGeographicViewGraphicsView()->getGeoMapWidget();
+  connect(gmw, SIGNAL(mouseMove()), this, SLOT(mouseMove()));
+
   static_cast<GeographicView *>(view())
       ->getGeographicViewGraphicsView()
       ->getGlMainWidget()
@@ -123,13 +134,9 @@ void GeographicViewShowElementInfo::clear() {
   _informationWidgetItem->setVisible(false);
 }
 
-void GeographicViewShowElementInfo::hideInfos() {
-  tableView()->setModel(nullptr);
-  clear();
-}
-
-QTableView *GeographicViewShowElementInfo::tableView() const {
-  return _informationWidget->findChild<QTableView *>();
+void GeographicViewShowElementInfo::mouseMove() {
+  if (QApplication::mouseButtons() & Qt::LeftButton)
+    _informationWidgetItem->setVisible(false);
 }
 
 bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
@@ -145,112 +152,103 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
   QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
   if (qMouseEv != nullptr) {
+    static SelectedEntity selectedEntity;
+
     GeographicView *geoView = static_cast<GeographicView *>(view());
-    SelectedEntity selectedEntity;
 
     if (e->type() == QEvent::MouseMove) {
-      if (pick(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity)) {
+      if (pick(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity) &&
+          (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
+           selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED)) {
         geoView->getGeographicViewGraphicsView()->getGlMainWidget()->setCursor(qtWhatsThisCursor);
       } else {
         geoView->getGeographicViewGraphicsView()->getGlMainWidget()->setCursor(QCursor());
       }
-
-      return false;
     } else if (e->type() == QEvent::MouseButtonPress && qMouseEv->button() == Qt::LeftButton) {
       if (_informationWidgetItem->isVisible()) {
         // Hide widget if we click outside it
         _informationWidgetItem->setVisible(false);
       }
+      // Show widget if we click on node or edge
+      if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
+          selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
+        _informationWidgetItem->setVisible(true);
 
-      if (!_informationWidgetItem->isVisible()) {
+        QLabel *title = _informationWidget->findChild<QLabel *>();
 
-        // Show widget if we click on node or edge
-        if (pick(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity)) {
-          if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
-              selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
-            _informationWidgetItem->setVisible(true);
-
-            QLabel *title = _informationWidget->findChild<QLabel *>();
-
-            if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
-              title->setText("Node");
-              tableView()->setModel(new GraphNodeElementModel(
-                  _view->graph(), selectedEntity.getComplexEntityId(), _informationWidget));
-            } else {
-              title->setText("Edge");
-              tableView()->setModel(new GraphEdgeElementModel(
-                  _view->graph(), selectedEntity.getComplexEntityId(), _informationWidget));
-            }
-
-            title->setText(title->text() + " #" +
-                           QString::number(selectedEntity.getComplexEntityId()));
-
-            QPoint position = qMouseEv->pos();
-
-            if (position.x() + _informationWidgetItem->rect().width() >
-                _view->graphicsView()->sceneRect().width() - 5)
-              position.setX(_view->graphicsView()->sceneRect().width() -
-                            _informationWidgetItem->rect().width() - 5);
-
-            if (position.y() + _informationWidgetItem->rect().height() >
-                _view->graphicsView()->sceneRect().height())
-              position.setY(_view->graphicsView()->sceneRect().height() -
-                            _informationWidgetItem->rect().height() - 5);
-
-            _informationWidgetItem->setPos(position);
-            QPropertyAnimation *animation =
-                new QPropertyAnimation(_informationWidgetItem, "opacity");
-            animation->setDuration(100);
-            animation->setStartValue(0.);
-            animation->setEndValue(1.);
-            animation->start();
-
-            return true;
-          } else if (selectedEntity.getEntityType() == SelectedEntity::SIMPLE_ENTITY_SELECTED) {
-
-            GlComplexPolygon *polygon =
-                dynamic_cast<GlComplexPolygon *>(selectedEntity.getSimpleEntity());
-
-            if (!polygon)
-              return false;
-
-            _informationWidgetItem->setVisible(true);
-            QLabel *title = _informationWidget->findChild<QLabel *>();
-            title->setText(selectedEntity.getSimpleEntity()
-                               ->getParent()
-                               ->findKey(selectedEntity.getSimpleEntity())
-                               .c_str());
-
-            delete _editor;
-
-            _editor = new GlComplexPolygonItemEditor(polygon);
-
-            tableView()->setModel(new GlSimpleEntityItemModel(_editor, _informationWidget));
-            int size = title->height() + _informationWidget->layout()->spacing() +
-                       tableView()->rowHeight(0) + tableView()->rowHeight(1) + 10;
-            _informationWidget->setMaximumHeight(size);
-
-            QPoint position = qMouseEv->pos();
-
-            if (position.x() + _informationWidgetItem->rect().width() >
-                _view->graphicsView()->sceneRect().width())
-              position.setX(qMouseEv->pos().x() - _informationWidgetItem->rect().width());
-
-            if (position.y() + _informationWidgetItem->rect().height() >
-                _view->graphicsView()->sceneRect().height())
-              position.setY(qMouseEv->pos().y() - _informationWidgetItem->rect().height());
-
-            _informationWidgetItem->setPos(position);
-            QPropertyAnimation *animation =
-                new QPropertyAnimation(_informationWidgetItem, "opacity");
-            animation->setDuration(100);
-            animation->setStartValue(0.);
-            animation->setEndValue(1.);
-            animation->start();
-          } else {
-            return false;
-          }
+        if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
+          title->setText("Node");
+          tableView()->setModel(new GraphNodeElementModel(
+                                                          _view->graph(), selectedEntity.getComplexEntityId(), _informationWidget));
+        } else {
+          title->setText("Edge");
+          tableView()->setModel(new GraphEdgeElementModel(
+                                                          _view->graph(), selectedEntity.getComplexEntityId(), _informationWidget));
         }
+
+        title->setText(title->text() + " #" +
+                       QString::number(selectedEntity.getComplexEntityId()));
+
+        QPoint position = qMouseEv->pos();
+
+        if (position.x() + _informationWidgetItem->rect().width() >
+            _view->graphicsView()->sceneRect().width() - 5)
+          position.setX(_view->graphicsView()->sceneRect().width() -
+                        _informationWidgetItem->rect().width() - 5);
+
+        if (position.y() + _informationWidgetItem->rect().height() >
+            _view->graphicsView()->sceneRect().height())
+          position.setY(_view->graphicsView()->sceneRect().height() -
+                        _informationWidgetItem->rect().height() - 5);
+
+        _informationWidgetItem->setPos(position);
+        QPropertyAnimation *animation =
+          new QPropertyAnimation(_informationWidgetItem, "opacity");
+        animation->setDuration(100);
+        animation->setStartValue(0.);
+        animation->setEndValue(1.);
+        animation->start();
+      } else if (selectedEntity.getEntityType() == SelectedEntity::SIMPLE_ENTITY_SELECTED) {
+
+        GlComplexPolygon *polygon =
+          dynamic_cast<GlComplexPolygon *>(selectedEntity.getSimpleEntity());
+
+        if (!polygon)
+          return false;
+
+        _informationWidgetItem->setVisible(true);
+        QLabel *title = _informationWidget->findChild<QLabel *>();
+        title->setText(selectedEntity.getSimpleEntity()
+                       ->getParent()
+                       ->findKey(selectedEntity.getSimpleEntity())
+                       .c_str());
+
+        delete _editor;
+
+        _editor = new GlComplexPolygonItemEditor(polygon);
+
+        tableView()->setModel(new GlSimpleEntityItemModel(_editor, _informationWidget));
+        int size = title->height() + _informationWidget->layout()->spacing() +
+          tableView()->rowHeight(0) + tableView()->rowHeight(1) + 10;
+        _informationWidget->setMaximumHeight(size);
+
+        QPoint position = qMouseEv->pos();
+
+        if (position.x() + _informationWidgetItem->rect().width() >
+            _view->graphicsView()->sceneRect().width())
+          position.setX(qMouseEv->pos().x() - _informationWidgetItem->rect().width());
+
+        if (position.y() + _informationWidgetItem->rect().height() >
+            _view->graphicsView()->sceneRect().height())
+          position.setY(qMouseEv->pos().y() - _informationWidgetItem->rect().height());
+
+        _informationWidgetItem->setPos(position);
+        QPropertyAnimation *animation =
+          new QPropertyAnimation(_informationWidgetItem, "opacity");
+        animation->setDuration(100);
+        animation->setStartValue(0.);
+        animation->setEndValue(1.);
+        animation->start();
       }
     }
   }

@@ -21,6 +21,7 @@
 #define GEOGRAPHIC_VIEW_SHOW_ELEMENT_INFO_H
 
 #include <tulip/InteractorComposite.h>
+#include <tulip/MouseShowElementInfo.h>
 
 #include "GeographicView.h"
 
@@ -34,11 +35,13 @@ class GlComplexPolygonItemEditor;
 /**
  * We define a specific interactor to show element graph info in eltProperties
  */
-class GeographicViewShowElementInfo : public InteractorComponent {
+class GeographicViewShowElementInfo : public MouseShowElementInfo {
   Q_OBJECT
 public:
   GeographicViewShowElementInfo();
-  ~GeographicViewShowElementInfo() override;
+
+  void init();
+
   bool eventFilter(QObject *widget, QEvent *e) override;
 
   void viewChanged(View *) override;
@@ -47,16 +50,12 @@ public:
 
   virtual bool pick(int x, int y, SelectedEntity &selectedEntity);
 
+public slots:
+  void mouseMove();
+
 protected:
   GeographicView *_view;
-  QWidget *_informationWidget;
-  QGraphicsProxyWidget *_informationWidgetItem;
   GlComplexPolygonItemEditor *_editor;
-
-  QTableView *tableView() const;
-
-private slots:
-  void hideInfos();
 };
 } // namespace tlp
 

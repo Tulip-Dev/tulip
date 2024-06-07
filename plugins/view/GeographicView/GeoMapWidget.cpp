@@ -196,6 +196,7 @@ void GeoMapWidget::mouseMoveEvent(QMouseEvent *ev) {
     mousePreviousPos = evPos;
     update();
     emit refreshMap();
+    emit mouseMove();
   }
 }
 

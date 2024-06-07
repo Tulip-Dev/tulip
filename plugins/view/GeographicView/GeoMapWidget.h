@@ -237,6 +237,7 @@ protected:
 signals:
   void currentZoomChanged();
   void refreshMap();
+  void mouseMove();
 
 public slots:
   // zooms in one step
