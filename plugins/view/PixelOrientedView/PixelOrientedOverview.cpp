@@ -179,6 +179,8 @@ void PixelOrientedOverview::computePixelView() {
   GlTextureManager::deleteTexture(textureName);
   GlTextureManager::registerExternalTexture(textureName, textureId);
 
+  glOffscreenRenderer->clearScene();
+
   if (findGlEntity(dimName) == nullptr) {
     addGlEntity(new Gl2DRect(blCornerPos.getY() + pixelOrientedMediator->getImageHeight(),
                              blCornerPos.getY(), blCornerPos.getX(),
