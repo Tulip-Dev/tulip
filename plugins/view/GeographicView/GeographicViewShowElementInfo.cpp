@@ -84,7 +84,8 @@ public:
    * Construct chain of responsibility
    */
   void construct() override {
-    setConfigurationWidgetText(QString("<h3>Display node or edge properties</h3>") +
+    setConfigurationWidgetText(
+        QString("<h3>Display node or edge properties</h3>") +
         "When the mouse cursor looks like <img src=\":/tulip/gui/icons/i_information.png\">, "
         "indicating it is on top of a graph element (node or edge), "
         "<b>Mouse left click</b> to display a panel showing the element properties.<br/>"
@@ -113,18 +114,18 @@ public:
 
 PLUGIN(GeographicViewInteractorGetInformation)
 
-GeographicViewShowElementInfo::GeographicViewShowElementInfo() : MouseShowElementInfo(), _editor(nullptr) {
-}
+GeographicViewShowElementInfo::GeographicViewShowElementInfo()
+    : MouseShowElementInfo(), _editor(nullptr) {}
 
 void GeographicViewShowElementInfo::init() {
-  auto gmw = static_cast<GeographicView *>(view())
-    ->getGeographicViewGraphicsView()->getGeoMapWidget();
+  auto gmw =
+      static_cast<GeographicView *>(view())->getGeographicViewGraphicsView()->getGeoMapWidget();
   connect(gmw, SIGNAL(mouseMove()), this, SLOT(mouseMove()));
 }
 
 void GeographicViewShowElementInfo::clear() {
-  auto gmw = static_cast<GeographicView *>(view())
-    ->getGeographicViewGraphicsView()->getGeoMapWidget();
+  auto gmw =
+      static_cast<GeographicView *>(view())->getGeographicViewGraphicsView()->getGeoMapWidget();
   connect(gmw, SIGNAL(mouseMove()), this, SLOT(mouseMove()));
 
   static_cast<GeographicView *>(view())
@@ -179,15 +180,14 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
         if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
           title->setText("Node");
           tableView()->setModel(new GraphNodeElementModel(
-                                                          _view->graph(), selectedEntity.getComplexEntityId(), _informationWidget));
+              _view->graph(), selectedEntity.getComplexEntityId(), _informationWidget));
         } else {
           title->setText("Edge");
           tableView()->setModel(new GraphEdgeElementModel(
-                                                          _view->graph(), selectedEntity.getComplexEntityId(), _informationWidget));
+              _view->graph(), selectedEntity.getComplexEntityId(), _informationWidget));
         }
 
-        title->setText(title->text() + " #" +
-                       QString::number(selectedEntity.getComplexEntityId()));
+        title->setText(title->text() + " #" + QString::number(selectedEntity.getComplexEntityId()));
 
         QPoint position = qMouseEv->pos();
 
@@ -202,8 +202,7 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
                         _informationWidgetItem->rect().height() - 5);
 
         _informationWidgetItem->setPos(position);
-        QPropertyAnimation *animation =
-          new QPropertyAnimation(_informationWidgetItem, "opacity");
+        QPropertyAnimation *animation = new QPropertyAnimation(_informationWidgetItem, "opacity");
         animation->setDuration(100);
         animation->setStartValue(0.);
         animation->setEndValue(1.);
@@ -211,7 +210,7 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
       } else if (selectedEntity.getEntityType() == SelectedEntity::SIMPLE_ENTITY_SELECTED) {
 
         GlComplexPolygon *polygon =
-          dynamic_cast<GlComplexPolygon *>(selectedEntity.getSimpleEntity());
+            dynamic_cast<GlComplexPolygon *>(selectedEntity.getSimpleEntity());
 
         if (!polygon)
           return false;
@@ -219,9 +218,9 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
         _informationWidgetItem->setVisible(true);
         QLabel *title = _informationWidget->findChild<QLabel *>();
         title->setText(selectedEntity.getSimpleEntity()
-                       ->getParent()
-                       ->findKey(selectedEntity.getSimpleEntity())
-                       .c_str());
+                           ->getParent()
+                           ->findKey(selectedEntity.getSimpleEntity())
+                           .c_str());
 
         delete _editor;
 
@@ -229,7 +228,7 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
 
         tableView()->setModel(new GlSimpleEntityItemModel(_editor, _informationWidget));
         int size = title->height() + _informationWidget->layout()->spacing() +
-          tableView()->rowHeight(0) + tableView()->rowHeight(1) + 10;
+                   tableView()->rowHeight(0) + tableView()->rowHeight(1) + 10;
         _informationWidget->setMaximumHeight(size);
 
         QPoint position = qMouseEv->pos();
@@ -243,8 +242,7 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
           position.setY(qMouseEv->pos().y() - _informationWidgetItem->rect().height());
 
         _informationWidgetItem->setPos(position);
-        QPropertyAnimation *animation =
-          new QPropertyAnimation(_informationWidgetItem, "opacity");
+        QPropertyAnimation *animation = new QPropertyAnimation(_informationWidgetItem, "opacity");
         animation->setDuration(100);
         animation->setStartValue(0.);
         animation->setEndValue(1.);
