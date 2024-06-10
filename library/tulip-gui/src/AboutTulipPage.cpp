@@ -81,9 +81,9 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       ";\">www.opengl.org</a> </li>"
       "<li><b>OGDF</b> v" +
       OGDF_VERSION +
-      ": <a href=\"http://ogdf.net/\" style=\"color: " HTML_LINK_COLOR ";\">ogdf.net</a> </li>" +
+      ": <a href=\"https://ogdf.net/\" style=\"color: " HTML_LINK_COLOR ";\">ogdf.net</a> </li>" +
       (PythonIDEInterface::exists()
-           ? QString("  <li> <b> Python </b> ") + PythonIDEInterface::compiledVersion() +
+           ? QString("  <li> <b> Python </b> ") + PythonIDEInterface::compiledVersion(true) +
                  ": <a href=\"https://www.python.org\" style=\"color:" HTML_LINK_COLOR
                  ";\">www.python.org</a> </li>"
                  "  <li> <b> SIP </b> " +
@@ -101,21 +101,6 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "<li><b>Color Brewer</b> "
       ": <a href=\"https://colorbrewer2.org\" style=\"color:" HTML_LINK_COLOR
       ";\">colorbrewer2.org</a></li>"
-      "<li><b>Libzip " +
-      LIBZIP_VERSION +
-      "</b>"
-      ": <a href=\"https://libzip.org/\" style=\"color:" HTML_LINK_COLOR
-      ";\">libzip.org/</a></li>"
-     "<li><b>Yajl "+
-      YajlParseFacade::yajlVersion().c_str() +
-      "</b>"
-      ": <a href=\"https://lloyd.github.io/yajl/\" style=\"color:" HTML_LINK_COLOR
-      ";\">https://lloyd.github.io/yajl/</a></li>"
-      "<li><b>Qhull "+
-      QhullFacade::QhullVersion().c_str() +
-      "</b>"
-      ": <a href=\"https://lloyd.github.io/yajl/\" style=\"color:" HTML_LINK_COLOR
-      ";\">https://lloyd.github.io/yajl/</a></li>"
       "</ul>"
       "</p>";
 

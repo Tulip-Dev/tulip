@@ -35,7 +35,7 @@ class TulipProject;
 // and the Python IDE
 class TLP_QT_SCOPE PythonIDEInterface : public QFrame {
 public:
-  static QString compiledVersion();
+  static QString compiledVersion(bool full = false);
 #ifdef WIN32
   static QString getPythonHome();
 #endif

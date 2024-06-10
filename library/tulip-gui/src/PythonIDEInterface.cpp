@@ -102,8 +102,8 @@ static QString pythonHome(const QString &pythonVersion) {
 QStringList _installedVersions;
 bool _installedVersionsChecked(false);
 
-QString PythonIDEInterface::compiledVersion() {
-  return PYTHON_VERSION;
+QString PythonIDEInterface::compiledVersion(bool full) {
+  return full ? PYTHON_FULL_VERSION : PYTHON_VERSION;
 }
 
 #ifdef WIN32
