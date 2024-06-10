@@ -17,35 +17,24 @@ SET(TULIP_GUI_PYTHON_BINDINGS_SRC
     ${TULIPGUI_BINDINGS_DIR}/sip_tulipguipart3.cpp
 )
 
-QTX_SET_INCLUDES_AND_DEFINITIONS()
-
-QTX_WRAP_CPP(tulipguiutils_MOC TulipViewsUtils.h)
-QTX_ADD_RESOURCES(tulipgui_RCC_SRCS TulipGui.qrc)
-
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/pyproject.toml.in ${CMAKE_CURRENT_BINARY_DIR}/pyproject.toml @ONLY)
 
 ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_GUI_PYTHON_BINDINGS_SRC}
 COMMAND ${SIP_BUILD} --verbose --protected-is-public --concatenate 4 --api-dir=${CMAKE_CURRENT_BINARY_DIR}
   COMMENT "Generating Python Bindings and API file for libtulip-gui"
-  DEPENDS ${TULIP_GUI_SIP_FILES} ${TULIP_SIP_FILES} ${tulipguiutils_MOC} ${tulipgui_RCC_SRCS}  VERBATIM)
-
-SET(TULIP_GUI_PYTHON_BINDINGS_SRC ${TULIP_GUI_PYTHON_BINDINGS_SRC} TulipViewsUtils.cpp ${tulipguiutils_MOC} ${tulipgui_RCC_SRCS})
+  DEPENDS ${TULIP_GUI_SIP_FILES} ${TULIP_SIP_FILES} VERBATIM)
 
 TULIP_DISABLE_COMPILER_WARNINGS_PYTHON()
 
 Python_add_library(${LibTulipGUIPythonBindingsName} MODULE WITH_SOABI ${TULIP_GUI_PYTHON_BINDINGS_SRC})
-IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
-  ADD_DEPENDENCIES(wheel ${LibTulipGUIPythonBindingsName})
-ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+QTX_SET_INCLUDES_AND_DEFINITIONS()
 
 TARGET_COMPILE_DEFINITIONS(${LibTulipGUIPythonBindingsName} PUBLIC "protected=public")
 TARGET_COMPILE_DEFINITIONS(${LibTulipGUIPythonBindingsName} PUBLIC "SIP_PROTECTED_IS_PUBLIC")
 TARGET_COMPILE_DEFINITIONS(${LibTulipGUIPythonBindingsName} PUBLIC "DYNAMIC_ANNOTATIONS_ENABLED=1")
 TARGET_INCLUDE_DIRECTORIES(${LibTulipGUIPythonBindingsName}
-    PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/build/ ${Python_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
+    PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/build/ ${Python_INCLUDE_DIRS} ${TulipGUIInclude}
     PUBLIC ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipPythonInclude}
-    PUBLIC ${TulipOGLInclude} ${TulipGUIInclude}
-    PUBLIC ${TULIPGUI_BINDINGS_DIR}
 )
 ADD_DEPENDENCIES(${LibTulipGUIPythonBindingsName} ${LibTulipCorePythonBindingsName})
 
@@ -78,7 +67,7 @@ ELSEIF(LINUX)
   SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES INSTALL_RPATH "${CURRENT_INSTALL_RPATHS}:$ORIGIN/${TulipLibsInstallRelPath}")
 ENDIF(APPLE)
 
-TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} PUBLIC ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES})
+TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} PUBLIC ${LibTulipCoreName} ${LibTulipGUIName})
 
 TULIP_INSTALL_PYTHON_FILES(tulipgui ${CMAKE_CURRENT_BINARY_DIR}/__init__.py)
 TULIP_INSTALL_PYTHON_FILES(tulipgui/native ${LibTulipGUIPythonBindingsName})

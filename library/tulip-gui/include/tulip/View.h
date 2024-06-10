@@ -23,7 +23,6 @@
 #include <list>
 
 #include <QObject>
-#include <QSet>
 #include <QSize>
 
 #include <tulip/tulipconf.h>
@@ -101,7 +100,7 @@ class TLP_QT_SCOPE View : public QObject, public tlp::Plugin, public tlp::Observ
   tlp::ViewToolTipAndUrlManager *_tturlManager;
   bool interactorsActivated;
 
-  QSet<tlp::Observable *> _triggers;
+  std::list<tlp::Observable *> _triggers;
   bool _displayContextMenu;
 
 public:
@@ -203,7 +202,7 @@ public:
     @return The list of currently registered triggers.
     @see View::addRedrawTrigger()
     */
-  QSet<tlp::Observable *> triggers() const;
+  std::list<tlp::Observable *> triggers() const;
 
   /**
     @brief reimplemented from tlp::Observable to provide the triggers mechanism.

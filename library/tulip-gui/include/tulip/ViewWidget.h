@@ -23,6 +23,8 @@
 #include <tulip/tulipconf.h>
 #include <tulip/View.h>
 
+#include <QSet>
+
 class QGraphicsItem;
 
 namespace tlp {

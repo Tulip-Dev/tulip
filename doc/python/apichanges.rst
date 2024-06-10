@@ -5,8 +5,8 @@ Release notes and API changes
 
 Tulip-Python 6.0.0
 ------------------
-Code breaking changes
-^^^^^^^^^^^^^^^^^^^^^
+Code breaking changes in the tulip module
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Due to the upgrade of the SIP build tool, C++ enums are now bind to Python enums. This change breaks code compatibility with Tulip 5.X.
 The changes are:
@@ -57,6 +57,15 @@ See :class:`tlp.PropertyEvent` for more details.
 
 See :meth:`tlp.DoubleProperty.setMetaValueCalculator` for more details.
 
+Updates of the tulipgui module
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This module has been simplified. It is now only usable from the Tulip GUI as a sort of remote controller.
+Thus, some methods have evolved.
+
+    * :func:`tulipgui.tlpgui.View.setVisible` is deprecated. It can only shows a view. Use :func:`tulipgui.tlpgui.View.show` instead. To close and destroy a view use :func:`tulipgui.tlpgui.closeView`.
+    * :func:`tulipgui.tlpgui.View.resize` is deprecated and does nothing.
+    * :func:`tulipgui.tlpgui.View.setPos` is deprecated and does nothing.
 
 Tulip-Python 5.3.1
 ------------------

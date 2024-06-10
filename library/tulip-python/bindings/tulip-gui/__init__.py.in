@@ -20,27 +20,16 @@ __version__ = "@Tulip_VERSION@"
 __email__ = 'tulipdev@labri.fr'
 __status__ = 'Production'
 
-import os
 import os.path
 import sys
 import platform
 
-# fix an ubuntu bug when using the nvidia driver,
-# when the python interpreter dynamically loads the GL library,
-# it ends up loading the mesa one instead of the nvidia one.
-# The use of the tulipgui module through the classical python intrepreter
-# was quite unusable because of that ...
-# Apply the workaround proposed here :
-# https://bugs.launchpad.net/ubuntu/+source/python-qt4/+bug/941826
-if hasattr(os, 'uname'):
-    if os.uname()[3].lower().find('ubuntu') != -1:
-        import ctypes.util
-        ctypes.CDLL(ctypes.util.find_library('GL'), ctypes.RTLD_GLOBAL)
 
 _tulipGuiNativeLibsPath = '%s/native/' % os.path.dirname(__file__)
-_tulipGuiNativePluginsPath = '%splugins' % _tulipGuiNativeLibsPath
 _tulipGuiPluginsPath = '%s/plugins/' % os.path.dirname(__file__)
+
 sys.path.append(_tulipGuiNativeLibsPath)
+import os
 
 if platform.system() == 'Windows':
     os.environ['PATH'] = '%s../../../;%s' % (
@@ -58,20 +47,5 @@ sys.path.pop()
 class tlpgui(_tulipgui.tlpgui):
     pass
 
-
-def tulipguiExitFunc():
-    import tulipgui
-    tulipgui.tlpgui.runQtMainLoop()
-
+# load python plugins from the python/tulipgui/plugins directory (interactors for instance)
 tlp.loadTulipPluginsFromDir(_tulipGuiPluginsPath)
-
-# Check if we are in script execution mode
-# (sys.ps1 is not defined in that case)
-# If so, register an exit callback that will run the Qt event loop
-# if some widgets are still in a visible state
-if not hasattr(sys, 'ps1') and not sys.flags.interactive:
-    import atexit
-    atexit.register(tulipguiExitFunc)
-
-import signal # noqa
-signal.signal(signal.SIGINT, signal.SIG_DFL)

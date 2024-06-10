@@ -24,29 +24,58 @@
 // +-------------------------------------------------------------------------+
 
 %ModuleHeaderCode
-#include <TulipViewsUtils.h>
-extern TulipViewsManager tvm;
+extern tlp::Workspace* tlpWorkspace(int& sipIsErr);
+extern bool isViewOpened(const tlp::View *v, int& sipIsErr);
+extern std::set<tlp::View *> createdView;
 %End
 
 %ModuleCode
-TulipViewsManager tvm;
+
+std::set<tlp::View *> createdView;
+
+tlp::Workspace* tlpWorkspace(int& sipIsErr) {
+  tlp::Perspective *perspective = tlp::Perspective::instance();
+  if (perspective)
+    return perspective->mainWindow()->findChild<tlp::Workspace *>();
+
+  sipIsErr = 1;
+  PyErr_SetString(PyExc_Exception, "No Tulip workspace found. Are we running inside Tulip? This module is not designed to run outside the Tulip GUI");
+  return nullptr;  
+}
+
+bool isViewOpened(const tlp::View *v, int& sipIsErr) {
+  tlp::Workspace *w = tlpWorkspace(sipIsErr);
+  if(w) {
+    auto p = w->panels();
+    if(std::find(p.begin(), p.end(), v)!= p.end()) {
+      return true;
+    }
+    else {
+      releaseSIPWrapper(const_cast<tlp::View*>(v), sipFindType("tlp::View"));
+      sipIsErr = 1;
+      PyErr_SetString(PyExc_Exception, "This view does not exist anymore");
+    }
+  }
+  return false;
+}
+
 %End
 
 namespace tlp {
 
-std::vector<std::string> getAvailableViews() const;
+std::list<std::string> getAvailableViews() const;
 %Docstring
 tlpgui.getAvailableViews()
 
 .. versionadded:: 4.4
 
-Returns a list of the views names currently available in Tulip.
+Returns a list of the names of the views currently available.
 
-:rtype: list of string
+:rtype: list of strings
 %End
 
 %MethodCode
-    sipRes = new std::vector<std::string>(tvm.getTulipViews());
+  sipRes = new std::list<std::string>(tlp::PluginLister::availablePlugins<tlp::View>());
 %End
 
 // =========================================================================================
@@ -63,7 +92,8 @@ Returns a list of the views currently opened.
 %End
 
 %MethodCode
-    sipRes = new std::vector<tlp::View *>(tvm.getOpenedViews());
+  tlp::Workspace *w = tlpWorkspace(sipIsErr);
+  sipRes = w?(new std::vector<tlp::View *>(w->panels())):nullptr;
 %End
 
 // =========================================================================================
@@ -77,56 +107,68 @@ tlpgui.getOpenedViewsWithName(viewName)
 Returns a list of the views named viewName currently opened. To get the names of
 the available views, use function :func:`tlpgui.getAvailableViews`.
 
-:param viewName: the view name (e.g. "Node Link Diagram view")
+:param viewName: the view name (e.g., "Node Link Diagram view")
 :type viewName: string
 :rtype: list of :class:`tlpgui.View`
 %End
 
 %MethodCode
-    sipRes = new std::vector<tlp::View *>(tvm.getOpenedViewsWithName(*a0));
+  tlp::Workspace *w = tlpWorkspace(sipIsErr);
+  std::vector<tlp::View *> ret;
+  if(w) {
+    for (tlp::View *v : w->panels()) {
+      if (v->name() == *a0)
+        ret.push_back(v);
+      }
+  }
+  sipRes = w?(new std::vector<tlp::View *>(ret)):nullptr;
 %End
 
 // =========================================================================================
 
-            tlp::View *createView(const std::string &viewName, tlp::Graph *graph, tlp::DataSet dataSet = tlp::DataSet(), bool show = true);
+tlp::View *createView(const std::string &viewName, tlp::Graph *graph, tlp::DataSet dataSet = tlp::DataSet(), bool show = true);
 %Docstring
 tlpgui.createView(viewName, graph, dataSet={}, show=True)
 
 .. versionadded:: 4.4
 
-Creates and adds a new Tulip view. If called through a Python Script editor in the main Tulip GUI, the
-view will be added in the Tulip workspace. If called through the classical Python shell,
-a dialog containing the view will be created and displayed.
+Creates and adds a new Tulip view. The view will be added in the Tulip workspace.
 Returns an instance of the newly created view.
 
-:param viewName: the name of the view to create (use :func:`tlpgui.getAvailableViews` to know which ones are installed)
+:param viewName: the name of the view to create (use :func:`tlpgui.getAvailableViews` to know which ones are available)
 :type viewName: string
 :param graph: the graph to set on the new view
 :type graph: :class:`tulip.tlp.Graph`
 :param dataSet: the optional parameters of the view
-:type dataSet: :class:`tulip.tlp.DataSet`
+:type dataSet: a dictionary with string keys (parameters names) and parameters values
 :param show: show the view if :const:`True`
 :type show: boolean
 :rtype: :class:`tlpgui.View`
 %End
 
 %MethodCode
-    sipRes = NULL;
-    std::vector<std::string> tlpViews = tvm.getTulipViews();
-    if (std::find(tlpViews.begin(), tlpViews.end(), *a0) != tlpViews.end()) {
-        if (tvm.tlpWorkspace()) {
-            PyObject *pyObj = sipGetPyObject(a1, sipFindType("tlp::Graph"));
-            if (pyObj) {
-                sipTransferTo(pyObj, pyObj);
-            }
+  tlp::Workspace *w = tlpWorkspace(sipIsErr);
+  if(!sipIsErr) {
+    for (auto v : tlp::PluginLister::availablePlugins<tlp::View>()) {
+      if (v == *a0) {
+        tlp::View *viewobj = tlp::PluginLister::getPluginObject<tlp::View>(*a0);
+        viewobj->setupUi();
+        viewobj->setGraph(a1);
+        viewobj->setState(*a2);
+        if(a3)
+          w->addPanel(viewobj);
+        createdView.insert(viewobj);
+        sipRes = viewobj;
+
         }
-        sipRes = tvm.addView(*a0, a1, *a2, a3);
-    } else {
-        sipIsErr = 1;
-        std::ostringstream oss;
-        oss << "Error : No Tulip view named \"" << *a0 << "\".";
-        PyErr_SetString(PyExc_Exception, oss.str().c_str());
-    }
+      }
+    if(!sipRes) {
+      sipIsErr = 1;
+      std::ostringstream oss;
+      oss << "Error : No Tulip view named \"" << *a0 << "\".";
+      PyErr_SetString(PyExc_Exception, oss.str().c_str());
+      }
+  }
 %End
 
 // =========================================================================================
@@ -137,10 +179,10 @@ tlpgui.createNodeLinkDiagramView(graph, dataSet={}, show=True)
 
 .. versionadded:: 4.4
 
-Convenient function for creating the principal view offered by Tulip : a node link diagram.
+Convenient function for creating the principal view offered by Tulip: a node link diagram.
 Its call is equivalent to::
 
-    nodeLinkView = tlp.createView("Node Link Diagram view", graph)
+    nodeLinkView = tlpgui.createView("Node Link Diagram view", graph)
 
 :param graph: the graph to visualize
 :type graph: :class:`tulip.tlp.Graph`
@@ -152,12 +194,22 @@ Its call is equivalent to::
 %End
 
 %MethodCode
-    sipRes = static_cast<tlp::NodeLinkDiagramComponent *>(tvm.addView("Node Link Diagram view", a0, *a1, a2));
+  tlp::Workspace *w = tlpWorkspace(sipIsErr);
+  if(!sipIsErr) {
+    tlp::View *viewobj = tlp::PluginLister::getPluginObject<tlp::View>("Node Link Diagram view");
+    viewobj->setupUi();
+    viewobj->setGraph(a0);
+    viewobj->setState(*a1);
+    if(a2)
+      w->addPanel(viewobj);
+    createdView.insert(viewobj);
+    sipRes = static_cast<tlp::NodeLinkDiagramComponent *>(viewobj);
+    }
 %End
 
 // =========================================================================================
 
-    void closeView(tlp::View *view);
+void closeView(tlp::View *view);
 %Docstring
 tlpgui.closeView(view)
 
@@ -170,12 +222,20 @@ Closes and destroys an opened view.
 %End
 
 %MethodCode
-    tvm.closeView(a0);
+  bool viewOk = isViewOpened(a0, sipIsErr);
+  if(viewOk) {
+    tlpWorkspace(sipIsErr)->delView(a0);
+    auto a = createdView.find(a0);
+    if (a!=createdView.end()) {
+      createdView.erase(a0);
+    }
+    releaseSIPWrapper(a0, sipFindType("tlp::View"));    
+  }
 %End
 
 // =========================================================================================
 
-    std::vector<tlp::View*> getViewsOfGraph(tlp::Graph *graph);
+std::vector<tlp::View*> getViewsOfGraph(tlp::Graph *graph);
 %Docstring
 tlpgui.getViewsOfGraph(graph)
 
@@ -189,27 +249,42 @@ Returns a list of views associated to a particular graph.
 %End
 
 %MethodCode
-    sipRes = new std::vector<tlp::View*>(tvm.getViewsOfGraph(a0));
+  tlp::Workspace* w = tlpWorkspace(sipIsErr);
+  std::vector<tlp::View *> ret;
+  if(w) {
+    for (tlp::View *v : w->panels()) {
+      if (v->graph() == a0)
+        ret.push_back(v);
+    }
+  }
+  sipRes = w?(new std::vector<tlp::View *>(ret)):nullptr;
 %End
 
 // =========================================================================================
 
-    void closeAllViews();
+void closeAllViews();
 %Docstring
 tlpgui.closeAllViews()
 
 .. versionadded:: 4.4
 
-Closes and destroys all opened views (except the Python Script ones).
+Closes and destroys all opened views.
 %End
 
 %MethodCode
-    tvm.closeAllViews();
+  tlp::Workspace* w = tlpWorkspace(sipIsErr);
+  if(w) {
+    for(tlp::View* v:w->panels()) {
+      releaseSIPWrapper(v, sipFindType("tlp::View"));
+    }
+    w->closeAll();
+    createdView.clear();
+    }
 %End
 
 // =========================================================================================
 
-    void closeViewsRelatedToGraph(tlp::Graph* graph);
+void closeViewsRelatedToGraph(tlp::Graph* graph);
 %Docstring
 tlpgui.closeViewsRelatedToGraph(graph)
 
@@ -222,17 +297,19 @@ Closes and destroys all the views associated to a particular graph.
 %End
 
 %MethodCode
-    tvm.closeViewsRelatedToGraph(a0);
-%End
-
-// =========================================================================================
-
-    void runQtMainLoop();
-%MethodCode
-    if (tvm.areViewsVisible()) {
-      QApplication::exec();
+  tlp::Workspace* w = tlpWorkspace(sipIsErr);
+  if(w) {
+    for(tlp::View* v:w->panels()) {
+      if(v->graph() == a0) {
+        releaseSIPWrapper(v, sipFindType("tlp::View"));
+        w->delView(v);
+        auto a = createdView.find(v);
+        if (a!=createdView.end()) {
+          createdView.erase(v);
+        }
+      }
     }
-
+  }
 %End
 
 };

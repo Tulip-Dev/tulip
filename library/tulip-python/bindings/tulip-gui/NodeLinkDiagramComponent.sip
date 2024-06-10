@@ -80,7 +80,7 @@ Returns a copy of the current rendering parameters for the node link diagram vie
 
 // =======================================================================================
 
-    void setRenderingParameters(const tlp::GlGraphRenderingParameters &parameters);
+void setRenderingParameters(const tlp::GlGraphRenderingParameters &parameters);
 %Docstring
 tlpgui.NodeLinkDiagramComponent.setRenderingParameters(parameters)
 
@@ -93,7 +93,6 @@ Sets the rendering parameters for the node link diagram view.
 %MethodCode
     sipCpp->getGlMainWidget()->getScene()->getGlGraphComposite()->setRenderingParameters(*a0);
     sipCpp->draw();
-    QApplication::processEvents();
 %End
 
 // =======================================================================================
