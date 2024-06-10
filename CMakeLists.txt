@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.22)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.22...3.28)
 
 #Setting project name and version (W.X.Y.Z if necessary)
 PROJECT(Tulip
@@ -9,9 +9,6 @@ message(STATUS "Configuring ${CMAKE_PROJECT_NAME} ${Tulip_VERSION}")
 
 # First display CMake version
 MESSAGE(STATUS "Using CMake ${CMAKE_VERSION}")
-
-# allow FindOpenGL to use GLVND when available
-CMAKE_POLICY(SET CMP0072 NEW)
 
 # enable the use of ccache for Tulip developers to speed up the build process
 IF(NOT MSVC)
@@ -245,7 +242,7 @@ INCLUDE(cmake/TulipPython.cmake)
 
 IF(NOT TULIP_BUILD_CORE_ONLY AND NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
   # OpenGL
-  FIND_PACKAGE(OpenGL REQUIRED)
+  FIND_PACKAGE(OpenGL REQUIRED COMPONENTS OpenGL)
 
   # Glew
   FIND_PACKAGE(GLEW REQUIRED)

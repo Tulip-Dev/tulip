@@ -77,9 +77,11 @@ IF(TULIP_BUILD_GL_TEX_LOADER)
 ENDIF(TULIP_BUILD_GL_TEX_LOADER)
 
 ADD_LIBRARY (${LibTulipOGLName} SHARED ${tulip-ogl_LIB_SRCS})
-TARGET_LINK_LIBRARIES(${LibTulipOGLName} ${FTGLLibrary} GLEW::GLEW
-                      ${LibTulipCoreName} ${OPENGL_gl_LIBRARY}
-                      ${FREETYPE_LIBRARY})
+TARGET_LINK_LIBRARIES(${LibTulipOGLName} PUBLIC ${FTGLLibrary}
+                      ${LibTulipCoreName}
+                      ${FREETYPE_LIBRARIES}
+                      INTERFACE GLEW::GLEW OpenGL::OpenGL
+                  )
 IF(TULIP_BUILD_GL_TEX_LOADER)
   TARGET_LINK_LIBRARIES(${LibTulipOGLName} ${JPEG_LIBRARIES} ${PNG_LIBRARIES})
 ENDIF(TULIP_BUILD_GL_TEX_LOADER)
