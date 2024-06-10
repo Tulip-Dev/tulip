@@ -288,7 +288,15 @@ SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF/include)
 SET(OGDFBuildInclude ${PROJECT_BINARY_DIR}/thirdparty/OGDF/include)
 SET(OGDFLibrary OGDF)
 
-SET(UTF8CppInclude ${PROJECT_SOURCE_DIR}/thirdparty/utf8-cpp/source)
+#utf8-cpp
+find_package(utf8cpp QUIET)
+IF(utf8cpp_FOUND)
+    GET_PROPERTY(UTF8CppInclude TARGET utf8cpp PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+    MESSAGE(STATUS "Using the system utf8cpp header files located in ${UTF8CppInclude}")
+ELSE(utf8cpp_FOUND)
+    SET(UTF8CppInclude ${PROJECT_SOURCE_DIR}/thirdparty/utf8-cpp/source)
+    MESSAGE(STATUS "Using utf8cpp from the thirdparty directory")
+ENDIF(utf8cpp_FOUND)
 
 SET(TulipCoreInclude ${PROJECT_SOURCE_DIR}/library/tulip-core/include/)
 SET(TulipCoreBuildInclude ${PROJECT_BINARY_DIR}/library/tulip-core/include/)
