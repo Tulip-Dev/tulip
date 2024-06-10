@@ -115,7 +115,7 @@ public:
 PLUGIN(GeographicViewInteractorGetInformation)
 
 GeographicViewShowElementInfo::GeographicViewShowElementInfo()
-    : MouseShowElementInfo(), _editor(nullptr) {}
+    : MouseShowElementInfo(false), _editor(nullptr) {}
 
 void GeographicViewShowElementInfo::init() {
   auto gmw =
