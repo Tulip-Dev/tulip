@@ -65,6 +65,7 @@ public:
 
   bool parsingSucceeded() const;
   std::string errorMessage() const;
+  static std::string yajlVersion();
 
 protected:
   tlp::PluginProgress *_progress;

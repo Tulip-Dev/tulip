@@ -28,6 +28,8 @@
 #include <tulip/GlOffscreenRenderer.h>
 #include <tulip/TulipFontAwesome.h>
 #include <tulip/TulipMaterialDesignIcons.h>
+#include <tulip/YajlFacade.h>
+#include <tulip/Delaunay.h>
 
 #include "ui_AboutTulipPage.h"
 
@@ -90,20 +92,30 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
                  ";\">www.riverbankcomputing.com/software/sip</a></li>"
            : "") +
       "<li><b>Font Awesome</b> " + TulipFontAwesome::getVersion().c_str() +
-      ": <a href=\"http://fontawesome.com\" style=\"color:" HTML_LINK_COLOR
+      ": <a href=\"https://fontawesome.com\" style=\"color:" HTML_LINK_COLOR
       ";\">fontawesome.com</a></li>"
       "<li><b>Material Design Icons</b> " +
       TulipMaterialDesignIcons::getVersion().c_str() +
       ": <a href=\"https://materialdesignicons.com\" style=\"color:" HTML_LINK_COLOR
       ";\">materialdesignicons.com</a></li>"
       "<li><b>Color Brewer</b> "
-      ": <a href=\"http://colorbrewer2.org\" style=\"color:" HTML_LINK_COLOR
+      ": <a href=\"https://colorbrewer2.org\" style=\"color:" HTML_LINK_COLOR
       ";\">colorbrewer2.org</a></li>"
       "<li><b>Libzip " +
       LIBZIP_VERSION +
       "</b>"
-      ": <a href=\"http://https://libzip.org/\" style=\"color:" HTML_LINK_COLOR
+      ": <a href=\"https://libzip.org/\" style=\"color:" HTML_LINK_COLOR
       ";\">libzip.org/</a></li>"
+     "<li><b>Yajl "+
+      YajlParseFacade::yajlVersion().c_str() +
+      "</b>"
+      ": <a href=\"https://lloyd.github.io/yajl/\" style=\"color:" HTML_LINK_COLOR
+      ";\">https://lloyd.github.io/yajl/</a></li>"
+      "<li><b>Qhull "+
+      QhullFacade::QhullVersion().c_str() +
+      "</b>"
+      ": <a href=\"https://lloyd.github.io/yajl/\" style=\"color:" HTML_LINK_COLOR
+      ";\">https://lloyd.github.io/yajl/</a></li>"
       "</ul>"
       "</p>";
 

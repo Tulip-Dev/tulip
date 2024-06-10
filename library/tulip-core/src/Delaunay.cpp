@@ -39,6 +39,11 @@ using namespace tlp;
 typedef Matrix<long double, 3> Mat3ld;
 typedef Vector<long double, 3> Vec3ld;
 
+std::string QhullFacade::QhullVersion() {
+  string s(qh_version);
+  return s.substr(0, s.find(' '));
+}
+
 static bool runQHull(int dim, vector<double> &points,
                      vector<pair<unsigned int, unsigned int>> &edges,
                      vector<vector<unsigned int>> &simplices) {

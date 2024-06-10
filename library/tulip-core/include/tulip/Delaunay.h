@@ -44,7 +44,9 @@ TLP_SCOPE bool delaunayTriangulation(std::vector<Coord> &points,
                                      std::vector<std::pair<unsigned int, unsigned int>> &edges,
                                      std::vector<std::vector<unsigned int>> &simplices,
                                      bool voronoiMode = false);
-
+struct QhullFacade {
+  static std::string QhullVersion();
+};
 /**
  * @ingroup Graph
  * @brief The VoronoiDiagram class

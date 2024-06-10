@@ -22,6 +22,7 @@
 
 #include <yajl/yajl_parse.h>
 #include <yajl/yajl_gen.h>
+#include <yajl/yajl_version.h>
 
 #include <iostream>
 #include <fstream>
@@ -29,6 +30,10 @@
 
 YajlParseFacade::YajlParseFacade(tlp::PluginProgress *progress)
     : _progress(progress), _parsingSucceeded(true) {}
+
+std::string YajlParseFacade::yajlVersion() {
+  return std::to_string(YAJL_MAJOR)+"."+std::to_string(YAJL_MINOR)+"."+std::to_string(YAJL_MICRO);
+}
 
 static int parse_null(void *ctx) {
   YajlParseFacade *facade = static_cast<YajlParseFacade *>(ctx);
