@@ -123,7 +123,7 @@ ADD_LIBRARY(${FTGLLibrary} STATIC ${ftgl_SRCS} ${ftgl_headers_SRCS} ${ftglyph_SR
 # allow the object files to be used to build shared libs
 SET_TARGET_PROPERTIES(${FTGLLibrary} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 TARGET_LINK_LIBRARIES(${FTGLLibrary} PUBLIC ${FREETYPE_LIBRARIES}
-    INTERFACE GLEW::GLEW OpenGL::OpenGL)
+    INTERFACE GLEW::GLEW OpenGL::GL)
 # Prevent link issues with MSVC when freetype is dynamically linked
 # against zlib and libpng
 IF(MSVC)

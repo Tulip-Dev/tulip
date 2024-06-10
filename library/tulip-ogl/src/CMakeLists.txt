@@ -80,7 +80,7 @@ ADD_LIBRARY (${LibTulipOGLName} SHARED ${tulip-ogl_LIB_SRCS})
 TARGET_LINK_LIBRARIES(${LibTulipOGLName} PUBLIC ${FTGLLibrary}
                       ${LibTulipCoreName}
                       ${FREETYPE_LIBRARIES}
-                      INTERFACE GLEW::GLEW OpenGL::OpenGL
+                      INTERFACE GLEW::GLEW OpenGL::GL
                   )
 IF(TULIP_BUILD_GL_TEX_LOADER)
   TARGET_LINK_LIBRARIES(${LibTulipOGLName} ${JPEG_LIBRARIES} ${PNG_LIBRARIES})
