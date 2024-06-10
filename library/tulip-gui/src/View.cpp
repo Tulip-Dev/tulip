@@ -231,8 +231,9 @@ std::list<tlp::Observable *> View::triggers() const {
 }
 
 void View::removeRedrawTrigger(tlp::Observable *obs) {
-  //to be changed for C++20. remove() returns the number of element removed. Returns void with c++17
-  if(std::find(_triggers.begin(), _triggers.end(), obs) != _triggers.end()) {
+  // to be changed for C++20. remove() returns the number of element removed. Returns void with
+  // c++17
+  if (std::find(_triggers.begin(), _triggers.end(), obs) != _triggers.end()) {
     _triggers.remove(obs);
     obs->removeObserver(this);
   }
@@ -255,7 +256,8 @@ void View::treatEvents(const std::vector<Event> &events) {
     Event e = events[i];
 
     // ensure redraw trigger is removed from the triggers set when it is deleted
-    if (e.type() == Event::TLP_DELETE && std::find(_triggers.begin(), _triggers.end(), e.sender()) != _triggers.end()) {
+    if (e.type() == Event::TLP_DELETE &&
+        std::find(_triggers.begin(), _triggers.end(), e.sender()) != _triggers.end()) {
       removeRedrawTrigger(e.sender());
     }
 

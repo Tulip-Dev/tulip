@@ -32,7 +32,8 @@ YajlParseFacade::YajlParseFacade(tlp::PluginProgress *progress)
     : _progress(progress), _parsingSucceeded(true) {}
 
 std::string YajlParseFacade::yajlVersion() {
-  return std::to_string(YAJL_MAJOR)+"."+std::to_string(YAJL_MINOR)+"."+std::to_string(YAJL_MICRO);
+  return std::to_string(YAJL_MAJOR) + "." + std::to_string(YAJL_MINOR) + "." +
+         std::to_string(YAJL_MICRO);
 }
 
 static int parse_null(void *ctx) {

@@ -28,8 +28,9 @@ using namespace std;
 using namespace tlp;
 
 ClusterMetric::ClusterMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
-  addOutParameter<double>("average clustering coefficient",
-                          "Average value of the local clustering coefficient associated to the nodes");
+  addOutParameter<double>(
+      "average clustering coefficient",
+      "Average value of the local clustering coefficient associated to the nodes");
 }
 
 bool ClusterMetric::check(string &err) {
