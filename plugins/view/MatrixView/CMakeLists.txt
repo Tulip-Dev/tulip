@@ -21,7 +21,9 @@ QTX_WRAP_CPP(LIB_MOC_SRCS
 QTX_ADD_RESOURCES(RCC_SRCS MatrixView.qrc)
 
 ADD_LIBRARY(MatrixView-${Tulip_VERSION} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${RCC_SRCS})
-TARGET_LINK_LIBRARIES(MatrixView-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${OPENGL_gl_LIBRARY})
+TARGET_LINK_LIBRARIES(MatrixView-${Tulip_VERSION}
+    PUBLIC ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName}
+    INTERFACE OpenGL::OpenGL)
 
 TULIP_INSTALL_PLUGIN(MatrixView-${Tulip_VERSION} ${TulipViewPluginsInstallDir})
 

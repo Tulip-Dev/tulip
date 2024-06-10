@@ -30,6 +30,8 @@ QTX_ADD_RESOURCES(LIB_RCC_SRCS
 
 ADD_LIBRARY(ScatterPlot2DView-${Tulip_VERSION} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
 
-TARGET_LINK_LIBRARIES(ScatterPlot2DView-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${OPENGL_gl_LIBRARY})
+TARGET_LINK_LIBRARIES(ScatterPlot2DView-${Tulip_VERSION}
+    PUBLIC ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName}
+    INTERFACE OpenGL::OpenGL)
 
 TULIP_INSTALL_PLUGIN(ScatterPlot2DView-${Tulip_VERSION} ${TulipViewPluginsInstallDir})
