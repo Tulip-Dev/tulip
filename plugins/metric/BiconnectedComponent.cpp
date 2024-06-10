@@ -192,8 +192,6 @@ public:
   BiconnectedComponent(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
     addOutParameter<unsigned int>("#biconnected components",
                                   "Number of biconnected components found");
-    // old name
-    declareDeprecatedName("Biconnected Component");
   }
   bool run() override {
     MutableContainer<int> compo;

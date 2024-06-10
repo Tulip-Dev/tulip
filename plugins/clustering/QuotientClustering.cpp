@@ -144,7 +144,7 @@ public:
     edgeFunctions.setCurrent(0);
 
     if (dataSet != nullptr) {
-      dataSet->getDeprecated("directed", "oriented", directed);
+      dataSet->get("directed", directed);
       dataSet->get("node function", nodeFunctions);
       dataSet->get("edge function", edgeFunctions);
       dataSet->get("edge cardinality", edgeCardinality);

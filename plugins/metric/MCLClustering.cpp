@@ -298,7 +298,7 @@ bool MCLClustering::run() {
   _k = 5;
 
   if (dataSet != nullptr) {
-    dataSet->getDeprecated("metric", "weights", weights);
+    dataSet->get("metric", weights);
     dataSet->get("inflate", _r);
     dataSet->get("pruning", _k);
   }

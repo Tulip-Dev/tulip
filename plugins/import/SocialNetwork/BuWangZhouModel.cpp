@@ -68,7 +68,7 @@ public:
 
     if (dataSet != nullptr) {
       dataSet->get("nodes", nb_nodes);
-      dataSet->getDeprecated("type of nodes", "types of nodes", type_of_nodes);
+      dataSet->get("type of nodes", type_of_nodes);
       dataSet->get("m", m);
     }
 

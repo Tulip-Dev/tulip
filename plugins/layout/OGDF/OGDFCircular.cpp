@@ -64,19 +64,19 @@ public:
     if (dataSet != nullptr) {
       double val = 0;
 
-      if (dataSet->getDeprecated("nodes spacing", "minDistCircle", val))
+      if (dataSet->get("nodes spacing", val))
         circular->minDistCircle(val);
 
-      if (dataSet->getDeprecated("levels spacing", "minDistLevel", val))
+      if (dataSet->get("levels spacing", val))
         circular->minDistLevel(val);
 
-      if (dataSet->getDeprecated("circles spacing", "minDistSibling", val))
+      if (dataSet->get("circles spacing", val))
         circular->minDistSibling(val);
 
-      if (dataSet->getDeprecated("connected components spacing", "minDistCC", val))
+      if (dataSet->get("connected components spacing", val))
         circular->minDistCC(val);
 
-      if (dataSet->getDeprecated("page ratio", "pageRatio", val))
+      if (dataSet->get("page ratio", val))
         circular->pageRatio(val);
     }
   }

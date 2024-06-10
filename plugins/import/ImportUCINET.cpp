@@ -932,7 +932,7 @@ public:
     string filename;
 
     dataSet->get("file::filename", filename);
-    dataSet->getDeprecated("default metric", "Default metric", defaultMetric);
+    dataSet->get("default metric", defaultMetric);
 
     if (filename.empty()) {
       pluginProgress->setError("Filename is empty.");

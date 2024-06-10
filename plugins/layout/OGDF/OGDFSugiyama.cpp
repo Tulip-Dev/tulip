@@ -198,25 +198,25 @@ public:
       if (dataSet->get("runs", ival))
         sugiyama->runs(ival);
 
-      if (dataSet->getDeprecated("connected components packing", "arrangeCCs", bval))
+      if (dataSet->get("connected components packing", bval))
         sugiyama->arrangeCCs(bval);
 
-      if (dataSet->getDeprecated("connected components spacing", "minDistCC", dval))
+      if (dataSet->get("connected components spacing", dval))
         sugiyama->minDistCC(dval);
 
-      if (dataSet->getDeprecated("page ratio", "pageRatio", dval))
+      if (dataSet->get("page ratio", dval))
         sugiyama->pageRatio(dval);
 
-      if (dataSet->getDeprecated("align base classes", "alignBaseClasses", bval))
+      if (dataSet->get("align base classes", bval))
         sugiyama->alignBaseClasses(bval);
 
-      if (dataSet->getDeprecated("align siblings", "alignSiblings", bval))
+      if (dataSet->get("align siblings", bval))
         sugiyama->alignSiblings(bval);
 
       if (dataSet->get("transpose", bval))
         sugiyama->transpose(bval);
 
-      if (dataSet->getDeprecated("ranking", "Ranking", sc)) {
+      if (dataSet->get("ranking", sc)) {
         switch (sc.getCurrent()) {
         case LONGESTPATHRANKING:
           sugiyama->setRanking(new ogdf::LongestPathRanking());
@@ -229,8 +229,7 @@ public:
         }
       }
 
-      if (dataSet->getDeprecated("two-layer crossing minimization",
-                                 "Two-layer crossing minimization", sc)) {
+      if (dataSet->get("two-layer crossing minimization", sc)) {
         switch (sc.getCurrent()) {
         case BARYCENTER:
           sugiyama->setCrossMin(new ogdf::BarycenterHeuristic());
@@ -258,7 +257,7 @@ public:
         }
       }
 
-      if (dataSet->getDeprecated("hierarchy layout", "Layout", sc)) {
+      if (dataSet->get("hierarchy layout", sc)) {
         double nodeDistance = 3;
         double layerDistance = 3;
         bool fixedLayerDistance = true;

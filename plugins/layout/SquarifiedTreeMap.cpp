@@ -103,10 +103,10 @@ bool SquarifiedTreeMap::run() {
   glyphResult = nullptr;
 
   if (dataSet != nullptr) {
-    dataSet->getDeprecated("aspect ratio", "Aspect Ratio", aspectRatio);
-    dataSet->getDeprecated("treemap type", "Treemap Type", shneidermanTreeMap);
-    dataSet->getDeprecated("node size", "Node Size", sizeResult);
-    dataSet->getDeprecated("node shape", "Node Shape", glyphResult);
+    dataSet->get("aspect ratio", aspectRatio);
+    dataSet->get("treemap type", shneidermanTreeMap);
+    dataSet->get("node size", sizeResult);
+    dataSet->get("node shape", glyphResult);
   }
 
   if (sizeResult == nullptr)

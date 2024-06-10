@@ -82,8 +82,6 @@ public:
     addInParameter<double>("page ratio", paramHelp[7], "1.0");
     addInParameter<bool>("check convergence", paramHelp[8], "true");
     addInParameter<double>("convergence tolerance", paramHelp[9], "0.01");
-    // old name
-    declareDeprecatedName("Frutcherman Reingold (OGDF)");
   }
 
   ~OGDFFruchtermanReingold() override {}
@@ -103,13 +101,13 @@ public:
       if (dataSet->get("noise", bval))
         sefr->noise(bval);
 
-      if (dataSet->getDeprecated("connected components spacing", "minDistCC", dval))
+      if (dataSet->get("connected components spacing", dval))
         sefr->minDistCC(dval);
 
-      if (dataSet->getDeprecated("page ratio", "pageRatio", dval))
+      if (dataSet->get("page ratio", dval))
         sefr->pageRatio(dval);
 
-      if (dataSet->getDeprecated("cooling function", "Cooling function", sc)) {
+      if (dataSet->get("cooling function", sc)) {
         if (sc.getCurrent() == FACTOR) {
           sefr->coolingFunction(SpringEmbedderFRExact::CoolingFunction::Factor);
         } else {

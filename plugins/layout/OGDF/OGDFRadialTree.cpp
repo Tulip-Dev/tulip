@@ -83,7 +83,7 @@ public:
       // if (dataSet->get("trees distance", dval))
       //   layout->connectedComponentDistance(dval);
 
-      if (dataSet->getDeprecated("root selection", "Root selection", sc)) {
+      if (dataSet->get("root selection", sc)) {
         switch (sc.getCurrent()) {
         case ROOTSOURCE:
           layout->rootSelection(RadialTreeLayout::RootSelectionType::Source);

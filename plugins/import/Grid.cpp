@@ -151,7 +151,7 @@ public:
     if (dataSet != nullptr) {
       dataSet->get("width", width);
       dataSet->get("height", height);
-      dataSet->getDeprecated("opposite nodes connected", "oppositeNodesConnected", isTore);
+      dataSet->get("opposite nodes connected", isTore);
       dataSet->get("spacing", spacing);
       dataSet->get("connectivity", connectivity);
     }

@@ -71,7 +71,7 @@ public:
     if (dataSet != nullptr) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("probability", proba);
-      dataSet->getDeprecated("self loops", "self loop", self_loop);
+      dataSet->get("self loops", self_loop);
       dataSet->get("directed", directed);
     }
 

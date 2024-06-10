@@ -69,7 +69,7 @@ MixedModel::MixedModel(const tlp::PluginContext *context) : LayoutAlgorithm(cont
   addInParameter<float>("y node-node spacing", paramHelp[1], "2");
   addInParameter<float>("x node-node and edge-node spacing", paramHelp[2], "2");
   addOutParameter<IntegerProperty>("shape property", paramHelp[3], "viewShape");
-  addDependency("Connected Component Packing", "1.1");
+  addDependency("Connected Components Packing", "1.1");
 }
 //====================================================
 MixedModel::~MixedModel() {}

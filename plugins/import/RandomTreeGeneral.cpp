@@ -91,18 +91,9 @@ public:
     bool needLayout = false;
 
     if (dataSet != nullptr) {
-      if (!dataSet->getDeprecated("min size", "minimum size", sizeMin))
-        dataSet->getDeprecated("Minimum size", "minsize",
-                               sizeMin); // keep old parameter name for backward compatibility
-
-      if (!dataSet->getDeprecated("max size", "maximum size", sizeMax))
-        dataSet->getDeprecated("Maximum size", "maxsize",
-                               sizeMax); // keep old parameter name for backward compatibility
-
-      if (!dataSet->getDeprecated("max degree", "maximal node degree", arityMax))
-        dataSet->getDeprecated("Maximal node's degree", "maxdegree",
-                               arityMax); // keep old parameter name for backward compatibility
-
+      dataSet->get("min size", sizeMin);
+      dataSet->get("max size", sizeMax);
+      dataSet->get("max degree", arityMax);
       dataSet->get("tree layout", needLayout);
     }
 

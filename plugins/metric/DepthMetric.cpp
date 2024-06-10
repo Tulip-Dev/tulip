@@ -131,7 +131,7 @@ double DepthMetric::getNodeValue(tlp::node current) {
 //====================================================================
 bool DepthMetric::run() {
   if (dataSet != nullptr) {
-    dataSet->getDeprecated("metric", "edge weight", edgeWeight);
+    dataSet->get("metric", edgeWeight);
   }
 
   result->setAllEdgeValue(0);

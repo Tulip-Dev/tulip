@@ -73,7 +73,7 @@ public:
     BooleanProperty *selection = nullptr;
 
     if (dataSet != nullptr) {
-      dataSet->getDeprecated("property", "input", input);
+      dataSet->get("property", input);
       dataSet->get("selection", selection);
     } else {
       input = graph->getProperty("viewMetric");

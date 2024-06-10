@@ -102,10 +102,10 @@ public:
       if (dataSet->get("page ratio", dval))
         pl->pageRatio(dval);
 
-      if (dataSet->getDeprecated("min clique size", "minimal clique size", clique_size))
+      if (dataSet->get("min clique size", clique_size))
         pl->minCliqueSize(clique_size);
 
-      if (dataSet->getDeprecated("embedder", "Embedder", sc)) {
+      if (dataSet->get("embedder", sc)) {
         switch (sc.getCurrent()) {
         case EMBEDDER_MAXFACE:
           pl->setEmbedder(new ogdf::EmbedderMaxFace());

@@ -300,12 +300,12 @@ public:
     if (dataSet) {
       tlp::StringCollection curveTypeSc;
 
-      if (dataSet->getDeprecated("curve type", "Curve Type", curveTypeSc)) {
+      if (dataSet->get("curve type", curveTypeSc)) {
         curveType = curveTypeSc.getCurrent();
       }
 
       dataSet->get("curve roundness", curveRoundness);
-      dataSet->getDeprecated("initial layout", "layout", layout);
+      dataSet->get("initial layout", layout);
       dataSet->get("bezier edges", bezierEdges);
     }
 

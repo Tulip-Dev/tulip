@@ -197,8 +197,8 @@ bool StrahlerMetric::run() {
   computationTypes.setCurrent(0);
 
   if (dataSet != nullptr) {
-    dataSet->getDeprecated("all nodes", "All nodes", allNodes);
-    dataSet->getDeprecated("type", "Type", computationTypes);
+    dataSet->get("all nodes", allNodes);
+    dataSet->get("type", computationTypes);
   }
 
   std::unordered_map<node, bool> visited;

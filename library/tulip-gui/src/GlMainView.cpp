@@ -446,17 +446,6 @@ bool GlMainView::getNodeOrEdgeAtViewportPos(GlMainWidget *glw, int x, int y, nod
   return false;
 }
 
-bool GlMainView::pickNodeEdge(const int x, const int y, node &n, edge &e, bool pickNode,
-                              bool pickEdge) {
-  n = node();
-  e = edge();
-  if (getNodeOrEdgeAtViewportPos(getGlMainWidget(), x, y, n, e)) {
-    if ((pickNode && n.isValid()) || (pickEdge && e.isValid()))
-      return true;
-  }
-  return false;
-}
-
 void GlMainView::zoomAndPanAnimation(const tlp::BoundingBox &boundingBox, const double duration) {
   BoundingBox bb(boundingBox);
   if (!bb.isValid()) {

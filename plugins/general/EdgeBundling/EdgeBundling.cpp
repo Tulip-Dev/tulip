@@ -220,17 +220,17 @@ bool EdgeBundling::run() {
   layout = graph->getProperty<LayoutProperty>("viewLayout");
 
   if (dataSet != nullptr) {
-    dataSet->getDeprecated("long edges", "long_edges", longEdges);
-    dataSet->getDeprecated("split ratio", "split_ratio", splitRatio);
+    dataSet->get("long edges", longEdges);
+    dataSet->get("split ratio", splitRatio);
     dataSet->get("iterations", MAX_ITER);
     dataSet->get("optimization", optimizationLevel);
-    dataSet->getDeprecated("edge node overlap", "edge_node_overlap", edgeNodeOverlap);
-    dataSet->getDeprecated("max thread", "max_thread", maxThread);
-    dataSet->getDeprecated("3D layout", "3D_layout", layout3D);
-    dataSet->getDeprecated("grid graph", "grid_graph", keepGrid);
-    dataSet->getDeprecated("sphere layout", "sphere_layout", sphereLayout);
-    dataSet->getDeprecated("initial layout", "layout", layout);
-    dataSet->getDeprecated("node size", "size", size);
+    dataSet->get("edge node overlap", edgeNodeOverlap);
+    dataSet->get("max thread", maxThread);
+    dataSet->get("3D layout", layout3D);
+    dataSet->get("grid graph", keepGrid);
+    dataSet->get("sphere layout", sphereLayout);
+    dataSet->get("initial layout", layout);
+    dataSet->get("node size", size);
   }
 
   if (sphereLayout) {

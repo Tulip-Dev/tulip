@@ -53,9 +53,9 @@ bool EqualValueClustering::run() {
   eltTypes.setCurrent(0);
 
   if (dataSet != nullptr) {
-    dataSet->getDeprecated("property", "Property", property);
-    dataSet->getDeprecated("type", "Type", eltTypes);
-    dataSet->getDeprecated("connected", "Connected", connected);
+    dataSet->get("property", property);
+    dataSet->get("type", eltTypes);
+    dataSet->get("connected", connected);
   }
 
   if (property == nullptr)

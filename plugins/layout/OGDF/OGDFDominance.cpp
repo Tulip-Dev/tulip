@@ -59,7 +59,7 @@ public:
     if (dataSet != nullptr) {
       int ival = 0;
 
-      if (dataSet->getDeprecated("min grid distance", "minimum grid distance", ival))
+      if (dataSet->get("min grid distance", ival))
         dominance->setMinGridDistance(ival);
     }
   }

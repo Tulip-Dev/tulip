@@ -100,8 +100,7 @@ public:
     bool autoformatting(true);
 
     if (dataSet != nullptr) {
-      dataSet->getDeprecated("makes SVG output human readable", "Makes SVG output human readable",
-                             autoformatting);
+      dataSet->get("makes SVG output human readable", autoformatting);
     }
 
     ExportSvg svg(pluginProgress, os, autoformatting); // We call our first concrete builder

@@ -32,7 +32,7 @@ Grip::Grip(const tlp::PluginContext *context)
     : LayoutAlgorithm(context), misf(nullptr), edgeLength(0), level(0), currentGraph(nullptr),
       _dim(0) {
   addInParameter<bool>("3D layout", paramHelp[0], "false");
-  addDependency("Connected Component Packing", "1.1");
+  addDependency("Connected Components Packing", "1.1");
 }
 Grip::~Grip() {}
 

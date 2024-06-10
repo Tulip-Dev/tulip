@@ -112,7 +112,7 @@ bool SecondOrderCentrality::randomWalk(NodeStaticProperty<vector<int>> &tickVect
   // if None, selects a node at random
   BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
   if (dataSet != nullptr) {
-    dataSet->getDeprecated("selection", "Selection", selection);
+    dataSet->get("selection", selection);
   }
   if (selection->hasNonDefaultValuatedNodes()) {
     auto *selNodesIt = selection->getNonDefaultValuatedNodes(graph);
@@ -211,7 +211,7 @@ bool SecondOrderCentrality::run() {
   res.copyToProperty(result);
   bool debug(false);
   if (dataSet != nullptr)
-    dataSet->getDeprecated("debug mode", "Debug mode", debug);
+    dataSet->get("debug mode", debug);
   if (debug) {
     IntegerVectorProperty *tickprop = graph->getProperty<IntegerVectorProperty>("tickVector");
     tickVector.copyToProperty(tickprop);

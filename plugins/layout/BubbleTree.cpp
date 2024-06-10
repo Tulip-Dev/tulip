@@ -321,7 +321,7 @@ static const char *paramHelp[] = {
 BubbleTree::BubbleTree(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addInParameter<bool>("complexity", paramHelp[0], "true");
-  addDependency("Connected Component Packing", "1.1");
+  addDependency("Connected Components Packing", "1.1");
   addDependency("Circular", "1.1");
 }
 

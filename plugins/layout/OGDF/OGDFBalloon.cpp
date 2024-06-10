@@ -53,7 +53,7 @@ public:
     if (dataSet != nullptr) {
       bool val = false;
 
-      if (dataSet->getDeprecated("even angles", "Even angles", val))
+      if (dataSet->get("even angles", val))
         balloon->setEvenAngles(val);
     }
   }

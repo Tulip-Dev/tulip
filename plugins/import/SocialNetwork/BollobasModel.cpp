@@ -64,7 +64,7 @@ struct BollobasModel : public ImportModule {
 
     if (dataSet != nullptr) {
       dataSet->get("nodes", n);
-      dataSet->getDeprecated("min degree", "minimum degree", d);
+      dataSet->get("min degree", d);
     }
 
     // check arguments

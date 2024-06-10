@@ -27,8 +27,6 @@ ConnectedComponent::ConnectedComponent(const tlp::PluginContext *context)
     : DoubleAlgorithm(context) {
 
   addOutParameter<unsigned>("#connected components", "Number of connected components found");
-  // old name
-  declareDeprecatedName("Connected Component");
 }
 //======================================================
 bool ConnectedComponent::run() {

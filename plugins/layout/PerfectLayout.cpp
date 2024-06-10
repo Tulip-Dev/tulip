@@ -41,8 +41,8 @@ public:
     bool subgraphOnly(false);
 
     if (dataSet != nullptr) {
-      dataSet->getDeprecated("initial layout", "layout", layout);
-      dataSet->getDeprecated("subgraph only", "Subgraph only", subgraphOnly);
+      dataSet->get("initial layout", layout);
+      dataSet->get("subgraph only", subgraphOnly);
     }
 
     if (!layout)

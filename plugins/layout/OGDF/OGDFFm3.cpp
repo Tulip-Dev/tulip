@@ -278,17 +278,16 @@ void OGDFFm3::beforeCall() {
   if (dataSet != nullptr) {
     double edgeLenth = 10;
 
-    if (dataSet->getDeprecated("unit edge length", "Unit edge length", edgeLenth))
+    if (dataSet->get("unit edge length", edgeLenth))
       fmmm->unitEdgeLength(edgeLenth);
 
     bool bval = false;
 
-    if (dataSet->getDeprecated("new initial layout", "new initial placement", bval) ||
-        dataSet->get("New initial placement", bval)) {
+    if (dataSet->get("new initial layout", bval)) {
       fmmm->newInitialPlacement(bval);
     }
 
-    if (dataSet->getDeprecated("page format", "Page Format", stringCollection)) {
+    if (dataSet->get("page format", stringCollection)) {
       switch (stringCollection.getCurrent()) {
       case PORTRAIT:
         fmmm->pageFormat(FMMMOptions::PageFormatType::Portrait);
@@ -301,7 +300,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("quality vs speed", "Quality vs Speed", stringCollection)) {
+    if (dataSet->get("quality vs speed", stringCollection)) {
       switch (stringCollection.getCurrent()) {
       case NICEANDINCREDIBLESPEED:
         fmmm->qualityVersusSpeed(FMMMOptions::QualityVsSpeed::NiceAndIncredibleSpeed);
@@ -356,24 +355,23 @@ void OGDFFm3::beforeCall() {
 
     SizeProperty *size = nullptr;
 
-    if (dataSet->getDeprecated("node size", "Node Size", size))
+    if (dataSet->get("node size", size))
       tlpToOGDF->copyTlpNodeSizeToOGDF(size);
 
     int ival = 0;
 
-    if (dataSet->getDeprecated("fixed iterations", "Fixed iterations", ival)) {
+    if (dataSet->get("fixed iterations", ival)) {
       if (ival)
         fmmm->fixedIterations(ival);
     }
 
     double dval = 0;
 
-    if (dataSet->getDeprecated("threshold", "Threshold", dval)) {
+    if (dataSet->get("threshold", dval)) {
       fmmm->threshold(dval);
     }
 
-    if (dataSet->getDeprecated("edge length measurement", "Edge Length Measurement",
-                               stringCollection)) {
+    if (dataSet->get("edge length measurement", stringCollection)) {
       if (stringCollection.getCurrent() == BOUNDINGCIRCLE) {
         fmmm->edgeLengthMeasurement(FMMMOptions::EdgeLengthMeasurement::BoundingCircle);
       } else {
@@ -381,7 +379,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("allowed positions", "Allowed Positions", stringCollection)) {
+    if (dataSet->get("allowed positions", stringCollection)) {
       switch (stringCollection.getCurrent()) {
       case INTEGER:
         fmmm->allowedPositions(FMMMOptions::AllowedPositions::Integer);
@@ -394,7 +392,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("tip over", "Tip Over", stringCollection)) {
+    if (dataSet->get("tip over", stringCollection)) {
       switch (stringCollection.getCurrent()) {
       case NONE:
         fmmm->tipOverCCs(FMMMOptions::TipOver::None);
@@ -407,7 +405,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("presort", "Pre Sort", stringCollection)) {
+    if (dataSet->get("presort", stringCollection)) {
       if (stringCollection.getCurrent() == NONE) {
         fmmm->presortCCs(FMMMOptions::PreSort::None);
       } else if (stringCollection.getCurrent() == DECREASINGHEIGHT) {
@@ -417,7 +415,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("galaxy choice", "Galaxy Choice", stringCollection)) {
+    if (dataSet->get("galaxy choice", stringCollection)) {
       switch (stringCollection.getCurrent()) {
       case UNIFORMPROB:
         fmmm->galaxyChoice(FMMMOptions::GalaxyChoice::UniformProb);
@@ -430,8 +428,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("max iterations change", "max iter change", stringCollection) ||
-        dataSet->get("Max Iter Change", stringCollection)) {
+    if (dataSet->get("max iterations change", stringCollection)) {
       switch (stringCollection.getCurrent()) {
       case CONSTANT:
         fmmm->maxIterChange(FMMMOptions::MaxIterChange::Constant);
@@ -444,8 +441,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("initial layout", "initial placement", stringCollection) ||
-        dataSet->get("Initial Placement Mult", stringCollection)) {
+    if (dataSet->get("initial layout", stringCollection)) {
       if (stringCollection.getCurrent() == ADVANCED) {
         fmmm->initialPlacementMult(FMMMOptions::InitialPlacementMult::Advanced);
       } else {
@@ -453,7 +449,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("force model", "Force Model", stringCollection)) {
+    if (dataSet->get("force model", stringCollection)) {
       switch (stringCollection.getCurrent()) {
       case FRUCHTERMANNREINGOLD:
         fmmm->forceModel(FMMMOptions::ForceModel::FruchtermanReingold);
@@ -466,8 +462,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("repulsive force method", "Repulsive Force Method",
-                               stringCollection)) {
+    if (dataSet->get("repulsive force method", stringCollection)) {
       switch (stringCollection.getCurrent()) {
       case EXACT:
         fmmm->repulsiveForcesCalculation(FMMMOptions::RepulsiveForcesMethod::Exact);
@@ -480,9 +475,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("initial layout forces", "initial placement forces",
-                               stringCollection) ||
-        dataSet->get("Initial Placement Forces", stringCollection)) {
+    if (dataSet->get("initial layout forces", stringCollection)) {
       auto current = stringCollection.getCurrent();
       if (current != 0) {
         switch (current) {
@@ -503,8 +496,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("reduced tree construction", "Reduced Tree Construction",
-                               stringCollection)) {
+    if (dataSet->get("reduced tree construction", stringCollection)) {
       if (stringCollection.getCurrent() == SUBTREEBYSUBTREE) {
         fmmm->nmTreeConstruction(FMMMOptions::ReducedTreeConstruction::SubtreeBySubtree);
       } else {
@@ -512,8 +504,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("smallest cell finding", "Smallest Cell Finding",
-                               stringCollection)) {
+    if (dataSet->get("smallest cell finding", stringCollection)) {
       if (stringCollection.getCurrent() == ITERATIVELY) {
         fmmm->nmSmallCell(FMMMOptions::SmallestCellFinding::Iteratively);
       } else {
@@ -529,7 +520,7 @@ void OGDFFm3::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
 
   NumericProperty *length = nullptr;
 
-  if (dataSet->getDeprecated("edge length property", "Edge Length Property", length) && length) {
+  if (dataSet->get("edge length property", length) && length) {
     EdgeArray<double> edgeLength(tlpToOGDF->getOGDFGraph());
 
     const std::vector<tlp::edge> &edges = graph->edges();

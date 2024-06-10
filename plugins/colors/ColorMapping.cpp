@@ -147,13 +147,13 @@ public:
     PropertyInterface *metric = nullptr;
 
     if (dataSet != nullptr) {
-      dataSet->getDeprecated("property", "input property", metric);
+      dataSet->get("property", metric);
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);
-      dataSet->getDeprecated("override min value", "override minimum value", overrideMinInput);
-      dataSet->getDeprecated("min value", "minimum value", minInput);
-      dataSet->getDeprecated("override max value", "override maximum value", overrideMaxInput);
-      dataSet->getDeprecated("max value", "maximum value", maxInput);
+      dataSet->get("override min value", overrideMinInput);
+      dataSet->get("min value", minInput);
+      dataSet->get("override max value", overrideMaxInput);
+      dataSet->get("max value", maxInput);
 
       /// Do not allow NaN input
       if (overrideMaxInput &&
@@ -295,13 +295,10 @@ public:
     PropertyInterface *metric = nullptr;
 
     if (dataSet != nullptr) {
-      dataSet->getDeprecated("property", "input property", metric);
+      dataSet->get("property", metric);
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);
-
-      if (!dataSet->get("color scale", colorScale))
-        dataSet->get("colorScale", colorScale);
-
+      dataSet->get("color scale", colorScale);
       dataSet->get("maximum value", maxInput);
       dataSet->get("minimum value", minInput);
     }

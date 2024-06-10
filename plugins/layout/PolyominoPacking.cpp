@@ -135,7 +135,7 @@ bool PolyominoPacking::run() {
   bndIncrement = 1;
 
   if (dataSet != nullptr) {
-    dataSet->getDeprecated("initial layout", "coordinates", layout);
+    dataSet->get("initial layout", layout);
     getNodeSizePropertyParameter(dataSet, size);
     dataSet->get("rotation", rotation);
     dataSet->get("margin", margin);

@@ -125,7 +125,7 @@ public:
       if (dataSet->get("orthogonal layout", bval))
         tree->orthogonalLayout(bval);
 
-      if (dataSet->getDeprecated("orientation", "Orientation", sc)) {
+      if (dataSet->get("orientation", sc)) {
         switch (sc.getCurrent()) {
         case TOPTOBOTTOM:
           // because of an ununderstanding fix
@@ -144,7 +144,7 @@ public:
         }
       }
 
-      if (dataSet->getDeprecated("root selection", "Root selection", sc)) {
+      if (dataSet->get("root selection", sc)) {
         switch (sc.getCurrent()) {
         case ROOTSOURCE:
           tree->rootSelection(TreeLayout::RootSelectionType::Source);

@@ -141,7 +141,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
 
   // get chosen values of plugin parameters
   if (dataSet != nullptr) {
-    if (dataSet->getDeprecated(ELT_TYPE, "Type of elements", eltTypes))
+    if (dataSet->get(ELT_TYPE, eltTypes))
       eltType = eltTypes.getCurrent();
 
     // this parameter is no longer needed
@@ -150,15 +150,13 @@ bool CsvExport::exportGraph(std::ostream &os) {
     // but it is there for compatibility reason
     // and then force the use of "viewSelection"
     // as default value of the former parameter "export selection property"
-    dataSet->getDeprecated(EXPORT_SELECTION, "Export selection", exportSelection);
-    if (!dataSet->getDeprecated(EXPORT_ID, "export id", exportId))
-      // former deprecated
-      dataSet->get("Export id", exportId);
+    dataSet->get(EXPORT_SELECTION, exportSelection);
+    dataSet->get(EXPORT_ID, exportId);
 
-    dataSet->getDeprecated(EXPORTED_PROPERTIES, "Exported properties", propsCollection);
-    dataSet->getDeprecated(FIELD_SEPARATOR_CUSTOM, "Custom separator", fieldSeparatorCustom);
+    dataSet->get(EXPORTED_PROPERTIES, propsCollection);
+    dataSet->get(FIELD_SEPARATOR_CUSTOM, fieldSeparatorCustom);
 
-    if (dataSet->getDeprecated(FIELD_SEPARATOR, "Field separator", fieldSeparators)) {
+    if (dataSet->get(FIELD_SEPARATOR, fieldSeparators)) {
       switch (fieldSeparators.getCurrent()) {
       case COMMA_SEPARATOR:
         fieldSeparator = ',';
@@ -181,10 +179,10 @@ bool CsvExport::exportGraph(std::ostream &os) {
       }
     }
 
-    if (dataSet->getDeprecated(STRING_DELIMITER, "String delimiter", stringDelimiters))
+    if (dataSet->get(STRING_DELIMITER, stringDelimiters))
       stringDelimiter = stringDelimiters.getCurrent() == DBL_QUOTE_DELIMITER ? '"' : '\'';
 
-    if (dataSet->getDeprecated(DECIMAL_MARK, "Decimal mark", decimalMarks))
+    if (dataSet->get(DECIMAL_MARK, decimalMarks))
       decimalMark = decimalMarks.getCurrent() ? ',' : '.';
   }
 
@@ -245,7 +243,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
 
   if (exportSelection) {
     prop = graph->getProperty<BooleanProperty>("viewSelection");
-    dataSet->getDeprecated("export selection property", "Export selection property", prop);
+    dataSet->get("export selection property", prop);
   } else
     dataSet->get("selection", prop);
 

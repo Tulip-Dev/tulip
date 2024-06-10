@@ -114,7 +114,7 @@ void OGDFGemFrick::beforeCall() {
       gem->numberOfRounds(ival);
     }
 
-    if (dataSet->getDeprecated("min temperature", "minimal temperature", dval)) {
+    if (dataSet->get("min temperature", dval)) {
       gem->minimalTemperature(dval);
     }
 
@@ -122,7 +122,7 @@ void OGDFGemFrick::beforeCall() {
       gem->initialTemperature(dval);
     }
 
-    if (dataSet->getDeprecated("gravitation", "gravitational constant", dval)) {
+    if (dataSet->get("gravitation", dval)) {
       gem->gravitationalConstant(dval);
     }
 
@@ -130,7 +130,7 @@ void OGDFGemFrick::beforeCall() {
       gem->desiredLength(dval);
     }
 
-    if (dataSet->getDeprecated("max disturbance", "maximal disturbance", dval)) {
+    if (dataSet->get("max disturbance", dval)) {
       gem->maximalDisturbance(dval);
     }
 
@@ -150,14 +150,14 @@ void OGDFGemFrick::beforeCall() {
       gem->oscillationSensitivity(dval);
     }
 
-    if (dataSet->getDeprecated("attraction formula", "Attraction formula", sc)) {
+    if (dataSet->get("attraction formula", sc)) {
       gem->attractionFormula(sc.getCurrent() + 1);
     }
 
-    if (dataSet->getDeprecated("connected components spacing", "minDistCC", dval))
+    if (dataSet->get("connected components spacing", dval))
       gem->minDistCC(dval);
 
-    if (dataSet->getDeprecated("page ratio", "pageRatio", dval))
+    if (dataSet->get("page ratio", dval))
       gem->pageRatio(dval);
   }
 }

@@ -145,7 +145,7 @@ public:
       if (dataSet->get("random initial placement", bval))
         npl->setRandomInitialPlacement(bval);
 
-      if (dataSet->getDeprecated("post processing", "Post Processing", stringCollection)) {
+      if (dataSet->get("post processing", stringCollection)) {
         switch (stringCollection.getCurrent()) {
         case POSTPROCESSINGNONE:
           npl->setPostProcessing(NodeRespecterLayout::PostProcessingMode::None);
@@ -158,53 +158,49 @@ public:
         }
       }
 
-      if (dataSet->getDeprecated("bends normalization angle", "Bends Normalization Angle", dval))
+      if (dataSet->get("bends normalization angle", dval))
         npl->setBendNormalizationAngle(dval);
 
       if (dataSet->get("number of iterations", ival))
         npl->setNumberOfIterations(ival);
 
-      if (dataSet->getDeprecated("min temperature", "minimal temperature", dval) ||
-          dataSet->get("Minimal Temperature", dval))
+      if (dataSet->get("min temperature", dval))
         npl->setMinimalTemperature(dval);
 
-      if (dataSet->getDeprecated("initial temperature", "Initial Temperature", dval))
+      if (dataSet->get("initial temperature", dval))
         npl->setInitialTemperature(dval);
 
-      if (dataSet->getDeprecated("temperature decrease", "Temperature Decrease", dval))
+      if (dataSet->get("temperature decrease", dval))
         npl->setTemperatureDecreaseOffset(dval);
 
-      if (dataSet->getDeprecated("gravitation", "Gravitation", dval))
+      if (dataSet->get("gravitation", dval))
         npl->setGravitation(dval);
 
-      if (dataSet->getDeprecated("oscillation Angle", "Oscillation Angle", dval))
+      if (dataSet->get("oscillation angle", dval))
         npl->setOscillationAngle(dval);
 
-      if (dataSet->getDeprecated("min edge length", "minimal edge length", dval) ||
-          dataSet->get("Desired Minimal Edge Length", dval))
+      if (dataSet->get("min edge length", dval))
         npl->setDesiredMinEdgeLength(dval);
 
-      if (dataSet->getDeprecated("init dummies per edge", "Init Dummies Per Edge", ival))
+      if (dataSet->get("init dummies per edge", ival))
         npl->setInitDummiesPerEdge(ival);
 
-      if (dataSet->getDeprecated("max dummies per edge", "maximal dummies per edge", ival) ||
-          dataSet->get("Maximal Dummies Per Edge", ival))
+      if (dataSet->get("max dummies per edge", ival))
         npl->setMaxDummiesPerEdge(ival);
 
-      if (dataSet->getDeprecated("dummy insertion threshold", "Dummy Insertion Threshold", dval))
+      if (dataSet->get("dummy insertion threshold", dval))
         npl->setDummyInsertionThreshold(dval);
 
-      if (dataSet->getDeprecated("max disturbance", "maximum disturbance", dval) ||
-          dataSet->get("Maximum Disturbance", dval))
+      if (dataSet->get("max disturbance", dval))
         npl->setMaxDisturbance(dval);
 
-      if (dataSet->getDeprecated("repulsion distance", "Repulsion Distance", dval))
+      if (dataSet->get("repulsion distance", dval))
         npl->setRepulsionDistance(dval);
 
-      if (dataSet->getDeprecated("connected components spacing", "Min Distance CC", dval))
+      if (dataSet->get("connected components spacing", dval))
         npl->setMinDistCC(dval);
 
-      if (dataSet->getDeprecated("page ratio", "Page Ratio", dval))
+      if (dataSet->get("page ratio", dval))
         npl->setPageRatio(dval);
     }
   }

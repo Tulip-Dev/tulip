@@ -136,8 +136,8 @@ bool LinkCommunities::run() {
 
   if (dataSet != nullptr) {
     dataSet->get("metric", metric);
-    dataSet->getDeprecated("group isthmus", "Group isthmus", group_isthmus);
-    dataSet->getDeprecated("number of steps", "Number of steps", nb_steps);
+    dataSet->get("group isthmus", group_isthmus);
+    dataSet->get("number of steps", nb_steps);
   }
 
   const std::vector<edge> &edges = graph->edges();

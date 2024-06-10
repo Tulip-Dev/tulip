@@ -107,21 +107,6 @@ public:
   void setState(const tlp::DataSet &) override;
   tlp::DataSet state() const override;
 
-  /** @brief Pick a node or an edge at a view position
-   *  First take a look at a node located at (x,y); if none is found, take a look at an edge
-   *  @param x the x coordinate of the position
-   *  @param y the y coordinate of the position
-   *  @param n on return holds the node found under the (x,y) position, n.isValid() return false if
-   * none has been found
-   *  @param e on return holds the edge found under the (x,y) position, e.isValid() return false if
-   * none has been found
-   *  @param pickNode enable or disable the node picking
-   *  @param pickEdge enable or disable the edge picking
-   *  @return true if something has been found, false otherwise
-   */
-  _DEPRECATED bool pickNodeEdge(const int x, const int y, tlp::node &n, tlp::edge &e,
-                                bool pickNode = true, bool pickEdge = true);
-
   /**
    * @brief Rotate the view camera by (x,y,z)
    * @param x rotation around the X axis in degree

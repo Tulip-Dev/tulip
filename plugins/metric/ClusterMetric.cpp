@@ -27,15 +27,9 @@ PLUGIN(ClusterMetric)
 using namespace std;
 using namespace tlp;
 
-static const char *paramHelp[] = {
-    // depth
-    "Deprecated. This parameter is not used anymore.",
-    // average
-    "Average value of the local clustering coefficient associated to the nodes"};
-
 ClusterMetric::ClusterMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
-  addInParameter<unsigned int>("depth (deprecated)", paramHelp[0], "1");
-  addOutParameter<double>("Average clustering coefficient", paramHelp[1]);
+  addOutParameter<double>("average clustering coefficient",
+                          "Average value of the local clustering coefficient associated to the nodes");
 }
 
 bool ClusterMetric::check(string &err) {
@@ -48,15 +42,6 @@ bool ClusterMetric::check(string &err) {
 
 //=================================================
 bool ClusterMetric::run() {
-
-  unsigned depth;
-
-  if (dataSet != nullptr) {
-    dataSet->getDeprecated("depth (deprecated)", "depth",
-                           depth); // property not used anymore. Use this line to show a deprecated
-                                   // message to the user.
-  }
-
   tlp::NodeStaticProperty<double> clusters(graph);
   clusteringCoefficient(graph, clusters);
 
@@ -67,7 +52,7 @@ bool ClusterMetric::run() {
   for (auto v : clusters) {
     sum += v;
   }
-  dataSet->set("Average clustering coefficient", sum / graph->numberOfNodes());
+  dataSet->set("average clustering coefficient", sum / graph->numberOfNodes());
 
   return true;
 }

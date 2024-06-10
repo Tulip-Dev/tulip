@@ -97,7 +97,7 @@ public:
     bool curvedEdges = false;
     // get the filename chosen by the user
     dataSet->get("file::filename", filename);
-    dataSet->getDeprecated("curved edges", "Curved edges", curvedEdges);
+    dataSet->get("curved edges", curvedEdges);
 
     QString qfilename = tlpStringToQString(filename);
 

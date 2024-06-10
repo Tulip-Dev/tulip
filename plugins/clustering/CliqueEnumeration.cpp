@@ -164,7 +164,7 @@ void CliqueEnumeration::getDegenerateOrdering(vector<node> &ordering) {
 //================================================================================
 bool CliqueEnumeration::run() {
   if (dataSet != nullptr)
-    dataSet->getDeprecated("min size", "minimum size", minsize);
+    dataSet->get("min size", minsize);
 
   vector<node> ordering;
   getDegenerateOrdering(ordering);

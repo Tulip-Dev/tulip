@@ -83,14 +83,8 @@ public:
     bool needLayout = false;
 
     if (dataSet != nullptr) {
-      if (!dataSet->getDeprecated("min size", "minimum size", minSize))
-        dataSet->getDeprecated("Minimum size", "minsize",
-                               minSize); // keep old name for backward compatibility
-
-      if (!dataSet->getDeprecated("max size", "maximum size", maxSize))
-        dataSet->getDeprecated("Maximum size", "maxsize",
-                               maxSize); // keep old name for backward compatibility
-
+      dataSet->get("min size", minSize);
+      dataSet->get("max size", maxSize);
       dataSet->get("tree layout", needLayout);
     }
 

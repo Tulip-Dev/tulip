@@ -55,8 +55,6 @@ ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PluginContext 
   addInParameter<int>("max distance", paramHelp[2], "5");
   addOutParameter<unsigned int>("#edges selected", "The number of newly selected edges");
   addOutParameter<unsigned int>("#nodes selected", "The number of newly selected nodes");
-  // old name
-  declareDeprecatedName("Reachable Sub-Graph");
 }
 
 ///===========================================================
@@ -68,11 +66,11 @@ bool ReachableSubGraphSelection::run() {
   BooleanProperty *startNodes = graph->getProperty<BooleanProperty>("viewSelection");
 
   if (dataSet != nullptr) {
-    dataSet->getDeprecated("max distance", "distance", maxDistance);
+    dataSet->get("max distance", maxDistance);
 
     // Get the edge orientation
     int direction = 0;
-    if (dataSet->getDeprecated("edge direction", "edges direction", edgeDirectionCollection))
+    if (dataSet->get("edge direction", edgeDirectionCollection))
       direction = edgeDirectionCollection.getCurrent();
     else
       // If the new parameter is not defined search for the very former one.
@@ -92,9 +90,7 @@ bool ReachableSubGraphSelection::run() {
     }
 
     // keep startingnodes for compatibility
-    if (!dataSet->getDeprecated("selection", "starting nodes", startNodes))
-      // former deprecated
-      dataSet->get("startingnodes", startNodes);
+    dataSet->get("selection", startNodes);
   }
 
   unsigned num_nodes = 0, num_edges = 0;

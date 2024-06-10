@@ -61,10 +61,10 @@ public:
       if (dataSet->get("impred", bval))
         bertault->setImpred(bval);
 
-      if (dataSet->getDeprecated("number of iterations", "iterno", ival))
+      if (dataSet->get("number of iterations", ival))
         bertault->iterno(ival);
 
-      if (dataSet->getDeprecated("edge length", "reqlength", val))
+      if (dataSet->get("edge length", val))
         bertault->reqlength(val);
     }
   }

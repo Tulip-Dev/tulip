@@ -96,7 +96,7 @@ GEMLayout::GEMLayout(const tlp::PluginContext *context)
   addInParameter<LayoutProperty>("initial layout", paramHelp[2], "", false);
   addInParameter<BooleanProperty>("unmovable nodes", paramHelp[3], "", false);
   addInParameter<unsigned int>("max iterations", paramHelp[4], "0");
-  addDependency("Connected Component Packing", "1.1");
+  addDependency("Connected Components Packing", "1.1");
 }
 //=========================================================
 GEMLayout::~GEMLayout() {}

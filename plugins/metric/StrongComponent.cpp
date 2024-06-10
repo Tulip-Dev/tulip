@@ -171,8 +171,6 @@ StrongComponent::StrongComponent(const tlp::PluginContext *context) : DoubleAlgo
                        "Indicates if the graph should be considered as directed or not.", "true");
   addOutParameter<unsigned>("#strongly connected components",
                             "Number of strongly components found");
-  // old name
-  declareDeprecatedName("Strongly Connected Component");
 }
 
 StrongComponent::~StrongComponent() {}

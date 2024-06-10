@@ -86,7 +86,7 @@ bool LinLogAlgorithm::run() {
     dataSet->get("attraction exponent", aExp);
     dataSet->get("repulsion exponent", rExp);
     dataSet->get("gravitation factor", gFac);
-    dataSet->getDeprecated("unmovable nodes", "skip nodes", skipNodes);
+    dataSet->get("unmovable nodes", skipNodes);
     dataSet->get("initial layout", layout);
   }
 

@@ -124,7 +124,7 @@ public:
     targetType.setCurrent(NODES_TARGET);
 
     if (dataSet != nullptr) {
-      dataSet->getDeprecated("metric", "property", entryMetric);
+      dataSet->get("metric", entryMetric);
       dataSet->get("input", entrySize);
       dataSet->get("width", xaxis);
       dataSet->get("height", yaxis);
@@ -139,7 +139,7 @@ public:
         linearType = mapping.getCurrent() == LINEAR_MAPPING;
       }
       dataSet->get(TARGET_TYPE, targetType);
-      dataSet->getDeprecated("mapping proportionality", "area proportional", proportionalType);
+      dataSet->get("mapping proportionality", proportionalType);
       proportional = proportionalType.getCurrent();
       // old parameter name and behavior
       if (dataSet->exists("node/edge")) {
