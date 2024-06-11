@@ -157,6 +157,9 @@ int main(int argc, char **argv) {
   QCommandLineOption debugPluginOption("debug_plugin_load", "Debug plugins loader");
   debugPluginOption.setFlags(QCommandLineOption::HiddenFromHelp);
 
+  QCommandLineOption guiTestingOption("gui_testing", "GUI Testing mode");
+  guiTestingOption.setFlags(QCommandLineOption::HiddenFromHelp);
+
   parser.addOptions({
         // Perspective name
         {{"perspective","p"},
@@ -172,6 +175,7 @@ int main(int argc, char **argv) {
       },
       idOption,
       debugPluginOption,
+      guiTestingOption,
         });
 
   parser.process(tulip);
@@ -226,6 +230,10 @@ int main(int argc, char **argv) {
     }
     //parse json file
     extraParams = jsonDoc.toVariant().toMap();
+  }
+
+  if(parser.isSet("gui_testing")) {
+    extraParams["gui_testing"] = "1";
   }
 
   initTulipLib(QStringToTlpString(QApplication::applicationDirPath()).c_str());
