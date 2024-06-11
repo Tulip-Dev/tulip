@@ -1,5 +1,7 @@
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/main.cpp @ONLY)
+
 SET(SRCS
-  src/main.cpp
+  ${CMAKE_CURRENT_BINARY_DIR}/main.cpp
   src/TulipPerspectiveMainWindow.cpp
 )
 
