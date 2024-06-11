@@ -325,7 +325,7 @@ void BasicPluginsTest::testInducedSubGraphSelection() {
   CPPUNIT_ASSERT(result);
   // check with old name
   tlp::debug() << "Testing deprecated 'Induced Sub-Graph'..." << std::endl;
-  result = computeProperty<BooleanProperty>("Induced Sub-Graph");
+  result = computeProperty<BooleanProperty>("Induced SubGraph");
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -353,7 +353,7 @@ void BasicPluginsTest::testReachableSubGraphSelection() {
   CPPUNIT_ASSERT(result);
   // check with old name
   tlp::debug() << "Testing deprecated 'Reachable Sub-Graph'..." << std::endl;
-  result = computeProperty<BooleanProperty>("Reachable Sub-Graph");
+  result = computeProperty<BooleanProperty>("Reachable SubGraph");
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -389,7 +389,7 @@ void BasicPluginsTest::testMetricSizeMapping() {
   CPPUNIT_ASSERT(result);
 
   SizeProperty size(graph);
-  ds.set("property", &metric);
+  ds.set("metric", &metric);
   result = graph->applyPropertyAlgorithm("Size Mapping", &size, errorMsg, &ds, nullptr);
   CPPUNIT_ASSERT(result);
 }

@@ -79,7 +79,7 @@ void BasicLayoutTest::testConeTreeExtended() {
 }
 //==========================================================
 void BasicLayoutTest::testConnectedComponentPacking() {
-  bool result = computeProperty<LayoutProperty>("Connected Component Packing");
+  bool result = computeProperty<LayoutProperty>("Connected Components Packing");
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
