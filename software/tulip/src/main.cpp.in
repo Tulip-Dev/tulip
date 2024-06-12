@@ -330,6 +330,8 @@ int main(int argc, char **argv) {
 
     mainWindow->setWindowIcon(progress->windowIcon());
     mainWindow->show();
+    // ensure to show on top
+    mainWindow->activateWindow();
     progress->hide();
 
     // the delay of geometry update until perspective execution
