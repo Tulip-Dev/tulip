@@ -156,9 +156,6 @@ int main(int argc, char **argv) {
   QCommandLineOption idOption("id", "Set internal perspective id", "id number");
   idOption.setFlags(QCommandLineOption::HiddenFromHelp);
 
-  QCommandLineOption debugPluginOption("debug_plugin_load", "Debug plugins loader");
-  debugPluginOption.setFlags(QCommandLineOption::HiddenFromHelp);
-
   QCommandLineOption guiTestingOption("gui_testing", "GUI Testing mode");
   guiTestingOption.setFlags(QCommandLineOption::HiddenFromHelp);
 
@@ -179,7 +176,9 @@ int main(int argc, char **argv) {
         "json file"
       },
       idOption,
-      debugPluginOption,
+      {{"debug_plugin_load", "d"},
+       "increase verbosity when loading plugins at startup"
+      },
       guiTestingOption,
       guiGeomOption,
         });
