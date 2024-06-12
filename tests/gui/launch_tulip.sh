@@ -10,7 +10,7 @@ if [ "$1" = "" ]; then
 fi
 
 #$TULIP $2 --perspective=Tulip --gui_testing=1 --geometry=100,73,1600,900 -style plastique &
-$TULIP --perspective=Tulip --gui_testing --geometry 1600x900+100+73 -style plastique $2 &
+$TULIP --perspective=Tulip --gui_testing --gui_geometry 100,73,1600,900 -style plastique $2 &
 TULIP_PID=$!
 echo $TULIP_PID > tulip.pid
 sleep 3

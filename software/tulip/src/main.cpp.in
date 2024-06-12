@@ -20,6 +20,8 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QStandardPaths>
+#include <QScreen>
+#include <QWindow>
 #include <QCommandLineParser>
 #include <QJsonDocument>
 #include <QJsonParseError>
@@ -146,7 +148,7 @@ int main(int argc, char **argv) {
           "meta-information. If the \"--perspective\" option is used, tulip will try to "
           "open the file with the given perspective (the project meta-information is ignored).");
 
-  //Tulip 5 --geometry option automatically handled by Qt (see tulip --help-all)
+  //Tulip 5 --geometry option changed to gui_geometry (hidden option)
   //Tulip 5 --icon option automatically handled by Qt (see tulip --help-all)
   //Tulip 5 --title option automatically handled by Qt (see tulip --help-all)
 
@@ -159,6 +161,9 @@ int main(int argc, char **argv) {
 
   QCommandLineOption guiTestingOption("gui_testing", "GUI Testing mode");
   guiTestingOption.setFlags(QCommandLineOption::HiddenFromHelp);
+
+  QCommandLineOption guiGeomOption("gui_geometry", "GUI Geometry for GUI Testing mode", "geometry x,y,w,h");
+  guiGeomOption.setFlags(QCommandLineOption::HiddenFromHelp);
 
   parser.addOptions({
         // Perspective name
@@ -176,6 +181,7 @@ int main(int argc, char **argv) {
       idOption,
       debugPluginOption,
       guiTestingOption,
+      guiGeomOption,
         });
 
   parser.process(tulip);
@@ -202,6 +208,15 @@ int main(int argc, char **argv) {
         parser.showHelp();
       }
   }
+
+  QRect windowGeometry;
+  if(parser.isSet("gui_geometry")) {
+    QStringList geom = parser.value("gui_geometry").split(u',');
+    windowGeometry = QRect(geom[0].toInt(), geom[1].toInt(),
+                          geom[2].toInt(), geom[3].toInt());
+
+  }
+
 
   PerspectiveContext *context = new PerspectiveContext();
 
@@ -316,6 +331,16 @@ int main(int argc, char **argv) {
     mainWindow->setWindowIcon(progress->windowIcon());
     mainWindow->show();
     progress->hide();
+
+    // the delay of geometry update until perspective execution
+    // seems to ensure that the four parameters (x,y,w,h)
+    // are taken into account
+    if (windowGeometry.isValid()) {
+      mainWindow->setGeometry(windowGeometry);
+    } else {
+      mainWindow->move(0, 0);
+      mainWindow->resize(mainWindow->windowHandle()->screen()->availableGeometry().size() * 0.9);
+    }
 
     TulipSettings::setFirstRun(false);
     TulipSettings::setFirstTulipMMRun(false);
