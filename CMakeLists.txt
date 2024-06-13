@@ -153,7 +153,7 @@ IF(TULIP_BUILD_CORE_ONLY AND LINUX)
       ENDFOREACH()
     ENDIF()
   ENDMACRO()
-  ADD_CORE_FILES(CMakeLists.txt cmake/cmake_uninstall.cmake.in cmake/TulipUseFile.cmake cmake/FindCppUnit.cmake cmake/FindTulip.cmake)
+  ADD_CORE_FILES(CMakeLists.txt cmake/cmake_uninstall.cmake.in cmake/TulipUseFile.cmake cmake/FindTulip.cmake)
 # the macro ADD_CORE_DIRECTORY_EXCEPT will be used
 # to exclude the files not needed to build a minimal Tulip
 # in the directory pointed by CMAKE_CURRENT_SOURCE_DIR
@@ -368,11 +368,7 @@ ENDFUNCTION()
 ## ========================================================
 ## Tests
 ## ========================================================
-IF(EXISTS ${CMAKE_SOURCE_DIR}/tests/CMakeLists.txt)
-  SET(TULIP_BUILD_TESTS OFF CACHE BOOL "Do you want to build the tests ? [OFF|ON]")
-ELSE()
-  SET(TULIP_BUILD_TESTS OFF)
-ENDIF()
+SET(TULIP_BUILD_TESTS OFF CACHE BOOL "Do you want to build the unit tests (target called 'test') ? [OFF|ON]")
 
 ## ========================================================
 ## Create library/tulip/include/tulip/TulipRelease.h based on TulipRelease.h.in

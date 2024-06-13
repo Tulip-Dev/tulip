@@ -1,6 +1,7 @@
 ADD_CORE_FILES(CMakeLists.txt)
 
-FIND_PACKAGE(CppUnit REQUIRED)
+PKG_SEARCH_MODULE(CppUnit cppunit REQUIRED)
+
 
 if(WIN32)
 MACRO(TULIP_FIND_EXTERNAL_LIB pattern result_var_name)
