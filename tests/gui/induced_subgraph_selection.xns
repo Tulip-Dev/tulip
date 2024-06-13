@@ -899,8 +899,8 @@ error-range                   0-0
 7,6,693,761,0,0,0,124728689,9,'VirtualBox mouse integration'
 7,6,691,764,0,0,0,124728705,9,'VirtualBox mouse integration'
 7,6,690,765,0,0,0,124728713,9,'VirtualBox mouse integration'
-7,6,688,766,0,0,0,124728729,9,'VirtualBox mouse integration'
-7,6,687,767,0,0,0,124728809,9,'VirtualBox mouse integration'
+7,6,688,760,0,0,0,124728729,9,'VirtualBox mouse integration'
+7,6,687,760,0,0,0,124728809,9,'VirtualBox mouse integration'
 7,4,0,0,3,0,0,124729284,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,3,0,0,124729284,2,Virtual core pointer
 7,5,0,0,3,0,0,124729461,12,ImExPS/2 Generic Explorer Mouse

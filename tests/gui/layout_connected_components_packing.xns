@@ -520,8 +520,8 @@ NEW-WINDOW:5,49:62914798,62914798,618,0,0,0:91x110+0+0:0,0:
 7,6,231,146,0,0,0,36988008,17,'Logitech USB Receiver'
 7,6,229,146,0,0,0,36988016,17,'Logitech USB Receiver'
 7,6,228,146,0,0,0,36988024,17,'Logitech USB Receiver'
-7,6,228,145,0,0,0,36988031,17,'Logitech USB Receiver'
-7,6,227,145,0,0,0,36988040,17,'Logitech USB Receiver'
+7,6,228,135,0,0,0,36988031,17,'Logitech USB Receiver'
+7,6,227,135,0,0,0,36988040,17,'Logitech USB Receiver'
 7,4,0,0,1,0,0,36988383,17,Logitech USB Receiver
 6,4,0,0,1,0,0,36988383,2,Virtual core pointer
 7,5,0,0,1,0,0,36988519,17,Logitech USB Receiver

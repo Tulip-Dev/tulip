@@ -301,8 +301,8 @@ NEW-WINDOW:527,310:62914589,62914589,34673109,0,0,0:36x74+727+347:0,0:Tulip pref
 7,6,560,379,0,0,0,92446056,9,'VirtualBox mouse integration'
 7,6,559,378,0,0,0,92446105,9,'VirtualBox mouse integration'
 7,6,559,376,0,0,0,92446241,9,'VirtualBox mouse integration'
-7,6,558,374,0,0,0,92446337,9,'VirtualBox mouse integration'
-7,6,557,374,0,0,0,92446345,9,'VirtualBox mouse integration'
+7,6,558,365,0,0,0,92446337,9,'VirtualBox mouse integration'
+7,6,557,365,0,0,0,92446345,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,92446564,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,92446564,2,Virtual core pointer
 7,5,0,0,1,0,0,92446717,12,ImExPS/2 Generic Explorer Mouse
@@ -2116,8 +2116,8 @@ NEW-WINDOW:527,310:62915085,62915085,34775187,0,0,0:36x74+727+361:0,0:Tulip pref
 7,6,564,382,0,0,0,92515875,9,'VirtualBox mouse integration'
 7,6,561,381,0,0,0,92515891,9,'VirtualBox mouse integration'
 7,6,559,380,0,0,0,92515907,9,'VirtualBox mouse integration'
-7,6,557,378,0,0,0,92515915,9,'VirtualBox mouse integration'
-7,6,556,378,0,0,0,92515931,9,'VirtualBox mouse integration'
+7,6,557,365,0,0,0,92515915,9,'VirtualBox mouse integration'
+7,6,556,365,0,0,0,92515931,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,92516367,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,92516367,2,Virtual core pointer
 7,5,0,0,1,0,0,92516504,12,ImExPS/2 Generic Explorer Mouse
@@ -2394,8 +2394,8 @@ NEW-WINDOW:527,268:62915085,62915085,701,527,268,0:527x268+727+361:0,0:Tulip pre
 7,6,377,718,0,0,0,92520395,9,'VirtualBox mouse integration'
 7,6,376,717,0,0,0,92520427,9,'VirtualBox mouse integration'
 7,6,375,716,0,0,0,92520443,9,'VirtualBox mouse integration'
-7,6,375,714,0,0,0,92520451,9,'VirtualBox mouse integration'
-7,6,374,713,0,0,0,92520491,9,'VirtualBox mouse integration'
+7,6,375,706,0,0,0,92520451,9,'VirtualBox mouse integration'
+7,6,374,706,0,0,0,92520491,9,'VirtualBox mouse integration'
 7,4,0,0,3,0,0,92521376,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,3,0,0,92521376,2,Virtual core pointer
 7,5,0,0,3,0,0,92521576,12,ImExPS/2 Generic Explorer Mouse

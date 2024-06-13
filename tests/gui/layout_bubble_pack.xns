@@ -181,8 +181,8 @@ error-range                   0-0
 7,6,304,145,0,0,0,45227431,11,'SynPS/2 Synaptics TouchPad'
 7,6,304,144,0,0,0,45227450,11,'SynPS/2 Synaptics TouchPad'
 7,6,304,144,0,0,0,45227467,11,'SynPS/2 Synaptics TouchPad'
-7,6,304,143,0,0,0,45227502,11,'SynPS/2 Synaptics TouchPad'
-7,6,304,143,0,0,0,45227519,11,'SynPS/2 Synaptics TouchPad'
+7,6,304,135,0,0,0,45227502,11,'SynPS/2 Synaptics TouchPad'
+7,6,304,135,0,0,0,45227519,11,'SynPS/2 Synaptics TouchPad'
 7,4,0,0,1,0,0,45227751,11,SynPS/2 Synaptics TouchPad
 6,4,0,0,1,0,0,45227751,2,Virtual core pointer
 7,5,0,0,1,0,0,45227779,11,SynPS/2 Synaptics TouchPad

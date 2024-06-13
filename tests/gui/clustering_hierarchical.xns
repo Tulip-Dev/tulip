@@ -483,8 +483,8 @@ error-range                   0-0
 0,6,271,151,0,0,0,2233009
 6,6,271,151,0,0,0,2233009,2,'Virtual core pointer'
 7,6,271,151,0,0,0,2233019,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,266,145,0,0,0,2233019
-6,6,266,145,0,0,0,2233019,2,'Virtual core pointer'
+0,6,266,140,0,0,0,2233019
+6,6,266,140,0,0,0,2233019,2,'Virtual core pointer'
 7,4,0,0,1,0,0,2233953,12,AlpsPS/2 ALPS DualPoint TouchPad
 0,4,0,0,1,0,0,2233953
 6,4,0,0,1,0,0,2233953,2,Virtual core pointer
