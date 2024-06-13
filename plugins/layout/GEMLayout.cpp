@@ -378,7 +378,7 @@ bool GEMLayout::run() {
     LayoutProperty tmpLayout(graph);
     DataSet ds;
     ds.set("initial layout", result);
-    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout, err, &ds,
+    graph->applyPropertyAlgorithm("Connected Components Packing", &tmpLayout, err, &ds,
                                   pluginProgress);
     *result = tmpLayout;
     return true;

@@ -132,7 +132,7 @@ bool Grip::run() {
     DataSet tmp;
     tmp.set("initial layout", result);
     LayoutProperty layout(graph);
-    graph->applyPropertyAlgorithm("Connected Component Packing", &layout, err, &tmp);
+    graph->applyPropertyAlgorithm("Connected Components Packing", &layout, err, &tmp);
 
     for (auto n : graph->nodes()) {
       result->setNodeValue(n, layout.getNodeValue(n));

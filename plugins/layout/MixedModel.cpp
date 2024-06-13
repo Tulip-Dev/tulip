@@ -284,7 +284,7 @@ bool MixedModel::run() {
     string err = "";
     DataSet tmp;
     tmp.set("initial layout", result);
-    graph->applyPropertyAlgorithm("Connected Component Packing", result, err, &tmp, pluginProgress);
+    graph->applyPropertyAlgorithm("Connected Components Packing", result, err, &tmp, pluginProgress);
     if (pluginProgress->state() != TLP_CONTINUE)
       return pluginProgress->state() != TLP_CANCEL;
   }

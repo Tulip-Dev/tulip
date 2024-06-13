@@ -352,7 +352,7 @@ bool BubbleTree::run() {
     LayoutProperty tmpLayout(graph);
     DataSet tmpdataSet;
     tmpdataSet.set("initial layout", result);
-    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout, err, &tmpdataSet,
+    graph->applyPropertyAlgorithm("Connected Components Packing", &tmpLayout, err, &tmpdataSet,
                                   pluginProgress);
     *result = tmpLayout;
     return true;
