@@ -117,7 +117,7 @@ class SquarifiedTreeMapHelper(tlp.Algorithm):
         # set the square shape to all leaf nodes
         for n in self.graph.getNodes():
             if self.graph.outdeg(n) == 0:
-                shapes[n] = tlp.NodeShape.Square
+                shapes[n] = tlp.NodeShape.NodeShapes.Square
 
         return True
 

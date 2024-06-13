@@ -53,7 +53,7 @@ class H3LayoutHelper(tlp.Algorithm):
                 return False
 
         self.graph['viewBorderWidth'].setAllNodeValue(0)
-        self.graph['viewShape'].setAllNodeValue(tlp.NodeShape.Sphere)
+        self.graph['viewShape'].setAllNodeValue(tlp.NodeShape.NodeShapes.Sphere)
         self.graph['viewTgtAnchorShape'].setAllEdgeValue(
             tlp.EdgeExtremityShape.Cone)
 

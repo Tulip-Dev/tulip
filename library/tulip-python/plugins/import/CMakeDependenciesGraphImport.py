@@ -143,7 +143,7 @@ class CMakeDependenciesGraphImport(tlp.ImportModule):
 
         # set some visual attributes to the imported graph
         self.graph['viewSize'].setAllNodeValue((1, 1, 1))
-        self.graph['viewShape'].setAllNodeValue(tlp.NodeShape.Circle)
+        self.graph['viewShape'].setAllNodeValue(tlp.NodeShape.NodeShapes.Circle)
 
         # apply a force directed algorithm to draw the graph
         self.graph.applyLayoutAlgorithm(
