@@ -491,8 +491,8 @@ NEW-WINDOW:640,406:62914968,62914968,701,640,406,0:640x406+500+71:0,0:Eccentrici
 7,6,678,701,0,0,0,130038514,9,'VirtualBox mouse integration'
 7,6,677,702,0,0,0,130038530,9,'VirtualBox mouse integration'
 7,6,676,703,0,0,0,130038554,9,'VirtualBox mouse integration'
-7,6,676,704,0,0,0,130038571,9,'VirtualBox mouse integration'
-7,6,676,705,0,0,0,130038587,9,'VirtualBox mouse integration'
+7,6,676,685,0,0,0,130038571,9,'VirtualBox mouse integration'
+7,6,676,685,0,0,0,130038587,9,'VirtualBox mouse integration'
 7,4,0,0,3,0,0,130038926,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,3,0,0,130038926,2,Virtual core pointer
 7,5,0,0,3,0,0,130039120,12,ImExPS/2 Generic Explorer Mouse
