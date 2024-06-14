@@ -870,7 +870,7 @@ static bool checkAndGetPluginInfoFromSrcCode(const QString &pluginCode, QString 
 
     rx.setPattern(".*registerPlugin.*\\(\\s*['\"]([^\"']+)[\"']\\s*,\\s*['\"]([^\"']+)[\"'].*$");
     match = rx.match(pluginCode);
-    if(match.hasMatch()) {
+    if (match.hasMatch()) {
       pluginName = match.captured(2);
       return true;
     }
@@ -931,13 +931,14 @@ bool PythonIDE::loadPythonPlugin(const QString &fileName, bool clear) {
       savePythonPlugin(editorId);
     }
   } else {
-    QString name = "\nName of the plugin: "+(pluginName.isEmpty()?"missing":pluginName);
-    QString classname = "\nPlugin class name: "+(pluginClassName.isEmpty()?"missing":pluginClassName);
-    QString type = "\nPlugin type: "+(pluginType.isEmpty()?"missing":pluginType);
-    QMessageBox::critical(
-        this, "Error",
-        "The file " + fileName +
-            " does not seem to be a valid Tulip Python plugin: \n " + name + classname + type );
+    QString name = "\nName of the plugin: " + (pluginName.isEmpty() ? "missing" : pluginName);
+    QString classname =
+        "\nPlugin class name: " + (pluginClassName.isEmpty() ? "missing" : pluginClassName);
+    QString type = "\nPlugin type: " + (pluginType.isEmpty() ? "missing" : pluginType);
+    QMessageBox::critical(this, "Error",
+                          "The file " + fileName +
+                              " does not seem to be a valid Tulip Python plugin: \n " + name +
+                              classname + type);
     return false;
   }
 
