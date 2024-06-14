@@ -352,7 +352,7 @@ static std::vector<_pipCommand> pipCommands{// install a package in the user dir
                                             {"list", "list', '--user", false},
                                             // list the installed packages
                                             {"list all", "list", false},
-                                            // show package infos
+                                            // show package info
                                             {"show", "show", true},
                                             // uninstall a package
                                             {"uninstall", "uninstall', '--yes", false},
@@ -868,9 +868,9 @@ static bool checkAndGetPluginInfoFromSrcCode(const QString &pluginCode, QString 
       pos = pluginCode.indexOf(rx, pos + match.capturedLength(), &match);
     }
 
-    rx.setPattern("^.*registerPlugin.*\\(.*['\"]([^,]+)['\"],.*['\"]([^,]+)['\"],.*$");
-
-    if (pluginCode.indexOf(rx, 0, &match) != -1) {
+    rx.setPattern(".*registerPlugin.*\\(\\s*['\"]([^\"']+)[\"']\\s*,\\s*['\"]([^\"']+)[\"'].*$");
+    match = rx.match(pluginCode);
+    if(match.hasMatch()) {
       pluginName = match.captured(2);
       return true;
     }
@@ -906,11 +906,8 @@ bool PythonIDE::loadPythonPlugin(const QString &fileName, bool clear) {
 
   QString pluginCode;
   file.open(QIODevice::ReadOnly | QIODevice::Text);
-
-  while (!file.atEnd()) {
-    pluginCode += file.readLine();
-  }
-
+  QTextStream in(&file);
+  pluginCode = in.readAll();
   file.close();
 
   if (checkAndGetPluginInfoFromSrcCode(pluginCode, pluginName, pluginClassName, pluginType,
@@ -934,10 +931,13 @@ bool PythonIDE::loadPythonPlugin(const QString &fileName, bool clear) {
       savePythonPlugin(editorId);
     }
   } else {
+    QString name = "\nName of the plugin: "+(pluginName.isEmpty()?"missing":pluginName);
+    QString classname = "\nPlugin class name: "+(pluginClassName.isEmpty()?"missing":pluginClassName);
+    QString type = "\nPlugin type: "+(pluginType.isEmpty()?"missing":pluginType);
     QMessageBox::critical(
         this, "Error",
         "The file " + fileName +
-            " does not seem to contain the source code of a Tulip Python plugin.");
+            " does not seem to be a valid Tulip Python plugin: \n " + name + classname + type );
     return false;
   }
 
