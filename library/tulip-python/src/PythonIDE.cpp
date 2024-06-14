@@ -259,7 +259,7 @@ class %2(%3):
         # This method is the entry point of the algorithm when it is called
         # and must contain its implementation.
         #
-vvv        # The graph on which the algorithm is applied can be accessed through
+        # The graph on which the algorithm is applied can be accessed through
         # the 'graph' class attribute (see documentation of class tlp.Graph).
         #
         # The parameters provided by the user are stored in a dictionary
