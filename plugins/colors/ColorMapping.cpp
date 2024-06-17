@@ -360,7 +360,8 @@ public:
                   });
       }
 
-      DoubleStringsListRelationDialog dialog(enumeratedValues, enumeratedColors, Perspective::instance()->mainWindow());
+      DoubleStringsListRelationDialog dialog(enumeratedValues, enumeratedColors,
+                                             Perspective::instance()->mainWindow());
 
       QWidget *progressWidget = dynamic_cast<QWidget *>(pluginProgress);
       if (progressWidget)
