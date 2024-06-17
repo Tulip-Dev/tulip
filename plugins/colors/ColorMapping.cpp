@@ -22,10 +22,13 @@
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/Vector.h>
 #include <tulip/ColorScale.h>
+#include <tulip/Perspective.h>
 
 #ifndef TULIP_BUILD_CORE_ONLY
 #include "DoubleStringsListRelationDialog.h"
 #endif
+
+#include <QApplication>
 
 using namespace tlp;
 
@@ -357,11 +360,18 @@ public:
                   });
       }
 
-      DoubleStringsListRelationDialog dialog(enumeratedValues, enumeratedColors);
+      DoubleStringsListRelationDialog dialog(enumeratedValues, enumeratedColors, Perspective::instance()->mainWindow());
 
+      QWidget *progressWidget = dynamic_cast<QWidget *>(pluginProgress);
+      if (progressWidget)
+        progressWidget->hide();
       if (!dialog.exec()) {
         errorMsg += "Cancelled by user";
         return false;
+      }
+      if (progressWidget) {
+        progressWidget->show();
+        QApplication::processEvents();
       }
 
       dialog.getResult(enumeratedMappingResultVector);
