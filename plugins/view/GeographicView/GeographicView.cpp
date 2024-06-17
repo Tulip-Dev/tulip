@@ -287,8 +287,8 @@ DataSet GeographicView::state() const {
   dataSet.set("mapType", int(_mapType));
   auto gmw = getGeoMapWidget();
   auto mapCenter = gmw->getMapCenter();
-  dataSet.set("mapCenterLatitude", mapCenter.first);
-  dataSet.set("mapCenterLongitude", mapCenter.second);
+  dataSet.set("mapCenterLatitude", mapCenter.second);
+  dataSet.set("mapCenterLongitude", mapCenter.first);
   dataSet.set("mapZoom", gmw->getCurrentZoom());
   dataSet.set("renderingParameters", geoViewGraphicsView->getGlMainWidget()
                                          ->getScene()

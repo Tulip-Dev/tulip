@@ -72,9 +72,6 @@ public:
   /*
    * The GeoMapWidget is the widget which displays the maps.
    * The size describes the area which gets filled with map data
-   * @param size the size which the widget should fill with map data
-   * @param showScale true if the scale should be displayed
-   * @param showCenter true if crosshairs should be shown at the centre of the map
    * @param parent QWidget parent
    * @param windowFlags QWidget Window flags
    */
@@ -85,13 +82,18 @@ public:
     delete http;
   }
 
-  // returns the coordinate of the center of the map
+  // returns the geo coordinates of the center
+  // of the map visible region
   std::pair<double, double> getMapCenter() const {
     return std::make_pair<double, double>(centerM.x(), centerM.y());
   }
 
+  // returns the geo coordinates of the bottom left corner
+  // of the map visible region
   std::pair<double, double> getMapSouthWest();
 
+  // returns the geo coordinates of the top right corner
+  // of the map visible region
   std::pair<double, double> getMapNorthEast();
 
   int getCurrentZoom() const {
@@ -110,22 +112,26 @@ public:
     return maxZoom;
   }
 
-  // center the map to the given coordinate
-  void setMapCenter(const QPointF &coordinate);
+  // center the map visible region to the given geo coordinates
+  void setMapCenter(const QPointF &coordinates);
 
-  // center map to the given geo point
+  // center the map to the given geo point
   inline void setMapCenter(double latitude, double longitude) {
     setMapCenter(QPointF(longitude, latitude));
   }
 
+  // set the map visible region to the one enclosing the given nodes
+  // and geo coordinates
   void setMapBounds(tlp::Graph *graph,
                     const std::unordered_map<tlp::node, std::pair<double, double>> &nodesLatLngs);
 
+  // set the map visible region to the one enclosing
+  // the south west and north east given points
   void zoomOnRectangle(std::pair<double, double> &sw, std::pair<double, double> &ne);
 
   void resizeEvent(QResizeEvent *ev);
 
-  // Smoothly moves the center of the view to the given Coordinate
+  // Smoothly moves the center of the view to the given coordinate
   // void moveTo(QPointF &coordinate);
 
   QPoint geoToScreenPos(const QPointF &coordinate) const;
