@@ -22,13 +22,12 @@
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/Vector.h>
 #include <tulip/ColorScale.h>
-#include <tulip/Perspective.h>
 
 #ifndef TULIP_BUILD_CORE_ONLY
+#include <QApplication>
+#include <tulip/Perspective.h>
 #include "DoubleStringsListRelationDialog.h"
 #endif
-
-#include <QApplication>
 
 using namespace tlp;
 
