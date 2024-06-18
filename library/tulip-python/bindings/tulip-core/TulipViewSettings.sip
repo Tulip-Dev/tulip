@@ -29,62 +29,41 @@
 
 namespace tlp {
 
-class NodeShape /NoDefaultCtors/ {
-%TypeHeaderCode
-#include <tulip/TulipViewSettings.h>
-%End
-
-public:
-  enum NodeShapes /BaseType=IntEnum/ {
-    Billboard=NodeShape::Billboard,
-    Circle=NodeShape::Circle,
-    Cone=NodeShape::Cone,
-    Cross=NodeShape::Cross,
-    Cube=NodeShape::Cube,
-    CubeOutlined=NodeShape::CubeOutlined,
-    CubeOutlinedTransparent=NodeShape::CubeOutlinedTransparent,
-    Cylinder=NodeShape::Cylinder,
-    Diamond=NodeShape::Diamond,
-    GlowSphere=NodeShape::GlowSphere,
-    HalfCylinder=NodeShape::HalfCylinder,
-    Hexagon=NodeShape::Hexagon,
-    Pentagon=NodeShape::Pentagon,
-    Ring=NodeShape::Ring,
-    RoundedBox=NodeShape::RoundedBox,
-    Sphere=NodeShape::Sphere,
-    Square=NodeShape::Square,
-    Triangle=NodeShape::Triangle,
-    Window=NodeShape::Window,
-    Star=NodeShape::Star,
-    FontAwesomeIcon=NodeShape::FontAwesomeIcon,
-    Icon=NodeShape::Icon
-  };
+enum class NodeShape /BaseType=IntEnum/ {
+    Billboard = NodeShape::Billboard,
+    BottomShadowedSphere = NodeShape::BottomShadowedSphere,
+    Circle = NodeShape::Circle,
+    Cone = NodeShape::Cone,
+    Cross = NodeShape::Cross,
+    Cube = NodeShape::Cube,
+    CubeOutlined = NodeShape::CubeOutlined,
+    CubeOutlinedTransparent = NodeShape::CubeOutlinedTransparent,
+    Cylinder = NodeShape::Cylinder,
+    Diamond = NodeShape::Diamond,
+    GlowSphere = NodeShape::GlowSphere,
+    HalfCylinder = NodeShape::HalfCylinder,
+    Hexagon = NodeShape::Hexagon,
+    LeftBottomShadowedSphere = NodeShape::LeftBottomShadowedSphere,
+    Pentagon = NodeShape::Pentagon,
+    RightBottomShadowedSphere = NodeShape::RightBottomShadowedSphere,
+    Ring = NodeShape::Ring,
+    RoundedBox = NodeShape::RoundedBox,
+    Sphere = NodeShape::Sphere,
+    Square = NodeShape::Square,
+    Triangle = NodeShape::Triangle,
+    Window = NodeShape::Window,
+    Star = NodeShape::Star,
+    Icon = NodeShape::Icon
 };
 
-class EdgeShape /NoDefaultCtors/ {
-%TypeHeaderCode
-#include <tulip/TulipViewSettings.h>
-%End
-
-public:
- enum EdgeShapes /BaseType=IntEnum/ {
-    Polyline=EdgeShape::EdgeShapes::Polyline,
-    BezierCurve=EdgeShape::EdgeShapes::BezierCurve,
-    CatmullRomCurve=EdgeShape::EdgeShapes::CatmullRomCurve,
-    CubicBSplineCurve=EdgeShape::EdgeShapes::CubicBSplineCurve
-  };
+enum class EdgeShape /BaseType=IntEnum/ {
+    Polyline=EdgeShape::Polyline,
+    BezierCurve=EdgeShape::BezierCurve,
+    CatmullRomCurve=EdgeShape::CatmullRomCurve,
+    CubicBSplineCurve=EdgeShape::CubicBSplineCurve
 };
 
-
-
-class EdgeExtremityShape /NoDefaultCtors/ {
-%TypeHeaderCode
-#include <tulip/TulipViewSettings.h>
-%End
-
-public:
-
-  enum EdgeExtremityShapes /BaseType=IntEnum/ {
+enum class EdgeExtremityShape /BaseType=IntEnum/ {
     None=EdgeExtremityShape::None,
     Arrow=EdgeExtremityShape::Arrow,
     Circle=EdgeExtremityShape::Circle,
@@ -101,31 +80,18 @@ public:
     Sphere=EdgeExtremityShape::Sphere,
     Square=EdgeExtremityShape::Square,
     Star=EdgeExtremityShape::Star,
-    FontAwesomeIcon=EdgeExtremityShape::FontAwesomeIcon,
     Icon=EdgeExtremityShape::Icon
-  };
 };
 
-class LabelPosition /NoDefaultCtors/ {
-%TypeHeaderCode
-#include <tulip/TulipViewSettings.h>
-%End
-
-public:
-
-enum LabelPositions /BaseType=IntEnum/ {
+enum class LabelPosition /BaseType=IntEnum/ {
     Center=LabelPosition::Center,
     Top=LabelPosition::Top,
     Bottom=LabelPosition::Bottom,
     Left=LabelPosition::Left,
     Right=LabelPosition::Right
-  };
 };
 
 class TulipViewSettings : tlp::Observable {
-%TypeHeaderCode
-#include <tulip/TulipViewSettings.h>
-%End
 
 public:
 
@@ -198,9 +164,6 @@ private:
 };
 
 class ViewSettingsEvent : public tlp::Event /NoDefaultCtors/ {
-%TypeHeaderCode
-#include <tulip/TulipViewSettings.h>
-%End
 
 %ConvertToSubClassCode
    if (dynamic_cast<tlp::ViewSettingsEvent*>(sipCpp)) {

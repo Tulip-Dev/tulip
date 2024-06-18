@@ -214,57 +214,57 @@ Some predefined constants are available for code readability (shapes are defined
 
 Below is the exhaustive list of the constants for nodes shapes:
 
-    * :const:`tlp.NodeShape.NodeShapes.Billboard`
-    * :const:`tlp.NodeShape.NodeShapes.ChristmasTree`
-    * :const:`tlp.NodeShape.NodeShapes.Circle`
-    * :const:`tlp.NodeShape.NodeShapes.Cone`
-    * :const:`tlp.NodeShape.NodeShapes.Cross`
-    * :const:`tlp.NodeShape.NodeShapes.Cube`
-    * :const:`tlp.NodeShape.NodeShapes.CubeOutlined`
-    * :const:`tlp.NodeShape.NodeShapes.CubeOutlinedTransparent`
-    * :const:`tlp.NodeShape.NodeShapes.Cylinder`
-    * :const:`tlp.NodeShape.NodeShapes.Diamond`
-    * :const:`tlp.NodeShape.NodeShapes.GlowSphere`
-    * :const:`tlp.NodeShape.NodeShapes.HalfCylinder`
-    * :const:`tlp.NodeShape.NodeShapes.Hexagon`
-    * :const:`tlp.NodeShape.NodeShapes.Pentagon`
-    * :const:`tlp.NodeShape.NodeShapes.Ring`
-    * :const:`tlp.NodeShape.NodeShapes.RoundedBox`
-    * :const:`tlp.NodeShape.NodeShapes.Sphere`
-    * :const:`tlp.NodeShape.NodeShapes.Square`
-    * :const:`tlp.NodeShape.NodeShapes.Star`
-    * :const:`tlp.NodeShape.NodeShapes.Triangle`
-    * :const:`tlp.NodeShape.NodeShapes.Window`
-    * :const:`tlp.NodeShape.NodeShapes.Icon` (see :class:`tlp.TulipFontAwesome` and :class:`tlp.TulipMaterialDesignIcons`)
+    * :const:`tlp.NodeShape.Billboard`
+    * :const:`tlp.NodeShape.ChristmasTree`
+    * :const:`tlp.NodeShape.Circle`
+    * :const:`tlp.NodeShape.Cone`
+    * :const:`tlp.NodeShape.Cross`
+    * :const:`tlp.NodeShape.Cube`
+    * :const:`tlp.NodeShape.CubeOutlined`
+    * :const:`tlp.NodeShape.CubeOutlinedTransparent`
+    * :const:`tlp.NodeShape.Cylinder`
+    * :const:`tlp.NodeShape.Diamond`
+    * :const:`tlp.NodeShape.GlowSphere`
+    * :const:`tlp.NodeShape.HalfCylinder`
+    * :const:`tlp.NodeShape.Hexagon`
+    * :const:`tlp.NodeShape.Pentagon`
+    * :const:`tlp.NodeShape.Ring`
+    * :const:`tlp.NodeShape.RoundedBox`
+    * :const:`tlp.NodeShape.Sphere`
+    * :const:`tlp.NodeShape.Square`
+    * :const:`tlp.NodeShape.Star`
+    * :const:`tlp.NodeShape.Triangle`
+    * :const:`tlp.NodeShape.Window`
+    * :const:`tlp.NodeShape.Icon` (see :class:`tlp.TulipFontAwesome` and :class:`tlp.TulipMaterialDesignIcons`)
 
 Below is the exhaustive list of the constants for edges shapes:
 
-    * :const:`tlp.EdgeShape.EdgeShapes.Polyline`
-    * :const:`tlp.EdgeShape.EdgeShapes.BezierCurve`
-    * :const:`tlp.EdgeShape.EdgeShapes.CatmullRomCurve`
-    * :const:`tlp.EdgeShape.EdgeShapes.CubicBSplineCurve`
+    * :const:`tlp.EdgeShape.Polyline`
+    * :const:`tlp.EdgeShape.BezierCurve`
+    * :const:`tlp.EdgeShape.CatmullRomCurve`
+    * :const:`tlp.EdgeShape.CubicBSplineCurve`
 
 The shape of the edge extremities can also be modified through the **"viewSrcAnchorShape"** and **"viewTgtAnchorShape"** graph properties.
 Constants are also available for code readability, here is the exhaustive list :
 
-    * :const:`tlp.EdgeExtremityShape.EdgeExtremityShapes.None`
-    * :const:`tlp.EdgeExtremityShape.EdgeExtremityShapes.Arrow`
-    * :const:`tlp.EdgeExtremityShape.EdgeExtremityShapes.Circle`
-    * :const:`tlp.EdgeExtremityShape.EdgeExtremityShapes.Cone`
-    * :const:`tlp.EdgeExtremityShape.EdgeExtremityShapes.Cross`
-    * :const:`tlp.EdgeExtremityShape.EdgeExtremityShapes.Cube`
-    * :const:`tlp.EdgeExtremityShape.EdgeExtremityShapes.CubeOutlinedTransparent`
-    * :const:`tlp.EdgeExtremityShape.EdgeExtremityShapes.Cylinder`
-    * :const:`tlp.EdgeExtremityShape.EdgeExtremityShapes.Diamond`
-    * :const:`tlp.EdgeExtremityShape.EdgeExtremityShapes.GlowSphere`
-    * :const:`tlp.EdgeExtremityShape.EdgeExtremityShapes.HalfCylinder`
-    * :const:`tlp.EdgeExtremityShape.EdgeExtremityShapes.Hexagon`
-    * :const:`tlp.EdgeExtremityShape.EdgeExtremityShapes.Pentagon`
-    * :const:`tlp.EdgeExtremityShape.EdgeExtremityShapes.Ring`
-    * :const:`tlp.EdgeExtremityShape.EdgeExtremityShapes.Sphere`
-    * :const:`tlp.EdgeExtremityShape.EdgeExtremityShapes.Square`
-    * :const:`tlp.EdgeExtremityShape.EdgeExtremityShapes.Star`
-    * :const:`tlp.EdgeExtremityShape.EdgeExtremityShapes.Icon` (see :class:`tlp.TulipFontAwesome` and :class:`tlp.TulipMaterialDesignIcons`)
+    * :const:`tlp.EdgeExtremityShape.None`
+    * :const:`tlp.EdgeExtremityShape.Arrow`
+    * :const:`tlp.EdgeExtremityShape.Circle`
+    * :const:`tlp.EdgeExtremityShape.Cone`
+    * :const:`tlp.EdgeExtremityShape.Cross`
+    * :const:`tlp.EdgeExtremityShape.Cube`
+    * :const:`tlp.EdgeExtremityShape.CubeOutlinedTransparent`
+    * :const:`tlp.EdgeExtremityShape.Cylinder`
+    * :const:`tlp.EdgeExtremityShape.Diamond`
+    * :const:`tlp.EdgeExtremityShape.GlowSphere`
+    * :const:`tlp.EdgeExtremityShape.HalfCylinder`
+    * :const:`tlp.EdgeExtremityShape.Hexagon`
+    * :const:`tlp.EdgeExtremityShape.Pentagon`
+    * :const:`tlp.EdgeExtremityShape.Ring`
+    * :const:`tlp.EdgeExtremityShape.Sphere`
+    * :const:`tlp.EdgeExtremityShape.Square`
+    * :const:`tlp.EdgeExtremityShape.Star`
+    * :const:`tlp.EdgeExtremityShape.Icon` (see :class:`tlp.TulipFontAwesome` and :class:`tlp.TulipMaterialDesignIcons`)
 
 The sample code below set the shape of the selected nodes to a circle::
 
@@ -273,7 +273,7 @@ The sample code below set the shape of the selected nodes to a circle::
 
     for n in graph.getNodes():
       if viewSelection[n]:
-        viewShape[n] = tlp.NodeShape.NodeShapes.Circle
+        viewShape[n] = tlp.NodeShape.Circle
 
 .. _graph-labels:
 
@@ -295,11 +295,11 @@ The sample code below labels nodes according to their id::
 The position of the label relative to the associated elements can also be modified through the **"viewLabelPosition"** graph property (of type :class:`tlp.IntegerProperty`).
 Constants are defined for code readability, below is the exhaustive list:
 
-    * :const:`tlp.LabelPosition.LabelPositions.Center`
-    * :const:`tlp.LabelPosition.LabelPositions.Top`
-    * :const:`tlp.LabelPosition.LabelPositions.Bottom`
-    * :const:`tlp.LabelPosition.LabelPositions.Left`
-    * :const:`tlp.LabelPosition.LabelPositions.Right`
+    * :const:`tlp.LabelPosition.Center`
+    * :const:`tlp.LabelPosition.Top`
+    * :const:`tlp.LabelPosition.Bottom`
+    * :const:`tlp.LabelPosition.Left`
+    * :const:`tlp.LabelPosition.Right`
 
 .. _borders-widths:
 

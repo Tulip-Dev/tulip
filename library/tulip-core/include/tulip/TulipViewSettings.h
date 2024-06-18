@@ -31,10 +31,12 @@
 
 namespace tlp {
 
-class TLP_SCOPE NodeShape {
+class TLP_SCOPE TulipShape {
 
 public:
-  enum NodeShapes {
+ enum Values : int {
+    None = -1,
+    Arrow = 50,
     Billboard = 7,
     BottomShadowedSphere = 21,
     Circle = 14,
@@ -58,9 +60,39 @@ public:
     Triangle = 11,
     Window = 17,
     Star = 19,
-    FontAwesomeIcon = 20,
     Icon = 20
   };
+};
+
+class TLP_SCOPE NodeShape {
+
+public:
+enum NodeShapes {
+    Billboard = TulipShape::Billboard,
+    BottomShadowedSphere = TulipShape::BottomShadowedSphere,
+    Circle = TulipShape::Circle,
+    Cone = TulipShape::Cone,
+    Cross = TulipShape::Cross,
+    Cube = TulipShape::Cube,
+    CubeOutlined = TulipShape::CubeOutlined,
+    CubeOutlinedTransparent = TulipShape::CubeOutlinedTransparent,
+    Cylinder = TulipShape::Cylinder,
+    Diamond = TulipShape::Diamond,
+    GlowSphere = TulipShape::GlowSphere,
+    HalfCylinder = TulipShape::HalfCylinder,
+    Hexagon = TulipShape::Hexagon,
+    LeftBottomShadowedSphere = TulipShape::LeftBottomShadowedSphere,
+    Pentagon = TulipShape::Pentagon,
+    RightBottomShadowedSphere = TulipShape::RightBottomShadowedSphere,
+    Ring = TulipShape::Ring,
+    RoundedBox = TulipShape::RoundedBox,
+    Sphere = TulipShape::Sphere,
+    Square = TulipShape::Square,
+    Triangle = TulipShape::Triangle,
+    Window = TulipShape::Window,
+    Star = TulipShape::Star,
+    Icon = TulipShape::Icon
+};
 };
 
 class TLP_SCOPE EdgeShape {
@@ -73,31 +105,31 @@ class TLP_SCOPE EdgeExtremityShape {
 
 public:
   enum EdgeExtremityShapes {
-    None = -1,
-    Arrow = 50,
-    Circle = 14,
-    Cone = 3,
-    Cross = 8,
-    Cube = 0,
-    CubeOutlinedTransparent = 9,
-    Cylinder = 6,
-    Diamond = 5,
-    GlowSphere = 16,
-    Hexagon = 13,
-    Pentagon = 12,
-    Ring = 15,
-    Sphere = 2,
-    Square = 4,
-    Star = 19,
-    FontAwesomeIcon = 20,
-    Icon = 20
+    None = TulipShape::None,
+    Arrow = TulipShape::Arrow,
+    Circle = TulipShape::Circle,
+    Cone = TulipShape::Cone,
+    Cross = TulipShape::Cross,
+    Cube = TulipShape::Cube,
+    CubeOutlinedTransparent = TulipShape::CubeOutlinedTransparent,
+    Cylinder = TulipShape::Cylinder,
+    Diamond = TulipShape::Diamond,
+    GlowSphere = TulipShape::GlowSphere,
+    Hexagon = TulipShape::Hexagon,
+    Pentagon = TulipShape::Pentagon,
+    Ring = TulipShape::Ring,
+    Sphere = TulipShape::Sphere,
+    Square = TulipShape::Square,
+    Star = TulipShape::Star,
+    FontAwesomeIcon = TulipShape::Icon,
+    Icon = TulipShape::Icon
   };
 };
 
 class TLP_SCOPE LabelPosition {
 
 public:
-  enum LabelPositions { Center = 0, Top, Bottom, Left, Right };
+  enum LabelPositions { Center = 0, Top = 1, Bottom = 2, Left = 3, Right = 4 };
 };
 
 ///@cond DOXYGEN_HIDDEN

@@ -11,16 +11,6 @@ Code breaking changes in the tulip module
 Due to the upgrade of the SIP build tool, C++ enums are now bind to Python enums. This change breaks code compatibility with Tulip 5.X.
 The changes are:
 
-   * tlp.NodeShape.* becomes tlp.NodeShape.NodeShapes.* (replace * by the shape name, e.g., Circle, Cross)
-   * tlp.EdgeShape.* becomes tlp.EdgeShape.EdgeShapes.*
-   * tlp.EdgeExtremityShape.* becomes tlp.EdgeExtremityShape.EdgeExtremityShapes.*
-
-See :ref:`Shapes of graph elements <graph-shapes>` for more details.
-
-   * tlp.LabelPosition.* becomes tlp.LabelPosition.LabelPositions.*
-
-See :ref:`Labels of graph elements <graph-labels>` for more details.
-
     * tlp.GraphEvent.TLP_* becomes tlp.GraphEvent.GraphEventType.TLP_*
 
 See :class:`tlp.GraphEvent` for more details.
