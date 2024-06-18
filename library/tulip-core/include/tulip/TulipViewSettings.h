@@ -34,7 +34,7 @@ namespace tlp {
 class TLP_SCOPE TulipShape {
 
 public:
- enum Values : int {
+  enum Values : int {
     None = -1,
     Arrow = 50,
     Billboard = 7,
@@ -67,7 +67,7 @@ public:
 class TLP_SCOPE NodeShape {
 
 public:
-enum NodeShapes {
+  enum NodeShapes {
     Billboard = TulipShape::Billboard,
     BottomShadowedSphere = TulipShape::BottomShadowedSphere,
     Circle = TulipShape::Circle,
@@ -92,7 +92,7 @@ enum NodeShapes {
     Window = TulipShape::Window,
     Star = TulipShape::Star,
     Icon = TulipShape::Icon
-};
+  };
 };
 
 class TLP_SCOPE EdgeShape {
