@@ -217,10 +217,10 @@ void BasicPluginsTest::testImportFileSystem() {
 //==========================================================
 void BasicPluginsTest::testImportAdjacencyMatrix() {
   DataSet ds;
-  ds.set("file::name", string("data/toto.txt"));
+  ds.set("file::filename", string("data/toto.txt"));
   Graph *g = importGraph("Adjacency Matrix", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == nullptr);
-  ds.set("file::name", string("data/adj_mat.txt"));
+  ds.set("file::filename", string("data/adj_mat.txt"));
   g = importGraph("Adjacency Matrix", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
