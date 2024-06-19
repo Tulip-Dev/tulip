@@ -1316,7 +1316,8 @@ void PythonIDE::createTulipProjectPythonPaths() {
 }
 
 bool PythonIDE::projectNeedsPythonIDE(tlp::TulipProject *project) {
-  return (project->exists(PYTHON_MODULES_FILES) || project->exists(PYTHON_PLUGINS_FILES) || project->exists(PYTHON_SCRIPTS_FILES));
+  return (project->exists(PYTHON_MODULES_FILES) || project->exists(PYTHON_PLUGINS_FILES) ||
+          project->exists(PYTHON_SCRIPTS_FILES));
 }
 
 void PythonIDE::setProject(tlp::TulipProject *project) {
