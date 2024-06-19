@@ -43,7 +43,6 @@ public slots:
   void showGraphDefaultsContextMenu(const QPoint &);
 
 private slots:
-  void usetlpbformat(int state);
   void resetToTulipDefaults(int row = -1, int updateMode = 0);
 };
 

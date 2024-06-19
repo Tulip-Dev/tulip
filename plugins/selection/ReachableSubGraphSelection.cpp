@@ -89,7 +89,6 @@ bool ReachableSubGraphSelection::run() {
       edgeDirection = UNDIRECTED;
     }
 
-    // keep startingnodes for compatibility
     dataSet->get("selection", startNodes);
   }
 

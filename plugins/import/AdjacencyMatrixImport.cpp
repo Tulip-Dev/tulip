@@ -120,18 +120,16 @@ Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E an
   }
 
   bool importGraph() override {
-    string name2;
+    string fname;
 
-    if (!(dataSet->get("file::filename", name2) ||
-          // ensure compatibility with old version
-          dataSet->get("file::name", name2)))
+    if (!dataSet->get("file::filename", fname))
       return false;
 
-    std::istream *in = tlp::getInputFileStream(name2);
+    std::istream *in = tlp::getInputFileStream(fname);
     // check for open stream failure
     if (in->fail()) {
       std::stringstream ess;
-      ess << "Unable to open " << name2 << ": " << tlp::getStrError();
+      ess << "Unable to open " << fname << ": " << tlp::getStrError();
       pluginProgress->setError(ess.str());
       delete in;
       return false;
@@ -255,7 +253,7 @@ Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E an
     if (curLine == nodes.size())
       return true;
 
-    pluginProgress->setError(std::string("The number of lines in file ") + name2 +
+    pluginProgress->setError(std::string("The number of lines in file ") + fname +
                              "\n is different from the number of found nodes.");
     return false;
   }

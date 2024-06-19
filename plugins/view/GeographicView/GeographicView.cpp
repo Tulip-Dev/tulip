@@ -184,37 +184,7 @@ void GeographicView::setState(const DataSet &dataSet) {
   loadStoredPolyInformation(dataSet);
 
   int mapType = 0;
-  if (dataSet.get("viewType", mapType)) {
-    // ensure compatibility with previous version
-    switch (mapType) {
-    case OpenTopoMap: // 1
-      mapType = EsriSatellite;
-      break;
-
-    case EsriStreetMap: // 2
-      mapType = EsriTopoMap;
-      break;
-
-    case EsriTopoMap: // 3
-      mapType = EsriLightGrayCanvas;
-      break;
-
-    case EsriNatGeoMap: // 4
-      mapType = CustomTileLayer;
-      break;
-
-    case EsriSatellite: // 5
-      mapType = Polygon;
-      break;
-
-    case EsriLightGrayCanvas: // 6
-      mapType = Globe;
-
-    default:
-      break;
-    }
-  } else
-    dataSet.get("mapType", mapType);
+  dataSet.get("mapType", mapType);
 
   switchMapType(MapType(mapType));
 

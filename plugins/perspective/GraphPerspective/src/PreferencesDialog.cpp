@@ -66,16 +66,6 @@ PreferencesDialog::~PreferencesDialog() {
   delete _ui;
 }
 
-void PreferencesDialog::usetlpbformat(int state) {
-  if (state == Qt::Checked) {
-    QMessageBox::warning(this, "Use tlpb file format",
-                         "Be careful: using the tlpb file format "
-                         "means faster Tulip project loading/saving "
-                         "but you will lose compatibility with "
-                         "previous versions of Tulip (<4.10).");
-  }
-}
-
 template <typename PROP, typename TYPE>
 inline void setDefaultNodeValueInProperty(const std::string &propertyName, const TYPE &value,
                                           bool &graphPush) {
@@ -329,11 +319,7 @@ void PreferencesDialog::readSettings() {
   _ui->colorMappingCheck->setChecked(TulipSettings::isAutomaticMapMetric());
   _ui->logCombo->setCurrentIndex(TulipSettings::logPluginCall());
   _ui->displayModeCombo->setCurrentIndex(TulipSettings::isDisplayInDarkMode() ? 1 : 0);
-
-  if (TulipSettings::isUseTlpbFileFormat()) {
-    _ui->usetlpbformat->setChecked(true);
-  } else
-    connect(_ui->usetlpbformat, SIGNAL(stateChanged(int)), this, SLOT(usetlpbformat(int)));
+  _ui->usetlpbformat->setChecked(TulipSettings::isUseTlpbFileFormat());
 
   // initialize seed according to settings
   unsigned int seed;

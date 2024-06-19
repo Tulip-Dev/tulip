@@ -131,22 +131,11 @@ public:
       dataSet->get("depth", zaxis);
       dataSet->get("min size", min);
       dataSet->get("max size", max);
-      // for compatibility with old parameter type
-      if (dataSet->getTypeName(MAPPING_TYPE) == dataSet->getTypeName<bool>())
-        dataSet->get(MAPPING_TYPE, linearType);
-      else {
-        dataSet->get(MAPPING_TYPE, mapping);
-        linearType = mapping.getCurrent() == LINEAR_MAPPING;
-      }
+      dataSet->get(MAPPING_TYPE, mapping);
+      linearType = mapping.getCurrent() == LINEAR_MAPPING;
       dataSet->get(TARGET_TYPE, targetType);
       dataSet->get("mapping proportionality", proportionalType);
       proportional = proportionalType.getCurrent();
-      // old parameter name and behavior
-      if (dataSet->exists("node/edge")) {
-        bool nodeoredge = true;
-        dataSet->get("node/edge", nodeoredge);
-        targetType.setCurrent(nodeoredge ? NODES_TARGET : EDGES_TARGET);
-      }
     }
 
     if (min >= max) {
