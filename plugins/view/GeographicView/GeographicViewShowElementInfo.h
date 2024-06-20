@@ -40,7 +40,7 @@ class GeographicViewShowElementInfo : public MouseShowElementInfo {
 public:
   GeographicViewShowElementInfo();
 
-  void init();
+  void init() override;
 
   bool eventFilter(QObject *widget, QEvent *e) override;
 
@@ -48,7 +48,7 @@ public:
 
   void clear() override;
 
-  virtual bool pick(int x, int y, SelectedEntity &selectedEntity);
+  bool pick(int x, int y, SelectedEntity &selectedEntity) override;
 
 public slots:
   void mouseMove();
