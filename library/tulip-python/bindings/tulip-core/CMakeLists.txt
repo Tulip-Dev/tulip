@@ -11,7 +11,6 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Color.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/ConnectedTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/ConvexHull.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Coord.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/DataSet.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Delaunay.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/DoublePropertySpecific.sip

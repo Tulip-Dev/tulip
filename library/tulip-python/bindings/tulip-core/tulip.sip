@@ -341,7 +341,9 @@ bool isTupleAndCanConvertToVec3fType(PyObject *pyObj) {
 %Include Edge.sip
 %Include Vector.sip
 %Include Color.sip
-%Include Coord.sip
+namespace tlp {
+    typedef tlp::Vec3f Coord;
+};
 %Include Size.sip
 %Include Matrix.sip
 %Include BoundingBox.sip
