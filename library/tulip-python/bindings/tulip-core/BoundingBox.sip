@@ -177,7 +177,7 @@ If the bounding box is invalid the result is always :const:`False`.
 :rtype: Boolean
 %End
 
-  tlp::Vec3f& operator[](const unsigned int i) const /NoCopy/;
+  tlp::Vec3f& __getitem__(const unsigned int i) const /NoCopy/;
 %MethodCode
   if (a0 < 2) {
     sipRes = &(*sipCpp)[a0];
