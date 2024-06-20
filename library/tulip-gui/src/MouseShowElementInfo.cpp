@@ -42,11 +42,6 @@ MouseShowElementInfo::MouseShowElementInfo(const bool showVisualPropButton)
   // fix display of QCheckBox and QRadioButton children
   tlpFixCBRBs(_informationWidget);
 
-// workaround to get rid of Qt5 warnings : QMacCGContext:: Unsupported painter devtype type 1
-// see https://bugreports.qt.io/browse/QTBUG-32639
-#if defined(__APPLE__)
-  _informationWidget->setWindowOpacity(0.99);
-#endif
   tableView()->setItemDelegate(new TulipItemDelegate(tableView()));
   _informationWidgetItem->setWidget(_informationWidget);
   _informationWidgetItem->setVisible(false);
