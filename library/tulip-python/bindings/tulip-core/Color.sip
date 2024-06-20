@@ -302,8 +302,8 @@ Sets the value component of the color in the HSV color space (must be in the ran
   }
 %End
 
-  bool operator!=(const tlp::Color &) const;
-  bool operator==(const tlp::Color &) const;
+  bool __eq__(const tlp::Color &) const;
+  bool __ne__(const tlp::Color &) const;
 
   std::string __repr__() const;
 %MethodCode

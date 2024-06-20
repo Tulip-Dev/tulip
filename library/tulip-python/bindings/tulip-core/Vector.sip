@@ -216,11 +216,10 @@ public:
   bool operator>(const tlp::Vec3f &) const;
   
   bool operator<(const tlp::Vec3f &) const;
-  
-  bool operator!=(const tlp::Vec3f &) const;
-  
-  bool operator==(const tlp::Vec3f &) const;
-    
+
+  bool __ne__(const tlp::Vec3f &) const;
+  bool __eq__(const tlp::Vec3f &) const;
+
   void set(const float x=0,const float y=0, const float z=0);
 %Docstring
 tlp.Vec3f.set(x, y, z)
@@ -588,10 +587,9 @@ public:
   bool operator>(const tlp::Vec4f &) const;
   
   bool operator<(const tlp::Vec4f &) const;
-  
-  bool operator!=(const tlp::Vec4f &) const;
-  
-  bool operator==(const tlp::Vec4f &) const;
+   
+  bool __eq__(const tlp::Vec4f &) const;
+  bool __ne__(const tlp::Vec4f &) const;
     
   void set(const float x=0,const float y=0, const float z=0, const float w=0);
 
@@ -744,9 +742,8 @@ public:
   
   bool operator<(const tlp::Vec4i &) const;
   
-  bool operator!=(const tlp::Vec4i &) const;
-  
-  bool operator==(const tlp::Vec4i &) const;
+  bool __eq__(const tlp::Vec4i &) const;
+  bool __ne__(const tlp::Vec4i &) const;
     
   tlp::Vec4i & fill(const int &obj);
     

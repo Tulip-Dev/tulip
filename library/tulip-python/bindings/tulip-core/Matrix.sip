@@ -65,9 +65,8 @@ public:
 
   tlp::Mat4f & operator-=(const tlp::Mat4f &mat);
 
-  bool operator==(const tlp::Mat4f &) const;
-
-  bool operator!=(const tlp::Mat4f &) const;
+  bool __eq__(const tlp::Mat4f &) const;
+  bool __ne__(const tlp::Mat4f &) const;
 
   tlp::Mat4f & operator*=(const tlp::Mat4f &mat);
 

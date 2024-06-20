@@ -309,8 +309,8 @@ Sets the transparency of all the colors in the underlying map.
 
 //==========================================================================================
 
-  bool operator==(const tlp::ColorScale &) const;
-
+    bool __eq__(const tlp::ColorScale &) const;
+    bool __ne__(const tlp::ColorScale &) const;
   std::string __repr__() const;
 %MethodCode
   std::ostringstream oss;

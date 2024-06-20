@@ -203,6 +203,14 @@ public:
   }
 
   /**
+   * @brief Tests color scale difference with another one.
+   *
+   */
+  bool operator!=(const ColorScale &cs) const {
+    return (gradient != cs.gradient) || (colorMap != cs.colorMap);
+  }
+
+  /**
    * @brief Tests color scale equality with a regular one defined by a vector of colors.
    *
    */
