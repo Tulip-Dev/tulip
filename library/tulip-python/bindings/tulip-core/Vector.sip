@@ -145,11 +145,11 @@ public:
   }
 %End
 
-  tlp::Vec3f & operator*=(const float &);
+  tlp::Vec3f & __imul__(const float &);
   
-  tlp::Vec3f & operator*=(const tlp::Vec3f &);
+  tlp::Vec3f & __imul__(const tlp::Vec3f &);
   
-  tlp::Vec3f & operator/=(const float &);
+  tlp::Vec3f & __itruediv__(const float &);
 %MethodCode
   if (a0 != 0) {
     sipCpp->tlp::Vec3f::operator/=(a0);
@@ -159,7 +159,7 @@ public:
   }
 %End
 
-  tlp::Vec3f & operator/=(const tlp::Vec3f &);
+  tlp::Vec3f & __itruediv__(const tlp::Vec3f &);
 %MethodCode
   if ((*a0)[0] && (*a0)[1] && (*a0)[2]) {
     sipCpp->tlp::Vec3f::operator/=(*a0);
@@ -169,29 +169,29 @@ public:
   }
 %End
 
-  tlp::Vec3f & operator+=(const float &);
+  tlp::Vec3f & __iadd__(const float &);
   
-  tlp::Vec3f & operator+=(const tlp::Vec3f &);
+  tlp::Vec3f & __iadd__(const tlp::Vec3f &);
   
-  tlp::Vec3f & operator-=(const float &);
+  tlp::Vec3f & __isub__(const float &);
   
-  tlp::Vec3f & operator-=(const tlp::Vec3f &);
+  tlp::Vec3f & __isub__(const tlp::Vec3f &);
   
-  tlp::Vec3f & operator^=(const tlp::Vec3f &);
+  tlp::Vec3f & __ixor__(const tlp::Vec3f &);
 
-  tlp::Vec3f operator*(const  tlp::Vec3f &) const;
+  tlp::Vec3f __mul__(const  tlp::Vec3f &) const;
   
-  tlp::Vec3f operator*(const float &) const;
+  tlp::Vec3f __mul__(const float &) const;
   
-  tlp::Vec3f operator+(const  tlp::Vec3f &) const;
+  tlp::Vec3f __add__(const  tlp::Vec3f &) const;
   
-  tlp::Vec3f operator+(const float &) const;
+  tlp::Vec3f __add__(const float &) const;
   
-  tlp::Vec3f operator-(const  tlp::Vec3f &) const;
+  tlp::Vec3f __sub__(const  tlp::Vec3f &) const;
   
-  tlp::Vec3f operator-(const float &) const; 
+  tlp::Vec3f __sub__(const float &) const;
   
-  tlp::Vec3f operator/(const  tlp::Vec3f &) const;
+  tlp::Vec3f __truediv__(const  tlp::Vec3f &) const;
 %MethodCode
   if ((*a1)[0] && (*a1)[1] && (*a1)[2]) {
     sipRes = new tlp::Vec3f((*a0 / *a1));
@@ -201,7 +201,7 @@ public:
   }
 %End
 
-  tlp::Vec3f operator/(const float &) const;
+  tlp::Vec3f __truediv__(const float &) const;
 %MethodCode
   if (a1 != 0) {
     sipRes = new tlp::Vec3f((*a0 / a1));
@@ -211,12 +211,10 @@ public:
   }
 %End
 
-  tlp::Vec3f operator^(const  tlp::Vec3f &) const;
-    
-  bool operator>(const tlp::Vec3f &) const;
-  
-  bool operator<(const tlp::Vec3f &) const;
+  tlp::Vec3f __xor__(const  tlp::Vec3f &) const;
 
+  bool __gt__(const tlp::Vec3f &) const;
+  bool __lt__(const tlp::Vec3f &) const;
   bool __ne__(const tlp::Vec3f &) const;
   bool __eq__(const tlp::Vec3f &) const;
 
@@ -471,7 +469,7 @@ Computes and returns the dot product (scalar product) of the vector with another
 
 };
 
-tlp::Vec3f operator*(const float &, const tlp::Vec3f &) const;
+tlp::Vec3f __mul__(const float &, const tlp::Vec3f &) const;
 
 class Vec4f  {
 
@@ -514,11 +512,11 @@ public:
   }
 %End
 
-  tlp::Vec4f & operator*=(const float &);
+  tlp::Vec4f & __imul__(const float &);
   
-  tlp::Vec4f & operator*=(const tlp::Vec4f &);
+  tlp::Vec4f & __imul__(const tlp::Vec4f &);
   
-  tlp::Vec4f & operator/=(const float &);
+  tlp::Vec4f & __itruediv__(const float &);
 %MethodCode
   if (a0 != 0) {
     sipCpp->tlp::Vec4f::operator/=(a0);
@@ -528,7 +526,7 @@ public:
   }
 %End
 
-  tlp::Vec4f & operator/=(const tlp::Vec4f &);
+  tlp::Vec4f & __itruediv__(const tlp::Vec4f &);
 %MethodCode
   if ((*a0)[0] && (*a0)[1] && (*a0)[2] && (*a0)[3]) {
     sipCpp->tlp::Vec4f::operator/=(*a0);
@@ -538,31 +536,31 @@ public:
   }
 %End
 
-  tlp::Vec4f & operator+=(const float &);
+  tlp::Vec4f & __iadd__(const float &);
   
-  tlp::Vec4f & operator+=(const tlp::Vec4f &);
+  tlp::Vec4f & __iadd__(const tlp::Vec4f &);
   
-  tlp::Vec4f & operator-=(const float &);
+  tlp::Vec4f & __isub__(const float &);
   
-  tlp::Vec4f & operator-=(const tlp::Vec4f &);
+  tlp::Vec4f & __isub__(const tlp::Vec4f &);
   
-  tlp::Vec4f & operator^=(const tlp::Vec4f &);
+  tlp::Vec4f & __ixor__(const tlp::Vec4f &);
 
-  tlp::Vec4f operator*(const  tlp::Vec4f &) const;
+  tlp::Vec4f __mul__(const  tlp::Vec4f &) const;
   
-  tlp::Vec4f operator*(const tlp::Mat4f &mat) const;
+  tlp::Vec4f __mul__(const tlp::Mat4f &mat) const;
   
-  tlp::Vec4f operator*(const float &) const;
+  tlp::Vec4f __mul__(const float &) const;
   
-  tlp::Vec4f operator+(const  tlp::Vec4f &) const;
+  tlp::Vec4f __add__(const  tlp::Vec4f &) const;
   
-  tlp::Vec4f operator+(const float &) const;
+  tlp::Vec4f __add__(const float &) const;
   
-  tlp::Vec4f operator-(const  tlp::Vec4f &) const;
+  tlp::Vec4f __sub__(const  tlp::Vec4f &) const;
   
-  tlp::Vec4f operator-(const float &) const;
+  tlp::Vec4f __sub__(const float &) const;
   
-  tlp::Vec4f operator/(const  tlp::Vec4f &) const;
+  tlp::Vec4f __truediv__(const  tlp::Vec4f &) const;
 %MethodCode
   if ((*a1)[0] && (*a1)[1] && (*a1)[2] && (*a1)[3]) {
     sipRes = new tlp::Vec4f((*a0 / *a1));
@@ -572,7 +570,7 @@ public:
   }
 %End
 
-  tlp::Vec4f operator/(const float &) const;
+  tlp::Vec4f __truediv__(const float &) const;
 %MethodCode
   if (a1 != 0) {
     sipRes = new tlp::Vec4f((*a0 / a1));
@@ -582,12 +580,10 @@ public:
   }
 %End
 
-  tlp::Vec4f operator^(const  tlp::Vec4f &) const;
-    
-  bool operator>(const tlp::Vec4f &) const;
-  
-  bool operator<(const tlp::Vec4f &) const;
-   
+  tlp::Vec4f __xor__(const  tlp::Vec4f &) const;
+
+  bool __gt__(const tlp::Vec4f &) const;
+  bool __lt__(const tlp::Vec4f &) const;
   bool __eq__(const tlp::Vec4f &) const;
   bool __ne__(const tlp::Vec4f &) const;
     
@@ -702,45 +698,44 @@ public:
   }
 %End
 
-  tlp::Vec4i & operator*=(const int &);
+  tlp::Vec4i & __imul__(const int &);
   
-  tlp::Vec4i & operator*=(const tlp::Vec4i &);
+  tlp::Vec4i & __imul__(const tlp::Vec4i &);
   
-  tlp::Vec4i & operator/=(const int &);
+  tlp::Vec4i & __itruediv__(const int &);
   
-  tlp::Vec4i & operator/=(const tlp::Vec4i &);
+  tlp::Vec4i & __itruediv__(const tlp::Vec4i &);
   
-  tlp::Vec4i & operator+=(const int &);
+  tlp::Vec4i & __iadd__(const int &);
   
-  tlp::Vec4i & operator+=(const tlp::Vec4i &);
+  tlp::Vec4i & __iadd__(const tlp::Vec4i &);
   
-  tlp::Vec4i & operator-=(const int &);
+  tlp::Vec4i & __isub__(const int &);
   
-  tlp::Vec4i & operator-=(const tlp::Vec4i &);
+  tlp::Vec4i & __isub__(const tlp::Vec4i &);
   
-  tlp::Vec4i & operator^=(const tlp::Vec4i &);
+  tlp::Vec4i & __ixor__(const tlp::Vec4i &);
 
-  tlp::Vec4i operator*(const  tlp::Vec4i &) const;
+  tlp::Vec4i __mul__(const  tlp::Vec4i &) const;
   
-  tlp::Vec4i operator*(const int &) const;
+  tlp::Vec4i __mul__(const int &) const;
   
-  tlp::Vec4i operator+(const  tlp::Vec4i &) const;
+  tlp::Vec4i __add__(const  tlp::Vec4i &) const;
   
-  tlp::Vec4i operator+(const int &) const;
+  tlp::Vec4i __add__(const int &) const;
   
-  tlp::Vec4i operator-(const  tlp::Vec4i &) const;
+  tlp::Vec4i __sub__(const  tlp::Vec4i &) const;
   
-  tlp::Vec4i operator-(const int &) const; 
+  tlp::Vec4i __sub__(const int &) const;
   
-  tlp::Vec4i operator/(const  tlp::Vec4i &) const;
+  tlp::Vec4i __truediv__(const  tlp::Vec4i &) const;
   
-  tlp::Vec4i operator/(const int &) const;
+  tlp::Vec4i __truediv__(const int &) const;
   
-  tlp::Vec4i operator^(const  tlp::Vec4i &) const;
-    
-  bool operator>(const tlp::Vec4i &) const;
-  
-  bool operator<(const tlp::Vec4i &) const;
+  tlp::Vec4i __xor__(const  tlp::Vec4i &) const;
+
+  bool __gt__(const tlp::Vec4i &) const;
+  bool __lt__(const tlp::Vec4i &) const;
   
   bool __eq__(const tlp::Vec4i &) const;
   bool __ne__(const tlp::Vec4i &) const;
@@ -756,7 +751,7 @@ public:
 
 };
 
-tlp::Vec4i operator*(const int &, const tlp::Vec4i &) const;
+tlp::Vec4i __mul__(const int &, const tlp::Vec4i &) const;
 
 };
 

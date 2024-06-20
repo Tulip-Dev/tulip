@@ -119,19 +119,19 @@ class PySize : tlp::Vec3f /PyName=Size, TypeHint="tlp.Size"/ {
 
   PySize(const tlp::Vec3f &s);
 
-  tlp::PySize operator*(const tlp::Vec3f &) const;
+  tlp::PySize __mul__(const tlp::Vec3f &) const;
 
-  tlp::PySize operator*(const float &) const;
+  tlp::PySize __mul__(const float &) const;
 
-  tlp::PySize operator+(const tlp::Vec3f &) const;
+  tlp::PySize __add__(const tlp::Vec3f &) const;
 
-  tlp::PySize operator+(const float &) const;
+  tlp::PySize __add__(const float &) const;
 
-  tlp::PySize operator-(const tlp::Vec3f &) const;
+  tlp::PySize __sub__(const tlp::Vec3f &) const;
 
-  tlp::PySize operator-(const float &) const;
+  tlp::PySize __sub__(const float &) const;
 
-  tlp::PySize operator/(const tlp::Vec3f &) const;
+  tlp::PySize __truediv__(const tlp::Vec3f &) const;
 %MethodCode
   if ((*a1)[0] && (*a1)[1] && (*a1)[2]) {
     sipRes = new tlp::PySize((*a0 / *a1));
@@ -141,7 +141,7 @@ class PySize : tlp::Vec3f /PyName=Size, TypeHint="tlp.Size"/ {
   }
 %End
 
-  tlp::PySize operator/(const float &) const;
+  tlp::PySize __truediv__(const float &) const;
 %MethodCode
   if (a1 != 0) {
     sipRes = new tlp::PySize((*a0 / a1));
