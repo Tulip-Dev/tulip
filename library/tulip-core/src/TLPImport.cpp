@@ -933,6 +933,7 @@ namespace tlp {
  */
 class TLPImport : public ImportFileModule {
   std::string data;
+
 public:
   PLUGININFORMATION("TLP Import", "Auber", "16/02/2001",
                     "<p>Supported extensions: tlp, tlpz (compressed), tlp.gz "
@@ -962,9 +963,9 @@ public:
 
   bool check() {
     return ImportFileModule::check() ||
-      // file::data is an hidden parameter
-      // used in GraphPerspective.cpp to copy a Graph
-      dataSet->get<std::string>("file::data", data);
+           // file::data is an hidden parameter
+           // used in GraphPerspective.cpp to copy a Graph
+           dataSet->get<std::string>("file::data", data);
   }
 
   bool importFile() override {

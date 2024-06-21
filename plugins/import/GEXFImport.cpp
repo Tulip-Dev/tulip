@@ -67,7 +67,8 @@ public:
   GEXFImport(const PluginContext *context)
       : ImportFileModule(context), viewLayout(nullptr), viewSize(nullptr), viewColor(nullptr),
         viewLabel(nullptr), viewShape(nullptr), nodesHaveCoordinates(false) {
-    addInParameter<bool>("curved edges", "Indicates if Bézier curves should be used to draw the edges.", "false");
+    addInParameter<bool>("curved edges",
+                         "Indicates if Bézier curves should be used to draw the edges.", "false");
   }
 
   ~GEXFImport() override {}

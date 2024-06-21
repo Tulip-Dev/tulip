@@ -74,8 +74,7 @@ public:
 
     // check arguments
     if (type_of_nodes > nb_nodes) {
-      pluginProgress->setError(
-          "\"nodes types\" cannot be greater than the \"nodes\"");
+      pluginProgress->setError("\"nodes types\" cannot be greater than the \"nodes\"");
       return false;
     }
 

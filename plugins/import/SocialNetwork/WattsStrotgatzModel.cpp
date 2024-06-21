@@ -84,8 +84,7 @@ struct WattsStrogatzModel : public ImportModule {
       return false;
     }
     if (k >= nbNodes) {
-      pluginProgress->setError(
-          "\"k\" cannot be greater than or equal \"nodes\"");
+      pluginProgress->setError("\"k\" cannot be greater than or equal \"nodes\"");
       return false;
     }
     if (original_model && (k < log(float(nbNodes)))) {

@@ -25,7 +25,7 @@ using namespace tlp;
 ImportModule::ImportModule(const tlp::PluginContext *context) {
   if (context != nullptr) {
     const tlp::AlgorithmContext *algoritmContext =
-      static_cast<const tlp::AlgorithmContext *>(context);
+        static_cast<const tlp::AlgorithmContext *>(context);
     graph = algoritmContext->graph;
     pluginProgress = algoritmContext->pluginProgress;
     dataSet = algoritmContext->dataSet;

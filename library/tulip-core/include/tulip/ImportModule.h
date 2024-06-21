@@ -130,7 +130,7 @@ public:
   /**
    * @brief create the graph contents from the file data
    **/
-  virtual bool importFile()=0;
+  virtual bool importFile() = 0;
 
   /**
    * @brief override the inherited method

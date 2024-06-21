@@ -208,7 +208,8 @@ public:
       : ImportFileModule(context), nbNodes(0), defaultMetric("weight"), n(0), nr(0), nc(0), nm(0),
         current(0), dl_found(false), diagonal(true), diagonal_found(false), labels_known(false),
         title_found(false), expectedLine(DL_HEADER), embedding(DL_NONE), dataFormat(DL_FM) {
-    addInParameter<string>("default metric", "This parameter indicates the name of the default metric", "weight");
+    addInParameter<string>("default metric",
+                           "This parameter indicates the name of the default metric", "weight");
   }
 
   ~ImportUCINET() override {}
