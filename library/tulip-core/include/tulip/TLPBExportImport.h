@@ -120,7 +120,7 @@ public:
  * \brief This plugin reads a Tulip graph using a binary format
  *
  */
-class TLPBImport : public tlp::ImportModule {
+class TLPBImport : public tlp::ImportFileModule {
 public:
   PLUGININFORMATION("TLPB Import", "David Auber, Patrick Mary", "13/07/2012",
                     "<p>Supported extensions: tlpb, tlpb.gz (compressed), tlpbz "
@@ -128,7 +128,7 @@ public:
                     "format.</p>",
                     "1.2", "File")
 
-  TLPBImport(tlp::PluginContext *context);
+  TLPBImport(tlp::PluginContext *context) : ImportFileModule(context) {}
   ~TLPBImport() override {}
 
   std::string icon() const override {
@@ -136,19 +136,14 @@ public:
   }
 
   std::list<std::string> fileExtensions() const override {
-    std::list<std::string> l;
-    l.push_back("tlpb");
-    return l;
+    return std::list<std::string>() = {"tlpb"};
   }
 
   std::list<std::string> gzipFileExtensions() const override {
-    std::list<std::string> ext;
-    ext.push_back("tlpb.gz");
-    ext.push_back("tlpbz");
-    return ext;
+    return std::list<std::string>() = {"tlpb.gz", "tlpbz"};
   }
 
-  bool importGraph() override;
+  bool importFile() override;
 };
 
 /*@}*/

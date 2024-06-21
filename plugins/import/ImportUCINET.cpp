@@ -190,14 +190,7 @@ bool tokenize(const string &str, vector<string> &tokens, const string &separator
 }
 } // namespace
 
-static const char *paramHelp[] = {
-    // filename
-    "This parameter indicates the pathname of the file in UCINET DL format to import.",
-
-    // Default metric
-    "This parameter indicates the name of the default metric."};
-
-class ImportUCINET : public ImportModule {
+class ImportUCINET : public ImportFileModule {
 
 public:
   PLUGININFORMATION(
@@ -209,16 +202,13 @@ public:
       "www.analytictech.com/ucinet/documentation/reference.rtf</a>)</p>",
       "1.1", "File")
   std::list<std::string> fileExtensions() const override {
-    std::list<std::string> l;
-    l.push_back("txt");
-    return l;
+    return std::list<std::string>() = {"txt"};
   }
   ImportUCINET(const tlp::PluginContext *context)
-      : ImportModule(context), nbNodes(0), defaultMetric("weight"), n(0), nr(0), nc(0), nm(0),
+      : ImportFileModule(context), nbNodes(0), defaultMetric("weight"), n(0), nr(0), nc(0), nm(0),
         current(0), dl_found(false), diagonal(true), diagonal_found(false), labels_known(false),
         title_found(false), expectedLine(DL_HEADER), embedding(DL_NONE), dataFormat(DL_FM) {
-    addInParameter<string>("file::filename", paramHelp[0], "");
-    addInParameter<string>("default metric", paramHelp[1], "weight");
+    addInParameter<string>("default metric", "This parameter indicates the name of the default metric", "weight");
   }
 
   ~ImportUCINET() override {}
@@ -928,16 +918,8 @@ public:
     return false;
   }
 
-  bool importGraph() override {
-    string filename;
-
-    dataSet->get("file::filename", filename);
+  bool importFile() override {
     dataSet->get("default metric", defaultMetric);
-
-    if (filename.empty()) {
-      pluginProgress->setError("Filename is empty.");
-      return false;
-    }
 
     std::istream *in = tlp::getInputFileStream(filename);
     // check for open stream failure

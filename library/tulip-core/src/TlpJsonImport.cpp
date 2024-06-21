@@ -494,7 +494,7 @@ protected:
   YajlParseFacade *_proxy;
 };
 
-class TlpJsonImport : public ImportModule, YajlProxy {
+class TlpJsonImport : public ImportFileModule, YajlProxy {
 public:
   PLUGININFORMATION("JSON Import", "Charles Huet", "18/05/2011",
                     "<p>Supported extensions: json</p><p>Imports a graph recorded in a file using "
@@ -502,23 +502,17 @@ public:
                     "1.0", "File")
 
   std::list<std::string> fileExtensions() const override {
-    std::list<std::string> l;
-    l.push_back("json");
-    return l;
+    return std::list<std::string>() = {"json"};
   }
 
-  TlpJsonImport(tlp::PluginContext *context) : ImportModule(context) {
-    addInParameter<std::string>("file::filename", "The pathname of the TLP JSON file to import.",
-                                "");
-  }
+  TlpJsonImport(tlp::PluginContext *context) : ImportFileModule(context) {}
 
   std::string icon() const override {
     return ":/tulip/gui/icons/json32x32.png";
   }
 
-  bool importGraph() override {
+  bool importFile() override {
     Observable::holdObservers();
-    std::string filename;
 
     if (_progress) {
       _progress->progress(0, 0);

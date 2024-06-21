@@ -53,14 +53,7 @@ using namespace std;
  *
  */
 
-static const char *paramHelp[] = {
-    // filename
-    "This parameter defines the pathname of the GEXF file to import.",
-
-    // curved edges
-    "Indicates if Bézier curves should be used to draw the edges."};
-
-class GEXFImport : public ImportModule {
+class GEXFImport : public ImportFileModule {
 
 public:
   PLUGININFORMATION(
@@ -72,11 +65,9 @@ public:
       "schema.html</a>).</p><p>Warning: dynamic mode is not supported.</p>",
       "1.1", "File")
   GEXFImport(const PluginContext *context)
-      : ImportModule(context), viewLayout(nullptr), viewSize(nullptr), viewColor(nullptr),
+      : ImportFileModule(context), viewLayout(nullptr), viewSize(nullptr), viewColor(nullptr),
         viewLabel(nullptr), viewShape(nullptr), nodesHaveCoordinates(false) {
-    // add a file parameter for the plugin
-    addInParameter<string>("file::filename", paramHelp[0], "");
-    addInParameter<bool>("curved edges", paramHelp[1], "false");
+    addInParameter<bool>("curved edges", "Indicates if Bézier curves should be used to draw the edges.", "false");
   }
 
   ~GEXFImport() override {}
@@ -86,25 +77,12 @@ public:
   }
 
   std::list<std::string> fileExtensions() const override {
-    std::list<std::string> l;
-    l.push_back("gexf");
-    return l;
+    return std::list<std::string>() = {"gexf"};
   }
 
-  // import plugins must implement bool importGraph()
-  bool importGraph() override {
-    string filename;
+  bool importFile() override {
     bool curvedEdges = false;
-    // get the filename chosen by the user
-    dataSet->get("file::filename", filename);
     dataSet->get("curved edges", curvedEdges);
-
-    QString qfilename = tlpStringToQString(filename);
-
-    // if wrong extension, abort
-    if (!qfilename.endsWith(".gexf")) {
-      return false;
-    }
 
     // get Tulip visual attributes properties associated to the empty graph we want to fill
     viewLayout = graph->getProperty<LayoutProperty>("viewLayout");
@@ -116,7 +94,7 @@ public:
     nodesHaveCoordinates = false;
 
     // Open the GEXF file chosen by the user
-    QFile xmlFile(qfilename);
+    QFile xmlFile(filename.c_str());
 
     if (!xmlFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
       // get error

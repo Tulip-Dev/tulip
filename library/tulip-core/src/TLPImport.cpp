@@ -931,7 +931,8 @@ namespace tlp {
  * choosing "File->Import->TLP" menu item is the same that using
  * "File->Open" menu item.
  */
-class TLPImport : public ImportModule {
+class TLPImport : public ImportFileModule {
+  std::string data;
 public:
   PLUGININFORMATION("TLP Import", "Auber", "16/02/2001",
                     "<p>Supported extensions: tlp, tlpz (compressed), tlp.gz "
@@ -945,38 +946,34 @@ public:
                     "using <b>File->Open</b> menu item.</p>",
                     "1.0", "File")
   std::list<std::string> fileExtensions() const override {
-    std::list<std::string> l;
-    l.push_back("tlp");
-    return l;
+    return std::list<std::string>() = {"tlp"};
   }
 
   std::list<std::string> gzipFileExtensions() const override {
-    std::list<std::string> ext;
-    ext.push_back("tlp.gz");
-    ext.push_back("tlpz");
-    return ext;
+    return std::list<std::string>() = {"tlp.gz", "tlpz"};
   }
 
-  TLPImport(tlp::PluginContext *context) : ImportModule(context) {
-    addInParameter<std::string>("file::filename", "The pathname of the TLP file to import.", "");
-  }
+  TLPImport(tlp::PluginContext *context) : ImportFileModule(context) {}
   ~TLPImport() override {}
 
   std::string icon() const override {
     return ":/tulip/gui/icons/logo32x32.png";
   }
 
-  bool importGraph() override {
-    std::string filename;
-    std::string data;
+  bool check() {
+    return ImportFileModule::check() ||
+      // file::data is an hidden parameter
+      // used in GraphPerspective.cpp to copy a Graph
+      dataSet->get<std::string>("file::data", data);
+  }
+
+  bool importFile() override {
     std::stringstream *tmpss = nullptr;
     int size;
     std::istream *input;
     bool result;
 
-    if (dataSet->exists("file::filename")) {
-      dataSet->get<std::string>("file::filename", filename);
-
+    if (data.empty()) {
       std::list<std::string> &&gexts = gzipFileExtensions();
       bool gzip(false);
 
@@ -1024,7 +1021,6 @@ public:
         input->seekg(0, std::ios::beg);
       }
     } else {
-      dataSet->get<std::string>("file::data", data);
       size = data.size();
       tmpss = new std::stringstream;
       (*tmpss) << data;

@@ -89,14 +89,7 @@ bool tokenize(const string &str, vector<string> &tokens, unsigned int nbMax) {
   return tokens.size() > 0;
 }
 
-static const char *paramHelp[] = {
-    // filename
-    "This parameter indicates the pathname of the file in \"Trivial Graph Format\" to import.",
-
-    // Default metric
-    "This parameter indicates the name of the default metric."};
-
-class ImportTGF : public ImportModule {
+class ImportTGF : public ImportFileModule {
 
 public:
   PLUGININFORMATION(
@@ -104,25 +97,14 @@ public:
       "<p>Supported extensions: tgf</p><p>Imports a new graph from a text file in Trivial Graph Format<br/>as it is described in <a href=\"https://en.wikipedia.org/wiki/Trivial_Graph_Format\">https://en.wikipedia.org/wiki/Trivial_Graph_Format</a></p>",
       "1.0", "File")
   std::list<std::string> fileExtensions() const override {
-    return std::list<std::string>{"tgf"};
+    return std::list<std::string>() = {"tgf"};
   }
 
-  ImportTGF(const tlp::PluginContext *context) : ImportModule(context) {
-    addInParameter<string>("file::filename", paramHelp[0], "");
-  }
+  ImportTGF(const tlp::PluginContext *context) : ImportFileModule(context) {}
 
   ~ImportTGF() override {}
 
-  bool importGraph() override {
-    string filename;
-
-    dataSet->get("file::filename", filename);
-
-    if (filename.empty()) {
-      pluginProgress->setError("Filename is empty.");
-      return false;
-    }
-
+  bool importFile() override {
     std::istream *in = tlp::getInputFileStream(filename);
     // check for open stream failure
     if (in->fail()) {

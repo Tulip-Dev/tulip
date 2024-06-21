@@ -60,35 +60,22 @@ bool errorTrap(void *buf = nullptr) {
   return false;
 }
 
-//================================================================================
-TLPBImport::TLPBImport(tlp::PluginContext *context) : ImportModule(context) {
-  addInParameter<std::string>("file::filename", "The pathname of the TLPB file to import.", "");
-}
-//================================================================================
-bool TLPBImport::importGraph() {
-  std::string filename;
+bool TLPBImport::importFile() {
   std::istream *is = nullptr;
 
-  if (dataSet->exists("file::filename")) {
-    dataSet->get<std::string>("file::filename", filename);
+  bool gzip(false);
+  std::list<std::string> &&gexts = gzipFileExtensions();
 
-    bool gzip(false);
-    std::list<std::string> &&gexts = gzipFileExtensions();
-
-    for (const std::string &ext : gexts) {
-      if (filename.rfind(ext) == (filename.length() - ext.length())) {
-        is = tlp::getIgzstream(filename);
-        gzip = true;
-        break;
-      }
+  for (const std::string &ext : gexts) {
+    if (filename.rfind(ext) == (filename.length() - ext.length())) {
+      is = tlp::getIgzstream(filename);
+      gzip = true;
+      break;
     }
-
-    if (!gzip)
-      is = tlp::getInputFileStream(filename, std::ifstream::in | std::ifstream::binary);
-  } else {
-    pluginProgress->setError("No file to open: 'file::filename' parameter is missing");
-    return false;
   }
+
+  if (!gzip)
+    is = tlp::getInputFileStream(filename, std::ifstream::in | std::ifstream::binary);
 
   // check for open stream failure
   if (is->fail()) {

@@ -36,20 +36,11 @@ class DataSet;
 
 /**
  * @addtogroup Plugins
- * @brief Base class for import plug-ins.
+ * @brief Base class for import plugins.
  **/
 class ImportModule : public tlp::Plugin {
 public:
-  ImportModule(const tlp::PluginContext *context) {
-    if (context != nullptr) {
-      const tlp::AlgorithmContext *algoritmContext =
-          static_cast<const tlp::AlgorithmContext *>(context);
-      graph = algoritmContext->graph;
-      pluginProgress = algoritmContext->pluginProgress;
-      dataSet = algoritmContext->dataSet;
-    }
-  }
-
+  ImportModule(const tlp::PluginContext *context);
   /**
    * @brief Gets the extensions of the file formats the plugin can import.
    * e.g. a TLP import would return 'tlp'.
@@ -116,6 +107,37 @@ public:
    **/
   DataSet *dataSet;
 };
+
+/**
+ * @addtogroup Plugins
+ * @brief Base class for plugins importing from a file.
+ **/
+class ImportFileModule : public ImportModule {
+protected:
+  /**
+   * @brief The pathname of the file to import
+   **/
+  std::string filename;
+
+public:
+  ImportFileModule(const tlp::PluginContext *context);
+
+  /**
+   * @brief check plugin parameters
+   **/
+  virtual bool check();
+
+  /**
+   * @brief create the graph contents from the file data
+   **/
+  virtual bool importFile()=0;
+
+  /**
+   * @brief override the inherited method
+   **/
+  bool importGraph() override;
+};
+
 } // namespace tlp
 #endif
 ///@endcond

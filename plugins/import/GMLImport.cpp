@@ -532,10 +532,6 @@ bool GMLGraphBuilder::addStruct(const string &structName, GMLBuilder *&newBuilde
 }
 //=================================================================================
 
-static const char *paramHelp[] = {
-    // filename
-    "The pathname of the GML file to import."};
-
 /** \addtogroup import */
 
 /// Import plugin for GML format.
@@ -544,7 +540,7 @@ static const char *paramHelp[] = {
  * This format is the file format used by Graphlet.
  * See www.infosun.fmi.uni-passau.de/Graphlet/GML/ for details.
  */
-class GMLImport : public ImportModule {
+class GMLImport : public ImportFileModule {
 public:
   PLUGININFORMATION(
       "GML", "Auber", "04/07/2001",
@@ -554,20 +550,12 @@ public:
       "(formerly www.infosun.fim.uni-passau.de/Graphlet/GML/) for details.</p>",
       "1.1", "File")
   std::list<std::string> fileExtensions() const override {
-    std::list<std::string> l;
-    l.push_back("gml");
-    return l;
+    return std::list<std::string>() = {"gml"};
   }
-  GMLImport(PluginContext *context) : ImportModule(context) {
-    addInParameter<string>("file::filename", paramHelp[0], "");
-  }
+  GMLImport(PluginContext *context) : ImportFileModule(context) {}
   ~GMLImport() override {}
-  bool importGraph() override {
-    string filename;
 
-    if (!dataSet->get<string>("file::filename", filename))
-      return false;
-
+  bool importFile() override {
     bool result = false;
     istream *is = tlp::getInputFileStream(filename);
     // check for open stream failure

@@ -1388,7 +1388,7 @@ static string &forceUtf8String(string &str) {
 
 #define NODES_TO_IMPORT "Authors;Authors & Publications;Publications"
 
-class ImportBibTeX : public ImportModule {
+class ImportBibTeX : public ImportFileModule {
 
 public:
   PLUGININFORMATION("BibTeX", "Patrick Mary", "09/01/2014",
@@ -1396,9 +1396,7 @@ public:
                     "formatted file.</p>",
                     "1.1", "File")
 
-  ImportBibTeX(const tlp::PluginContext *context) : ImportModule(context) {
-    addInParameter<string>(
-        "file::filename", "This parameter indicates the pathname of the file(.bib) to import.", "");
+  ImportBibTeX(const tlp::PluginContext *context) : ImportFileModule(context) {
     addInParameter<StringCollection>(
         "Nodes to import",
         "The type of nodes to create: <b>Authors</b> (Create nodes for authors only, publications "
@@ -1423,12 +1421,10 @@ public:
   }
 
   std::list<std::string> fileExtensions() const override {
-    std::list<std::string> l;
-    l.push_back("bib");
-    return l;
+    return std::list<std::string>() = {"bib"};
   }
 
-  bool importGraph() override {
+  bool importFile() override {
     string filename;
     int toImport = IMPORT_AUTHORS;
     bool oneEdgePerPubli = true;
@@ -1441,11 +1437,6 @@ public:
       if (dataSet->get("Nodes to import", nodesToImport))
         toImport = nodesToImport.getCurrent();
       dataSet->get("One edge per publication", oneEdgePerPubli);
-    }
-
-    if (filename.empty()) {
-      pluginProgress->setError("Filename is empty.");
-      return false;
     }
 
     bool createAuthNodes = toImport != IMPORT_PUBLICATIONS;

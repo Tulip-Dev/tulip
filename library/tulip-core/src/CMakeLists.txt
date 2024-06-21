@@ -28,6 +28,7 @@ GraphStorage.cpp
 GraphTools.cpp
 GraphUpdatesRecorder.cpp
 GraphView.cpp
+ImportModule.cpp
 IdManager.cpp
 IntegerProperty.cpp
 LayoutProperty.cpp

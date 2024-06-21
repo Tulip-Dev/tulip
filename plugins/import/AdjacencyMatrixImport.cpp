@@ -75,7 +75,7 @@ static const char *paramHelp[] = {
  * value 5
  *
  */
-class AdjacencyMatrixImport : public ImportModule {
+class AdjacencyMatrixImport : public ImportFileModule {
 public:
   PLUGININFORMATION("Adjacency Matrix", "Auber David", "05/09/2008",
                     "Imports a graph from a file coding an adjacency matrix.<br/>File format:<br/>\
@@ -103,9 +103,7 @@ A # E & 5<br/>\
 @ B<br/># @ C<br/>\
 Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E and has the value 5",
                     "1.2", "File")
-  AdjacencyMatrixImport(tlp::PluginContext *context) : ImportModule(context) {
-    addInParameter<string>("file::filename", paramHelp[0], "");
-  }
+  AdjacencyMatrixImport(tlp::PluginContext *context) : ImportFileModule(context) {}
   ~AdjacencyMatrixImport() override {}
 
   std::string icon() const override {
@@ -119,17 +117,12 @@ Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E an
     return false;
   }
 
-  bool importGraph() override {
-    string fname;
-
-    if (!dataSet->get("file::filename", fname))
-      return false;
-
-    std::istream *in = tlp::getInputFileStream(fname);
+  bool importFile() override {
+    std::istream *in = tlp::getInputFileStream(filename);
     // check for open stream failure
     if (in->fail()) {
       std::stringstream ess;
-      ess << "Unable to open " << fname << ": " << tlp::getStrError();
+      ess << "Unable to open " << filename << ": " << tlp::getStrError();
       pluginProgress->setError(ess.str());
       delete in;
       return false;
@@ -253,7 +246,7 @@ Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E an
     if (curLine == nodes.size())
       return true;
 
-    pluginProgress->setError(std::string("The number of lines in file ") + fname +
+    pluginProgress->setError(std::string("The number of lines in file ") + filename +
                              "\n is different from the number of found nodes.");
     return false;
   }

@@ -354,16 +354,14 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgr
     newGraphP = true;
   }
 
-  PluginProgress *tmpProgress;
   bool deletePluginProgress = false;
 
   if (progress == nullptr) {
-    tmpProgress = new SimplePluginProgress();
+    progress = new SimplePluginProgress();
     deletePluginProgress = true;
-  } else
-    tmpProgress = progress;
+  }
 
-  AlgorithmContext context(graph, &dataSet, tmpProgress);
+  AlgorithmContext context(graph, &dataSet, progress);
   ImportModule *importModule = PluginLister::getPluginObject<ImportModule>(format, &context);
   assert(importModule != nullptr);
 
@@ -376,20 +374,14 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgr
       delete graph;
 
     graph = nullptr;
-    if (!tmpProgress->getError().empty())
-      tlp::error() << tmpProgress->getError() << std::endl;
+    if (!progress->getError().empty())
+      tlp::error() << progress->getError() << std::endl;
   } else {
-    std::string filename;
-
-    if (dataSet.get("file::filename", filename)) {
-      graph->setAttribute("file", filename);
-    }
-
     setViewPropertiesDefaults(graph);
   }
 
   if (deletePluginProgress)
-    delete tmpProgress;
+    delete progress;
 
   delete importModule;
   dataSet = *context.dataSet;

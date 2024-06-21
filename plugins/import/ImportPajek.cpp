@@ -43,11 +43,6 @@
 using namespace std;
 using namespace tlp;
 
-static const char *paramHelp[] = {
-    // filename
-    "This parameter indicates the pathname of the Pajek file (.net or .paj) to import.",
-};
-
 namespace {
 bool tokenize(const string &str, vector<string> &tokens, const string &delimiters) {
   if (str.empty())
@@ -105,7 +100,7 @@ bool tokenize(const string &str, vector<string> &tokens, const string &delimiter
 }
 } // namespace
 
-class ImportPajek : public ImportModule {
+class ImportPajek : public ImportFileModule {
 
 public:
   PLUGININFORMATION("Pajek", "Patrick Mary", "09/05/2011",
@@ -119,18 +114,13 @@ public:
                     "supported.</p>",
                     "1.0", "File")
   std::list<std::string> fileExtensions() const override {
-    std::list<std::string> l;
-    l.push_back("net");
-    l.push_back("paj");
-    return l;
+    return std::list<std::string>() = {"net", "paj"};
   }
 
   ImportPajek(const tlp::PluginContext *context)
-      : ImportModule(context), nbNodes(0), weights(nullptr), labels(nullptr), layout(nullptr),
+      : ImportFileModule(context), nbNodes(0), weights(nullptr), labels(nullptr), layout(nullptr),
         sizes(nullptr), expectedLine(NET_UNKNOWN), partition(nullptr), curNodeId(0),
-        vectorProp(nullptr) {
-    addInParameter<string>("file::filename", paramHelp[0], "");
-  }
+        vectorProp(nullptr) {}
 
   ~ImportPajek() override {}
 
@@ -480,16 +470,7 @@ public:
     return true;
   }
 
-  bool importGraph() override {
-    string filename;
-
-    dataSet->get<string>("file::filename", filename);
-
-    if (filename.empty()) {
-      pluginProgress->setError("Filename is empty.");
-      return false;
-    }
-
+  bool importFile() override {
     std::istream *in = tlp::getInputFileStream(filename);
     // check for open stream failure
     if (in->fail()) {
