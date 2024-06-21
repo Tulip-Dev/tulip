@@ -28,17 +28,18 @@ namespace tlp {
 class edge {
 
 %TypeHeaderCode
-#include <tulip/tulipconf.h>
 #include <tulip/Edge.h>
 %End
 
 %Docstring
-An instance of this class represent an edge in a Tulip graph. It encapsulates an integer identifier.
-Use specific methods in the :class:`tlp.Graph` class to get references on such objects (
-for instance :meth:`tlp.Graph.addEdge`, :meth:`tlp.Graph.getEdges`, :meth:`tlp.Graph.getInEdges`, ...).
+An instance of this class represents an edge of a Tulip graph. It encapsulates an integer identifier.
+Use specific methods in the :class:`tlp.Graph` class to get references on such objects (for instance
+:meth:`tlp.Graph.addEdge`, :meth:`tlp.Graph.getEdges`, :meth:`tlp.Graph.getInEdges`).
 Edge objects can be used as keys in a Python dictionary.
 
-The edge identifier can be accessed through the **id** class member.
+The edge identifier can be accessed through the **id** class member. If necessary, it is automatically
+converted to an integer value with the __int__ special method.
+
 %End
 
 public:
@@ -49,23 +50,21 @@ public:
   edge(unsigned int);
   
   bool __eq__(const tlp::edge) const;
-  
   bool __ne__(const tlp::edge) const;
-  
+  int __int__();
+
   bool isValid() const;
 %Docstring
 tlp.edge.isValid()
 
-Returns :const:`True` if the edge is a valid one, meaning it is attached to a graph.
+Returns :const:`True` if the edge is valid, i.e., it is an element of a graph.
 
 :rtype: Boolean
 %End
 
   std::string __repr__() const;
 %MethodCode
-  std::ostringstream oss;
-  oss << "<edge " << sipCpp->id << ">";
-  sipRes = new std::string(oss.str());
+  sipRes = new std::string("<edge " + std::to_string(sipCpp->id) + ">");
 %End
 
   Py_hash_t __hash__() const;
