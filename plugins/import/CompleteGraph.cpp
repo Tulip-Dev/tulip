@@ -49,7 +49,7 @@ public:
 
     if (nbNodes == 0) {
       if (pluginProgress)
-        pluginProgress->setError("Error: number of nodes must be greater than 0");
+        pluginProgress->setError("Error: \"nodes\" parameter must be greater than 0");
 
       return false;
     }

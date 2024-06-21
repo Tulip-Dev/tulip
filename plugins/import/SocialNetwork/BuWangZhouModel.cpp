@@ -57,7 +57,7 @@ public:
       "1.1", "Social network")
   BuWangZhouModel(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "200");
-    addInParameter<unsigned int>("type of nodes", paramHelp[1], "3");
+    addInParameter<unsigned int>("nodes types", paramHelp[1], "3");
     addInParameter<unsigned int>("m", paramHelp[2], "2");
   }
 
@@ -68,14 +68,14 @@ public:
 
     if (dataSet != nullptr) {
       dataSet->get("nodes", nb_nodes);
-      dataSet->get("type of nodes", type_of_nodes);
+      dataSet->getDeprecated("nodes types", "types of nodes", type_of_nodes);
       dataSet->get("m", m);
     }
 
     // check arguments
     if (type_of_nodes > nb_nodes) {
       pluginProgress->setError(
-          "The number of node types cannot be greater than the number of nodes");
+          "\"nodes types\" cannot be greater than the \"nodes\"");
       return false;
     }
 
@@ -85,7 +85,8 @@ public:
     vector<vector<node>> nodes(type_of_nodes);
     graph->reserveNodes(nb_nodes);
 
-    // In the paper, there are 3 types starting from a triangle without telling if the whole graph
+    // In the paper, there are 3 types starting from a triangle
+    // without telling if the whole graph
     // or a cycle has to be taken into account.
     for (unsigned int i = 0; i < type_of_nodes; ++i) {
       nodes[i].push_back(graph->addNode());

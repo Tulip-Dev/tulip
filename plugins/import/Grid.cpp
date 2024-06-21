@@ -158,21 +158,21 @@ public:
 
     if (width == 0) {
       if (pluginProgress)
-        pluginProgress->setError(string("Error: width cannot be null"));
+        pluginProgress->setError(string("Error: \"width\" cannot be null"));
 
       return false;
     }
 
     if (height == 0) {
       if (pluginProgress)
-        pluginProgress->setError(string("Error: height cannot be null"));
+        pluginProgress->setError(string("Error: \"height\" cannot be null"));
 
       return false;
     }
 
-    if (spacing < 0.0) {
+    if (spacing < 0) {
       if (pluginProgress)
-        pluginProgress->setError(string("Error: spacing must be strictly positive"));
+        pluginProgress->setError(string("Error: \"spacing\" must be strictly positive"));
 
       return false;
     }

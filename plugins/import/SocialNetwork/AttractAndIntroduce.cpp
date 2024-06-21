@@ -28,10 +28,10 @@ using namespace tlp;
 
 static const char *paramHelp[] = {
     // nodes
-    "This parameter defines the amount of nodes used to build the graph.",
+    "This parameter defines the number of nodes used to build the graph.",
 
     // edges
-    "This parameter defines the amount of edges used to build the graph.",
+    "This parameter defines the number of edges used to build the graph.",
 
     // alpha
     "This parameter defines the alpha parameter between [0,1]. This one is a percentage and describes the distribution of attractiveness; the model suggests about 1 - alpha of the individuals have very low attractiveness whereas the remaining alpha are approximately evenly distributed between low, medium, and high attractiveness",
@@ -82,10 +82,10 @@ public:
 
     // check arguments
     if (alpha < 0 || alpha > 1) {
-      pluginProgress->setError("alpha is not a percentage,\nit is not between [0, 1]");
+      pluginProgress->setError("\"alpha\" must belong to [0, 1]");
       return false;
     } else if (beta < 0 || beta > 1) {
-      pluginProgress->setError("beta is not a probability,\nit is is not between [0, 1]");
+      pluginProgress->setError("\"beta\" must belong to [0, 1]");
       return false;
     }
 

@@ -90,14 +90,14 @@ public:
 
     if (maxSize < 1) {
       if (pluginProgress)
-        pluginProgress->setError("Error: max size must be a strictly positive integer");
+        pluginProgress->setError("Error: \"max size\" must be a strictly positive integer");
 
       return false;
     }
 
     if (maxSize < minSize) {
       if (pluginProgress)
-        pluginProgress->setError("Error: max size must be greater than min size");
+        pluginProgress->setError("Error: \"max size\" must be greater than \"min size\"");
 
       return false;
     }

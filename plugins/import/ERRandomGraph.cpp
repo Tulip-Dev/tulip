@@ -54,7 +54,7 @@ public:
                     "1.2", "Graph")
   ERRandomGraph(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "50");
-    addInParameter<double>("probability", paramHelp[1], "0.5");
+    addInParameter<double>("p", paramHelp[1], "0.5");
     addInParameter<bool>("self loops", paramHelp[2], "false");
     addInParameter<bool>("directed", paramHelp[3], "false");
   }
@@ -64,27 +64,27 @@ public:
     tlp::initRandomSequence();
 
     unsigned int nbNodes = 50;
-    double proba = 0.5;
+    double p = 0.5;
     bool self_loop = false;
     bool directed = false;
 
     if (dataSet != nullptr) {
       dataSet->get("nodes", nbNodes);
-      dataSet->get("probability", proba);
+      dataSet->getDeprecated("p", "probability", p);
       dataSet->get("self loops", self_loop);
       dataSet->get("directed", directed);
     }
 
     if (nbNodes == 0) {
       if (pluginProgress)
-        pluginProgress->setError(string("Error: the number of nodes cannot be null."));
+        pluginProgress->setError(string("Error: \"nodes\" cannot be null."));
 
       return false;
     }
 
-    if ((proba < 0) || (proba > 1)) {
+    if ((p < 0) || (p > 1)) {
       if (pluginProgress)
-        pluginProgress->setError(string("Error: the probability must be between ]0, 1[."));
+        pluginProgress->setError(string("Error: \"p\" must be between [0, 1]."));
 
       return false;
     }
@@ -112,7 +112,7 @@ public:
         if ((u == v) && (!self_loop))
           continue;
 
-        if (tlp::randomDouble() < proba) {
+        if (tlp::randomDouble() < p) {
           graph->addEdge(u, v);
         }
       }

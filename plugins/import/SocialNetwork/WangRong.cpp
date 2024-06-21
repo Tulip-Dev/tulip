@@ -74,10 +74,10 @@ struct WangRong : public ImportModule {
 
     // check arguments
     if (m > n) {
-      pluginProgress->setError("The m parameter cannot be greater than the number of nodes.");
+      pluginProgress->setError("\"m\" cannot be greater than \"nodes\"");
       return false;
     } else if (m0 > n) {
-      pluginProgress->setError("The m0 parameter cannot be greater than the number of nodes.");
+      pluginProgress->setError("\"m0\" cannot be greater than \"nodes\"");
       return false;
     }
 

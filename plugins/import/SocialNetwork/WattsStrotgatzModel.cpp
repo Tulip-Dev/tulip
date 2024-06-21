@@ -29,7 +29,7 @@ using namespace tlp;
 
 static const char *paramHelp[] = {
     // nodes
-    "This parameter defines the amount of nodes used to build the scale-free graph.",
+    "Number of nodes used to build the scale-free graph.",
 
     // k
     "Number of edges added to each node in the initial ring lattice. Be careful that #nodes &ge; k &ge; ln(#nodes)",
@@ -80,16 +80,16 @@ struct WattsStrogatzModel : public ImportModule {
 
     // check arguments
     if (p < 0 || p > 1) {
-      pluginProgress->setError("The p parameter does not belong to [0, 1]");
+      pluginProgress->setError("\"p\" must belong to [0, 1]");
       return false;
     }
     if (k >= nbNodes) {
       pluginProgress->setError(
-          "The k parameter cannot be greater than or equal to the number of nodes.");
+          "\"k\" cannot be greater than or equal \"nodes\"");
       return false;
     }
     if (original_model && (k < log(float(nbNodes)))) {
-      pluginProgress->setError("The k cannot be lesser than ln(number of nodes)");
+      pluginProgress->setError("\"k\" cannot be lesser than ln(\"nodes\")");
       return false;
     }
 
@@ -97,7 +97,7 @@ struct WattsStrogatzModel : public ImportModule {
       if (k % 2 == 1) {
         k--;
         pluginProgress->setComment(
-            "k must be an even number when used in the original model; rounding k down to" +
+            "\"k\" must be an even number when used in the original model; rounding \"k\" down to" +
             to_string(k) + ".");
       }
 

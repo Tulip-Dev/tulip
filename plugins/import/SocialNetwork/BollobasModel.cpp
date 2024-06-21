@@ -27,9 +27,9 @@ using namespace tlp;
 
 static const char *paramHelp[] = {
     // nodes
-    "This parameter defines the amount of nodes used to build the scale-free graph.",
+    "This parameter defines the number of nodes used to build the scale-free graph.",
 
-    // d
+    // min degree
     "Minimum degree."};
 
 /**
@@ -69,7 +69,7 @@ struct BollobasModel : public ImportModule {
 
     // check arguments
     if (d > n) {
-      pluginProgress->setError("The minimum degree cannot be greater than the number of nodes.");
+      pluginProgress->setError("\"min degree\" cannot be greater than \"nodes\"");
       return false;
     }
 
