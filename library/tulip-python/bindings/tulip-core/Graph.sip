@@ -4361,11 +4361,7 @@ while the values must be typed according to those of the available Tulip propert
 
   std::string __repr__() const;
 %MethodCode
-  std::string graphName;
-  sipCpp->getAttribute("name", graphName);
-  std::ostringstream oss;
-  oss << "<graph \"" << graphName << "\" (id " << sipCpp->getId() << ") >";
-  sipRes = new std::string(oss.str());
+  sipRes = new std::string("<graph \"" + sipCpp->getName() + "\" (id " + std::to_string(sipCpp->getId()) + ") >");
 %End
 
 //===========================================================================================
