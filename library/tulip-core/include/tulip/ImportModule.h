@@ -38,7 +38,7 @@ class DataSet;
  * @addtogroup Plugins
  * @brief Base class for import plugins.
  **/
-class ImportModule : public tlp::Plugin {
+class TLP_SCOPE ImportModule : public tlp::Plugin {
 public:
   ImportModule(const tlp::PluginContext *context);
   /**
@@ -112,7 +112,7 @@ public:
  * @addtogroup Plugins
  * @brief Base class for plugins importing from a file.
  **/
-class ImportFileModule : public ImportModule {
+class TLP_SCOPE ImportFileModule : public ImportModule {
 protected:
   /**
    * @brief The pathname of the file to import
