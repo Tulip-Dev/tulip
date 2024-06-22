@@ -55,7 +55,8 @@ IF(APPLE AND NOT "${Python_EXECUTABLE}" MATCHES "^/usr/bin/python.*$"
 ENDIF()
 
 SET(SIP_BUILD ${Python_EXECUTABLE} -m sipbuild.tools.build) #instead of sip-build
-SET(SIP_VERSION 6.8.3)
+SET(SIP_MODULE_PROG ${Python_EXECUTABLE} -m sipbuild.tools.module) #instead of sip-module
+SET(SIP_VERSION 6.8.5)
 SET(SIP_API 13.7)
 SET(SIP_API_FULL 13.7.0)
 #check if sip is installed (it is up to the user to install it)
@@ -80,26 +81,6 @@ IF(${SIP_MODULE_OUTPUT} VERSION_GREATER_EQUAL ${SIP_VERSION})
 ELSE()
     MESSAGE(FATAL_ERROR "SIP Python package at least version ${SIP_VERSION} not found (found ${SIP_MODULE_OUTPUT}).")
 ENDIF()
-
-# sipbuild.module.main not working (does nothing in fact)
-# hack to find sip-module which is not available via the Python executable.
-# This will be fixed in a future version of SIP (problem reported to the SIP maintener)
-# get sip-module possible paths
-GET_FILENAME_COMPONENT(PYTHON_EXE_PATH ${Python_EXECUTABLE} DIRECTORY)
-EXECUTE_PROCESS(COMMAND ${Python_EXECUTABLE} -m site --user-base OUTPUT_VARIABLE USER_EXE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
-IF(LINUX OR APPLE)
-  SET(USER_EXE_PATH "${USER_EXE_PATH}/bin")
-ELSE()
-  SET(USER_EXE_PATH "${USER_EXE_PATH}/../Scripts")
-  SET(PYTHON_EXE_PATH "${PYTHON_EXE_PATH}/Scripts")
-ENDIF()
-
-FIND_PROGRAM(SIP_MODULE_PROG sip-module HINTS ${USER_EXE_PATH} ${PYTHON_EXE_PATH} REQUIRED)
-if(WIN32)
-    file(TO_NATIVE_PATH "${SIP_MODULE_PROG}" SIP_MODULE_PROG) #useful?
-endif(WIN32)
-MESSAGE(STATUS "sip-module found in ${SIP_MODULE_PROG}")
-
 
 SET(SIP_MODULE tulip.native.sip)
 string(REPLACE "." "_" SIP_MODULE_ ${SIP_MODULE})
@@ -234,7 +215,6 @@ SET(SIP_PYTHON_MODULE_SRC
     ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-${SIP_API_FULL}/sip_threads.c
     ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-${SIP_API_FULL}/sip_voidptr.c
 )
-
 
 Python_add_library(${SIP_LIB} MODULE WITH_SOABI ${SIP_PYTHON_MODULE_SRC})
 target_include_directories(${SIP_LIB} PUBLIC ${Python_INCLUDE_DIRS})
