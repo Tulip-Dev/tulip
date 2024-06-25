@@ -54,8 +54,8 @@ mv python Python-311
 Python-311\tools\python.exe -m pip install --upgrade pip
 Python-311\tools\python.exe -m pip install wheel sip
 
-rem Python 3.12.3
-nuget.exe install python -Version 3.12.3 -ExcludeVersion -OutputDirectory .
+rem Python 3.12.4
+nuget.exe install python -Version 3.12.4 -ExcludeVersion -OutputDirectory .
 mv python Python-312
 Python-312\tools\python.exe -m pip install --upgrade pip
 Python-312\tools\python.exe -m pip install wheel sip
