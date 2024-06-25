@@ -60,11 +60,12 @@ for PY_EXE in $(find /Library/Frameworks/Python.framework/Versions -name python3
 do
   # remove previous contents
   rm -rf *
-  # upgrade pip
+  # upgrade pip and setuptools
   export DYLD_LIBRARY_PATH=$(dirname $(dirname $PY_EXE))/lib
   ${PY_EXE} -m pip install --upgrade pip
-  # install wheel module
-  ${PY_EXE} -m pip install wheel
+  ${PY_EXE} -m pip install --upgrade setuptools
+  # install build module
+  ${PY_EXE} -m pip install build
   # install sip module
   ${PY_EXE} -m pip install sip
   PY_DIR=$(dirname $(dirname ${PY_EXE}))

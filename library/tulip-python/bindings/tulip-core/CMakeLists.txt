@@ -115,30 +115,12 @@ SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES RUNTIME_OUTPU
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${TULIP_PYTHON_NATIVE_FOLDER})
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${TULIP_PYTHON_NATIVE_FOLDER})
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/__init__.py.in ${CMAKE_CURRENT_BINARY_DIR}/__init__.py @ONLY)
-ADD_CUSTOM_TARGET(copyTulipInitPy ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/__init__.py ${TULIP_PYTHON_FOLDER}/__init__.py
-    COMMENT "Copying tulip-core module __init__.py file"
-    DEPENDS ${LibTulipCorePythonBindingsName}
-    VERBATIM)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/__init__.py.in ${TULIP_PYTHON_FOLDER}/__init__.py @ONLY)
 
 IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
-  ADD_DEPENDENCIES(wheel copyTulipInitPy)
-
-  CONFIGURE_FILE(packaging/setup.cfg.in ${TULIP_PYTHON_FOLDER}/../setup.cfg)
-  CONFIGURE_FILE(packaging/setup.py.in ${TULIP_PYTHON_FOLDER}/../setup.py)
-  IF(TULIP_GENERATE_TESTPYPI_WHEEL)
-    SET(TULIP_PYTHON_WHEEL_VERSION ${TULIP_PYTHON_TEST_WHEEL_VERSION})
-    CONFIGURE_FILE(packaging/setup.py.in ${TULIP_PYTHON_FOLDER}/../setuptest.py)
-  ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
-
-  ADD_CUSTOM_TARGET(copyTulipPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/MANIFEST.in ${TULIP_PYTHON_FOLDER}/../MANIFEST.in
-                    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/README.rst ${TULIP_PYTHON_FOLDER}/../README.rst
-                    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/copyTulipCoreDllDependencies.cmake ${TULIP_PYTHON_FOLDER}/../copyTulipCoreDllDependencies.cmake
-                    DEPENDS ${TULIP_PYTHON_FOLDER}/../setup.py ${TULIP_PYTHON_FOLDER}/../setup.cfg)
-  ADD_DEPENDENCIES(wheel copyTulipPythonPackagingFiles)
-  IF(TULIP_GENERATE_TESTPYPI_WHEEL)
-    ADD_DEPENDENCIES(wheel copyTulipPythonPackagingFiles)
-  ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
+  CONFIGURE_FILE(packaging/pyproject.toml.in ${TULIP_PYTHON_FOLDER}/../pyproject.toml)
+  FILE(COPY packaging/setup.py DESTINATION ${TULIP_PYTHON_FOLDER}/../)
+  FILE(COPY packaging/README.rst DESTINATION ${TULIP_PYTHON_FOLDER}/../)
 ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName}

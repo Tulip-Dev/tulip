@@ -17,37 +17,6 @@ IF(APPLE)
   ENDIF()
 ENDIF(APPLE)
 
-# IF(MINGW)
-  # Check if Python is provided by MSYS2 (it is compiled with GCC in that case instead of MSVC)
-  # EXECUTE_PROCESS(COMMAND ${Python_EXECUTABLE} -VV OUTPUT_VARIABLE PYTHON_VERSION_FULL ERROR_VARIABLE PYTHON_VERSION_FULL)
-  # STRING(REGEX MATCH "GCC" MSYS2_PYTHON "${PYTHON_VERSION_FULL}")
-
-  # Python 64bits does not provide a dll import library for MinGW.
-  # Fortunately, we can directly link to the Python dll with that compiler.
-  # So find the location of that dll and overwrite the Python_LIBRARIES CMake cache variable with it
-
-  # IF(MSYS2_PYTHON)
-    # IF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll)
-      # SET(Python_LIBRARIES ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll CACHE FILEPATH "" FORCE)
-    # ELSEIF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}m.dll)
-      # SET(Python_LIBRARIES ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}m.dll CACHE FILEPATH "" FORCE)
-    # ENDIF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll)
-  # ELSE(MSYS2_PYTHON)
-  #   # Check if the Python dll is located in the Python home directory (when Python is installed for current user only)
-  #   IF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
-  #     SET(Python_LIBRARIES ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
-  #     #If not, the Python dll is located in %WINDIR%/System32 (when Python is installed for all users)
-  #   ELSE(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
-  #     STRING(REPLACE "\\" "/" WINDIR $ENV{WINDIR})
-  #     IF(NOT WIN_AMD64 OR X64)
-  #       SET(Python_LIBRARIES ${WINDIR}/System32/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
-  #     ELSE(NOT WIN_AMD64 OR X64)
-  #       SET(Python_LIBRARIES ${WINDIR}/SysWOW64/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
-  #     ENDIF(NOT WIN_AMD64 OR X64)
-  #   ENDIF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
-  # ENDIF(MSYS2_PYTHON)
-# ENDIF(MINGW)
-
 # Ensure headers correspond to the ones associated to the detected Python library on MacOS
 IF(APPLE AND NOT "${Python_EXECUTABLE}" MATCHES "^/usr/bin/python.*$"
    AND EXISTS ${PYTHON_HOME_PATH}/../Headers)
@@ -81,45 +50,34 @@ IF(${SIP_MODULE_OUTPUT} VERSION_GREATER_EQUAL ${SIP_VERSION})
 ELSE()
     MESSAGE(FATAL_ERROR "SIP Python package at least version ${SIP_VERSION} not found (found ${SIP_MODULE_OUTPUT}).")
 ENDIF()
-
+##########################################################
 SET(SIP_MODULE tulip.native.sip)
 string(REPLACE "." "_" SIP_MODULE_ ${SIP_MODULE})
 SET(SIP_LIB sip)
 
 IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
-  STRING(REGEX REPLACE "[^0-9.]" "" TULIP_PYTHON_WHEEL_VERSION "${Tulip_VERSION}")
-
+  # STRING(REGEX REPLACE "[^0-9.]" "" TULIP_PYTHON_WHEEL_VERSION "${Tulip_VERSION}")
+  SET(TULIP_PYTHON_WHEEL_NAME tulip-python)
+  string(REPLACE "-" "_" TULIP_PYTHON_WHEEL_NAME_ ${TULIP_PYTHON_WHEEL_NAME})
   IF(WIN32)
     SET(WHEEL_INSTALL_PATH "\\")
   ELSE(WIN32)
     SET(WHEEL_INSTALL_PATH "/")
   ENDIF(WIN32)
-  #check for wheel
+  #check for build
   execute_process(
-          COMMAND ${Python_EXECUTABLE} -m pip show wheel
+          COMMAND ${Python_EXECUTABLE} -m pip show build
           RESULT_VARIABLE EXIT_CODE
           OUTPUT_QUIET
   )
   if (NOT ${EXIT_CODE} EQUAL 0)
       message(FATAL_ERROR
-              "The \"wheel\" Python package is not installed. Please install it using a command like this one: \"${Python_EXECUTABLE} -m pip install wheel\".")
+              "The \"build\" Python package is not installed. Please install it using a command like this one: \"${Python_EXECUTABLE} -m pip install build\".")
   endif()
 
   ADD_CUSTOM_TARGET(wheel
-    COMMAND ${Python_EXECUTABLE} setup.py bdist_wheel
+    COMMAND ${Python_EXECUTABLE} -m build --wheel
     WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER})
-
-  # check generation of test wheels
-  STRING(COMPARE NOTEQUAL "${TULIP_PYTHON_TEST_WHEEL_SUFFIX}" "" TULIP_GENERATE_TESTPYPI_WHEEL)
-
-  IF(TULIP_GENERATE_TESTPYPI_WHEEL)
-    SET(TULIP_PYTHON_TEST_WHEEL_VERSION ${TULIP_PYTHON_WHEEL_VERSION}.${TULIP_PYTHON_TEST_WHEEL_SUFFIX})
-
-    ADD_CUSTOM_TARGET(test-wheel
-      COMMAND ${Python_EXECUTABLE} setuptest.py bdist_wheel
-            WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER})
-    ADD_DEPENDENCIES(test-wheel wheel)
-  ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
 
   IF(LINUX)
   #where to put wheel after having it repaired
@@ -128,63 +86,33 @@ IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   ENDIF()
   #check for auditwheel (installed by default on manylinux)
   find_program(AUDITWHEEL_CMD auditwheel REQUIRED)
-    ADD_CUSTOM_COMMAND(TARGET wheel POST_BUILD
-      COMMAND bash -xc "LD_LIBRARY_PATH=${Qhull_LIBDIR}:$ENV{LD_LIBRARY_PATH} ${AUDITWHEEL_CMD} repair -L native -w ${TULIP_WHEELS_PREFIX} ./dist/$(ls -t ./dist/ | head -1)"
-      COMMAND bash -xc "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
+  #filename under linux does not implement Python_SOABI well => cp${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-linux_x86_64 instead of cpython-${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-x86_64-linux-gnu
+  SET(TULIP_PYTHON_WHEEL_FILE ${TULIP_PYTHON_WHEEL_NAME_}-${Tulip_VERSION}-cp${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-cp${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-linux_x86_64.whl)
+  ADD_CUSTOM_COMMAND(TARGET wheel POST_BUILD
+      COMMAND bash -xc "LD_LIBRARY_PATH=${Qhull_LIBDIR}:$ENV{LD_LIBRARY_PATH} ${AUDITWHEEL_CMD} repair -L native -w ${TULIP_WHEELS_PREFIX} ./dist/${TULIP_PYTHON_WHEEL_FILE}"
       WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
       COMMENT "Repairing tulip-core wheel" VERBATIM)
-
-  IF(TULIP_GENERATE_TESTPYPI_WHEEL)
-      ADD_CUSTOM_COMMAND(TARGET test-wheel POST_BUILD
-        COMMAND bash -xc "LD_LIBRARY_PATH=${Qhull_LIBDIR}:$ENV{LD_LIBRARY_PATH} ${AUDITWHEEL_CMD} repair -L native -w ${TULIP_WHEELS_PREFIX} ./dist/$(ls -t ./dist/ | head -1)"
-        COMMAND bash -xc "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
-        WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
-        COMMENT "Repairing tulip-core test wheel"  VERBATIM
-        )
-    ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
-
   ENDIF(LINUX)
+  GET_FILENAME_COMPONENT(PYTHON_EXE_PATH ${Python_EXECUTABLE} DIRECTORY)
+  EXECUTE_PROCESS(COMMAND ${Python_EXECUTABLE} -m site --user-base OUTPUT_VARIABLE USER_EXE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+  IF(LINUX OR APPLE)
+    SET(USER_EXE_PATH "${USER_EXE_PATH}/bin")
+  ELSE()
+    SET(USER_EXE_PATH "${USER_EXE_PATH}/../Scripts")
+    SET(PYTHON_EXE_PATH "${PYTHON_EXE_PATH}/Scripts")
+  ENDIF()
+  IF(WIN32)
+    find_program(DELVEWHEEL_CMD delvewheel HINTS ${USER_EXE_PATH} ${PYTHON_EXE_PATH} REQUIRED)
+    FILE(TO_NATIVE_PATH "${TULIP_WHEELS_PREFIX}" TULIP_WHEELS_PREFIX)
+    SET(TULIP_PYTHON_WHEEL_FILE ${TULIP_PYTHON_WHEEL_NAME_}-${Tulip_VERSION}-cp${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-${Python_SOABI}.whl)
+    ADD_CUSTOM_COMMAND(TARGET wheel POST_BUILD
+        #ignore-existing parameter below is important to tell delvewheel to not consider libtulip-core-x.dll
+        COMMAND ${DELVEWHEEL_CMD} repair -v --ignore-existing --add-path=${TULIP_PYTHON_NATIVE_FOLDER} --wheel-dir=${TULIP_WHEELS_PREFIX} ./dist/${TULIP_PYTHON_WHEEL_FILE}
+        WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
+        COMMENT "Repairing tulip-core wheel" VERBATIM)
+  ENDIF(WIN32)
+  #TODO: use delocate python package for apple to repaire the wheel. This will allow to remove the long apple specific code of packaging/setup.py
 
-  # In order to upload the generated wheels, an account must be created on PyPi
-  # and the following configuration must be stored in the ~/.pypirc file
-  ##############################################################
-  # [distutils]
-  # index-servers=
-  #     pypi
-  #     testpypi
-  #
-  # [testpypi]
-  # repository: https://test.pypi.org/legacy/
-  # username: <your user name goes here>
-  # password: <your password goes here>
-  #
-  # [pypi]
-  # repository: https://upload.pypi.org/legacy/
-  # username: <your user name goes here>
-  # password: <your password goes here>
-  ###############################################################
-
-
-  # SET(TWINE twine)
-  # IF(EXISTS ${PYTHON_HOME_PATH}/twine)
-  #   SET(TWINE ${PYTHON_HOME_PATH}/twine)
-  # ENDIF(EXISTS ${PYTHON_HOME_PATH}/twine)
-  # IF(WIN32)
-  #   SET(TWINE ${Python_INCLUDE_DIRS}/../Scripts/twine.exe)
-  # ENDIF(WIN32)
-  # SET(WHEEL_FILES_REGEXP "*${TULIP_PYTHON_WHEEL_VERSION}-cp*")
-  # ADD_CUSTOM_TARGET(wheel-upload
-  #   COMMAND bash -c "echo -e 'uploading wheels:\\n' $(ls ${TULIP_PYTHON_ROOT_FOLDER}/dist/${WHEEL_FILES_REGEXP})"
-  #   COMMAND ${TWINE} upload -r pypi dist/${WHEEL_FILES_REGEXP}
-  #   WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER} VERBATIM)
-
-  # IF(TULIP_GENERATE_TESTPYPI_WHEEL)
-  #   SET(TEST_WHEEL_FILES_REGEXP "*${TULIP_PYTHON_TEST_WHEEL_VERSION}*")
-  #   ADD_CUSTOM_TARGET(test-wheel-upload
-  #     COMMAND bash -c "echo -e 'uploading test wheels:\\n' $(ls ${TULIP_PYTHON_ROOT_FOLDER}/dist/${TEST_WHEEL_FILES_REGEXP})"
-  #     COMMAND ${TWINE} upload -r testpypi dist/${TEST_WHEEL_FILES_REGEXP}
-  #     WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER} VERBATIM)
-  # ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
 ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 ##########################################################
 #generate the sip module sources

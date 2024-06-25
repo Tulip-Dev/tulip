@@ -216,8 +216,6 @@ IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 # so we need to unset the previous values of the CMake Python cache variables
 # to force their recomputation
   UNSET(Python_FOUND CACHE)
-  UNSET(Python_LIBRARIES CACHE)
-  UNSET(Python_INCLUDE_DIRS CACHE)
   #force to rediscover Qhull for each build (use the cmeel package from the same Python version)
   UNSET(PKG_CONFIG_ARGN CACHE)
   UNSET(Qhull_FOUND CACHE)

@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=68.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "@TULIP_PYTHON_WHEEL_NAME@"
+version = "@Tulip_VERSION@"
+authors = [
+  { name="Tulip development team", email="tulipdev@labri.fr" },
+]
+description = "@Tulip_DESCRIPTION@"
+readme = "README.rst"
+requires-python = ">=3.8"
+keywords=["graph", "algorithms", "visualization", "network"]
+classifiers = [
+'Development Status :: 5 - Production/Stable',
+
+'Intended Audience :: Developers',
+'Intended Audience :: Education',
+'Intended Audience :: Science/Research',
+
+'Topic :: Scientific/Engineering',
+'Topic :: Scientific/Engineering :: Information Analysis',
+'Topic :: Scientific/Engineering :: Mathematics',
+'Topic :: Scientific/Engineering :: Visualization',
+
+'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)', # noqa
+
+'Operating System :: POSIX :: Linux',
+'Operating System :: MacOS :: MacOS X',
+'Operating System :: Microsoft :: Windows :: Windows 11',
+'Operating System :: Microsoft :: Windows :: Windows 10',
+'Operating System :: Microsoft :: Windows :: Windows 8.1',
+'Operating System :: Microsoft :: Windows :: Windows 8',
+
+'Programming Language :: C++',
+'Programming Language :: Python :: Implementation :: CPython',
+'Programming Language :: Python :: 3.8',
+'Programming Language :: Python :: 3.9',
+'Programming Language :: Python :: 3.10',
+'Programming Language :: Python :: 3.11',
+'Programming Language :: Python :: 3.12',
+]
+
+[project.urls]
+Homepage = "@PROJECT_HOMEPAGE_URL@"
+Issues = "https://sourceforge.net/p/auber/bugs/"
+Documentation = "@PROJECT_HOMEPAGE_URL@/Documentation/current/tulip-python/html/index.html"
+
+[tool.setuptools]
+packages = ["tulip", "tulip.native", "tulip.native.plugins",
+            "tulipplugins", "tulip.plugins.color", "tulip.plugins.general",
+            "tulip.plugins.import", "tulip.plugins.layout", "tulip.plugins.layout.h3"]
+include-package-data = true

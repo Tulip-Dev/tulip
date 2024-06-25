@@ -1,22 +1,16 @@
-# Always prefer setuptools over distutils
 from setuptools import setup
 from setuptools.dist import Distribution
-# To use a consistent encoding
-from codecs import open
 import os
 from os import path
 import fnmatch
 import platform
 import subprocess
-import sys
 import shutil
 
 # On MacOS, we need to relink dylibs and set correct rpaths in
 # order for the modules to be imported in a portable way when
 # distributed through pip
-if platform.system() == 'Darwin' and len(sys.argv) > 1 \
-        and sys.argv[1] == 'bdist_wheel':
-
+if platform.system() == 'Darwin':
     def getDyLibDependencies(dylib):
         otool = subprocess.check_output('otool -L %s' % dylib, shell=True)
         otool = otool.decode('utf-8')
@@ -94,90 +88,13 @@ tulip_native_libs = []
 if platform.system() == 'Windows':
     tulip_native_libs = ['native/*.pyd', 'native/*.dll',
                          'native/plugins/*.dll']
-    # on Windows, call a CMake script that will gather all the required DLLs
-    # to import the modules and copy them to the wheel native folder
-    command = ('"${CMAKE_COMMAND}" -DCWD=%s '
-               '-DLIBRARY_PATHS=${CMAKE_LIBRARY_PATH} '
-               '-DPython_SOABI=@Python_SOABI@ '
-               '-P copyTulipCoreDllDependencies.cmake') % os.getcwd()
-    p = subprocess.call(command, shell=True)
 elif platform.system() == 'Darwin':
     tulip_native_libs = ['native/*.so', 'native/*.dylib',
                          'native/plugins/*.dylib']
 elif platform.system() == 'Linux':
     tulip_native_libs = ['native/*.so*', 'native/plugins/*.so']
 
-here = path.abspath(path.dirname(__file__))
-
-with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
-    long_description = f.read()
-
 setup(
-    name='tulip-python',
-
-    # Versions should comply with PEP440.  For a discussion on single-sourcing
-    # the version across setup.py and the project code, see
-    # https://packaging.python.org/en/latest/single_source_version.html
-    version='@TULIP_PYTHON_WHEEL_VERSION@',
-
-    description='@Tulip_DESCRIPTION@',
-    long_description=long_description,
-
-    url='@PROJECT_HOMEPAGE_URL@',
-    project_urls={
-        'Documentation': '@PROJECT_HOMEPAGE_URL@/Documentation/current/tulip-python/html/index.html',
-        'Issue Tracker': 'https://sourceforge.net/p/auber/bugs/',
-        'Sources': 'https://sourceforge.net/projects/auber/files/tulip',
-    },
-
-    author='David Auber and the Tulip development team',
-    author_email='tulipdev@labri.fr',
-
-    license='LGPLv3+',
-
-    # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
-    classifiers=[
-        'Development Status :: 5 - Production/Stable',
-
-        'Intended Audience :: Developers',
-        'Intended Audience :: Education',
-        'Intended Audience :: Science/Research',
-
-        'Topic :: Scientific/Engineering',
-        'Topic :: Scientific/Engineering :: Information Analysis',
-        'Topic :: Scientific/Engineering :: Mathematics',
-        'Topic :: Scientific/Engineering :: Visualization',
-
-        'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)', # noqa
-
-        'Operating System :: POSIX :: Linux',
-        'Operating System :: MacOS :: MacOS X',
-        'Operating System :: Microsoft :: Windows :: Windows 11',
-        'Operating System :: Microsoft :: Windows :: Windows 10',
-        'Operating System :: Microsoft :: Windows :: Windows 8.1',
-        'Operating System :: Microsoft :: Windows :: Windows 8',
-
-        'Programming Language :: C++',
-        'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
-        'Programming Language :: Python :: 3.10',
-        'Programming Language :: Python :: 3.11',
-    ],
-
-    keywords='graph theory algorithms visualization',
-
-    packages=['tulip', 'tulip.native', 'tulipplugins'],
-
-    package_data={
-        'tulip': tulip_native_libs + ['plugins/color/*',
-                                      'plugins/general/*',
-                                      'plugins/import/*',
-                                      'plugins/layout/H3Layout.py',
-                                      'plugins/layout/h3/*'],
-    },
-
-    include_package_data=True,
+    package_data={'tulip': tulip_native_libs},
     distclass=BinaryDistribution,
 )

@@ -1,3 +1,4 @@
+cd C:\Tulip5
 PATH c:\msys64\ucrt64\bin;c:\msys64\usr\bin;c:\Windows\System32;%PATH%
 
 echo on
@@ -33,36 +34,42 @@ rem Python 3.8.10
 nuget.exe install python -Version 3.8.10 -ExcludeVersion -OutputDirectory .
 mv python Python-38
 Python-38\tools\python.exe -m pip install --upgrade pip
-Python-38\tools\python.exe -m pip install wheel sip
+Python-38\tools\python.exe -m pip install --upgrade setuptools
+Python-38\tools\python.exe -m pip install sip build delvewheel
 
 
 rem Python 3.9.13
 nuget.exe install python -Version 3.9.13 -ExcludeVersion -OutputDirectory .
 mv python Python-39
 Python-39\tools\python.exe -m pip install --upgrade pip
-Python-39\tools\python.exe -m pip install wheel sip
+Python-39\tools\python.exe -m pip install --upgrade setuptools
+Python-39\tools\python.exe -m pip install sip build delvewheel
 
 rem Python 3.10.11
 nuget.exe install python -Version 3.10.11 -ExcludeVersion -OutputDirectory .
 mv python Python-310
 Python-310\tools\python.exe -m pip install --upgrade pip
-Python-310\tools\python.exe -m pip install wheel sip
+Python-310\tools\python.exe -m pip install sip build delvewheel
 
 rem Python 3.11.9
 nuget.exe install python -Version 3.11.9 -ExcludeVersion -OutputDirectory .
 mv python Python-311
 Python-311\tools\python.exe -m pip install --upgrade pip
-Python-311\tools\python.exe -m pip install wheel sip
+Python-311\tools\python.exe -m pip install sip build delvewheel
 
 rem Python 3.12.4
 nuget.exe install python -Version 3.12.4 -ExcludeVersion -OutputDirectory .
 mv python Python-312
 Python-312\tools\python.exe -m pip install --upgrade pip
-Python-312\tools\python.exe -m pip install wheel sip
+Python-312\tools\python.exe -m pip install sip build delvewheel
 
 mkdir wheels
 mkdir build
 rem cd build
+
+rem wheel packages will be store in the wheels directory
+set tulip_wheels_prefix="C:\Tulip5\wheels"
+mkdir %tulip_wheels_prefix%
 
 for /D %%G in ("C:\Tulip5\Python-*") do (
   setlocal EnableDelayedExpansion
@@ -73,14 +80,12 @@ for /D %%G in ("C:\Tulip5\Python-*") do (
   rd /s /q build
   mkdir build
   cd build
-  cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./install -DCMAKE_COLOR_MAKEFILE=OFF -DPython_EXECUTABLE=!pyexe! -DPython_INCLUDE_DIRS=!pydir!/include -DTULIP_ACTIVATE_PYTHON_WHEEL_TARGET=ON -DTULIP_USE_CCACHE=ON Z:
+  cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./install -DCMAKE_COLOR_MAKEFILE=OFF -DPython_EXECUTABLE=!pyexe! -DPython_INCLUDE_DIRS=!pydir!/include -DTULIP_WHEELS_PREFIX=!tulip_wheels_prefix! -DTULIP_ACTIVATE_PYTHON_WHEEL_TARGET=ON -DTULIP_USE_CCACHE=ON Z:
   if !ERRORLEVEL! NEQ 0 exit /B 1
-  make -j4
-  if !ERRORLEVEL! NEQ 0 exit /B 1
-  make wheel
+  make -j4 wheel
   if !ERRORLEVEL! NEQ 0 exit /B 1
   set "FC=1"
-  for /F %%F in ('dir /S /B library\tulip-python\bindings\tulip-core\tulip_module\dist\*-cp!pyver!*.whl /O:-D') do (
+  for /F %%F in ('dir /S /B %tulip_wheel_prefix%\*-cp!pyver!*.whl /O:-D') do (
     if !FC! == 1 (
       set /A FC-=1
       !pyexe! -m pip install %%F
@@ -89,7 +94,6 @@ for /D %%G in ("C:\Tulip5\Python-*") do (
       if !ERRORLEVEL! NEQ 0 exit /B 1
       !pyexe! -m pip uninstall -y tulip-python
       if !ERRORLEVEL! NEQ 0 exit /B 1
-      copy %%F ..\wheels\%%~nxF
     )
   cd ..
   )
