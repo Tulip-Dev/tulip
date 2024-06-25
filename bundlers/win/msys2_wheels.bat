@@ -90,7 +90,7 @@ for /D %%G in ("C:\Tulip5\Python-*") do (
       set /A FC-=1
       !pyexe! -m pip install %%F
       if !ERRORLEVEL! NEQ 0 exit /B 1
-      !pyexe! -c "from tulip import tlp; from platform import python_version; str = 'Tulip ' + tlp.getTulipRelease() + ' successfully imported in Python ' + python_version(); print(str)"
+      !pyexe! -c "from tulip import tlp; from platform import python_version; str = 'Tulip ' + tlp.getTulipRelease() + ' successfully imported in Python ' + python_version(); print(str); l = tlp.getSizeAlgorithmPluginsList();exit(1) if not l else exit(0)"
       if !ERRORLEVEL! NEQ 0 exit /B 1
       !pyexe! -m pip uninstall -y tulip-python
       if !ERRORLEVEL! NEQ 0 exit /B 1

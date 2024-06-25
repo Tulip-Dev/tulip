@@ -82,6 +82,12 @@ do
   ${PY_EXE} -c "from tulip import tlp
 from platform import python_version
 str = 'Tulip ' + tlp.getTulipRelease() + ' successfully imported in Python ' + python_version()
-print(str)"
+print(str)
+l = tlp.getSizeAlgorithmPluginsList()
+exit(1) if not l else exit(0)"
+if [ $? -ne 0 ]
+then
+   break
+fi
   ${PY_EXE} -m pip uninstall -y tulip-python
 done

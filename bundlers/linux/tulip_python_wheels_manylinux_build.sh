@@ -29,7 +29,7 @@ else
   mkdir -p /tmp/tulip_build/build /tmp/tulip_build/wheels; cd /tmp/tulip_build/build; TULIP_WHEELS_PREFIX=/tmp/tulip_build/wheels
 fi
 
-TULIP_PYTHON_TEST="from tulip import tlp; from platform import python_version; str = '==> Tulip ' + tlp.getTulipRelease() + ' successfully imported in Python ' + python_version(); print(str)"
+TULIP_PYTHON_TEST="from tulip import tlp; from platform import python_version; str = '==> Tulip ' + tlp.getTulipRelease() + ' successfully imported in Python ' + python_version(); print(str); l = tlp.getSizeAlgorithmPluginsList();exit(1) if not l else exit(0)"
 # iterate on available Python versions
 for CPYBIN in /opt/python/cp*/bin
 do
