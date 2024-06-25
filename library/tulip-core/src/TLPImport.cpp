@@ -961,7 +961,7 @@ public:
     return ":/tulip/gui/icons/logo32x32.png";
   }
 
-  bool check() {
+  bool check() override {
     return ImportFileModule::check() ||
            // file::data is an hidden parameter
            // used in GraphPerspective.cpp to copy a Graph
