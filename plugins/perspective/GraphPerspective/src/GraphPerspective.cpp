@@ -88,9 +88,8 @@ static bool tulipCanOpenFile(const QString &path) {
 
   for (auto &import : imports) {
     ImportModule *m = PluginLister::getPluginObject<ImportModule>(import);
-    std::list<std::string> fileExtensions(m->allFileExtensions());
 
-    for (auto &ext : fileExtensions) {
+    for (auto &ext : m->fileExtensions()) {
       if (path.endsWith(tlpStringToQString(ext))) {
         delete m;
         return true;
@@ -1399,11 +1398,9 @@ void GraphPerspective::open(QString fileName) {
 
   for (auto &import : imports) {
     ImportModule *m = PluginLister::getPluginObject<ImportModule>(import);
-    std::list<std::string> fileExtension(m->allFileExtensions());
-
     std::string currentFilter;
 
-    for (auto &ext : fileExtension) {
+    for (auto &ext : m->fileExtensions()) {
 
       if (ext.empty())
         continue;

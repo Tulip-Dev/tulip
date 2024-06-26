@@ -936,7 +936,7 @@ class TLPImport : public ImportFileModule {
 
 public:
   PLUGININFORMATION("TLP Import", "Auber", "16/02/2001",
-                    "<p>Supported extensions: tlp, tlpz (compressed), tlp.gz "
+                    "<p>File extensions: tlp, tlpz (compressed), tlp.gz "
                     "(compressed)</p><p>Imports a graph recorded in a file using the TLP format "
                     "(Tulip Software Graph Format).<br/>See "
                     "<a "
@@ -946,15 +946,8 @@ public:
                     "interface,<br/>choosing <b>File->Import->TLP</b> menu item is the same as "
                     "using <b>File->Open</b> menu item.</p>",
                     "1.0", "File")
-  std::list<std::string> fileExtensions() const override {
-    return std::list<std::string>() = {"tlp"};
-  }
 
-  std::list<std::string> gzipFileExtensions() const override {
-    return std::list<std::string>() = {"tlp.gz", "tlpz"};
-  }
-
-  TLPImport(tlp::PluginContext *context) : ImportFileModule(context) {}
+  TLPImport(tlp::PluginContext *context) : ImportFileModule(context, {"tlp", "tlp.gz", "tlpz"}) {}
   ~TLPImport() override {}
 
   std::string icon() const override {
@@ -975,11 +968,10 @@ public:
     bool result;
 
     if (data.empty()) {
-      std::list<std::string> &&gexts = gzipFileExtensions();
       bool gzip(false);
 
-      for (const std::string &ext : gexts) {
-        if (filename.rfind(ext) == (filename.length() - ext.length())) {
+      for (auto ext = ++extensions.begin();  ext != extensions.end(); ++ext) {
+        if (filename.rfind(*ext) == (filename.length() - (*ext).length())) {
           gzip = true;
           // we first open a "standard" stream to retrieve the original size
           // of the file compressed with gzip.

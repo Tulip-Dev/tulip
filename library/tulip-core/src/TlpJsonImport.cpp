@@ -501,11 +501,7 @@ public:
                     "the Tulip JSON format.</p>",
                     "1.0", "File")
 
-  std::list<std::string> fileExtensions() const override {
-    return std::list<std::string>() = {"json"};
-  }
-
-  TlpJsonImport(tlp::PluginContext *context) : ImportFileModule(context) {}
+  TlpJsonImport(tlp::PluginContext *context) : ImportFileModule(context, {"json"}) {}
 
   std::string icon() const override {
     return ":/tulip/gui/icons/json32x32.png";

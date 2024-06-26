@@ -62,12 +62,10 @@ bool errorTrap(void *buf = nullptr) {
 
 bool TLPBImport::importFile() {
   std::istream *is = nullptr;
-
   bool gzip(false);
-  std::list<std::string> &&gexts = gzipFileExtensions();
 
-  for (const std::string &ext : gexts) {
-    if (filename.rfind(ext) == (filename.length() - ext.length())) {
+  for (auto ext = ++extensions.begin();  ext != extensions.end(); ++ext) {
+    if (filename.rfind(*ext) == (filename.length() - (*ext).length())) {
       is = tlp::getIgzstream(filename);
       gzip = true;
       break;

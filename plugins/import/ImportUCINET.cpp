@@ -195,17 +195,14 @@ class ImportUCINET : public ImportFileModule {
 public:
   PLUGININFORMATION(
       "UCINET", "Patrick Mary", "12/09/2011",
-      "<p>Supported extensions: txt</p><p>Imports a new graph from a text file in "
+      "<p>File extension: txt</p><p>Imports a new graph from a text file in "
       "UCINET DL input format<br/>as it is described in the UCINET reference manual<br/>"
       "(see <a "
       "href=\"http://www.analytictech.com/ucinet/documentation/reference.rtf\">http://"
       "www.analytictech.com/ucinet/documentation/reference.rtf</a>)</p>",
       "1.1", "File")
-  std::list<std::string> fileExtensions() const override {
-    return std::list<std::string>() = {"txt"};
-  }
   ImportUCINET(const tlp::PluginContext *context)
-      : ImportFileModule(context), nbNodes(0), defaultMetric("weight"), n(0), nr(0), nc(0), nm(0),
+    : ImportFileModule(context, {"txt"}), nbNodes(0), defaultMetric("weight"), n(0), nr(0), nc(0), nm(0),
         current(0), dl_found(false), diagonal(true), diagonal_found(false), labels_known(false),
         title_found(false), expectedLine(DL_HEADER), embedding(DL_NONE), dataFormat(DL_FM) {
     addInParameter<string>("default metric",

@@ -51,32 +51,6 @@ public:
     return std::list<std::string>();
   }
 
-  /**
-   * @brief Gets the extensions of the gzipped file formats this plugin can import.
-   * e.g. a TLP import would return 'tlp.gz and tlpz'.
-   *
-   * @since Tulip 5.0
-   *
-   * @return the list of gzipped file extensions the plugin can import.
-   **/
-  virtual std::list<std::string> gzipFileExtensions() const {
-    return std::list<std::string>();
-  }
-
-  /**
-   * @brief Gets all the extensions (normal and gzipped) of the file formats this plugin can import.
-   *
-   * @since Tulip 5.0
-   *
-   * @return the list of file extensions the plugin can import.
-   **/
-  std::list<std::string> allFileExtensions() const {
-    std::list<std::string> zext(gzipFileExtensions());
-    std::list<std::string> ext(fileExtensions());
-    ext.splice(ext.end(), zext);
-    return ext;
-  }
-
   std::string category() const override {
     return IMPORT_CATEGORY;
   }
@@ -119,8 +93,21 @@ protected:
    **/
   std::string filename;
 
+  /**
+   * @brief The supported file extensions
+   **/
+  std::list<std::string> extensions;
+
 public:
-  ImportFileModule(const tlp::PluginContext *context);
+  ImportFileModule(const tlp::PluginContext *context,
+                   std::list<std::string> exts = {});
+
+  /**
+   * @brief override the inherited method
+   **/
+  std::list<std::string> fileExtensions() const override {
+    return extensions;
+  }
 
   /**
    * @brief check plugin parameters

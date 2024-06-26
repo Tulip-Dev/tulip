@@ -247,13 +247,6 @@ Graph *tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
         importPluginName = importPlugin.name();
         break;
       }
-
-    extensions = importPlugin.gzipFileExtensions();
-    for (const string &ext : extensions)
-      if (filename.rfind(ext) == (filename.size() - ext.size())) {
-        importPluginName = importPlugin.name();
-        break;
-      }
   }
 
   dataSet.set("file::filename", filename);

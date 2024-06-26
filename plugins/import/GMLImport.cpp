@@ -544,15 +544,12 @@ class GMLImport : public ImportFileModule {
 public:
   PLUGININFORMATION(
       "GML", "Auber", "04/07/2001",
-      "<p>Supported extension: gml</p><p>Imports a new graph from a file (.gml) in "
+      "<p>File extension: gml</p><p>Imports a new graph from a file (.gml) in "
       "GML format (used by Graphlet).<br/>See:<br/>"
       "<a href=\"https://github.com/GunterMueller/UNI_PASSAU_FMI_Graph_Drawing\">https://github.com/GunterMueller/UNI_PASSAU_FMI_Graph_Drawing</a><br/>"
       "(formerly www.infosun.fim.uni-passau.de/Graphlet/GML/) for details.</p>",
       "1.1", "File")
-  std::list<std::string> fileExtensions() const override {
-    return std::list<std::string>() = {"gml"};
-  }
-  GMLImport(PluginContext *context) : ImportFileModule(context) {}
+  GMLImport(PluginContext *context) : ImportFileModule(context, {"gml"}) {}
   ~GMLImport() override {}
 
   bool importFile() override {

@@ -1392,11 +1392,11 @@ class ImportBibTeX : public ImportFileModule {
 
 public:
   PLUGININFORMATION("BibTeX", "Patrick Mary", "09/01/2014",
-                    "<p>Supported extensions: bib</p><p>Import a co-authorship graph from a BibTeX "
+                    "<p>File extension: bib</p><p>Import a co-authorship graph from a BibTeX "
                     "formatted file.</p>",
                     "1.1", "File")
 
-  ImportBibTeX(const tlp::PluginContext *context) : ImportFileModule(context) {
+  ImportBibTeX(const tlp::PluginContext *context) : ImportFileModule(context, {"bib"}) {
     addInParameter<StringCollection>(
         "Nodes to import",
         "The type of nodes to create: <b>Authors</b> (Create nodes for authors only, publications "
@@ -1418,10 +1418,6 @@ public:
 
   std::string icon() const override {
     return ":/tulip/graphperspective/icons/32/import_bibtex.png";
-  }
-
-  std::list<std::string> fileExtensions() const override {
-    return std::list<std::string>() = {"bib"};
   }
 
   bool importFile() override {

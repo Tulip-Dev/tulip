@@ -32,9 +32,15 @@ ImportModule::ImportModule(const tlp::PluginContext *context) {
   }
 }
 
-ImportFileModule::ImportFileModule(const tlp::PluginContext *context) : ImportModule(context) {
+ImportFileModule::ImportFileModule(const tlp::PluginContext *context, std::list<std::string> exts) : ImportModule(context), extensions(exts) {
+  std::string doc("The pathname of the file ");
+  for (auto &ext : extensions)
+    doc.append((ext == extensions.front()) ? "(." : ", .").append(ext);
+  if (!extensions.empty())
+    doc.append(") ");
+  doc.append("to import");
   // declare the parameter to set the filename data member
-  addInParameter<std::string>("file::filename", "The pathname of the file to import", "", true);
+  addInParameter<std::string>("file::filename", doc, "", true);
 }
 
 bool ImportFileModule::check() {

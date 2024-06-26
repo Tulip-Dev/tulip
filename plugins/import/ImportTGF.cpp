@@ -94,13 +94,10 @@ class ImportTGF : public ImportFileModule {
 public:
   PLUGININFORMATION(
       "TGF", "Patrick Mary", "30/11/2023",
-      "<p>Supported extensions: tgf</p><p>Imports a new graph from a text file in Trivial Graph Format<br/>as it is described in <a href=\"https://en.wikipedia.org/wiki/Trivial_Graph_Format\">https://en.wikipedia.org/wiki/Trivial_Graph_Format</a></p>",
+      "<p>File extension: tgf</p><p>Imports a new graph from a text file in Trivial Graph Format<br/>as it is described in <a href=\"https://en.wikipedia.org/wiki/Trivial_Graph_Format\">https://en.wikipedia.org/wiki/Trivial_Graph_Format</a></p>",
       "1.0", "File")
-  std::list<std::string> fileExtensions() const override {
-    return std::list<std::string>() = {"tgf"};
-  }
 
-  ImportTGF(const tlp::PluginContext *context) : ImportFileModule(context) {}
+  ImportTGF(const tlp::PluginContext *context) : ImportFileModule(context, {"tgf"}) {}
 
   ~ImportTGF() override {}
 

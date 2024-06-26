@@ -123,24 +123,16 @@ public:
 class TLPBImport : public tlp::ImportFileModule {
 public:
   PLUGININFORMATION("TLPB Import", "David Auber, Patrick Mary", "13/07/2012",
-                    "<p>Supported extensions: tlpb, tlpb.gz (compressed), tlpbz "
+                    "<p>File extensions: tlpb, tlpbz (compressed), tlpb.gz "
                     "(compressed)</p><p>Imports a graph recorded in a file using the Tulip binary "
                     "format.</p>",
                     "1.2", "File")
 
-  TLPBImport(tlp::PluginContext *context) : ImportFileModule(context) {}
+  TLPBImport(tlp::PluginContext *context) : ImportFileModule(context, {"tlpb", "tlpb.gz", "tlpbz"}) {}
   ~TLPBImport() override {}
 
   std::string icon() const override {
     return ":/tulip/gui/icons/tlpb32x32.png";
-  }
-
-  std::list<std::string> fileExtensions() const override {
-    return std::list<std::string>() = {"tlpb"};
-  }
-
-  std::list<std::string> gzipFileExtensions() const override {
-    return std::list<std::string>() = {"tlpb.gz", "tlpbz"};
   }
 
   bool importFile() override;

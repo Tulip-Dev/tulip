@@ -104,7 +104,7 @@ class ImportPajek : public ImportFileModule {
 
 public:
   PLUGININFORMATION("Pajek", "Patrick Mary", "09/05/2011",
-                    "<p>Supported extensions: net, paj</p><p>Imports a new graph from a file "
+                    "<p>File extensions: net, paj</p><p>Imports a new graph from a file "
                     "(.net) in Pajek NET format<br/>as it is described in the Pajek manual "
                     "(<a "
                     "href=\"http://mrvar.fdv.uni-lj.si/pajek/pajekman.pdf\">http://"
@@ -113,12 +113,9 @@ public:
                     "description of the edges with Matrix (adjacency lists)is not yet "
                     "supported.</p>",
                     "1.0", "File")
-  std::list<std::string> fileExtensions() const override {
-    return std::list<std::string>() = {"net", "paj"};
-  }
 
   ImportPajek(const tlp::PluginContext *context)
-      : ImportFileModule(context), nbNodes(0), weights(nullptr), labels(nullptr), layout(nullptr),
+    : ImportFileModule(context, {"net", "paj"}), nbNodes(0), weights(nullptr), labels(nullptr), layout(nullptr),
         sizes(nullptr), expectedLine(NET_UNKNOWN), partition(nullptr), curNodeId(0),
         vectorProp(nullptr) {}
 

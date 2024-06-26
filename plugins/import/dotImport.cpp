@@ -59,16 +59,13 @@ namespace {
 class DotImport : public ImportFileModule {
 public:
   PLUGININFORMATION("graphviz", "Gerald Gainant", "01/03/2004",
-                    "<p>Supported extensions: dot</p><p>Imports a new graph from a file in the dot "
+                    "<p>File extension: dot</p><p>Imports a new graph from a file in the dot "
                     "input format.</p>"
                     "<p>(see <a "
                     "href=\"https://www.graphviz.org/doc/info/lang.html\">https://www.graphviz.org/"
                     "doc/info/lang.html</a>)</p>",
                     "1.0", "File")
-  std::list<std::string> fileExtensions() const override {
-    return std::list<std::string>() = {"dot"};
-  }
-  DotImport(tlp::PluginContext *context) : ImportFileModule(context) {}
+  DotImport(tlp::PluginContext *context) : ImportFileModule(context, {"dot"}) {}
   ~DotImport() override {}
 
   std::string icon() const override {
