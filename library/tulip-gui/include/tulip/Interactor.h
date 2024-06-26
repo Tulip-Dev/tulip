@@ -89,7 +89,7 @@ public:
     @note The configuration widget has to be instantiated from the construct method.
     @note It is up to the interactor developer to delete the configuration widget
     */
-  virtual QWidget *configurationWidget() const {
+  _DEPRECATED virtual QWidget *configurationWidget() const {
     return nullptr;
   }
   virtual QLabel *configurationDocWidget() const {
