@@ -82,7 +82,8 @@ public:
 
   /**
     @deprecated Use QWidget *configurationDocWidget() and/or QWidget *configurationOptionsWidget()
-    instead. If not overloaded, this deprecated method calls QWidget *configurationOptionsWidget() and will be removed in a next release.
+    instead. If not overloaded, this deprecated method calls QWidget *configurationOptionsWidget()
+    and will be removed in a next release.
     @return the configuration widget used to set up the interactor.
     @warning This method MUST ALWAYS return the same pointer. Doing otherwise may lead to memory
     leaks.

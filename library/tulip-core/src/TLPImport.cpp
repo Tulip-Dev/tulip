@@ -970,7 +970,7 @@ public:
     if (data.empty()) {
       bool gzip(false);
 
-      for (auto ext = ++extensions.begin();  ext != extensions.end(); ++ext) {
+      for (auto ext = ++extensions.begin(); ext != extensions.end(); ++ext) {
         if (filename.rfind(*ext) == (filename.length() - (*ext).length())) {
           gzip = true;
           // we first open a "standard" stream to retrieve the original size

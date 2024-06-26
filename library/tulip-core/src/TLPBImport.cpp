@@ -64,7 +64,7 @@ bool TLPBImport::importFile() {
   std::istream *is = nullptr;
   bool gzip(false);
 
-  for (auto ext = ++extensions.begin();  ext != extensions.end(); ++ext) {
+  for (auto ext = ++extensions.begin(); ext != extensions.end(); ++ext) {
     if (filename.rfind(*ext) == (filename.length() - (*ext).length())) {
       is = tlp::getIgzstream(filename);
       gzip = true;

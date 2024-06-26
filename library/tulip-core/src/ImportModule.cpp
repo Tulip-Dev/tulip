@@ -32,7 +32,8 @@ ImportModule::ImportModule(const tlp::PluginContext *context) {
   }
 }
 
-ImportFileModule::ImportFileModule(const tlp::PluginContext *context, std::list<std::string> exts) : ImportModule(context), extensions(exts) {
+ImportFileModule::ImportFileModule(const tlp::PluginContext *context, std::list<std::string> exts)
+    : ImportModule(context), extensions(exts) {
   std::string doc("The pathname of the file ");
   for (auto &ext : extensions)
     doc.append((ext == extensions.front()) ? "(." : ", .").append(ext);

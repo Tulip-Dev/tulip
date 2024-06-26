@@ -115,9 +115,9 @@ public:
                     "1.0", "File")
 
   ImportPajek(const tlp::PluginContext *context)
-    : ImportFileModule(context, {"net", "paj"}), nbNodes(0), weights(nullptr), labels(nullptr), layout(nullptr),
-        sizes(nullptr), expectedLine(NET_UNKNOWN), partition(nullptr), curNodeId(0),
-        vectorProp(nullptr) {}
+      : ImportFileModule(context, {"net", "paj"}), nbNodes(0), weights(nullptr), labels(nullptr),
+        layout(nullptr), sizes(nullptr), expectedLine(NET_UNKNOWN), partition(nullptr),
+        curNodeId(0), vectorProp(nullptr) {}
 
   ~ImportPajek() override {}
 

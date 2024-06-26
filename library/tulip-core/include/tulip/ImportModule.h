@@ -99,8 +99,7 @@ protected:
   std::list<std::string> extensions;
 
 public:
-  ImportFileModule(const tlp::PluginContext *context,
-                   std::list<std::string> exts = {});
+  ImportFileModule(const tlp::PluginContext *context, std::list<std::string> exts = {});
 
   /**
    * @brief override the inherited method

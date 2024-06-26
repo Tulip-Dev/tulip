@@ -128,7 +128,8 @@ public:
                     "format.</p>",
                     "1.2", "File")
 
-  TLPBImport(tlp::PluginContext *context) : ImportFileModule(context, {"tlpb", "tlpb.gz", "tlpbz"}) {}
+  TLPBImport(tlp::PluginContext *context)
+      : ImportFileModule(context, {"tlpb", "tlpb.gz", "tlpbz"}) {}
   ~TLPBImport() override {}
 
   std::string icon() const override {

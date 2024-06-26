@@ -65,8 +65,8 @@ public:
       "schema.html</a>).</p><p>Warning: dynamic mode is not supported.</p>",
       "1.1", "File")
   GEXFImport(const PluginContext *context)
-      : ImportFileModule(context, {"gexf"}), viewLayout(nullptr), viewSize(nullptr), viewColor(nullptr),
-        viewLabel(nullptr), viewShape(nullptr), nodesHaveCoordinates(false) {
+      : ImportFileModule(context, {"gexf"}), viewLayout(nullptr), viewSize(nullptr),
+        viewColor(nullptr), viewLabel(nullptr), viewShape(nullptr), nodesHaveCoordinates(false) {
     addInParameter<bool>("curved edges",
                          "Indicates if Bézier curves should be used to draw the edges.", "false");
   }

@@ -202,9 +202,10 @@ public:
       "www.analytictech.com/ucinet/documentation/reference.rtf</a>)</p>",
       "1.1", "File")
   ImportUCINET(const tlp::PluginContext *context)
-    : ImportFileModule(context, {"txt"}), nbNodes(0), defaultMetric("weight"), n(0), nr(0), nc(0), nm(0),
-        current(0), dl_found(false), diagonal(true), diagonal_found(false), labels_known(false),
-        title_found(false), expectedLine(DL_HEADER), embedding(DL_NONE), dataFormat(DL_FM) {
+      : ImportFileModule(context, {"txt"}), nbNodes(0), defaultMetric("weight"), n(0), nr(0), nc(0),
+        nm(0), current(0), dl_found(false), diagonal(true), diagonal_found(false),
+        labels_known(false), title_found(false), expectedLine(DL_HEADER), embedding(DL_NONE),
+        dataFormat(DL_FM) {
     addInParameter<string>("default metric",
                            "This parameter indicates the name of the default metric", "weight");
   }
