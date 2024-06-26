@@ -31,7 +31,7 @@ ADD_CUSTOM_TARGET(pythonBindingsDoc ALL ${CMAKE_COMMAND} -DSPHINX_EXECUTABLE=${S
                                                          -DCMAKE_LIBRARY_PATH=${CMAKE_LIBRARY_PATH_STR}
                                                          -P ${CMAKE_CURRENT_SOURCE_DIR}/genSphinxDoc.cmake
                                     DEPENDS ${LibTulipCorePythonBindingsName}
-                                            ${LibTulipGUIPythonBindingsName} copyTulipGuiInitPy
+                                            ${LibTulipGUIPythonBindingsName}
                                             ${TULIP_PLUGIN_TARGETS}
                                             copyTulipPythonPlugins
 					    copyTulipPluginsPyInBuild

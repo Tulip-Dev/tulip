@@ -45,11 +45,7 @@ SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES RUNTIME_OUTPUT
 SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${TULIPGUI_PYTHON_NATIVE_FOLDER})
 SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${TULIPGUI_PYTHON_NATIVE_FOLDER})
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/__init__.py.in ${CMAKE_CURRENT_BINARY_DIR}/__init__.py @ONLY)
-ADD_CUSTOM_TARGET(copyTulipGuiInitPy ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/__init__.py ${TULIPGUI_PYTHON_FOLDER}/__init__.py
-    COMMENT "Copying tulipgui module __init__.py file"
-    DEPENDS ${LibTulipGUIPythonBindingsName}
-    VERBATIM)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/__init__.py.in ${TULIPGUI_PYTHON_FOLDER}/__init__.py @ONLY)
 
 SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName}
                       PROPERTIES OUTPUT_NAME tulipgui PREFIX "_")
@@ -69,7 +65,7 @@ ENDIF(APPLE)
 
 TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} PUBLIC ${LibTulipCoreName} ${LibTulipGUIName})
 
-TULIP_INSTALL_PYTHON_FILES(tulipgui ${CMAKE_CURRENT_BINARY_DIR}/__init__.py)
+TULIP_INSTALL_PYTHON_FILES(tulipgui ${TULIPGUI_PYTHON_FOLDER}/__init__.py)
 TULIP_INSTALL_PYTHON_FILES(tulipgui/native ${LibTulipGUIPythonBindingsName})
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/build/tulipgui.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
