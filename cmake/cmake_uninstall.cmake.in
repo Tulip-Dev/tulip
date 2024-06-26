@@ -1,43 +1,29 @@
-IF(NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
+IF(NOT EXISTS @CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt)
     MESSAGE(FATAL_ERROR "Cannot find install manifest: \"@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt\"")
-ENDIF(NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
-
-MACRO(REMOVE_FILE file)
-  IF(EXISTS "${file}")
-      MESSAGE(STATUS "Uninstalling \"${file}\"")
-      EXECUTE_PROCESS(
-          COMMAND @CMAKE_COMMAND@ -E remove "${file}"
-          OUTPUT_QUIET ERROR_QUIET
-      )
-      IF(NOT ${rm_retval} EQUAL 0)
-          MESSAGE(FATAL_ERROR "Problem when removing \"${file}\"")
-      ENDIF(NOT ${rm_retval} EQUAL 0)
-  ENDIF(EXISTS "${file}")
-ENDMACRO(REMOVE_FILE)
+ENDIF(NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt)
 
 # remove installed files
-FILE(READ "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt" files)
+FILE(READ @CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt files)
 STRING(REGEX REPLACE "\n" ";" files "${files}")
 LIST(REVERSE files)
 FOREACH(file ${files})
-    REMOVE_FILE($ENV{DESTDIR}${file})
+    MESSAGE(STATUS "Uninstalling $ENV{DESTDIR}${file}")
+    FILE(REMOVE ${file})
 ENDFOREACH(file)
 
 # remove tulip dedicated folders
-EXECUTE_PROCESS(
-    COMMAND @CMAKE_COMMAND@ -E remove_directory "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/tulip"
-    COMMAND @CMAKE_COMMAND@ -E remove_directory "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@/tulip"
-    COMMAND @CMAKE_COMMAND@ -E remove_directory "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@/tulip2ogdf"
-    COMMAND @CMAKE_COMMAND@ -E remove_directory "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/cmake/TULIP"
-    COMMAND @CMAKE_COMMAND@ -E remove_directory "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_DATADIR@/tulip"
-    COMMAND @CMAKE_COMMAND@ -E remove_directory "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_DOCDIR@"
-    COMMAND @CMAKE_COMMAND@ -E remove_directory "@TulipPythonModulesInstallDir@/tulip"
-    COMMAND @CMAKE_COMMAND@ -E remove_directory "@TulipPythonModulesInstallDir@/tulipgui"
-    OUTPUT_QUIET ERROR_QUIET
-)
+    FILE(REMOVE_RECURSE @CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/tulip/)
+    FILE(REMOVE_RECURSE @CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@/tulip/)
+    FILE(REMOVE_RECURSE @CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@/tulip2ogdf/)
+    FILE(REMOVE_RECURSE @CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/cmake/TULIP/)
+    FILE(REMOVE_RECURSE @CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_DATADIR@/tulip/)
+    FILE(REMOVE_RECURSE @CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_DOCDIR@/)
+    FILE(REMOVE_RECURSE @TulipPythonModulesInstallDir@/tulip/)
+    FILE(REMOVE_RECURSE @TulipPythonModulesInstallDir@/tulipgui/)
+
 
 # also remove desktop file and file associations on Linux
-IF(NOT WIN32 AND NOT APPLE)
-  EXECUTE_PROCESS(COMMAND update-desktop-database "@DESKTOP_CONFIG_INSTALL_PREFIX@/share/applications" OUTPUT_QUIET ERROR_QUIET)
-  EXECUTE_PROCESS(COMMAND update-mime-database "@DESKTOP_CONFIG_INSTALL_PREFIX@/share/mime" OUTPUT_QUIET ERROR_QUIET)
-endif (NOT WIN32 AND NOT APPLE)
+IF(LINUX)
+  EXECUTE_PROCESS(COMMAND update-desktop-database @DESKTOP_CONFIG_INSTALL_PREFIX@/share/applications OUTPUT_QUIET ERROR_QUIET)
+  EXECUTE_PROCESS(COMMAND update-mime-database @DESKTOP_CONFIG_INSTALL_PREFIX@/share/mime OUTPUT_QUIET ERROR_QUIET)
+ENDIF(LINUX)
