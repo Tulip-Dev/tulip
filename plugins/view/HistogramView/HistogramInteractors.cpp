@@ -168,7 +168,7 @@ void HistogramInteractorStatistics::construct() {
   push_back(new MousePanNZoomNavigator);
 }
 
-QWidget *HistogramInteractorStatistics::configurationWidget() const {
+QWidget *HistogramInteractorStatistics::configurationOptionsWidget() const {
   return histoStatsConfigWidget;
 }
 

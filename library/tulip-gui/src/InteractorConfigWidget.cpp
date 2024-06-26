@@ -48,19 +48,8 @@ bool InteractorConfigWidget::setWidgets(Interactor *interactor) {
   _ui->interactorConfigWidgetDoc->takeWidget();
   _ui->interactorConfigWidgetOptions->takeWidget();
 
-  QWidget *oldConfig(interactor->configurationWidget());
-  // if old config is present and is only a QLabel => Documentation tab, else Options tab
-  QWidget *docWidget = nullptr;
-  QWidget *optionsWidget = nullptr;
-  if (oldConfig != nullptr) {
-    if (dynamic_cast<QLabel *>(oldConfig) != nullptr)
-      docWidget = oldConfig;
-    else
-      optionsWidget = oldConfig;
-  } else {
-    docWidget = interactor->configurationDocWidget();
-    optionsWidget = interactor->configurationOptionsWidget();
-  }
+  QWidget *optionsWidget(interactor->configurationOptionsWidget());
+  QLabel *docWidget(interactor->configurationDocWidget());
 
   if ((docWidget == nullptr) && (optionsWidget == nullptr)) {
     _interactor = nullptr;

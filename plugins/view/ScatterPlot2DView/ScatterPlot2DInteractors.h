@@ -69,7 +69,7 @@ public:
 
   void construct() override;
 
-  QWidget *configurationWidget() const override;
+  QWidget *configurationOptionsWidget() const override;
 
 private:
   ScatterPlotCorrelCoeffSelectorOptionsWidget *optionsWidget;

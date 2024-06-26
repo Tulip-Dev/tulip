@@ -55,7 +55,7 @@ public:
 
   void construct() override;
 
-  QWidget *configurationWidget() const override {
+  QWidget *configurationOptionsWidget() const override {
     return configWidget;
   }
 

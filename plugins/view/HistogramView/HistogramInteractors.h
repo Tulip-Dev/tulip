@@ -69,7 +69,7 @@ public:
   ~HistogramInteractorStatistics() override;
 
   void construct() override;
-  QWidget *configurationWidget() const override;
+  QWidget *configurationOptionsWidget() const override;
   void install(QObject *target) override;
 
 private:

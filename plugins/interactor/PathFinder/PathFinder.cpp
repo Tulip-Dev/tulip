@@ -143,7 +143,7 @@ void PathFinder::construct() {
   connect(_configurationWidget, SIGNAL(setTolerance(int)), this, SLOT(setTolerance(int)));
 }
 
-QWidget *PathFinder::configurationWidget() const {
+QWidget *PathFinder::configurationOptionsWidget() const {
   return _configurationWidget;
 }
 

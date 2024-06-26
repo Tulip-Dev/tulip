@@ -102,7 +102,7 @@ FishEyeInteractor::~FishEyeInteractor() {
   delete fisheyeConfigWidget;
 }
 
-QWidget *FishEyeInteractor::configurationWidget() const {
+QWidget *FishEyeInteractor::configurationOptionsWidget() const {
   return fisheyeConfigWidget;
 }
 

@@ -63,7 +63,7 @@ public:
   unsigned int priority() const override {
     return tlp::StandardInteractorPriority::PathSelection;
   }
-  QWidget *configurationWidget() const override;
+  QWidget *configurationOptionsWidget() const override;
 
   /**
    * @return The name of the property used to get the weight values over the edges.

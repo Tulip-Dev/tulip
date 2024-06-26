@@ -104,7 +104,7 @@ ScatterPlot2DInteractorCorrelCoeffSelector::~ScatterPlot2DInteractorCorrelCoeffS
   delete optionsWidget;
 }
 
-QWidget *ScatterPlot2DInteractorCorrelCoeffSelector::configurationWidget() const {
+QWidget *ScatterPlot2DInteractorCorrelCoeffSelector::configurationOptionsWidget() const {
   return optionsWidget;
 }
 

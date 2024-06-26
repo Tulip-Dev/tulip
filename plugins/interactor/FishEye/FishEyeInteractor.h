@@ -78,7 +78,7 @@ public:
 
   void uninstall() override;
 
-  QWidget *configurationWidget() const override;
+  QWidget *configurationOptionsWidget() const override;
 
   unsigned int priority() const override {
     return StandardInteractorPriority::FishEye;

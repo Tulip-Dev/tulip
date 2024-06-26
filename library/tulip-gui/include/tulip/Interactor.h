@@ -82,7 +82,7 @@ public:
 
   /**
     @deprecated Use QWidget *configurationDocWidget() and/or QWidget *configurationOptionsWidget()
-    instead
+    instead. If not overloaded, this deprecated method calls QWidget *configurationOptionsWidget() and will be removed in a next release.
     @return the configuration widget used to set up the interactor.
     @warning This method MUST ALWAYS return the same pointer. Doing otherwise may lead to memory
     leaks.
@@ -90,11 +90,27 @@ public:
     @note It is up to the interactor developer to delete the configuration widget
     */
   _DEPRECATED virtual QWidget *configurationWidget() const {
-    return nullptr;
+    return configurationOptionsWidget();
   }
+
+  /**
+    @return The interactor documentation.
+    @warning This method MUST ALWAYS return the same pointer. Doing otherwise may lead to memory
+    leaks.
+    @note The interactor document has to be instantiated from the construct method.
+    @note It is up to the interactor developer to delete the returned pointer.
+    */
   virtual QLabel *configurationDocWidget() const {
     return nullptr;
   }
+
+  /**
+    @return the configuration options widget used to set up the interactor.
+    @warning This method MUST ALWAYS return the same pointer. Doing otherwise may lead to memory
+    leaks.
+    @note The configuration widget has to be instantiated from the construct method.
+    @note It is up to the interactor developer to delete the configuration widget
+    */
   virtual QWidget *configurationOptionsWidget() const {
     return nullptr;
   }
