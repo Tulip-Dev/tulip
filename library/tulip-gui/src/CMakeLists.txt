@@ -10,7 +10,6 @@ SET(SRCS
   CSVParserConfigurationWidget.cpp
   CSVParser.cpp
   DoubleStringsListSelectionWidget.cpp
-  DownloadManager.cpp
   DragHandle.cpp
   GlCompositeHierarchyManager.cpp
   GlMainView.cpp
@@ -161,7 +160,6 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/CSVImportWizard.h
   ../include/tulip/CSVParserConfigurationWidget.h
   ../include/tulip/DoubleStringsListSelectionWidget.h
-  ../include/tulip/DownloadManager.h
   ../include/tulip/DragHandle.h
   ../include/tulip/GLInteractor.h
   ../include/tulip/GlMainView.h
