@@ -440,14 +440,6 @@ void TulipSettings::setDisplayInDarkMode(bool f) {
     instance().setValue(TS_DisplayInDarkMode, f);
 }
 
-bool TulipSettings::showStatusBar() {
-  return instance().value(TS_ShowStatusBar, true).toBool();
-}
-
-void TulipSettings::setShowStatusBar(bool f) {
-  instance().setValue(TS_ShowStatusBar, f);
-}
-
 bool TulipSettings::loggerAnchored() {
   return instance().value(TS_LoggerAnchored, true).toBool();
 }

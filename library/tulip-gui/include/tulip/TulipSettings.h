@@ -156,10 +156,6 @@ public:
   static bool isDisplayInDarkMode();
   static void setDisplayInDarkMode(bool);
 
-  // no longer used
-  _DEPRECATED static bool showStatusBar();
-  _DEPRECATED static void setShowStatusBar(bool);
-
   static bool loggerAnchored();
   static void setLoggerAnchored(bool);
 
