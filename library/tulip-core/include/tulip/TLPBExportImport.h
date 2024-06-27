@@ -79,7 +79,8 @@ public:
                     "(compressed)</p><p>Exports a graph in a file using the Tulip binary format.",
                     "1.2", "File")
 
-  TLPBExport(const tlp::PluginContext *context) : ExportModule(context, {"tlpb", "tlpb.gz","tlpbz"}) {}
+  TLPBExport(const tlp::PluginContext *context)
+      : ExportModule(context, {"tlpb", "tlpb.gz", "tlpbz"}) {}
   ~TLPBExport() override {}
 
   bool exportGraph(std::ostream &) override;

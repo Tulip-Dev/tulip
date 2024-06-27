@@ -45,8 +45,8 @@ class ExportModule : public tlp::Plugin {
   std::list<std::string> extensions;
 
 public:
-  ExportModule(const tlp::PluginContext *context,
-               std::list<std::string> exts = {}) : extensions(exts) {
+  ExportModule(const tlp::PluginContext *context, std::list<std::string> exts = {})
+      : extensions(exts) {
     if (context != nullptr) {
       const tlp::AlgorithmContext *algoritmContext =
           static_cast<const tlp::AlgorithmContext *>(context);
