@@ -61,11 +61,8 @@ public:
       "<a href=\"https://github.com/GunterMueller/UNI_PASSAU_FMI_Graph_Drawing\">https://github.com/GunterMueller/UNI_PASSAU_FMI_Graph_Drawing</a><br/>"
       "(formerly www.infosun.fim.uni-passau.de/Graphlet/GML/) for details.</p>",
       "1.0", "File")
-  std::string fileExtension() const override {
-    return "gml";
-  }
 
-  GMLExport(tlp::PluginContext *context) : tlp::ExportModule(context) {}
+  GMLExport(tlp::PluginContext *context) : tlp::ExportModule(context, {"gml"}) {}
 
   ~GMLExport() override {}
 

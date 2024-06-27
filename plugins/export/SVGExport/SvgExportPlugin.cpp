@@ -73,17 +73,7 @@ public:
     return ":/tulip/graphperspective/icons/32/export_svg.png";
   }
 
-  string fileExtension() const override {
-    return "svg";
-  }
-
-  list<string> gzipFileExtensions() const override {
-    list<string> ext;
-    ext.push_back("svgz");
-    return ext;
-  }
-
-  SvgExport(tlp::PluginContext *context) : tlp::ExportModule(context) {
+  SvgExport(tlp::PluginContext *context) : tlp::ExportModule(context, {"svg", "svgz"}) {
     addInParameter<bool>("edge color interpolation", paramHelp[0], "false");
     addInParameter<bool>("edge size interpolation", paramHelp[1], "true");
     addInParameter<bool>("edge extremities", paramHelp[2], "false");

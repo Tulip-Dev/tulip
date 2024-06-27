@@ -58,10 +58,6 @@ public:
                     "JSON format.</p>",
                     "1.0", "File")
 
-  std::string fileExtension() const override {
-    return "json";
-  }
-
   std::string icon() const override {
     return ":/tulip/gui/icons/json32x32.png";
   }
@@ -71,7 +67,7 @@ public:
    *
    * @param context The context this export algorithm will be initialized with.
    **/
-  TlpJsonExport(tlp::PluginContext *context) : ExportModule(context) {
+  TlpJsonExport(tlp::PluginContext *context) : ExportModule(context, {"json"}) {
     addInParameter<bool>("Beautify JSON string",
                          "If true, generate a JSON string with indentation and line breaks.",
                          "false");

@@ -264,27 +264,18 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
 
   for (const string &pluginName : exportPlugins) {
     ExportModule *exportPlugin = PluginLister::getPluginObject<ExportModule>(pluginName);
-    string ext(exportPlugin->fileExtension());
+    list<string> extensions(exportPlugin->fileExtensions());
 
-    if (filename.rfind(ext) != string::npos &&
-        filename.rfind(ext) == (filename.length() - ext.length())) {
-      exportPluginName = exportPlugin->name();
-      delete exportPlugin;
-      break;
-    } else {
-      list<string> extensions(exportPlugin->gzipFileExtensions());
-
-      for (const string &zext : exportPlugin->gzipFileExtensions()) {
-        if (filename.rfind(zext) == filename.length() - zext.length()) {
-          exportPluginName = exportPlugin->name();
-          gzip = true;
-          break;
-        }
-      }
-      delete exportPlugin;
-      if (gzip)
+    for (const string &ext : extensions) {
+      if (filename.rfind(ext) == filename.length() - ext.length()) {
+        exportPluginName = exportPlugin->name();
+        gzip = ext != extensions.front();
         break;
+      }
     }
+    delete exportPlugin;
+    if (!exportPluginName.empty())
+      break;
   }
 
   if (exportPluginName.empty()) {

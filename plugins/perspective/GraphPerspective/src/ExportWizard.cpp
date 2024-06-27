@@ -139,7 +139,7 @@ void ExportWizard::pathChanged(QString s) {
 
   for (std::list<std::string>::iterator itm = modules.begin(); itm != modules.end(); ++itm) {
     ExportModule *p = PluginLister::getPluginObject<ExportModule>(*itm);
-    std::list<std::string> extension = p->allFileExtensions();
+    std::list<std::string> extension = p->fileExtensions();
 
     for (list<string>::const_iterator extit = extension.begin(); extit != extension.end();
          ++extit) {
@@ -176,7 +176,7 @@ void ExportWizard::browseButtonClicked() {
 
   for (std::list<std::string>::const_iterator itm = modules.begin(); itm != modules.end(); ++itm) {
     ExportModule *p = PluginLister::getPluginObject<ExportModule>(*itm);
-    const std::list<std::string> extension = p->allFileExtensions();
+    const std::list<std::string> extension = p->fileExtensions();
     filter += tlpStringToQString(p->name()) + " (";
 
     for (list<string>::const_iterator it = extension.begin(); it != extension.end(); ++it) {
@@ -225,7 +225,7 @@ bool ExportWizard::validateCurrentPage() {
   std::list<std::string> extension;
 
   if (p != nullptr)
-    extension = p->allFileExtensions();
+    extension = p->fileExtensions();
 
   bool extok(false);
   QString ext;

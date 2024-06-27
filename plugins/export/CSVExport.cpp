@@ -86,7 +86,7 @@ static const char *paramHelp[] = {
 #define DECIMAL_MARKS " . ; , "
 
 //================================================================================
-CsvExport::CsvExport(const PluginContext *context) : ExportModule(context) {
+CsvExport::CsvExport(const PluginContext *context) : ExportModule(context, {"csv"}) {
   addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES);
   addInParameter<BooleanProperty>("selection", paramHelp[1], "", false);
   addInParameter<bool>(EXPORT_ID, paramHelp[2], "false");

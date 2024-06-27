@@ -79,18 +79,7 @@ public:
                     "(compressed)</p><p>Exports a graph in a file using the Tulip binary format.",
                     "1.2", "File")
 
-  std::string fileExtension() const override {
-    return "tlpb";
-  }
-
-  std::list<std::string> gzipFileExtensions() const override {
-    std::list<std::string> ext;
-    ext.push_back("tlpb.gz");
-    ext.push_back("tlpbz");
-    return ext;
-  }
-
-  TLPBExport(const tlp::PluginContext *context) : ExportModule(context) {}
+  TLPBExport(const tlp::PluginContext *context) : ExportModule(context, {"tlpb", "tlpb.gz","tlpbz"}) {}
   ~TLPBExport() override {}
 
   bool exportGraph(std::ostream &) override;

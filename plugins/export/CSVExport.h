@@ -72,10 +72,6 @@ public:
     return ":/tulip/graphperspective/icons/32/spreadsheet.png";
   }
 
-  std::string fileExtension() const override {
-    return "csv";
-  }
-
   CsvExport(const tlp::PluginContext *context);
   bool exportGraph(std::ostream &) override;
 
