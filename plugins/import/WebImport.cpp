@@ -17,9 +17,8 @@
  *
  */
 #include <iostream>
-#include <qapplication.h>
-#include <qtimer.h>
 #include <QNetworkAccessManager>
+#include <QApplication>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/TlpQtTools.h>
 #include "WebImport.h"
@@ -382,13 +381,13 @@ UrlElement UrlElement::parseUrl(const std::string &href) {
           findUp = urlreference.rfind('/', findUp - 1);
 
           if (findUp == string::npos) {
-            tlp::warning() << "bad url reference, to much ../" << endl;
+            tlp::warning() << "bad url reference, too much ../" << endl;
             return newUrl;
           }
 
           urlreference = urlreference.substr(0, findUp + 1);
         } else {
-          tlp::warning() << "bad url reference, to much ../" << endl;
+          tlp::warning() << "bad url reference, too much ../" << endl;
           return newUrl;
         }
       }
