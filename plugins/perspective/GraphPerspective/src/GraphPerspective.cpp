@@ -1952,8 +1952,16 @@ void GraphPerspective::applyDefaultLayout(Graph *g) {
     if (g->numberOfEdges() > 0) {
       if (TreeTest::isTree(g))
         g->applyPropertyAlgorithm("Tree Radial", viewLayout, str);
-      else
-        g->applyPropertyAlgorithm("FM^3 (OGDF)", viewLayout, str);
+      else {
+        DataSet ds;
+        if (tlp::inGuiTestingMode()) {
+          // ensure deterministic call using a fixed random seed
+          StringCollection sc("default;random seed;random time;uniform grid;keep positions");
+          sc.setCurrent(1);
+          ds.set("initial layout forces", sc);
+        }
+        g->applyPropertyAlgorithm("FM^3 (OGDF)", viewLayout, str, &ds);
+      }
     } else
       g->applyPropertyAlgorithm("Random layout", viewLayout, str);
   }

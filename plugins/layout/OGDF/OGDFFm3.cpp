@@ -18,6 +18,7 @@
  */
 
 #include <tulip/StringCollection.h>
+#include <tulip/TlpTools.h>
 
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
 #include <ogdf/energybased/FMMMLayout.h>
@@ -153,8 +154,7 @@ static const char *paramHelp[] = {
 
     // Initial layout Forces
     "Specifies how the initial layout is done. "
-    "If not set to default, it supersedes the value induced by the 'new initial layout' "
-    "parameter.",
+    "If not set to default, it supersedes the value induced by the \"new initial layout\" parameter.",
 
     // Reduced Tree Construction
     "Specifies how the reduced bucket quadtree is constructed.",
@@ -201,6 +201,7 @@ static const char *repulsiveForceValuesDescription =
     "grid approximation <i>(grid approximation)</i>";
 
 static const char *initialPlacementValuesDescription =
+    "default <i>(use default of \"new initial layout\" parameter)"
     "random seed <i>(random layout, based on random seed)</i><br>"
     "random time <i>(random layout, based on current time)</i><br>"
     "uniform grid <i>(uniform layout on a grid)</i><br>"
@@ -274,6 +275,11 @@ OGDFFm3::~OGDFFm3() {}
 
 void OGDFFm3::beforeCall() {
   ogdf::FMMMLayout *fmmm = static_cast<ogdf::FMMMLayout *>(ogdfLayoutAlgo);
+
+  // init seed of possible random sequence
+  auto seed = tlp::getSeedOfRandomSequence();
+  if (seed != UINT_MAX)
+    fmmm->randSeed(seed);
 
   if (dataSet != nullptr) {
     double edgeLenth = 10;

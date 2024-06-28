@@ -21,6 +21,7 @@
 #include <vector>
 
 #include <tulip/DrawingTools.h>
+#include <tulip/TlpTools.h>
 
 #include <ogdf/basic/basic.h>
 
@@ -47,6 +48,11 @@ bool OGDFLayoutPluginBase::run() {
     pluginProgress->showPreview(false);
     pluginProgress->showStops(false);
   }
+
+  // init seed of any possible random sequence
+  auto seed = tlp::getSeedOfRandomSequence();
+  if (seed != UINT_MAX)
+    ogdf::setSeed(static_cast<int>(seed));
 
   ogdf::GraphAttributes &gAttributes = tlpToOGDF->getOGDFGraphAttr();
 
