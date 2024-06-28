@@ -879,7 +879,7 @@ MutableVertexPartition::get_neigh_comms(size_t v, igraph_neimode_t mode,
       size_t comm = this->membership(u);
       if (!comm_added[comm]) {
         neigh_comms.push_back(comm);
-        comm_added[comm]=true;
+        comm_added[comm] = true;
       }
     }
   }
