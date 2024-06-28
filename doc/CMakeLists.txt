@@ -2,33 +2,9 @@ SET(TULIP_BUILD_DOC ON CACHE BOOL "Do you want to build the documentation ? [ON|
 
 #Only
 IF(TULIP_BUILD_DOC)
+  STRING(TIMESTAMP CurrentYear "%Y")
 
-    ## ========================================================
-    ## Current year (used in documentation config files)
-    ## ========================================================
-    STRING(TIMESTAMP CurrentYear "%Y")
-
-
-  # Unset the previous values of the CMake cache variable SPHINX_EXECUTABLE
-  # in case the value of Python_EXECUTABLE CMake variable changed
-  # but save it before into D_SPHINX_EXECUTABLE to be able to restore it
-  # in case there will be no other available
-  SET(D_SPHINX_EXECUTABLE ${SPHINX_EXECUTABLE})
-  UNSET(SPHINX_EXECUTABLE CACHE)
-  IF(EXISTS ${D_SPHINX_EXECUTABLE})
-    FIND_PACKAGE(Sphinx QUIET)
-  ELSE(EXISTS ${D_SPHINX_EXECUTABLE})
-    IF(D_SPHINX_EXECUTABLE)
-      MESSAGE(FATAL_ERROR " SPHINX_EXECUTABLE ${D_SPHINX_EXECUTABLE} does not exist")
-    ENDIF(D_SPHINX_EXECUTABLE)
-    FIND_PACKAGE(Sphinx)
-  ENDIF(EXISTS ${D_SPHINX_EXECUTABLE})
-  IF(NOT SPHINX_FOUND AND (EXISTS ${D_SPHINX_EXECUTABLE}))
-    # restore the previously defined value
-    SET(SPHINX_FOUND TRUE)
-    SET(SPHINX_EXECUTABLE ${D_SPHINX_EXECUTABLE} CACHE FILEPATH "Sphinx document generator" FORCE)
-    MESSAGE("-- Found Sphinx: ${SPHINX_EXECUTABLE}")
-  ENDIF(NOT SPHINX_FOUND AND (EXISTS ${D_SPHINX_EXECUTABLE}))
+  FIND_PACKAGE(Sphinx)
   IF(SPHINX_FOUND)
     ADD_SUBDIRECTORY(python)
     ADD_SUBDIRECTORY(user)

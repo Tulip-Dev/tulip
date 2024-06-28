@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.22...3.28)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.25...3.28)
 
 #Setting project name and version (W.X.Y.Z if necessary)
 PROJECT(Tulip
@@ -48,14 +48,9 @@ ENDIF(IS_64BIT)
 ## ========================================================
 ## Consider *BSD as Linux
 ## ========================================================
-STRING(COMPARE EQUAL "${CMAKE_SYSTEM_NAME}" "Linux" LINUX)
-IF(NOT LINUX)
-  STRING(FIND "${CMAKE_SYSTEM_NAME}" "BSD" BSD_POS)
-  IF(BSD_POS GREATER -1)
+IF(BSD)
     SET(LINUX TRUE)
-    SET(BSD TRUE)
-  ENDIF()
-ENDIF(NOT LINUX)
+ENDIF(BSD)
 
 ## ========================================================
 ## AppImage build
@@ -129,7 +124,7 @@ TULIP_SET_COMPILER_OPTIONS()
 ## ========================================================
 IF(NOT EXISTS ${PROJECT_SOURCE_DIR}/cmake/FindQtX.cmake)
   SET(TULIP_BUILD_CORE_ONLY ON)
-  MESSAGE("You can only configure a core build of Tulip.")
+  MESSAGE(STATUS "You can only configure a core build of Tulip.")
 ELSE()
   SET(TULIP_BUILD_CORE_ONLY OFF CACHE BOOL "Do you want a minimal build of Tulip (no OpenGL rendering, no Qt gui, no documentation) ? [ON|OFF]")
 ENDIF()
