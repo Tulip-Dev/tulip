@@ -24,12 +24,14 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/SceneLayersModel.h>
 #include <tulip/TulipSettings.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace tlp;
 
 SceneLayersConfigWidget::SceneLayersConfigWidget(QWidget *parent)
     : QWidget(parent), _ui(new Ui::SceneLayersConfigWidget), _glMainWidget(nullptr) {
   _ui->setupUi(this);
+  tlpFixCBRBs(this);
 }
 
 SceneLayersConfigWidget::~SceneLayersConfigWidget() {

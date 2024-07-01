@@ -38,7 +38,9 @@
 #endif
 #include <QWidget>
 #include <QCheckBox>
+#include <QListWidget>
 #include <QRadioButton>
+#include <QTreeView>
 #include <QWizard>
 
 #include <tulip/TulipSettings.h>
@@ -582,11 +584,11 @@ void convertLikeFilter(QString &filter) {
 }
 
 #ifdef _LINUX
-// define a specific class to fix the display of QCheckBox and QRadioButton
-// when in dark mode
+// define a specific class to fix the display of QCheckBox, QListWidget,
+// QRadioButton and QTreeView when in dark mode
 class CBRBsFixer : public QObject {
 public:
-  // QCheckBox and QRadioButton children must be fixed
+  // QCheckBox, QListWidget, QRadioButton and QTreeView children must be fixed
   // at first show time
   bool eventFilter(QObject *obj, QEvent *ev) override {
     if (ev->type() == QEvent::Show) {
@@ -598,16 +600,20 @@ public:
   }
 
   void fixCBRBs(QWidget *parent) {
-    if (dynamic_cast<QCheckBox *>(parent) || dynamic_cast<QRadioButton *>(parent)) {
+    if (dynamic_cast<QCheckBox *>(parent) ||
+        dynamic_cast<QRadioButton *>(parent) ||
+        dynamic_cast<QListWidget *>(parent) ||
+        dynamic_cast<QTreeView *>(parent)) {
       // because their indicator border is displayed in black
       // we must use lightgray instead
       QPalette p = parent->palette();
       p.setColor(QPalette::Window, Qt::lightGray);
       parent->setPalette(p);
     } else {
-      // a loop on children does not work when a QCheckBox or a QRadioButton
-      // is a child of a non current page of a QTabWidget
-      // so we must do a loop on the different pages
+      // a loop on children does not work when a QCheckBox, a QListWidget
+      // a QRadioButton or a QTreeView is a child of a non current page
+      // of a QTabWidget.
+      // So we must do a loop on the different pages
       // if parent is a QTabWidget
       QTabWidget *tw = dynamic_cast<QTabWidget *>(parent);
       if (tw) {
@@ -634,8 +640,9 @@ public:
   }
 };
 
-// fix display of QCheckBox and QRadioButton in dark mode
-// because their indicator border is display in black
+// fix display of QCheckBox, QListWidget, QRadioButton and QTreeView
+// when in dark mode.
+// Because their indicator border is displayed in black
 // we must use lightgray instead
 void tlpFixCBRBs(QWidget *parent) {
   static CBRBsFixer fixer;

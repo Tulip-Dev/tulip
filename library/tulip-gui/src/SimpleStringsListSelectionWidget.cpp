@@ -35,6 +35,7 @@ SimpleStringsListSelectionWidget::SimpleStringsListSelectionWidget(
       maxSelectedStringsListSize(maxSelectedStringsListSize) {
 
   _ui->setupUi(this);
+  tlpFixCBRBs(this);
 
   if (maxSelectedStringsListSize != 0) {
     _ui->selectButton->setEnabled(false);
