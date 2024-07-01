@@ -600,10 +600,8 @@ public:
   }
 
   void fixCBRBs(QWidget *parent) {
-    if (dynamic_cast<QCheckBox *>(parent) ||
-        dynamic_cast<QRadioButton *>(parent) ||
-        dynamic_cast<QListWidget *>(parent) ||
-        dynamic_cast<QTreeView *>(parent)) {
+    if (dynamic_cast<QCheckBox *>(parent) || dynamic_cast<QRadioButton *>(parent) ||
+        dynamic_cast<QListWidget *>(parent) || dynamic_cast<QTreeView *>(parent)) {
       // because their indicator border is displayed in black
       // we must use lightgray instead
       QPalette p = parent->palette();
