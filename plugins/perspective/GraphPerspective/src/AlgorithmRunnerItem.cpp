@@ -82,6 +82,9 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, bool darkBackground
   if (PluginLister::pluginInformation(QStringToTlpString(pluginName)).getParameters().empty()) {
     _ui->settingsButton->setVisible(false);
   }
+#if defined(__APPLE__)
+  _ui->settingsButton->setToolTip("Mouse click: show/hide algorithm settings,\nCtrl + Mouse click: display plugin documentation");
+#endif
 
   std::string &&info = PluginLister::pluginInformation(QStringToTlpString(pluginName)).info();
 
