@@ -82,6 +82,10 @@
         <file>icons/22/pause.png</file>
         <file>icons/22/start.png</file>
         <file>icons/22/stop.png</file>
+        <file>icons/16/close-settings-black.png</file>
+        <file>icons/16/close-settings-white.png</file>
+        <file>icons/16/open-settings-black.png</file>
+        <file>icons/16/open-settings-white.png</file>
         <file>icons/16/settings.png</file>
         <file>icons/32/node_link_diagram_view.png</file>
         <file>icons/32/plugin_algorithm.png</file>

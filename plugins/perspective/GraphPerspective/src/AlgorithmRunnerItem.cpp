@@ -77,6 +77,11 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, bool darkBackground
   // set foreground colors according to contents background color
   if (darkBackground) {
     _ui->parameters->setStyleSheet("QHeaderView::section { color: white }");
+    _ui->settingsButton->setIcon(QIcon(":/tulip/gui/icons/16/open-settings-white.png"));
+    settingsButtonIconName = QString(":/tulip/gui/icons/16/%1-settings-white.png");
+  } else {
+    _ui->settingsButton->setIcon(QIcon(":/tulip/gui/icons/16/open-settings-black.png"));
+    settingsButtonIconName = QString(":/tulip/gui/icons/16/%1-settings-black.png");
   }
 
   if (PluginLister::pluginInformation(QStringToTlpString(pluginName)).getParameters().empty()) {
@@ -689,4 +694,13 @@ void AlgorithmRunnerItem::initModel() {
     }
     model->setParametersValues(dataSet);
   }
+}
+
+void AlgorithmRunnerItem::updateSettings(bool checked) {
+  QString iconName = settingsButtonIconName.arg(checked ? QString("close") : QString("open"));
+  _ui->settingsButton->setIcon(QIcon(iconName));
+
+  _ui->parameters->setVisible(checked);
+  if (checked)
+    initModel();
 }

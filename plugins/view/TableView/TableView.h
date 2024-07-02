@@ -45,6 +45,7 @@ class TableView : public tlp::ViewWidget {
   bool filteringColumns;
   tlp::Graph *previousGraph;
   int minFontSize;
+  QString settingsButtonIconName;
 
 public:
   PLUGININFORMATION("Spreadsheet view", "Tulip Team", "04/17/2012", "Spreadsheet view for raw data",

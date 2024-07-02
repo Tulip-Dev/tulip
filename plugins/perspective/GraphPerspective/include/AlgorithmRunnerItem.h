@@ -35,7 +35,7 @@ class ParameterListModel;
 class AlgorithmRunnerItem : public QWidget {
   Q_OBJECT
   Ui::AlgorithmRunnerItem *_ui;
-  QString _pluginName;
+  QString _pluginName, settingsButtonIconName;
   tlp::Graph *_graph;
   bool _storeResultAsLocal;
   QPointF _dragStartPosition;
@@ -71,6 +71,7 @@ signals:
 
 protected slots:
   void afterRun(tlp::Graph *, const tlp::DataSet &);
+  void updateSettings(bool checked);
   void initModel();
 };
 #endif // ALGORITHMRUNNERITEM_H

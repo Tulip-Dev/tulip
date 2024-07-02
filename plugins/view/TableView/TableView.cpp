@@ -27,6 +27,7 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/StringProperty.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/TulipSettings.h>
 #include <tulip/CopyPropertyDialog.h>
 #include <tulip/PropertyCreationDialog.h>
 #include <tulip/Perspective.h>
@@ -139,6 +140,9 @@ void TableView::showHideTableSettings() {
     _ui->tableSettingsFrame->hide();
   else
     _ui->tableSettingsFrame->show();
+
+  QString iconName = settingsButtonIconName.arg(expand ? QString("open") : QString("close"));
+  _ui->tableSettingsButton->setIcon(QIcon(iconName));
 }
 
 void TableView::setupWidget() {
@@ -200,6 +204,13 @@ void TableView::setupWidget() {
   connect(propertiesEditor->getPropertiesFilterEdit(), SIGNAL(textChanged(QString)), this,
           SLOT(setPropertiesFilter(QString)));
   connect(_ui->tableSettingsButton, SIGNAL(clicked()), this, SLOT(showHideTableSettings()));
+  if (TulipSettings::isDisplayInDarkMode()) {
+    settingsButtonIconName = QString(":/tulip/gui/icons/16/%1-settings-white.png");
+    _ui->tableSettingsButton->setIcon(QIcon(":/tulip/gui/icons/16/close-settings-white.png"));
+  } else {
+    settingsButtonIconName = QString(":/tulip/gui/icons/16/%1-settings-black.png");
+    _ui->tableSettingsButton->setIcon(QIcon(":/tulip/gui/icons/16/close-settings-black.png"));
+  }
 }
 
 std::list<QWidget *> TableView::configurationWidgets() const {

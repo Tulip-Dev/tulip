@@ -241,24 +241,8 @@ image: url(:/tulip/graphperspective/icons/16/favorite-empty.png);
   <connection>
    <sender>settingsButton</sender>
    <signal>toggled(bool)</signal>
-   <receiver>parameters</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>41</x>
-     <y>13</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>369</x>
-     <y>140</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>settingsButton</sender>
-   <signal>toggled(bool)</signal>
    <receiver>AlgorithmRunnerItem</receiver>
-   <slot>initModel()</slot>
+   <slot>updateSettings(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>41</x>
@@ -274,6 +258,6 @@ image: url(:/tulip/graphperspective/icons/16/favorite-empty.png);
  <slots>
   <signal>favorized(bool)</signal>
   <slot>run()</slot>
-  <slot>initModel()</slot>
+  <slot>updateSettings(bool)</slot>
  </slots>
 </ui>
