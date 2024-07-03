@@ -277,6 +277,10 @@ GraphPerspective::~GraphPerspective() {
   delete _ui;
 }
 
+void GraphPerspective::setFocusedPanel(WorkspacePanel *wsp) {
+  _ui->workspace->setFocusedPanel(wsp);
+}
+
 void GraphPerspective::destroyWorkspace() {
   // disconnect to avoid any possible segfaults when deleting graphs
   disconnect(_graphs, SIGNAL(currentGraphChanged(tlp::Graph *)), this,

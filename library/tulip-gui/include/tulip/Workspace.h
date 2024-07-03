@@ -117,6 +117,8 @@ public slots:
 
   void setGraphForFocusedPanel(tlp::Graph *);
 
+  void setFocusedPanel(WorkspacePanel *panel);
+
 signals:
   void panelFocused(tlp::View *);
   void focusedPanelSynchronized();
@@ -150,8 +152,6 @@ protected:
   QWidget *currentModeWidget() const;
   std::vector<PlaceHolderWidget *> currentModeSlots() const;
   unsigned int currentSlotsCount() const;
-
-  void setFocusedPanel(WorkspacePanel *panel);
 };
 } // namespace tlp
 

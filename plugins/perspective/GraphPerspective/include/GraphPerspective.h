@@ -32,19 +32,17 @@ class GraphHierarchiesEditor;
 class GraphPerspectiveLogger;
 
 namespace tlp {
-class Graph;
-class GraphHierarchiesModel;
-class View;
 class BooleanProperty;
 class ColorScaleConfigDialog;
+class Graph;
+class GraphHierarchiesModel;
+class PythonIDEInterface;
+class View;
+class WorkspacePanel;
 } // namespace tlp
 
 namespace Ui {
 class GraphPerspectiveMainWindowData;
-}
-
-namespace tlp {
-class PythonIDEInterface;
 }
 
 class GraphPerspective : public tlp::Perspective, tlp::Observable {
@@ -84,6 +82,8 @@ public:
   tlp::Graph *createSubGraph(tlp::Graph *);
   QAction *createPanelAction();
   QAction *exportAction();
+
+  void setFocusedPanel(tlp::WorkspacePanel *);
 
   void treatEvent(const tlp::Event &) override;
 

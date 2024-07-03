@@ -45,6 +45,7 @@
 #include <tulip/ColorScalesManager.h>
 #include <tulip/StableIterator.h>
 #include <tulip/PluginLister.h>
+#include <tulip/Workspace.h>
 
 using namespace tlp;
 
@@ -265,7 +266,7 @@ public:
 
 #define TN(T) typeid(T).name()
 
-void AlgorithmRunnerItem::run(Graph *g) {
+void AlgorithmRunnerItem::run(Graph *g, WorkspacePanel *wsp) {
   initModel();
 
   if (g == nullptr)
@@ -468,6 +469,12 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
       qDebug() << log.str().c_str();
     }
+    if (wsp) {
+      // the current algorith as been "dropped" in wsp,
+      // so set wsp as the current WorkspacePanel to ease further actions
+      // on the corresponding graph (ex: undo)
+      dynamic_cast<GraphPerspective *>(Perspective::instance())->setFocusedPanel(wsp);
+    }
   }
 
   if ((PluginLister::pluginInformation(algorithm).group() == "Topological Test") && result) {
@@ -526,9 +533,7 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
   }
 
   QDrag *drag = new QDrag(this);
-  QPixmap icon(
-      QPixmap(PluginLister::pluginInformation(QStringToTlpString(_pluginName)).icon().c_str())
-          .scaled(64, 64));
+  QPixmap icon(QPixmap(":/tulip/graphperspective/icons/64/run_algorithm.png"));
   QFont f;
   f.setBold(true);
   QFontMetrics metrics(f);
@@ -552,7 +557,7 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
   initModel();
   AlgorithmMimeType *mimeData = new AlgorithmMimeType(
       name(), static_cast<ParameterListModel *>(_ui->parameters->model())->parametersValues());
-  connect(mimeData, SIGNAL(mimeRun(tlp::Graph *)), this, SLOT(run(tlp::Graph *)));
+  connect(mimeData, SIGNAL(mimeRun(tlp::Graph *, tlp::WorkspacePanel *)), this, SLOT(run(tlp::Graph *, tlp::WorkspacePanel *)));
   drag->setMimeData(mimeData);
   drag->exec(Qt::CopyAction | Qt::MoveAction);
 }

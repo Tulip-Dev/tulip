@@ -701,7 +701,7 @@ bool WorkspacePanel::handleDropEvent(const QMimeData *mimedata) {
   }
 
   else if (algorithmMime) {
-    algorithmMime->run(view()->graph());
+    algorithmMime->run(view()->graph(), this);
   }
 
   setOverlayMode(false);

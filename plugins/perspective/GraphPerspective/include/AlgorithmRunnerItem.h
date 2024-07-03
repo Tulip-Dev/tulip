@@ -30,6 +30,7 @@ class AlgorithmRunnerItem;
 namespace tlp {
 class Graph;
 class ParameterListModel;
+class WorkspacePanel;
 } // namespace tlp
 
 class AlgorithmRunnerItem : public QWidget {
@@ -64,7 +65,7 @@ public slots:
   void setStoreResultAsLocal(bool);
   void favoriteChanged(int state);
 
-  void run(tlp::Graph *g = nullptr);
+  void run(tlp::Graph *g = nullptr, tlp::WorkspacePanel *wsp = nullptr);
 
 signals:
   void favorized(bool);

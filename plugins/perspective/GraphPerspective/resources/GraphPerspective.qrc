@@ -52,5 +52,6 @@
         <file>icons/48/document-import.png</file>
         <file>icons/48/search.png</file>
         <file>icons/32/desktop.png</file>
+        <file>icons/64/run_algorithm.png</file>
     </qresource>
 </RCC>
