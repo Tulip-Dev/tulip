@@ -217,16 +217,16 @@ MACRO(TULIP_DISABLE_COMPILER_WARNINGS)
 ENDMACRO(TULIP_DISABLE_COMPILER_WARNINGS)
 
 # External libraries macros
-IF(WIN32)
+# IF(WIN32)
 
-  IF(MINGW)
-    # get paths to MINGW binaries, libraries and headers
-    cmake_path(GET CMAKE_AR ROOT_PATH MINGW_BIN_PATH)
-    SET(MINGW_LIB_PATH ${MINGW_BIN_PATH}/../lib)
-    SET(MINGW_LIB64_PATH ${MINGW_BIN_PATH}/../lib64)
-    SET(MINGW_INCLUDE_PATH ${MINGW_BIN_PATH}/../include)
-  ENDIF(MINGW)
-ENDIF(WIN32)
+#   IF(MINGW)
+#     # get paths to MINGW binaries, libraries and headers
+#     cmake_path(GET CMAKE_AR ROOT_PATH MINGW_BIN_PATH)
+#     SET(MINGW_LIB_PATH ${MINGW_BIN_PATH}/../lib)
+#     SET(MINGW_LIB64_PATH ${MINGW_BIN_PATH}/../lib64)
+#     SET(MINGW_INCLUDE_PATH ${MINGW_BIN_PATH}/../include)
+#   ENDIF(MINGW)
+# ENDIF(WIN32)
 
 MACRO(TULIP_COPY_TARGET_LIBRARY_POST_BUILD target_name destination)
 

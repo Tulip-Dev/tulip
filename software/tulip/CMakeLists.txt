@@ -77,14 +77,15 @@ IF(WIN32)
     # As Qt5 does not link directly to OpenSSL for license issue and thus use
     # a dynamic loading approach, we are forced to use the following trick to copy
     # the needed dlls into the Tulip install folder.
-    IF(MINGW AND EXISTS ${MINGW_BIN_PATH}/openssl.exe)
+    FIND_PROGRAM(OPENSSL openssl.exe)
+    IF(MINGW AND OPENSSL)
       INSTALL(CODE
               "INCLUDE(BundleUtilities)
-               FILE(COPY \"${MINGW_BIN_PATH}/openssl.exe\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}/bin/\")
-               FIXUP_BUNDLE(\"\${CMAKE_INSTALL_PREFIX}/bin/openssl.exe\" \"\" \"${LIB_DIRS}\")
-               FILE(REMOVE \"\${CMAKE_INSTALL_PREFIX}/bin/openssl.exe\")"
+               FILE(COPY ${OPENSSL} DESTINATION \"\${CMAKE_INSTALL_PREFIX}/bin/\")
+               FIXUP_BUNDLE(\"${OPENSSL}\" \"\" \"${LIB_DIRS}\")
+               FILE(REMOVE ${OPENSSL})"
       )
-    ENDIF(MINGW AND EXISTS ${MINGW_BIN_PATH}/openssl.exe)
+    ENDIF(MINGW AND OPENSSL)
   ENDIF(TULIP_FIXUP_BUNDLE)
 ENDIF(WIN32)
 
