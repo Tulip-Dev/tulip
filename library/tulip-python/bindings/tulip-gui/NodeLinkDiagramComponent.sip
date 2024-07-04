@@ -32,6 +32,8 @@ class NodeLinkDiagramComponent : tlp::GlMainView  /NoDefaultCtors/ {
 %TypeHeaderCode
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/GlComplexPolygon.h>
+#include <tulip/GlCompositeHierarchyManager.h>
 %End
 
 %Docstring
@@ -97,6 +99,29 @@ Sets the rendering parameters for the node link diagram view.
 
 // =======================================================================================
 
+
+void displayConvexHulls(const bool visible=true, const bool withTextures=false);
+%Docstring
+    tlpgui.NodeLinkDiagramComponent.displayConvexHulls(visible=True, withTextures=False)
+
+    Display or hide subgraphs convex hulls
+%End
+%MethodCode
+  auto h = sipCpp->getGlMainWidget()->getScene()->getLayer("Main")->findGlEntity("Hulls");
+
+  h->setVisible(a0);
+
+tlp::GlComplexPolygon *pl = dynamic_cast<tlp::GlComplexPolygon *>(h);
+  if (pl)
+    pl->setTextureActivation(a1);
+  else {
+    tlp::GlConvexGraphHullsComposite *composite = dynamic_cast<tlp::GlConvexGraphHullsComposite *>(h);
+    if (composite)
+      composite->setHullsTextureActivation(a1);
+sipCpp->draw();
+}
+%End
+
 protected :
 
     void setQuickAccessBarVisible(bool);
@@ -111,7 +136,7 @@ Sets the visibility state of the quick access bar.
 
 // =======================================================================================
 
-    bool quickAccessBarVisible() const;
+bool quickAccessBarVisible() const;
 %Docstring
 tlpgui.NodeLinkDiagramComponent.quickAccessBarVisible()
 
