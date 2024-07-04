@@ -26,8 +26,6 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 
-#include <sstream>
-
 using namespace std;
 
 namespace tlp {
@@ -110,10 +108,9 @@ void GlCompositeHierarchyManager::buildComposite(Graph *current,
   }
   current->addListener(this);
 
-  stringstream naming;
-  naming << current->getName() << " [#" << current->getId() << ']';
+  std::string naming(current->getName() + " [#" + std::to_string(current->getId()) + ']');
   GlConvexGraphHull *hull =
-      new GlConvexGraphHull(composite, naming.str(), getColor(), _fillTextures[_currentColor - 1],
+      new GlConvexGraphHull(composite, naming, getColor(), getTexture(),
                             current, _layout, _size, _rotation);
   hull->setTextureZoom(0.02);
 
@@ -122,8 +119,8 @@ void GlCompositeHierarchyManager::buildComposite(Graph *current,
 
   if (!current->subGraphs().empty()) {
     GlConvexGraphHullsComposite *newComposite = new GlConvexGraphHullsComposite();
-    naming << " - " << _subCompositesSuffix;
-    composite->addGlEntity(newComposite, naming.str());
+    naming += " - " + _subCompositesSuffix;
+    composite->addGlEntity(newComposite, naming);
 
     for (Graph *sg : current->subGraphs()) {
       buildComposite(sg, newComposite);
