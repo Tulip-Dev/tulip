@@ -96,8 +96,8 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../../../plugins/perspective/GraphPerspective/resources/GraphPerspective.qrc">
-            <normaloff>:/tulip/graphperspective/icons/16/document-open.png</normaloff>:/tulip/graphperspective/icons/16/document-open.png</iconset>
+           <iconset>
+            <normaloff>:/tulip/gui/icons/16/document-open.png</normaloff>:/tulip/gui/icons/16/document-open.png</iconset>
           </property>
          </widget>
         </item>
@@ -347,7 +347,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../../plugins/perspective/GraphPerspective/resources/GraphPerspective.qrc"/>
+  <include location="../../tulip-gui/resources/TulipGUIResource.qrc"/>
  </resources>
  <connections>
   <connection>

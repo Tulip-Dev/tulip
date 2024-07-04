@@ -86,6 +86,10 @@
         <file>icons/16/close-settings-white.png</file>
         <file>icons/16/open-settings-black.png</file>
         <file>icons/16/open-settings-white.png</file>
+        <file>icons/16/document-open.png</file>
+        <file>icons/16/document-open-recent.png</file>
+        <file>icons/16/document-save.png</file>
+        <file>icons/16/document-save-as.png</file>
         <file>icons/16/settings.png</file>
         <file>icons/32/node_link_diagram_view.png</file>
         <file>icons/32/plugin_algorithm.png</file>
@@ -112,7 +116,6 @@
         <file>icons/16/clipboard.png</file>
         <file>icons/64/document-add.png</file>
         <file>icons/64/document-export.png</file>
-        <file>icons/64/document-saveas.png</file>
         <file>icons/64/document-import.png</file>
         <file>icons/64/document-plus.png</file>
         <file>icons/arrow_two_head.png</file>

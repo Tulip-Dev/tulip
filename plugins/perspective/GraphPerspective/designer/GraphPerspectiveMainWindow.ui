@@ -17,7 +17,7 @@
    <string/>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+   <iconset>
     <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
   </property>
   <property name="dockNestingEnabled">
@@ -260,7 +260,7 @@ background-color: #D0D0D0;
           <string>Python</string>
          </property>
          <property name="icon">
-          <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+          <iconset>
            <normaloff>:/tulip/gui/icons/python.png</normaloff>:/tulip/gui/icons/python.png</iconset>
          </property>
          <property name="iconSize">
@@ -681,7 +681,7 @@ color: white;
           <string>Import</string>
          </property>
          <property name="icon">
-          <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+          <iconset>
            <normaloff>:/tulip/gui/icons/64/document-import.png</normaloff>:/tulip/gui/icons/64/document-import.png</iconset>
          </property>
          <property name="iconSize">
@@ -884,7 +884,7 @@ border: 0px;
                     <string/>
                    </property>
                    <property name="icon">
-                    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                    <iconset>
                      <normaloff>:/tulip/gui/ui/sidebar.png</normaloff>:/tulip/gui/ui/sidebar.png</iconset>
                    </property>
                    <property name="flat">
@@ -910,7 +910,7 @@ border: 0px;
                     <string/>
                    </property>
                    <property name="icon">
-                    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                    <iconset>
                      <normaloff>:/tulip/gui/ui/menubar.png</normaloff>:/tulip/gui/ui/menubar.png</iconset>
                    </property>
                    <property name="flat">
@@ -990,7 +990,7 @@ border: 0px;
                   </size>
                  </property>
                  <property name="icon">
-                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                  <iconset>
                    <normaloff>:/tulip/gui/ui/previous.png</normaloff>:/tulip/gui/ui/previous.png</iconset>
                  </property>
                  <property name="shortcut">
@@ -1019,7 +1019,7 @@ border: 0px;
                   </size>
                  </property>
                  <property name="icon">
-                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                  <iconset>
                    <normaloff>:/tulip/gui/ui/next.png</normaloff>:/tulip/gui/ui/next.png</iconset>
                  </property>
                  <property name="shortcut">
@@ -1058,7 +1058,7 @@ border: 0px;
                   </size>
                  </property>
                  <property name="icon">
-                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                  <iconset>
                    <normaloff>:/tulip/gui/ui/full_screen.png</normaloff>:/tulip/gui/ui/full_screen.png</iconset>
                  </property>
                  <property name="flat">
@@ -1081,7 +1081,7 @@ border: 0px;
                   </size>
                  </property>
                  <property name="icon">
-                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                  <iconset>
                    <normaloff>:/tulip/gui/ui/split_screen.png</normaloff>:/tulip/gui/ui/split_screen.png</iconset>
                  </property>
                  <property name="flat">
@@ -1104,7 +1104,7 @@ border: 0px;
                   </size>
                  </property>
                  <property name="icon">
-                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                  <iconset>
                    <normaloff>:/tulip/gui/ui/split_screen_horizontal.png</normaloff>:/tulip/gui/ui/split_screen_horizontal.png</iconset>
                  </property>
                  <property name="flat">
@@ -1127,7 +1127,7 @@ border: 0px;
                   </size>
                  </property>
                  <property name="icon">
-                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                  <iconset>
                    <normaloff>:/tulip/gui/ui/split3_screen.png</normaloff>:/tulip/gui/ui/split3_screen.png</iconset>
                  </property>
                  <property name="flat">
@@ -1150,7 +1150,7 @@ border: 0px;
                   </size>
                  </property>
                  <property name="icon">
-                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                  <iconset>
                    <normaloff>:/tulip/gui/ui/split3_2_screen.png</normaloff>:/tulip/gui/ui/split3_2_screen.png</iconset>
                  </property>
                  <property name="flat">
@@ -1173,7 +1173,7 @@ border: 0px;
                   </size>
                  </property>
                  <property name="icon">
-                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                  <iconset>
                    <normaloff>:/tulip/gui/ui/split3_3_screen.png</normaloff>:/tulip/gui/ui/split3_3_screen.png</iconset>
                  </property>
                  <property name="flat">
@@ -1196,7 +1196,7 @@ border: 0px;
                   </size>
                  </property>
                  <property name="icon">
-                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                  <iconset>
                    <normaloff>:/tulip/gui/ui/grid_screen.png</normaloff>:/tulip/gui/ui/grid_screen.png</iconset>
                  </property>
                  <property name="flat">
@@ -1219,7 +1219,7 @@ border: 0px;
                   </size>
                  </property>
                  <property name="icon">
-                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                  <iconset>
                    <normaloff>:/tulip/gui/ui/six_screen.png</normaloff>:/tulip/gui/ui/six_screen.png</iconset>
                  </property>
                  <property name="flat">
@@ -1259,7 +1259,7 @@ border: 0px;
       <string>&amp;Delete</string>
      </property>
      <property name="icon">
-      <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+      <iconset>
        <normaloff>:/tulip/gui/icons/i_del.png</normaloff>:/tulip/gui/icons/i_del.png</iconset>
      </property>
      <addaction name="actionDelete"/>
@@ -1353,7 +1353,7 @@ border: 0px;
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>:/tulip/graphperspective/icons/16/document-open-recent.png</normaloff>:/tulip/graphperspective/icons/16/document-open-recent.png</iconset>
+       <normaloff>:/tulip/gui/icons/16/document-open-recent.png</normaloff>:/tulip/gui/icons/16/document-open-recent.png</iconset>
      </property>
     </widget>
     <addaction name="actionNewProject"/>
@@ -1388,7 +1388,7 @@ border: 0px;
   <action name="actionSave_Project">
    <property name="icon">
     <iconset>
-     <normaloff>:/tulip/graphperspective/icons/16/document-save.png</normaloff>:/tulip/graphperspective/icons/16/document-save.png</iconset>
+     <normaloff>:/tulip/gui/icons/16/document-save.png</normaloff>:/tulip/gui/icons/16/document-save.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Save</string>
@@ -1400,7 +1400,7 @@ border: 0px;
   <action name="actionSave_Project_as">
    <property name="icon">
     <iconset>
-     <normaloff>:/tulip/graphperspective/icons/16/document-save-as.png</normaloff>:/tulip/graphperspective/icons/16/document-save-as.png</iconset>
+     <normaloff>:/tulip/gui/icons/16/document-save-as.png</normaloff>:/tulip/gui/icons/16/document-save-as.png</iconset>
    </property>
    <property name="text">
     <string>Sa&amp;ve as</string>
@@ -1411,7 +1411,7 @@ border: 0px;
   </action>
   <action name="actionImport">
    <property name="icon">
-    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+    <iconset>
      <normaloff>:/tulip/gui/icons/64/document-import.png</normaloff>:/tulip/gui/icons/64/document-import.png</iconset>
    </property>
    <property name="text">
@@ -1513,7 +1513,7 @@ border: 0px;
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+    <iconset>
      <normaloff>:/tulip/gui/icons/i_del.png</normaloff>:/tulip/gui/icons/i_del.png</iconset>
    </property>
    <property name="text">
@@ -1585,7 +1585,7 @@ border: 0px;
   </action>
   <action name="actionPreferences">
    <property name="icon">
-    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+    <iconset>
      <normaloff>:/tulip/gui/icons/16/settings.png</normaloff>:/tulip/gui/icons/16/settings.png</iconset>
    </property>
    <property name="text">
@@ -1612,7 +1612,7 @@ border: 0px;
   </action>
   <action name="actionShowUserDocumentation">
    <property name="icon">
-    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+    <iconset>
      <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
    </property>
    <property name="text">
@@ -1636,7 +1636,7 @@ border: 0px;
   </action>
   <action name="actionShowPythonDocumentation">
    <property name="icon">
-    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+    <iconset>
      <normaloff>:/tulip/gui/icons/16/python.png</normaloff>:/tulip/gui/icons/16/python.png</iconset>
    </property>
    <property name="text">
@@ -1686,7 +1686,7 @@ border: 0px;
   </action>
   <action name="actionCreate_panel">
    <property name="icon">
-    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+    <iconset>
      <normaloff>:/tulip/gui/icons/16/list-add.png</normaloff>:/tulip/gui/icons/16/list-add.png</iconset>
    </property>
    <property name="text">
@@ -1698,7 +1698,7 @@ border: 0px;
   </action>
   <action name="actionExport">
    <property name="icon">
-    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+    <iconset>
      <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
    </property>
    <property name="text">
@@ -1711,7 +1711,7 @@ border: 0px;
   <action name="actionOpen_Project">
    <property name="icon">
     <iconset>
-     <normaloff>:/tulip/graphperspective/icons/16/document-open.png</normaloff>:/tulip/graphperspective/icons/16/document-open.png</iconset>
+     <normaloff>:/tulip/gui/icons/16/document-open.png</normaloff>:/tulip/gui/icons/16/document-open.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Open</string>
@@ -1723,7 +1723,7 @@ border: 0px;
   <action name="actionSave_graph_to_file">
    <property name="icon">
     <iconset>
-     <normaloff>:/tulip/graphperspective/icons/16/document-save.png</normaloff>:/tulip/graphperspective/icons/16/document-save.png</iconset>
+     <normaloff>:/tulip/gui/icons/16/document-save.png</normaloff>:/tulip/gui/icons/16/document-save.png</iconset>
    </property>
    <property name="text">
     <string>Save graph to file</string>
@@ -1757,7 +1757,7 @@ border: 0px;
   </action>
   <action name="action_Remove_All">
    <property name="icon">
-    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+    <iconset>
      <normaloff>:/tulip/gui/icons/i_del.png</normaloff>:/tulip/gui/icons/i_del.png</iconset>
    </property>
    <property name="text">
@@ -1783,7 +1783,7 @@ border: 0px;
   </action>
   <action name="actionDelete_from_the_root_graph">
    <property name="icon">
-    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+    <iconset>
      <normaloff>:/tulip/gui/icons/i_del.png</normaloff>:/tulip/gui/icons/i_del.png</iconset>
    </property>
    <property name="text">
@@ -1818,7 +1818,7 @@ border: 0px;
   </action>
   <action name="actionPython_IDE">
    <property name="icon">
-    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+    <iconset>
      <normaloff>:/tulip/gui/icons/python.png</normaloff>:/tulip/gui/icons/python.png</iconset>
    </property>
    <property name="text">
@@ -1953,6 +1953,7 @@ border: 0px;
  </customwidgets>
  <resources>
   <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+  <include location="../resources/GraphPerspective.qrc"/>
  </resources>
  <connections>
   <connection>

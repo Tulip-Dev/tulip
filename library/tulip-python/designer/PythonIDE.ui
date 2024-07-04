@@ -171,8 +171,8 @@ background-color: #A0A0A0;
              </property>
              <property name="iconSize">
               <size>
-               <width>20</width>
-               <height>20</height>
+               <width>16</width>
+               <height>16</height>
               </size>
              </property>
              <property name="toolButtonStyle">
@@ -205,12 +205,12 @@ background-color: #A0A0A0;
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>:/tulip/gui/icons/64/document-import.png</normaloff>:/tulip/gui/icons/64/document-import.png</iconset>
+               <normaloff>:/tulip/gui/icons/16/document-open.png</normaloff>:/tulip/gui/icons/16/document-open.png</iconset>
              </property>
              <property name="iconSize">
               <size>
-               <width>20</width>
-               <height>20</height>
+               <width>16</width>
+               <height>16</height>
               </size>
              </property>
              <property name="toolButtonStyle">
@@ -243,12 +243,12 @@ background-color: #A0A0A0;
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
+               <normaloff>:/tulip/gui/icons/16/document-save.png</normaloff>:/tulip/gui/icons/16/document-save.png</iconset>
              </property>
              <property name="iconSize">
               <size>
-               <width>20</width>
-               <height>20</height>
+               <width>16</width>
+               <height>16</height>
               </size>
              </property>
              <property name="toolButtonStyle">
@@ -281,12 +281,12 @@ background-color: #A0A0A0;
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>:/tulip/gui/icons/64/document-saveas.png</normaloff>:/tulip/gui/icons/64/document-saveas.png</iconset>
+               <normaloff>:/tulip/gui/icons/16/document-save-as.png</normaloff>:/tulip/gui/icons/16/document-save-as.png</iconset>
              </property>
              <property name="iconSize">
               <size>
-               <width>20</width>
-               <height>20</height>
+               <width>16</width>
+               <height>16</height>
               </size>
              </property>
              <property name="toolButtonStyle">
@@ -446,8 +446,8 @@ background-color: #A0A0A0;
              </property>
              <property name="iconSize">
               <size>
-               <width>20</width>
-               <height>20</height>
+               <width>16</width>
+               <height>16</height>
               </size>
              </property>
              <property name="toolButtonStyle">
@@ -477,12 +477,12 @@ background-color: #A0A0A0;
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>:/tulip/gui/icons/64/document-import.png</normaloff>:/tulip/gui/icons/64/document-import.png</iconset>
+               <normaloff>:/tulip/gui/icons/16/document-open.png</normaloff>:/tulip/gui/icons/16/document-open.png</iconset>
              </property>
              <property name="iconSize">
               <size>
-               <width>20</width>
-               <height>20</height>
+               <width>16</width>
+               <height>16</height>
               </size>
              </property>
              <property name="toolButtonStyle">
@@ -512,12 +512,12 @@ background-color: #A0A0A0;
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
+               <normaloff>:/tulip/gui/icons/16/document-save.png</normaloff>:/tulip/gui/icons/16/document-save.png</iconset>
              </property>
              <property name="iconSize">
               <size>
-               <width>20</width>
-               <height>20</height>
+               <width>16</width>
+               <height>16</height>
               </size>
              </property>
              <property name="toolButtonStyle">
@@ -720,7 +720,7 @@ background-color: #A0A0A0;
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>:/tulip/gui/icons/64/document-import.png</normaloff>:/tulip/gui/icons/64/document-import.png</iconset>
+               <normaloff>:/tulip/gui/icons/16/document-open.png</normaloff>:/tulip/gui/icons/16/document-open.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -755,7 +755,7 @@ background-color: #A0A0A0;
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
+               <normaloff>:/tulip/gui/icons/16/document-save.png</normaloff>:/tulip/gui/icons/16/document-save.png</iconset>
              </property>
              <property name="iconSize">
               <size>
