@@ -25,6 +25,7 @@ SET(${LibTulipPythonName}_UI
     ../designer/FindReplaceDialog.ui
     ../designer/PythonPluginCreationDialog.ui
     ../designer/PythonIDE.ui
+    ../designer/PythonIDEWarningDialog.ui
     ../designer/PythonPanel.ui
 )
 

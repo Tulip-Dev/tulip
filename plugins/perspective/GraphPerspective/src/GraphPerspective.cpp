@@ -311,14 +311,21 @@ bool GraphPerspective::terminated() {
       } else
         _pythonIDE->stopCurrentScript();
     }
-    _pythonIDE->savePythonFilesAndWriteToProject(true);
+    if (_pythonIDE->hasUnsavedFiles()) {
+      QString message("The Python IDE has unsaved files."
+                      "\nDo you want to save their changes?");
+      if (QMessageBox::question(_mainWindow, "Save Python IDE files", message,
+                                QMessageBox::Yes | QMessageBox::No)
+          == QMessageBox::Yes) {
+        _pythonIDEDialog->show();
+        _restartNeeded = false;
+        return false;
+      }
+    }
     _pythonIDEDialog->hide();
   }
 
   if (_graphs->needsSaving() || mainWindow()->isWindowModified()) {
-    if (_pythonIDE)
-      QString message("The project has been modified (loaded graphs or Python files opened in the "
-                      "IDE).\nDo you want to save your changes?");
     QString message("The project has been modified.\nDo you want to save your changes?");
 
     QMessageBox::StandardButton answer = QMessageBox::question(
@@ -1079,7 +1086,7 @@ top: -1px;
     connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(showPythonIDE()));
   tlp::PluginEvent::addListener(this);
   if (_pythonIDE && _pythonIDE->projectNeedsPythonIDE(_project))
-    QTimer::singleShot(100, this, SLOT(initPythonIDE()));
+    QTimer::singleShot(100, this, SLOT(buildthonIDE()));
 
   if (!_externalFile.isEmpty() && QFileInfo(_externalFile).exists()) {
     open(_externalFile);
@@ -1383,10 +1390,8 @@ bool GraphPerspective::saveAs(const QString &path) {
   progress.show();
   QMap<Graph *, QString> rootIds = _graphs->writeProject(_project, &progress);
   _ui->workspace->writeProject(_project, rootIds, &progress);
-  if (_pythonIDE)
-    _pythonIDE->savePythonFilesAndWriteToProject();
-  bool ret = _project->write(_project->projectFile(), &progress);
 
+  bool ret = _project->write(_project->projectFile(), &progress);
   if (ret)
     TulipSettings::addToRecentDocuments(_project->projectFile());
 
@@ -1471,7 +1476,7 @@ void GraphPerspective::openProjectFile(const QString &path) {
       QMap<QString, tlp::Graph *> rootIds = _graphs->readProject(_project, prg);
       _ui->workspace->readProject(_project, rootIds, prg);
       if (_pythonIDE && _pythonIDE->projectNeedsPythonIDE(_project))
-        QTimer::singleShot(100, this, SLOT(initPythonIDE()));
+        QTimer::singleShot(100, this, SLOT(buildPythonIDE()));
     } else {
       auto msg = prg->getError();
       delete prg;
@@ -1485,12 +1490,6 @@ void GraphPerspective::openProjectFile(const QString &path) {
   } else {
     Perspective::openProjectFile(path);
   }
-}
-
-void GraphPerspective::initPythonIDE() {
-  buildPythonIDE();
-  if (_pythonIDE)
-    _pythonIDE->setProject(_project);
 }
 
 void GraphPerspective::deleteSelectedElementsFromRootGraph() {
@@ -2125,6 +2124,7 @@ void GraphPerspective::showPythonIDE() {
   if (_pythonIDEDialog) {
     _pythonIDEDialog->show();
     _pythonIDEDialog->raise();
+    _pythonIDEDialog->activateWindow();
   }
 }
 

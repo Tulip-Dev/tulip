@@ -43,8 +43,8 @@ public:
   virtual ~PythonIDEInterface() {}
 
   virtual bool projectNeedsPythonIDE(TulipProject *project) = 0;
-  virtual void setProject(tlp::TulipProject *project) = 0;
-  virtual void savePythonFilesAndWriteToProject(bool notifyProjectModified = false) = 0;
+  virtual bool hasUnsavedFiles() = 0;
+  virtual void readProject(tlp::TulipProject *project) = 0;
   virtual void clearPythonCodeEditors() = 0;
   virtual bool isCurrentScriptExecuting() = 0;
   virtual void executeCurrentScript() = 0;

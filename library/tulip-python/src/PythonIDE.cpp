@@ -23,14 +23,10 @@
 #include <QTextStream>
 #include <QMessageBox>
 #include <QFileDialog>
-#include <QTextBlock>
-#include <QInputDialog>
 #include <QLineEdit>
-#include <QXmlStreamReader>
-#include <QCryptographicHash>
-#include <QByteArray>
 #include <QRegularExpression>
 #include <QShortcut>
+#include <QTimer>
 
 #include <tulip/Graph.h>
 #include <tulip/DoubleProperty.h>
@@ -46,12 +42,12 @@
 #include <tulip/ExportModule.h>
 #include <tulip/PluginLister.h>
 #include <tulip/PythonCodeEditor.h>
-#include <tulip/PluginLister.h>
 #include <tulip/TulipProject.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/GraphHierarchiesModel.h>
 #include <tulip/TulipMimes.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/TulipSettings.h>
 #include <tulip/Perspective.h>
 
 #include <tulip/PythonIDE.h>
@@ -60,11 +56,10 @@
 #include <tulip/PythonEditorsTabWidget.h>
 
 #include "ui_PythonIDE.h"
+#include "ui_PythonIDEWarningDialog.h"
 
 using namespace std;
 using namespace tlp;
-
-static QCryptographicHash hasher(QCryptographicHash::Md5);
 
 static const QString utilityFunctions = R"(
 import tuliputils
@@ -385,7 +380,27 @@ result = subprocess.run([)";
   return pipScript + pyExe + ", '-m', 'pip', '";
 }
 
+// display a warning message about python files
+// no longer saved in project files
+static void showWarningDialog() {
+  QDialog wd(Perspective::instance()->mainWindow());
+  auto ui = Ui::PythonIDEWarningDialog();
+  ui.setupUi(&wd);
+  tlpFixCBRBs(&wd);
+  wd.exec();
+  if (!ui.displayDialogCB->isChecked()) {
+    TulipSettings::instance().beginGroup("pythonIDE");
+    TulipSettings::instance().setValue("displayPythonIDEWarningDialog", false);
+    TulipSettings::instance().endGroup();
+  }
+}
+
 PythonIDEInterface *PythonIDE::Builder::newIDE(GraphHierarchiesModel *model) {
+  TulipSettings::instance().beginGroup("pythonIDE");
+  if (TulipSettings::instance().value("displayPythonIDEWarningDialog", true).toBool())
+    // display a warning message on top of Python IDE
+    QTimer::singleShot(1000, [=]() { showWarningDialog(); });
+  TulipSettings::instance().endGroup();
   auto ide = new PythonIDE();
   ide->setGraphsModel(model);
   return ide;
@@ -402,9 +417,8 @@ static PythonIDE::Builder builder;
 
 PythonIDE::PythonIDE()
     : _ui(new Ui::PythonIDE), _pythonInterpreter(PythonInterpreter::getInstance()),
-      _pythonPanel(new PythonPanel()), _dontTreatFocusIn(false), _project(nullptr),
-      _graphsModel(nullptr), _scriptStopped(false), _saveFilesToProject(true),
-      _notifyProjectModified(false) {
+      _pythonPanel(new PythonPanel()), _dontTreatFocusIn(false),
+      _graphsModel(nullptr), _scriptStopped(false) {
   _ui->setupUi(this);
   // fix display of QCheckBox and QRadioButton children
   tlpFixCBRBs(this);
@@ -517,13 +531,14 @@ os.symlink(certifi.where(), openssl_cafile))";
 
   connect(_ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
 
-  connect(_ui->newModuleButton, SIGNAL(clicked()), this, SLOT(newFileModule()));
-  connect(_ui->newStringModuleButton, SIGNAL(clicked()), this, SLOT(newStringModule()));
+  connect(_ui->newModuleButton, SIGNAL(clicked()), this, SLOT(newModule()));
   connect(_ui->loadModuleButton, SIGNAL(clicked()), this, SLOT(loadModule()));
   connect(_ui->saveModuleButton, SIGNAL(clicked()), this, SLOT(saveModule()));
+  connect(_ui->saveAsModuleButton, SIGNAL(clicked()), this, SLOT(saveAsModule()));
   connect(_ui->newPluginButton, SIGNAL(clicked()), this, SLOT(newPythonPlugin()));
   connect(_ui->loadPluginButton, SIGNAL(clicked()), this, SLOT(loadPythonPlugin()));
   connect(_ui->savePluginButton, SIGNAL(clicked()), this, SLOT(savePythonPlugin()));
+  connect(_ui->saveAsPluginButton, SIGNAL(clicked()), this, SLOT(saveAsPythonPlugin()));
   connect(_ui->registerPluginButton, SIGNAL(clicked()), this, SLOT(registerPythonPlugin()));
   connect(_ui->removePluginButton, SIGNAL(clicked()), this, SLOT(removePythonPlugin()));
   connect(_ui->consoleWidget, SIGNAL(anchorClicked(const QUrl &)), this,
@@ -661,78 +676,58 @@ bool PythonIDE::loadModule(const QString &fileName) {
   return true;
 }
 
-void PythonIDE::saveModule(int tabIdx) {
+bool PythonIDE::saveModule(int tabIdx, bool saveAs) {
   if (tabIdx >= 0 && tabIdx < _ui->modulesTabWidget->count()) {
+    auto moduleFileName = getModuleEditor(tabIdx)->getFileName();
+    QFileInfo fileInfo(moduleFileName);
     QString moduleNameExt = _ui->modulesTabWidget->tabText(tabIdx);
     QString moduleName;
+    auto pos = moduleNameExt.indexOf(".py");
+    if (pos != -1)
+      moduleName = moduleNameExt.mid(0, pos);
 
-    if (moduleNameExt[moduleNameExt.size() - 1] == '*')
-      moduleName = moduleNameExt.mid(0, moduleNameExt.size() - 4);
-    else
-      moduleName = moduleNameExt.mid(0, moduleNameExt.size() - 3);
+    if (saveAs || moduleFileName.isEmpty()) {
+      QString dir = "";
 
-    // workaround a Qt5 bug on linux
-    moduleName = moduleName.replace("&", "");
+      if (!moduleFileName.isEmpty()) {
+        dir = fileInfo.dir().absolutePath();
+      }
+      auto fileName = QFileDialog::getSaveFileName(this, "Save module", dir, "Module (*.py)");
+      if (fileName.isEmpty())
+        return false;
 
-    _pythonInterpreter->deleteModule(moduleName);
+      fileName = fileName.replace("&", "");
+      getModuleEditor(tabIdx)->setFileName(fileName);
+      fileInfo = QFileInfo(fileName);
+      _pythonInterpreter->addModuleSearchPath(fileInfo.absolutePath());
+    }
+
+    // ensure module reimportation in _pythonInterpreter
+    if (!moduleName.isEmpty())
+      _pythonInterpreter->deleteModule(moduleName);
+
+    // get module name in regard to the name of the attached file
+    moduleNameExt = fileInfo.baseName();
+    pos = moduleNameExt.indexOf(".py");
+    moduleName = moduleNameExt.mid(0, pos);
+
     _ui->modulesTabWidget->setTabText(tabIdx, moduleName + ".py");
-    QString fileName = getModuleEditor(tabIdx)->getFileName();
 
-    // string module special case
-    if (fileName.isEmpty()) {
-      QString tabText = _ui->modulesTabWidget->tabText(tabIdx);
-      fileName = tabText.replace("&", "");
-    }
-
-    QFileInfo fileInfo(fileName);
-
-    if (getModuleEditor(tabIdx)->saveCodeToFile()) {
+    if (getModuleEditor(tabIdx)->saveCodeToFile())
       _ui->modulesTabWidget->setTabToolTip(tabIdx, fileInfo.absoluteFilePath());
-    }
 
-    writeModulesFilesList();
-    writeFileToProject(PYTHON_MODULES_PATH + "/" + fileInfo.fileName(),
-                       getModuleEditor(tabIdx)->getCleanCode());
+    getModuleEditor(tabIdx)->getCleanCode();
+
+    return true;
   }
+  return false;
 }
 
-void PythonIDE::newFileModule() {
-  QString fileName =
-      QFileDialog::getSaveFileName(this, tr("Set module filename"), "", "Python script (*.py)");
-
-  if (fileName.isEmpty())
-    return;
-
-  if (!fileName.endsWith(".py"))
-    fileName += ".py";
-
-  QFile file(fileName);
-
-  if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-    return;
-
-  file.close();
-
-  QFileInfo fileInfo(file);
-  QString modulePath(fileInfo.absolutePath());
-
-  int editorId = addModuleEditor(fileInfo.absoluteFilePath());
-  saveModule(editorId);
-  _pythonInterpreter->addModuleSearchPath(modulePath);
-}
-
-void PythonIDE::newStringModule() {
-  bool ok;
-  QString moduleName = QInputDialog::getText(this, "New string module  ",
-                                             "module name :", QLineEdit::Normal, "", &ok);
-
-  if (ok && !moduleName.isEmpty()) {
-    if (!moduleName.endsWith(".py"))
-      moduleName += ".py";
-
-    int editorId = addModuleEditor(moduleName);
-    saveModule(editorId);
-  }
+void PythonIDE::newModule() {
+  int editorId = addModuleEditor("");
+  _ui->modulesTabWidget->setTabText(editorId, "[no file]");
+  _ui->modulesTabWidget->setTabToolTip(
+      editorId, "new module, do not forget to save the current module to a file to not lose your source code modifications.");
 }
 
 void PythonIDE::saveModule() {
@@ -742,6 +737,15 @@ void PythonIDE::saveModule() {
     return;
 
   saveModule(curModule);
+}
+
+void PythonIDE::saveAsModule() {
+  int curModule = _ui->modulesTabWidget->currentIndex();
+
+  if (curModule == -1)
+    return;
+
+  saveModule(curModule, true);
 }
 
 void PythonIDE::saveAllModules() {
@@ -785,25 +789,16 @@ void PythonIDE::newPythonPlugin() {
   PythonPluginCreationDialog pluginCreationDialog(this);
 
   if (pluginCreationDialog.exec() == QDialog::Accepted) {
-    QFile file(pluginCreationDialog.getPluginFileName());
+    QString pluginName = pluginCreationDialog.getPluginName();
 
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-      return;
+    int editorId = addPluginEditor("");
+    QString editorSID = QString("%1").arg(reinterpret_cast<intptr_t>(getPluginEditor(editorId)));
+    _ui->pluginsTabWidget->setTabToolTip(editorId, pluginCreationDialog.getPluginName());
+    _ui->pluginsTabWidget->setTabText(editorId, pluginCreationDialog.getPluginType() + " - " + pluginName);
 
-    QFileInfo fileInfo(file);
-    QString modulePath(fileInfo.absolutePath());
-
-    int editorId = addPluginEditor(fileInfo.absoluteFilePath());
-    _ui->pluginsTabWidget->setTabToolTip(editorId, fileInfo.absoluteFilePath());
-    PythonInterpreter::getInstance()->addModuleSearchPath(modulePath);
-    _ui->pluginsTabWidget->setTabText(editorId, QString("[") +
-                                                    pluginCreationDialog.getPluginType() +
-                                                    QString("] ") + fileInfo.fileName());
-
-    QString pluginFile = fileInfo.absoluteFilePath();
-    _editedPluginsClassName[pluginFile] = pluginCreationDialog.getPluginClassName();
-    _editedPluginsType[pluginFile] = pluginCreationDialog.getPluginType();
-    _editedPluginsName[pluginFile] = pluginCreationDialog.getPluginName();
+    _editedPluginsClassName[editorSID] = pluginCreationDialog.getPluginClassName();
+    _editedPluginsType[editorSID] = pluginCreationDialog.getPluginType();
+    _editedPluginsName[editorSID] = pluginName;
     QString pluginSkeleton = getTulipPythonPluginSkeleton(
         pluginCreationDialog.getPluginClassName(), pluginCreationDialog.getPluginType(),
         pluginCreationDialog.getPluginName(), pluginCreationDialog.getPluginAuthor(),
@@ -811,7 +806,6 @@ void PythonIDE::newPythonPlugin() {
         pluginCreationDialog.getPluginRelease(), pluginCreationDialog.getPluginGroup());
 
     getPluginEditor(editorId)->setPlainText(pluginSkeleton);
-    savePythonPlugin();
   }
 }
 
@@ -972,72 +966,52 @@ bool PythonIDE::loadPythonPluginFromSrcCode(const QString &moduleName, const QSt
   return false;
 }
 
-void PythonIDE::writeFileToProject(const QString &projectFile, const QString &fileContent) {
-
-  if (!_project || !_saveFilesToProject) {
-    return;
-  }
-
-  hasher.reset();
-  hasher.addData(fileContent.toUtf8());
-  QByteArray fileContentHash = hasher.result();
-
-  bool fileModified = false;
-
-  if (!_project->exists(projectFile)) {
-    _project->touch(projectFile);
-    fileModified = true;
-  } else {
-    hasher.reset();
-    QIODevice *fs = _project->fileStream(projectFile, QIODevice::ReadOnly | QIODevice::Text);
-    hasher.addData(fs->readAll());
-    delete fs;
-    fileModified = fileContentHash != hasher.result();
-  }
-
-  if (fileModified) {
-    QIODevice *fs = _project->fileStream(projectFile, QIODevice::WriteOnly | QIODevice::Text);
-    fs->write(fileContent.toUtf8());
-    fs->close();
-    delete fs;
-  }
-
-  // notify the Tulip main window that the Tulip project has been modified
-  if (Perspective::instance() && _notifyProjectModified && fileModified) {
-    Perspective::instance()->mainWindow()->setWindowModified(true);
-  }
-}
-
 void PythonIDE::savePythonPlugin() {
   savePythonPlugin(_ui->pluginsTabWidget->currentIndex());
 }
 
-void PythonIDE::savePythonPlugin(int tabIdx) {
+void PythonIDE::saveAsPythonPlugin() {
+  savePythonPlugin(_ui->pluginsTabWidget->currentIndex(), true);
+}
 
+bool PythonIDE::savePythonPlugin(int tabIdx, bool saveAs) {
   if (tabIdx >= 0 && tabIdx < _ui->pluginsTabWidget->count()) {
+    auto pluginFileName = getPluginEditor(tabIdx)->getFileName();
+    if (saveAs || pluginFileName.isEmpty()) {
+      QString dir = "";
 
-    QString moduleNameExt = _ui->pluginsTabWidget->tabText(tabIdx);
-    QString moduleName;
+      if (!pluginFileName.isEmpty()) {
+        QFileInfo fileInfo(pluginFileName);
+        dir = fileInfo.dir().absolutePath();
+      }
+      auto fileName = QFileDialog::getSaveFileName(this, "Save python plugin", dir, "Python plugin (*.py)");
+      if (fileName.isEmpty())
+        return false;
+      getPluginEditor(tabIdx)->setFileName(fileName);
+      PythonInterpreter::getInstance()->addModuleSearchPath(fileName);
 
-    if (moduleNameExt[moduleNameExt.size() - 1] == '*')
-      moduleName = moduleNameExt.mid(0, moduleNameExt.size() - 4);
-    else
-      moduleName = moduleNameExt.mid(0, moduleNameExt.size() - 3);
+      if (pluginFileName.isEmpty()) {
+        pluginFileName = fileName;
+        QString id = QString("%1").arg(reinterpret_cast<intptr_t>(getPluginEditor(tabIdx)));
 
-    // workaround a Qt5 bug on linux
-    moduleName = moduleName.replace("&", "");
-
-    _ui->pluginsTabWidget->setTabText(tabIdx, moduleName + ".py");
-    QFile file(getPluginEditor(tabIdx)->getFileName());
-    QFileInfo fileInfo(file);
+        _editedPluginsClassName[fileName] = _editedPluginsClassName[id];
+        _editedPluginsClassName.remove(id);
+        _editedPluginsType[fileName] = _editedPluginsType[id];
+        _editedPluginsType.remove(id);
+        _editedPluginsName[fileName] = _editedPluginsName[id];
+        _editedPluginsName.remove(id);
+      }
+    }
 
     getPluginEditor(tabIdx)->saveCodeToFile();
+
+    _ui->pluginsTabWidget->setTabText(tabIdx, _editedPluginsType[pluginFileName] + " - " + _editedPluginsName[pluginFileName]);
     _ui->pluginsTabWidget->setTabToolTip(tabIdx, getPluginEditor(tabIdx)->getFileName());
 
-    writePluginsFilesList();
-    writeFileToProject(PYTHON_PLUGINS_PATH + "/" + fileInfo.fileName(),
-                       getPluginEditor(tabIdx)->getCleanCode());
+    getPluginEditor(tabIdx)->getCleanCode();
+    return true;
   }
+  return false;
 }
 
 void PythonIDE::saveAllPlugins() {
@@ -1277,11 +1251,11 @@ void PythonIDE::increaseFontSize() {
   _ui->consoleWidget->zoomIn();
 }
 
-QString PythonIDE::readProjectFile(const QString &filePath) {
+QString PythonIDE::readProjectFile(tlp::TulipProject *project, const QString &filePath) {
   QString content;
 
-  if (_project) {
-    QIODevice *fs = _project->fileStream(filePath, QIODevice::ReadOnly | QIODevice::Text);
+  if (project) {
+    QIODevice *fs = project->fileStream(filePath, QIODevice::ReadOnly | QIODevice::Text);
 
     QString currentLine = fs->readLine();
 
@@ -1297,47 +1271,32 @@ QString PythonIDE::readProjectFile(const QString &filePath) {
   return content;
 }
 
-void PythonIDE::createTulipProjectPythonPaths() {
-  if (!_project) {
-    return;
-  }
-
-  if (!_project->exists(PYTHON_SCRIPTS_PATH)) {
-    _project->mkpath(PYTHON_SCRIPTS_PATH);
-  }
-
-  if (!_project->exists(PYTHON_PLUGINS_PATH)) {
-    _project->mkpath(PYTHON_PLUGINS_PATH);
-  }
-
-  if (!_project->exists(PYTHON_MODULES_PATH)) {
-    _project->mkpath(PYTHON_MODULES_PATH);
-  }
-}
-
 bool PythonIDE::projectNeedsPythonIDE(tlp::TulipProject *project) {
   return (project->exists(PYTHON_MODULES_FILES) || project->exists(PYTHON_PLUGINS_FILES) ||
           project->exists(PYTHON_SCRIPTS_FILES));
 }
 
-void PythonIDE::setProject(tlp::TulipProject *project) {
+bool PythonIDE::hasUnsavedFiles() {
+  auto tabWidgets =
+    { _ui->mainScriptsTabWidget, _ui->pluginsTabWidget, _ui->modulesTabWidget };
+  for (auto tabWidget : tabWidgets) {
+    for (int i = 0; i < tabWidget->count(); ++i) {
+      QString tabText = tabWidget->tabText(i);
+      if (tabText[tabText.size() - 1] == '*')
+        return true;
+    }
+  }
+  return false;
+}
 
-  _project = project;
-
-  if (!_project) {
+void PythonIDE::readProject(tlp::TulipProject *project) {
+  if (!project) {
     return;
   }
 
-  _notifyProjectModified = false;
-
-  // we don't want to save files to project as a side effect here
-  _saveFilesToProject = false;
-
-  createTulipProjectPythonPaths();
-
-  if (_project->exists(PYTHON_MODULES_FILES)) {
+  if (project->exists(PYTHON_MODULES_FILES)) {
     QIODevice *fs =
-        _project->fileStream(PYTHON_MODULES_FILES, QIODevice::ReadOnly | QIODevice::Text);
+        project->fileStream(PYTHON_MODULES_FILES, QIODevice::ReadOnly | QIODevice::Text);
     QString file = fs->readLine();
 
     while (!file.isEmpty()) {
@@ -1347,8 +1306,8 @@ void PythonIDE::setProject(tlp::TulipProject *project) {
         QFileInfo fileInfo(file);
         QString projectFile = PYTHON_MODULES_PATH + "/" + fileInfo.fileName();
 
-        if (_project->exists(projectFile)) {
-          QString code = readProjectFile(projectFile);
+        if (project->exists(projectFile)) {
+          QString code = readProjectFile(project, projectFile);
           QString moduleNameExt = fileInfo.fileName();
           QString moduleName = moduleNameExt.mid(0, moduleNameExt.size() - 3);
           int editorId = addModuleEditor(moduleNameExt);
@@ -1367,9 +1326,9 @@ void PythonIDE::setProject(tlp::TulipProject *project) {
     delete fs;
   }
 
-  if (_project->exists(PYTHON_PLUGINS_FILES)) {
+  if (project->exists(PYTHON_PLUGINS_FILES)) {
     QIODevice *fs =
-        _project->fileStream(PYTHON_PLUGINS_FILES, QIODevice::ReadOnly | QIODevice::Text);
+        project->fileStream(PYTHON_PLUGINS_FILES, QIODevice::ReadOnly | QIODevice::Text);
     QString file = fs->readLine();
 
     while (!file.isEmpty()) {
@@ -1379,8 +1338,8 @@ void PythonIDE::setProject(tlp::TulipProject *project) {
         QFileInfo fileInfo(file);
         QString projectFile = PYTHON_PLUGINS_PATH + "/" + fileInfo.fileName();
 
-        if (_project->exists(projectFile)) {
-          QString code = readProjectFile(projectFile);
+        if (project->exists(projectFile)) {
+          QString code = readProjectFile(project, projectFile);
           loadPythonPluginFromSrcCode(fileInfo.fileName(), code);
         }
       }
@@ -1392,9 +1351,9 @@ void PythonIDE::setProject(tlp::TulipProject *project) {
     delete fs;
   }
 
-  if (_project->exists(PYTHON_SCRIPTS_FILES)) {
+  if (project->exists(PYTHON_SCRIPTS_FILES)) {
     QIODevice *fs =
-        _project->fileStream(PYTHON_SCRIPTS_FILES, QIODevice::ReadOnly | QIODevice::Text);
+        project->fileStream(PYTHON_SCRIPTS_FILES, QIODevice::ReadOnly | QIODevice::Text);
     QString file = fs->readLine();
 
     while (!file.isEmpty()) {
@@ -1405,17 +1364,15 @@ void PythonIDE::setProject(tlp::TulipProject *project) {
         QFileInfo fileInfo(file);
         QString projectFile = PYTHON_SCRIPTS_PATH + "/" + fileInfo.fileName();
 
-        if (_project->exists(projectFile)) {
-          QString code = readProjectFile(projectFile);
+        if (project->exists(projectFile)) {
+          QString code = readProjectFile(project, projectFile);
           QString fileName = fileInfo.fileName();
           int editorId = addMainScriptEditor();
 
           if (fileName.startsWith("[no file]")) {
             fileName = "[no file]";
             _ui->mainScriptsTabWidget->setTabToolTip(
-                editorId, "string main script, do not forget to save the current Tulip project "
-                          "or\n save the script to a file to not lose your source code "
-                          "modifications.");
+                editorId, "\"main\" script, do not forget to save the current script to a file to not lose your source code modifications.");
           } else {
             _ui->mainScriptsTabWidget->setTabToolTip(editorId, fileName);
           }
@@ -1443,240 +1400,15 @@ void PythonIDE::setProject(tlp::TulipProject *project) {
   if (_ui->modulesTabWidget->count() > 0) {
     _ui->modulesTabWidget->setCurrentIndex(0);
   }
-
-  _notifyProjectModified = true;
-  _saveFilesToProject = true;
 }
 
-void PythonIDE::writeScriptsFilesList(int deleted) {
-  if (!_project || !_saveFilesToProject) {
-    return;
-  }
-
-  QStringList existingScriptFilenames;
-  QString scriptFilesList;
-
-  for (int i = 0; i < _ui->mainScriptsTabWidget->count(); ++i) {
-    QString fileName = getMainScriptEditor(i)->getFileName();
-
-    if (deleted == -1 || i != deleted) {
-
-      if (fileName.isEmpty()) {
-        QString tabText = _ui->mainScriptsTabWidget->tabText(i);
-        tabText = tabText.replace("&", "");
-
-        if (tabText.endsWith(".py")) {
-          fileName = tabText;
-        } else {
-          fileName = "[no file]" + QString::number(i);
-        }
-      } else if (!_project->projectFile().isEmpty()) {
-        // if the Python file is relatively located to the project file
-        // only save a relative path for reloading the code from the file even on a different
-        // computer
-        // this is useful for instance when Tulip project and Python files are stored on a git
-        // repository
-        QFileInfo projectFileInfo(_project->projectFile());
-
-        if (fileName.startsWith(projectFileInfo.absolutePath())) {
-          fileName = fileName.mid(projectFileInfo.absolutePath().length() + 1);
-        }
-      }
-
-      scriptFilesList += (fileName + "\n");
-      existingScriptFilenames.append(QFileInfo(fileName).fileName());
-    }
-  }
-
-  hasher.reset();
-  hasher.addData(scriptFilesList.toUtf8());
-  QByteArray scriptFilesListHash = hasher.result();
-
-  bool fileModified = false;
-
-  createTulipProjectPythonPaths();
-
-  if (!_project->exists(PYTHON_SCRIPTS_FILES)) {
-    _project->touch(PYTHON_SCRIPTS_FILES);
-    fileModified = true;
-  } else {
-    QIODevice *fs =
-        _project->fileStream(PYTHON_SCRIPTS_FILES, QIODevice::ReadOnly | QIODevice::Text);
-    hasher.reset();
-    hasher.addData(fs->readAll());
-    delete fs;
-    fileModified = scriptFilesListHash != hasher.result();
-  }
-
-  if (fileModified) {
-    QIODevice *fs =
-        _project->fileStream(PYTHON_SCRIPTS_FILES, QIODevice::WriteOnly | QIODevice::Text);
-    fs->write(scriptFilesList.toUtf8());
-    fs->close();
-    delete fs;
-  }
-
-  deleteFilesFromProjectIfRemoved(PYTHON_SCRIPTS_PATH, existingScriptFilenames);
-
-  // notify the Tulip main window that the Tulip project has been modified
-  if (Perspective::instance() && _notifyProjectModified && fileModified) {
-    Perspective::instance()->mainWindow()->setWindowModified(true);
-  }
+void PythonIDE::scriptSaved(int /*idx*/) {
 }
 
-void PythonIDE::writePluginsFilesList(int deleted) {
-  if (!_project || !_saveFilesToProject) {
-    return;
-  }
-
-  QStringList existingPluginsFilenames;
-  QString pluginFilesList;
-
-  for (int i = 0; i < _ui->pluginsTabWidget->count(); ++i) {
-    if (deleted == -1 || i != deleted) {
-      pluginFilesList += (getPluginEditor(i)->getFileName() + "\n");
-      existingPluginsFilenames.append(QFileInfo(getPluginEditor(i)->getFileName()).fileName());
-    }
-  }
-
-  hasher.reset();
-  hasher.addData(pluginFilesList.toUtf8());
-  QByteArray pluginFilesListHash = hasher.result();
-
-  bool fileModified = false;
-
-  createTulipProjectPythonPaths();
-
-  if (!_project->exists(PYTHON_PLUGINS_FILES)) {
-    _project->touch(PYTHON_PLUGINS_FILES);
-    fileModified = true;
-  } else {
-    hasher.reset();
-    QIODevice *fs =
-        _project->fileStream(PYTHON_PLUGINS_FILES, QIODevice::ReadOnly | QIODevice::Text);
-    hasher.addData(fs->readAll());
-    delete fs;
-    fileModified = pluginFilesListHash != hasher.result();
-  }
-
-  if (fileModified) {
-    QIODevice *fs =
-        _project->fileStream(PYTHON_PLUGINS_FILES, QIODevice::WriteOnly | QIODevice::Text);
-    fs->write(pluginFilesList.toUtf8());
-    fs->close();
-    delete fs;
-  }
-
-  deleteFilesFromProjectIfRemoved(PYTHON_PLUGINS_PATH, existingPluginsFilenames);
-
-  // notify the Tulip main window that the Tulip project has been modified
-  if (Perspective::instance() && _notifyProjectModified && fileModified) {
-    Perspective::instance()->mainWindow()->setWindowModified(true);
-  }
+void PythonIDE::pluginSaved(int /*idx*/) {
 }
 
-void PythonIDE::writeModulesFilesList(int deleted) {
-  if (!_project || !_saveFilesToProject) {
-    return;
-  }
-
-  QStringList existingModuleFilenames;
-  QString moduleFilesList;
-
-  for (int i = 0; i < _ui->modulesTabWidget->count(); ++i) {
-    QString fileName = getModuleEditor(i)->getFileName();
-
-    if (deleted == -1 || i != deleted) {
-      // string module special case
-      if (fileName.isEmpty()) {
-        QString tabText = _ui->modulesTabWidget->tabText(i);
-        fileName = tabText.replace("&", "");
-      }
-
-      moduleFilesList += (fileName + "\n");
-      existingModuleFilenames.append(QFileInfo(fileName).fileName());
-    }
-  }
-
-  hasher.reset();
-  hasher.addData(moduleFilesList.toUtf8());
-
-  QByteArray moduleFilesListHash = hasher.result();
-
-  bool fileModified = false;
-
-  createTulipProjectPythonPaths();
-
-  if (!_project->exists(PYTHON_MODULES_FILES)) {
-    _project->touch(PYTHON_MODULES_FILES);
-    fileModified = true;
-  } else {
-    hasher.reset();
-    QIODevice *fs =
-        _project->fileStream(PYTHON_MODULES_FILES, QIODevice::ReadOnly | QIODevice::Text);
-    hasher.addData(fs->readAll());
-    delete fs;
-    fileModified = moduleFilesListHash != hasher.result();
-  }
-
-  if (fileModified) {
-    QIODevice *fs =
-        _project->fileStream(PYTHON_MODULES_FILES, QIODevice::WriteOnly | QIODevice::Text);
-    fs->write(moduleFilesList.toUtf8());
-    fs->close();
-    delete fs;
-  }
-
-  deleteFilesFromProjectIfRemoved(PYTHON_MODULES_PATH, existingModuleFilenames);
-
-  // notify the Tulip main window that the Tulip project has been modified
-  if (Perspective::instance() && _notifyProjectModified && fileModified) {
-    Perspective::instance()->mainWindow()->setWindowModified(true);
-  }
-}
-
-void PythonIDE::scriptSaved(int idx) {
-  QString fileName = getMainScriptEditor(idx)->getFileName();
-  QFileInfo fileInfo(fileName);
-  writeScriptsFilesList();
-  writeScriptFileToProject(idx, fileInfo.fileName(), getMainScriptEditor(idx)->getCleanCode());
-}
-
-void PythonIDE::writeScriptFileToProject(int idx, const QString &scriptFileName,
-                                         const QString &scriptContent) {
-  QString fileName = scriptFileName;
-
-  if (fileName.isEmpty()) {
-    fileName = "[no file]" + QString::number(idx);
-  }
-
-  writeFileToProject(PYTHON_SCRIPTS_PATH + "/" + fileName, scriptContent);
-}
-
-void PythonIDE::deleteFilesFromProjectIfRemoved(const QString &projectDir,
-                                                const QStringList &existingFilenames) {
-  QStringList filesInProject = _project->entryList(projectDir);
-
-  for (const QString &filename : filesInProject) {
-    if (filename == "files")
-      continue;
-
-    if (!existingFilenames.contains(filename)) {
-      _project->removeFile(projectDir + "/" + filename);
-    }
-  }
-}
-
-void PythonIDE::pluginSaved(int idx) {
-  QString fileName = getPluginEditor(idx)->getFileName();
-  QFileInfo fileInfo(fileName);
-  writePluginsFilesList();
-  writeFileToProject(PYTHON_PLUGINS_PATH + "/" + fileInfo.fileName(),
-                     getPluginEditor(idx)->getCleanCode());
-}
-
-void PythonIDE::moduleSaved(int idx) {
-  saveModule(idx);
+void PythonIDE::moduleSaved(int /*idx*/) {
 }
 
 int PythonIDE::addMainScriptEditor(const QString &fileName) {
@@ -1715,14 +1447,12 @@ void PythonIDE::newScript() {
   getMainScriptEditor(editorId)->setPlainText(defaultScriptCode);
   _ui->mainScriptsTabWidget->setTabText(editorId, "[no file]");
   _ui->mainScriptsTabWidget->setTabToolTip(
-      editorId, "string main script, do not forget to save the current Tulip project or\n save the "
-                "script to a file to not lose your source code modifications.");
-  saveScript(editorId, false);
+      editorId, "\"main\" script, do not forget to save the current script to a file to not lose your source code modifications.");
 }
 
 void PythonIDE::loadScript() {
   QString fileName =
-      QFileDialog::getOpenFileName(this, "Open main script", "", "Python script (*.py)");
+      QFileDialog::getOpenFileName(this, "Open \"main\" script", "", "Python script (*.py)");
   loadScript(fileName);
 }
 
@@ -1763,10 +1493,10 @@ void PythonIDE::saveScript() {
 }
 
 void PythonIDE::saveAsScript() {
-  saveScript(_ui->mainScriptsTabWidget->currentIndex(), true, true, true);
+  saveScript(_ui->mainScriptsTabWidget->currentIndex(), true, true);
 }
 
-void PythonIDE::saveScript(int tabIdx, bool clear, bool showFileDialog, bool saveAs) {
+bool PythonIDE::saveScript(int tabIdx, bool clear, bool saveAs) {
   if (tabIdx >= 0 && tabIdx < _ui->mainScriptsTabWidget->count()) {
     QString fileName;
     QString mainScriptFileName = getMainScriptEditor(tabIdx)->getFileName();
@@ -1776,7 +1506,7 @@ void PythonIDE::saveScript(int tabIdx, bool clear, bool showFileDialog, bool sav
     // workaround a Qt5 bug on linux
     tabText = tabText.replace("&", "");
 
-    if (saveAs || (mainScriptFileName.isEmpty() && showFileDialog)) {
+    if (saveAs || mainScriptFileName.isEmpty()) {
       QString dir = "";
 
       if (!tabText.startsWith("[")) {
@@ -1788,7 +1518,7 @@ void PythonIDE::saveScript(int tabIdx, bool clear, bool showFileDialog, bool sav
       fileName =
           QFileDialog::getSaveFileName(this, tr("Save main script"), dir, "Python script (*.py)");
       if (fileName.isEmpty())
-        return;
+        return false;
     } else
       fileName = mainScriptFileName;
 
@@ -1822,7 +1552,6 @@ void PythonIDE::saveScript(int tabIdx, bool clear, bool showFileDialog, bool sav
 
       fileName = fileInfo.fileName();
     } else {
-
       if (tabText.contains(".py")) {
         fileName = tabText;
         tabText.replace(".py", "");
@@ -1833,10 +1562,9 @@ void PythonIDE::saveScript(int tabIdx, bool clear, bool showFileDialog, bool sav
         _pythonInterpreter->setOutputEnabled(true);
       }
     }
-
-    writeScriptsFilesList();
-    writeScriptFileToProject(tabIdx, fileName, getMainScriptEditor(tabIdx)->getCleanCode());
+    return true;
   }
+  return false;
 }
 
 void PythonIDE::saveAllScripts() {
@@ -2028,36 +1756,24 @@ bool PythonIDE::closeEditorTabRequested(PythonEditorsTabWidget *tabWidget, int i
   if (curTabText.isEmpty())
     return true;
 
-  PythonCodeEditor *editor = tabWidget->getEditor(idx);
-  QString fileName = editor->getFileName();
-
-  if (curTabText[curTabText.size() - 1] == '*' || fileName.isEmpty() ||
-      !QFileInfo(fileName).exists()) {
+  if (curTabText[curTabText.size() - 1] == '*') {
 
     QMessageBox::StandardButton button = QMessageBox::question(
         QApplication::activeWindow(), QString("Save edited Python code"),
-        QString("The code of ") +
-            // if the editor has not yet a file name
-            // show the tab text instead
-            (fileName.isEmpty() ? curTabText : fileName) +
-            QString("\n has been edited but has not been saved to disk.\n"
-                    "Do you want to save it?"),
+        QString("The code of ") + curTabText.mid(0, curTabText.size() - 1) +
+        QString("\n has been edited but has not been saved to disk.\n"
+                "Do you want to save it?"),
         QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel, QMessageBox::Save);
 
     if (button == QMessageBox::Save) {
-      if (fileName.isEmpty()) {
-        // unsaved main script code, user must choose a file
-        saveScript(idx, false, true);
-      } else {
-        // module or plugin without an associated file
-        QString saveFileName =
-            QFileDialog::getSaveFileName(this, tr("Save Python file"), "", "Python file (*.py)");
-
-        if (!saveFileName.isEmpty()) {
-          editor->setFileName(saveFileName);
-          editor->saveCodeToFile();
-        }
-      }
+      bool saved = false;
+      if (tabWidget == _ui->mainScriptsTabWidget)
+        saved = saveScript(idx, false);
+      else if (tabWidget == _ui->pluginsTabWidget)
+        saved = savePythonPlugin(idx);
+      else if (tabWidget == _ui->modulesTabWidget)
+        saved = saveModule(idx);
+      return saved;
     }
 
     return button != QMessageBox::Cancel;
@@ -2121,45 +1837,13 @@ bool PythonIDE::eventFilter(QObject *obj, QEvent *event) {
 }
 
 void PythonIDE::closeModuleTabRequested(int idx) {
-  QString moduleFile = getModuleEditor(idx)->getFileName();
-  QFileInfo fileInfo(moduleFile);
-  QString projectFile = PYTHON_MODULES_PATH + "/" + fileInfo.fileName();
-
-  if (_project && _project->exists(projectFile) && !_saveFilesToProject) {
-    return;
-  }
-
   if (closeEditorTabRequested(_ui->modulesTabWidget, idx)) {
-    if (_project) {
-      writeModulesFilesList(idx);
-
-      if (_project->exists(projectFile)) {
-        _project->removeFile(projectFile);
-      }
-    }
-
     _ui->modulesTabWidget->closeTab(idx);
   }
 }
 
 void PythonIDE::closeScriptTabRequested(int idx) {
-  QString scriptFile = getMainScriptEditor(idx)->getFileName();
-  QFileInfo fileInfo(scriptFile);
-  QString projectFile = PYTHON_SCRIPTS_PATH + "/" + fileInfo.fileName();
-
-  if (_project && _project->exists(projectFile) && !_saveFilesToProject) {
-    return;
-  }
-
   if (closeEditorTabRequested(_ui->mainScriptsTabWidget, idx)) {
-    if (_project) {
-
-      writeScriptsFilesList(idx);
-
-      if (_project->exists(projectFile)) {
-        _project->removeFile(projectFile);
-      }
-    }
     _ui->mainScriptsTabWidget->closeTab(idx);
 
     if (_ui->mainScriptsTabWidget->count() == 0) {
@@ -2171,26 +1855,13 @@ void PythonIDE::closeScriptTabRequested(int idx) {
 void PythonIDE::closePluginTabRequested(int idx) {
   QString pluginFile = getPluginEditor(idx)->getFileName();
   QFileInfo fileInfo(pluginFile);
-  QString projectFile = PYTHON_PLUGINS_PATH + "/" + fileInfo.fileName();
-
-  if (_project && _project->exists(projectFile) && !_saveFilesToProject) {
-    return;
-  }
 
   if (closeEditorTabRequested(_ui->pluginsTabWidget, idx)) {
     _editedPluginsClassName.remove(pluginFile);
     _editedPluginsType.remove(pluginFile);
     _editedPluginsName.remove(pluginFile);
 
-    if (_project) {
-      writePluginsFilesList(idx);
-
-      if (_project->exists(projectFile)) {
-        _project->removeFile(projectFile);
-      }
-    }
-
-    _ui->pluginsTabWidget->closeTab(idx);
+     _ui->pluginsTabWidget->closeTab(idx);
 
     if (_ui->pluginsTabWidget->count() == 1) {
       _ui->registerPluginButton->setEnabled(false);
@@ -2264,18 +1935,7 @@ void PythonIDE::loadScriptsAndModulesFromPythonScriptViewDataSet(const tlp::Data
   }
 }
 
-void PythonIDE::savePythonFilesAndWriteToProject(bool notifyProjectModified) {
-  _notifyProjectModified = notifyProjectModified;
-  saveAllScripts();
-  saveAllPlugins();
-  saveAllModules();
-  _notifyProjectModified = true;
-}
-
 void PythonIDE::clearPythonCodeEditors() {
-  // we don't want to save files to project as a side effect here
-  _saveFilesToProject = false;
-
   for (int i = _ui->mainScriptsTabWidget->count() - 1; i >= 0; --i) {
     closeScriptTabRequested(i);
     _ui->mainScriptsTabWidget->removeTab(i);
@@ -2292,7 +1952,6 @@ void PythonIDE::clearPythonCodeEditors() {
   }
 
   _ui->consoleWidget->clear();
-  _saveFilesToProject = true;
 }
 
 void PythonIDE::setScriptEditorsVisible(bool visible) {

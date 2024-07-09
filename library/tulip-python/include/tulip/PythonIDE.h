@@ -56,11 +56,8 @@ class TLP_PYTHON_SCOPE PythonIDE : public PythonIDEInterface {
   tlp::PythonInterpreter *_pythonInterpreter;
   PythonPanel *_pythonPanel;
   bool _dontTreatFocusIn;
-  tlp::TulipProject *_project;
   tlp::GraphHierarchiesModel *_graphsModel;
   bool _scriptStopped;
-  bool _saveFilesToProject;
-  bool _notifyProjectModified;
 
   QMap<QString, QString> _editedPluginsClassName;
   QMap<QString, QString> _editedPluginsType;
@@ -74,33 +71,25 @@ class TLP_PYTHON_SCOPE PythonIDE : public PythonIDEInterface {
   QComboBox *_pipCombo;
 
   bool loadPythonPlugin(const QString &fileName, bool clear = true);
-  bool loadPythonPluginFromSrcCode(const QString &moduleName, const QString &pluginSrcCode,
+  bool loadPythonPluginFromSrcCode(const QString &moduleName,
+                                   const QString &pluginSrcCode,
                                    bool clear = true);
-  void savePythonPlugin(int tabIdx);
+  bool savePythonPlugin(int tabIdx, bool saveAs = false);
   bool indicateErrors() const;
   void clearErrorIndicators() const;
   bool loadModule(const QString &fileName);
-  void saveModule(int tabIdx);
+  bool saveModule(int tabIdx, bool saveAs = false);
 
   bool reloadAllModules() const;
-  void createTulipProjectPythonPaths();
-  void writeScriptsFilesList(int deleted = -1);
-  void writePluginsFilesList(int deleted = -1);
-  void writeModulesFilesList(int deleted = -1);
-  QString readProjectFile(const QString &filePath);
-  void writeScriptFileToProject(int idx, const QString &scriptFileName,
-                                const QString &scriptContent);
-  void writeFileToProject(const QString &projectFile, const QString &fileContent);
-  void deleteFilesFromProjectIfRemoved(const QString &projectDir,
-                                       const QStringList &existingFilenames);
+  QString readProjectFile(tlp::TulipProject *project, const QString &filePath);
 
 public:
   explicit PythonIDE();
   ~PythonIDE() override;
 
   bool projectNeedsPythonIDE(tlp::TulipProject *project) override;
-  void setProject(tlp::TulipProject *project) override;
-  void savePythonFilesAndWriteToProject(bool notifyProjectModified = false) override;
+  bool hasUnsavedFiles() override;
+  void readProject(tlp::TulipProject *project) override;
   void setGraphsModel(tlp::GraphHierarchiesModel *model);
   void clearPythonCodeEditors() override;
 
@@ -136,7 +125,7 @@ private:
   int addPluginEditor(const QString &fileName = "");
 
   bool loadScript(const QString &fileName, bool clear = true);
-  void saveScript(int tabIdx, bool clear = true, bool showFileDialog = false, bool saveAs = false);
+  bool saveScript(int tabIdx, bool clear = true, bool saveAs = false);
 
   tlp::PythonCodeEditor *getCurrentMainScriptEditor() const;
   tlp::PythonCodeEditor *getMainScriptEditor(int idx) const;
@@ -156,13 +145,14 @@ private slots:
   void currentTabChanged(int index);
   void loadPythonPlugin();
   void savePythonPlugin();
+  void saveAsPythonPlugin();
   void saveAllPlugins();
   void registerPythonPlugin(bool clear = true);
   void removePythonPlugin();
-  void newFileModule();
-  void newStringModule();
+  void newModule();
   void loadModule();
   void saveModule();
+  void saveAsModule();
   void saveAllModules();
   void scrollToEditorLine(const QUrl &);
   void increaseFontSize();

@@ -160,7 +160,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>New main script</string>
+              <string>New "main" script</string>
              </property>
              <property name="text">
               <string>New</string>
@@ -198,7 +198,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Load main script from file</string>
+              <string>Load "main" script from file</string>
              </property>
              <property name="text">
               <string>Load</string>
@@ -236,7 +236,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Save the current script</string>
+              <string>Save the current script in the attached file</string>
              </property>
              <property name="text">
               <string>Save</string>
@@ -323,7 +323,7 @@ background-color: #A0A0A0;
               </sizepolicy>
              </property>
              <property name="toolTip">
-              <string>When processing the selected script, the current graph will be bound to The Python global variable named &quot;graph&quot;</string>
+              <string>When processing the current script, the current graph will be bound to The Python global variable named &quot;graph&quot;</string>
              </property>
             </widget>
            </item>
@@ -505,7 +505,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Save Tulip Python plugin to file/project</string>
+              <string>Save the current plugin in the attached file</string>
              </property>
              <property name="text">
               <string>Save</string>
@@ -513,6 +513,41 @@ background-color: #A0A0A0;
              <property name="icon">
               <iconset>
                <normaloff>:/tulip/gui/icons/16/document-save.png</normaloff>:/tulip/gui/icons/16/document-save.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="toolButtonStyle">
+              <enum>Qt::ToolButtonTextUnderIcon</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="saveAsPluginButton">
+             <property name="minimumSize">
+              <size>
+               <width>40</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>40</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Save the current plugin in an interactively chosen file</string>
+             </property>
+             <property name="text">
+              <string>Save as</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>:/tulip/gui/icons/16/document-save-as.png</normaloff>:/tulip/graphperspective/icons/16/document-save-as.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -629,41 +664,6 @@ background-color: #A0A0A0;
             <number>3</number>
            </property>
            <item>
-            <widget class="QToolButton" name="newStringModuleButton">
-             <property name="minimumSize">
-              <size>
-               <width>40</width>
-               <height>40</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>40</width>
-               <height>40</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string>New string module</string>
-             </property>
-             <property name="text">
-              <string>New</string>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/tulip/gui/icons/64/document-plus.png</normaloff>:/tulip/gui/icons/64/document-plus.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
-             </property>
-            </widget>
-           </item>
-           <item>
             <widget class="QToolButton" name="newModuleButton">
              <property name="minimumSize">
               <size>
@@ -678,7 +678,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>New file module</string>
+              <string>New module</string>
              </property>
              <property name="text">
               <string>New</string>
@@ -689,8 +689,8 @@ background-color: #A0A0A0;
              </property>
              <property name="iconSize">
               <size>
-               <width>20</width>
-               <height>20</height>
+               <width>16</width>
+               <height>16</height>
               </size>
              </property>
              <property name="toolButtonStyle">
@@ -713,7 +713,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Import module from file</string>
+              <string>Load module from file</string>
              </property>
              <property name="text">
               <string>Load</string>
@@ -748,7 +748,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Save module to file/project</string>
+              <string>Save the current module in the attached file</string>
              </property>
              <property name="text">
               <string>Save</string>
@@ -761,6 +761,41 @@ background-color: #A0A0A0;
               <size>
                <width>20</width>
                <height>20</height>
+              </size>
+             </property>
+             <property name="toolButtonStyle">
+              <enum>Qt::ToolButtonTextUnderIcon</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="saveAsModuleButton">
+             <property name="minimumSize">
+              <size>
+               <width>40</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>40</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Save current module in an interactively chosen file</string>
+             </property>
+             <property name="text">
+              <string>Save as</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>:/tulip/gui/icons/16/document-save-as.png</normaloff>:/tulip/graphperspective/icons/16/document-save-as.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
               </size>
              </property>
              <property name="toolButtonStyle">

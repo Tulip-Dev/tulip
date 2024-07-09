@@ -60,8 +60,6 @@ class GraphPerspective : public tlp::Perspective, tlp::Observable {
   void showStartPanels(tlp::Graph *);
   void applyDefaultLayout(tlp::Graph *);
 
-  void buildPythonIDE();
-
 public:
   GraphPerspectiveLogger *_logger;
 
@@ -130,6 +128,7 @@ public slots:
   void showAboutTulipPage();
 
 protected slots:
+  void buildPythonIDE();
   void currentGraphChanged(tlp::Graph *graph);
   void refreshDockExpandControls();
   void panelFocused(tlp::View *);
@@ -169,7 +168,6 @@ protected slots:
   void panelsEmpty();
   void showHideMenuBar();
   void updateLogIconsAndCounters();
-  void initPythonIDE();
   void displayStatusMessage(const QString &s) override;
   void clearStatusMessage() override;
 

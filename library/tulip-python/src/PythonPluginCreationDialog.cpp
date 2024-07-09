@@ -22,6 +22,7 @@
 #include <QDate>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QPushButton>
 
 #include <tulip/PythonPluginCreationDialog.h>
 #include "ui_PythonPluginCreationDialog.h"
@@ -34,11 +35,9 @@ PythonPluginCreationDialog::PythonPluginCreationDialog(QWidget *parent)
       _ui(new Ui::PythonPluginCreationDialog) {
   _ui->setupUi(this);
 
-  connect(_ui->browseButton, SIGNAL(clicked()), this, SLOT(selectPluginSourceFile()));
   QDate currentDate = QDate::currentDate();
   _ui->date->setText(currentDate.toString("dd/MM/yyyy"));
   _ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-  _ui->pluginFileName->installEventFilter(this);
   _ui->pluginClassName->installEventFilter(this);
   _ui->pluginName->installEventFilter(this);
 }
@@ -48,30 +47,6 @@ PythonPluginCreationDialog::~PythonPluginCreationDialog() {
 }
 
 void PythonPluginCreationDialog::accept() {
-  QString fileName =
-      _ui->pluginFileName->text().mid(_ui->pluginFileName->text().lastIndexOf("/") + 1);
-  fileName = fileName.mid(0, fileName.length() - 3);
-
-  if (fileName.at(0).isNumber()) {
-    QMessageBox::critical(this, "Error",
-                          "Python does not allow a file name to begin with a number.");
-    return;
-  }
-
-  if (fileName.contains(" ")) {
-    QMessageBox::critical(this, "Error", "The plugin file name cannot contain any whitespace.");
-    return;
-  }
-
-  int i = 0;
-
-  while (PythonInterpreter::pythonReservedCharacters[i]) {
-    if (fileName.contains(PythonInterpreter::pythonReservedCharacters[i++])) {
-      QMessageBox::critical(this, "Error", "The plugin file name contains an invalid character.");
-      return;
-    }
-  }
-
   auto className = _ui->pluginClassName->text();
   auto nameIt = className.begin();
   while (nameIt != className.end()) {
@@ -92,23 +67,6 @@ void PythonPluginCreationDialog::accept() {
   }
 
   QDialog::accept();
-}
-
-void PythonPluginCreationDialog::selectPluginSourceFile() {
-  QString fileName =
-      QFileDialog::getSaveFileName(this, tr("Set Plugin source file"), "", "Python script (*.py)");
-
-  if (fileName.isEmpty())
-    return;
-
-  if (!fileName.endsWith(".py"))
-    fileName += ".py";
-
-  _ui->pluginFileName->setText(fileName);
-}
-
-QString PythonPluginCreationDialog::getPluginFileName() const {
-  return _ui->pluginFileName->text().trimmed();
 }
 
 QString PythonPluginCreationDialog::getPluginType() const {
@@ -146,7 +104,7 @@ QString PythonPluginCreationDialog::getPluginGroup() const {
 bool PythonPluginCreationDialog::eventFilter(QObject *, QEvent *ev) {
   if (ev->type() == QEvent::KeyRelease) {
     auto okButton = _ui->buttonBox->button(QDialogButtonBox::Ok);
-    okButton->setEnabled(!getPluginFileName().isEmpty() && !getPluginClassName().isEmpty() &&
+    okButton->setEnabled(!getPluginClassName().isEmpty() &&
                          !getPluginName().isEmpty());
   }
   return false;
