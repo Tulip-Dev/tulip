@@ -102,6 +102,9 @@ Sets the rendering parameters for the node link diagram view.
 
 void displayConvexHulls(const bool visible=true, const bool withTextures=false);
 %Docstring
+
+    .. versionadded:: 6.0
+
     tlpgui.NodeLinkDiagramComponent.displayConvexHulls(visible=True, withTextures=False)
 
     Display or hide subgraphs convex hulls
@@ -126,6 +129,9 @@ sipCpp->draw();
 
 void setQuickAccessBarVisible(bool);
 %Docstring
+
+.. versionadded:: 6.0
+
 tlpgui.NodeLinkDiagramComponent.setQuickAccessBarVisible(state)
 
 Sets the visibility state of the quick access bar.
@@ -138,6 +144,8 @@ Sets the visibility state of the quick access bar.
 
 bool quickAccessBarVisible() const;
 %Docstring
+  .. versionadded:: 6.0
+
 tlpgui.NodeLinkDiagramComponent.quickAccessBarVisible()
 
 Returns the visibility state of the quick access bar.
@@ -149,6 +157,9 @@ Returns the visibility state of the quick access bar.
 
 void setOverviewVisible(bool display);
 %Docstring
+
+  .. versionadded:: 6.0
+
   tlpgui.NodeLinkDiagramComponent.setOverviewVisible(state)
 
   Sets the visibility state of the overview display.
@@ -159,6 +170,9 @@ void setOverviewVisible(bool display);
 
 bool overviewVisible() const;
 %Docstring
+
+  .. versionadded:: 6.0
+
   tlpgui.NodeLinkDiagramComponent.overviewVisible()
 
   Returns the visibility state of the overview display.
