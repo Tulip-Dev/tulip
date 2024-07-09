@@ -122,9 +122,9 @@ sipCpp->draw();
 }
 %End
 
-protected :
+// =======================================================================================
 
-    void setQuickAccessBarVisible(bool);
+void setQuickAccessBarVisible(bool);
 %Docstring
 tlpgui.NodeLinkDiagramComponent.setQuickAccessBarVisible(state)
 
@@ -145,6 +145,26 @@ Returns the visibility state of the quick access bar.
 :rtype: boolean
 %End
 
+// =======================================================================================
+
+void setOverviewVisible(bool display);
+%Docstring
+  tlpgui.NodeLinkDiagramComponent.setOverviewVisible(state)
+
+  Sets the visibility state of the overview display.
+
+  :param state: the visibility state of the overview display
+  :type state: boolean
+%End
+
+bool overviewVisible() const;
+%Docstring
+  tlpgui.NodeLinkDiagramComponent.overviewVisible()
+
+  Returns the visibility state of the overview display.
+
+  :rtype: boolean
+%End
 
 };
 
