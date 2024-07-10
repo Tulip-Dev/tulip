@@ -69,6 +69,8 @@ signals:
 
   void tabAboutToBeDeleted(int);
 
+  void fileEdited();
+
   void fileSaved(int);
 
   void filesReloaded();

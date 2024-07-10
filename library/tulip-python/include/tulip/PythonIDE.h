@@ -136,6 +136,7 @@ private:
 
   bool closeEditorTabRequested(PythonEditorsTabWidget *tabWidget, int idx);
   bool loadModuleFromSrcCode(const QString &moduleName, const QString &moduleSrcCode);
+  bool checkUnsavedFiles(PythonEditorsTabWidget *editorsTabWidget, bool updateTabText = false);
 
   void loadScriptsAndModulesFromPythonScriptViewDataSet(const DataSet &dataSet);
 
@@ -161,6 +162,7 @@ private slots:
   void pluginSaved(int);
   void moduleSaved(int);
   void graphComboBoxIndexChanged();
+  void fileEdited();
 
   void newScript();
   void loadScript();

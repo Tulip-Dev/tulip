@@ -563,8 +563,11 @@ os.symlink(certifi.where(), openssl_cafile))";
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton_3, "increase font size", "-");
 
   connect(_ui->mainScriptsTabWidget, SIGNAL(fileSaved(int)), this, SLOT(scriptSaved(int)));
+  connect(_ui->mainScriptsTabWidget, SIGNAL(fileEdited()), this, SLOT(fileEdited()));
   connect(_ui->modulesTabWidget, SIGNAL(fileSaved(int)), this, SLOT(moduleSaved(int)));
+  connect(_ui->modulesTabWidget, SIGNAL(fileEdited()), this, SLOT(fileEdited()));
   connect(_ui->pluginsTabWidget, SIGNAL(fileSaved(int)), this, SLOT(pluginSaved(int)));
+  connect(_ui->pluginsTabWidget, SIGNAL(fileEdited()), this, SLOT(fileEdited()));
 
   connect(_ui->runScriptButton, SIGNAL(clicked()), this, SLOT(executeCurrentScript()));
   connect(_ui->pauseScriptButton, SIGNAL(clicked()), this, SLOT(pauseCurrentScript()));
@@ -719,6 +722,7 @@ bool PythonIDE::saveModule(int tabIdx, bool saveAs) {
       _ui->modulesTabWidget->setTabToolTip(tabIdx, fileInfo.absoluteFilePath());
 
     getModuleEditor(tabIdx)->getCleanCode();
+    checkUnsavedFiles(_ui->modulesTabWidget, true);
 
     return true;
   }
@@ -1011,6 +1015,8 @@ bool PythonIDE::savePythonPlugin(int tabIdx, bool saveAs) {
     _ui->pluginsTabWidget->setTabToolTip(tabIdx, getPluginEditor(tabIdx)->getFileName());
 
     getPluginEditor(tabIdx)->getCleanCode();
+    checkUnsavedFiles(_ui->pluginsTabWidget, true);
+
     return true;
   }
   return false;
@@ -1278,15 +1284,37 @@ bool PythonIDE::projectNeedsPythonIDE(tlp::TulipProject *project) {
           project->exists(PYTHON_SCRIPTS_FILES));
 }
 
+bool PythonIDE::checkUnsavedFiles(PythonEditorsTabWidget *tabWidget,
+                                  bool updateTabText) {
+  for (int i = 0; i < tabWidget->count(); ++i) {
+    QString tabText = tabWidget->tabText(i);
+    if (tabText[tabText.size() - 1] == '*')
+      return true;
+  }
+  if (updateTabText) {
+    // remove '*' if needed
+    auto current = _ui->tabWidget->currentIndex();
+    auto tabText = _ui->tabWidget->tabText(current);
+    if (tabText[tabText.size() - 1] == '*') {
+      tabText = tabText.mid(0, tabText.size() - 1);
+      _ui->tabWidget->setTabText(current, tabText);
+    }
+  }
+  return false;
+}
+
 bool PythonIDE::hasUnsavedFiles() {
+  int i = 0;
   auto tabWidgets =
     { _ui->mainScriptsTabWidget, _ui->pluginsTabWidget, _ui->modulesTabWidget };
   for (auto tabWidget : tabWidgets) {
-    for (int i = 0; i < tabWidget->count(); ++i) {
-      QString tabText = tabWidget->tabText(i);
-      if (tabText[tabText.size() - 1] == '*')
-        return true;
+    if (checkUnsavedFiles(tabWidget)) {
+      // set it as current to ensure unsaved files
+      // will be first shown
+      _ui->tabWidget->setCurrentIndex(i);
+      return true;
     }
+    ++i;
   }
   return false;
 }
@@ -1564,6 +1592,7 @@ bool PythonIDE::saveScript(int tabIdx, bool clear, bool saveAs) {
         _pythonInterpreter->setOutputEnabled(true);
       }
     }
+    checkUnsavedFiles(_ui->mainScriptsTabWidget, true);
     return true;
   }
   return false;
@@ -1811,6 +1840,17 @@ void PythonIDE::graphComboBoxIndexChanged() {
 
   for (int i = 0; i < _ui->pluginsTabWidget->count(); ++i) {
     getPluginEditor(i)->getAutoCompletionDb()->setGraph(graph);
+  }
+}
+
+void PythonIDE::fileEdited() {
+  // if needed mark current tab text
+  // to indicate unsaved files exist
+  auto current = _ui->tabWidget->currentIndex();
+  auto curTabText = _ui->tabWidget->tabText(current);
+  if (curTabText[curTabText.size() - 1] != '*') {
+    curTabText += "*";
+    _ui->tabWidget->setTabText(current, curTabText);
   }
 }
 

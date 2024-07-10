@@ -89,6 +89,7 @@ void PythonEditorsTabWidget::scriptTextChanged() {
   if (curTabText[curTabText.size() - 1] != '*') {
     curTabText += "*";
     setTabText(currentIndex(), curTabText);
+    emit fileEdited();
   }
 }
 
