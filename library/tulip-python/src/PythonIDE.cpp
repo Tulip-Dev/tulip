@@ -339,20 +339,22 @@ struct _pipCommand {
   QString name;
   std::string argList;
   bool needPackage;
+  QString progressMsg;
 };
 
-static std::vector<_pipCommand> pipCommands{// install a package in the user directory
-                                            {"install", "install', '--user", true},
-                                            // list the package installed in the user directory
-                                            {"list", "list', '--user", false},
-                                            // list the installed packages
-                                            {"list all", "list", false},
-                                            // show package info
-                                            {"show", "show", true},
-                                            // uninstall a package
-                                            {"uninstall", "uninstall', '--yes", false},
-                                            // upgrade a package
-                                            {"upgrade", "install', '--upgrade", true}};
+static std::vector<_pipCommand> pipCommands{
+  // install a package in the user directory
+  {"install", "install', '--user", true, "installing"},
+  // list the package installed in the user directory
+  {"list", "list', '--user", false, ""},
+  // list the installed packages
+  {"list all", "list", false, ""},
+  // show package info
+  {"show", "show", true, ""},
+  // uninstall a package
+  {"uninstall", "uninstall', '--yes", false, "uninstalling"},
+  // upgrade a package
+  {"upgrade", "install', '--upgrade", true, "upgrading"}};
 
 // the name of the python exe
 static std::string pyExe;
@@ -1628,8 +1630,22 @@ if result.returncode != 0:
     pipScript += R"(
 elif result.stdout == '':
     print('no package'))";
+  // if needed, show a progress message while executing the command
+  QString progressMsg = pipCommands[command].progressMsg;
+  QMessageBox *progress = progressMsg.isEmpty() ? nullptr
+    : new QMessageBox(QMessageBox::Information, "Pip command execution",
+                      "", QMessageBox::Ok, this, Qt::Popup);
+  if (progress) {
+    for (auto button : progress->buttons())
+      progress->removeButton(button);
+    progress->setText(QString("%1 %2 ...").arg(progressMsg).arg(packageName));
+    progress->show();
+    QApplication::processEvents(QEventLoop::WaitForMoreEvents, 1000);
+  }
   // execute script
   _pythonInterpreter->runString(pipScript.c_str());
+
+  delete progress;
 }
 
 void PythonIDE::executeCurrentScript() {
