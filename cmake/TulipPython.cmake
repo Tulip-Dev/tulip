@@ -26,8 +26,6 @@ ENDIF()
 SET(SIP_BUILD ${Python_EXECUTABLE} -m sipbuild.tools.build) #instead of sip-build
 SET(SIP_MODULE_PROG ${Python_EXECUTABLE} -m sipbuild.tools.module) #instead of sip-module
 SET(SIP_VERSION 6.8.5)
-SET(SIP_API 13.7)
-SET(SIP_API_FULL 13.7.0)
 #check if sip is installed (it is up to the user to install it)
 #use the detected python interpreter to call sip instead of the command line tool
 #to be sure to use the correct version (command line tool may not be in the PATH)
@@ -51,10 +49,6 @@ ELSE()
     MESSAGE(FATAL_ERROR "SIP Python package at least version ${SIP_VERSION} not found (found ${SIP_MODULE_OUTPUT}).")
 ENDIF()
 ##########################################################
-SET(SIP_MODULE tulip.native.sip)
-string(REPLACE "." "_" SIP_MODULE_ ${SIP_MODULE})
-SET(SIP_LIB sip)
-
 IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   # STRING(REGEX REPLACE "[^0-9.]" "" TULIP_PYTHON_WHEEL_VERSION "${Tulip_VERSION}")
   SET(TULIP_PYTHON_WHEEL_NAME tulip-python)
@@ -116,21 +110,19 @@ IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 ##########################################################
 #generate the sip module sources
+SET(SIP_MODULE tulip.native.sip)
+string(REPLACE "." "_" SIP_MODULE_ ${SIP_MODULE})
+SET(SIP_LIB sip)
 SET(SIP_INCLUDE_DIR ${PROJECT_BINARY_DIR}/thirdparty/sip)
+
+FILE(MAKE_DIRECTORY ${SIP_INCLUDE_DIR})
+execute_process(
+    COMMAND ${SIP_MODULE_PROG} --sdist --target-dir=${SIP_INCLUDE_DIR} ${SIP_MODULE}
+    COMMAND_ERROR_IS_FATAL ANY)
+FILE(GLOB SIP_DIST LIST_DIRECTORIES false CONFIGURE_DEPENDS ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-*.tar.gz)
+STRING(REGEX MATCH "[0-9]+\.[0-9]+\.[0-9]+" SIP_API_FULL ${SIP_DIST})
+FILE(ARCHIVE_EXTRACT INPUT ${SIP_DIST} DESTINATION ${SIP_INCLUDE_DIR} PATTERNS *.c *.h)
 SET (SIP_H_DIR ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-${SIP_API_FULL})
-SET(SIP_MODULE_SRC ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-${SIP_API_FULL}.tar.gz)
-IF(NOT EXISTS ${SIP_MODULE_SRC})
-    MESSAGE(STATUS "Generating SIP module sources")
-    FILE(MAKE_DIRECTORY ${SIP_INCLUDE_DIR})
-    execute_process(
-        COMMAND ${SIP_MODULE_PROG} --sdist --abi-version=${SIP_API} --target-dir=${SIP_INCLUDE_DIR} ${SIP_MODULE}
-        COMMAND_ERROR_IS_FATAL ANY)
-    execute_process(
-    COMMAND ${CMAKE_COMMAND} -E tar zxf  ${SIP_MODULE_SRC}
-    WORKING_DIRECTORY ${SIP_INCLUDE_DIR}
-    COMMAND_ERROR_IS_FATAL ANY
-    )
-ENDIF()
 #######################
 #compile the sip module on our own instead of pip (produce faulty binaries on Windows and module is not compiled with gcc)
 SET(SIP_PYTHON_MODULE_SRC
