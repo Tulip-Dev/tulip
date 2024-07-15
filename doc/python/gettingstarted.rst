@@ -17,7 +17,7 @@ Tulip Python IDE
 .. |icon_ide| image:: tulipPythonIDEButton.png
     :width: 24
 
-A lightweight Python IDE can be accessed through the Tulip GUI. Some GUI reorganisation
+The Python IDE can be accessed through the Tulip GUI. Some GUI reorganisation
 has been made in Tulip 5.0 and all Python development features are now centralized in a
 separated window. It can be displayed by clicking on the |icon_ide| **Python** button located in the left side of the Tulip GUI.
 
@@ -55,6 +55,20 @@ More sophisticated ways to write python code for graphs management purpose are p
 
   Figure 2: Screenshot of the **Scripts editor** tab in the Python IDE.
 
+Pip tool graphic interface
+""""""""""""""""""""""""""
+
+As shown in the figure above, the Python IDE provides a graphic interface to interact with the pip tool of the Python environment used by Tulip. It allows to execute the following pip commands :
+
+        * install (a package in the user directory),
+        * list (packages in the user directory),
+        * list all (the installed packages),
+        * show (information about a package),
+        * uninstall (a package),
+        * upgrade (a package).
+
+After choosing the command, click in the *package name* input field, type the name, if needed, and hit the **Enter** key to execute it. The command ouput will then be displayed in the **Python output** tab.
+
 - A **Plugins editor** (see :ref:`Figure 3<fig3>`): it enables to develop Tulip plugins in pure Python
   (see :ref:`Writing Tulip plugins in Python <tulippythonplugins>`).
   These plugins are then immediately integrated in the Tulip GUI when requesting their registration
@@ -77,20 +91,6 @@ More sophisticated ways to write python code for graphs management purpose are p
    :align: center
 
    Figure 4: Screenshot of the **Modules editor** tab in the Python IDE.
-
-Backup and restore your Python code with Tulip projects
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The Tulip software uses a zipped project file format named TLPX to save and restore the state of a Tulip
-work session in a portable way. Notably it contains the graphs that was loaded in the software serialized to
-files but also the configuration of the views and components that was opened in the software.
-
-When working with the Python IDE, the source code of the scripts, plugins and modules currently edited
-are automatically saved to the current Tulip project. Nevertheless, the Tulip project must be explicitly
-saved to a .tlpx file in order for the Python files to be included in the resulting archive.
-When reopening the project file, the previously edited scripts, plugins and modules will still be available
-in the Python IDE even if you open the file on a computer different from the one you write your code.
-Python plugins will also be automatically loaded when reopening the project.
 
 Using the autocompletion to code faster
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -194,15 +194,19 @@ The autocompletion list facilitates the development of Tulip Python scripts espe
 
    Figure 10: Using the autocompletion list to get the subgraphs names.
 
+Save your Python code in .py files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Since Tulip 6, the code of the modules, plugins, scripts, you develop using Tulip Python IDE, is non longer saved in the Tulip projects files.
+You have to explicitely load/save them from/in .py file, using the **Load**, **Save**, **Save as** buttons available with the different editors.
+
 .. _usingBindingsInShell:
 
 Using the bindings from the Python Interpreter
 ----------------------------------------------
 
 The Tulip Python bindings can also be used through the classical Python Interpreter in an interactive shell.
-
 Since Tulip 4.8 release, the bindings modules are available on the `Python Packaging Index <https://pypi.python.org>`_.
-
 The modules are also located within the Tulip software installation, but some setup has to be done before being able to import them.
 
 Installing the Tulip-Python modules from the Python Packaging Index
