@@ -1,3 +1,4 @@
+OPTION(TULIP_USE_QT6 "Use Qt6 instead of Qt5" OFF)
 IF(TULIP_USE_QT6)
   SET(QT Qt6)
   SET(QT_MIN 6.2)
