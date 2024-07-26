@@ -135,9 +135,6 @@ public:
    * @return void
    **/
   void saveGraph_V4(Graph *g) {
-    node n;
-    edge e;
-
     _writer.writeString(GraphIDToken);
 
     if (g->getSuperGraph() == g) {

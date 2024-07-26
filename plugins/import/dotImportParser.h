@@ -2152,7 +2152,7 @@ yyoverflowlab:
 #endif
 
 yyreturn:
-#ifndef yyoverflow
+#ifdef yyoverflow // see line 1415 which is in a '#ifdef yyoverflow' block
 
   if (yyss != yyssa)
     YYSTACK_FREE(yyss);

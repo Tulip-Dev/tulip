@@ -54,7 +54,7 @@ void TestAlgorithmTest::testSimple() {
   std::vector<edge> multi;
   std::vector<edge> loops;
   // build a simple graph
-  node n1, n2, n3, n4;
+  node n1, n2, n3;
   edge e1, e2, e3;
   n1 = graph->addNode();
   n2 = graph->addNode();

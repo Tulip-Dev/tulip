@@ -718,8 +718,6 @@ void LinLogLayout::computeBaryCenter() {
 void LinLogLayout::initWeights() {
   linLogWeight.setAllNodeValue(0.0);
 
-  node u;
-
   if (edgeWeight == nullptr) {
     linLogWeight.setAllEdgeValue(1.0);
     for (auto e : graph->edges()) {
