@@ -75,11 +75,10 @@
          </size>
         </property>
         <property name="toolTip">
-         <string>Choose the export file location</string>
+         <string>Browse to select the export file location</string>
         </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>:/tulip/graphperspective/icons/16/document-open.png</normaloff>:/tulip/graphperspective/icons/16/document-open.png</iconset>
+        <property name="text">
+         <string>...</string>
         </property>
        </widget>
       </item>
