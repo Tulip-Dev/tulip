@@ -45,6 +45,7 @@ public:
   GraphImpl();
   ~GraphImpl() override;
   void clear() override;
+  static Graph *newGraph();
   //=========================================================================
   inline bool isElement(const node n) const override {
     return storage.isElement(n);

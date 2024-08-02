@@ -18,6 +18,7 @@
  */
 
 #include <iomanip>
+#include <mutex>
 #include <sstream>
 #include <stack>
 #include <unordered_set>
@@ -86,150 +87,34 @@ ostream &operator<<(ostream &os, const Graph *graph) {
   return os;
 }
 
-static void setViewPropertiesDefaults(Graph *g) {
+//=========================================================
+static std::set<ImportGraphObserver *> importGraphObservers;
+static std::mutex importGraphObserversMtx;
 
-  const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize",
-                    metrics = "viewMetric", fonts = "viewFont", fontSizes = "viewFontSize",
-                    borderWidth = "viewBorderWidth", borderColor = "viewBorderColor",
-                    tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape",
-                    icon = "viewIcon", labelColor = "viewLabelColor",
-                    labelBorderColor = "viewLabelBorderColor",
-                    labelBorderWidth = "viewLabelBorderWidth", labelPosition = "viewLabelPosition",
-                    label = "viewLabel", layout = "viewLayout", rotation = "viewRotation",
-                    srcAnchorSize = "viewSrcAnchorSize", selection = "viewSelection",
-                    texture = "viewTexture", tgtAnchorSize = "viewTgtAnchorSize";
+ImportGraphObserver::ImportGraphObserver() {
+  importGraphObserversMtx.lock();
+  importGraphObservers.insert(this);
+  importGraphObserversMtx.unlock();
+}
 
-  if (!g->existProperty(shapes)) {
-    g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipViewSettings::defaultShape(NODE));
-    g->getProperty<IntegerProperty>(shapes)->setAllEdgeValue(TulipViewSettings::defaultShape(EDGE));
-  }
-
-  if (!g->existProperty(colors)) {
-    g->getProperty<ColorProperty>(colors)->setAllNodeValue(TulipViewSettings::defaultColor(NODE));
-    g->getProperty<ColorProperty>(colors)->setAllEdgeValue(TulipViewSettings::defaultColor(EDGE));
-  }
-
-  if (!g->existProperty(sizes)) {
-    g->getProperty<SizeProperty>(sizes)->setAllNodeValue(TulipViewSettings::defaultSize(NODE));
-    g->getProperty<SizeProperty>(sizes)->setAllEdgeValue(TulipViewSettings::defaultSize(EDGE));
-  }
-
-  if (!g->existProperty(metrics)) {
-    g->getProperty<DoubleProperty>(metrics)->setAllNodeValue(0);
-    g->getProperty<DoubleProperty>(metrics)->setAllEdgeValue(0);
-  }
-
-  if (!g->existProperty(fonts)) {
-    g->getProperty<StringProperty>(fonts)->setAllNodeValue(TulipViewSettings::defaultFontFile());
-    g->getProperty<StringProperty>(fonts)->setAllEdgeValue(TulipViewSettings::defaultFontFile());
-  }
-
-  if (!g->existProperty(fontSizes)) {
-    g->getProperty<IntegerProperty>(fontSizes)->setAllNodeValue(
-        TulipViewSettings::defaultFontSize());
-    g->getProperty<IntegerProperty>(fontSizes)->setAllEdgeValue(
-        TulipViewSettings::defaultFontSize());
-  }
-
-  if (!g->existProperty(borderWidth)) {
-    g->getProperty<DoubleProperty>(borderWidth)
-        ->setAllNodeValue(TulipViewSettings::defaultBorderWidth(NODE));
-    g->getProperty<DoubleProperty>(borderWidth)
-        ->setAllEdgeValue(TulipViewSettings::defaultBorderWidth(EDGE));
-  }
-
-  if (!g->existProperty(borderColor)) {
-    g->getProperty<ColorProperty>(borderColor)
-        ->setAllNodeValue(TulipViewSettings::defaultBorderColor(NODE));
-    g->getProperty<ColorProperty>(borderColor)
-        ->setAllEdgeValue(TulipViewSettings::defaultBorderColor(EDGE));
-  }
-
-  if (!g->existProperty(tgtShape)) {
-    g->getProperty<IntegerProperty>(tgtShape)->setAllEdgeValue(
-        TulipViewSettings::defaultEdgeExtremityTgtShape());
-  }
-
-  if (!g->existProperty(srcShape)) {
-    g->getProperty<IntegerProperty>(srcShape)->setAllEdgeValue(
-        TulipViewSettings::defaultEdgeExtremitySrcShape());
-  }
-
-  if (!g->existProperty(labelColor)) {
-    g->getProperty<ColorProperty>(labelColor)
-        ->setAllNodeValue(TulipViewSettings::defaultLabelColor());
-    g->getProperty<ColorProperty>(labelColor)
-        ->setAllEdgeValue(TulipViewSettings::defaultLabelColor());
-  }
-
-  if (!g->existProperty(labelBorderColor)) {
-    g->getProperty<ColorProperty>(labelBorderColor)
-        ->setAllNodeValue(TulipViewSettings::defaultLabelBorderColor());
-    g->getProperty<ColorProperty>(labelBorderColor)
-        ->setAllEdgeValue(TulipViewSettings::defaultLabelBorderColor());
-  }
-
-  if (!g->existProperty(labelBorderWidth)) {
-    g->getProperty<DoubleProperty>(labelBorderWidth)
-        ->setAllNodeValue(TulipViewSettings::defaultLabelBorderWidth());
-    g->getProperty<DoubleProperty>(labelBorderWidth)
-        ->setAllEdgeValue(TulipViewSettings::defaultLabelBorderWidth());
-  }
-
-  if (!g->existProperty(labelPosition)) {
-    g->getProperty<IntegerProperty>(labelPosition)
-        ->setAllNodeValue(TulipViewSettings::defaultLabelPosition());
-    g->getProperty<IntegerProperty>(labelPosition)
-        ->setAllEdgeValue(TulipViewSettings::defaultLabelPosition());
-  }
-
-  if (!g->existProperty(layout)) {
-    g->getProperty<LayoutProperty>(layout)->setAllNodeValue(Coord(0, 0, 0));
-    g->getProperty<LayoutProperty>(layout)->setAllEdgeValue(std::vector<Coord>());
-  }
-
-  if (!g->existProperty(rotation)) {
-    g->getProperty<DoubleProperty>(rotation)->setAllNodeValue(0);
-    g->getProperty<DoubleProperty>(rotation)->setAllEdgeValue(0);
-  }
-
-  if (!g->existProperty(srcAnchorSize)) {
-    g->getProperty<SizeProperty>(srcAnchorSize)
-        ->setAllEdgeValue(TulipViewSettings::defaultEdgeExtremitySrcSize());
-  }
-
-  if (!g->existProperty(tgtAnchorSize)) {
-    g->getProperty<SizeProperty>(tgtAnchorSize)
-        ->setAllEdgeValue(TulipViewSettings::defaultEdgeExtremityTgtSize());
-  }
-
-  if (!g->existProperty(texture)) {
-    g->getProperty<StringProperty>(texture)->setAllNodeValue("");
-    g->getProperty<StringProperty>(texture)->setAllEdgeValue("");
-  }
-
-  if (!g->existProperty(label)) {
-    g->getProperty<StringProperty>(label)->setAllNodeValue("");
-    g->getProperty<StringProperty>(label)->setAllEdgeValue("");
-  }
-
-  if (!g->existProperty(selection)) {
-    g->getProperty<BooleanProperty>(selection)->setAllNodeValue(false);
-    g->getProperty<BooleanProperty>(selection)->setAllEdgeValue(false);
-  }
-
-  if (!g->existProperty(icon)) {
-    g->getProperty<StringProperty>(icon)->setAllNodeValue("fas-circle-question");
-    g->getProperty<StringProperty>(icon)->setAllEdgeValue("fas-circle-question");
-  }
+ImportGraphObserver::~ImportGraphObserver() {
+  importGraphObserversMtx.lock();
+  importGraphObservers.erase(this);
+  importGraphObserversMtx.unlock();
 }
 
 //=========================================================
 Graph *tlp::newGraph() {
-  Graph *g = new GraphImpl();
-  setViewPropertiesDefaults(g);
+  auto g = GraphImpl::newGraph();
+
+  importGraphObserversMtx.lock();
+  for (auto ngo : importGraphObservers)
+    ngo->graphImported(g);
+  importGraphObserversMtx.unlock();
+
   return g;
 }
+
 //=========================================================
 Graph *tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
   DataSet dataSet;
@@ -322,8 +207,8 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
   return result;
 }
 //=========================================================
-Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress,
-                        Graph *graph) {
+Graph *tlp::importGraph(const std::string &format, DataSet &dataSet,
+                        PluginProgress *progress, Graph *graph) {
 
   if (!PluginLister::pluginExists(format)) {
     tlp::warning() << "libtulip: " << __FUNCTION__ << ": import plugin \"" << format
@@ -334,7 +219,7 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgr
   bool newGraphP = false;
 
   if (graph == nullptr) {
-    graph = tlp::newGraph();
+    graph = GraphImpl::newGraph();
     newGraphP = true;
   }
 
@@ -360,8 +245,11 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgr
     graph = nullptr;
     if (!progress->getError().empty())
       tlp::error() << progress->getError() << std::endl;
-  } else {
-    setViewPropertiesDefaults(graph);
+  } else if (newGraphP) {
+    importGraphObserversMtx.lock();
+    for (auto ngo : importGraphObservers)
+      ngo->graphImported(graph);
+    importGraphObserversMtx.unlock();
   }
 
   if (deletePluginProgress)

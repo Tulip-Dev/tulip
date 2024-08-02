@@ -1288,7 +1288,6 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
     g = tlp::newGraph();
   }
 
-  _graphs->addGraph(g);
   std::string fileName;
 
   if (data.get("file::filename", fileName))
@@ -1851,7 +1850,7 @@ void GraphPerspective::CSVImport() {
   bool mustDeleteGraph = false;
 
   if (_graphs->empty()) {
-    _graphs->addGraph(tlp::newGraph());
+    tlp::newGraph();
     mustDeleteGraph = true;
   }
 

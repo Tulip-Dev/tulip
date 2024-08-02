@@ -25,6 +25,15 @@
 #include <tulip/GraphView.h>
 #include <tulip/GraphIterators.h>
 #include <tulip/GraphUpdatesRecorder.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/GraphProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/TulipViewSettings.h>
 
 using namespace std;
 using namespace tlp;
@@ -70,6 +79,83 @@ GraphImpl::~GraphImpl() {
 void GraphImpl::clear() {
   GraphAbstract::clear();
   storage.clear();
+}
+//----------------------------------------------------------------
+Graph *GraphImpl::newGraph() {
+  Graph* g = new GraphImpl();
+
+  // set "view..'" properties defaults
+  const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize",
+    metrics = "viewMetric", fonts = "viewFont", fontSizes = "viewFontSize",
+    borderWidth = "viewBorderWidth", borderColor = "viewBorderColor",
+    tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape",
+    icon = "viewIcon", labelColor = "viewLabelColor",
+    labelBorderColor = "viewLabelBorderColor",
+    labelBorderWidth = "viewLabelBorderWidth", labelPosition = "viewLabelPosition",
+    label = "viewLabel", layout = "viewLayout", rotation = "viewRotation",
+    srcAnchorSize = "viewSrcAnchorSize", selection = "viewSelection",
+    texture = "viewTexture", tgtAnchorSize = "viewTgtAnchorSize";
+
+  g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipViewSettings::defaultShape(NODE));
+  g->getProperty<IntegerProperty>(shapes)->setAllEdgeValue(TulipViewSettings::defaultShape(EDGE));
+  g->getProperty<ColorProperty>(colors)->setAllNodeValue(TulipViewSettings::defaultColor(NODE));
+  g->getProperty<ColorProperty>(colors)->setAllEdgeValue(TulipViewSettings::defaultColor(EDGE));
+  g->getProperty<SizeProperty>(sizes)->setAllNodeValue(TulipViewSettings::defaultSize(NODE));
+  g->getProperty<SizeProperty>(sizes)->setAllEdgeValue(TulipViewSettings::defaultSize(EDGE));
+  g->getProperty<DoubleProperty>(metrics)->setAllNodeValue(0);
+  g->getProperty<DoubleProperty>(metrics)->setAllEdgeValue(0);
+  g->getProperty<StringProperty>(fonts)->setAllNodeValue(TulipViewSettings::defaultFontFile());
+  g->getProperty<StringProperty>(fonts)->setAllEdgeValue(TulipViewSettings::defaultFontFile());
+  g->getProperty<IntegerProperty>(fontSizes)->setAllNodeValue(
+                                                              TulipViewSettings::defaultFontSize());
+  g->getProperty<IntegerProperty>(fontSizes)->setAllEdgeValue(
+                                                              TulipViewSettings::defaultFontSize());
+  g->getProperty<DoubleProperty>(borderWidth)
+    ->setAllNodeValue(TulipViewSettings::defaultBorderWidth(NODE));
+  g->getProperty<DoubleProperty>(borderWidth)
+    ->setAllEdgeValue(TulipViewSettings::defaultBorderWidth(EDGE));
+  g->getProperty<ColorProperty>(borderColor)
+    ->setAllNodeValue(TulipViewSettings::defaultBorderColor(NODE));
+  g->getProperty<ColorProperty>(borderColor)
+    ->setAllEdgeValue(TulipViewSettings::defaultBorderColor(EDGE));
+  g->getProperty<IntegerProperty>(tgtShape)->setAllEdgeValue(
+                                                             TulipViewSettings::defaultEdgeExtremityTgtShape());
+  g->getProperty<IntegerProperty>(srcShape)->setAllEdgeValue(
+                                                             TulipViewSettings::defaultEdgeExtremitySrcShape());
+  g->getProperty<ColorProperty>(labelColor)
+    ->setAllNodeValue(TulipViewSettings::defaultLabelColor());
+  g->getProperty<ColorProperty>(labelColor)
+    ->setAllEdgeValue(TulipViewSettings::defaultLabelColor());
+  g->getProperty<ColorProperty>(labelBorderColor)
+    ->setAllNodeValue(TulipViewSettings::defaultLabelBorderColor());
+  g->getProperty<ColorProperty>(labelBorderColor)
+    ->setAllEdgeValue(TulipViewSettings::defaultLabelBorderColor());
+  g->getProperty<DoubleProperty>(labelBorderWidth)
+    ->setAllNodeValue(TulipViewSettings::defaultLabelBorderWidth());
+  g->getProperty<DoubleProperty>(labelBorderWidth)
+    ->setAllEdgeValue(TulipViewSettings::defaultLabelBorderWidth());
+  g->getProperty<IntegerProperty>(labelPosition)
+    ->setAllNodeValue(TulipViewSettings::defaultLabelPosition());
+  g->getProperty<IntegerProperty>(labelPosition)
+    ->setAllEdgeValue(TulipViewSettings::defaultLabelPosition());
+  g->getProperty<LayoutProperty>(layout)->setAllNodeValue(Coord(0, 0, 0));
+  g->getProperty<LayoutProperty>(layout)->setAllEdgeValue(std::vector<Coord>());
+  g->getProperty<DoubleProperty>(rotation)->setAllNodeValue(0);
+  g->getProperty<DoubleProperty>(rotation)->setAllEdgeValue(0);
+  g->getProperty<SizeProperty>(srcAnchorSize)
+    ->setAllEdgeValue(TulipViewSettings::defaultEdgeExtremitySrcSize());
+  g->getProperty<SizeProperty>(tgtAnchorSize)
+    ->setAllEdgeValue(TulipViewSettings::defaultEdgeExtremityTgtSize());
+  g->getProperty<StringProperty>(texture)->setAllNodeValue("");
+  g->getProperty<StringProperty>(texture)->setAllEdgeValue("");
+  g->getProperty<StringProperty>(label)->setAllNodeValue("");
+  g->getProperty<StringProperty>(label)->setAllEdgeValue("");
+  g->getProperty<BooleanProperty>(selection)->setAllNodeValue(false);
+  g->getProperty<BooleanProperty>(selection)->setAllEdgeValue(false);
+  g->getProperty<StringProperty>(icon)->setAllNodeValue("fas-circle-question");
+  g->getProperty<StringProperty>(icon)->setAllEdgeValue("fas-circle-question");
+
+  return g;
 }
 //----------------------------------------------------------------
 edge GraphImpl::existEdge(const node src, const node tgt, bool directed) const {

@@ -211,12 +211,12 @@ static void restoreTextureFilesFromProject(tlp::Graph *g, tlp::TulipProject *pro
 }
 
 GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent)
-    : TulipModel(parent), _currentGraph(nullptr) {}
+  : TulipModel(parent), tlp::ImportGraphObserver(), _currentGraph(nullptr) {}
 
 GraphHierarchiesModel::GraphHierarchiesModel(const GraphHierarchiesModel &copy)
-    : TulipModel(copy.QObject::parent()), tlp::Observable() {
+  : TulipModel(copy.QObject::parent()), tlp::Observable(), tlp::ImportGraphObserver() {
   for (int i = 0; i < copy.size(); ++i)
-    addGraph(copy[i]);
+    graphImported(copy[i]);
 
   _currentGraph = nullptr;
 }
@@ -294,7 +294,6 @@ QMap<QString, tlp::Graph *> GraphHierarchiesModel::readProject(tlp::TulipProject
     if (g) {
       rootIds[entry] = g;
       restoreTextureFilesFromProject(g, project, progress);
-      addGraph(g);
     } else {
       // failure when loading a graph
       // so delete already loaded graphs
@@ -586,15 +585,7 @@ static void addListenerToWholeGraphHierarchy(Graph *root, Observable *listener) 
   root->addObserver(listener);
 }
 
-void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
-  if (_graphs.contains(g) || g == nullptr)
-    return;
-
-  for (auto _g : _graphs) {
-    if (_g->isDescendantGraph(g))
-      return;
-  }
-
+void GraphHierarchiesModel::graphImported(tlp::Graph *g) {
   beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
   _saveNeeded[g] = new GraphNeedsSavingObserver(

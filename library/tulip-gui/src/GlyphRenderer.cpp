@@ -23,7 +23,7 @@
 #include <tulip/GlyphRenderer.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
-#include <tulip/Graph.h>
+#include <tulip/GraphImpl.h>
 #include <tulip/GlOffscreenRenderer.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/TulipViewSettings.h>
@@ -40,7 +40,7 @@ static std::unordered_map<int, QPixmap> nodePreviews;
 static QPixmap renderNodeGlyph(int glyphId, int dim) {
   // Init graph parameters.
   GlGraphRenderingParameters parameters;
-  auto graph = newGraph();
+  auto graph = GraphImpl::newGraph();
   auto node = graph->addNode();
   QPixmap pxmp;
   {

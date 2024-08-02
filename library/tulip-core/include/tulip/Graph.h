@@ -146,14 +146,29 @@ TLP_SCOPE Graph *importGraph(const std::string &format, DataSet &dataSet,
  * @ingroup Graph
  * @brief Creates a new, empty graph.
  *
- * This is a simple method factory to create a Graph implementation (remember, Graph is only an
- *interface).
+ * This is a simple method factory to create a Graph implementation
+ * (remember, Graph is only an interface).
  *
  * This is the recommended way to create a new Graph.
  *
  * @return :Graph* A new, empty graph.
  **/
 TLP_SCOPE Graph *newGraph();
+
+/**
+ * @ingroup Graph
+ * @brief new graph observation.
+ *
+ * This is a simple class with only one virtual method which is called
+ * each time a new graph is imported (tlp::importGraph(), tlp::newGraph()).
+ *
+ */
+  class ImportGraphObserver {
+  public:
+    ImportGraphObserver();
+    virtual ~ImportGraphObserver();
+    virtual void graphImported(Graph *g)=0;
+  };
 
 /**
  * @ingroup Graph

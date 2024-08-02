@@ -35,7 +35,7 @@ class GraphNeedsSavingObserver;
 class TulipProject;
 class PluginProgress;
 
-class TLP_QT_SCOPE GraphHierarchiesModel : public tlp::TulipModel, public tlp::Observable {
+  class TLP_QT_SCOPE GraphHierarchiesModel : public tlp::TulipModel, public tlp::Observable, public tlp::ImportGraphObserver {
   Q_OBJECT
 
   QList<tlp::Graph *> _graphs;
@@ -100,10 +100,12 @@ public:
   QModelIndex indexOf(const Graph *);
   QModelIndex forceGraphIndex(Graph *);
 
-  // Methods inherited from the observable system
+  // inherited from Observable
   void treatEvent(const tlp::Event &) override;
-
   void treatEvents(const std::vector<tlp::Event> &) override;
+
+  // inherited from ImportGraphObserver
+  void graphImported(tlp::Graph *) override;
 
   // active graph handling
   void setCurrentGraph(tlp::Graph *);
@@ -113,7 +115,6 @@ signals:
   void currentGraphChanged(tlp::Graph *);
 
 public slots:
-  void addGraph(tlp::Graph *);
   void removeGraph(tlp::Graph *);
 
   QMap<QString, tlp::Graph *> readProject(tlp::TulipProject *, tlp::PluginProgress *);

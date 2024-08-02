@@ -34,6 +34,7 @@
 #include <QMessageBox>
 #include <QKeyEvent>
 
+#include <tulip/GraphImpl.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/Interactor.h>
@@ -106,7 +107,7 @@ void ParallelCoordinatesView::initGlWidget() {
     scene->addExistingLayer(mainLayer);
   }
 
-  axisPointsGraph = tlp::newGraph();
+  axisPointsGraph = GraphImpl::newGraph();
   glGraphComposite = new GlGraphComposite(axisPointsGraph);
   mainLayer->addGlEntity(glGraphComposite, "graph");
   axisSelectionLayer = new GlLayer("Axis selection layer");

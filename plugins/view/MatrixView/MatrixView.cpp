@@ -26,6 +26,7 @@
 #include "MatrixViewQuickAccessBar.h"
 
 #include <tulip/Graph.h>
+#include <tulip/GraphImpl.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/TlpQtTools.h>
@@ -291,7 +292,7 @@ void MatrixView::initDisplayedGraph() {
     return;
   }
 
-  _matrixGraph = newGraph();
+  _matrixGraph = GraphImpl::newGraph();
   _matrixGraph->reserveNodes(2 * (graph()->numberOfNodes() + graph()->numberOfEdges()));
   _matrixGraph->reserveEdges(graph()->numberOfEdges());
 

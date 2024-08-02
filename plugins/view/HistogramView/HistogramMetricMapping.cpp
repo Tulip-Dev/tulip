@@ -17,6 +17,7 @@
  *
  */
 
+#include <tulip/GraphImpl.h>
 #include <tulip/GlQuantitativeAxis.h>
 #include <tulip/GlLines.h>
 #include <tulip/GlLine.h>
@@ -453,7 +454,7 @@ void GlSizeScale::translate(const Coord &move) {
 }
 
 GlGlyphScale::GlGlyphScale(const Coord &baseCoord, const float length, Orientation orientation)
-    : glyphGraph(newGraph()),
+    : glyphGraph(GraphImpl::newGraph()),
       glyphGraphInputData(new GlGraphInputData(glyphGraph, &glyphGraphRenderingParameters)),
       baseCoord(baseCoord), length(length), orientation(orientation), size(0) {
   glyphGraphLayout = glyphGraph->getProperty<LayoutProperty>("viewLayout");
@@ -561,7 +562,7 @@ HistogramMetricMapping::HistogramMetricMapping()
       glSizeScale(nullptr), glGlyphScale(nullptr), colorScaleConfigDialog(nullptr),
       sizeScaleConfigDialog(nullptr), glyphScaleConfigDialog(nullptr), lastXAxisLength(0),
       histoXAxis(nullptr), mappinqPolyQuad(nullptr), scaleAxisOffset(0),
-      glyphMappingGraph(newGraph()),
+      glyphMappingGraph(GraphImpl::newGraph()),
       glyphMappingGraphInputData(
           new GlGraphInputData(glyphMappingGraph, &glyphMapppingGraphRenderingParameters)),
       mappingType(VIEWCOLOR_MAPPING), popupMenu(nullptr), colorMappingMenu(nullptr),
@@ -571,7 +572,7 @@ HistogramMetricMapping::HistogramMetricMapping()
 HistogramMetricMapping::HistogramMetricMapping(const HistogramMetricMapping &histoMetricMapping)
     : curve(nullptr), curveDragStarted(false), selectedAnchor(nullptr), colorScale(nullptr),
       glColorScale(nullptr), glSizeScale(nullptr), glGlyphScale(nullptr), histoXAxis(nullptr),
-      mappinqPolyQuad(nullptr), scaleAxisOffset(0), glyphMappingGraph(newGraph()),
+      mappinqPolyQuad(nullptr), scaleAxisOffset(0), glyphMappingGraph(GraphImpl::newGraph()),
       glyphMappingGraphInputData(
           new GlGraphInputData(glyphMappingGraph, &glyphMapppingGraphRenderingParameters)),
       popupMenu(nullptr), colorMappingMenu(nullptr), viewColorMappingAction(nullptr),

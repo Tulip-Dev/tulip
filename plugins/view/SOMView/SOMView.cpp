@@ -28,6 +28,7 @@
 #include "SOMViewInteractor.h"
 #include "SOMPropertiesWidget.h"
 
+#include <tulip/GraphImpl.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/NumericProperty.h>
 #include <tulip/ColorProperty.h>
@@ -178,7 +179,7 @@ void SOMView::initGlMainViews() {
   }
 
   // No graph to print
-  GlGraphComposite *graphComposite = new GlGraphComposite(tlp::newGraph());
+  GlGraphComposite *graphComposite = new GlGraphComposite(GraphImpl::newGraph());
   mainLayer->addGlEntity(graphComposite, "graph");
   // activate hover
 
@@ -189,7 +190,7 @@ void SOMView::initGlMainViews() {
     mapWidget->getScene()->addExistingLayer(mainLayer);
   }
 
-  graphComposite = new GlGraphComposite(tlp::newGraph());
+  graphComposite = new GlGraphComposite(GraphImpl::newGraph());
   mainLayer->addGlEntity(graphComposite, "graph");
 
   GlGraphRenderingParameters *renderingParameters = graphComposite->getRenderingParametersPointer();

@@ -17,6 +17,7 @@
  *
  */
 
+#include <tulip/GraphImpl.h>
 #include <tulip/GlQuantitativeAxis.h>
 #include <tulip/Interactor.h>
 #include <tulip/GlMainWidget.h>
@@ -102,7 +103,7 @@ void HistogramView::initGlWidget() {
   cleanupGlScene();
 
   if (emptyGlGraphComposite == nullptr) {
-    emptyGraph = newGraph();
+    emptyGraph = GraphImpl::newGraph();
     emptyGlGraphComposite = new GlGraphComposite(emptyGraph);
   }
 
@@ -214,7 +215,7 @@ void HistogramView::setState(const DataSet &dataSet) {
     delete edgeAsNodeGraph;
 
     if (_histoGraph) {
-      edgeAsNodeGraph = tlp::newGraph();
+      edgeAsNodeGraph = GraphImpl::newGraph();
       edgeToNode.clear();
       nodeToEdge.clear();
       for (auto e : _histoGraph->edges()) {

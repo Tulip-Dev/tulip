@@ -18,6 +18,7 @@
  */
 
 #include "SOMMap.h"
+#include <tulip/GraphImpl.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/GlyphManager.h>
@@ -40,7 +41,7 @@ SOMMap::SOMMap(Graph *root, unsigned int width, unsigned int height,
 }
 SOMMap::SOMMap(unsigned int width, unsigned int height, SOMMapConnectivity connectivity,
                bool oppositeConnected)
-    : tlp::GraphDecorator(newGraph()), width(width), height(height), connectivity(connectivity),
+    : tlp::GraphDecorator(GraphImpl::newGraph()), width(width), height(height), connectivity(connectivity),
       oppositeConnected(oppositeConnected), graphCreated(true) {
   initMap();
 }
@@ -81,6 +82,7 @@ void SOMMap::initMap() {
     gridDataSet.set("opposite nodes connected", oppositeConnected);
     // Suppress spacing
     gridDataSet.set("spacing", 0.0);
+    graph_component = GraphImpl::newGraph();
     graph_component = importGraph("Grid", gridDataSet, nullptr, graph_component);
   }
 

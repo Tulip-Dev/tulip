@@ -17,6 +17,7 @@
  *
  */
 
+#include <tulip/GraphImpl.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlGraphComposite.h>
@@ -86,7 +87,7 @@ void ScatterPlot2DView::initGlWidget() {
   cleanupGlScene();
 
   if (emptyGraph == nullptr) {
-    emptyGraph = newGraph();
+    emptyGraph = GraphImpl::newGraph();
     glGraphComposite = new GlGraphComposite(emptyGraph);
   }
 
@@ -197,7 +198,7 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     delete edgeAsNodeGraph;
 
     if (scatterPlotGraph) {
-      edgeAsNodeGraph = tlp::newGraph();
+      edgeAsNodeGraph = GraphImpl::newGraph();
       ColorProperty *edgeAsNodeGraphColor =
           edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
       ColorProperty *graphColor = scatterPlotGraph->getProperty<ColorProperty>("viewColor");
