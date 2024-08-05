@@ -121,7 +121,6 @@ public:
     Sphere = TulipShape::Sphere,
     Square = TulipShape::Square,
     Star = TulipShape::Star,
-    FontAwesomeIcon = TulipShape::Icon,
     Icon = TulipShape::Icon
   };
 };
