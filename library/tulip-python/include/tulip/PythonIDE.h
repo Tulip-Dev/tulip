@@ -147,14 +147,12 @@ private slots:
   void loadPythonPlugin();
   void savePythonPlugin();
   void saveAsPythonPlugin();
-  void saveAllPlugins();
   void registerPythonPlugin(bool clear = true);
   void removePythonPlugin();
   void newModule();
   void loadModule();
   void saveModule();
   void saveAsModule();
-  void saveAllModules();
   void scrollToEditorLine(const QUrl &);
   void increaseFontSize();
   void decreaseFontSize();
@@ -168,7 +166,6 @@ private slots:
   void loadScript();
   void saveScript();
   void saveAsScript();
-  void saveAllScripts();
   void currentScriptPaused();
 
   void closeModuleTabRequested(int index);

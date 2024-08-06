@@ -601,13 +601,6 @@ os.symlink(certifi.where(), openssl_cafile))";
   connect(_ui->pluginsTabWidget, SIGNAL(tabAboutToBeDeleted(int)), this,
           SLOT(closePluginTabRequested(int)));
 
-  connect(_ui->modulesTabWidget->tabBar(), SIGNAL(tabMoved(int, int)), this,
-          SLOT(saveAllModules()));
-  connect(_ui->mainScriptsTabWidget->tabBar(), SIGNAL(tabMoved(int, int)), this,
-          SLOT(saveAllScripts()));
-  connect(_ui->pluginsTabWidget->tabBar(), SIGNAL(tabMoved(int, int)), this,
-          SLOT(saveAllPlugins()));
-
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) +
                                           "/apiFiles/tulip.api");
   APIDataBase::getInstance()->loadApiFile(
@@ -752,12 +745,6 @@ void PythonIDE::saveAsModule() {
     return;
 
   saveModule(curModule, true);
-}
-
-void PythonIDE::saveAllModules() {
-  for (int i = 0; i < _ui->modulesTabWidget->count(); ++i) {
-    saveModule(i);
-  }
 }
 
 bool PythonIDE::reloadAllModules() const {
@@ -1020,12 +1007,6 @@ bool PythonIDE::savePythonPlugin(int tabIdx, bool saveAs) {
     return true;
   }
   return false;
-}
-
-void PythonIDE::saveAllPlugins() {
-  for (int i = 0; i < _ui->pluginsTabWidget->count(); ++i) {
-    savePythonPlugin(i);
-  }
 }
 
 void PythonIDE::registerPythonPlugin(bool clear) {
@@ -1598,12 +1579,6 @@ bool PythonIDE::saveScript(int tabIdx, bool clear, bool saveAs) {
   return false;
 }
 
-void PythonIDE::saveAllScripts() {
-  for (int i = 0; i < _ui->mainScriptsTabWidget->count(); ++i) {
-    saveScript(i, false);
-  }
-}
-
 void PythonIDE::setGraphsModel(tlp::GraphHierarchiesModel *model) {
   _graphsModel = model;
   _ui->graphComboBox->setModel(model);
@@ -1707,10 +1682,6 @@ void PythonIDE::executeCurrentScript() {
   if (scriptFileName.isEmpty()) {
     scriptFileName = "<unnamed script>";
   }
-
-  saveAllScripts();
-
-  saveAllModules();
 
   _pythonInterpreter->setConsoleWidget(_ui->consoleWidget);
 
