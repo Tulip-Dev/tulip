@@ -47,12 +47,9 @@ public:
 };
 
 class ParenMatcherHighlighter : public QSyntaxHighlighter {
-
-  QVector<char> _leftParensToMatch;
-  QVector<char> _rightParensToMatch;
-
 public:
-  explicit ParenMatcherHighlighter(QTextDocument *parent = nullptr);
+  explicit ParenMatcherHighlighter(QTextDocument *parent = nullptr)
+    : QSyntaxHighlighter(parent) {}
 
 protected:
   void highlightBlock(const QString &text) override;
