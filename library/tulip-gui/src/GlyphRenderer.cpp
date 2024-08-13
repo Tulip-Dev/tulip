@@ -106,7 +106,7 @@ static QPixmap renderEEGlyph(int glyphId, int dim) {
   eePreviews[EdgeExtremityShape::None] = pxmp;
   // Init graph parameters.
   GlGraphRenderingParameters parameters;
-  auto graph = newGraph();
+  auto graph = GraphImpl::newGraph();
   node n1 = graph->addNode();
   node n2 = graph->addNode();
   edge e = graph->addEdge(n1, n2);
