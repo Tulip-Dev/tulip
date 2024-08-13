@@ -281,7 +281,11 @@ SET(OGDFLibrary OGDF)
 #utf8-cpp
 find_package(utf8cpp QUIET)
 IF(utf8cpp_FOUND)
-    GET_PROPERTY(UTF8CppInclude TARGET utf8cpp PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+    IF(TARGET utf8cpp) #Gentoo linux is looking for utf8cpp only
+        GET_PROPERTY(UTF8CppInclude TARGET utf8cpp PROPERTY INTERFACE_INCLUDE_DIRECTORIES)  #Gentoo linux is looking for utf8cpp only
+    ELSE(TARGET utf8cpp)
+        GET_PROPERTY(UTF8CppInclude TARGET utf8cpp::utf8cpp PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+    ENDIF(TARGET utf8cpp)
     MESSAGE(STATUS "Using the system utf8cpp header files located in ${UTF8CppInclude}")
 ELSE(utf8cpp_FOUND)
     SET(UTF8CppInclude ${PROJECT_SOURCE_DIR}/thirdparty/utf8-cpp/source)
