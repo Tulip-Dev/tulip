@@ -71,15 +71,22 @@ public:
                             const Graph *graph) override;
 };
 //----------------------------------------------------------------
+bool rejectAnyValue(int) {
+  return false;
+}
+//----------------------------------------------------------------
 IntegerEnumeratedProperty::IntegerEnumeratedProperty(Graph *g, const std::string &n)  : IntegerProperty(g, n), _checkNodeValue(nullptr), _checkEdgeValue(nullptr) {
   if (name == "viewShape") {
     _checkNodeValue = tlp::NodeShape::checkValue;
     _checkEdgeValue = tlp::EdgeShape::checkValue;
+    return;
   } else if (name == "viewLabelPosition") {
     _checkNodeValue = tlp::LabelPosition::checkValue;
     _checkEdgeValue = tlp::LabelPosition::checkValue;
-  } else if (name == "viewSrcAnchorshape" || name == "viewTgtAnchorshape") {
-    _checkEdgeValue = tlp:: EdgeExtremityShape::checkValue;
+    return;
+  } else if (name == "viewSrcAnchorShape" || name == "viewTgtAnchorShape") {
+    _checkNodeValue = rejectAnyValue;
+    _checkEdgeValue = tlp::EdgeExtremityShape::checkValue;
   }
 }
 //----------------------------------------------------------------
