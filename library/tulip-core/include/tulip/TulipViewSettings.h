@@ -93,12 +93,28 @@ public:
     Star = TulipShape::Star,
     Icon = TulipShape::Icon
   };
+
+  static bool checkValue(int v) {
+    return v > -1 && v < 24;
+  }
 };
 
 class TLP_SCOPE EdgeShape {
 
 public:
   enum EdgeShapes { Polyline = 0, BezierCurve = 4, CatmullRomCurve = 8, CubicBSplineCurve = 16 };
+
+  inline bool static checkValue(int v) {
+    switch(v) {
+    case Polyline:
+    case BezierCurve:
+    case CatmullRomCurve:
+    case CubicBSplineCurve:
+      return true;
+    default:
+      return false;
+    }
+  }
 };
 
 class TLP_SCOPE EdgeExtremityShape {
@@ -123,12 +139,41 @@ public:
     Star = TulipShape::Star,
     Icon = TulipShape::Icon
   };
+
+  inline bool static checkValue(int v) {
+    switch(v) {
+      case TulipShape::None:
+      case TulipShape::Arrow:
+      case TulipShape::Circle:
+      case TulipShape::Cone:
+      case TulipShape::Cross:
+      case TulipShape::Cube:
+      case TulipShape::CubeOutlinedTransparent:
+      case TulipShape::Cylinder:
+      case TulipShape::Diamond:
+      case TulipShape::GlowSphere:
+      case TulipShape::Hexagon:
+      case TulipShape::Pentagon:
+      case TulipShape::Ring:
+      case TulipShape::Sphere:
+      case TulipShape::Square:
+      case TulipShape::Star:
+      case TulipShape::Icon:
+      return true;
+    default:
+      return false;
+    }
+  }
 };
 
 class TLP_SCOPE LabelPosition {
 
 public:
   enum LabelPositions { Center = 0, Top = 1, Bottom = 2, Left = 3, Right = 4 };
+
+  inline static bool checkValue(int v) {
+    return v > -1 && v < 4;
+  }
 };
 
 ///@cond DOXYGEN_HIDDEN
