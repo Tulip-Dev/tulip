@@ -35,9 +35,6 @@ static const char *paramHelp[] = {
     // levels distance
     "The minimal required vertical distance between levels.",
 
-    // trees distance
-    "The minimal required horizontal distance between trees in the forest.",
-
     // root selection
     "This parameter indicates how the root is selected."};
 
@@ -50,11 +47,10 @@ class OGDFRadialTree : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Radial Tree (OGDF)", "Carsten Gutwenger", "02/02/2020",
-                    "The radial tree layout algorithm. ", "1.1", "Tree")
+                    "The radial tree layout algorithm. ", "1.2", "Tree")
   OGDFRadialTree(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::RadialTreeLayout() : nullptr) {
     addInParameter<double>("levels distance", paramHelp[0], "50");
-    addInParameter<double>("trees distance", paramHelp[1], "50");
     addInParameter<StringCollection>("root selection", paramHelp[2], ROOTSELECTIONLIST, true,
                                      rootSelectionValuesDescription);
   }
@@ -79,9 +75,6 @@ public:
 
       if (dataSet->get("levels distance", dval))
         layout->levelDistance(dval);
-
-      // if (dataSet->get("trees distance", dval))
-      //   layout->connectedComponentDistance(dval);
 
       if (dataSet->get("root selection", sc)) {
         switch (sc.getCurrent()) {
