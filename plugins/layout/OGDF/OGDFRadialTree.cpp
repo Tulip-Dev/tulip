@@ -51,7 +51,7 @@ public:
   OGDFRadialTree(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::RadialTreeLayout() : nullptr) {
     addInParameter<double>("levels distance", paramHelp[0], "50");
-    addInParameter<StringCollection>("root selection", paramHelp[2], ROOTSELECTIONLIST, true,
+    addInParameter<StringCollection>("root selection", paramHelp[1], ROOTSELECTIONLIST, true,
                                      rootSelectionValuesDescription);
   }
 
