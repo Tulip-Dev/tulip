@@ -174,7 +174,11 @@ void FTContour::SetParity(int parity)
 }
 
 
-FTContour::FTContour(FT_Vector* contour, char* tags, unsigned int n)
+FTContour::FTContour(FT_Vector* contour,
+#if FREETYPE_MAJOR==2 && FREETYPE_MINOR == 13 && FREETYPE_PATCH >= 3
+                     unsigned
+#endif
+                     char* tags, unsigned int n)
 {
     FTPoint prev, cur(contour[(n - 1) % n]), next(contour[0]);
     double olddir, dir = atan2((next - cur).Y(), (next - cur).X());
