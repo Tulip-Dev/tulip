@@ -17,7 +17,7 @@ rem Install minimal Python 3 and pip if needed
 if not defined PYTHON3_HOME (
   cd %WORKSPACE%
   curl -o nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-  nuget.exe install python -Version 3.12.4 -ExcludeVersion -OutputDirectory .
+  nuget.exe install python -Version 3.12.5 -ExcludeVersion -OutputDirectory .
   curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
   python\tools\python.exe get-pip.py
   set PYTHON3_HOME=%WORKSPACE%\python\tools
@@ -69,7 +69,6 @@ rem install_complete_tulip_build_dependencies
   pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-freetype
   pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-glew
   pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-qt5-base
-  pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-qt5-tools
 ) else (
   set TULIP_BUILD_DOC=""
 )
