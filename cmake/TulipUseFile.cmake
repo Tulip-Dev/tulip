@@ -74,12 +74,11 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
 
   IF(NOT MSVC) # Visual Studio does not recognize these options
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused -Wno-long-long -Wold-style-cast")
+    IF(CMAKE_CXX_COMPILER_ID MATCHES Clang)
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-dtor-name")
+    ENDIF(CMAKE_CXX_COMPILER_ID MATCHES Clang)
     IF(NOT APPLE)
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
-      # disable annoying GCC > 7.x compilation warnings
-      IF(NOT CLANG)
-          SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wimplicit-fallthrough=0")
-      ENDIF(NOT CLANG)
     ENDIF(NOT APPLE)
 
     IF(BSD)
@@ -123,7 +122,7 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
       ENDIF(X64)
     ENDIF(MSVC)
 
-  # OpenMP (only available with clang starting the 3.7 version with libomp installed)
+  # OpenMP
     FIND_PACKAGE(Threads)
     IF(CMAKE_DEBUG_MODE)
       OPTION(TULIP_ENABLE_MULTI_THREADING "Do you want to enable multithreaded code (debug mode)?" OFF)
@@ -134,7 +133,7 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
       # TULIP_CXX_THREADS can be set to force the use of the cxx threads
       # regardless the OpenMP availability
       IF(NOT TULIP_CXX_THREADS)
-        IF(APPLE AND CLANG)
+      IF(APPLE AND (CMAKE_CXX_COMPILER_ID MATCHES Clang))
           EXECUTE_PROCESS(COMMAND ${CMAKE_CXX_COMPILER} --version OUTPUT_VARIABLE CLANG_VERSION)
           STRING(FIND "${CLANG_VERSION}" "Apple" APPLE_POS)
           STRING(COMPARE EQUAL "${APPLE_POS}" "-1" LLVM_LIBOMP)
@@ -152,7 +151,7 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
             TULIP_SET_CACHE_VAR(CMAKE_EXE_LINKER_FLAGS "-L${LLVM_COMPILER_DIR}/../lib" TRUE TRUE)
             TULIP_SET_CACHE_VAR(CMAKE_SHARED_LINKER_FLAGS "-L${LLVM_COMPILER_DIR}/../lib" TRUE TRUE)
           ENDIF(LLVM_LIBOMP)
-        ENDIF(APPLE AND CLANG)
+        ENDIF(APPLE AND (CMAKE_CXX_COMPILER_ID MATCHES Clang))
         FIND_PACKAGE(OpenMP)
         IF(OPENMP_FOUND)
           SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${OpenMP_CXX_FLAGS}")

@@ -123,7 +123,7 @@ void GraphUpdatesRecorder::treatEvent(const Event &ev) {
 
     case GraphEvent::TLP_REMOVE_ATTRIBUTE:
       removeAttribute(graph, gEvt->getAttributeName());
-
+      [[fallthrough]];
     default:
       break;
     }

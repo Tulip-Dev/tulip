@@ -1,4 +1,4 @@
-// Copyright (C) 2004 Xavier Décoret <Xavier.Decoret@imag.fr>
+// Copyright (C) 2004 Xavier DÃ©coret <Xavier.Decoret@imag.fr>
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License

@@ -49,7 +49,7 @@ void TriconnectedTestListener::treatEvent(const Event &evt) {
       if (it != resultsBuffer.end())
         if (it->second)
           return;
-
+      [[fallthrough]];
     case GraphEvent::TLP_DEL_EDGE:
     case GraphEvent::TLP_DEL_NODE:
       if (it != resultsBuffer.end()) {

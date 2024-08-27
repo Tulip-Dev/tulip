@@ -132,7 +132,7 @@ struct TLPTokenParser {
             slashMode = false;
             break;
           }
-
+          [[fallthrough]];
         default:
           if (!slashMode)
             val.str += ch;

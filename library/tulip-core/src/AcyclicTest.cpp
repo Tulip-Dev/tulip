@@ -56,7 +56,7 @@ void TestAcyclicListener::treatEvent(const Event &evt) {
 
       if (resultsBuffer[graph])
         return;
-
+      [[fallthrough]];
     case GraphEvent::TLP_REVERSE_EDGE:
       graph->removeListener(this);
       resultsBuffer.erase(graph);

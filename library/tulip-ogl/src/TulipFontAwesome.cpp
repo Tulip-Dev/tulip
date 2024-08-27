@@ -70,6 +70,7 @@ static string iconFile(const string &iconName) {
       if (iconCodePoint.find(name.c_str()) != iconCodePoint.end())
         return "fa-regular-400";
     }
+    [[fallthrough]];
   }
   default:
     return "fa-brands-400";

@@ -213,7 +213,7 @@ void RangeSlider::triggerAction(QAbstractSlider::SliderAction action, bool main)
   case QAbstractSlider::SliderMove:
     if ((main && mainControl == UpperHandle) || (!main && altControl == UpperHandle))
       up = true;
-
+    [[fallthrough]];
   case QAbstractSlider::SliderNoAction:
     no = true;
     break;
