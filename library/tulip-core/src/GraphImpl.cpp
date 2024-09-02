@@ -71,8 +71,8 @@ public:
                             const Graph *graph) override;
 };
 //----------------------------------------------------------------
-bool rejectAnyValue(int) {
-  return false;
+bool rejectNonNullValue(int v) {
+  return !v;
 }
 //----------------------------------------------------------------
 IntegerEnumeratedProperty::IntegerEnumeratedProperty(Graph *g, const std::string &n)  : IntegerProperty(g, n), _checkNodeValue(nullptr), _checkEdgeValue(nullptr) {
@@ -85,7 +85,7 @@ IntegerEnumeratedProperty::IntegerEnumeratedProperty(Graph *g, const std::string
     _checkEdgeValue = tlp::LabelPosition::checkValue;
     return;
   } else if (name == "viewSrcAnchorShape" || name == "viewTgtAnchorShape") {
-    _checkNodeValue = rejectAnyValue;
+    _checkNodeValue = rejectNonNullValue;
     _checkEdgeValue = tlp::EdgeExtremityShape::checkValue;
   }
 }
@@ -113,7 +113,7 @@ void IntegerEnumeratedProperty::setEdgeValue(const edge e, tlp::StoredType<int>:
 void IntegerEnumeratedProperty::setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v) {
   if (_checkNodeValue && !_checkNodeValue(v)) {
     printValueError(v, "node");
-        return;
+    return;
   }
   IntegerProperty::setAllNodeValue(v);
 }
