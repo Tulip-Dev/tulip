@@ -70,7 +70,7 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "  </body>"
       "</html>");
 
-  bool openGL_OK = GlOffscreenRenderer::getInstance()->getOpenGLContext()->isValid();
+  bool openGL_OK = GlOffscreenRenderer::getInstance()->isValid();
 
   if (openGL_OK)
     GlOffscreenRenderer::getInstance()->makeOpenGLContextCurrent();

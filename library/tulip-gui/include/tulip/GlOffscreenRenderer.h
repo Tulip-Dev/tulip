@@ -132,6 +132,7 @@ public:
   QOpenGLContext *getOpenGLContext();
   void makeOpenGLContextCurrent();
   void doneOpenGLContextCurrent();
+  bool isValid();
 
 private:
   GlOffscreenRenderer();

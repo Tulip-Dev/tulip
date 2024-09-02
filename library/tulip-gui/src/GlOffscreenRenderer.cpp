@@ -289,6 +289,10 @@ void GlOffscreenRenderer::doneOpenGLContextCurrent() {
   getOpenGLContext()->doneCurrent();
 }
 
+bool GlOffscreenRenderer::isValid() {
+  return getOpenGLContext()->isValid();
+}
+
 QImage GlOffscreenRenderer::renderGlMainWidget(GlMainWidget *glWidget, bool redrawNeeded) {
   setViewPortSize(glWidget->screenToViewport(glWidget->width()),
                   glWidget->screenToViewport(glWidget->height()));

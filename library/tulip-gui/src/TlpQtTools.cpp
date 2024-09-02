@@ -367,7 +367,15 @@ void initTulipSoftware(tlp::PluginLoader *loader) {
 
   // Explicitly create a shared OpenGL context to
   // ensure it is initialized before using it
-  GlOffscreenRenderer::getInstance()->getOpenGLContext();
+  if (GlOffscreenRenderer::getInstance()->isValid()) {
+    GlOffscreenRenderer::getInstance()->makeOpenGLContextCurrent();
+    auto vs = OpenGlConfigManager::getOpenGLVersionString();
+    if (vs.find("Mesa Intel(R) HD Graphics") == 0)
+      // workaround for GL_SELECT rendering crash (Tulip bugs #813)
+      // when using the Mesa crocus driver for legacy Intel GPUs
+      qputenv("DRAW_USE_LLVM", "0");
+    GlOffscreenRenderer::getInstance()->doneOpenGLContextCurrent();
+  }
 }
 
 // tlp::debug redirection
