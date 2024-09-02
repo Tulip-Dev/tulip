@@ -22,7 +22,7 @@
 using namespace tlp;
 
 AlgorithmMimeType::AlgorithmMimeType(QString algorithmName, const DataSet &data)
-  : _algorithm(algorithmName), _params(data) {}
+    : _algorithm(algorithmName), _params(data) {}
 
 void AlgorithmMimeType::run(Graph *g, WorkspacePanel *wsp) const {
   emit mimeRun(g, wsp);

@@ -109,9 +109,8 @@ void GlCompositeHierarchyManager::buildComposite(Graph *current,
   current->addListener(this);
 
   std::string naming(current->getName() + " [#" + std::to_string(current->getId()) + ']');
-  GlConvexGraphHull *hull =
-      new GlConvexGraphHull(composite, naming, getColor(), getTexture(),
-                            current, _layout, _size, _rotation);
+  GlConvexGraphHull *hull = new GlConvexGraphHull(composite, naming, getColor(), getTexture(),
+                                                  current, _layout, _size, _rotation);
   hull->setTextureZoom(0.02);
 
   _graphsComposites.emplace(

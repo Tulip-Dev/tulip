@@ -105,7 +105,7 @@ public:
   enum EdgeShapes { Polyline = 0, BezierCurve = 4, CatmullRomCurve = 8, CubicBSplineCurve = 16 };
 
   inline bool static checkValue(int v) {
-    switch(v) {
+    switch (v) {
     case Polyline:
     case BezierCurve:
     case CatmullRomCurve:
@@ -141,24 +141,24 @@ public:
   };
 
   inline bool static checkValue(int v) {
-    switch(v) {
-      case TulipShape::None:
-      case TulipShape::Arrow:
-      case TulipShape::Circle:
-      case TulipShape::Cone:
-      case TulipShape::Cross:
-      case TulipShape::Cube:
-      case TulipShape::CubeOutlinedTransparent:
-      case TulipShape::Cylinder:
-      case TulipShape::Diamond:
-      case TulipShape::GlowSphere:
-      case TulipShape::Hexagon:
-      case TulipShape::Pentagon:
-      case TulipShape::Ring:
-      case TulipShape::Sphere:
-      case TulipShape::Square:
-      case TulipShape::Star:
-      case TulipShape::Icon:
+    switch (v) {
+    case TulipShape::None:
+    case TulipShape::Arrow:
+    case TulipShape::Circle:
+    case TulipShape::Cone:
+    case TulipShape::Cross:
+    case TulipShape::Cube:
+    case TulipShape::CubeOutlinedTransparent:
+    case TulipShape::Cylinder:
+    case TulipShape::Diamond:
+    case TulipShape::GlowSphere:
+    case TulipShape::Hexagon:
+    case TulipShape::Pentagon:
+    case TulipShape::Ring:
+    case TulipShape::Sphere:
+    case TulipShape::Square:
+    case TulipShape::Star:
+    case TulipShape::Icon:
       return true;
     default:
       return false;

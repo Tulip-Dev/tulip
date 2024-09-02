@@ -35,7 +35,9 @@ class GraphNeedsSavingObserver;
 class TulipProject;
 class PluginProgress;
 
-  class TLP_QT_SCOPE GraphHierarchiesModel : public tlp::TulipModel, public tlp::Observable, public tlp::ImportGraphObserver {
+class TLP_QT_SCOPE GraphHierarchiesModel : public tlp::TulipModel,
+                                           public tlp::Observable,
+                                           public tlp::ImportGraphObserver {
   Q_OBJECT
 
   QList<tlp::Graph *> _graphs;

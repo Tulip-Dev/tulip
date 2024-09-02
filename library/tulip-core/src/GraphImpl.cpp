@@ -55,8 +55,8 @@ static bool existEdgeE(Graph *g, const node n1, const node, edge e) {
 // we define a subclass of IntegerProperty to add check functions to the setting
 // of the value of some view... properties which only admit enumerated values
 class TLP_SCOPE IntegerEnumeratedProperty : public IntegerProperty {
-  bool (*_checkNodeValue) (int);
-  bool (*_checkEdgeValue) (int);
+  bool (*_checkNodeValue)(int);
+  bool (*_checkEdgeValue)(int);
   void printValueError(tlp::StoredType<int>::ReturnedConstValue v, const std::string &eltType);
 
 public:
@@ -75,7 +75,8 @@ bool rejectNonNullValue(int v) {
   return !v;
 }
 //----------------------------------------------------------------
-IntegerEnumeratedProperty::IntegerEnumeratedProperty(Graph *g, const std::string &n)  : IntegerProperty(g, n), _checkNodeValue(nullptr), _checkEdgeValue(nullptr) {
+IntegerEnumeratedProperty::IntegerEnumeratedProperty(Graph *g, const std::string &n)
+    : IntegerProperty(g, n), _checkNodeValue(nullptr), _checkEdgeValue(nullptr) {
   if (name == "viewShape") {
     _checkNodeValue = tlp::NodeShape::checkValue;
     _checkEdgeValue = tlp::EdgeShape::checkValue;
@@ -90,11 +91,14 @@ IntegerEnumeratedProperty::IntegerEnumeratedProperty(Graph *g, const std::string
   }
 }
 //----------------------------------------------------------------
-void IntegerEnumeratedProperty::printValueError(tlp::StoredType<int>::ReturnedConstValue v, const std::string &eltType) {
-  tlp::error() << "Error: '" << v << "' is not a valid " << eltType << " value for property \"" << getName() << "\"\n";
+void IntegerEnumeratedProperty::printValueError(tlp::StoredType<int>::ReturnedConstValue v,
+                                                const std::string &eltType) {
+  tlp::error() << "Error: '" << v << "' is not a valid " << eltType << " value for property \""
+               << getName() << "\"\n";
 }
 //----------------------------------------------------------------
-void IntegerEnumeratedProperty::setNodeValue(const node n, tlp::StoredType<int>::ReturnedConstValue v) {
+void IntegerEnumeratedProperty::setNodeValue(const node n,
+                                             tlp::StoredType<int>::ReturnedConstValue v) {
   if (_checkNodeValue && !_checkNodeValue(v)) {
     printValueError(v, "node");
     return;
@@ -102,7 +106,8 @@ void IntegerEnumeratedProperty::setNodeValue(const node n, tlp::StoredType<int>:
   IntegerProperty::setNodeValue(n, v);
 }
 //----------------------------------------------------------------
-void IntegerEnumeratedProperty::setEdgeValue(const edge e, tlp::StoredType<int>::ReturnedConstValue v) {
+void IntegerEnumeratedProperty::setEdgeValue(const edge e,
+                                             tlp::StoredType<int>::ReturnedConstValue v) {
   if (_checkEdgeValue && !_checkEdgeValue(v)) {
     printValueError(v, "edge");
     return;
@@ -119,7 +124,7 @@ void IntegerEnumeratedProperty::setAllNodeValue(tlp::StoredType<int>::ReturnedCo
 }
 //----------------------------------------------------------------
 void IntegerEnumeratedProperty::setValueToGraphNodes(tlp::StoredType<int>::ReturnedConstValue v,
-                                           const Graph *graph) {
+                                                     const Graph *graph) {
   if (_checkNodeValue && !_checkNodeValue(v)) {
     printValueError(v, "node");
     return;
@@ -136,7 +141,7 @@ void IntegerEnumeratedProperty::setAllEdgeValue(tlp::StoredType<int>::ReturnedCo
 }
 //----------------------------------------------------------------
 void IntegerEnumeratedProperty::setValueToGraphEdges(tlp::StoredType<int>::ReturnedConstValue v,
-                                           const Graph *graph) {
+                                                     const Graph *graph) {
   if (_checkEdgeValue && !_checkEdgeValue(v)) {
     printValueError(v, "edge");
     return;
@@ -174,10 +179,10 @@ void GraphImpl::clear() {
 }
 //----------------------------------------------------------------
 Graph *GraphImpl::newGraph() {
-  Graph* g = new GraphImpl();
+  Graph *g = new GraphImpl();
 
   // set "view..'" properties defaults
- {
+  {
     auto prop = g->getProperty<ColorProperty>("viewColor");
     prop->setAllNodeValue(TulipViewSettings::defaultColor(NODE));
     prop->setAllEdgeValue(TulipViewSettings::defaultColor(EDGE));
@@ -262,7 +267,8 @@ Graph *GraphImpl::newGraph() {
     prop->setAllNodeValue(TulipViewSettings::defaultSize(NODE));
     prop->setAllEdgeValue(TulipViewSettings::defaultSize(EDGE));
   }
-  g->getProperty<IntegerEnumeratedProperty>("viewSrcAnchorShape")->setAllEdgeValue(TulipViewSettings::defaultEdgeExtremitySrcShape());
+  g->getProperty<IntegerEnumeratedProperty>("viewSrcAnchorShape")
+      ->setAllEdgeValue(TulipViewSettings::defaultEdgeExtremitySrcShape());
   {
     auto prop = g->getProperty<SizeProperty>("viewSrcAnchorSize");
     prop->setAllEdgeValue(TulipViewSettings::defaultEdgeExtremitySrcSize());
@@ -273,7 +279,8 @@ Graph *GraphImpl::newGraph() {
     prop->setAllNodeValue("");
     prop->setAllEdgeValue("");
   }
-  g->getProperty<IntegerEnumeratedProperty>("viewTgtAnchorShape")->setAllEdgeValue(TulipViewSettings::defaultEdgeExtremityTgtShape());
+  g->getProperty<IntegerEnumeratedProperty>("viewTgtAnchorShape")
+      ->setAllEdgeValue(TulipViewSettings::defaultEdgeExtremityTgtShape());
   return g;
 }
 //----------------------------------------------------------------

@@ -46,8 +46,8 @@ void GlConvexGraphHullsComposite::setHullsTextureActivation(bool flag) {
 int GlConvexGraphHull::bezierValue = 1;
 
 GlConvexGraphHull::GlConvexGraphHull(GlConvexGraphHullsComposite *parent, const std::string &name,
-                                     const tlp::Color &fcolor, const std::string &texName, Graph *graph,
-                                     LayoutProperty *layout, SizeProperty *size,
+                                     const tlp::Color &fcolor, const std::string &texName,
+                                     Graph *graph, LayoutProperty *layout, SizeProperty *size,
                                      DoubleProperty *rotation)
     : _parent(parent), _name(name), _fcolor(fcolor), _tex(texName), _polygon(nullptr), graph(graph),
       _layout(layout), _size(size), _rotation(rotation) {

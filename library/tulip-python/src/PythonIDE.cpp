@@ -343,18 +343,18 @@ struct _pipCommand {
 };
 
 static std::vector<_pipCommand> pipCommands{
-  // install a package in the user directory
-  {"install", "install', '--user", true, "installing"},
-  // list the package installed in the user directory
-  {"list", "list', '--user", false, ""},
-  // list the installed packages
-  {"list all", "list", false, ""},
-  // show package info
-  {"show", "show", true, ""},
-  // uninstall a package
-  {"uninstall", "uninstall', '--yes", false, "uninstalling"},
-  // upgrade a package
-  {"upgrade", "install', '--upgrade", true, "upgrading"}};
+    // install a package in the user directory
+    {"install", "install', '--user", true, "installing"},
+    // list the package installed in the user directory
+    {"list", "list', '--user", false, ""},
+    // list the installed packages
+    {"list all", "list", false, ""},
+    // show package info
+    {"show", "show", true, ""},
+    // uninstall a package
+    {"uninstall", "uninstall', '--yes", false, "uninstalling"},
+    // upgrade a package
+    {"upgrade", "install', '--upgrade", true, "upgrading"}};
 
 // the name of the python exe
 static std::string pyExe;
@@ -419,8 +419,8 @@ static PythonIDE::Builder builder;
 
 PythonIDE::PythonIDE()
     : _ui(new Ui::PythonIDE), _pythonInterpreter(PythonInterpreter::getInstance()),
-      _pythonPanel(new PythonPanel()), _dontTreatFocusIn(false),
-      _graphsModel(nullptr), _scriptStopped(false) {
+      _pythonPanel(new PythonPanel()), _dontTreatFocusIn(false), _graphsModel(nullptr),
+      _scriptStopped(false) {
   _ui->setupUi(this);
   // fix display of QCheckBox and QRadioButton children
   tlpFixCBRBs(this);
@@ -726,7 +726,8 @@ void PythonIDE::newModule() {
   int editorId = addModuleEditor("");
   _ui->modulesTabWidget->setTabText(editorId, "[no file]");
   _ui->modulesTabWidget->setTabToolTip(
-      editorId, "new module, do not forget to save the current module to a file to not lose your source code modifications.");
+      editorId,
+      "new module, do not forget to save the current module to a file to not lose your source code modifications.");
 }
 
 void PythonIDE::saveModule() {
@@ -787,7 +788,8 @@ void PythonIDE::newPythonPlugin() {
     int editorId = addPluginEditor("");
     QString editorSID = QString("%1").arg(reinterpret_cast<intptr_t>(getPluginEditor(editorId)));
     _ui->pluginsTabWidget->setTabToolTip(editorId, pluginCreationDialog.getPluginName());
-    _ui->pluginsTabWidget->setTabText(editorId, pluginCreationDialog.getPluginType() + " - " + pluginName);
+    _ui->pluginsTabWidget->setTabText(editorId,
+                                      pluginCreationDialog.getPluginType() + " - " + pluginName);
 
     _editedPluginsClassName[editorSID] = pluginCreationDialog.getPluginClassName();
     _editedPluginsType[editorSID] = pluginCreationDialog.getPluginType();
@@ -977,7 +979,8 @@ bool PythonIDE::savePythonPlugin(int tabIdx, bool saveAs) {
         QFileInfo fileInfo(pluginFileName);
         dir = fileInfo.dir().absolutePath();
       }
-      auto fileName = QFileDialog::getSaveFileName(this, "Save python plugin", dir, "Python plugin (*.py)");
+      auto fileName =
+          QFileDialog::getSaveFileName(this, "Save python plugin", dir, "Python plugin (*.py)");
       if (fileName.isEmpty())
         return false;
       getPluginEditor(tabIdx)->setFileName(fileName);
@@ -998,7 +1001,8 @@ bool PythonIDE::savePythonPlugin(int tabIdx, bool saveAs) {
 
     getPluginEditor(tabIdx)->saveCodeToFile();
 
-    _ui->pluginsTabWidget->setTabText(tabIdx, _editedPluginsType[pluginFileName] + " - " + _editedPluginsName[pluginFileName]);
+    _ui->pluginsTabWidget->setTabText(tabIdx, _editedPluginsType[pluginFileName] + " - " +
+                                                  _editedPluginsName[pluginFileName]);
     _ui->pluginsTabWidget->setTabToolTip(tabIdx, getPluginEditor(tabIdx)->getFileName());
 
     getPluginEditor(tabIdx)->getCleanCode();
@@ -1265,8 +1269,7 @@ bool PythonIDE::projectNeedsPythonIDE(tlp::TulipProject *project) {
           project->exists(PYTHON_SCRIPTS_FILES));
 }
 
-bool PythonIDE::checkUnsavedFiles(PythonEditorsTabWidget *tabWidget,
-                                  bool updateTabText) {
+bool PythonIDE::checkUnsavedFiles(PythonEditorsTabWidget *tabWidget, bool updateTabText) {
   for (int i = 0; i < tabWidget->count(); ++i) {
     QString tabText = tabWidget->tabText(i);
     if (tabText[tabText.size() - 1] == '*')
@@ -1286,8 +1289,7 @@ bool PythonIDE::checkUnsavedFiles(PythonEditorsTabWidget *tabWidget,
 
 bool PythonIDE::hasUnsavedFiles() {
   int i = 0;
-  auto tabWidgets =
-    { _ui->mainScriptsTabWidget, _ui->pluginsTabWidget, _ui->modulesTabWidget };
+  auto tabWidgets = {_ui->mainScriptsTabWidget, _ui->pluginsTabWidget, _ui->modulesTabWidget};
   for (auto tabWidget : tabWidgets) {
     if (checkUnsavedFiles(tabWidget)) {
       // set it as current to ensure unsaved files
@@ -1383,7 +1385,8 @@ void PythonIDE::readProject(tlp::TulipProject *project) {
           if (fileName.startsWith("[no file]")) {
             fileName = "[no file]";
             _ui->mainScriptsTabWidget->setTabToolTip(
-                editorId, "\"main\" script, do not forget to save the current script to a file to not lose your source code modifications.");
+                editorId,
+                "\"main\" script, do not forget to save the current script to a file to not lose your source code modifications.");
           } else {
             _ui->mainScriptsTabWidget->setTabToolTip(editorId, fileName);
           }
@@ -1413,14 +1416,11 @@ void PythonIDE::readProject(tlp::TulipProject *project) {
   }
 }
 
-void PythonIDE::scriptSaved(int /*idx*/) {
-}
+void PythonIDE::scriptSaved(int /*idx*/) {}
 
-void PythonIDE::pluginSaved(int /*idx*/) {
-}
+void PythonIDE::pluginSaved(int /*idx*/) {}
 
-void PythonIDE::moduleSaved(int /*idx*/) {
-}
+void PythonIDE::moduleSaved(int /*idx*/) {}
 
 int PythonIDE::addMainScriptEditor(const QString &fileName) {
   int idx = _ui->mainScriptsTabWidget->addEditor(fileName);
@@ -1458,7 +1458,8 @@ void PythonIDE::newScript() {
   getMainScriptEditor(editorId)->setPlainText(defaultScriptCode);
   _ui->mainScriptsTabWidget->setTabText(editorId, "[no file]");
   _ui->mainScriptsTabWidget->setTabToolTip(
-      editorId, "\"main\" script, do not forget to save the current script to a file to not lose your source code modifications.");
+      editorId,
+      "\"main\" script, do not forget to save the current script to a file to not lose your source code modifications.");
 }
 
 void PythonIDE::loadScript() {
@@ -1636,9 +1637,10 @@ elif result.stdout == '':
     print('no package'))";
   // if needed, show a progress message while executing the command
   QString progressMsg = pipCommands[command].progressMsg;
-  QMessageBox *progress = progressMsg.isEmpty() ? nullptr
-    : new QMessageBox(QMessageBox::Information, "Pip command execution",
-                      "", QMessageBox::Ok, this, Qt::Popup);
+  QMessageBox *progress = progressMsg.isEmpty()
+                              ? nullptr
+                              : new QMessageBox(QMessageBox::Information, "Pip command execution",
+                                                "", QMessageBox::Ok, this, Qt::Popup);
   if (progress) {
     for (auto button : progress->buttons())
       progress->removeButton(button);
@@ -1777,8 +1779,8 @@ bool PythonIDE::closeEditorTabRequested(PythonEditorsTabWidget *tabWidget, int i
     QMessageBox::StandardButton button = QMessageBox::question(
         QApplication::activeWindow(), QString("Save edited Python code"),
         QString("The code of ") + curTabText.mid(0, curTabText.size() - 1) +
-        QString("\n has been edited but has not been saved to disk.\n"
-                "Do you want to save it?"),
+            QString("\n has been edited but has not been saved to disk.\n"
+                    "Do you want to save it?"),
         QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel, QMessageBox::Save);
 
     if (button == QMessageBox::Save) {
@@ -1888,7 +1890,7 @@ void PythonIDE::closePluginTabRequested(int idx) {
     _editedPluginsType.remove(pluginFile);
     _editedPluginsName.remove(pluginFile);
 
-     _ui->pluginsTabWidget->closeTab(idx);
+    _ui->pluginsTabWidget->closeTab(idx);
 
     if (_ui->pluginsTabWidget->count() == 1) {
       _ui->registerPluginButton->setEnabled(false);

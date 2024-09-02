@@ -207,8 +207,8 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
   return result;
 }
 //=========================================================
-Graph *tlp::importGraph(const std::string &format, DataSet &dataSet,
-                        PluginProgress *progress, Graph *graph) {
+Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress,
+                        Graph *graph) {
 
   if (!PluginLister::pluginExists(format)) {
     tlp::warning() << "libtulip: " << __FUNCTION__ << ": import plugin \"" << format

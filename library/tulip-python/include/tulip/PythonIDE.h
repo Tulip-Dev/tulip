@@ -71,8 +71,7 @@ class TLP_PYTHON_SCOPE PythonIDE : public PythonIDEInterface {
   QComboBox *_pipCombo;
 
   bool loadPythonPlugin(const QString &fileName, bool clear = true);
-  bool loadPythonPluginFromSrcCode(const QString &moduleName,
-                                   const QString &pluginSrcCode,
+  bool loadPythonPluginFromSrcCode(const QString &moduleName, const QString &pluginSrcCode,
                                    bool clear = true);
   bool savePythonPlugin(int tabIdx, bool saveAs = false);
   bool indicateErrors() const;

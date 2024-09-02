@@ -163,12 +163,12 @@ TLP_SCOPE Graph *newGraph();
  * each time a new graph is imported (tlp::importGraph(), tlp::newGraph()).
  *
  */
-  class TLP_SCOPE ImportGraphObserver {
-  public:
-    ImportGraphObserver();
-    virtual ~ImportGraphObserver();
-    virtual void graphImported(Graph *g)=0;
-  };
+class TLP_SCOPE ImportGraphObserver {
+public:
+  ImportGraphObserver();
+  virtual ~ImportGraphObserver();
+  virtual void graphImported(Graph *g) = 0;
+};
 
 /**
  * @ingroup Graph

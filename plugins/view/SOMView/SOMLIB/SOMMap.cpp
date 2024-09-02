@@ -41,8 +41,8 @@ SOMMap::SOMMap(Graph *root, unsigned int width, unsigned int height,
 }
 SOMMap::SOMMap(unsigned int width, unsigned int height, SOMMapConnectivity connectivity,
                bool oppositeConnected)
-    : tlp::GraphDecorator(GraphImpl::newGraph()), width(width), height(height), connectivity(connectivity),
-      oppositeConnected(oppositeConnected), graphCreated(true) {
+    : tlp::GraphDecorator(GraphImpl::newGraph()), width(width), height(height),
+      connectivity(connectivity), oppositeConnected(oppositeConnected), graphCreated(true) {
   initMap();
 }
 

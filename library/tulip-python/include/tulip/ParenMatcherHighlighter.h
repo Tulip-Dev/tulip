@@ -48,8 +48,7 @@ public:
 
 class ParenMatcherHighlighter : public QSyntaxHighlighter {
 public:
-  explicit ParenMatcherHighlighter(QTextDocument *parent = nullptr)
-    : QSyntaxHighlighter(parent) {}
+  explicit ParenMatcherHighlighter(QTextDocument *parent = nullptr) : QSyntaxHighlighter(parent) {}
 
 protected:
   void highlightBlock(const QString &text) override;

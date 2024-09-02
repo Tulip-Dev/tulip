@@ -104,8 +104,7 @@ QString PythonPluginCreationDialog::getPluginGroup() const {
 bool PythonPluginCreationDialog::eventFilter(QObject *, QEvent *ev) {
   if (ev->type() == QEvent::KeyRelease) {
     auto okButton = _ui->buttonBox->button(QDialogButtonBox::Ok);
-    okButton->setEnabled(!getPluginClassName().isEmpty() &&
-                         !getPluginName().isEmpty());
+    okButton->setEnabled(!getPluginClassName().isEmpty() && !getPluginName().isEmpty());
   }
   return false;
 }

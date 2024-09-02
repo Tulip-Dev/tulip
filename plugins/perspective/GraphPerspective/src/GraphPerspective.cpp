@@ -315,8 +315,7 @@ bool GraphPerspective::terminated() {
       QString message("The Python IDE has unsaved files."
                       "\nDo you want to save their changes?");
       if (QMessageBox::question(_mainWindow, "Save Python IDE files", message,
-                                QMessageBox::Yes | QMessageBox::No)
-          == QMessageBox::Yes) {
+                                QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
         _pythonIDEDialog->show();
         _restartNeeded = false;
         return false;

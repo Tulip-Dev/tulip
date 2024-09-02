@@ -211,10 +211,10 @@ static void restoreTextureFilesFromProject(tlp::Graph *g, tlp::TulipProject *pro
 }
 
 GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent)
-  : TulipModel(parent), tlp::ImportGraphObserver(), _currentGraph(nullptr) {}
+    : TulipModel(parent), tlp::ImportGraphObserver(), _currentGraph(nullptr) {}
 
 GraphHierarchiesModel::GraphHierarchiesModel(const GraphHierarchiesModel &copy)
-  : TulipModel(copy.QObject::parent()), tlp::Observable(), tlp::ImportGraphObserver() {
+    : TulipModel(copy.QObject::parent()), tlp::Observable(), tlp::ImportGraphObserver() {
   for (int i = 0; i < copy.size(); ++i)
     graphImported(copy[i]);
 
