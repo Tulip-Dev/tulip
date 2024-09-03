@@ -475,11 +475,6 @@ IF (NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
     ENDIF(MSVC)
 
     IF(WIN32)
-      # initialize the list of bundle libs (second arg of FIXUP_BUNDLE),
-      # updated in plugins/view/GeographicView,
-      # and finally used in software/tulip_perpective/CMakeLists.txt
-      SET_PROPERTY(GLOBAL PROPERTY FIXUP_BUNDLE_LIBS "")
-
       GET_FILENAME_COMPONENT(NSIS_PATH "[HKEY_LOCAL_MACHINE\\SOFTWARE\\NSIS]" ABSOLUTE)
       STRING(COMPARE EQUAL "${NSIS_PATH}" "" NSIS_PATH_EMPTY)
       IF(NSIS_PATH_EMPTY)

@@ -67,10 +67,9 @@ IF(WIN32)
     SET(APP "\${CMAKE_INSTALL_PREFIX}/bin/tulip.exe")
     SET(LIB_DIRS ${QT_BINARY_DIR} ${CMAKE_LIBRARY_PATH})
     STRING(REPLACE ";" "\;" LIB_DIRS "${LIB_DIRS}")
-    GET_PROPERTY(FIXUP_BUNDLE_LIBS GLOBAL PROPERTY FIXUP_BUNDLE_LIBS)
     INSTALL(CODE
             "INCLUDE(BundleUtilities)
-             FIXUP_BUNDLE(\"${APP}\" \"${FIXUP_BUNDLE_LIBS}\" \"${LIB_DIRS}\")"
+             FIXUP_BUNDLE(\"${APP}\" \"\" \"${LIB_DIRS}\")"
     )
     # When generating Tulip installers using MSYS2, we need to bundle OpenSSL
     # libraries in order for the Geographic view to work correctly.
@@ -82,8 +81,7 @@ IF(WIN32)
       INSTALL(CODE
               "INCLUDE(BundleUtilities)
                FILE(COPY ${OPENSSL} DESTINATION \"\${CMAKE_INSTALL_PREFIX}/bin/\")
-               FIXUP_BUNDLE(\"${OPENSSL}\" \"\" \"${LIB_DIRS}\")
-               FILE(REMOVE ${OPENSSL})"
+               FIXUP_BUNDLE(\"${CMAKE_INSTALL_PREFIX}/bin/openssl.exe\" \"\" \"${LIB_DIRS}\")"
       )
     ENDIF(MINGW AND OPENSSL)
   ENDIF(TULIP_FIXUP_BUNDLE)

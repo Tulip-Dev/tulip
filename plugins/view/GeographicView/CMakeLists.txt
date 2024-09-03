@@ -31,15 +31,6 @@ QTX_WRAP_CPP(LIB_MOC_SRCS
              GeolocalisationConfigWidget.h
              GeoMapWidget.h)
 
-IF(WIN32)
-  SET(GEOVIEW_DLL "GeographicView-${Tulip_VERSION}.dll")
-  IF(NOT MSVC)
-    SET(GEOVIEW_DLL "lib${GEOVIEW_DLL}")
-  ENDIF(NOT MSVC)
-  # update the list of bundle libs
-  # SET_PROPERTY(GLOBAL APPEND PROPERTY FIXUP_BUNDLE_LIBS "${CMAKE_INSTALL_PREFIX}/lib/tulip/view/${GEOVIEW_DLL}")
-ENDIF(WIN32)
-
 ADD_LIBRARY(GeographicView-${Tulip_VERSION} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
 TARGET_LINK_LIBRARIES(GeographicView-${Tulip_VERSION}
     PUBLIC ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES}
