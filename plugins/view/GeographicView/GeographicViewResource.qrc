@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/tulip/view/geographic">
         <file>MAPAGR4.txt</file>
-        <file>planisphere.jpg</file>
+        <file>planisphere.png</file>
         <file>help-contents.png</file>
         <file>geographic_view.png</file>
         <file>zoom+.png</file>

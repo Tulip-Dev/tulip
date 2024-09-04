@@ -59,7 +59,7 @@ using namespace std;
 
 namespace tlp {
 
-const string planisphereTextureId = ":/tulip/view/geographic/planisphere.jpg";
+const string planisphereTextureId = ":/tulip/view/geographic/planisphere.png";
 
 GlComposite *readPolyFile(const QString &fileName) {
   GlComposite *composite = new GlComposite;
