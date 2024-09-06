@@ -237,8 +237,9 @@ void GeographicView::initMap() {
   gmw->setMapCenter(mapCenterLatitudeInit, mapCenterLongitudeInit);
   gmw->setCurrentZoom(mapZoomInit);
   if (graph()->isEmpty()) {
-    QMessageBox::warning(graphicsView(), QString("Graph \"%1\" is empty").arg(graph()->getName().c_str()),
-                         QString("The geographic view is inoperable with an empty graph."), QMessageBox::Ok);
+    QMessageBox::warning(
+        graphicsView(), QString("Graph \"%1\" is empty").arg(graph()->getName().c_str()),
+        QString("The geographic view is inoperable with an empty graph."), QMessageBox::Ok);
     // we perform an acceptable automatic configuration
     // in order to allow an interactive creation of the graph
     // over the geographic map, using the 'Add nodes/edges'
