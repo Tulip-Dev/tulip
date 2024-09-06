@@ -116,9 +116,9 @@ void GeoMapWidget::init() {
   connect(http, SIGNAL(finished(QNetworkReply *)), this, SLOT(requestFinished(QNetworkReply *)));
 
   // init default map layer
-  currentZoom = 3;
+  currentZoom = initialZoom;
   switchToMapLayer(0);
-  setMapCenter(QPointF(-40, 44.8084));
+  setMapCenter(QPointF(initialCenterLng, initialCenterLat));
 
   update();
 }
@@ -372,7 +372,8 @@ void GeoMapWidget::setMapBounds(
     }
 
     zoomOnRectangle(minLatLng, maxLatLng);
-  }
+  } else
+    setMapCenter(QPointF(initialCenterLng, initialCenterLat));
 }
 
 void GeoMapWidget::zoomOnRectangle(std::pair<double, double> &sw, std::pair<double, double> &ne) {

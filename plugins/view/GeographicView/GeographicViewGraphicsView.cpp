@@ -458,12 +458,12 @@ void GeographicViewGraphicsView::cleanup() {
   }
 }
 
-void GeographicViewGraphicsView::setGraph(Graph *graph) {
-  if (this->graph != graph) {
+void GeographicViewGraphicsView::setGraph(Graph *g) {
+  if (graph != g) {
 
     GlGraphRenderingParameters rp;
 
-    if (this->graph) {
+    if (graph) {
       rp = glMainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
     } else {
       rp.setNodesLabelStencil(1);
@@ -471,7 +471,7 @@ void GeographicViewGraphicsView::setGraph(Graph *graph) {
     }
 
     cleanup();
-    this->graph = graph;
+    graph = g;
 
     GlScene *scene = glMainWidget->getScene();
     GlGraphComposite *graphComposite = new GlGraphComposite(graph);
@@ -495,7 +495,6 @@ void GeographicViewGraphicsView::setGraph(Graph *graph) {
     geoViewSize = graph->getProperty<SizeProperty>("viewSize");
     geoViewShape = graph->getProperty<IntegerProperty>("viewShape");
     polygonEntity = nullptr;
-
     draw();
   }
 }

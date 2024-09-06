@@ -169,6 +169,10 @@ public:
     return loadingQueueEmpty();
   }
 
+  static constexpr float initialCenterLat = 44.8084;
+  static constexpr float initialCenterLng = -40;
+  static constexpr int initialZoom = 3;
+
 private:
   void init();
 

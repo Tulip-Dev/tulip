@@ -26,9 +26,10 @@
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/TulipViewSettings.h>
 
-#include <QMenu>
-#include <QComboBox>
 #include <QApplication>
+#include <QComboBox>
+#include <QMenu>
+#include <QMessageBox>
 #include <QTimer>
 
 #include <iostream>
@@ -86,18 +87,8 @@ void GeographicView::setupUi() {
 }
 
 void GeographicView::graphChanged(Graph *g) {
-  setState(getState(g));
-
-  if (g->isEmpty()) {
-    // we perform an acceptable automatic configuration
-    // in order to allow an interactive creation of the graph
-    // over the geographic map, using the 'Add nodes/edges'
-    // and 'Edit edge bends' view interactors
-    auto prop = g->getProperty<SizeProperty>("viewSize");
-    if (prop->getNodeDefaultValue() == TulipViewSettings::defaultSize(ElementType::NODE))
-      prop->setNodeDefaultValue({0.0005, 0.0005, 0.0005});
-    computeGeoLayout();
-  }
+  geolocalisationConfigWidget->setGraph(g);
+  geoViewGraphicsView->setGraph(g);
 }
 
 void GeographicView::switchMapType(MapType type) {
@@ -168,9 +159,6 @@ void GeographicView::fillContextMenu(QMenu *menu, const QPointF &pf) {
 }
 
 void GeographicView::setState(const DataSet &dataSet) {
-  geolocalisationConfigWidget->setGraph(graph());
-  geoViewGraphicsView->setGraph(graph());
-
   updatePoly(true);
 
   if (dataSet.exists("configurationWidget")) {
@@ -234,9 +222,9 @@ void GeographicView::setState(const DataSet &dataSet) {
 
   View::setState(dataSet);
 
-  mapCenterLatitudeInit = 44.8084;
-  mapCenterLongitudeInit = -40;
-  mapZoomInit = 3;
+  mapCenterLatitudeInit = GeoMapWidget::initialCenterLat;
+  mapCenterLongitudeInit = GeoMapWidget::initialCenterLng;
+  mapZoomInit = GeoMapWidget::initialZoom;
   dataSet.get("mapCenterLatitude", mapCenterLatitudeInit);
   dataSet.get("mapCenterLongitude", mapCenterLongitudeInit);
   dataSet.get("mapZoom", mapZoomInit);
@@ -248,6 +236,18 @@ void GeographicView::initMap() {
   auto gmw = getGeoMapWidget();
   gmw->setMapCenter(mapCenterLatitudeInit, mapCenterLongitudeInit);
   gmw->setCurrentZoom(mapZoomInit);
+  if (graph()->isEmpty()) {
+    QMessageBox::warning(graphicsView(), QString("Graph \"%1\" is empty").arg(graph()->getName().c_str()),
+                         QString("The geographic view is inoperable with an empty graph."), QMessageBox::Ok);
+    // we perform an acceptable automatic configuration
+    // in order to allow an interactive creation of the graph
+    // over the geographic map, using the 'Add nodes/edges'
+    // and 'Edit edge bends' view interactors
+    auto prop = graph()->getProperty<SizeProperty>("viewSize");
+    if (prop->getNodeDefaultValue() == TulipViewSettings::defaultSize(ElementType::NODE))
+      prop->setNodeDefaultValue({0.0005, 0.0005, 0.0005});
+    computeGeoLayout();
+  }
 }
 
 DataSet GeographicView::state() const {

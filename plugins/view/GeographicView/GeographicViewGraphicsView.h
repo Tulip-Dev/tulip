@@ -51,7 +51,12 @@ public:
                              QWidget *parent = nullptr);
   ~GeographicViewGraphicsView() override;
 
+  Graph *getGraph() {
+    return graph;
+  }
+
   void setGraph(Graph *graph);
+
   void createLayoutWithAddresses(const std::string &addressPropertyName = "",
                                  bool createLatAndLngProps = false,
                                  bool resetLatAndLngValues = true, bool automaticChoice = true);
