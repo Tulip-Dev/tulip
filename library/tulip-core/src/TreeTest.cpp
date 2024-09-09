@@ -47,9 +47,9 @@ void TreeTestListener::treatEvent(const Event &evt) {
 
     switch (gEvt->getType()) {
     case GraphEvent::TLP_ADD_NODE:
-    case GraphEvent::TLP_DEL_NODE:
+    case GraphEvent::TLP_BEFORE_DEL_NODE:
     case GraphEvent::TLP_ADD_EDGE:
-    case GraphEvent::TLP_DEL_EDGE:
+    case GraphEvent::TLP_BEFORE_DEL_EDGE:
     case GraphEvent::TLP_REVERSE_EDGE:
       graph->removeListener(this);
       resultsBuffer.erase(graph);

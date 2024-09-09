@@ -135,12 +135,12 @@ void GlCompositeHierarchyManager::treatEvent(const Event &evt) {
 
     switch (gEvt->getType()) {
     case GraphEvent::TLP_ADD_NODE:
-
+    case GraphEvent::TLP_AFTER_DEL_NODE: {
       if (_graphsComposites[graph].second) {
         _graphsComposites[graph].second->updateHull();
       }
-
       break;
+    }
 
     case GraphEvent::TLP_AFTER_ADD_SUBGRAPH:
     case GraphEvent::TLP_AFTER_DEL_SUBGRAPH: {

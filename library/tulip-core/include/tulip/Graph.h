@@ -1701,13 +1701,21 @@ protected:
   void notifyAfterSetEnds(Graph *, const edge e) {
     notifyAfterSetEnds(e);
   }
-  void notifyDelNode(const node n);
-  void notifyDelNode(Graph *, const node n) {
-    notifyDelNode(n);
+  void notifyBeforeDelNode(const node n);
+  void notifyBeforeDelNode(Graph *, const node n) {
+    notifyBeforeDelNode(n);
   }
-  void notifyDelEdge(const edge e);
-  void notifyDelEdge(Graph *, const edge e) {
-    notifyDelEdge(e);
+  void notifyAfterDelNode(const node n);
+  void notifyAfterDelNode(Graph *, const node n) {
+    notifyAfterDelNode(n);
+  }
+  void notifyBeforeDelEdge(const edge e);
+  void notifyBeforeDelEdge(Graph *, const edge e) {
+    notifyBeforeDelEdge(e);
+  }
+  void notifyAfterDelEdge(const edge e);
+  void notifyAfterDelEdge(Graph *, const edge e) {
+    notifyAfterDelEdge(e);
   }
   void notifyReverseEdge(const edge e);
   void notifyReverseEdge(Graph *, const edge e) {
@@ -1777,35 +1785,37 @@ public:
   // in the enum below because it is used in some assertions
   enum GraphEventType {
     TLP_ADD_NODE = 0,
-    TLP_DEL_NODE = 1,
-    TLP_ADD_EDGE = 2,
-    TLP_DEL_EDGE = 3,
-    TLP_REVERSE_EDGE = 4,
-    TLP_BEFORE_SET_ENDS = 5,
-    TLP_AFTER_SET_ENDS = 6,
-    TLP_ADD_NODES = 7,
-    TLP_ADD_EDGES = 8,
-    TLP_BEFORE_ADD_DESCENDANTGRAPH = 9,
-    TLP_AFTER_ADD_DESCENDANTGRAPH = 10,
-    TLP_BEFORE_DEL_DESCENDANTGRAPH = 11,
-    TLP_AFTER_DEL_DESCENDANTGRAPH = 12,
-    TLP_BEFORE_ADD_SUBGRAPH = 13,
-    TLP_AFTER_ADD_SUBGRAPH = 14,
-    TLP_BEFORE_DEL_SUBGRAPH = 15,
-    TLP_AFTER_DEL_SUBGRAPH = 16,
-    TLP_ADD_LOCAL_PROPERTY = 17,
-    TLP_BEFORE_DEL_LOCAL_PROPERTY = 18,
-    TLP_AFTER_DEL_LOCAL_PROPERTY = 19,
-    TLP_ADD_INHERITED_PROPERTY = 20,
-    TLP_BEFORE_DEL_INHERITED_PROPERTY = 21,
-    TLP_AFTER_DEL_INHERITED_PROPERTY = 22,
-    TLP_BEFORE_RENAME_LOCAL_PROPERTY = 23,
-    TLP_AFTER_RENAME_LOCAL_PROPERTY = 24,
-    TLP_BEFORE_SET_ATTRIBUTE = 25,
-    TLP_AFTER_SET_ATTRIBUTE = 26,
-    TLP_REMOVE_ATTRIBUTE = 27,
-    TLP_BEFORE_ADD_LOCAL_PROPERTY = 28,
-    TLP_BEFORE_ADD_INHERITED_PROPERTY = 29
+    TLP_BEFORE_DEL_NODE,
+    TLP_AFTER_DEL_NODE,
+    TLP_ADD_EDGE,
+    TLP_BEFORE_DEL_EDGE,
+    TLP_AFTER_DEL_EDGE,
+    TLP_REVERSE_EDGE,
+    TLP_BEFORE_SET_ENDS,
+    TLP_AFTER_SET_ENDS,
+    TLP_ADD_NODES,
+    TLP_ADD_EDGES,
+    TLP_BEFORE_ADD_DESCENDANTGRAPH,
+    TLP_AFTER_ADD_DESCENDANTGRAPH,
+    TLP_BEFORE_DEL_DESCENDANTGRAPH,
+    TLP_AFTER_DEL_DESCENDANTGRAPH,
+    TLP_BEFORE_ADD_SUBGRAPH,
+    TLP_AFTER_ADD_SUBGRAPH,
+    TLP_BEFORE_DEL_SUBGRAPH,
+    TLP_AFTER_DEL_SUBGRAPH,
+    TLP_ADD_LOCAL_PROPERTY,
+    TLP_BEFORE_DEL_LOCAL_PROPERTY,
+    TLP_AFTER_DEL_LOCAL_PROPERTY,
+    TLP_ADD_INHERITED_PROPERTY,
+    TLP_BEFORE_DEL_INHERITED_PROPERTY,
+    TLP_AFTER_DEL_INHERITED_PROPERTY,
+    TLP_BEFORE_RENAME_LOCAL_PROPERTY,
+    TLP_AFTER_RENAME_LOCAL_PROPERTY,
+    TLP_BEFORE_SET_ATTRIBUTE,
+    TLP_AFTER_SET_ATTRIBUTE,
+    TLP_REMOVE_ATTRIBUTE,
+    TLP_BEFORE_ADD_LOCAL_PROPERTY,
+    TLP_BEFORE_ADD_INHERITED_PROPERTY
   };
 
   // constructor for node/edge/nodes/edges events
@@ -1854,7 +1864,7 @@ public:
   }
 
   edge getEdge() const {
-    assert(evtType > TLP_DEL_NODE && evtType < TLP_ADD_NODES);
+    assert(evtType > TLP_AFTER_DEL_NODE && evtType < TLP_ADD_NODES);
     return edge(info.eltId);
   }
 

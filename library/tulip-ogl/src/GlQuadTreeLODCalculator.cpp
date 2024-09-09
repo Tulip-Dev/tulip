@@ -566,8 +566,8 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
     switch (graphEvent->getType()) {
     case GraphEvent::TLP_ADD_NODE:
     case GraphEvent::TLP_ADD_EDGE:
-    case GraphEvent::TLP_DEL_NODE:
-    case GraphEvent::TLP_DEL_EDGE:
+    case GraphEvent::TLP_AFTER_DEL_NODE:
+    case GraphEvent::TLP_AFTER_DEL_EDGE:
       setHaveToCompute();
       break;
 

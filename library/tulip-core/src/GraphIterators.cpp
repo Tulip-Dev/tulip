@@ -53,7 +53,7 @@ struct TLP_SCOPE EdgeIteratorObserver : public Observable {
 void NodeIteratorObserver::treatEvent(const Event &evt) {
   switch (static_cast<const GraphEvent *>(&evt)->getType()) {
   case GraphEvent::TLP_ADD_NODE:
-  case GraphEvent::TLP_DEL_NODE:
+  case GraphEvent::TLP_AFTER_DEL_NODE:
 
     if (itn->hasNext())
       tlp::warning() << "Warning: node added or deleted while iterating!!!" << std::endl;
@@ -66,7 +66,7 @@ void NodeIteratorObserver::treatEvent(const Event &evt) {
 void EdgeIteratorObserver::treatEvent(const Event &evt) {
   switch (static_cast<const GraphEvent *>(&evt)->getType()) {
   case GraphEvent::TLP_ADD_EDGE:
-  case GraphEvent::TLP_DEL_EDGE:
+  case GraphEvent::TLP_AFTER_DEL_EDGE:
 
     if (ite->hasNext())
       tlp::warning() << "Warning: edge added or deleted while iterating!!!" << std::endl;

@@ -60,7 +60,7 @@ void GraphUpdatesRecorder::treatEvent(const Event &ev) {
       addNode(graph, gEvt->getNode());
       break;
 
-    case GraphEvent::TLP_DEL_NODE:
+    case GraphEvent::TLP_BEFORE_DEL_NODE:
       delNode(graph, gEvt->getNode());
       break;
 
@@ -68,7 +68,7 @@ void GraphUpdatesRecorder::treatEvent(const Event &ev) {
       addEdge(graph, gEvt->getEdge());
       break;
 
-    case GraphEvent::TLP_DEL_EDGE:
+    case GraphEvent::TLP_BEFORE_DEL_EDGE:
       delEdge(graph, gEvt->getEdge());
       break;
 

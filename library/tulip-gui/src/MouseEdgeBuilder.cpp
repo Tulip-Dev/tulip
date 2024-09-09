@@ -180,7 +180,7 @@ void MouseEdgeBuilder::treatEvent(const Event &evt) {
   if (typeid(evt) == typeid(GraphEvent)) {
     const GraphEvent *graphEvent = dynamic_cast<const GraphEvent *>(&evt);
 
-    if (graphEvent && graphEvent->getType() == GraphEvent::TLP_DEL_NODE &&
+    if (graphEvent && graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_NODE &&
         graphEvent->getNode() == _source) {
       _bends.clear();
       _started = false;

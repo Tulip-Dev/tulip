@@ -1044,7 +1044,7 @@ void NodesGraphModel::treatEvent(const Event &ev) {
           _elementsToModify.remove(wasDeleted);
         }
       }
-    } else if (graphEv->getType() == GraphEvent::TLP_DEL_NODE) {
+    } else if (graphEv->getType() == GraphEvent::TLP_AFTER_DEL_NODE) {
       _nodesRemoved = true;
       // if the node was added then deleted before the call to Observable::unholdObservers(), remove
       // it from the elementsToModify list as no update has to be performed in the model for that
@@ -1136,7 +1136,7 @@ void EdgesGraphModel::treatEvent(const Event &ev) {
           _elementsToModify.remove(wasDeleted);
         }
       }
-    } else if (graphEv->getType() == GraphEvent::TLP_DEL_EDGE) {
+    } else if (graphEv->getType() == GraphEvent::TLP_AFTER_DEL_EDGE) {
       _edgesRemoved = true;
       // if the edge was added then deleted before the call to Observable::unholdObservers(), remove
       // it from the elementsToModify list as no update has to be performed in the model for that

@@ -56,7 +56,7 @@ void SimpleTestListener::treatEvent(const Event &evt) {
 
       break;
 
-    case GraphEvent::TLP_DEL_EDGE:
+    case GraphEvent::TLP_AFTER_DEL_EDGE:
 
       if (!resultsBuffer[graph])
         deleteResult(graph);

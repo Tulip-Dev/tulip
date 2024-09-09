@@ -438,10 +438,10 @@ void MatrixView::treatEvent(const Event &message) {
     if (graphEvent->getType() == GraphEvent::TLP_ADD_EDGE)
       addEdge(graphEvent->getGraph(), graphEvent->getEdge());
 
-    if (graphEvent->getType() == GraphEvent::TLP_DEL_NODE)
+    if (graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_NODE)
       delNode(graphEvent->getGraph(), graphEvent->getNode());
 
-    if (graphEvent->getType() == GraphEvent::TLP_DEL_EDGE)
+    if (graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_EDGE)
       delEdge(graphEvent->getGraph(), graphEvent->getEdge());
   }
 }

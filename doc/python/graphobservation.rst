@@ -28,13 +28,13 @@ to register an observer to a graph. The sample code below illustrates that obser
           if event.getType() == tlp.GraphEvent.TLP_ADD_NODE:
             print("The node", event.getNode(), "has been added to the graph", graph)
 
-          elif event.getType() == tlp.GraphEvent.TLP_DEL_NODE:
+          elif event.getType() == tlp.GraphEvent.TLP_AFTER_DEL_NODE:
             print("The node", event.getNode(), "has been deleted from the graph", graph)
 
           if event.getType() == tlp.GraphEvent.TLP_ADD_EDGE:
             print("The edge", event.getEdge(), "has been added to the graph", graph)
 
-          elif event.getType() == tlp.GraphEvent.TLP_DEL_EDGE:
+          elif event.getType() == tlp.GraphEvent.TLP_AFTER_DEL_EDGE:
             print("The edge", event.getEdge(), "has been deleted from the graph", graph)
 
           elif event.getType() == tlp.GraphEvent.TLP_REVERSE_EDGE:

@@ -387,8 +387,9 @@ void GraphDecorator::removeEdge(const edge) {
 
 //============================================================
 void GraphDecorator::delNode(const node n, bool deleteInAllGraphs) {
-  notifyDelNode(n);
+  notifyBeforeDelNode(n);
   graph_component->delNode(n, deleteInAllGraphs);
+  notifyAfterDelNode(n);
 }
 
 //============================================================
@@ -402,8 +403,9 @@ void GraphDecorator::delNodes(Iterator<node> *itN, bool deleteInAllGraphs) {
 
 //============================================================
 void GraphDecorator::delEdge(const edge e, bool deleteInAllGraphs) {
-  notifyDelEdge(e);
+  notifyBeforeDelEdge(e);
   graph_component->delEdge(e, deleteInAllGraphs);
+  notifyAfterDelEdge(e);
 }
 
 //=========================================================================

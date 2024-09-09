@@ -37,9 +37,11 @@ The type of graph event can be retrieved through the :meth:`tlp.GraphEvent.getTy
 Below is an exhaustive list of those types :
 
   * :const:`tlp.GraphEvent.GraphEventType.TLP_ADD_NODE` : a node has been added in the graph (use :meth:`tlp.GraphEvent.getNode` to get the concerned node)
-  * :const:`tlp.GraphEvent.GraphEventType.TLP_DEL_NODE` : a node has been deleted in the graph (use :meth:`tlp.GraphEvent.getNode` to get the concerned node)
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_BEFORE_DEL_NODE` : a node is about to be deleted in the graph (use :meth:`tlp.GraphEvent.getNode` to get the concerned node)
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_AFTER_DEL_NODE` : a node has been deleted in the graph (use :meth:`tlp.GraphEvent.getNode` to get the concerned node)
   * :const:`tlp.GraphEvent.GraphEventType.TLP_ADD_EDGE` : an edge has been added in the graph (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
-  * :const:`tlp.GraphEvent.GraphEventType.TLP_DEL_EDGE` : an edge has been deleted in the graph (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_BEFORE_DEL_EDGE` : an edge is about to be deleted in the graph (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_AFTER_DEL_EDGE` : an edge has been deleted in the graph (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
   * :const:`tlp.GraphEvent.GraphEventType.TLP_REVERSE_EDGE` : the direction of an edge has been reversed in the graph (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
   * :const:`tlp.GraphEvent.GraphEventType.TLP_BEFORE_SET_ENDS` : the extremities of an edge is about to be modified (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
   * :const:`tlp.GraphEvent.GraphEventType.TLP_AFTER_SET_ENDS` : the extremities of an edge have been modified (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
@@ -81,9 +83,11 @@ public:
 
   enum GraphEventType /BaseType=IntEnum/ {
     TLP_ADD_NODE = GraphEvent::GraphEventType::TLP_ADD_NODE,
-    TLP_DEL_NODE = GraphEvent::GraphEventType::TLP_DEL_NODE,
+    TLP_BEFORE_DEL_NODE = GraphEvent::GraphEventType::TLP_BEFORE_DEL_NODE,
+    TLP_AFTER_DEL_NODE = GraphEvent::GraphEventType::TLP_AFTER_DEL_NODE,
     TLP_ADD_EDGE = GraphEvent::GraphEventType::TLP_ADD_EDGE,
-    TLP_DEL_EDGE = GraphEvent::GraphEventType::TLP_DEL_EDGE,
+    TLP_BEFORE_DEL_EDGE = GraphEvent::GraphEventType::TLP_BEFORE_DEL_EDGE,
+    TLP_AFTER_DEL_EDGE = GraphEvent::GraphEventType::TLP_AFTER_DEL_EDGE,
     TLP_REVERSE_EDGE = GraphEvent::GraphEventType::TLP_REVERSE_EDGE,
     TLP_BEFORE_SET_ENDS = GraphEvent::GraphEventType::TLP_BEFORE_SET_ENDS,
     TLP_AFTER_SET_ENDS = GraphEvent::GraphEventType::TLP_AFTER_SET_ENDS,

@@ -52,8 +52,8 @@ void OuterPlanarTestListener::treatEvent(const Event &evt) {
       }
       break;
 
-    case GraphEvent::TLP_DEL_EDGE:
-    case GraphEvent::TLP_DEL_NODE:
+    case GraphEvent::TLP_AFTER_DEL_EDGE:
+    case GraphEvent::TLP_AFTER_DEL_NODE:
 
       if (it != resultsBuffer.end())
         if (!it->second)

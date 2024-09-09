@@ -666,11 +666,11 @@ void ParallelCoordinatesDrawing::treatEvent(const tlp::Event &evt) {
     Graph *graph = gEvt->getGraph();
 
     switch (gEvt->getType()) {
-    case GraphEvent::TLP_DEL_NODE:
+    case GraphEvent::TLP_AFTER_DEL_NODE:
       delNode(graph, gEvt->getNode());
       break;
 
-    case GraphEvent::TLP_DEL_EDGE:
+    case GraphEvent::TLP_AFTER_DEL_EDGE:
       delEdge(graph, gEvt->getEdge());
       break;
 

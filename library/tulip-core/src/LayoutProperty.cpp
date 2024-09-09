@@ -853,7 +853,7 @@ void LayoutProperty::treatEvent(const Event &evt) {
   if (graphEvent) {
     switch (graphEvent->getType()) {
     case GraphEvent::TLP_ADD_NODE:
-    case GraphEvent::TLP_DEL_NODE:
+    case GraphEvent::TLP_BEFORE_DEL_NODE:
       LayoutMinMaxProperty::treatEvent(evt);
       break;
 

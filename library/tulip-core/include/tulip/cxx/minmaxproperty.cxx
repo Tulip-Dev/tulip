@@ -292,7 +292,7 @@ void tlp::MinMaxProperty<nodeType, edgeType, propType>::treatEvent(const tlp::Ev
       removeListenersAndClearNodeMap();
       break;
 
-    case GraphEvent::TLP_DEL_NODE: {
+    case GraphEvent::TLP_BEFORE_DEL_NODE: {
       unsigned int sgi = graph->getId();
       auto it = minMaxNode.find(sgi);
 
@@ -317,7 +317,7 @@ void tlp::MinMaxProperty<nodeType, edgeType, propType>::treatEvent(const tlp::Ev
       removeListenersAndClearEdgeMap();
       break;
 
-    case GraphEvent::TLP_DEL_EDGE: {
+    case GraphEvent::TLP_BEFORE_DEL_EDGE: {
       unsigned int sgi = graph->getId();
       auto it = minMaxEdge.find(sgi);
 

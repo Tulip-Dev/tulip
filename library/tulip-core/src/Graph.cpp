@@ -668,9 +668,14 @@ void Graph::notifyAddNode(const node n) {
     sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_NODE, n));
 }
 
-void Graph::notifyDelNode(const node n) {
+void Graph::notifyBeforeDelNode(const node n) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_DEL_NODE, n));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_NODE, n));
+}
+
+void Graph::notifyAfterDelNode(const node n) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_NODE, n));
 }
 
 void Graph::notifyAddEdge(const edge e) {
@@ -678,9 +683,14 @@ void Graph::notifyAddEdge(const edge e) {
     sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_EDGE, e));
 }
 
-void Graph::notifyDelEdge(const edge e) {
+void Graph::notifyBeforeDelEdge(const edge e) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_DEL_EDGE, e));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_EDGE, e));
+}
+
+void Graph::notifyAfterDelEdge(const edge e) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_EDGE, e));
 }
 
 void Graph::notifyReverseEdge(const edge e) {

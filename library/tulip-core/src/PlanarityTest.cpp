@@ -45,8 +45,8 @@ void PlanarityTestListener::treatEvent(const Event &evt) {
 
     auto it = resultsBuffer.find(graph);
     switch (gEvt->getType()) {
-    case GraphEvent::TLP_DEL_EDGE:
-    case GraphEvent::TLP_DEL_NODE:
+    case GraphEvent::TLP_AFTER_DEL_EDGE:
+    case GraphEvent::TLP_AFTER_DEL_NODE:
 
       if (it != resultsBuffer.end())
         if (it->second)

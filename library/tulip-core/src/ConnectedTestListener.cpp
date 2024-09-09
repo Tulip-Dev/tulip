@@ -35,7 +35,7 @@ void ConnectedTestListener::treatEvent(const Event &evt) {
       resultsBuffer[graph] = false;
       break;
 
-    case GraphEvent::TLP_DEL_NODE:
+    case GraphEvent::TLP_AFTER_DEL_NODE:
       if (it != resultsBuffer.end()) {
         graph->removeListener(this);
         resultsBuffer.erase(it);
@@ -53,7 +53,7 @@ void ConnectedTestListener::treatEvent(const Event &evt) {
       }
       break;
 
-    case GraphEvent::TLP_DEL_EDGE:
+    case GraphEvent::TLP_AFTER_DEL_EDGE:
 
       if (it != resultsBuffer.end()) {
         if (!it->second)

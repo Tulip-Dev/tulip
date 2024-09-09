@@ -746,10 +746,10 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 
       } else if (ge->getType() == GraphEvent::TLP_ADD_NODE ||
                  ge->getType() == GraphEvent::TLP_ADD_NODES ||
-                 ge->getType() == GraphEvent::TLP_DEL_NODE ||
+                 ge->getType() == GraphEvent::TLP_AFTER_DEL_NODE ||
                  ge->getType() == GraphEvent::TLP_ADD_EDGE ||
                  ge->getType() == GraphEvent::TLP_ADD_EDGES ||
-                 ge->getType() == GraphEvent::TLP_DEL_EDGE ||
+                 ge->getType() == GraphEvent::TLP_AFTER_DEL_EDGE ||
                  (ge->getType() == GraphEvent::TLP_AFTER_SET_ATTRIBUTE &&
                   ge->getAttributeName() == "name")) {
         const Graph *graph = ge->getGraph();

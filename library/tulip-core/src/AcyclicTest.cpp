@@ -52,7 +52,7 @@ void TestAcyclicListener::treatEvent(const Event &evt) {
       resultsBuffer.erase(graph);
       break;
 
-    case GraphEvent::TLP_DEL_EDGE:
+    case GraphEvent::TLP_AFTER_DEL_EDGE:
 
       if (resultsBuffer[graph])
         return;

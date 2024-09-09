@@ -393,10 +393,13 @@ void GraphImpl::reserveEdges(unsigned int nb) {
 //----------------------------------------------------------------
 void GraphImpl::removeNode(const node n) {
   assert(isElement(n));
-  notifyDelNode(n);
+  notifyBeforeDelNode(n);
+
   // remove from storage and propertyContainer
   storage.removeFromNodes(n);
   propertyContainer->erase(n);
+
+  notifyAfterDelNode(n);
 }
 //----------------------------------------------------------------
 void GraphImpl::delNode(const node n, bool) {
@@ -434,12 +437,15 @@ void GraphImpl::delNode(const node n, bool) {
       removeEdge(e);
   }
 
-  notifyDelNode(n);
+  notifyBeforeDelNode(n);
+
   // delete n from storage
   storage.delNode(n);
 
   // remove from propertyContainer
   propertyContainer->erase(n);
+
+  notifyAfterDelNode(n);
 }
 //----------------------------------------------------------------
 void GraphImpl::delEdge(const edge e, bool) {
@@ -552,10 +558,13 @@ void GraphImpl::setEnds(const edge e, const node newSrc, const node newTgt) {
 //----------------------------------------------------------------
 void GraphImpl::removeEdge(const edge e) {
   assert(isElement(e));
-  notifyDelEdge(e);
+  notifyBeforeDelEdge(e);
+
   // remove from propertyContainer and storage
   storage.delEdge(e);
   propertyContainer->erase(e);
+
+  notifyAfterDelEdge(e);
 }
 //----------------------------------------------------------------
 bool GraphImpl::canPop() {
