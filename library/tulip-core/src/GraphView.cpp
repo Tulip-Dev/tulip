@@ -180,7 +180,7 @@ void GraphView::setEndsInternal(const edge e, node src, node tgt, const node new
       _nodeData.get(tgt.id)->inDegreeAdd(-1);
 
       notifyAfterDelEdge(e);
-}
+    }
   }
 }
 //----------------------------------------------------------------
