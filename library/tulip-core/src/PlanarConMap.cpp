@@ -218,7 +218,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   // initialize the list of faces adjacent to all nodes of the new face
   for (unsigned int id : isInNewFace.findAll(true)) {
     node n_tmp(id);
-    vector<Face> v_faces;
+    v_faces.clear();
 
     for (const Face &f : getFacesAdj(n_tmp))
       v_faces.push_back(f);
@@ -312,7 +312,7 @@ void PlanarConMap::delEdgeMap(edge e, Face f) {
 
     for (unsigned int i = 0; nb_added < nb_edges - 1; i = (i + 1) % nb_edges) {
       edge e_tmp = facesEdges[f2][i];
-      auto eEnds = ends(e_tmp);
+      eEnds = ends(e_tmp);
       isInF2.set(eEnds.first.id, true);
       isInF2.set(eEnds.second.id, true);
 

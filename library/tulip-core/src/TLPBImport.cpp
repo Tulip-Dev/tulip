@@ -172,8 +172,8 @@ bool TLPBImport::importFile() {
             return (delete is, errorTrap());
 
           // loop to add nodes
-          for (unsigned int i = 0; i < rangesToRead; ++i) {
-            std::pair<node, node> &range = vRanges[i];
+          for (unsigned int j = 0; j < rangesToRead; ++j) {
+            std::pair<node, node> &range = vRanges[j];
             RangeIterator<node> itr(range.first, range.second);
             sg->addNodes(&itr);
           }
@@ -203,8 +203,8 @@ bool TLPBImport::importFile() {
             return (delete is, errorTrap());
 
           // loop to add edges
-          for (unsigned int i = 0; i < rangesToRead; ++i) {
-            std::pair<edge, edge> &range = vRanges[i];
+          for (unsigned int j = 0; j < rangesToRead; ++j) {
+            std::pair<edge, edge> &range = vRanges[j];
             RangeIterator<edge> itr(range.first, range.second);
             sg->addEdges(&itr);
           }
@@ -407,7 +407,7 @@ bool TLPBImport::importFile() {
             vs.rdbuf()->pubsetbuf(reinterpret_cast<char *>(vBuf),
                                   valuesToRead * (sizeof(unsigned int) + size));
 
-            for (unsigned int i = 0; i < valuesToRead; ++i) {
+            for (unsigned int j = 0; j < valuesToRead; ++j) {
               node n;
 
               // read node id
@@ -428,7 +428,7 @@ bool TLPBImport::importFile() {
         } else {
           // we cannot predict the size of property values
           // so the loop is simpler but with more disk reads
-          for (unsigned int i = 0; i < numValues; ++i) {
+          for (unsigned int j = 0; j < numValues; ++j) {
             node n;
 
             // read node id
@@ -493,7 +493,7 @@ bool TLPBImport::importFile() {
             // set read buffer of stringstream to vBuf
             vs.rdbuf()->pubsetbuf(vBuf, valuesToRead * (sizeof(unsigned int) + size));
 
-            for (unsigned int i = 0; i < valuesToRead; ++i) {
+            for (unsigned int j = 0; j < valuesToRead; ++j) {
               edge e;
 
               // read edge id
@@ -533,7 +533,7 @@ bool TLPBImport::importFile() {
         } else {
           // we cannot predict the size of property values
           // so the loop is simpler but with more disk reads
-          for (unsigned int i = 0; i < numValues; ++i) {
+          for (unsigned int j = 0; j < numValues; ++j) {
             edge e;
 
             // read edge id

@@ -248,8 +248,8 @@ Graph *GraphAbstract::getDescendantGraph(unsigned int sgId) const {
     if (sg)
       return sg;
 
-    for (auto sg : subgraphs) {
-      if ((sg = sg->getDescendantGraph(sgId)))
+    for (auto cur : subgraphs) {
+      if ((sg = cur->getDescendantGraph(sgId)))
         return sg;
     }
   }
@@ -263,8 +263,8 @@ Graph *GraphAbstract::getDescendantGraph(const string &name) const {
   if (sg)
     return sg;
 
-  for (auto sg : subgraphs) {
-    if ((sg = sg->getDescendantGraph(name)))
+  for (auto cur : subgraphs) {
+    if ((sg = cur->getDescendantGraph(name)))
       return sg;
   }
 

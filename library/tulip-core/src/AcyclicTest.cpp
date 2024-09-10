@@ -144,7 +144,7 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
       neighboursToVisit.push(graph->getOutEdges(curNode));
 
       while (!nodesToVisit.empty()) {
-        node curNode = nodesToVisit.top();
+        curNode = nodesToVisit.top();
         Iterator<edge> *ite = neighboursToVisit.top();
 
         // check if dfs traversal of curNode neighbours is finished

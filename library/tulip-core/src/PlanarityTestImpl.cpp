@@ -225,9 +225,9 @@ void PlanarityTestImpl::findTerminalNodes(Graph *sG, node n, list<node> &listOfC
       }
 
       while (!S.empty()) {
-        node target = S.front();
+        node tgt = S.front();
         S.pop_front();
-        componentOf[target] = componentOf[parent.get(target.id)];
+        componentOf[tgt] = componentOf[parent.get(tgt.id)];
       }
 
       // did we find a terminal node?
