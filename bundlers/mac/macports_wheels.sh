@@ -36,8 +36,8 @@ sudo installer -store -pkg python-3.11.*.pkg -target /
 # cleanup
 rm python-*.pkg
 
-# 3.12.5
-curl -LO https://www.python.org/ftp/python/3.12.5/python-3.12.5-macos11.pkg
+# 3.12.6
+curl -LO https://www.python.org/ftp/python/3.12.6/python-3.12.6-macos11.pkg
 sudo installer -store -pkg python-3.12.*.pkg -target /
 # cleanup
 rm python-*.pkg

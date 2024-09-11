@@ -57,8 +57,8 @@ mv python Python-311
 Python-311\tools\python.exe -m pip install --upgrade pip
 Python-311\tools\python.exe -m pip install sip build delvewheel
 
-rem Python 3.12.5
-nuget.exe install python -Version 3.12.5 -ExcludeVersion -OutputDirectory .
+rem Python 3.12.6
+nuget.exe install python -Version 3.12.6 -ExcludeVersion -OutputDirectory .
 mv python Python-312
 Python-312\tools\python.exe -m pip install --upgrade pip
 Python-312\tools\python.exe -m pip install sip build delvewheel
