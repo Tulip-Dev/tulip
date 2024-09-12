@@ -24,6 +24,9 @@ if EXIST "%DEST_DIR%\\files" (
 echo 'Copying Tulip files'
 xcopy "%TULIP_DIR%" "%DEST_DIR%\\files" /E /Q
 
+echo 'Removing include directory'
+rmdir /Q /S "%DEST_DIR%\\files\\include" >nul 2>&1
+
 if NOT "%DEBUG_MODE%" == "TRUE" (
 echo 'Removing debug libs'
 del /Q /F /S "%DEST_DIR%\\files\\bin\\Qt5*d.dll" >nul 2>&1
@@ -40,6 +43,8 @@ echo 'Removing tulip-python lib'
 del /Q /F /S "%DEST_DIR%\\files\\lib\\tulip\\libtulip-python*.dll" >nul 2>&1
 echo 'Removing lib/tulip/python directory'
 rmdir /Q /S "%DEST_DIR%\\files\\lib\\tulip\\python" >nul 2>&1
+echo 'Removing python doc'
+rmdir /Q /S "%DEST_DIR%\\files\\share\\doc\\Tulip\\tulip-python" >nul 2>&1
 )
 
 echo 'Removing non dll files from lib directory'
