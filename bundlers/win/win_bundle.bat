@@ -2,7 +2,7 @@
 set NSIS_PATH=%1
 set TULIP_DIR=%2
 set DEST_DIR=%3
-set NO_PYTHON=%4
+set BUNDLE_TYPE=%4
 if [%5] NEQ [] (
   if "%5" == "TRUE" (
     set DEBUG_MODE=%5
@@ -35,7 +35,7 @@ del /Q /F /S "%DEST_DIR%\\files\\bin\\styles\\q*d.dll" >nul 2>&1
 del /Q /F /S "%DEST_DIR%\\files\\bin\\styles\\q*d.pdb" >nul 2>&1
 )
 
-if "%NO_PYTHON%" == "TRUE" (
+if "%BUNDLE_TYPE%" == "WITHOUT_PYTHON" (
 echo 'Removing tulip-python lib'
 del /Q /F /S "%DEST_DIR%\\files\\lib\\tulip\\libtulip-python*.dll" >nul 2>&1
 echo 'Removing lib/tulip/python directory'
@@ -49,7 +49,7 @@ robocopy "%DEST_DIR%\\empty_folder" "%DEST_DIR%\\files\\lib\\cmake" /MIR >nul 2>
 rmdir /Q /S "%DEST_DIR%\\files\\lib\\cmake" >nul 2>&1
 
 echo 'Copying NSIS script and licence'
-if "%NO_PYTHON%" == "TRUE" (
+if "%BUNDLE_TYPE%" == "WITHOUT_PYTHON" (
 set TULIP_NSI=Tulip_no_python.nsi
 ) else (set TULIP_NSI=Tulip.nsi)
 
