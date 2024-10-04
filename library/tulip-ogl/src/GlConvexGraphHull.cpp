@@ -63,6 +63,7 @@ GlConvexGraphHull::~GlConvexGraphHull() {
 void GlConvexGraphHull::updateHull(LayoutProperty *layout, SizeProperty *size,
                                    DoubleProperty *rotation) {
   bool visible = !_polygon || _polygon->isVisible();
+  bool textured = _polygon && _polygon->textureActivation();
 
   if (_polygon) {
     _parent->deleteGlEntity(_polygon);
@@ -81,7 +82,7 @@ void GlConvexGraphHull::updateHull(LayoutProperty *layout, SizeProperty *size,
 
   if (graph->isEmpty() == false) {
     _polygon = new GlComplexPolygon(computeConvexHull(graph, _layout, _size, _rotation, nullptr),
-                                    _fcolor, GlConvexGraphHull::bezierValue, _tex, false);
+                                    _fcolor, GlConvexGraphHull::bezierValue, _tex, textured);
     _polygon->setVisible(visible);
     _parent->addGlEntity(_polygon, _name);
   }
