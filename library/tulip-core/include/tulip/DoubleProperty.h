@@ -51,7 +51,121 @@ public:
   DEFINE_GET_CPP_CLASS_NAME;
 
   void setNodeValue(const node n, tlp::StoredType<double>::ReturnedConstValue v) override;
+
+  // inner class used to extend the overloading of the operator[]
+  // to set a node value
+  class nodeValueRef :public AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>::nodeValueRef {
+  public:
+
+    constexpr nodeValueRef(DoubleProperty *prop, node n) : AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>::nodeValueRef(prop, n) {}
+
+    nodeValueRef& operator=(typename tlp::StoredType<typename DoubleType::RealType>::ReturnedConstValue val) noexcept {
+      _prop->setNodeValue(_n, val);
+      return *this;
+    }
+
+    // prefix increment
+    nodeValueRef& operator++() {
+      _prop->setNodeValue(_n, getValue() + 1);
+      return *this;
+    }
+
+    // postfix increment
+    auto operator++(int) {
+      auto val = getValue();
+      _prop->setNodeValue(_n, val + 1);
+      return val;
+    }
+
+    // increment and assign
+    nodeValueRef& operator+=(double val) {
+      _prop->setNodeValue(_n, getValue() + val);
+      return *this;
+    }
+
+    // prefix decrement
+    nodeValueRef& operator--() {
+      _prop->setNodeValue(_n, getValue() - 1);
+      return *this;
+    }
+
+    // postfix decrement
+    auto operator--(int) {
+      auto val = getValue();
+      _prop->setNodeValue(_n, val - 1);
+      return val;
+    }
+
+    // decrement and assign
+    nodeValueRef& operator-=(double val) {
+      _prop->setNodeValue(_n, getValue() - val);
+      return *this;
+    }
+  };
+
+  // overload operator[] to set a node value
+  constexpr nodeValueRef operator[](node n) {
+    return nodeValueRef(this, n);
+  }
+
   void setEdgeValue(const edge e, tlp::StoredType<double>::ReturnedConstValue v) override;
+
+  // inner class used to extend the overloading of the operator[]
+  // to set an edge value
+  class edgeValueRef :public AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>::edgeValueRef {
+  public:
+
+    constexpr edgeValueRef(DoubleProperty *prop, edge e) : AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>::edgeValueRef(prop, e) {}
+
+    edgeValueRef& operator=(typename tlp::StoredType<typename DoubleType::RealType>::ReturnedConstValue val) noexcept {
+      _prop->setEdgeValue(_e, val);
+      return *this;
+    }
+
+    // prefix increment
+    edgeValueRef& operator++() {
+      _prop->setEdgeValue(_e, getValue() + 1);
+      return *this;
+    }
+
+    // postfix increment
+    auto operator++(int) {
+      auto val = getValue();
+      _prop->setEdgeValue(_e, val + 1);
+      return val;
+    }
+
+    // increase value
+    edgeValueRef& operator+=(double val) {
+      _prop->setEdgeValue(_e, getValue() + val);
+      return *this;
+    }
+
+    // prefix decrement
+    edgeValueRef& operator--() {
+      _prop->setEdgeValue(_e, getValue() - 1);
+      return *this;
+    }
+
+    // postfix decrement
+    auto operator--(int) {
+      auto val = getValue();
+      _prop->setEdgeValue(_e, val - 1);
+      return val;
+    }
+
+    // decrease value
+    edgeValueRef& operator-=(double val) {
+      _prop->setEdgeValue(_e, getValue() - val);
+      return *this;
+    }
+  };
+
+  // overload operator[] to set an edge value
+  constexpr edgeValueRef operator[](edge e) {
+    return edgeValueRef(this, e);
+  }
+
   void setAllNodeValue(tlp::StoredType<double>::ReturnedConstValue v) override;
 
   void setValueToGraphNodes(tlp::StoredType<double>::ReturnedConstValue v,

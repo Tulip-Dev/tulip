@@ -46,7 +46,7 @@ struct node {
   /**
    * @brief node creates an invalid node.
    */
-  node() : id(UINT_MAX) {}
+  constexpr node() : id(UINT_MAX) {}
 
   /**
    * @brief node Create a node of given identifier.

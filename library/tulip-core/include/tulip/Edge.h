@@ -46,7 +46,7 @@ struct edge {
   /**
    * @brief edge creates an invalid edge.
    */
-  edge() : id(UINT_MAX) {}
+  constexpr edge() : id(UINT_MAX) {}
 
   /**
    * @brief edge Create an edge of given identifier.

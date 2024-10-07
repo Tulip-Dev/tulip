@@ -1,0 +1,50 @@
+/**
+ *
+ * This file is part of Tulip (https://tulip.labri.fr)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
+
+#ifndef PROPERTYARRAYSUBSCRIPTTEST_H_
+#define PROPERTYARRAYSUBSCRIPTTEST_H_
+
+#include <tulip/Graph.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/IntegerProperty.h>
+
+#include "CppUnitIncludes.h"
+
+class PropertyArraySubscriptTest : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(PropertyArraySubscriptTest);
+  CPPUNIT_TEST(testBooleanProperty);
+  CPPUNIT_TEST(testIntegerProperty);
+  CPPUNIT_TEST(testDoubleProperty);
+  CPPUNIT_TEST_SUITE_END();
+
+public:
+  void setUp() override;
+  void tearDown() override;
+  void testBooleanProperty();
+  void testDoubleProperty();
+  void testIntegerProperty();
+
+private:
+  tlp::Graph *graph;
+  tlp::node n1, n2, n3;
+  tlp::edge e1, e2, e3;
+};
+
+#endif
