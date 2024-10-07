@@ -76,7 +76,8 @@ public:
    * If there is no value, it returns the default node value.
    *
    * @param n The node for which we want to get the value of the property.
-   * @return :StoredType< Tnode::RealType >::ReturnedConstValue The value of the property for this node.
+   * @return :StoredType< Tnode::RealType >::ReturnedConstValue The value of the property for this
+   *node.
    **/
   typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue
   getNodeValue(const node n) const;
@@ -84,7 +85,10 @@ public:
   /**
    * @brief overloading of operator[] to get a node value
    **/
-  const typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue operator[](node n) const { return getNodeValue(n); }
+  const typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue
+  operator[](node n) const {
+    return getNodeValue(n);
+  }
 
   /**
    * @brief Returns the value associated to the edge e in this property.
@@ -100,7 +104,9 @@ public:
   /**
    * @brief overloading of operator[] to get an edge value
    **/
-  typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue operator[](edge e) const { return getEdgeValue(e); }
+  typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue operator[](edge e) const {
+    return getEdgeValue(e);
+  }
 
   /**
    * Returns an iterator through all nodes belonging to g
@@ -149,7 +155,8 @@ public:
      * @brief overloading of operator= to assign a node value
      * which allow to write: prop[n] = val
      **/
-    nodeValueRef& operator=(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue val) noexcept {
+    nodeValueRef &
+    operator=(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue val) noexcept {
       _prop->setNodeValue(_n, val);
       return *this;
     }
@@ -158,7 +165,7 @@ public:
      * @brief overloading of operator= to assign a node value
      * which allow to write: prop1[n] = prop2[m]
      **/
-    nodeValueRef& operator=(const nodeValueRef& ref) noexcept {
+    nodeValueRef &operator=(const nodeValueRef &ref) noexcept {
       _prop->setNodeValue(_n, ref.getValue());
       return *this;
     }
@@ -167,7 +174,9 @@ public:
      * @brief overloading of value type conversion operator
      * which allow to write: if (prop[n])
      **/
-    operator typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue() { return getValue(); }
+    operator typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue() {
+      return getValue();
+    }
   };
 
   /**
@@ -206,7 +215,8 @@ public:
      * @brief overloading of operator= to assign an edge value
      * which allow to write: prop[n] = val
      **/
-    edgeValueRef& operator=(typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue val) noexcept {
+    edgeValueRef &
+    operator=(typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue val) noexcept {
       _prop->setEdgeValue(_e, val);
       return *this;
     }
@@ -215,7 +225,7 @@ public:
      * @brief overloading of operator= to assign an edge value
      * which allow to write: prop1[e1] = prop2[e2]
      **/
-    edgeValueRef& operator=(const edgeValueRef& ref) noexcept {
+    edgeValueRef &operator=(const edgeValueRef &ref) noexcept {
       _prop->setEdgeValue(_e, ref.getValue());
       return *this;
     }
@@ -224,7 +234,9 @@ public:
      * @brief overloading of value type conversion operator
      * which allow to write: if (prop[e])
      **/
-    operator typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue() { return getValue(); }
+    operator typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue() {
+      return getValue();
+    }
   };
 
   /**

@@ -54,18 +54,21 @@ public:
 
   // inner class used to extend the overloading of the operator[]
   // to set a node value
-  class nodeValueRef :public AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>::nodeValueRef {
+  class nodeValueRef : public AbstractProperty<tlp::DoubleType, tlp::DoubleType,
+                                               tlp::NumericProperty>::nodeValueRef {
   public:
+    constexpr nodeValueRef(DoubleProperty *prop, node n)
+        : AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>::nodeValueRef(
+              prop, n) {}
 
-    constexpr nodeValueRef(DoubleProperty *prop, node n) : AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>::nodeValueRef(prop, n) {}
-
-    nodeValueRef& operator=(typename tlp::StoredType<typename DoubleType::RealType>::ReturnedConstValue val) noexcept {
+    nodeValueRef &operator=(
+        typename tlp::StoredType<typename DoubleType::RealType>::ReturnedConstValue val) noexcept {
       _prop->setNodeValue(_n, val);
       return *this;
     }
 
     // prefix increment
-    nodeValueRef& operator++() {
+    nodeValueRef &operator++() {
       _prop->setNodeValue(_n, getValue() + 1);
       return *this;
     }
@@ -78,13 +81,13 @@ public:
     }
 
     // increment and assign
-    nodeValueRef& operator+=(double val) {
+    nodeValueRef &operator+=(double val) {
       _prop->setNodeValue(_n, getValue() + val);
       return *this;
     }
 
     // prefix decrement
-    nodeValueRef& operator--() {
+    nodeValueRef &operator--() {
       _prop->setNodeValue(_n, getValue() - 1);
       return *this;
     }
@@ -97,7 +100,7 @@ public:
     }
 
     // decrement and assign
-    nodeValueRef& operator-=(double val) {
+    nodeValueRef &operator-=(double val) {
       _prop->setNodeValue(_n, getValue() - val);
       return *this;
     }
@@ -112,18 +115,21 @@ public:
 
   // inner class used to extend the overloading of the operator[]
   // to set an edge value
-  class edgeValueRef :public AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>::edgeValueRef {
+  class edgeValueRef : public AbstractProperty<tlp::DoubleType, tlp::DoubleType,
+                                               tlp::NumericProperty>::edgeValueRef {
   public:
+    constexpr edgeValueRef(DoubleProperty *prop, edge e)
+        : AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>::edgeValueRef(
+              prop, e) {}
 
-    constexpr edgeValueRef(DoubleProperty *prop, edge e) : AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>::edgeValueRef(prop, e) {}
-
-    edgeValueRef& operator=(typename tlp::StoredType<typename DoubleType::RealType>::ReturnedConstValue val) noexcept {
+    edgeValueRef &operator=(
+        typename tlp::StoredType<typename DoubleType::RealType>::ReturnedConstValue val) noexcept {
       _prop->setEdgeValue(_e, val);
       return *this;
     }
 
     // prefix increment
-    edgeValueRef& operator++() {
+    edgeValueRef &operator++() {
       _prop->setEdgeValue(_e, getValue() + 1);
       return *this;
     }
@@ -136,13 +142,13 @@ public:
     }
 
     // increase value
-    edgeValueRef& operator+=(double val) {
+    edgeValueRef &operator+=(double val) {
       _prop->setEdgeValue(_e, getValue() + val);
       return *this;
     }
 
     // prefix decrement
-    edgeValueRef& operator--() {
+    edgeValueRef &operator--() {
       _prop->setEdgeValue(_e, getValue() - 1);
       return *this;
     }
@@ -155,7 +161,7 @@ public:
     }
 
     // decrease value
-    edgeValueRef& operator-=(double val) {
+    edgeValueRef &operator-=(double val) {
       _prop->setEdgeValue(_e, getValue() - val);
       return *this;
     }

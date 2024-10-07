@@ -43,7 +43,7 @@ void PropertyArraySubscriptTest::tearDown() {
 
 void PropertyArraySubscriptTest::testBooleanProperty() {
   BooleanProperty &bp = *graph->getProperty<BooleanProperty>("boolean");
-  
+
   bp[e1] = bp[n1] = true;
   bp[e2] = bp[n2] = !bp[n1];
   bp[e3] = bp[n3] = bp[n1];
@@ -74,7 +74,7 @@ void PropertyArraySubscriptTest::testBooleanProperty() {
 
 void PropertyArraySubscriptTest::testIntegerProperty() {
   IntegerProperty &ip = *graph->getProperty<IntegerProperty>("integer");
-  
+
   ip[e1] = ip[n1] = 1;
   ip[e2] = ip[n2] = ip[n1] + 1;
   ip[e3] = ip[n3] = ip[n1] - 1;
@@ -100,9 +100,9 @@ void PropertyArraySubscriptTest::testIntegerProperty() {
   i1 = ip[n1]--;
   CPPUNIT_ASSERT(ip[n1] == 1);
   CPPUNIT_ASSERT(i1 == 2);
-  ip[n1]+=i1;
+  ip[n1] += i1;
   CPPUNIT_ASSERT(ip[n1] == 3);
-  ip[n1]-=i1;
+  ip[n1] -= i1;
   CPPUNIT_ASSERT(ip[n1] == 1);
   ++ip[e1];
   CPPUNIT_ASSERT(ip[e1] == 2);
@@ -114,9 +114,9 @@ void PropertyArraySubscriptTest::testIntegerProperty() {
   i1 = ip[e1]--;
   CPPUNIT_ASSERT(ip[e1] == 1);
   CPPUNIT_ASSERT(i1 == 2);
-  ip[e1]+=i1;
+  ip[e1] += i1;
   CPPUNIT_ASSERT(ip[e1] == 3);
-  ip[e1]-=i1;
+  ip[e1] -= i1;
   CPPUNIT_ASSERT(ip[e1] == 1);
 
   // test as PropertyInterface
@@ -131,12 +131,12 @@ void PropertyArraySubscriptTest::testIntegerProperty() {
   ipi[e2] = ipi[e1];
   CPPUNIT_ASSERT(ipi[e2] == "1");
   CPPUNIT_ASSERT(ipi[e2] == ipi[e1]);
-  CPPUNIT_ASSERT(ip[e2] == ip[e1]); 
+  CPPUNIT_ASSERT(ip[e2] == ip[e1]);
 }
 
 void PropertyArraySubscriptTest::testDoubleProperty() {
   DoubleProperty &dp = *graph->getProperty<DoubleProperty>("double");
-  
+
   dp[e1] = dp[n1] = 2;
   dp[e2] = dp[n2] = dp[n1] + 1;
   dp[e3] = dp[n3] = dp[n1] - 2;
@@ -172,9 +172,9 @@ void PropertyArraySubscriptTest::testDoubleProperty() {
   d1 = dp[e1]--;
   CPPUNIT_ASSERT(dp[e1] == 2);
   CPPUNIT_ASSERT(d1 == 3);
-  dp[e1]+=d1;
+  dp[e1] += d1;
   CPPUNIT_ASSERT(dp[e1] == 5);
-  dp[e1]-=d1;
+  dp[e1] -= d1;
   CPPUNIT_ASSERT(dp[e1] == 2);
 
   // test as PropertyInterface

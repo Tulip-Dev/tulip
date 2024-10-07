@@ -229,7 +229,7 @@ public:
      * @brief overloading of operator= to assign a node string value
      * which allows to write: prop[n] = strval
      **/
-    nodeStringValueRef& operator=(std::string val) noexcept {
+    nodeStringValueRef &operator=(std::string val) noexcept {
       _prop->setNodeStringValue(_n, val);
       return *this;
     }
@@ -238,7 +238,7 @@ public:
      * @brief overloading of operator= to assign a node string value
      * which allows to write: prop1[n] = prop2[m]
      **/
-    nodeStringValueRef& operator=(const nodeStringValueRef& ref) noexcept {
+    nodeStringValueRef &operator=(const nodeStringValueRef &ref) noexcept {
       _prop->setNodeStringValue(_n, ref.getStringValue());
       return *this;
     }
@@ -254,7 +254,9 @@ public:
     /**
      * @brief overloading of std::string conversion operator
      **/
-    operator std::string() { return getStringValue(); }
+    operator std::string() {
+      return getStringValue();
+    }
   };
 
   /**
@@ -299,7 +301,7 @@ public:
      * @brief overloading of operator= to assign a edge string value
      * which allows to write: prop[e] = strval
      **/
-    edgeStringValueRef& operator=(std::string val) noexcept {
+    edgeStringValueRef &operator=(std::string val) noexcept {
       _prop->setEdgeStringValue(_e, val);
       return *this;
     }
@@ -308,7 +310,7 @@ public:
      * @brief overloading of operator= to assign a edge string value
      * which allows to write: prop1[e1] = prop2[e2]
      **/
-    edgeStringValueRef& operator=(const edgeStringValueRef& ref) noexcept {
+    edgeStringValueRef &operator=(const edgeStringValueRef &ref) noexcept {
       _prop->setEdgeStringValue(_e, ref.getStringValue());
       return *this;
     }
@@ -324,7 +326,9 @@ public:
     /**
      * @brief overloading of std::string conversion operator
      **/
-    operator std::string() { return getStringValue(); }
+    operator std::string() {
+      return getStringValue();
+    }
   };
 
   /**
@@ -337,7 +341,9 @@ public:
   /**
    * @brief overloading of operator[] to get the edge string value
    **/
-  std::string operator[](edge e) const { return getEdgeStringValue(e); }
+  std::string operator[](edge e) const {
+    return getEdgeStringValue(e);
+  }
 
   /**
    * @brief Gets a string representation of the node default value.
