@@ -428,7 +428,8 @@ bool MCLClustering::run() {
         node nq = fifo.front();
         result->setNodeValue(tlpNodes[nq.id], curVal);
         fifo.pop();
-        for (auto ni : g.adj(nq)) {
+        for (auto &adj : g.adj(nq)) {
+          auto ni = adj.opposite();
           if (!visited[ni]) {
             fifo.push(ni);
             visited[ni] = true;

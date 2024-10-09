@@ -99,9 +99,9 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
     if (forbiddenNodes[n] && n != src)
       continue;
 
-    for (auto e : graph.star(n)) {
-      node v = graph.opposite(e, n);
-      DijkstraElement &dEle = *mapDik[v];
+    for (auto &adj : graph.adj(n)) {
+      edge e = adj.link();
+      DijkstraElement &dEle = *mapDik[adj.opposite()];
 
       auto eWeight = weights.getEdgeValue(edik2tlp[e]);
       if (fabs((u.dist + eWeight) - dEle.dist) < 1E-9) // path of the same length
@@ -152,12 +152,12 @@ void Dijkstra::searchPaths(node ntlp, EdgeStaticProperty<unsigned int> &depth) {
 
   resultNodes[n] = true;
 
-  for (auto e : graph.star(n)) {
-
+  for (auto &adj : graph.adj(n)) {
+    edge e = adj.link();
     if (!usedEdges[e] || resultEdges[e])
       continue;
 
-    node tgt = graph.opposite(e, n);
+    node tgt = adj.opposite();
 
     if (nodeDistance[tgt] >= nodeDistance[n])
       continue;
@@ -182,13 +182,15 @@ void Dijkstra::searchPath(node ntlp, vector<node> &vNodes) {
     vNodes.push_back(ndik2tlp[n]);
     ok = false;
 
-    for (auto e : graph.star(n)) {
+    for (auto &adj : graph.adj(n)) {
+      edge e = adj.link();
+
       // check if that edge does not belong to the shortest path edges
       // or if it has already been treated
       if (!usedEdges[e] || resultEdges[e])
         continue;
 
-      node tgt = graph.opposite(e, n);
+      node tgt = adj.opposite();
 
       if (nodeDistance[tgt] >= nodeDistance[n])
         continue;

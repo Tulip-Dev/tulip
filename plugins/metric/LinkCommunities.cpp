@@ -361,11 +361,8 @@ double LinkCommunities::computeAverageDensity(double threshold, const std::vecto
       while (!dnToVisit.empty()) {
         dn = dnToVisit.front();
         dnToVisit.pop_front();
-        const std::vector<edge> &curEdges = dual.star(dn);
-        unsigned int eSz = curEdges.size();
-
-        for (unsigned int j = 0; j < eSz; ++j) {
-          edge e = curEdges[j];
+        for (auto &adj : dual.adj(dn)) {
+          edge e = adj.link();
 
           if (similarity[e] > threshold) {
             node neighbour = dual.opposite(e, dn);
@@ -431,11 +428,8 @@ void LinkCommunities::setEdgeValues(double threshold, bool group_isthmus,
       while (!dnToVisit.empty()) {
         dn = dnToVisit.front();
         dnToVisit.pop_front();
-        const std::vector<edge> &curEdges = dual.star(dn);
-        unsigned int eSz = curEdges.size();
-
-        for (unsigned int j = 0; j < eSz; ++j) {
-          edge e = curEdges[j];
+        for (auto &adj : dual.adj(dn)) {
+          edge e = adj.link();
 
           if (similarity[e] > threshold) {
             node neighbour = dual.opposite(e, dn);

@@ -109,10 +109,11 @@ private:
   // of the current quotient graph
   void get_weighted_degree_and_selfloops(unsigned int n, double &wdg, double &nsl) {
     wdg = nsl = 0;
-    const std::vector<edge> &edges = quotient->star(node(n));
+    auto &adjs = quotient->adj(node(n));
 
-    for (unsigned int i = 0; i < edges.size(); ++i) {
-      edge e = edges[i];
+    for (unsigned int i = 0; i < adjs.size(); ++i) {
+      edge e = adjs[i].link();
+
       double weight = (*weights)[e];
       wdg += weight;
       // self loop must be counted only once
@@ -163,7 +164,8 @@ private:
     neigh_weight[neigh_pos[0]] = 0;
     neigh_last = 1;
 
-    for (auto e : quotient->star(node(n))) {
+    for (auto &adj : quotient->adj(node(n))) {
+      edge e = adj.link();
       auto ends = quotient->ends(e);
       unsigned int neigh = (ends.first == node(n)) ? ends.second : ends.first;
       unsigned int neigh_comm = n2c[neigh];

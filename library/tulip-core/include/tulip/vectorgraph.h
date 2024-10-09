@@ -36,6 +36,7 @@ namespace tlp {
 
 template <class itType>
 struct Iterator;
+
 //===========================================
 /**
  * @class VectorGraph
@@ -62,6 +63,17 @@ struct Iterator;
 class TLP_SCOPE VectorGraph {
 
 public:
+  // adjacency data
+  struct adjData {
+    bool _out:1;         // true for out edge
+    unsigned int _e:31;  // edge id (no more than 2 billions edges)
+    node _n;             // opposite node
+    adjData(bool t = false, node n = node(0), edge e = edge(0)) : _out(t), _e(e.id), _n(n) {}
+    bool isOut() const { return _out; }
+    edge link() const { return edge(_e); }
+    node opposite() const { return _n; }
+  };
+
   //=======================================================
   VectorGraph();
   //=======================================================
@@ -80,7 +92,7 @@ public:
    * @remark o(min(deg(src), deg(tgt))
    * @todo test
    */
-  edge existEdge(const node src, const node tgt, const bool directed = true) const;
+  edge existEdge(node src, node tgt, bool directed = true) const;
   //=======================================================
   /**
    * @brief Return true if n belongs to the graph
@@ -236,7 +248,7 @@ public:
    */
   unsigned int deg(const node n) const {
     assert(isElement(n));
-    return _nData[n]._adjn.size();
+    return _nData[n]._adj.size();
   }
   //=======================================================
   /**
@@ -610,25 +622,9 @@ public:
    * \see getInNodes
    * \see getOutNodes
    */
-  const std::vector<node> &adj(const node n) const {
+  const std::vector<adjData> &adj(const node n) {
     assert(isElement(n));
-    return _nData[n]._adjn;
-  }
-  //=======================================================
-  /**
-   * @brief Return a const reference on the vector of adjacent edges of n
-   *
-   * It is the fastest way to access to edge adjacency, Iterators are 25% slower.
-   * \warning code that use that function won't be compatible with Tulip Graph API
-   *
-   * @remark o(1)
-   * \see getInOutEdges
-   * \see getInEdges
-   * \see getOutEdges
-   */
-  const std::vector<edge> &star(const node n) const {
-    assert(isElement(n));
-    return _nData[n]._adje;
+    return _nData[n]._adj;
   }
   //=======================================================
   /**
@@ -677,35 +673,29 @@ public:
   void integrityTest();
 
 private:
-  struct _iNodes {
-    _iNodes() : _outdeg(0) {}
+  struct nodeData {
+    nodeData() : _outdeg(0) {}
 
     void clear() {
       _outdeg = 0;
-      _adjt.clear();
-      _adjn.clear();
-      _adje.clear();
+      _adj.clear();
     }
 
     void addEdge(bool t, node n, edge e) {
-      _adjt.push_back(t);
-      _adjn.push_back(n);
-      _adje.push_back(e);
+      _adj.emplace_back(t, n, e);
     }
 
-    unsigned int _outdeg;    /** out degree of nodes */
-    std::vector<bool> _adjt; /** orientation of the edge, used to separate in and out edges/nodes */
-    std::vector<node> _adjn; /** inout nodes*/
-    std::vector<edge> _adje; /** inout edges*/
+    unsigned int _outdeg;      // out degree
+    std::vector<adjData> _adj; // adjacencies
   };
 
-  struct _iEdges {
+  struct edgeData {
     std::pair<node, node> _ends;                    /** source and target of an edge */
     std::pair<unsigned int, unsigned int> _endsPos; /** edge pos in the ends adjacencies */
   };
 
-  std::vector<_iNodes> _nData; /** internal storage of nodes */
-  std::vector<_iEdges> _eData; /** internal storage of edges */
+  std::vector<nodeData> _nData; /** internal storage of nodes */
+  std::vector<edgeData> _eData; /** internal storage of edges */
 
   IdContainer<node> _nodes; /** vector of nodes element of the graph */
   IdContainer<edge> _edges; /** vector of edges element of the graph */
