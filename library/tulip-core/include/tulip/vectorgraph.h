@@ -65,13 +65,19 @@ class TLP_SCOPE VectorGraph {
 public:
   // adjacency data
   struct adjData {
-    bool _out:1;         // true for out edge
-    unsigned int _e:31;  // edge id (no more than 2 billions edges)
-    node _n;             // opposite node
+    bool _out : 1;        // true for out edge
+    unsigned int _e : 31; // edge id (no more than 2 billions edges)
+    node _n;              // opposite node
     adjData(bool t = false, node n = node(0), edge e = edge(0)) : _out(t), _e(e.id), _n(n) {}
-    bool isOut() const { return _out; }
-    edge link() const { return edge(_e); }
-    node opposite() const { return _n; }
+    bool isOut() const {
+      return _out;
+    }
+    edge link() const {
+      return edge(_e);
+    }
+    node opposite() const {
+      return _n;
+    }
   };
 
   //=======================================================

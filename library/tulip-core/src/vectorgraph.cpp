@@ -631,14 +631,14 @@ void VectorGraph::integrityTest() {
 
     for (auto &adj : adj(n)) {
       testCond(this, "opposite", opposite(adj.link(), _nodes[i]) == adj.opposite());
-       if (!adj.isOut())
+      if (!adj.isOut())
         ++_indeg;
       else
         ++_outdeg;
 
       edgeFound.insert(adj.link());
       nodeFound.insert(adj.opposite());
-     
+
       testCond(this, "_adj in", _indeg == indeg(n));
       testCond(this, "_adj out", _outdeg == outdeg(n));
     }
