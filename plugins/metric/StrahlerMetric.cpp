@@ -88,8 +88,7 @@ Strahler StrahlerMetric::topSortStrahler(tlp::node n, SortInfos &nInfos, int &cu
     if (!tmpInfos.visited) {
       // Arc Normal
       nInfos.toFree = 0;
-      Strahler tmpValue =
-          topSortStrahler(tmpN, tmpInfos, curPref, sortInfos, cachedValues);
+      Strahler tmpValue = topSortStrahler(tmpN, tmpInfos, curPref, sortInfos, cachedValues);
       // Data for strahler evaluation on the spanning Dag.
       strahlerResult.push_front(tmpValue.strahler);
       // Counting current used stacks.
