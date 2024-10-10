@@ -71,10 +71,14 @@ public:
   bool run() override;
 
 private:
-  Strahler topSortStrahler(tlp::node n, int &curPref, std::unordered_map<tlp::node, int> &tofree,
-                           std::unordered_map<tlp::node, int> &prefix,
-                           std::unordered_map<tlp::node, bool> &visited,
-                           std::unordered_map<tlp::node, bool> &finished,
+  struct SortInfos {
+    int toFree, prefix;
+    bool visited, finished;
+    SortInfos() : toFree(0), prefix(0), visited(false), finished(false) {}
+  };
+
+  Strahler topSortStrahler(tlp::node n, SortInfos &nInfos, int &curPref,
+                           std::unordered_map<tlp::node, SortInfos> &sortInfos,
                            std::unordered_map<tlp::node, Strahler> &cachedValues);
   bool allNodes;
 };
