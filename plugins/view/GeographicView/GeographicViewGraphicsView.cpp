@@ -1492,6 +1492,7 @@ void GeographicViewGraphicsView::setGeoLayoutComputed() {
 
 void GeographicViewGraphicsView::showScale(bool show) {
   scale->setVisible(displayScale = show);
+  resizeAttributionLabel();
 }
 
 void GeographicViewGraphicsView::showCenter(bool show) {
