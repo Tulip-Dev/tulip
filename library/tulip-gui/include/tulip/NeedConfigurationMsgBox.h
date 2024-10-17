@@ -31,21 +31,23 @@
 #include <QVBoxLayout>
 #include <tulip/Perspective.h>
 
-QFrame *new_NeedConfigurationMsgBox(QString text, QPushButton** okButton) {
+QFrame *new_NeedConfigurationMsgBox(QString text, QPushButton **okButton) {
   QFrame *frame = new QFrame();
   frame->setFrameShape(QFrame::Box);
   frame->setFrameShadow(QFrame::Plain);
   QVBoxLayout *frameLayout = new QVBoxLayout(frame);
   QFormLayout *formLayout = new QFormLayout();
   QLabel *warningLabel = new QLabel(frame);
-  warningLabel->setText("<html><head/><body><p><span style=\" font-size:18pt; font-weight:600; color:#a51d2d;\">Warning !</span></p></body></html>");
+  warningLabel->setText(
+      "<html><head/><body><p><span style=\" font-size:18pt; font-weight:600; color:#a51d2d;\">Warning !</span></p></body></html>");
   formLayout->setWidget(0, QFormLayout::LabelRole, warningLabel);
 
   QVBoxLayout *verticalLayout = new QVBoxLayout();
   QLabel *warningText = new QLabel(text, frame);
   verticalLayout->addWidget(warningText);
 
-  QSpacerItem *verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+  QSpacerItem *verticalSpacer =
+      new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
   verticalLayout->addItem(verticalSpacer);
 
   QHBoxLayout *horizontalLayout = new QHBoxLayout();
@@ -61,7 +63,7 @@ QFrame *new_NeedConfigurationMsgBox(QString text, QPushButton** okButton) {
   // set a specific name before applying style sheet
   frame->setObjectName("needConfigurationMessageBox");
   tlp::Perspective::setStyleSheet(frame);
-  frame->resize(/*416, 158*/365, 151);
+  frame->resize(/*416, 158*/ 365, 151);
 
   return frame;
 }

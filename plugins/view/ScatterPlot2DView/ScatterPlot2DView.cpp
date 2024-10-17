@@ -158,10 +158,11 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
 
     QPushButton *okButton;
     QWidget *msgBox =
-      new_NeedConfigurationMsgBox("<b><font size=\"+1\">"
-                                  "Select at least two graph properties.</font></b><br/><br/>"
-                                  "Open the <b>Properties</b> configuration tab<br/>"
-                                  "to proceed.", &okButton);
+        new_NeedConfigurationMsgBox("<b><font size=\"+1\">"
+                                    "Select at least two graph properties.</font></b><br/><br/>"
+                                    "Open the <b>Properties</b> configuration tab<br/>"
+                                    "to proceed.",
+                                    &okButton);
     connect(okButton, SIGNAL(released()), this, SLOT(showPropertiesSelectionWidget()));
     connect(okButton, SIGNAL(released()), msgBox, SLOT(hide()));
     noPropertyMsgBox = graphicsView()->scene()->addWidget(msgBox);

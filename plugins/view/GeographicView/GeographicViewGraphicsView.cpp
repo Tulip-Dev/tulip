@@ -342,11 +342,11 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   frameProxy->setZValue(1);
 
   QPushButton *okButton;
-  noLayoutMsgBox =
-    new_NeedConfigurationMsgBox("<font size=\"+1\"><b>The geolocated layout<br/>"
-                                "has not been initialized yet.</b></font><br/><br/>"
-                                "Open the <b>Geolocation</b> configuration tab<br/>"
-                                "to proceed.", &okButton);
+  noLayoutMsgBox = new_NeedConfigurationMsgBox("<font size=\"+1\"><b>The geolocated layout<br/>"
+                                               "has not been initialized yet.</b></font><br/><br/>"
+                                               "Open the <b>Geolocation</b> configuration tab<br/>"
+                                               "to proceed.",
+                                               &okButton);
   connect(okButton, SIGNAL(released()), this, SLOT(showGeolocationWidget()));
   connect(okButton, SIGNAL(released()), noLayoutMsgBox, SLOT(hide()));
   scene()->addWidget(noLayoutMsgBox);
