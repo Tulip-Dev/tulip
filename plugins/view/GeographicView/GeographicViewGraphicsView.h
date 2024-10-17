@@ -34,7 +34,6 @@
 #include <QGraphicsProxyWidget>
 
 class QComboBox;
-class QMessageBox;
 class QOpenGLFramebufferObject;
 class QGraphicsItemGroup;
 
@@ -189,7 +188,7 @@ private:
   GlSimpleEntity *planisphereEntity;
 
   AddressSelectionDialog *addressSelectionDialog;
-  QMessageBox *noLayoutMsgBox;
+  QWidget *noLayoutMsgBox;
 
   bool firstGlobeSwitch, geoLayoutComputed, displayScale, displayCenter;
   int scaleWidth; // width of the displayed scale

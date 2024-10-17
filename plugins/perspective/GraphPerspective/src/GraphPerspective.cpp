@@ -671,6 +671,7 @@ height:20px;
 
 #needConfigurationMessageBox {
 border: 1px solid #808080;
+background-color: %BG_COLOR%;
 }
 
 QFrame[ section=\"true\" ] {

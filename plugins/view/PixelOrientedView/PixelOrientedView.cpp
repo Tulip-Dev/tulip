@@ -36,6 +36,7 @@
 #include <tulip/Perspective.h>
 #include <tulip/ViewGraphPropertiesSelectionWidget.h>
 #include <tulip/WorkspacePanel.h>
+#include <tulip/NeedConfigurationMsgBox.h>
 
 #include "PixelOrientedInteractors.h"
 #include "PixelOrientedView.h"
@@ -46,6 +47,7 @@
 #include <QGraphicsProxyWidget>
 #include <QMessageBox>
 #include <QProgressDialog>
+#include <QPushButton>
 #include <QTimer>
 
 using namespace std;
@@ -154,24 +156,20 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
     optionsWidget = new PixelOrientedOptionsWidget();
     layoutFunctionsMap["Spiral"] = spiralLayout;
 
-    // build QMessageBox indicating the lack of selected properties
+    // create box indicating the lack of selected properties
     QGraphicsRectItem *qgrItem = new QGraphicsRectItem(0, 0, 1, 1);
     qgrItem->setBrush(Qt::transparent);
     qgrItem->setPen(QPen(Qt::transparent));
     graphicsView()->scene()->addItem(qgrItem);
 
-    QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning, "",
-                                          "<b><font size=\"+1\">"
-                                          "No graph properties selected.</font></b><br/><br/>"
-                                          "Open the <b>Properties</b> configuration tab<br/>"
-                                          "to proceed.",
-                                          QMessageBox::Ok);
-    msgBox->setModal(false);
-    auto okButton = msgBox->button(QMessageBox::Ok);
+    QPushButton *okButton;
+    QWidget *msgBox =
+      new_NeedConfigurationMsgBox("<b><font size=\"+1\">"
+                                  "No graph properties selected.</font></b><br/><br/>"
+                                  "Open the <b>Properties</b> configuration tab<br/>"
+                                  "to proceed.", &okButton);
     connect(okButton, SIGNAL(released()), this, SLOT(showPropertiesSelectionWidget()));
-    // set a specific name before applying style sheet
-    msgBox->setObjectName("needConfigurationMessageBox");
-    Perspective::setStyleSheet(msgBox);
+    connect(okButton, SIGNAL(released()), msgBox, SLOT(hide()));
     noPropertyMsgBox = graphicsView()->scene()->addWidget(msgBox);
     noPropertyMsgBox->setParentItem(qgrItem);
   }

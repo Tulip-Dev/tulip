@@ -37,6 +37,7 @@
 #include <tulip/GlOffscreenRenderer.h>
 #include <tulip/Gl2DRect.h>
 #include <tulip/WorkspacePanel.h>
+#include <tulip/NeedConfigurationMsgBox.h>
 
 #include <QComboBox>
 #include <QDesktopServices>
@@ -340,18 +341,14 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   frameProxy->setPos(20, 20);
   frameProxy->setZValue(1);
 
-  noLayoutMsgBox = new QMessageBox(QMessageBox::Warning, "",
-                                   "<font size=\"+1\"><b>The geolocated layout<br/>"
-                                   "has not been initialized yet.</b></font><br/><br/>"
-                                   "Open the <b>Geolocation</b> configuration tab<br/>"
-                                   "to proceed.",
-                                   QMessageBox::Ok);
-  noLayoutMsgBox->setModal(false);
-  auto okButton = noLayoutMsgBox->button(QMessageBox::Ok);
+  QPushButton *okButton;
+  noLayoutMsgBox =
+    new_NeedConfigurationMsgBox("<font size=\"+1\"><b>The geolocated layout<br/>"
+                                "has not been initialized yet.</b></font><br/><br/>"
+                                "Open the <b>Geolocation</b> configuration tab<br/>"
+                                "to proceed.", &okButton);
   connect(okButton, SIGNAL(released()), this, SLOT(showGeolocationWidget()));
-  // set a specific name before applying style sheet
-  noLayoutMsgBox->setObjectName("needConfigurationMessageBox");
-  Perspective::setStyleSheet(noLayoutMsgBox);
+  connect(okButton, SIGNAL(released()), noLayoutMsgBox, SLOT(hide()));
   scene()->addWidget(noLayoutMsgBox);
 
   // init map attribution label
