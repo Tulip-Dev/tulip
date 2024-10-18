@@ -53,6 +53,6 @@ void QtGlSceneZoomAndPanAnimator::animateZoomAndPan() {
 
 void QtGlSceneZoomAndPanAnimator::zoomAndPanAnimStepSlot(int animationStep) {
   zoomAndPanAnimationStep(animationStep);
-  glWidget->draw();
+  glWidget->draw(false);
 }
 } // namespace tlp
