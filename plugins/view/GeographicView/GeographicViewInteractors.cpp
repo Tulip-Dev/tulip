@@ -291,6 +291,8 @@ bool GeographicViewBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 
   if (e->type() == QEvent::MouseButtonDblClick) {
     geoView->centerView();
+    // abort zoom on rectangle if any
+    started = false;
     return true;
   }
 
