@@ -131,9 +131,7 @@ public:
 
   void resizeEvent(QResizeEvent *ev);
 
-  // Smoothly moves the center of the view to the given coordinate
-  // void moveTo(QPointF &coordinate);
-
+  // geographic world coordinates => screen position
   QPoint geoToScreenPos(const QPointF &coordinate) const;
 
   inline tlp::Coord geoToScreenPos(double lat, double lng) const {
@@ -141,6 +139,7 @@ public:
     return tlp::Coord(screenPos.x(), screenPos.y());
   }
 
+  // screen position => geographic world coordinates
   QPointF screenToGeoPos(const QPoint &point) const;
 
   std::pair<double, double> screenToGeoPos(int x, int y) const {
@@ -195,11 +194,6 @@ private:
   QSize size; // size of the widget
 
   bool mousePressed;
-  /*
-  int steps; // used by method moveTo()
-  QMutex moveMutex; // used for method moveTo()
-  QPointF target; // used for method moveTo()
-  */
 
   QPixmap offscreenPx;
   QPixmap zoomPx;

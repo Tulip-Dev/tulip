@@ -23,7 +23,6 @@
 #include <QGuiApplication>
 #include <QMouseEvent>
 #include <QScreen>
-#include <QTimer>
 
 #include "GeoMapWidget.h"
 
@@ -34,6 +33,19 @@
 
 static const int kDefaultTimeoutDelaySecs = 30;
 static const int kDefaultPixmapCacheSizeKB = 20000;
+
+inline double nbZoomTiles(int zoom) {
+  return pow(2.0, zoom);
+}
+
+QPoint geoToScreenPos(const QPointF &coordinate, double nbTiles) {
+  // coord to pixel
+  qreal x = (coordinate.x() + 180) * (nbTiles * TILE_SIZE) / 360.;
+  qreal y = (1 - (log(tan(M_PI / 4 + DEG_TO_RAD(coordinate.y()) / 2)) / M_PI)) / 2 *
+            (nbTiles * TILE_SIZE);
+
+  return QPoint(int(x), int(y));
+}
 
 GeoMapWidget::GeoMapWidget(const std::vector<MapLayer> &mapLayers, QSize size, QWidget *parent,
                            Qt::WindowFlags windowFlags)
@@ -122,32 +134,6 @@ void GeoMapWidget::init() {
 
   update();
 }
-
-/*
-void GeoMapWidget::moveTo(QPointF &coordinate) {
-  target = coordinate;
-  steps = 25;
-  if (moveMutex.tryLock())
-    QTimer::singleShot(40, this, SLOT(moveStep()));
-  else
-    moveMutex.unlock();
-}
-
-void GeoMapWidget::moveStep() {
-  QPoint start = geoToScreenPos(centerM);
-  QPoint dest = geoToScreenPos(target);
-
-  QPoint step = (dest-start)/steps;
-  translateView(step);
-
-  update();
-  forceRedraw();
-  if (--steps > 0)
-    QTimer::singleShot(50, this, SLOT(moveStep()));
-  else
-    moveMutex.unlock();
-}
-*/
 
 void GeoMapWidget::paintEvent(QPaintEvent *) {
   if (m_doubleBuffer == nullptr) {
@@ -380,31 +366,34 @@ void GeoMapWidget::zoomOnRectangle(std::pair<double, double> &sw, std::pair<doub
   // first center map
   QPointF swP(sw.second, sw.first);
   QPointF neP(ne.second, ne.first);
-  QPoint swPos = geoToScreenPos(QPointF(sw.second, sw.first));
-  QPoint nePos = geoToScreenPos(QPointF(ne.second, ne.first));
-  setMapCenter(screenToGeoPos((swPos + nePos) / 2.0));
+  setMapCenter((swP + neP) / 2.0);
+  update();
 
-  auto containsRectangle = [&]() {
-    QRectF bb = this->getGeoViewport();
-    return bb.contains(swP) && bb.contains(neP);
+  auto containsRectangle = [&](int zoom) {
+    auto nbTiles = ::nbZoomTiles(zoom);
+    auto swp = ::geoToScreenPos(swP, nbTiles);
+    auto nep = ::geoToScreenPos(neP, nbTiles);
+    return ((nep.x() - swp.x()) <= size.width()) &&
+      ((swp.y() - nep.y()) <= size.height());
   };
 
-  while (!containsRectangle()) {
-    zoomOut();
-    // check min
-    if (currentZoom == minZoom)
-      break;
+  auto zoom = currentZoom;
+  if (!containsRectangle(zoom)) {
+    for (;;) {
+      // check min
+      if (zoom == minZoom || containsRectangle(--zoom))
+        break;
+    }
+    setCurrentZoom(zoom);
   }
-
-  while (containsRectangle()) {
-    zoomIn();
-    // check max
-    if (currentZoom == maxZoom)
-      break;
+  else {
+    for (;;) {
+      // check max
+      if ((++zoom > maxZoom) || !containsRectangle(zoom))
+        break;
+    }
+    setCurrentZoom(--zoom);
   }
-
-  if (!containsRectangle())
-    zoomOut();
 }
 
 void GeoMapWidget::centerMap(const QList<QPointF> &coordinates) {
@@ -500,15 +489,8 @@ void GeoMapWidget::draw(QPainter *painter, const QPoint &wCenterM) {
   }
 }
 
-#define MAX_LAT 85.0511287798
-#define EARTH_RADIUS 6378137
 QPoint GeoMapWidget::geoToScreenPos(const QPointF &coordinate) const {
-  // coord to pixel
-  qreal x = (coordinate.x() + 180) * (nbTiles * TILE_SIZE) / 360.;
-  qreal y = (1 - (log(tan(M_PI / 4 + DEG_TO_RAD(coordinate.y()) / 2)) / M_PI)) / 2 *
-            (nbTiles * TILE_SIZE);
-
-  return QPoint(int(x), int(y));
+  return ::geoToScreenPos(coordinate, nbTiles);
 }
 
 QPointF GeoMapWidget::screenToGeoPos(const QPoint &point) const {
@@ -524,7 +506,7 @@ bool GeoMapWidget::isTileValid(int x, int y, int z) const {
 }
 
 double GeoMapWidget::nbZoomTiles() const {
-  return pow(2.0, currentZoom);
+  return ::nbZoomTiles(currentZoom);
 }
 
 QPixmap GeoMapWidget::getTile(int x, int y, int z) {
