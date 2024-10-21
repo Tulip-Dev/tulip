@@ -373,8 +373,7 @@ void GeoMapWidget::zoomOnRectangle(std::pair<double, double> &sw, std::pair<doub
     auto nbTiles = ::nbZoomTiles(zoom);
     auto swp = ::geoToScreenPos(swP, nbTiles);
     auto nep = ::geoToScreenPos(neP, nbTiles);
-    return ((nep.x() - swp.x()) <= size.width()) &&
-      ((swp.y() - nep.y()) <= size.height());
+    return ((nep.x() - swp.x()) <= size.width()) && ((swp.y() - nep.y()) <= size.height());
   };
 
   auto zoom = currentZoom;
@@ -385,8 +384,7 @@ void GeoMapWidget::zoomOnRectangle(std::pair<double, double> &sw, std::pair<doub
         break;
     }
     setCurrentZoom(zoom);
-  }
-  else {
+  } else {
     for (;;) {
       // check max
       if ((++zoom > maxZoom) || !containsRectangle(zoom))
