@@ -63,44 +63,42 @@
 
 #define RK_STATE_LEN 624
 
-typedef struct rk_state_
-{
-    unsigned long key[RK_STATE_LEN];
-    int pos;
-    int has_gauss; /* !=0: gauss contains a gaussian deviate */
-    double gauss;
+typedef struct rk_state_ {
+  unsigned long key[RK_STATE_LEN];
+  int pos;
+  int has_gauss; /* !=0: gauss contains a gaussian deviate */
+  double gauss;
 
-    /* The rk_state structure has been extended to store the following
-     * information for the binomial generator. If the input values of n or p
-     * are different than nsave and psave, then the other parameters will be
-     * recomputed. RTK 2005-09-02 */
+  /* The rk_state structure has been extended to store the following
+   * information for the binomial generator. If the input values of n or p
+   * are different than nsave and psave, then the other parameters will be
+   * recomputed. RTK 2005-09-02 */
 
-    int has_binomial; /* !=0: following parameters initialized for
-                              binomial */
-    double psave;
-    long nsave;
-    double r;
-    double q;
-    double fm;
-    long m;
-    double p1;
-    double xm;
-    double xl;
-    double xr;
-    double c;
-    double laml;
-    double lamr;
-    double p2;
-    double p3;
-    double p4;
+  int has_binomial; /* !=0: following parameters initialized for
+                            binomial */
+  double psave;
+  long nsave;
+  double r;
+  double q;
+  double fm;
+  long m;
+  double p1;
+  double xm;
+  double xl;
+  double xr;
+  double c;
+  double laml;
+  double lamr;
+  double p2;
+  double p3;
+  double p4;
 
-}
-rk_state;
+} rk_state;
 
 typedef enum {
-    RK_NOERR = 0, /* no error */
-    RK_ENODEV = 1, /* no RK_DEV_RANDOM device */
-    RK_ERR_MAX = 2
+  RK_NOERR = 0,  /* no error */
+  RK_ENODEV = 1, /* no RK_DEV_RANDOM device */
+  RK_ERR_MAX = 2
 } rk_error;
 
 /* error strings */
@@ -175,7 +173,7 @@ extern double rk_double(rk_state *state);
  * Returns RK_ENODEV if the device is unavailable, or RK_NOERR if it is
  */
 // extern rk_error rk_altfill(void *buffer, size_t size, int strong,
-                            // rk_state *state);
+// rk_state *state);
 
 /*
  * return a random gaussian deviate with variance unity and zero mean.
