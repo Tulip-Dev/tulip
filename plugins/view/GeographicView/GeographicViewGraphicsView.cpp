@@ -46,6 +46,7 @@
 #include <QTimeLine>
 #include <QFile>
 #include <QApplication>
+#include <QGuiApplication>
 #include <QImage>
 #include <QPainter>
 #include <QTimer>
@@ -826,11 +827,11 @@ void GeographicViewGraphicsView::mapToPolygon() {
 }
 
 void GeographicViewGraphicsView::zoomIn() {
-  _geoMW->setCurrentZoom(_geoMW->getCurrentZoom() + 1);
+  _geoMW->zoomIn();
 }
 
 void GeographicViewGraphicsView::zoomOut() {
-  _geoMW->setCurrentZoom(_geoMW->getCurrentZoom() - 1);
+  _geoMW->zoomOut();
 }
 
 void GeographicViewGraphicsView::currentZoomChanged() {
@@ -1173,6 +1174,8 @@ void GeographicViewGraphicsView::refreshMap() {
   updateMapTexture();
   glWidgetItem->setRedrawNeeded(true);
   scene()->update();
+  // ensure removal of overrideCursor set in GeoMapWidget::draw
+  QGuiApplication::restoreOverrideCursor();
 }
 
 void GeographicViewGraphicsView::centerView() {

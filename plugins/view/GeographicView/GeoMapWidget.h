@@ -157,8 +157,8 @@ public:
   void translateView(const QPoint &offset);
 
   // map layer management
-  void setMapLayer(QString name, QString templUrl, QString attribution, int minZoom, int maxZoom,
-                   bool darkBackground = false);
+  void setMapLayer(QString name, QString templUrl, QString attribution,
+                   int minZoom, int maxZoom);
 
   void switchToMapLayer(unsigned int layer);
 
@@ -174,10 +174,10 @@ public:
 
 private:
   void init();
+  void configureTiling(int zoom);
 
   void draw(QPainter *painter, const QPoint &wCenterM);
   bool isTileValid(int x, int y, int z) const;
-  double nbZoomTiles() const;
 
   QPixmap getTile(int x, int y, int z);
   void loadTile(const QString &url);
@@ -206,15 +206,12 @@ private:
   // map layer config
   const std::vector<MapLayer> &mapLayers;
   unsigned int currentLayer;
+  int minZoom, maxZoom, currentZoom, tilingSize;
   QString lname;
   QString tileTemplUrl;
   QString attribution;
-  int minZoom;
-  int maxZoom;
-  int currentZoom;
 
   mutable QRect offscreenViewport;
-  double nbTiles;
 
   // Tiles loading from network
   QPixmap emptyTile;

@@ -25,6 +25,7 @@
 #include <QScreen>
 
 #include "GeoMapWidget.h"
+#include <tulip/TlpQtTools.h>
 
 #define TILE_SIZE 256
 
@@ -34,17 +35,16 @@
 static const int kDefaultTimeoutDelaySecs = 30;
 static const int kDefaultPixmapCacheSizeKB = 20000;
 
-inline double nbZoomTiles(int zoom) {
-  return pow(2.0, zoom);
+inline int nbZoomTiles(int zoom) {
+  return 1 << zoom;
 }
 
-QPoint geoToScreenPos(const QPointF &coordinate, double nbTiles) {
+QPoint geoToScreenPos(const QPointF &coordinate, int tilingSize) {
   // coord to pixel
-  qreal x = (coordinate.x() + 180) * (nbTiles * TILE_SIZE) / 360.;
-  qreal y = (1 - (log(tan(M_PI / 4 + DEG_TO_RAD(coordinate.y()) / 2)) / M_PI)) / 2 *
-            (nbTiles * TILE_SIZE);
+  int x = (coordinate.x() + 180) * tilingSize / 360.;
+  int y = (1 - (log(tan(M_PI / 4 + DEG_TO_RAD(coordinate.y()) / 2)) / M_PI)) / 2. * tilingSize;
 
-  return QPoint(int(x), int(y));
+  return QPoint(x, y);
 }
 
 GeoMapWidget::GeoMapWidget(const std::vector<MapLayer> &mapLayers, QSize size, QWidget *parent,
@@ -56,8 +56,8 @@ GeoMapWidget::GeoMapWidget(const std::vector<MapLayer> &mapLayers, QSize size, Q
   init();
 }
 
-void GeoMapWidget::setMapLayer(QString name, QString templUrl, QString attrib, int minZ, int maxZ,
-                               bool) {
+void GeoMapWidget::setMapLayer(QString name, QString templUrl, QString attrib,
+                               int minZ, int maxZ) {
   if (name == lname)
     return;
 
@@ -76,10 +76,9 @@ void GeoMapWidget::setMapLayer(QString name, QString templUrl, QString attrib, i
 
   // adapt currentZoom if needed
   if (currentZoom < minZoom)
-    currentZoom = minZoom;
+    configureTiling(minZoom);
   if (currentZoom > maxZoom)
-    currentZoom = maxZoom;
-  nbTiles = nbZoomTiles();
+    configureTiling(maxZoom);
 
   if (needUpdate) {
     forceRedraw();
@@ -95,7 +94,7 @@ void GeoMapWidget::switchToMapLayer(unsigned int layer) {
   // first check zoom
   if (mapLayer.maxZoom < getCurrentZoom())
     setCurrentZoom(mapLayer.maxZoom);
-  setMapLayer(mapLayer.name, mapLayer.url, mapLayer.attrib, 0, mapLayer.maxZoom, mapLayer.dark);
+  setMapLayer(mapLayer.name, mapLayer.url, mapLayer.attrib, 0, mapLayer.maxZoom);
 }
 
 void GeoMapWidget::switchToCustomTileLayer(QString url, QString attrib) {
@@ -128,11 +127,16 @@ void GeoMapWidget::init() {
   connect(http, SIGNAL(finished(QNetworkReply *)), this, SLOT(requestFinished(QNetworkReply *)));
 
   // init default map layer
-  currentZoom = initialZoom;
+  configureTiling(initialZoom);
   switchToMapLayer(0);
   setMapCenter(QPointF(initialCenterLng, initialCenterLat));
 
   update();
+}
+
+void GeoMapWidget::configureTiling(int zoom) {
+  currentZoom = zoom;
+  tilingSize = nbZoomTiles(zoom) * TILE_SIZE;
 }
 
 void GeoMapWidget::paintEvent(QPaintEvent *) {
@@ -228,6 +232,20 @@ void GeoMapWidget::zoomIn() {
   if (currentZoom == maxZoom)
     return;
 
+  setZoom(currentZoom + 1);
+}
+
+void GeoMapWidget::zoomOut() {
+  if (currentZoom == minZoom)
+    return;
+
+  setZoom(currentZoom - 1);
+}
+
+void GeoMapWidget::setZoom(int zoom) {
+  if (zoom == currentZoom || zoom < minZoom || zoom > maxZoom)
+    return;
+
   abortPendingLoads();
 
   // prepare pixel zoomed image
@@ -240,66 +258,26 @@ void GeoMapWidget::zoomIn() {
                        wCenter.y() + offscreenPxTranslation.y(), size.width(), size.height());
   QPainter painter(&zoomPx);
   painter.translate(wCenter);
-  painter.scale(2, 2);
+  if (zoom < currentZoom)
+    painter.scale(0.500001, 0.500001);
+  else
+    painter.scale(2, 2);
   painter.translate(-wCenter);
   painter.drawPixmap(0, 0, tmpImg);
   painter.end();
 
-  // increase zoom
-  ++currentZoom;
-  emit currentZoomChanged();
-  nbTiles = nbZoomTiles();
+  configureTiling(zoom);
   wCenterM = geoToScreenPos(centerM);
-
-  // show scaled image while map loads
-  newOffscreenImage(true, true);
-  emit refreshMap();
-}
-
-void GeoMapWidget::zoomOut() {
-  if (currentZoom == minZoom)
-    return;
-
-  abortPendingLoads();
-
-  // prepare pixel zoomed image
-  // from current offscreen one
-  zoomPxTranslation = QPoint(0, 0);
-  zoomPx.fill(Qt::white);
-  QPixmap tmpImg =
-      offscreenPx.copy(wCenter.x() + offscreenPxTranslation.x(),
-                       wCenter.y() + offscreenPxTranslation.y(), size.width(), size.height());
-  QPainter painter(&zoomPx);
-  painter.translate(wCenter);
-  painter.scale(0.500001, 0.500001);
-  painter.translate(-wCenter);
-  painter.drawPixmap(0, 0, tmpImg);
-  painter.end();
-
-  // decrease zoom
-  --currentZoom;
   emit currentZoomChanged();
-  nbTiles = nbZoomTiles();
-  wCenterM = geoToScreenPos(centerM);
 
   // show pixel zoomed image while map loads
   newOffscreenImage(true, true);
   emit refreshMap();
 }
 
-void GeoMapWidget::setZoom(int zoom) {
-  if (zoom < minZoom || zoom > maxZoom)
-    return;
-
-  if (zoom < currentZoom)
-    for (int i = currentZoom; i > zoom; --i)
-      zoomOut();
-  else
-    for (int i = currentZoom; i < zoom; ++i)
-      zoomIn();
-}
-
 void GeoMapWidget::forceRedraw() {
+  // ensure removal of overrideCursor
+  QGuiApplication::restoreOverrideCursor();
   newOffscreenImage(true, false);
 }
 
@@ -370,9 +348,9 @@ void GeoMapWidget::zoomOnRectangle(std::pair<double, double> &sw, std::pair<doub
   update();
 
   auto containsRectangle = [&](int zoom) {
-    auto nbTiles = ::nbZoomTiles(zoom);
-    auto swp = ::geoToScreenPos(swP, nbTiles);
-    auto nep = ::geoToScreenPos(neP, nbTiles);
+    auto tilingSize = nbZoomTiles(zoom) * TILE_SIZE;
+    auto swp = ::geoToScreenPos(swP, tilingSize);
+    auto nep = ::geoToScreenPos(neP, tilingSize);
     return ((nep.x() - swp.x()) <= size.width()) && ((swp.y() - nep.y()) <= size.height());
   };
 
@@ -433,6 +411,9 @@ QRectF GeoMapWidget::getGeoViewport() const {
 }
 
 void GeoMapWidget::draw(QPainter *painter, const QPoint &wCenterM) {
+  // we must indicate that the current operation may took a long time
+  // because of tiles loading
+  QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
   // position on center tile
   int cross_x = int(wCenterM.x()) % TILE_SIZE;
   int cross_y = int(wCenterM.y()) % TILE_SIZE;
@@ -444,9 +425,9 @@ void GeoMapWidget::draw(QPainter *painter, const QPoint &wCenterM) {
     ++tilesOnLeft;
 
   space = wCenter.y() - cross_y;
-  int tilesAbove = space / TILE_SIZE;
+  int tilesOnTop = space / TILE_SIZE;
   if (space > 0)
-    ++tilesAbove;
+    ++tilesOnTop;
 
   space = wCenter.x() - (TILE_SIZE - cross_x);
   int tilesOnRight = space / TILE_SIZE;
@@ -462,7 +443,7 @@ void GeoMapWidget::draw(QPainter *painter, const QPoint &wCenterM) {
   int wCenterM_tile_y = wCenterM.y() / TILE_SIZE;
 
   const QPoint from = QPoint((wCenterM_tile_x - tilesOnLeft) * TILE_SIZE,
-                             (wCenterM_tile_y - tilesAbove) * TILE_SIZE);
+                             (wCenterM_tile_y - tilesOnTop) * TILE_SIZE);
   const QPoint to = QPoint((wCenterM_tile_x + tilesOnRight + 1) * TILE_SIZE,
                            (wCenterM_tile_y + tilesOnBottom + 1) * TILE_SIZE);
 
@@ -474,37 +455,35 @@ void GeoMapWidget::draw(QPainter *painter, const QPoint &wCenterM) {
                         getTile(wCenterM_tile_x, wCenterM_tile_y, currentZoom));
 
   for (int i = wCenterM_tile_x - tilesOnLeft; i <= wCenterM_tile_x + tilesOnRight; ++i) {
-    for (int j = wCenterM_tile_y - tilesAbove; j <= wCenterM_tile_y + tilesOnBottom; ++j) {
+    for (int j = wCenterM_tile_y - tilesOnTop; j <= wCenterM_tile_y + tilesOnBottom; ++j) {
       // check if image is valid
-      if (!(i == wCenterM_tile_x && j == wCenterM_tile_y)) {
-        if (isTileValid(i, j, currentZoom)) {
-          painter->drawPixmap(((i - wCenterM_tile_x) * TILE_SIZE) - cross_x + size.width(),
-                              ((j - wCenterM_tile_y) * TILE_SIZE) - cross_y + size.height(),
-                              getTile(i, j, currentZoom));
-        }
+      if ((i != wCenterM_tile_x || j != wCenterM_tile_y) &&
+          isTileValid(i, j, currentZoom)) {
+        painter->drawPixmap(((i - wCenterM_tile_x) * TILE_SIZE) - cross_x + size.width(),
+                            ((j - wCenterM_tile_y) * TILE_SIZE) - cross_y + size.height(),
+                            getTile(i, j, currentZoom));
       }
     }
   }
+  if (loadingQueueEmpty())
+    // ensure removal of overrideCursor
+    QGuiApplication::restoreOverrideCursor();
 }
 
 QPoint GeoMapWidget::geoToScreenPos(const QPointF &coordinate) const {
-  return ::geoToScreenPos(coordinate, nbTiles);
+  return ::geoToScreenPos(coordinate, tilingSize);
 }
 
 QPointF GeoMapWidget::screenToGeoPos(const QPoint &point) const {
   // pixel to coord
-  qreal longitude = (point.x() * (360 / (nbTiles * TILE_SIZE))) - 180;
-  qreal latitude = RAD_TO_DEG(atan(sinh((1 - point.y() * (2 / (nbTiles * TILE_SIZE))) * M_PI)));
+  qreal longitude = (point.x() * 360. / tilingSize) - 180;
+  qreal latitude = RAD_TO_DEG(atan(sinh((1 - point.y() * (2. / tilingSize)) * M_PI)));
 
   return QPointF(longitude, latitude);
 }
 
 bool GeoMapWidget::isTileValid(int x, int y, int z) const {
   return !((x < 0) || (x > (1 << z) - 1) || (y < 0) || (y > (1 << z) - 1));
-}
-
-double GeoMapWidget::nbZoomTiles() const {
-  return ::nbZoomTiles(currentZoom);
 }
 
 QPixmap GeoMapWidget::getTile(int x, int y, int z) {
@@ -576,6 +555,8 @@ void GeoMapWidget::requestFinished(QNetworkReply *reply) {
         failedFetches.insert(url, QDateTime::currentDateTime());
       }
     }
+  } else if (reply->error() != QNetworkReply::OperationCanceledError) {
+    tlp::error() << "error: " << tlp::QStringToTlpString(reply->url().toDisplayString()) << " - " << tlp::QStringToTlpString(reply->errorString()) << std::endl;
   }
 
   if (loadingQueueEmpty()) {
@@ -590,6 +571,7 @@ void GeoMapWidget::requestFinished(QNetworkReply *reply) {
 }
 
 void GeoMapWidget::abortPendingLoads() {
+  QGuiApplication::restoreOverrideCursor();
   if (loadingQueueEmpty())
     return;
 
