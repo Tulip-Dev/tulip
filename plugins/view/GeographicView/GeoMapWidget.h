@@ -157,8 +157,7 @@ public:
   void translateView(const QPoint &offset);
 
   // map layer management
-  void setMapLayer(QString name, QString templUrl, QString attribution,
-                   int minZoom, int maxZoom);
+  void setMapLayer(QString name, QString templUrl, QString attribution, int minZoom, int maxZoom);
 
   void switchToMapLayer(unsigned int layer);
 

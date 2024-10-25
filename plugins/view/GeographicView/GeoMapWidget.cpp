@@ -56,8 +56,7 @@ GeoMapWidget::GeoMapWidget(const std::vector<MapLayer> &mapLayers, QSize size, Q
   init();
 }
 
-void GeoMapWidget::setMapLayer(QString name, QString templUrl, QString attrib,
-                               int minZ, int maxZ) {
+void GeoMapWidget::setMapLayer(QString name, QString templUrl, QString attrib, int minZ, int maxZ) {
   if (name == lname)
     return;
 
@@ -452,8 +451,8 @@ void GeoMapWidget::draw(QPainter *painter, const QPoint &wCenterM) {
     painter->drawPixmap(size.width() - cross_x, size.height() - cross_y,
                         getTile(wCenterM_tile_x, wCenterM_tile_y, currentZoom));
 
-  for (int i = - tilesOnLeft; i <= tilesOnRight; ++i) {
-    for (int j = - tilesOnTop; j <= tilesOnBottom; ++j) {
+  for (int i = -tilesOnLeft; i <= tilesOnRight; ++i) {
+    for (int j = -tilesOnTop; j <= tilesOnBottom; ++j) {
       auto iT = i + wCenterM_tile_x;
       auto jT = j + wCenterM_tile_y;
       // check if image is valid
@@ -555,7 +554,8 @@ void GeoMapWidget::requestFinished(QNetworkReply *reply) {
       }
     }
   } else if (reply->error() != QNetworkReply::OperationCanceledError) {
-    tlp::error() << "error: " << tlp::QStringToTlpString(reply->url().toDisplayString()) << " - " << tlp::QStringToTlpString(reply->errorString()) << std::endl;
+    tlp::error() << "error: " << tlp::QStringToTlpString(reply->url().toDisplayString()) << " - "
+                 << tlp::QStringToTlpString(reply->errorString()) << std::endl;
   }
 
   if (loadingQueueEmpty()) {
