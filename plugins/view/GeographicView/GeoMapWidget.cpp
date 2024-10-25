@@ -282,13 +282,11 @@ void GeoMapWidget::forceRedraw() {
 }
 
 void GeoMapWidget::translateView(const QPoint &point) {
-  QPointF tmpCenter = screenToGeoPos(wCenterM + point);
-
   offscreenPxTranslation += point;
   zoomPxTranslation += point;
   wCenterM += point;
 
-  centerM = tmpCenter;
+  centerM = screenToGeoPos(wCenterM);
 
   // check if a new offscreen image is needed
   QPoint upperLeft = wCenterM - wCenter;
@@ -415,10 +413,10 @@ void GeoMapWidget::draw(QPainter *painter, const QPoint &wCenterM) {
   // because of tiles loading
   QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
   // position on center tile
-  int cross_x = int(wCenterM.x()) % TILE_SIZE;
-  int cross_y = int(wCenterM.y()) % TILE_SIZE;
+  int cross_x = wCenterM.x() % TILE_SIZE;
+  int cross_y = wCenterM.y() % TILE_SIZE;
 
-  // computer the number tiles to drawn to fill the viewport
+  // compute the number of tiles needed to fill the viewport
   int space = wCenter.x() - cross_x;
   int tilesOnLeft = space / TILE_SIZE;
   if (space > 0)
@@ -454,14 +452,15 @@ void GeoMapWidget::draw(QPainter *painter, const QPoint &wCenterM) {
     painter->drawPixmap(size.width() - cross_x, size.height() - cross_y,
                         getTile(wCenterM_tile_x, wCenterM_tile_y, currentZoom));
 
-  for (int i = wCenterM_tile_x - tilesOnLeft; i <= wCenterM_tile_x + tilesOnRight; ++i) {
-    for (int j = wCenterM_tile_y - tilesOnTop; j <= wCenterM_tile_y + tilesOnBottom; ++j) {
+  for (int i = - tilesOnLeft; i <= tilesOnRight; ++i) {
+    for (int j = - tilesOnTop; j <= tilesOnBottom; ++j) {
+      auto iT = i + wCenterM_tile_x;
+      auto jT = j + wCenterM_tile_y;
       // check if image is valid
-      if ((i != wCenterM_tile_x || j != wCenterM_tile_y) &&
-          isTileValid(i, j, currentZoom)) {
-        painter->drawPixmap(((i - wCenterM_tile_x) * TILE_SIZE) - cross_x + size.width(),
-                            ((j - wCenterM_tile_y) * TILE_SIZE) - cross_y + size.height(),
-                            getTile(i, j, currentZoom));
+      if ((i || j) && isTileValid(iT, jT, currentZoom)) {
+        painter->drawPixmap((i * TILE_SIZE) - cross_x + size.width(),
+                            (j * TILE_SIZE) - cross_y + size.height(),
+                            getTile(iT, jT, currentZoom));
       }
     }
   }
