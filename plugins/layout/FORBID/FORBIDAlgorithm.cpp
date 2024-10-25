@@ -17,6 +17,7 @@
  *
  */
 
+#include <algorithm>
 #include <numeric>
 
 #include <tulip/GraphParallelTools.h>
