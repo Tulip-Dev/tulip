@@ -98,8 +98,11 @@ void ViewWidget::setupUi() {
 }
 
 void ViewWidget::currentInteractorChanged(tlp::Interactor *i) {
-  if (i)
+  if (i) {
     i->install(_centralWidget);
+    // gives focus to allow keyboard interaction
+    _centralWidgetItem->setFocus(Qt::MouseFocusReason);
+  }
 }
 
 void ViewWidget::graphDeleted(Graph *parentGraph) {
