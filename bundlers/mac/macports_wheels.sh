@@ -12,12 +12,6 @@ export TRUSTED_HOSTS='--trusted-host pypi.python.org --trusted-host files.python
 
 pushd /tmp
 
-# 3.8.10 - the last 3.8 version with installer
-curl -LO https://www.python.org/ftp/python/3.8.10/python-3.8.10-macosx10.9.pkg
-sudo installer -store -pkg python-3.8.*.pkg -target /
-# cleanup
-rm python-*.pkg
-
 # 3.9.13 - the last 3.9 version with installer
 curl -LO https://www.python.org/ftp/python/3.9.13/python-3.9.13-macosx10.9.pkg
 sudo installer -store -pkg python-3.9.*.pkg -target /
@@ -39,6 +33,12 @@ rm python-*.pkg
 # 3.12.7
 curl -LO https://www.python.org/ftp/python/3.12.7/python-3.12.7-macos11.pkg
 sudo installer -store -pkg python-3.12.*.pkg -target /
+# cleanup
+rm python-*.pkg
+
+# 3.13.0
+curl -LO https://www.python.org/ftp/python/3.13.0/python-3.13.0-macos11.pkg
+sudo installer -store -pkg python-3.13.*.pkg -target /
 # cleanup
 rm python-*.pkg
 

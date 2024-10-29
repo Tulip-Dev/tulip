@@ -35,8 +35,8 @@ for CPYBIN in /opt/python/cp*/bin
 do
   PY_VERSION=$(${CPYBIN}/python -c "from platform import python_version; print(python_version())")
   IFS='.' read -a PY_VERSION <<< "$PY_VERSION"
-  # Python < 3.8 no longer supported, 3.13 not yet supported
-  if [[ ${PY_VERSION[0]} -ne 3 ]] || [[ ${PY_VERSION[1]} -lt 8 ]] || [[ ${PY_VERSION[1]} -ge 13 ]]
+  # Python < 3.9 no longer supported, 3.14 not yet supported
+  if [[ ${PY_VERSION[0]} -ne 3 ]] || [[ ${PY_VERSION[1]} -lt 9 ]] || [[ ${PY_VERSION[1]} -ge 14 ]]
   then
      continue
   fi

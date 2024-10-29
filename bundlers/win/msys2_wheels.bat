@@ -30,14 +30,6 @@ pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-qhull
 
 rem Install supported version of python with nuget
 
-rem Python 3.8.10
-nuget.exe install python -Version 3.8.10 -ExcludeVersion -OutputDirectory .
-mv python Python-38
-Python-38\tools\python.exe -m pip install --upgrade pip
-Python-38\tools\python.exe -m pip install --upgrade setuptools
-Python-38\tools\python.exe -m pip install sip build delvewheel
-
-
 rem Python 3.9.13
 nuget.exe install python -Version 3.9.13 -ExcludeVersion -OutputDirectory .
 mv python Python-39
@@ -62,6 +54,12 @@ nuget.exe install python -Version 3.12.7 -ExcludeVersion -OutputDirectory .
 mv python Python-312
 Python-312\tools\python.exe -m pip install --upgrade pip
 Python-312\tools\python.exe -m pip install sip build delvewheel
+
+rem Python 3.13.0
+nuget.exe install python -Version 3.13.0 -ExcludeVersion -OutputDirectory .
+mv python Python-313
+Python-313\tools\python.exe -m pip install --upgrade pip
+Python-313\tools\python.exe -m pip install sip build delvewheel
 
 mkdir wheels
 mkdir build
