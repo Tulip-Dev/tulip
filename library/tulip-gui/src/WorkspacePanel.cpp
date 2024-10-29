@@ -575,9 +575,7 @@ void WorkspacePanel::resizeEvent(QResizeEvent *ev) {
   }
 
   // delay the call to ensure the scroll bar has been correctly resized
-  QTimer::singleShot(10, [=]() {
-    resetInteractorsScrollButtonsVisibility();
-  });
+  QTimer::singleShot(10, [=]() { resetInteractorsScrollButtonsVisibility(); });
 
   QWidget::resizeEvent(ev);
 }
