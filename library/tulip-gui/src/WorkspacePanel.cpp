@@ -27,6 +27,7 @@
 #include <QGraphicsProxyWidget>
 #include <QGraphicsSceneMouseEvent>
 #include <QScrollBar>
+#include <QTimer>
 #include <QPropertyAnimation>
 
 #include <tulip/TulipMetaTypes.h>
@@ -573,7 +574,10 @@ void WorkspacePanel::resizeEvent(QResizeEvent *ev) {
     setConfigurationTabExpanded(_viewConfigurationExpanded, false);
   }
 
-  resetInteractorsScrollButtonsVisibility();
+  // delay the call to ensure the scroll bar has been correctly resized
+  QTimer::singleShot(10, [=]() {
+    resetInteractorsScrollButtonsVisibility();
+  });
 
   QWidget::resizeEvent(ev);
 }
