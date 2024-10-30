@@ -73,26 +73,28 @@ for /D %%G in ("C:\Tulip5\Python-*") do (
   setlocal EnableDelayedExpansion
   set pydir=%%G
   set pyver=!pydir:~17!
-  set pyexe="%%G\tools/python.exe"
-  PATH %%G\tools;%%G\Scripts;%PATH%
-  rd /s /q build
-  mkdir build
-  cd build
-  cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./install -DCMAKE_COLOR_MAKEFILE=OFF -DPython_EXECUTABLE=!pyexe! -DPython_INCLUDE_DIRS=!pydir!/include -DTULIP_WHEELS_PREFIX=!tulip_wheels_prefix! -DTULIP_ACTIVATE_PYTHON_WHEEL_TARGET=ON -DTULIP_USE_CCACHE=ON Z:
-  if !ERRORLEVEL! NEQ 0 exit /B 1
-  make -j4 wheel
-  if !ERRORLEVEL! NEQ 0 exit /B 1
-  set "FC=1"
-  for /F %%F in ('dir /S /B %tulip_wheel_prefix%\*-cp!pyver!*.whl /O:-D') do (
-    if !FC! == 1 (
-      set /A FC-=1
-      !pyexe! -m pip install %%F
-      if !ERRORLEVEL! NEQ 0 exit /B 1
+  if !pyver! GEQ 39 (
+    set pyexe="%%G\tools/python.exe"
+    PATH %%G\tools;%%G\Scripts;%PATH%
+    rd /s /q build
+    mkdir build
+    cd build
+    cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./install -DCMAKE_COLOR_MAKEFILE=OFF -DPython_EXECUTABLE=!pyexe! -DPython_INCLUDE_DIRS=!pydir!/include -DTULIP_WHEELS_PREFIX=!tulip_wheels_prefix! -DTULIP_ACTIVATE_PYTHON_WHEEL_TARGET=ON -DTULIP_USE_CCACHE=ON Z:
+    if !ERRORLEVEL! NEQ 0 exit /B 1
+    make -j4 wheel
+    if !ERRORLEVEL! NEQ 0 exit /B 1
+    set "FC=1"
+    for /F %%F in ('dir /S /B %tulip_wheel_prefix%\*-cp!pyver!*.whl /O:-D') do (
+      if !FC! == 1 (
+        set /A FC-=1
+        !pyexe! -m pip install %%F
+        if !ERRORLEVEL! NEQ 0 exit /B 1
       !pyexe! -c "from tulip import tlp; from platform import python_version; str = 'Tulip ' + tlp.getTulipRelease() + ' successfully imported in Python ' + python_version(); print(str); l = tlp.getSizeAlgorithmPluginsList();exit(1) if not l else exit(0)"
-      if !ERRORLEVEL! NEQ 0 exit /B 1
-      !pyexe! -m pip uninstall -y tulip-python
-      if !ERRORLEVEL! NEQ 0 exit /B 1
+        if !ERRORLEVEL! NEQ 0 exit /B 1
+        !pyexe! -m pip uninstall -y tulip-python
+        if !ERRORLEVEL! NEQ 0 exit /B 1
+      )
+    cd ..
     )
-  cd ..
   )
 )
