@@ -50,7 +50,7 @@ public:
         QString("<h3>Zoom on rectangle</h3>") +
         "<u>Zoom on selected rectangle</u><br/><br/><b>Mouse left</b> down indicates "
         "the first corner.<br/> <b>Mouse left</b> up indicates the opposite "
-        "corner.<br/> <b>Mouse left Doucle click</b> to center the view.<br/><br/>" +
+        "corner.<br/> <b>Double Mouse left</b> click to center the view.<br/><br/>" +
         "<u>Navigation in the graph</u><br/><br/>" +
         "Translation: <ul><li><b>Arrow</b> keys</li></ul>" +
 #if !defined(__APPLE__)

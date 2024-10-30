@@ -72,8 +72,8 @@ public:
         QString("<h3>Display node or edge properties</h3>") +
         "When the mouse cursor looks like <img src=\":/tulip/gui/icons/i_information.png\">, "
         "indicating it is on top of a graph element (node or edge), "
-        "<b>Mouse left click</b> to display a panel showing the element properties.<br/>"
-        "As the panel is displayed, <b>Mouse left click</b> in a property row to edit the "
+        "<b>Mouse left</b> click to display a panel showing the element properties.<br/>"
+        "As the panel is displayed, <b>Mouse left</b> click in a property row to edit the "
         "corresponding value.<br/>"
         "The visible properties can be filtered using the list of properties displayed in the "
         "<b>Options</b> tab.<br/>"
@@ -97,11 +97,11 @@ public:
         "+ up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>"
 #endif
         +
-        "Meta node navigation: <ul><li><b>double Mouse left click</b> go inside the metanode<br/>(press Shift to avoid element properties display)</li>" +
+        "Meta node navigation: <ul><li><b>double Mouse left</b> click go inside the metanode<br/>(press Shift to avoid element properties display)</li>" +
 #if !defined(__APPLE__)
-        "<li><b>Ctrl + double Mouse left click</b> go outside the metanode</li></ul>"
+        "<li><b>Ctrl + Double Mouse left</b> click go outside the metanode</li></ul>"
 #else
-        "<li><b>⌥ or ⌘ + double Mouse left click</b> go outside the metanode</li></ul>"
+        "<li><b>⌥ or ⌘ + Double Mouse left</b> click go outside the metanode</li></ul>"
 #endif
     );
     push_back(new MouseNKeysNavigator);

@@ -67,11 +67,11 @@ public:
         "down</b> keys</li></ul>"
 #endif
         +
-        "Meta node navigation: <ul><li><b>double Mouse left click</b> go inside the metanode</li>" +
+        "Meta node navigation: <ul><li><b>Double Mouse left</b> click go inside the metanode</li>" +
 #if !defined(__APPLE__)
-        "<li><b>Ctrl + double Mouse left click</b> go outside the metanode</li></ul>"
+        "<li><b>Ctrl + Double Mouse left</b> click go outside the metanode</li></ul>"
 #else
-        "<li><b>⌥ or ⌘ + double Mouse left click</b> go outside the metanode</li></ul>"
+        "<li><b>⌥ or ⌘ + Double Mouse left</b> click go outside the metanode</li></ul>"
 #endif
     );
     push_back(new MouseNKeysNavigator);

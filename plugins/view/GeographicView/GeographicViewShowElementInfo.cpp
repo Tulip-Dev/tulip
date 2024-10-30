@@ -88,8 +88,8 @@ public:
         QString("<h3>Display node or edge properties</h3>") +
         "When the mouse cursor looks like <img src=\":/tulip/gui/icons/i_information.png\">, "
         "indicating it is on top of a graph element (node or edge), "
-        "<b>Mouse left click</b> to display a panel showing the element properties.<br/>"
-        "As the panel is displayed, <b>Mouse left click</b> in a property row to edit the "
+        "<b>Mouse left</b> click to display a panel showing the element properties.<br/>"
+        "As the panel is displayed, <b>Mouse left</b> click in a property row to edit the "
         "corresponding value.<br/>"
         "The visible properties can be filtered using the list of properties displayed in the "
         "<b>Options</b> tab.<br/>"

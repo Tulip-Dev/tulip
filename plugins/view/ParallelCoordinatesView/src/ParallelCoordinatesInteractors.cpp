@@ -243,11 +243,11 @@ void InteractorShowElementInfo::construct() {
       QString("<h3>Display node or edge properties</h3>") +
       "When the mouse cursor looks like <img src=\":/tulip/gui/icons/i_information.png\">, "
       "indicating it is on top of a graph element (node or edge), "
-      "<b>Mouse left click</b> to display a panel showing the element properties.<br/>"
-      "<b>Mouse left click</b> on an element (the mouse cursor must be as <img "
+      "<b>Mouse left</b> click to display a panel showing the element properties.<br/>"
+      "<b>Mouse left</b> click on an element (the mouse cursor must be as <img "
       "src=\":/tulip/gui/icons/i_information.png\">),<br/>"
       "to display a panel showing its properties.<br/>"
-      "As the panel is displayed, <b>Mouse left click</b> in a property row to edit the "
+      "As the panel is displayed, <b>Mouse left</b> click in a property row to edit the "
       "corresponding value.<br/><br/>"
 #if defined(__APPLE__)
       "<b>Mouse wheel</b> down/up can be used to zoom/unzoom the view."

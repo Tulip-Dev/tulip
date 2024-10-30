@@ -58,8 +58,8 @@ void GeographicViewInteractorZoom::construct() {
   setConfigurationWidgetText(
       QString("<h3>Zoom on rectangle</h3>") +
       "<b>Mouse left</b> down indicates "
-      "the first corner.<br/> <b>Mouse left</b> up indicates the opposite "
-      "corner.<br/> <b>Mouse left Doucle click</b> to center the view.<br/><br/>" +
+      "the first corner.<br/> drag the mouse then <b>Mouse left</b> up indicates the opposite "
+      "corner.<br/> <b>Double Mouse left</b> click to center the view.<br/><br/>" +
       "Zoom/Unzoom: <b>Mouse wheel</b> down/up");
   push_back(new GeographicViewNavigator);
   push_back(new GeographicViewBoxZoomer);
@@ -72,7 +72,7 @@ GeographicViewInteractorSelection::GeographicViewInteractorSelection(const Plugi
 void GeographicViewInteractorSelection::construct() {
   setConfigurationWidgetText(
       QString("<h3>Selection nodes/edges in a rectangle</h3>") +
-      "<u>Draw selection rectangle</u><br/><b>Mouse left</b> down indicates the first corner, "
+      "<u>Draw selection rectangle</u><br/><b>Mouse left</b> down indicates the first corner, drag the mouse then "
       "<b>Mouse "
       "left</b> up indicates the opposite corner,<br/>all graph elements instersecting the "
       "rectangle are selected<br/><br/>" +
@@ -119,8 +119,7 @@ void GeographicViewInteractorSelectionEditor::construct() {
 #endif
       "Only rotate selection: <ul><li><b>Shift + Mouse left</b> down on circle + "
       "moves</li></ul>" +
-      "Translate: <ul><li><b>Mouse left</b> down inside rectangle + moves</li>"
-      "<li> or <b>Arrow</b> keys</li></ul>" +
+      "Translate: <b>Mouse left</b> down inside rectangle + moves" +
       "Align vertically/horizontally: <ul><li><b>Mouse left</b> click on two arrows icon in top "
       "right zone</li></ul>" +
       "Align left/right/top/bottom: <ul><li><b>Mouse left</b> click on simple arrow icon in top "
@@ -353,15 +352,15 @@ void GeographicViewInteractorEditEdgeBends::construct() {
   setConfigurationWidgetText(
       QString("<h3>Edit edge bends</h3>") + "<>Modify edge bends</u><br/><br/>" +
       "Select edge: <ul><li>use rectangle selection</li></ul>" +
-      "Translate bend: <ul><li><b>Mouse left down</b> on a selected bend + moves</li></ul>" +
+      "Translate bend: <ul><li><b>Mouse left</b> down on a selected bend + moves</li></ul>" +
       "Change source node: <ul><li><b>Drag and drop circle</b> on source node</li></ul>" +
       "Change target node: <ul><li><b>Drag and drop triangle</b> on target node</li></ul>" +
-      "Add bend: <ul><li><b>Double mouse left click</b> on the selected "
+      "Add bend: <ul><li><b>Double Mouse left</b> click on the selected "
       "edge</li></ul>" +
 #if !defined(__APPLE__)
-      "Delete bend: <ul><li><b>Ctrl + Mouse left click</b> on a selected bend</li></ul>"
+      "Delete bend: <ul><li><b>Ctrl + Mouse left</b> click on a selected bend</li></ul>"
 #else
-      "Delete bend: <ul><li><b>⌥ + Mouse left click</b> on a selected bend</li></ul>"
+      "Delete bend: <ul><li><b>⌥ + Mouse left</b> click on a selected bend</li></ul>"
 #endif
       + "<br/><br/>Zoom/Unzoom: <b>Mouse wheel</b> down/up");
   push_back(new GeographicViewNavigator);

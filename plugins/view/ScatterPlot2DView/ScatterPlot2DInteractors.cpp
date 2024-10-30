@@ -55,8 +55,7 @@ ScatterPlot2DInteractorNavigation::ScatterPlot2DInteractorNavigation(const tlp::
 
 void ScatterPlot2DInteractorNavigation::construct() {
   setConfigurationWidgetText(
-      QString("<html><head>") + "<title></title>" + "</head>" + "<body>" +
-      "<h3>View navigation interactor</h3>" +
+                             QString("<h3>View navigation interactor</h3>") +
       "<p>This interactor allows to navigate in the scatter plot view.</p>" +
       "<p>When there is more than one graph properties selected, the corresponding scatter plots "
       "previews are generated and displayed in a matrix form. By <b>double clicking on a scatter "
@@ -66,15 +65,25 @@ void ScatterPlot2DInteractorNavigation::construct() {
       "view.</p>" +
       "<p>Otherwise, this interactor offers the same functionalities as the one in the \"Node "
       "Link Diagram view\". The commands are described below:</p>" +
+        "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys "
+        "</li></ul>" +
+        "X or Y rotation: <ul><li><b>Shift + Mouse left</b> down + up/down or left/right "
+        "moves</li></ul>" +
 #if !defined(__APPLE__)
-      "<b>Ctrl + Mouse up/down</b>: zoom/unzoom<br>" +
-      "<b>Ctrl + Mouse left/right</b>: z rotation<br>" +
+        "Z rotation: <ul><li><b>Ctrl + Mouse left</b> down + left/right moves</li><li> or "
+        "<b>Insert</b> key</li></ul>" +
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Ctrl + Mouse left</b> down "
+        "+ up/down moves</li><li> or <b>Pg "
+        "up/Pg down</b> keys</li></ul>"
 #else
-      "<b>⌥ + Mouse up/down</b>: zoom/unzoom<br>" + "<b>⌥ + Mouse left/right</b>: z rotation<br>" +
+        "Z rotation: <ul><li><b>⌥ + Mouse left</b> down + left/right moves</li><li> or "
+        "<b>Insert</b> key</li></ul>" +
+        "Translation: <ul><li><b>Arrow</b> keys</li></ul>" +
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>⌥ + Mouse left</b> down "
+        "+ up/down moves</li><li> or <b>Pg up/Pg "
+        "down</b> keys</li></ul>"
 #endif
-      "<b>Shift + Mouse</b>: rotation<br>" + "<b>Key up/down</b>: up/down<br>" +
-      "<b>Key left/right</b>: left/right<br>" + "<b>Key page up/down</b>: zoom<br>" +
-      "<b>Key insert</b>: rotate<br>" + "</body>" + "</html>");
+);
   push_back(new ScatterPlot2DViewNavigator);
   push_back(new MouseNKeysNavigator);
 }
@@ -168,9 +177,9 @@ void ScatterPlot2DInteractorGetInformation::construct() {
       QString("<h3>Display node or edge properties</h3>") +
       "When the mouse cursor looks like <img src=\":/tulip/gui/icons/i_information.png\">, "
       "indicating it is on top of a graph element (node or edge), "
-      "<b>Mouse left click</b> to display a panel showing the element properties.<br/>"
+      "<b>Mouse left</b> click to display a panel showing the element properties.<br/>"
       "to display a panel showing its properties.<br/>"
-      "As the panel is displayed, <b>Mouse left click</b> in a property row to edit the "
+      "As the panel is displayed, <b>Mouse left</b> click in a property row to edit the "
       "corresponding value.<br/><br/>"
 #if defined(__APPLE__)
       "<b>Mouse wheel</b> down/up can be used to zoom/unzoom the view."
