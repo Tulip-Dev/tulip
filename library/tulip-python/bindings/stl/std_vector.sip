@@ -373,7 +373,11 @@ template<TYPE*>
   std::vector<int> *v = new std::vector<int>();
   v->reserve(PyList_GET_SIZE(sipPy));
   for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+    #if PY_MINOR_VERSION < 13
     v->push_back(int(PyLong_AsLong(PyList_GET_ITEM(sipPy, i))));
+  #else
+  v->push_back(PyLong_AsInt(PyList_GET_ITEM(sipPy, i)));
+  #endif
   }
 
   *sipCppPtr = v;

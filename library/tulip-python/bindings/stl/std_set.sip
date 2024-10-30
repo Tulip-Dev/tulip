@@ -401,7 +401,12 @@ template<TYPE*>
   PyObject *iterator = PyObject_GetIter(sipPy);
   PyObject *item = SIP_NULLPTR;
   while ((item = PyIter_Next(iterator))) {
+    #if PY_MINOR_VERSION < 13
     s->insert(int(PyLong_AsLong(item)));
+    #else
+    s->insert(PyLong_AsInt(item));
+  #endif
+
     Py_DECREF(item);
   }
 

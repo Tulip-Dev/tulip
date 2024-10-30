@@ -364,7 +364,11 @@ template<TYPE>
   // Convert Python list of integers to a std::vector<int>
   std::list<int> *v = new std::list<int>();
   for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+    #if PY_MINOR_VERSION < 13
     v->push_back(int(PyLong_AsLong(PyList_GET_ITEM(sipPy, i))));
+    #else
+    v->push_back(PyLong_AsInt(PyList_GET_ITEM(sipPy, i)));
+#endif
   }
     
   *sipCppPtr = v;
@@ -475,7 +479,7 @@ template<TYPE>
     return 1;
   }
     
-  // Convert Python list of integers to a std::vector<int>
+  // Convert Python list of integers to a std::vector<long>
   std::list<long> *v = new std::list<long>();
   for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
     v->push_back(PyLong_AsLong(PyList_GET_ITEM(sipPy, i)));
