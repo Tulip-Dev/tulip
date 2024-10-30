@@ -55,7 +55,7 @@ ScatterPlot2DInteractorNavigation::ScatterPlot2DInteractorNavigation(const tlp::
 
 void ScatterPlot2DInteractorNavigation::construct() {
   setConfigurationWidgetText(
-                             QString("<h3>View navigation interactor</h3>") +
+      QString("<h3>View navigation interactor</h3>") +
       "<p>This interactor allows to navigate in the scatter plot view.</p>" +
       "<p>When there is more than one graph properties selected, the corresponding scatter plots "
       "previews are generated and displayed in a matrix form. By <b>double clicking on a scatter "
@@ -65,25 +65,25 @@ void ScatterPlot2DInteractorNavigation::construct() {
       "view.</p>" +
       "<p>Otherwise, this interactor offers the same functionalities as the one in the \"Node "
       "Link Diagram view\". The commands are described below:</p>" +
-        "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys "
-        "</li></ul>" +
-        "X or Y rotation: <ul><li><b>Shift + Mouse left</b> down + up/down or left/right "
-        "moves</li></ul>" +
+      "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys "
+      "</li></ul>" +
+      "X or Y rotation: <ul><li><b>Shift + Mouse left</b> down + up/down or left/right "
+      "moves</li></ul>" +
 #if !defined(__APPLE__)
-        "Z rotation: <ul><li><b>Ctrl + Mouse left</b> down + left/right moves</li><li> or "
-        "<b>Insert</b> key</li></ul>" +
-        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Ctrl + Mouse left</b> down "
-        "+ up/down moves</li><li> or <b>Pg "
-        "up/Pg down</b> keys</li></ul>"
+      "Z rotation: <ul><li><b>Ctrl + Mouse left</b> down + left/right moves</li><li> or "
+      "<b>Insert</b> key</li></ul>" +
+      "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Ctrl + Mouse left</b> down "
+      "+ up/down moves</li><li> or <b>Pg "
+      "up/Pg down</b> keys</li></ul>"
 #else
-        "Z rotation: <ul><li><b>⌥ + Mouse left</b> down + left/right moves</li><li> or "
-        "<b>Insert</b> key</li></ul>" +
-        "Translation: <ul><li><b>Arrow</b> keys</li></ul>" +
-        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>⌥ + Mouse left</b> down "
-        "+ up/down moves</li><li> or <b>Pg up/Pg "
-        "down</b> keys</li></ul>"
+      "Z rotation: <ul><li><b>⌥ + Mouse left</b> down + left/right moves</li><li> or "
+      "<b>Insert</b> key</li></ul>" +
+      "Translation: <ul><li><b>Arrow</b> keys</li></ul>" +
+      "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>⌥ + Mouse left</b> down "
+      "+ up/down moves</li><li> or <b>Pg up/Pg "
+      "down</b> keys</li></ul>"
 #endif
-);
+  );
   push_back(new ScatterPlot2DViewNavigator);
   push_back(new MouseNKeysNavigator);
 }
