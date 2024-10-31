@@ -516,6 +516,8 @@ void WorkspacePanel::scrollInteractorsLeft() {
 }
 
 void WorkspacePanel::resetInteractorsScrollButtonsVisibility() {
+  if (!_ui) // can be null on deletion
+    return;
   QScrollBar *scrollBar = _ui->scrollArea->horizontalScrollBar();
   bool interactorScrollBtnVisible = scrollBar->minimum() != scrollBar->maximum();
   _ui->interactorsLeft->setVisible(interactorScrollBtnVisible);
@@ -575,7 +577,7 @@ void WorkspacePanel::resizeEvent(QResizeEvent *ev) {
   }
 
   // delay the call to ensure the scroll bar has been correctly resized
-  QTimer::singleShot(10, [=]() { resetInteractorsScrollButtonsVisibility(); });
+  QTimer::singleShot(5, [=]() { resetInteractorsScrollButtonsVisibility(); });
 
   QWidget::resizeEvent(ev);
 }
