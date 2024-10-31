@@ -1022,9 +1022,9 @@ NEW-WINDOW:451,168:52428864,52428864,662,451,168,0:451x168+879+557:0,0:Add panel
 7,6,731,117,0,0,0,191617579,9,'Logitech USB Optical Mouse'
 7,6,730,117,0,0,0,191617603,9,'Logitech USB Optical Mouse'
 7,6,729,116,0,0,0,191617627,9,'Logitech USB Optical Mouse'
-7,6,728,115,0,0,0,191617659,9,'Logitech USB Optical Mouse'
-7,6,728,115,0,0,0,191617675,9,'Logitech USB Optical Mouse'
-7,6,728,114,0,0,0,191617803,9,'Logitech USB Optical Mouse'
+7,6,710,115,0,0,0,191617659,9,'Logitech USB Optical Mouse'
+7,6,710,115,0,0,0,191617675,9,'Logitech USB Optical Mouse'
+7,6,710,114,0,0,0,191617803,9,'Logitech USB Optical Mouse'
 7,4,0,0,1,0,0,191618019,9,Logitech USB Optical Mouse
 6,4,0,0,1,0,0,191618019,2,Virtual core pointer
 7,5,0,0,1,0,0,191618179,9,Logitech USB Optical Mouse

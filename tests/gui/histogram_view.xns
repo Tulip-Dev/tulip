@@ -1212,9 +1212,9 @@ NEW-WINDOW:528,127:62914658,62914658,62914757,0,0,0:0x0+1172+819:0,0:
 7,6,936,121,0,0,0,92478829,9,'VirtualBox mouse integration'
 7,6,935,120,0,0,0,92478837,9,'VirtualBox mouse integration'
 7,6,934,119,0,0,0,92478941,9,'VirtualBox mouse integration'
-7,6,934,118,0,0,0,92478949,9,'VirtualBox mouse integration'
-7,6,934,117,0,0,0,92478957,9,'VirtualBox mouse integration'
-7,6,934,116,0,0,0,92478997,9,'VirtualBox mouse integration'
+7,6,924,118,0,0,0,92478949,9,'VirtualBox mouse integration'
+7,6,924,117,0,0,0,92478957,9,'VirtualBox mouse integration'
+7,6,924,116,0,0,0,92478997,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,92479145,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,92479145,2,Virtual core pointer
 7,5,0,0,1,0,0,92479285,12,ImExPS/2 Generic Explorer Mouse
