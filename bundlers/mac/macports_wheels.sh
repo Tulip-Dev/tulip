@@ -12,35 +12,16 @@ export TRUSTED_HOSTS='--trusted-host pypi.python.org --trusted-host files.python
 
 pushd /tmp
 
-# 3.9.13 - the last 3.9 version with installer
-curl -LO https://www.python.org/ftp/python/3.9.13/python-3.9.13-macosx10.9.pkg
-sudo installer -store -pkg python-3.9.*.pkg -target /
-# cleanup
-rm python-*.pkg
-
-# 3.10.11
-curl -LO https://www.python.org/ftp/python/3.10.11/python-3.10.11-macos11.pkg
-sudo installer -store -pkg python-3.10.*.pkg -target /
-# cleanup
-rm python-*.pkg
-
-# 3.11.9
-curl -LO https://www.python.org/ftp/python/3.11.9/python-3.11.9-macos11.pkg
-sudo installer -store -pkg python-3.11.*.pkg -target /
-# cleanup
-rm python-*.pkg
-
-# 3.12.7
-curl -LO https://www.python.org/ftp/python/3.12.7/python-3.12.7-macos11.pkg
-sudo installer -store -pkg python-3.12.*.pkg -target /
-# cleanup
-rm python-*.pkg
-
-# 3.13.0
-curl -LO https://www.python.org/ftp/python/3.13.0/python-3.13.0-macos11.pkg
-sudo installer -store -pkg python-3.13.*.pkg -target /
-# cleanup
-rm python-*.pkg
+# install python supported versions
+for version in 3.9.13 3.10.11 3.11.9 3.12.7 3.13.0
+do
+  # download installer
+  curl -LO https://www.python.org/ftp/python/${version}/python-${version}-macos11.pkg
+  # standard installation
+  sudo installer -store -pkg python-${version%.*}.*.pkg -target /
+  # cleanup
+  rm python-*.pkg
+done
 
 popd
 
