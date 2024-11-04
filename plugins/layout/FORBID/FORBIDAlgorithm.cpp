@@ -315,7 +315,6 @@ void OPTIMIZATION_PASS(vector<Rect2D> &rects, vector<term> &terms, const vector<
 }
 
 class FORBIDAlgorithm : public tlp::LayoutAlgorithm {
-  const double delta = 0.03;
   const double eps = 0.01;
   float alpha, k, minMove, scaleStep;
   unsigned int maxIter, maxPasses;
