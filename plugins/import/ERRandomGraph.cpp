@@ -54,7 +54,7 @@ public:
                     "1.2", "Graph")
   ERRandomGraph(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "50");
-    addInParameter<double>("p", paramHelp[1], "0.5");
+    addInParameter<double>("p", paramHelp[1], "0.01");
     addInParameter<bool>("self loops", paramHelp[2], "false");
     addInParameter<bool>("directed", paramHelp[3], "false");
   }
