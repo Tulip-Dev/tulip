@@ -105,8 +105,30 @@ IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
         WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
         COMMENT "Repairing tulip-core wheel" VERBATIM)
   ENDIF(WIN32)
-  #TODO: use delocate python package for apple to repaire the wheel. This will allow to remove the long apple specific code of packaging/setup.py
-
+  IF(APPLE)
+    find_program(DELOCATE delocate-wheel HINTS ${USER_EXE_PATH} ${PYTHON_EXE_PATH} REQUIRED)
+    FILE(TO_NATIVE_PATH "${TULIP_WHEELS_PREFIX}" TULIP_WHEELS_PREFIX)
+    # as the built wheel is not an "universal2" wheel, it has to be renamed
+    # with the architecture used by the current build, before repairing
+    IF (CMAKE_OSX_ARCHITECTURES)
+      SET(ARCH ${CMAKE_OSX_ARCHITECTURES})
+    ELSE()
+      EXECUTE_PROCESS(COMMAND uname -m
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        OUTPUT_VARIABLE ARCH)
+    ENDIF()
+    EXECUTE_PROCESS(COMMAND sw_vers -productVersion
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        OUTPUT_VARIABLE MACOS_VERSION)
+    STRING(REGEX MATCH "^[0-9]+\.[0-9]+" MACOS_VERSION ${MACOS_VERSION})
+    STRING(REPLACE "." "_" MACOS_VERSION ${MACOS_VERSION})
+    SET(TULIP_PYTHON_WHEEL_FILE ${TULIP_PYTHON_WHEEL_NAME_}-${Tulip_VERSION}-cp${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-cp${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-macosx_${MACOS_VERSION}_${ARCH}.whl)
+    ADD_CUSTOM_COMMAND(TARGET wheel POST_BUILD
+        COMMAND bash -c -x "mv ./dist/${TULIP_PYTHON_WHEEL_NAME_}-${Tulip_VERSION}-cp${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-*.whl ./dist/${TULIP_PYTHON_WHEEL_FILE}"
+        COMMAND ${DELOCATE} ./dist/${TULIP_PYTHON_WHEEL_FILE} -w ${TULIP_WHEELS_PREFIX}
+        WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
+        COMMENT "Repairing tulip-core wheel" VERBATIM)
+  ENDIF(APPLE)
 ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 ##########################################################
 #generate the sip module sources

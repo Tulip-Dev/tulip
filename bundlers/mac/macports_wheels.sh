@@ -8,8 +8,6 @@ INSTALL_MACPORTS=$5
 # set columns in terminal, required for curl to work correctly
 export COLUMNS=80
 
-export TRUSTED_HOSTS='--trusted-host pypi.python.org --trusted-host files.pythonhosted.org'
-
 pushd /tmp
 
 # install python supported versions
@@ -45,24 +43,21 @@ do
   export DYLD_LIBRARY_PATH=$(dirname $(dirname $PY_EXE))/lib
   ${PY_EXE} -m pip install --upgrade pip
   ${PY_EXE} -m pip install --upgrade setuptools
-  # install build module
-  ${PY_EXE} -m pip install build
-  # install sip module
-  ${PY_EXE} -m pip install sip
+  # install needed modules
+  ${PY_EXE} -m pip install build delocate sip wheel
   PY_DIR=$(dirname $(dirname ${PY_EXE}))
   PY_VERSION=$(basename ${PY_DIR})
   # configure and build python wheel with specific Python version
-  cmake ${TULIP_SOURCE_DIR} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../install -DCMAKE_C_COMPILER=/opt/local/bin/clang-mp-${CLANG_VERSION} -DCMAKE_CXX_COMPILER=/opt/local/bin/clang++-mp-${CLANG_VERSION} -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DPython_EXECUTABLE=${PY_EXE} -DPython_INCLUDE_DIRS=${PY_DIR}/includes -DTULIP_ACTIVATE_PYTHON_WHEEL_TARGET=ON
+  cmake ${TULIP_SOURCE_DIR} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../install -DCMAKE_C_COMPILER=/opt/local/bin/clang-mp-${CLANG_VERSION} -DCMAKE_CXX_COMPILER=/opt/local/bin/clang++-mp-${CLANG_VERSION} -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DPython_EXECUTABLE=${PY_EXE} -DPython_INCLUDE_DIRS=${PY_DIR}/includes -DTULIP_ACTIVATE_PYTHON_WHEEL_TARGET=ON -DTULIP_WHEELS_PREFIX=${TULIP_WHEELS_DIR}
   make -j4
   # build & check the tulip-core wheel
   make wheel
-  cp library/tulip-python/bindings/tulip-core/tulip_module/dist/tulip_python*-cp*.whl ${TULIP_WHEELS_DIR}
-  pushd library/tulip-python/bindings/tulip-core/tulip_module/dist
+  pushd ${TULIP_WHEELS_DIR}
   ${PY_EXE} -m pip install --user $(ls -t | head -1)
   popd
   ${PY_EXE} -c "from tulip import tlp
 from platform import python_version
-str = 'Tulip ' + tlp.getTulipRelease() + ' successfully imported in Python ' + python_version()
+str = '===> Tulip ' + tlp.getTulipRelease() + ' successfully imported in Python ' + python_version()
 print(str)
 l = tlp.getSizeAlgorithmPluginsList()
 exit(1) if not l else exit(0)"
