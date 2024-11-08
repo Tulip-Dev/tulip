@@ -126,6 +126,13 @@ SimplePluginProgressDialog *createProgress(QString &title) {
 
 int main(int argc, char **argv) {
 
+//force Tulip to be an X11 window
+//temporary workaround for systems with Wayland instead of X11.
+//we need to add opengl ES support (replace glew by qt call at least. Huge work...)
+#ifdef _LINUX
+qputenv("QT_QPA_PLATFORM", "xcb");
+#endif
+
   CrashHandling::installCrashHandler();
 
   // Enables resource sharing between the OpenGL contexts
