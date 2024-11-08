@@ -1,11 +1,6 @@
 from setuptools import setup
 from setuptools.dist import Distribution
-import os
-from os import path
-import fnmatch
 import platform
-import subprocess
-import shutil
 
 class BinaryDistribution(Distribution):
     def is_pure(self):
