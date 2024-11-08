@@ -104,5 +104,6 @@ void PythonPanel::endCurrentLinesExecution() {
                       ->data(_ui->graphCombo->selectedIndex(), tlp::TulipModel::GraphRole)
                       .value<tlp::Graph *>();
   // undo/redo management
-  g->popIfNoUpdates();
+  if (g)
+    g->popIfNoUpdates();
 }
