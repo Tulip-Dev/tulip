@@ -95,8 +95,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
                  ";\">www.python.org</a> </li>"
                  "  <li> <b> SIP </b> " +
                  SIP_VERSION_STR +
-                 ": <a href=\"https://www.riverbankcomputing.com/software/sip\"  style=\"color:" HTML_LINK_COLOR
-                 ";\">www.riverbankcomputing.com/software/sip</a></li>"
+                 ": <a href=\"https://github.com/Python-SIP/sip\"  style=\"color:" HTML_LINK_COLOR
+                 ";\">github.com/Python-SIP/sip</a></li>"
            : "") +
       "<li><b>Font Awesome</b> " + TulipFontAwesome::getVersion().c_str() +
       ": <a href=\"https://fontawesome.com\" style=\"color:" HTML_LINK_COLOR
