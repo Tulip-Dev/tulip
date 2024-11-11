@@ -37,8 +37,6 @@ cd ${TULIP_BUILD_DIR}
 # iterate on available Python versions
 for PY_EXE in $(find /Library/Frameworks/Python.framework/Versions -name python3)
 do
-  # remove previous contents
-  rm -rf *
   # upgrade pip and setuptools
   export DYLD_LIBRARY_PATH=$(dirname $(dirname $PY_EXE))/lib
   ${PY_EXE} -m pip install --upgrade pip
@@ -52,6 +50,10 @@ do
   make -j4
   # build & check the tulip-core wheel
   make wheel
+  # minimize contents removal for next wheel build
+  rm CMakeCache.txt
+  rm -rf library/tulip-python
+
   pushd ${TULIP_WHEELS_DIR}
   ${PY_EXE} -m pip install --user $(ls -t | head -1)
   popd
