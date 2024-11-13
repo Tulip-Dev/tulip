@@ -31,7 +31,7 @@ namespace tlp {
 class GraphHierarchiesModel;
 class TulipProject;
 
-// this class defined the interface between the Graph Perspective
+// this class defines the interface between the Graph Perspective
 // and the Python IDE
 class TLP_QT_SCOPE PythonIDEInterface : public QFrame {
 public:
