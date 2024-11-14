@@ -36,6 +36,8 @@
 #if defined(__MINGW32__)
 #include <QSslSocket>
 #endif
+#include <QTcpSocket>
+#include <QTimer>
 #include <QWidget>
 #include <QCheckBox>
 #include <QListWidget>
@@ -589,6 +591,20 @@ void convertLikeFilter(QString &filter) {
     else
       filter.replace(pos - 1, 1, "");
   }
+}
+
+bool checkInternetAccess(int time) {
+  QTcpSocket checkInternetSocket;
+  // initiate a connection to google on https port (443)
+  checkInternetSocket.connectToHost("google.com", 443);
+  // wait for time elapsed
+  QTimer::singleShot(time, [&time]() { time = 0; });
+  while (time) {
+    QApplication::processEvents();
+  }
+  bool internetAccess = checkInternetSocket.state() == QTcpSocket::ConnectedState;
+  checkInternetSocket.close();
+  return internetAccess;
 }
 
 #ifdef _LINUX

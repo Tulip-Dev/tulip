@@ -151,6 +151,11 @@ TLP_QT_SCOPE QString getRegisteredTextureFile(QString name);
  */
 TLP_QT_SCOPE void clearRegisteredTextureFiles();
 
+/**
+ * @brief check for possible internet access waiting for time ms
+ */
+TLP_QT_SCOPE bool checkInternetAccess(int time = 1000);
+
 #define qtWhatsThisCursor Qt::PointingHandCursor
 
 #ifdef _LINUX

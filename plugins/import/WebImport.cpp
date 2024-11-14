@@ -716,6 +716,12 @@ struct WebImport : public ImportModule {
   }
 
   bool importGraph() override {
+    if (!checkInternetAccess()) {
+      if (pluginProgress)
+        pluginProgress->setError("It seems there is no internet access.<br/>Check your connection.");
+      return false;
+    }
+
     string server = "www.labri.fr";
     string url;
     bool computelayout = true;

@@ -18,8 +18,10 @@
  */
 #include "PanelSelectionWizard.h"
 #include "ui_PanelSelectionWizard.h"
+#include "../../../utils/PluginNames.h"
 
 #include <QAbstractButton>
+#include <QMessageBox>
 #include <QMouseEvent>
 
 #include <tulip/View.h>
@@ -78,6 +80,12 @@ tlp::View *PanelSelectionWizard::panel() const {
 }
 
 void PanelSelectionWizard::createView() {
+  if (QStringToTlpString(_currentItem) == ViewName::GeographicViewName &&
+      !checkInternetAccess()) {
+    QMessageBox::warning(nullptr, QString("No internet access"),
+                         QString("It seems there is no internet access.<br/>Check your connection."));
+    return;
+  }
   _view = PluginLister::getPluginObject<View>(QStringToTlpString(_currentItem));
   _view->setupUi();
   _view->setGraph(graph());
