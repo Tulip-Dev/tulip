@@ -597,14 +597,13 @@ bool checkInternetAccess(unsigned int time) {
   QTcpSocket checkInternetSocket;
   // initiate a connection to google on https port (443)
   checkInternetSocket.connectToHost("google.com", 443);
-  unsigned int steps = time/100;
+  unsigned int steps = time / 100;
   if (time % 100)
     ++steps;
   bool error = false;
   // error detection
-  QObject::connect(&checkInternetSocket, &QTcpSocket::errorOccurred,
-                   [&error]() { error = true; });
-  while(steps) {
+  QObject::connect(&checkInternetSocket, &QTcpSocket::errorOccurred, [&error]() { error = true; });
+  while (steps) {
     --steps;
     time = 100;
     // wait for time elapsed

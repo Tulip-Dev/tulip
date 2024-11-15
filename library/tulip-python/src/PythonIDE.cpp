@@ -1625,7 +1625,8 @@ void PythonIDE::executePipCommand(int command, const QString &packageName) {
 
   // check internet access if needed
   if (pipCommands[command].needInternetAccess && !checkInternetAccess()) {
-    _pythonInterpreter->runString("print('Warning: there seems to be no internet access.\\nCheck your network configuration.')");
+    _pythonInterpreter->runString(
+        "print('Warning: there seems to be no internet access.\\nCheck your network configuration.')");
     return;
   }
 
