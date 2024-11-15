@@ -593,18 +593,39 @@ void convertLikeFilter(QString &filter) {
   }
 }
 
-bool checkInternetAccess(int time) {
+bool checkInternetAccess(unsigned int time) {
   QTcpSocket checkInternetSocket;
   // initiate a connection to google on https port (443)
   checkInternetSocket.connectToHost("google.com", 443);
-  // wait for time elapsed
-  QTimer::singleShot(time, [&time]() { time = 0; });
-  while (time) {
-    QApplication::processEvents();
+  unsigned int steps = time/100;
+  if (time % 100)
+    ++steps;
+  bool error = false;
+  // error detection
+  QObject::connect(&checkInternetSocket, &QTcpSocket::errorOccurred,
+                   [&error]() { error = true; });
+  while(steps) {
+    --steps;
+    time = 100;
+    // wait for time elapsed
+    QTimer::singleShot(100, [&time]() { time = 0; });
+    while (time) {
+      QApplication::processEvents();
+      if (error) {
+        switch (checkInternetSocket.error()) {
+        case QAbstractSocket::HostNotFoundError:
+        case QAbstractSocket::NetworkError:
+        case QAbstractSocket::SocketAccessError:
+          return false;
+        default:
+          break;
+        }
+      }
+      if (checkInternetSocket.state() == QAbstractSocket::ConnectedState)
+        return true;
+    }
   }
-  bool internetAccess = checkInternetSocket.state() == QTcpSocket::ConnectedState;
-  checkInternetSocket.close();
-  return internetAccess;
+  return checkInternetSocket.state() == QTcpSocket::ConnectedState;
 }
 
 #ifdef _LINUX

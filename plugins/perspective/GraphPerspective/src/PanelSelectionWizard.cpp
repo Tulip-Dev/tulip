@@ -83,7 +83,7 @@ void PanelSelectionWizard::createView() {
   if (QStringToTlpString(_currentItem) == ViewName::GeographicViewName && !checkInternetAccess()) {
     QMessageBox::warning(
         nullptr, QString("No internet access"),
-        QString("It seems there is no internet access.<br/>Check your connection."));
+        QString("There seems to be no internet access.<br/>Check your network configuration."));
     return;
   }
   _view = PluginLister::getPluginObject<View>(QStringToTlpString(_currentItem));

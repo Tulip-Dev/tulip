@@ -719,7 +719,7 @@ struct WebImport : public ImportModule {
     if (!checkInternetAccess()) {
       if (pluginProgress)
         pluginProgress->setError(
-            "It seems there is no internet access.<br/>Check your connection.");
+            "There seems to be no internet access. Check your network configuration.");
       return false;
     }
 

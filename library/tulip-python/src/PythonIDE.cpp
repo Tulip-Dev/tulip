@@ -338,23 +338,23 @@ tulipplugins.registerPluginOfGroup('%1', '%2', '%3', '%4', '%5', '%6', '%7')
 struct _pipCommand {
   QString name;
   std::string argList;
-  bool needPackage;
+  bool needPackage, needInternetAccess;
   QString progressMsg;
 };
 
 static std::vector<_pipCommand> pipCommands{
     // install a package in the user directory
-    {"install", "install', '--user", true, "installing"},
+    {"install", "install', '--user", true, true, "installing"},
     // list the package installed in the user directory
-    {"list", "list', '--user", false, ""},
+    {"list", "list', '--user", false, false, ""},
     // list the installed packages
-    {"list all", "list", false, ""},
+    {"list all", "list", false, false, ""},
     // show package info
-    {"show", "show", true, ""},
+    {"show", "show", true, false, ""},
     // uninstall a package
-    {"uninstall", "uninstall', '--yes", false, "uninstalling"},
+    {"uninstall", "uninstall', '--yes", false, false, "uninstalling"},
     // upgrade a package
-    {"upgrade", "install', '--upgrade", true, "upgrading"}};
+    {"upgrade", "install', '--upgrade", true, true, "upgrading"}};
 
 // the name of the python exe
 static std::string pyExe;
@@ -1615,12 +1615,20 @@ void PythonIDE::executePipCommand(int command, const QString &packageName) {
   _pythonInterpreter->clearOutputBuffers();
   clearErrorIndicators();
   _pythonInterpreter->setConsoleWidget(_ui->consoleWidget);
+
   auto name = QStringToTlpString(packageName.trimmed());
   // nothing to do if package name is missing
   if (name.empty() && pipCommands[command].needPackage) {
-    _pythonInterpreter->runString("print('warning: you must specified a package name')");
+    _pythonInterpreter->runString("print('Warning: you must specified a package name')");
     return;
   }
+
+  // check internet access if needed
+  if (pipCommands[command].needInternetAccess && !checkInternetAccess()) {
+    _pythonInterpreter->runString("print('Warning: there seems to be no internet access.\\nCheck your network configuration.')");
+    return;
+  }
+
   // construct the script to execute
   std::string pipScript = beginPipScript();
   // set the pip command to run
