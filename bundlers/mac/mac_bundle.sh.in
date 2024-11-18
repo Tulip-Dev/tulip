@@ -77,11 +77,13 @@ else
      cp -a $PYTHON_DIR_PATH Frameworks/Python.framework/Versions
      # cleanup Python.framework
      find Frameworks/Python.framework \( -name '*.pyc' -o -name '*.pyo' \) | xargs rm -rf
+     rm -rf Frameworks/Python.framework/Versions/@PYTHON_VERSION@/bin/sip-*
      rm -rf Frameworks/Python.framework/Versions/@PYTHON_VERSION@/include
      rm -rf Frameworks/Python.framework/Versions/@PYTHON_VERSION@/share
      pushd Frameworks/Python.framework/Versions/@PYTHON_VERSION@/lib/python@PYTHON_VERSION@/site-packages
      rm -rf packaging* setuptools* sip*
      popd
+
  fi
 fi
 
