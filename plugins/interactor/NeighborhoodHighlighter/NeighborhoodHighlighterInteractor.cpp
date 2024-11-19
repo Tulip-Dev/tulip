@@ -607,10 +607,9 @@ void NeighborhoodHighlighter::morphCircleAlphaAnimStep(int animStep) {
 float NeighborhoodHighlighter::computeNeighborhoodGraphRadius(
     LayoutProperty *neighborhoodGraphLayoutProp) {
   float radius = 0;
-  node n;
   const Coord &centralNodeCoord =
       neighborhoodGraphLayoutProp->getNodeValue(neighborhoodGraphCentralNode);
-  for (auto n : neighborhoodGraph->nodes()) {
+  for (node n : neighborhoodGraph->nodes()) {
     const Coord &nodeCoord = neighborhoodGraphLayoutProp->getNodeValue(n);
     const Size &nodeSize =
         originalGlGraphComposite->getInputData()->getElementSize()->getNodeValue(n);
