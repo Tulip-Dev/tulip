@@ -443,7 +443,7 @@ unsigned int getSeedOfRandomSequence();
 %Docstring
 tlp.getSeedOfRandomSequence()
 
-Returns the value of the seed used for further initialization of a random sequence
+Returns the value of the seed used to initialize the random number generator.
 
 :rtype: integer
 %End
@@ -455,6 +455,18 @@ tlp.randomUnsignedInteger(max)
 
 Returns a random unsigned integer in the range [0, max]
 
+:param max: the maximum number to generate
+:rtype: integer
+%End
+
+//=====================================================================
+int randomInteger(int max);
+%Docstring
+tlp.randomInteger(max)
+
+  Returns a random integer in the range [0, max] if max>0 else between [max, 0].
+
+:param max: the maximum or minimum number to generate
 :rtype: integer
 %End
 
@@ -465,18 +477,19 @@ tlp.randomDouble(max)
 
 Returns a random double in the range [0, max]
 
+:param max: the maximum number to generate
 :rtype: double
 %End
 
 //=====================================================================
 
-void setSeedOfRandomSequence(unsigned int seed);
+void setSeedOfRandomSequence(unsigned int seed=UINT_MAX);
 %Docstring
 tlp.setSeedOfRandomSequence(seed)
 
 Gives the value of the seed used for further generation of random numbers.
-Set seed to UINT_MAX if you need a random choice of the seed.
-Also call tlp.initRandomSequence() to initialize the random number generator with the new seed.
+Do not pass an argument if you prefer a random choice of the seed.
+Also initializes the random number generator with the new seed.
 
 :param seed: the value of the seed
 :type seed: integer
@@ -488,8 +501,9 @@ void initRandomSequence() /Deprecated/;
 %Docstring
 tlp.initRandomSequence()
 
+.. deprecated:: 6.0.0
 Initializes a random sequence with the seed previously set.
-    Use tlp.setSeedOfRandomSequence() with no argument instead.
+    Use :func:`tlp.setSeedOfRandomSequence()` with no argument instead.
 
 %End
 

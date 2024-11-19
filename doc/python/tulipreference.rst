@@ -1811,3 +1811,23 @@ tlp.TriconnectedTest
 
 .. autoclass:: tulip::tlp.TriconnectedTest
 	:members:
+
+Tulip Tools
+-------------------
+
+Random number generation
+^^^^^^^^^^^^^^^^^^^^^^^^
+There is no need to use Python API to generate random numbers. Use the Tulip dedicated functions to avoid any
+side effect with plugins using random numbers (e.g., Louvain, FM^3).
+
+.. automethod:: tulip::tlp.initRandomSequence
+
+.. automethod:: tulip::tlp.setSeedOfRandomSequence
+
+.. automethod:: tulip::tlp.getSeedOfRandomSequence
+
+.. automethod:: tulip::tlp.randomDouble
+
+.. automethod:: tulip::tlp.randomUnsignedInteger
+
+.. automethod:: tulip::tlp.randomInteger
