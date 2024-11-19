@@ -72,7 +72,8 @@ echo "if [ \"\$1\" = \"-no-output-filtering\" ]; then" >> $APPRUN_FILE
 # for debugging purpose, allow to run without filtering of console output
 echo "  \${BUNDLE_DIR}/usr/bin/tulip -p ${PERSPECTIVE} \"\$2\"" >> $APPRUN_FILE
 echo "else" >> $APPRUN_FILE
-echo "  \${BUNDLE_DIR}/usr/bin/tulip -p ${PERSPECTIVE} \"\$1\" 2>&1" >> $APPRUN_FILE
+# unset SESSION_MANAGER to avoid a Qt 5.15 warning
+echo "  env -u SESSION_MANAGER \${BUNDLE_DIR}/usr/bin/tulip -p ${PERSPECTIVE} \"\$1\" 2>&1" >> $APPRUN_FILE
 echo "fi" >> $APPRUN_FILE
 chmod 755 $APPRUN_FILE
 
@@ -117,11 +118,6 @@ if [ -e @QT_PLUGINS_DIR@/platformthemes ]; then
 fi
 if [ -e @QT_PLUGINS_DIR@/xcbglintegrations ]; then
   cp -v -Rp @QT_PLUGINS_DIR@/xcbglintegrations $BUNDLE_USR_DIR/plugins
-fi
-
-# add gtk-2.0 plugins directory (needed for qt5 gtk2 platformthemes plugin)
-if [ -e /usr/lib/@CMAKE_LIBRARY_ARCHITECTURE@/gtk-2.0 ]; then
-  cp -v -Rp /usr/lib/@CMAKE_LIBRARY_ARCHITECTURE@/gtk-2.0 $BUNDLE_LIB_DIR
 fi
 
 # set up LD_LIBRARY_PATH with the installation path of the Qt libs used
