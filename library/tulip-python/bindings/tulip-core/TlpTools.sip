@@ -474,8 +474,9 @@ void setSeedOfRandomSequence(unsigned int seed);
 %Docstring
 tlp.setSeedOfRandomSequence(seed)
 
-Gives the value of the seed used for further initialization of a random sequence (with further calls to rand() or rand_r(...)).
+Gives the value of the seed used for further generation of random numbers.
 Set seed to UINT_MAX if you need a random choice of the seed.
+Also call tlp.initRandomSequence() to initialize the random number generator with the new seed.
 
 :param seed: the value of the seed
 :type seed: integer
@@ -483,12 +484,12 @@ Set seed to UINT_MAX if you need a random choice of the seed.
 
 //=====================================================================
 
-void initRandomSequence();
+void initRandomSequence() /Deprecated/;
 %Docstring
 tlp.initRandomSequence()
 
 Initializes a random sequence with the seed previously set.
-Further calls to rand() or rand_r(...) will return the elements of that sequence
+    Use tlp.setSeedOfRandomSequence() with no argument instead.
 
 %End
 

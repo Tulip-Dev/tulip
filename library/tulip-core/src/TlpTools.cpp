@@ -337,14 +337,12 @@ std::ostream *tlp::getOgzstream(const std::string &name, int open_mode) {
 //=========================================================
 
 static unsigned int randomSeed = UINT_MAX;
-// uniformly-distributed integer random number generator that produces non-deterministic random
-// numbers
-static std::random_device rd;
 // Mersenne Twister pseudo-random generator of 32-bit numbers
 static std::mt19937 mt;
 
 void tlp::setSeedOfRandomSequence(unsigned int seed) {
   randomSeed = seed;
+  tlp::initRandomSequence();
 }
 
 unsigned int tlp::getSeedOfRandomSequence() {
@@ -352,15 +350,8 @@ unsigned int tlp::getSeedOfRandomSequence() {
 }
 
 void tlp::initRandomSequence() {
-  // init seed from random sequence with std::random_device
   if (randomSeed == UINT_MAX) {
-#ifndef __MINGW32__
-    mt.seed(rd());
-#else
-    // std::random_device implementation is deterministic in MinGW so initialize seed with current
-    // time (microsecond precision)
-    mt.seed(uint(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
-#endif
+    mt.seed(std::chrono::high_resolution_clock::now().time_since_epoch().count());
   } else {
     mt.seed(randomSeed);
   }

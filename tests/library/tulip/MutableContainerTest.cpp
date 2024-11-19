@@ -33,7 +33,6 @@ void MutableContainerTest::setUp() {
 #ifndef NDEBUG
   // choose the seed to ease the debugging
   tlp::setSeedOfRandomSequence(1);
-  tlp::initRandomSequence();
 #endif
   mutBool = new MutableContainer<bool>();
   mutDouble = new MutableContainer<double>();
