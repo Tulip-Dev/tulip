@@ -152,14 +152,14 @@ void TableView::setupWidget() {
   QWidget *centralWidget = new QWidget();
   Perspective::setStyleSheet(centralWidget);
   _ui->setupUi(centralWidget);
-  #ifdef __APPLE__
+#ifdef __APPLE__
   _ui->eltTypeCombo->setMinimumContentsLength(7);
   _ui->valueMatchCombo->setMinimumContentsLength(9);
   _ui->columnMatchCombo->setMinimumContentsLength(9);
   _ui->filteringPropertyCombo->setMinimumContentsLength(14)
- #endif
-  // fix display of QCheckBox and QRadioButton children
-  tlpFixCBRBs(centralWidget);
+#endif
+      // fix display of QCheckBox and QRadioButton children
+      tlpFixCBRBs(centralWidget);
 
   activateTooltipAndUrlManager(_ui->table->viewport());
   // no need to display standard View context menu

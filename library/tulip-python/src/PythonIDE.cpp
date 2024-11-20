@@ -450,9 +450,9 @@ PythonIDE::PythonIDE()
   pipLayout->addWidget(pipLabel);
   // add QComboBox to choose pip sub-command
   _pipCombo = new QComboBox();
- #ifdef __APPLE__
+#ifdef __APPLE__
   _pipCombo->setMinimumContentsLength(9);
- #endif
+#endif
   _pipCombo->setToolTip(
       "Choose the pip command to execute:\n- install (a package in the user directory),\n- list (packages in the user directory),\n- list all (the installed packages),\n- show (information about a package)\n- uninstall (a package)\n- upgrade (a package).");
   pipLayout->addWidget(_pipCombo);
