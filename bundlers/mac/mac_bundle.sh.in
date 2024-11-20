@@ -40,14 +40,14 @@ fi
 echo "Wiping previous bundles into ${DEST_DIR}"
 rm -rf "${DEST_DIR}/application" 2>/dev/null
 rm -f "${DEST_DIR}/${APP_NAME}-@Tulip_VERSION@.dmg" 2>/dev/null
-mkdir -p "${DEST_DIR}/application"
-cd "${DEST_DIR}/application"
-mkdir .background
-cp "${SRC_DIR}/background.png" .background/
-rm -rf * 2>/dev/null
 
 echo 'Creating base directories'
+mkdir -p "${DEST_DIR}/application"
 cd "${DEST_DIR}/application"
+# needed by make_dmg.sh
+mkdir .background
+cp "${SRC_DIR}/background.png" .background/
+
 mkdir -p Tulip.app/Contents/{MacOS,Resources,Frameworks}
 cd Tulip.app/Contents
 cp "${SRC_DIR}/tulip.icns" Resources/
@@ -81,9 +81,8 @@ else
      rm -rf Frameworks/Python.framework/Versions/@PYTHON_VERSION@/include
      rm -rf Frameworks/Python.framework/Versions/@PYTHON_VERSION@/share
      pushd Frameworks/Python.framework/Versions/@PYTHON_VERSION@/lib/python@PYTHON_VERSION@/site-packages
-     rm -rf packaging* setuptools* sip*
+     find . -mindepth 1 -maxdepth 1 -type d | grep -v pip | xargs rm -rf *.pth *.py
      popd
-
  fi
 fi
 
@@ -101,6 +100,8 @@ cp "@QT_QTCLUCENE_LIBRARY@" . 2>/dev/null
 cd ..
 # configure tulip
 mv bin/tulip MacOS/Tulip
+rm -rf bin
+
 # run macdeployqt with the Tulip Python dynamic modules
 # (not processed by macdeployqt as they are suffixed by .so instead of .dylib)
 if [ "$PYTHON_BUILD" = "ON" ]

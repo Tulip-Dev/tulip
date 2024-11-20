@@ -516,19 +516,6 @@ if result.returncode != 0:
       pyExe +
       ", '-m', 'ensurepip', '--default-pip'], capture_output=True, text=True, env=exec_env)";
   _pythonInterpreter->runString(pipScript.c_str());
-#elif __APPLE__
-  // on macos if in bundle we must ensure that default Root certificates
-  // are installed for the ssl module
-  auto pyPath = _pythonInterpreter->getSysVariable("exec_prefix");
-  if (pyPath.contains(".app/Contents/") && !QFile::exists(pyPath + "/etc/openssl/cert.pem")) {
-    std::string pipScript = beginPipScript();
-    // use the certificates provided by the certifi package
-    pipScript += R"(install', '--user', 'certifi'], capture_output=True, text=True, env=exec_env)
-import certifi; import os
-openssl_cafile=sys.exec_prefix + '/etc/openssl/cert.pem'
-os.symlink(certifi.where(), openssl_cafile))";
-    _pythonInterpreter->runString(pipScript.c_str());
-  }
 #endif
 
   connect(_ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
