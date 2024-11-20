@@ -29,6 +29,10 @@ namespace tlp {
 MatrixViewConfigurationWidget::MatrixViewConfigurationWidget(QWidget *parent)
     : QWidget(parent), _ui(new Ui::MatrixViewConfigurationWidget()), _modifyingMetricList(false) {
   _ui->setupUi(this);
+#ifdef __APPLE__
+  _ui->gridDisplayCombo->setMinimumContentsLength(25);
+#endif
+
   connect(_ui->orderingMetricCombo, SIGNAL(currentIndexChanged(int)), this,
           SLOT(orderingMetricComboIndexChanged(int)));
   connect(_ui->backgroundColorBtn, SIGNAL(colorChanged(QColor)), this,

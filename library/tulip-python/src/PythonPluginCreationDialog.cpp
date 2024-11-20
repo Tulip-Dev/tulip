@@ -34,6 +34,9 @@ PythonPluginCreationDialog::PythonPluginCreationDialog(QWidget *parent)
               Qt::Tool | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint),
       _ui(new Ui::PythonPluginCreationDialog) {
   _ui->setupUi(this);
+#ifdef __APPLE__
+  _ui->pluginType->setMinimumContentsLength(10);
+#endif
 
   QDate currentDate = QDate::currentDate();
   _ui->date->setText(currentDate.toString("dd/MM/yyyy"));

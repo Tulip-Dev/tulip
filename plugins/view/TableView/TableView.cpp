@@ -152,6 +152,12 @@ void TableView::setupWidget() {
   QWidget *centralWidget = new QWidget();
   Perspective::setStyleSheet(centralWidget);
   _ui->setupUi(centralWidget);
+  #ifdef __APPLE__
+  _ui->eltTypeCombo->setMinimumContentsLength(7);
+  _ui->valueMatchCombo->setMinimumContentsLength(9);
+  _ui->columnMatchCombo->setMinimumContentsLength(9);
+  _ui->filteringPropertyCombo->setMinimumContentsLength(14)
+ #endif
   // fix display of QCheckBox and QRadioButton children
   tlpFixCBRBs(centralWidget);
 

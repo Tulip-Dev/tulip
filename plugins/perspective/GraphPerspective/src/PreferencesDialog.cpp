@@ -37,6 +37,8 @@ PreferencesDialog::PreferencesDialog(QWidget *parent)
   _ui->setupUi(this);
   tlpFixCBRBs(this);
 #ifdef __APPLE__
+  _ui->displayModeCombo->setMinimumContentsLength(6);
+  _ui->proxyType->setMinimumContentsLength(18);
   resize(width(), 455);
 #endif
   _ui->graphDefaultsTable->setItemDelegate(new tlp::TulipItemDelegate(_ui->graphDefaultsTable));

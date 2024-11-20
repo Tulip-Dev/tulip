@@ -139,6 +139,11 @@ void ViewToolTipAndUrlManager::manageToolTips() {
   QDialog ttDialog(_view->graphicsView()->viewport());
   Ui::ManageGraphEltTooltipDialog ui;
   ui.setupUi(&ttDialog);
+#ifdef __APPLE__
+  ui.imgPropCB->setMinimumContentsLength(21);
+  ui.urlPropCB->setMinimumContentsLength(21);
+#endif
+
   // configure ui
   bool tooltips = false;
   graph->getAttribute(TOOLTIPS_ENABLED, tooltips);

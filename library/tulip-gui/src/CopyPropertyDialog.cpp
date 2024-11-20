@@ -40,6 +40,10 @@ using namespace tlp;
 CopyPropertyDialog::CopyPropertyDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::CopyPropertyDialogData()), _graph(nullptr), _source(nullptr) {
   ui->setupUi(this);
+#ifdef __APPLE__
+  ui->localPropertiesComboBox->setMinimumContentsLength(21);
+  ui->inheritedPropertiesComboBox->setMinimumContentsLength(21);
+#endif
 
   ui->buttonBox->button(QDialogButtonBox::Ok)->setText("&Copy");
 

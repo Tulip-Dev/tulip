@@ -36,6 +36,11 @@ QString CSVParserConfigurationWidget::lastOpenedFile;
 CSVParserConfigurationWidget::CSVParserConfigurationWidget(QWidget *parent)
     : QWidget(parent), ui(new Ui::CSVParserConfigurationWidget) {
   ui->setupUi(this);
+#ifdef __APPLE__
+  ui->separatorComboBox->setMinimumContentsLength(7);
+  ui->textDelimiterComboBox->setMinimumContentsLength(3);
+  ui->decimalMarkComboBox->setMinimumContentsLength(3);
+#endif
   // Fill the encoding combo box
   fillEncodingComboBox();
   // Set the default encoding to UTF8

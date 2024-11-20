@@ -230,6 +230,12 @@ public:
 SearchWidget::SearchWidget(QWidget *parent)
     : QFrame(parent), _ui(new Ui::SearchWidget), _graph(nullptr) {
   _ui->setupUi(this);
+#ifdef __APPLE__
+  _ui->operatorCombo->setMinimumContentsLength(20);
+  _ui->searchTermACombo->setMinimumContentsLength(21);
+  _ui->searchTermBCombo->setMinimumContentsLength(21);
+  _ui->selectionModeCombo->setMinimumContentsLength(30);
+#endif
   // fix display of QCheckBox and QRadioButton children
   tlpFixCBRBs(this);
 
