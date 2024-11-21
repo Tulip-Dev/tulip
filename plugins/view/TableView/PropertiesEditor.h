@@ -67,7 +67,8 @@ public:
   void setPropertyChecked(const QString &pName, bool state);
   void setCaseSensitive(Qt::CaseSensitivity cs);
   QLineEdit *getPropertiesFilterEdit();
-  QPushButton *getPropertiesMatchButton();
+  QString getPropertiesMatchOp();
+  void setPropertiesMatchOp(QString);
   void toLabels(tlp::PropertyInterface *prop, bool nodes, bool edges, bool selectedOnly = false);
   bool setAllValues(tlp::PropertyInterface *prop, bool nodes, bool selectedOnly,
                     bool graphOnly = false);

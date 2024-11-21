@@ -183,25 +183,14 @@ void TableView::setupWidget() {
   minFontSize = _ui->table->font().pointSize();
   connect(_ui->filterEdit, SIGNAL(returnPressed()), this, SLOT(filterChanged()));
   connect(_ui->filtercase, SIGNAL(stateChanged(int)), this, SLOT(filterChanged()));
-
-  _ui->eltTypeCombo->addItem("Nodes");
-  _ui->eltTypeCombo->addItem("Edges");
-  _ui->eltTypeCombo->setCurrentIndex(0);
   connect(_ui->eltTypeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(readSettings()));
   connect(_ui->filteringPropertyCombo, SIGNAL(currentIndexChanged(int)), this,
           SLOT(readSettings()));
-  _ui->valueMatchCombo->addItem("matching");
-  _ui->valueMatchCombo->addItem("like");
-  _ui->valueMatchCombo->setCurrentIndex(0);
   connect(_ui->valueMatchCombo, SIGNAL(currentIndexChanged(int)), this,
           SLOT(clearValueMatchFilter()));
-  _ui->columnMatchCombo->addItem("matching");
-  _ui->columnMatchCombo->addItem("like");
-  _ui->columnMatchCombo->setCurrentIndex(0);
   connect(_ui->columnMatchCombo, SIGNAL(currentIndexChanged(int)), this,
           SLOT(clearColumnMatchFilter()));
-  // use a push button instead of a combobox (see matchPropertyCombo)
-  // waiting for a fix for combobox in QGraphicsItem
+  // use a push button to ensure just-in-time display of properties
   connect(_ui->matchPropertyButton, SIGNAL(pressed()), this, SLOT(setMatchProperty()));
   // columns/properties filtering
   filteringColumns = false;
@@ -454,8 +443,7 @@ void TableView::setColumnsFilter() {
     return;
 
   filteringColumns = true;
-  propertiesEditor->getPropertiesMatchButton()->setText(
-      _ui->columnMatchCombo->currentIndex() ? "like" : "matching");
+  propertiesEditor->setPropertiesMatchOp(_ui->columnMatchCombo->currentIndex() ? "like" : "matching");
   propertiesEditor->getPropertiesFilterEdit()->setText(_ui->columnsFilterEdit->text());
   filteringColumns = false;
 }
@@ -466,7 +454,7 @@ void TableView::setPropertiesFilter(const QString &text) {
 
   filteringColumns = true;
   _ui->columnMatchCombo->setCurrentIndex(
-      propertiesEditor->getPropertiesMatchButton()->text() == "matching" ? 0 : 1);
+      propertiesEditor->getPropertiesMatchOp() == "matching" ? 0 : 1);
   _ui->columnsFilterEdit->setText(text);
   filteringColumns = false;
 }

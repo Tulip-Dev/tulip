@@ -142,7 +142,7 @@ font-weight: bold; font-size: 22px; color: #A0A0A0A0</string>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <property name="spacing">
-         <number>0</number>
+         <number>3</number>
         </property>
         <item>
          <widget class="QLabel" name="propMatchLabel">
@@ -162,10 +162,20 @@ matches the given regular expression.</string>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="propMatchButton">
-          <property name="text">
-           <string>matching</string>
+         <widget class="QComboBox" name="propMatchCombo">
+          <property name="sizeAdjustPolicy">
+           <enum>QComboBox::SizeAdjustPolicy::AdjustToContentsOnFirstShow</enum>
           </property>
+          <item>
+           <property name="text">
+            <string>matching</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>like</string>
+           </property>
+          </item>
          </widget>
         </item>
         <item>

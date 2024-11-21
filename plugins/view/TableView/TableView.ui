@@ -173,9 +173,16 @@ font: bold; font-size: 22px; color: #A0A0A0A0</string>
              <property name="sizeAdjustPolicy">
               <enum>QComboBox::SizeAdjustPolicy::AdjustToContentsOnFirstShow</enum>
              </property>
-             <property name="frame">
-              <bool>true</bool>
-             </property>
+             <item>
+               <property name="text">
+                 <string>Nodes</string>
+               </property>
+             </item>
+             <item>
+               <property name="text">
+                 <string>Edges</string>
+               </property>
+             </item>
             </widget>
            </item>
            <item>
@@ -203,9 +210,6 @@ the chosen selection property value is 'true'</string>
              </property>
              <property name="sizeAdjustPolicy">
               <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
-             </property>
-             <property name="frame">
-              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -297,9 +301,16 @@ the chosen selection property value is 'true'</string>
              <property name="sizeAdjustPolicy">
               <enum>QComboBox::SizeAdjustPolicy::AdjustToContentsOnFirstShow</enum>
              </property>
-             <property name="minimumContentsLength">
-              <number>8</number>
-             </property>
+             <item>
+              <property name="text">
+               <string>matching</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>like</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item>
@@ -427,9 +438,16 @@ matches the given regular expression.</string>
 - 'matching' for a regular expressio
 - 'like' for a sql like pattern.</string>
              </property>
-             <property name="minimumContentsLength">
-              <number>8</number>
-             </property>
+             <item>
+              <property name="text">
+               <string>matching</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>like</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item>

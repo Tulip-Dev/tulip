@@ -50,10 +50,12 @@ PropertiesEditor::PropertiesEditor(QWidget *parent)
       editorParent(parent), _caseSensitiveSearch(Qt::CaseSensitive) {
   Perspective::setStyleSheet(this);
   _ui->setupUi(this);
+#ifdef __APPLE__
+  _ui->propMatchCombo->setMinimumContentsLength(9);
+#endif
+
   connect(_ui->newButton, SIGNAL(clicked()), this, SLOT(newProperty()));
-  // use a push button instead of a combobox
-  // waiting for a fix for combobox in QGraphicsItem
-  connect(_ui->propMatchButton, SIGNAL(pressed()), this, SLOT(setMatchProperty()));
+  connect(_ui->propMatchCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(setMatchProperty()));
 }
 
 PropertiesEditor::~PropertiesEditor() {
@@ -91,64 +93,24 @@ void PropertiesEditor::setGraph(tlp::Graph *g) {
 }
 
 void PropertiesEditor::setMatchProperty() {
-  QMenu menu;
-  QAction *action = menu.addAction("matching");
-  if (_ui->propMatchButton->text() == "matching")
-    menu.setActiveAction(action);
-  action = menu.addAction("like");
-  if (_ui->propMatchButton->text() == "like")
-    menu.setActiveAction(action);
-
-  QPalette palette = QComboBox().palette();
-
-  // set a combo like stylesheet
-  menu.setStyleSheet(QString("QMenu::item {border-image: none; border-width: 4; padding: 0px 6px; "
-                             "font-size: 12px; color: %1; background-color: %2;} "
-                             "QMenu::item:selected {color: %3; background-color: %4}")
-                         .arg(palette.color(QPalette::Active, QPalette::Text).name())
-                         .arg(palette.color(QPalette::Active, QPalette::Base).name())
-                         .arg(palette.color(QPalette::Active, QPalette::HighlightedText).name())
-                         .arg(palette.color(QPalette::Active, QPalette::Highlight).name()));
-
-  // compute a combo like position
-  // to popup the menu
-  QWidget *pViewport = QApplication::widgetAt(QCursor::pos());
-  QWidget *pView = pViewport->parentWidget();
-  QGraphicsView *pGraphicsView = static_cast<QGraphicsView *>(pView);
-  QGraphicsItem *pGraphicsItem =
-      pGraphicsView->items(pViewport->mapFromGlobal(QCursor::pos())).first();
-  QPoint popupPos = pGraphicsView->mapToGlobal(pGraphicsView->mapFromScene(
-      pGraphicsItem->mapToScene(static_cast<QGraphicsProxyWidget *>(pGraphicsItem)
-                                    ->subWidgetRect(_ui->propMatchButton)
-                                    .bottomLeft())));
-
-  action = menu.exec(popupPos);
-
-  if (action) {
-    if (action->text() != _ui->propMatchButton->text()) {
-      _ui->propMatchButton->setText(action->text());
-      _ui->propertiesFilterEdit->setText("");
-      QString tooltip;
-      if (_ui->propMatchButton->text() == "like") {
-        tooltip = QString(
-            "Only show the properties whose name\nis like the given pattern (sql like pattern).");
-        _ui->propertiesFilterEdit->setPlaceholderText("a sql like pattern");
-      } else {
-        tooltip =
-            QString("Only show the properties whose name\nmatches the given regular expression.");
-        _ui->propertiesFilterEdit->setPlaceholderText("a regular expression");
-      }
-      _ui->propMatchLabel->setToolTip(tooltip);
-      // tooltip += "\nPress 'Return' to validate.";
-      _ui->propertiesFilterEdit->setToolTip(tooltip);
-    }
+  _ui->propertiesFilterEdit->setText("");
+  QString tooltip;
+  if (_ui->propMatchCombo->currentText() == "like") {
+    tooltip = QString("Only show the properties whose name\nis like the given pattern (sql like pattern).");
+    _ui->propertiesFilterEdit->setPlaceholderText("a sql like pattern");
+  } else {
+    tooltip =
+      QString("Only show the properties whose name\nmatches the given regular expression.");
+    _ui->propertiesFilterEdit->setPlaceholderText("a regular expression");
   }
+  _ui->propMatchLabel->setToolTip(tooltip);
+  _ui->propertiesFilterEdit->setToolTip(tooltip);
 }
 
 void PropertiesEditor::setPropertiesFilter(QString filter) {
   filteringProperties = true;
 
-  if (_ui->propMatchButton->text() == "like")
+  if (_ui->propMatchCombo->currentText() == "like")
     // convert the sql like filter
     convertLikeFilter(filter);
 
@@ -163,8 +125,12 @@ QLineEdit *PropertiesEditor::getPropertiesFilterEdit() {
   return _ui->propertiesFilterEdit;
 }
 
-QPushButton *PropertiesEditor::getPropertiesMatchButton() {
-  return _ui->propMatchButton;
+QString PropertiesEditor::getPropertiesMatchOp() {
+  return _ui->propMatchCombo->currentText();
+}
+
+void PropertiesEditor::setPropertiesMatchOp(QString op) {
+  return _ui->propMatchCombo->setCurrentText(op);
 }
 
 void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
