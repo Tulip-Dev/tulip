@@ -443,7 +443,8 @@ void TableView::setColumnsFilter() {
     return;
 
   filteringColumns = true;
-  propertiesEditor->setPropertiesMatchOp(_ui->columnMatchCombo->currentIndex() ? "like" : "matching");
+  propertiesEditor->setPropertiesMatchOp(_ui->columnMatchCombo->currentIndex() ? "like"
+                                                                               : "matching");
   propertiesEditor->getPropertiesFilterEdit()->setText(_ui->columnsFilterEdit->text());
   filteringColumns = false;
 }

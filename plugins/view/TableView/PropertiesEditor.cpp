@@ -96,11 +96,11 @@ void PropertiesEditor::setMatchProperty() {
   _ui->propertiesFilterEdit->setText("");
   QString tooltip;
   if (_ui->propMatchCombo->currentText() == "like") {
-    tooltip = QString("Only show the properties whose name\nis like the given pattern (sql like pattern).");
+    tooltip = QString(
+        "Only show the properties whose name\nis like the given pattern (sql like pattern).");
     _ui->propertiesFilterEdit->setPlaceholderText("a sql like pattern");
   } else {
-    tooltip =
-      QString("Only show the properties whose name\nmatches the given regular expression.");
+    tooltip = QString("Only show the properties whose name\nmatches the given regular expression.");
     _ui->propertiesFilterEdit->setPlaceholderText("a regular expression");
   }
   _ui->propMatchLabel->setToolTip(tooltip);
