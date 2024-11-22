@@ -343,11 +343,11 @@ struct _pipCommand {
 };
 
 static std::vector<_pipCommand> pipCommands{
-    // install a package in the user directory
+    // install a package in the home directory
     {"install", "install', '--user", true, true, "installing"},
-    // list the package installed in the user directory
+    // list home directory installed packages
     {"list", "list', '--user", false, false, ""},
-    // list the installed packages
+    // list all installed packages
     {"list all", "list", false, false, ""},
     // show package info
     {"show", "show", true, false, ""},
@@ -453,18 +453,16 @@ PythonIDE::PythonIDE()
 #ifdef __APPLE__
   _pipCombo->setMinimumContentsLength(9);
 #endif
-  _pipCombo->setToolTip(
-      "Choose the pip command to execute:\n- install (a package in the user directory),\n- list (packages in the user directory),\n- list all (the installed packages),\n- show (information about a package)\n- uninstall (a package)\n- upgrade (a package).");
+  _pipCombo->setToolTip("Choose the pip command to execute:\n- install (a home directory package),\n- list (home directory packages only),\n- list all (installed packages),\n- show (package information)\n- uninstall (a package)\n- upgrade (a package).");
   pipLayout->addWidget(_pipCombo);
   _pipCombo->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-  for (auto pipCommand : pipCommands) {
-    _pipCombo->addItem(pipCommand.name);
-  }
   // add QLineEdit to give package name
   _pipPackage = new QLineEdit();
   _pipPackage->setPlaceholderText("package name");
-  _pipPackage->setToolTip(
-      "Type the package name and hit [Enter]\nto execute the choosen pip command.");
+  connect(_pipCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(pipCommandChanged(int)));
+  for (auto pipCommand : pipCommands) {
+    _pipCombo->addItem(pipCommand.name);
+  }
   connect(_pipPackage, &QLineEdit::returnPressed, [this] {
     this->executePipCommand(this->_pipCombo->currentIndex(), this->_pipPackage->text());
   });
@@ -1896,6 +1894,11 @@ void PythonIDE::closePluginTabRequested(int idx) {
       _ui->removePluginButton->setEnabled(false);
     }
   }
+}
+
+void PythonIDE::pipCommandChanged(int index) {
+  auto &command = pipCommands[index];
+  _pipPackage->setToolTip(QString(command.needPackage ? "Type the package name and hit [Enter]\nto execute the '%1' command." : "Hit [Enter] to execute the '%1' command.").arg(command.name));
 }
 
 void PythonIDE::loadScriptsAndModulesFromPythonScriptViewDataSet(const tlp::DataSet &dataSet) {

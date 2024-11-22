@@ -170,6 +170,7 @@ private slots:
   void closeModuleTabRequested(int index);
   void closeScriptTabRequested(int index);
   void closePluginTabRequested(int index);
+  void pipCommandChanged(int index);
 
   tlp::Graph *getSelectedGraph() const;
 };
