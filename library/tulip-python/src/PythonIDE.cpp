@@ -453,7 +453,8 @@ PythonIDE::PythonIDE()
 #ifdef __APPLE__
   _pipCombo->setMinimumContentsLength(9);
 #endif
-  _pipCombo->setToolTip("Choose the pip command to execute:\n- install (a home directory package),\n- list (home directory packages only),\n- list all (installed packages),\n- show (package information)\n- uninstall (a package)\n- upgrade (a package).");
+  _pipCombo->setToolTip(
+      "Choose the pip command to execute:\n- install (a home directory package),\n- list (home directory packages only),\n- list all (installed packages),\n- show (package information)\n- uninstall (a package)\n- upgrade (a package).");
   pipLayout->addWidget(_pipCombo);
   _pipCombo->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
   // add QLineEdit to give package name
@@ -1898,7 +1899,11 @@ void PythonIDE::closePluginTabRequested(int idx) {
 
 void PythonIDE::pipCommandChanged(int index) {
   auto &command = pipCommands[index];
-  _pipPackage->setToolTip(QString(command.needPackage ? "Type the package name and hit [Enter]\nto execute the '%1' command." : "Hit [Enter] to execute the '%1' command.").arg(command.name));
+  _pipPackage->setToolTip(
+      QString(command.needPackage
+                  ? "Type the package name and hit [Enter]\nto execute the '%1' command."
+                  : "Hit [Enter] to execute the '%1' command.")
+          .arg(command.name));
 }
 
 void PythonIDE::loadScriptsAndModulesFromPythonScriptViewDataSet(const tlp::DataSet &dataSet) {
