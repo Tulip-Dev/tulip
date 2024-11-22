@@ -71,9 +71,8 @@ ExportWizard::ExportWizard(Graph *g, const QString &exportFile, QWidget *parent)
 
   // Help button is used to display export plugin doc
   // as soon as an import plugin is selected
-  auto helpButton = button(QWizard::HelpButton);
-  helpButton->setVisible(false);
-  connect(helpButton, SIGNAL(clicked(bool)), this, SLOT(helpButtonClicked()));
+  button(QWizard::HelpButton)->setVisible(false);
+  connect(this, SIGNAL(helpRequested()), this, SLOT(helpButtonClicked()));
 
   _ui->pathEdit->setText(exportFile);
 }

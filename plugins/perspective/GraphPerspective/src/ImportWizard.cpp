@@ -65,7 +65,7 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
   // Help button is used to display import plugin doc
   // as soon as an import plugin is selected
   button(QWizard::HelpButton)->setVisible(false);
-  connect(button(QWizard::HelpButton), SIGNAL(clicked(bool)), this, SLOT(helpButtonClicked()));
+  connect(this, SIGNAL(helpRequested()), this, SLOT(helpButtonClicked()));
 
   _ui->parametersFrame->hide();
   QString importLabel("<html><head/><body><p align=\"justify\">Import a graph hierarchy into your "

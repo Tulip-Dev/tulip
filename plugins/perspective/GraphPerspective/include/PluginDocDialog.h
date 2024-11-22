@@ -33,6 +33,10 @@ public:
     ui->setupUi(this);
   }
 
+  ~PluginDocDialog() {
+    delete ui;
+  }
+
   static void showDoc(QWidget *parent, QString pluginName, QString pluginHelp,
                       tlp::ParameterListModel *model);
 };
