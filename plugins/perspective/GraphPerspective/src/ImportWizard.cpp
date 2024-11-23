@@ -54,10 +54,14 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
   _ui->importModules->setModel(model);
   _ui->importModules->setRootIndex(model->index(0, 0));
   _ui->importModules->expandAll();
-  connect(_ui->importModules->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(moduleSelected(const QModelIndex &)));
+  connect(_ui->importModules->selectionModel(),
+          SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), this,
+          SLOT(moduleSelected(const QModelIndex &)));
 
-  connect(_ui->importModules, SIGNAL(doubleClicked(const QModelIndex &)), button(QWizard::FinishButton), SLOT(click()));
-  connect(_ui->searchBox, SIGNAL(textChanged(const QString &)), this, SLOT(setFilter(const QString &)));
+  connect(_ui->importModules, SIGNAL(doubleClicked(const QModelIndex &)),
+          button(QWizard::FinishButton), SLOT(click()));
+  connect(_ui->searchBox, SIGNAL(textChanged(const QString &)), this,
+          SLOT(setFilter(const QString &)));
   // display OK instead of Finish
   setButtonText(QWizard::FinishButton, "OK");
   // Help button is used to display import plugin doc

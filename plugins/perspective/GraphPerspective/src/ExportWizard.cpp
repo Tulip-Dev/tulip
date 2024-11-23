@@ -58,9 +58,12 @@ ExportWizard::ExportWizard(Graph *g, const QString &exportFile, QWidget *parent)
   _ui->exportModules->setModel(model);
   _ui->exportModules->setRootIndex(model->index(0, 0));
   _ui->exportModules->expandAll();
-  connect(_ui->exportModules->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(algorithmSelected(const QModelIndex &)));
+  connect(_ui->exportModules->selectionModel(),
+          SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), this,
+          SLOT(algorithmSelected(const QModelIndex &)));
 
-  connect(_ui->exportModules, SIGNAL(doubleClicked(const QModelIndex &)), button(QWizard::FinishButton), SLOT(click()));
+  connect(_ui->exportModules, SIGNAL(doubleClicked(const QModelIndex &)),
+          button(QWizard::FinishButton), SLOT(click()));
 
   // display OK instead of Finish
   setButtonText(QWizard::FinishButton, "OK");
