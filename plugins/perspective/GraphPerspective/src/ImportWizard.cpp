@@ -54,12 +54,10 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
   _ui->importModules->setModel(model);
   _ui->importModules->setRootIndex(model->index(0, 0));
   _ui->importModules->expandAll();
-  connect(_ui->importModules->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-          this, SLOT(moduleSelected(QModelIndex)));
+  connect(_ui->importModules->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(moduleSelected(const QModelIndex &)));
 
-  connect(_ui->importModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton),
-          SLOT(click()));
-  connect(_ui->searchBox, SIGNAL(textChanged(QString)), this, SLOT(setFilter(QString)));
+  connect(_ui->importModules, SIGNAL(doubleClicked(const QModelIndex &)), button(QWizard::FinishButton), SLOT(click()));
+  connect(_ui->searchBox, SIGNAL(textChanged(const QString &)), this, SLOT(setFilter(const QString &)));
   // display OK instead of Finish
   setButtonText(QWizard::FinishButton, "OK");
   // Help button is used to display import plugin doc
@@ -131,7 +129,6 @@ void ImportWizard::moduleSelected(const QModelIndex &index) {
   QString parametersText("<b>Parameters</b>");
 
   if (!isGroup && PluginLister::pluginExists(algs)) {
-    _index = &index;
     parametersText += "&nbsp;<font size=-2>[" + alg + "]</font>";
     setButtonText(QWizard::HelpButton, QString("%1 documentation").arg(alg));
     button(QWizard::HelpButton)->setVisible(true);
@@ -173,15 +170,16 @@ tlp::DataSet ImportWizard::parameters() const {
 void ImportWizard::helpButtonClicked() {
   // display current import plugin documentation
   ParameterListModel *model = static_cast<ParameterListModel *>(_ui->parameters->model());
-  PluginDocDialog::showDoc(parentWidget(), _index->data().toString(),
-                           _index->data(Qt::ToolTipRole).toString(), model);
+  auto index = _ui->importModules->selectionModel()->currentIndex();
+  PluginDocDialog::showDoc(parentWidget(), index.data().toString(),
+                           index.data(Qt::ToolTipRole).toString(), model);
 }
 
 void ImportWizard::updateFinishButton() {
   button(QWizard::FinishButton)->setEnabled(_ui->parameters->model() != nullptr);
 }
 
-void ImportWizard::setFilter(QString filter) {
+void ImportWizard::setFilter(const QString &filter) {
   auto model = _ui->importModules->model();
   // root is the "Import" item (non visible)
   auto root = model->index(0, 1);

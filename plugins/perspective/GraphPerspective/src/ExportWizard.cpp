@@ -58,11 +58,9 @@ ExportWizard::ExportWizard(Graph *g, const QString &exportFile, QWidget *parent)
   _ui->exportModules->setModel(model);
   _ui->exportModules->setRootIndex(model->index(0, 0));
   _ui->exportModules->expandAll();
-  connect(_ui->exportModules->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-          this, SLOT(algorithmSelected(QModelIndex)));
+  connect(_ui->exportModules->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(algorithmSelected(const QModelIndex &)));
 
-  connect(_ui->exportModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton),
-          SLOT(click()));
+  connect(_ui->exportModules, SIGNAL(doubleClicked(const QModelIndex &)), button(QWizard::FinishButton), SLOT(click()));
 
   // display OK instead of Finish
   setButtonText(QWizard::FinishButton, "OK");
@@ -88,7 +86,6 @@ void ExportWizard::algorithmSelected(const QModelIndex &index) {
   _ui->parametersFrame->setVisible(!alg.isEmpty());
 
   if (PluginLister::pluginExists(algs)) {
-    _index = &index;
     setButtonText(QWizard::HelpButton, QString("%1 documentation").arg(alg));
     button(QWizard::HelpButton)->setVisible(true);
     QAbstractItemModel *oldModel = _ui->parameters->model();
@@ -211,8 +208,9 @@ void ExportWizard::browseButtonClicked() {
 void ExportWizard::helpButtonClicked() {
   // display current import plugin documentation
   ParameterListModel *model = static_cast<ParameterListModel *>(_ui->parameters->model());
-  PluginDocDialog::showDoc(parentWidget(), _index->data().toString(),
-                           _index->data(Qt::ToolTipRole).toString(), model);
+  auto index = _ui->exportModules->selectionModel()->currentIndex();
+  PluginDocDialog::showDoc(parentWidget(), index.data().toString(),
+                           index.data(Qt::ToolTipRole).toString(), model);
 }
 
 bool ExportWizard::validateCurrentPage() {

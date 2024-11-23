@@ -35,7 +35,6 @@ class ImportWizard : public QWizard {
   Q_OBJECT
 
   Ui::ImportWizard *_ui;
-  QModelIndex const *_index;
 
 public:
   explicit ImportWizard(QWidget *parent = nullptr);
@@ -49,7 +48,7 @@ protected slots:
   void moduleSelected(const QModelIndex &index);
   void helpButtonClicked();
   void updateFinishButton();
-  void setFilter(QString filter);
+  void setFilter(const QString &filter);
 };
 
 #endif // IMPORTWIZARD_H
