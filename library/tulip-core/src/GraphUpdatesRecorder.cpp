@@ -185,8 +185,7 @@ void GraphUpdatesRecorder::deleteDeletedObjects() {
 }
 
 // clean up all the MutableContainers
-void GraphUpdatesRecorder::deleteValues(
-    tlp_hash_map<PropertyInterface *, RecordedValues> &values) {
+void GraphUpdatesRecorder::deleteValues(tlp_hash_map<PropertyInterface *, RecordedValues> &values) {
   for (auto &itv : values) {
     delete itv.second.values;
 
@@ -210,9 +209,8 @@ void GraphUpdatesRecorder::deleteDefaultValues(
   values.clear();
 }
 
-void GraphUpdatesRecorder::recordEdgeContainer(
-    tlp_hash_map<node, std::vector<edge>> &containers, GraphImpl *g, node n, edge e,
-    bool loop) {
+void GraphUpdatesRecorder::recordEdgeContainer(tlp_hash_map<node, std::vector<edge>> &containers,
+                                               GraphImpl *g, node n, edge e, bool loop) {
   if (containers.find(n) == containers.end()) {
     auto itAdj = containers.emplace(n, g->storage.adj(n)).first;
     // if we got a valid edge, this means that we must record
@@ -228,9 +226,9 @@ void GraphUpdatesRecorder::recordEdgeContainer(
   }
 }
 
-void GraphUpdatesRecorder::recordEdgeContainer(
-    tlp_hash_map<node, std::vector<edge>> &containers, GraphImpl *g, node n,
-    const vector<edge> &gEdges, unsigned int nbAdded) {
+void GraphUpdatesRecorder::recordEdgeContainer(tlp_hash_map<node, std::vector<edge>> &containers,
+                                               GraphImpl *g, node n, const vector<edge> &gEdges,
+                                               unsigned int nbAdded) {
   if (containers.find(n) == containers.end()) {
     auto &adj = containers.emplace(n, g->storage.adj(n)).first->second;
     // we must ensure that the last edges added in gEdges
@@ -746,8 +744,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
 
   // loop on edgesToAdd
   std::map<Graph *, unordered_set<edge>> &edgesToAdd = undo ? graphDeletedEdges : graphAddedEdges;
-  tlp_hash_map<edge, std::pair<node, node>> &edgesEnds =
-      undo ? deletedEdgesEnds : addedEdgesEnds;
+  tlp_hash_map<edge, std::pair<node, node>> &edgesEnds = undo ? deletedEdgesEnds : addedEdgesEnds;
 
   for (auto itge = edgesToAdd.begin(); itge != edgesToAdd.end(); ++itge) {
     Graph *g = itge->first;

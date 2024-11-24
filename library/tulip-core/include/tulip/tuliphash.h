@@ -28,7 +28,7 @@
  */
 // we tried to find a high-performance alternative to std::unordered_map
 // with the same api and an easy integration into Tulip.
-// see 
+// see
 // https://martin.ankerl.com/2022/08/27/hashmap-bench-01/
 // https://jacksonallan.github.io/c_cpp_hash_tables_benchmark/
 #include <tulip/unordered_dense.h>

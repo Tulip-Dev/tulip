@@ -89,8 +89,7 @@ public:
   }
 };
 
-tlp_hash_map<std::string, GlGraphInputData::PropertyName>
-    GlGraphInputData::_propertiesNameMap;
+tlp_hash_map<std::string, GlGraphInputData::PropertyName> GlGraphInputData::_propertiesNameMap;
 
 void GlGraphInputData::reloadGraphProperties() {
   if (_propertiesNameMap.empty()) {

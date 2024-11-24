@@ -434,8 +434,7 @@ CSVImportColumnToGraphPropertyMappingProxy::generateApproximateProperty(const st
 PropertyInterface *
 CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int column,
                                                                  const string &) {
-  tlp_hash_map<unsigned int, PropertyInterface *>::iterator it =
-      propertiesBuffer.find(column);
+  tlp_hash_map<unsigned int, PropertyInterface *>::iterator it = propertiesBuffer.find(column);
 
   // No properties
   if (it == propertiesBuffer.end()) {

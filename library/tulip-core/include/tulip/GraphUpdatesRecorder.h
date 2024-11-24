@@ -147,8 +147,7 @@ class GraphUpdatesRecorder : public Observable {
   void recordEdgeContainer(tlp_hash_map<node, std::vector<edge>> &, GraphImpl *, node,
                            const std::vector<edge> &, unsigned int);
   // remove an edge from a node's edges container
-  void removeFromEdgeContainer(tlp_hash_map<node, std::vector<edge>> &containers, edge e,
-                               node n);
+  void removeFromEdgeContainer(tlp_hash_map<node, std::vector<edge>> &containers, edge e, node n);
 
   void removeGraphData(Graph *);
 

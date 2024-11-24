@@ -243,8 +243,8 @@ public:
     }
 
     // restore previous calculators
-    tlp_hash_map<PropertyInterface *, PropertyInterface::MetaValueCalculator *>::iterator
-        itC = prevCalcs.begin();
+    tlp_hash_map<PropertyInterface *, PropertyInterface::MetaValueCalculator *>::iterator itC =
+        prevCalcs.begin();
 
     while (itC != prevCalcs.end()) {
       if (dynamic_cast<DoubleProperty *>((*itC).first)) {

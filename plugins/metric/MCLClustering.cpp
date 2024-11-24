@@ -116,8 +116,7 @@ void MCLClustering::power(node n) {
     }
   }
 
-  for (tlp_hash_map<node, double>::iterator it = newTargets.begin(); it != newTargets.end();
-       ++it) {
+  for (tlp_hash_map<node, double>::iterator it = newTargets.begin(); it != newTargets.end(); ++it) {
     edge ne;
     ne = g.addEdge(n, it->first);
     inW[ne] = 0.;

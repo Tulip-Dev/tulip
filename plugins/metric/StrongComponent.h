@@ -47,8 +47,8 @@ public:
 
 private:
   unsigned curComponent, curTS;
-  void findSCC(tlp::node, tlp_hash_map<tlp::node, bool> &,
-               tlp_hash_map<tlp::node, unsigned> &, std::stack<tlp::node> &);
+  void findSCC(tlp::node, tlp_hash_map<tlp::node, bool> &, tlp_hash_map<tlp::node, unsigned> &,
+               std::stack<tlp::node> &);
   void findDE(tlp::node, std::vector<tlp::edge> &, tlp_hash_map<tlp::node, unsigned int> &,
               tlp_hash_map<tlp::node, unsigned int> &);
 };

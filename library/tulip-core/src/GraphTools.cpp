@@ -90,8 +90,8 @@ EdgesIteratorFn getEdgesIterator(EDGE_TYPE direction) {
 }
 
 //======================================================================
-void makeProperDag(Graph *graph, list<node> &addedNodes,
-                   tlp_hash_map<edge, edge> &replacedEdges, IntegerProperty *edgeLength) {
+void makeProperDag(Graph *graph, list<node> &addedNodes, tlp_hash_map<edge, edge> &replacedEdges,
+                   IntegerProperty *edgeLength) {
   if (TreeTest::isTree(graph))
     return;
 
@@ -784,9 +784,8 @@ bool selectShortestPaths(const Graph *const graph, node src, node tgt, ShortestP
   return dijkstra.searchPaths(tgt, result);
 }
 
-void markReachableNodes(const Graph *graph, const node startNode,
-                        tlp_hash_map<node, bool> &result, unsigned int maxDistance,
-                        EDGE_TYPE direction) {
+void markReachableNodes(const Graph *graph, const node startNode, tlp_hash_map<node, bool> &result,
+                        unsigned int maxDistance, EDGE_TYPE direction) {
   deque<node> fifo;
   MutableContainer<bool> visited;
   MutableContainer<unsigned int> distance;

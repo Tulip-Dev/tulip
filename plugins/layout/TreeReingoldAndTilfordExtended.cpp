@@ -281,8 +281,7 @@ list<LR> *TreeReingoldAndTilfordExtended::TreePlace(tlp::node n,
 }
 //=============================================================================
 void TreeReingoldAndTilfordExtended::TreeLevelSizing(tlp::node n,
-                                                     tlp_hash_map<int, double> &maxSize,
-                                                     int level,
+                                                     tlp_hash_map<int, double> &maxSize, int level,
                                                      tlp_hash_map<tlp::node, int> &levels) {
   levels[n] = level;
 
@@ -305,9 +304,8 @@ void TreeReingoldAndTilfordExtended::TreeLevelSizing(tlp::node n,
   }
 }
 //=============================================================================
-void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n,
-                                                tlp_hash_map<tlp::node, double> *p, double x,
-                                                double y, int level,
+void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, tlp_hash_map<tlp::node, double> *p,
+                                                double x, double y, int level,
                                                 tlp_hash_map<int, double> &maxLevelSize) {
   Coord tmpCoord;
 
