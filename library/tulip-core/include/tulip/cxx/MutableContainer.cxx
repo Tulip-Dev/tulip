@@ -51,7 +51,7 @@ tlp::MutableContainer<TYPE>::~MutableContainer() {
 
     if (StoredType<TYPE>::isPointer) {
       // delete stored values
-      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator
+      typename tlp_hash_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator
           it = hData->begin();
 
       while (it != hData->end()) {
@@ -103,7 +103,7 @@ void tlp::MutableContainer<TYPE>::setAll(typename StoredType<TYPE>::ReturnedCons
 
     if (StoredType<TYPE>::isPointer) {
       // delete stored values
-      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator
+      typename tlp_hash_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator
           it = hData->begin();
 
       while (it != hData->end()) {
@@ -237,7 +237,7 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i,
       return;
 
     case HASH: {
-      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+      typename tlp_hash_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
           hData->find(i);
 
       if (it != hData->end()) {
@@ -265,7 +265,7 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i,
       return;
 
     case HASH: {
-      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+      typename tlp_hash_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
           hData->find(i);
 
       if (it != hData->end()) {
@@ -321,7 +321,7 @@ void tlp::MutableContainer<TYPE>::add(const unsigned int i, TYPE val) {
     }
 
     case HASH: {
-      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+      typename tlp_hash_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
           hData->find(i);
 
       if (it != hData->end()) {
@@ -365,7 +365,7 @@ tlp::MutableContainer<TYPE>::get(const unsigned int i) const {
       return StoredType<TYPE>::get((*vData)[i - minIndex]);
 
   case HASH: {
-    typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+    typename tlp_hash_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
         hData->find(i);
 
     if (it != hData->end())
@@ -402,7 +402,7 @@ void tlp::MutableContainer<TYPE>::invertBooleanValue(const unsigned int i) {
     }
 
     case HASH: {
-      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+      typename tlp_hash_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
           hData->find(i);
 
       if (it != hData->end()) {
@@ -471,7 +471,7 @@ tlp::MutableContainer<TYPE>::get(const unsigned int i, bool &notDefault) const {
     }
 
   case HASH: {
-    typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+    typename tlp_hash_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
         hData->find(i);
 
     if (it != hData->end()) {
@@ -498,7 +498,7 @@ unsigned int tlp::MutableContainer<TYPE>::numberOfNonDefaultValues() const {
 //===================================================================
 template <typename TYPE>
 void tlp::MutableContainer<TYPE>::vecttohash() {
-  hData = new std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>(elementInserted);
+  hData = new tlp_hash_map<unsigned int, typename StoredType<TYPE>::Value>(elementInserted);
 
   unsigned int newMaxIndex = 0;
   unsigned int newMinIndex = UINT_MAX;
@@ -527,7 +527,7 @@ void tlp::MutableContainer<TYPE>::hashtovect() {
   maxIndex = UINT_MAX;
   elementInserted = 0;
   state = VECT;
-  typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it;
+  typename tlp_hash_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it;
 
   for (it = hData->begin(); it != hData->end(); ++it) {
     if (it->second != defaultValue)

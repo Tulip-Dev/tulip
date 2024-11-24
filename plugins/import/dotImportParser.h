@@ -113,7 +113,7 @@ void yyerror(char const *) {}
 extern char *yytext;
 // extern int yylen;
 
-typedef std::unordered_map<std::string, node> NodeMap;
+typedef tlp_hash_map<std::string, node> NodeMap;
 typedef std::vector<node> NodeA;
 typedef std::vector<edge> EdgeA;
 

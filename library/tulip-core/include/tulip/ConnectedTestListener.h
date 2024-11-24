@@ -21,7 +21,7 @@
 #ifndef TEST_LISTENER
 #define TEST_LISTENER
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <tulip/Observable.h>
 
@@ -37,7 +37,7 @@ public:
   /**
    * @brief Stored results for graphs. When a graph is updated, its entry is removed from the map.
    **/
-  std::unordered_map<const Graph *, bool> resultsBuffer;
+  tlp_hash_map<const Graph *, bool> resultsBuffer;
 };
 
 } // namespace tlp

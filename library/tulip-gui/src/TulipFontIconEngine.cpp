@@ -25,12 +25,12 @@
 #include <QFontMetrics>
 #include <QPainter>
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <unordered_set>
 
 using namespace tlp;
 
-std::unordered_map<std::string, QFont> qFonts;
+tlp_hash_map<std::string, QFont> qFonts;
 std::unordered_set<std::string> unknownIcons;
 QFont nullFont;
 

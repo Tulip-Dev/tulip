@@ -46,7 +46,7 @@
 #include <tulip/TulipException.h>
 #endif
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 using namespace std;
 namespace tlp {
@@ -509,7 +509,7 @@ void tesselateFontIcon(const std::string &fontFile, unsigned int iconCodePoint,
   vector<unsigned short> indices;
   vector<unsigned short> outlineIndices;
 
-  unordered_map<Coord, unsigned int> vertexIdx;
+  tlp_hash_map<Coord, unsigned int> vertexIdx;
 
   unsigned int idx = 0;
 

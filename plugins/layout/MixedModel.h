@@ -22,7 +22,7 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/PlanarConMap.h>
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 /** \addtogroup layout */
 
@@ -81,25 +81,25 @@ private:
 
   tlp::PlanarConMap *carte;
   std::vector<std::vector<tlp::node>> V;
-  std::unordered_map<tlp::node, tlp::Coord> NodeCoords;
+  tlp_hash_map<tlp::node, tlp::Coord> NodeCoords;
 
-  std::unordered_map<tlp::node, int> outl;
-  std::unordered_map<tlp::node, int> outr;
-  std::unordered_map<tlp::node, int> inl;
-  std::unordered_map<tlp::node, int> inr;
+  tlp_hash_map<tlp::node, int> outl;
+  tlp_hash_map<tlp::node, int> outr;
+  tlp_hash_map<tlp::node, int> inl;
+  tlp_hash_map<tlp::node, int> inr;
 
-  std::unordered_map<tlp::node, unsigned int> rank;
-  std::unordered_map<tlp::node, std::vector<tlp::edge>> EdgesIN;
-  std::unordered_map<tlp::node, std::vector<tlp::edge>> EdgesOUT;
+  tlp_hash_map<tlp::node, unsigned int> rank;
+  tlp_hash_map<tlp::node, std::vector<tlp::edge>> EdgesIN;
+  tlp_hash_map<tlp::node, std::vector<tlp::edge>> EdgesOUT;
 
-  std::unordered_map<tlp::edge, std::vector<tlp::Coord>> InPoints;
-  std::unordered_map<tlp::edge, tlp::Coord> OutPoints;
+  tlp_hash_map<tlp::edge, std::vector<tlp::Coord>> InPoints;
+  tlp_hash_map<tlp::edge, tlp::Coord> OutPoints;
 
   tlp::Graph *Pere;
   tlp::PlanarConMap *graphMap;
   tlp::Graph *currentGraph;
   std::vector<tlp::edge> dummy;
-  std::unordered_map<tlp::node, std::vector<tlp::Coord>> out_points;
+  tlp_hash_map<tlp::node, std::vector<tlp::Coord>> out_points;
   tlp::MutableContainer<tlp::Coord> nodeSize;
   std::vector<tlp::edge> unplanar_edges;
   bool planar;

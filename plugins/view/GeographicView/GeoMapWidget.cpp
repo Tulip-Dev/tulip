@@ -316,7 +316,7 @@ std::pair<double, double> GeoMapWidget::getMapNorthEast() {
 
 void GeoMapWidget::setMapBounds(
     tlp::Graph *graph,
-    const std::unordered_map<tlp::node, std::pair<double, double>> &nodesLatLngs) {
+    const tlp_hash_map<tlp::node, std::pair<double, double>> &nodesLatLngs) {
 
   if (!nodesLatLngs.empty()) {
 

@@ -291,7 +291,7 @@ bool EdgeBundling::run() {
       Graph *workGraph = graph->addCloneSubGraph();
       // we use a hash map to ease the retrieve of the vector of the nodes
       // having the same position
-      std::unordered_map<std::string, std::pair<node, unsigned int>> clusters;
+      tlp_hash_map<std::string, std::pair<node, unsigned int>> clusters;
 
       // iterate on graph nodes
       for (auto n : graph->nodes()) {
@@ -302,7 +302,7 @@ bool EdgeBundling::run() {
         // instead of relying on the x, y exact values
         std::string key = tlp::PointType::toString(coord);
 
-        std::unordered_map<std::string, std::pair<node, unsigned int>>::iterator it =
+        tlp_hash_map<std::string, std::pair<node, unsigned int>>::iterator it =
             clusters.find(key);
 
         if (it == clusters.end())

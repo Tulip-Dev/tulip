@@ -25,7 +25,7 @@
 #include <set>
 #include <string>
 #include <vector>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <climits>
 #include <tulip/tulipconf.h>
@@ -1771,7 +1771,7 @@ protected:
   }
 
   unsigned int id;
-  std::unordered_map<std::string, tlp::PropertyInterface *> circularCalls;
+  tlp_hash_map<std::string, tlp::PropertyInterface *> circularCalls;
   ///@endcond
 };
 

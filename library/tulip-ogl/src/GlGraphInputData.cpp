@@ -89,7 +89,7 @@ public:
   }
 };
 
-std::unordered_map<std::string, GlGraphInputData::PropertyName>
+tlp_hash_map<std::string, GlGraphInputData::PropertyName>
     GlGraphInputData::_propertiesNameMap;
 
 void GlGraphInputData::reloadGraphProperties() {

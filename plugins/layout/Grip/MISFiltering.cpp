@@ -89,7 +89,7 @@ void MISFiltering::computeFiltering() {
 //========================================
 void MISFiltering::bfsDepth(node n, unsigned int depth) {
   vector<node> nextNodes;
-  std::unordered_map<node, unsigned int> nodeDepth;
+  tlp_hash_map<node, unsigned int> nodeDepth;
   MutableContainer<bool> inNext;
   inNext.setAll(false);
   inNext.set(n.id, true);
@@ -191,7 +191,7 @@ void MISFiltering::getNearest(node n, vector<node> &neighbors, vector<unsigned i
   vector<node> nextNodes;
   MutableContainer<bool> alreadyTreated;
   MutableContainer<bool> toTreat;
-  std::unordered_map<node, unsigned int> nodeDepth;
+  tlp_hash_map<node, unsigned int> nodeDepth;
   bool found = false;
   unsigned nbFound = 0;
 

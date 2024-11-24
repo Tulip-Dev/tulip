@@ -248,7 +248,7 @@ public:
   enum TypeOfData { DL_FM, DL_UH, DL_LH, DL_NL1, DL_NL2, DL_NL1B, DL_EL1, DL_EL2, DL_BM };
   // indicates the current format for the data to be read
   TypeOfData dataFormat;
-  std::unordered_map<std::string, node> labelToNode, colLabelToNode, rowLabelToNode;
+  tlp_hash_map<std::string, node> labelToNode, colLabelToNode, rowLabelToNode;
 
   bool readHeader(string &str, stringstream &error) {
     string token;
@@ -629,7 +629,7 @@ public:
   }
 
   bool readLabels(const string &str, stringstream &error,
-                  std::unordered_map<std::string, node> &labelsHMap, unsigned int nbLabels,
+                  tlp_hash_map<std::string, node> &labelsHMap, unsigned int nbLabels,
                   unsigned int offset, const vector<node> &nodes) {
     vector<std::string> labels;
     StringProperty *label = graph->getProperty<StringProperty>("viewLabel");
@@ -694,7 +694,7 @@ public:
               static_cast<int (*)(int)>(std::toupper));
 
     if (n /*embedding == DL_ALL*/) { // 1-mode
-      std::unordered_map<std::string, node>::iterator it = labelToNode.find(upcasetoken);
+      tlp_hash_map<std::string, node>::iterator it = labelToNode.find(upcasetoken);
 
       if (it != labelToNode.end())
         return (*it).second;
@@ -709,7 +709,7 @@ public:
     }
 
     if (findCol) {
-      std::unordered_map<std::string, node>::iterator it = colLabelToNode.find(upcasetoken);
+      tlp_hash_map<std::string, node>::iterator it = colLabelToNode.find(upcasetoken);
 
       if (it != colLabelToNode.end())
         return (*it).second;
@@ -722,7 +722,7 @@ public:
       graph->getProperty<StringProperty>("viewLabel")->setNodeValue(nodes[i - 1], token);
       return colLabelToNode[upcasetoken] = nodes[i - 1];
     } else {
-      std::unordered_map<std::string, node>::iterator it = rowLabelToNode.find(upcasetoken);
+      tlp_hash_map<std::string, node>::iterator it = rowLabelToNode.find(upcasetoken);
 
       if (it != rowLabelToNode.end())
         return (*it).second;

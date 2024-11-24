@@ -30,7 +30,7 @@ namespace tlp {
 
 bool OpenGlConfigManager::_glewIsInit = false;
 bool OpenGlConfigManager::_antialiased = true;
-std::unordered_map<std::string, bool> OpenGlConfigManager::_checkedExtensions;
+tlp_hash_map<std::string, bool> OpenGlConfigManager::_checkedExtensions;
 
 void OpenGlConfigManager::initExtensions() {
   if (!_glewIsInit) {

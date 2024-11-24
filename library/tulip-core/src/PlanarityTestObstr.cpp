@@ -50,7 +50,7 @@ bool PlanarityTestImpl::listEdgesUpwardT0(node n1, node n2) {
  */
 void PlanarityTestImpl::extractBoundaryCycle(Graph *sG, node cNode, list<edge> &listEdges) {
   assert(embedList[cNode].size() > 0);
-  unordered_map<node, list<edge>> el;
+  tlp_hash_map<node, list<edge>> el;
   BmdListIt<edge> it(embedList[cNode]);
 
   while (it.hasNext()) {

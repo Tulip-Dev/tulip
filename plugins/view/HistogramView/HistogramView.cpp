@@ -251,7 +251,7 @@ void HistogramView::setState(const DataSet &dataSet) {
     histoOptionsWidget->setBackgroundColor(backgroundColor);
   }
 
-  unordered_map<string, DataSet> histogramParametersMap;
+  tlp_hash_map<string, DataSet> histogramParametersMap;
   DataSet histogramParameters;
   int i = 0;
   stringstream ss;

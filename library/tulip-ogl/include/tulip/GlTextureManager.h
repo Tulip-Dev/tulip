@@ -28,7 +28,7 @@
 #include <tulip/OpenGlIncludes.h>
 
 #include <set>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <string>
 
 namespace tlp {
@@ -64,7 +64,7 @@ public:
  */
 class TLP_GL_SCOPE GlTextureManager {
 
-  typedef std::unordered_map<std::string, GlTexture> TextureMap;
+  typedef tlp_hash_map<std::string, GlTexture> TextureMap;
 
 public:
   /**

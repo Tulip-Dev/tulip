@@ -22,7 +22,7 @@
 #define INTERACTORCONFIGWIDGET_H
 
 #include <QDialog>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 namespace Ui {
 class InteractorConfigWidget;
@@ -39,7 +39,7 @@ class InteractorConfigWidget : public QDialog {
   Ui::InteractorConfigWidget *_ui;
   Interactor *_interactor;
   // current index registration per interactor
-  std::unordered_map<std::string, int> lastIndex;
+  tlp_hash_map<std::string, int> lastIndex;
 
 public:
   explicit InteractorConfigWidget(QWidget *parent = nullptr);

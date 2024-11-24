@@ -17,7 +17,7 @@
  *
  */
 #include <list>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <tulip/GlyphManager.h>
 #include <tulip/Glyph.h>
@@ -28,8 +28,8 @@ using namespace std;
 
 namespace tlp {
 static std::list<std::string> glyphList;
-static std::unordered_map<int, std::string> glyphIdToName;
-static std::unordered_map<std::string, int> nameToGlyphId;
+static tlp_hash_map<int, std::string> glyphIdToName;
+static tlp_hash_map<std::string, int> nameToGlyphId;
 
 //====================================================
 string GlyphManager::glyphName(int id) {

@@ -160,7 +160,7 @@ void GraphUpdatesRecorder::treatEvent(const Event &ev) {
 // delete the objects collected as to be deleted
 void GraphUpdatesRecorder::deleteDeletedObjects() {
 
-  std::unordered_map<Graph *, set<PropertyInterface *>> &propertiesToDelete =
+  tlp_hash_map<Graph *, set<PropertyInterface *>> &propertiesToDelete =
       updatesReverted ? addedProperties : deletedProperties;
 
   std::list<std::pair<Graph *, Graph *>> &subGraphsToDelete =
@@ -186,7 +186,7 @@ void GraphUpdatesRecorder::deleteDeletedObjects() {
 
 // clean up all the MutableContainers
 void GraphUpdatesRecorder::deleteValues(
-    std::unordered_map<PropertyInterface *, RecordedValues> &values) {
+    tlp_hash_map<PropertyInterface *, RecordedValues> &values) {
   for (auto &itv : values) {
     delete itv.second.values;
 
@@ -200,9 +200,9 @@ void GraphUpdatesRecorder::deleteValues(
   values.clear();
 }
 
-// delete all the DataMem referenced by a std::unordered_map
+// delete all the DataMem referenced by a tlp_hash_map
 void GraphUpdatesRecorder::deleteDefaultValues(
-    std::unordered_map<PropertyInterface *, DataMem *> &values) {
+    tlp_hash_map<PropertyInterface *, DataMem *> &values) {
   for (auto &itv : values) {
     delete itv.second;
   }
@@ -211,7 +211,7 @@ void GraphUpdatesRecorder::deleteDefaultValues(
 }
 
 void GraphUpdatesRecorder::recordEdgeContainer(
-    std::unordered_map<node, std::vector<edge>> &containers, GraphImpl *g, node n, edge e,
+    tlp_hash_map<node, std::vector<edge>> &containers, GraphImpl *g, node n, edge e,
     bool loop) {
   if (containers.find(n) == containers.end()) {
     auto itAdj = containers.emplace(n, g->storage.adj(n)).first;
@@ -229,7 +229,7 @@ void GraphUpdatesRecorder::recordEdgeContainer(
 }
 
 void GraphUpdatesRecorder::recordEdgeContainer(
-    std::unordered_map<node, std::vector<edge>> &containers, GraphImpl *g, node n,
+    tlp_hash_map<node, std::vector<edge>> &containers, GraphImpl *g, node n,
     const vector<edge> &gEdges, unsigned int nbAdded) {
   if (containers.find(n) == containers.end()) {
     auto &adj = containers.emplace(n, g->storage.adj(n)).first->second;
@@ -260,7 +260,7 @@ void GraphUpdatesRecorder::recordEdgeContainer(
 }
 
 void GraphUpdatesRecorder::removeFromEdgeContainer(
-    std::unordered_map<node, std::vector<edge>> &containers, edge e, node n) {
+    tlp_hash_map<node, std::vector<edge>> &containers, edge e, node n) {
   const auto itAdj = containers.find(n);
 
   if (itAdj != containers.end()) {
@@ -616,7 +616,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
 
   Observable::holdObservers();
   // loop on propsToDel
-  std::unordered_map<Graph *, set<PropertyInterface *>> &propsToDel =
+  tlp_hash_map<Graph *, set<PropertyInterface *>> &propsToDel =
       undo ? addedProperties : deletedProperties;
 
   for (const auto &itpg : propsToDel) {
@@ -668,7 +668,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   }
 
   // loop on nodesToDel
-  std::unordered_map<Graph *, std::unordered_set<node>> &nodesToDel =
+  tlp_hash_map<Graph *, std::unordered_set<node>> &nodesToDel =
       undo ? graphAddedNodes : graphDeletedNodes;
 
   for (const auto &itgn : nodesToDel) {
@@ -702,7 +702,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   }
 
   // loop on nodesToAdd
-  std::unordered_map<Graph *, unordered_set<node>> &nodesToAdd =
+  tlp_hash_map<Graph *, unordered_set<node>> &nodesToAdd =
       undo ? graphDeletedNodes : graphAddedNodes;
 
   for (const auto &itgn : nodesToAdd) {
@@ -727,8 +727,8 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   }
 
   // loop on edgesEnds
-  std::unordered_map<edge, pair<node, node>> &updatedEdgesEnds = undo ? oldEdgesEnds : newEdgesEnds;
-  std::unordered_map<edge, pair<node, node>>::const_iterator itee = updatedEdgesEnds.begin();
+  tlp_hash_map<edge, pair<node, node>> &updatedEdgesEnds = undo ? oldEdgesEnds : newEdgesEnds;
+  tlp_hash_map<edge, pair<node, node>>::const_iterator itee = updatedEdgesEnds.begin();
 
   while (itee != updatedEdgesEnds.end()) {
     g->setEnds(itee->first, itee->second.first, itee->second.second);
@@ -736,7 +736,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   }
 
   // loop on containers
-  std::unordered_map<node, std::vector<edge>> &containers = undo ? oldContainers : newContainers;
+  tlp_hash_map<node, std::vector<edge>> &containers = undo ? oldContainers : newContainers;
   for (auto itc = containers.begin(); itc != containers.end(); ++itc) {
     node n(itc->first);
     // n may have been deleted as a previously added node
@@ -746,7 +746,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
 
   // loop on edgesToAdd
   std::map<Graph *, unordered_set<edge>> &edgesToAdd = undo ? graphDeletedEdges : graphAddedEdges;
-  std::unordered_map<edge, std::pair<node, node>> &edgesEnds =
+  tlp_hash_map<edge, std::pair<node, node>> &edgesEnds =
       undo ? deletedEdgesEnds : addedEdgesEnds;
 
   for (auto itge = edgesToAdd.begin(); itge != edgesToAdd.end(); ++itge) {
@@ -767,7 +767,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   }
 
   // loop on propsToAdd
-  std::unordered_map<Graph *, set<PropertyInterface *>> &propsToAdd =
+  tlp_hash_map<Graph *, set<PropertyInterface *>> &propsToAdd =
       undo ? deletedProperties : addedProperties;
 
   for (const auto &itpg : propsToAdd) {
@@ -790,7 +790,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   }
 
   // loop on nodeDefaultValues
-  std::unordered_map<PropertyInterface *, DataMem *> &nodeDefaultValues =
+  tlp_hash_map<PropertyInterface *, DataMem *> &nodeDefaultValues =
       undo ? oldNodeDefaultValues : newNodeDefaultValues;
 
   for (const auto &itdv : nodeDefaultValues) {
@@ -799,7 +799,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   }
 
   // loop on edgeDefaultValues
-  std::unordered_map<PropertyInterface *, DataMem *> &edgeDefaultValues =
+  tlp_hash_map<PropertyInterface *, DataMem *> &edgeDefaultValues =
       undo ? oldEdgeDefaultValues : newEdgeDefaultValues;
 
   for (const auto &itdv : edgeDefaultValues) {
@@ -808,7 +808,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   }
 
   // loop on recorded values
-  std::unordered_map<PropertyInterface *, RecordedValues> &rvalues = undo ? oldValues : newValues;
+  tlp_hash_map<PropertyInterface *, RecordedValues> &rvalues = undo ? oldValues : newValues;
 
   for (const auto &itrv : rvalues) {
     PropertyInterface *prop = itrv.first;
@@ -832,7 +832,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   }
 
   // loop on attribute values to restore
-  std::unordered_map<Graph *, DataSet> &attValues = undo ? oldAttributeValues : newAttributeValues;
+  tlp_hash_map<Graph *, DataSet> &attValues = undo ? oldAttributeValues : newAttributeValues;
 
   for (const auto &itav : attValues) {
     Graph *g = itav.first;

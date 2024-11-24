@@ -309,7 +309,7 @@ bool CSVTableWidget::end(unsigned int, unsigned int) {
   return true;
 }
 
-static std::unordered_map<std::string, std::set<std::string>> typenameToProps;
+static tlp_hash_map<std::string, std::set<std::string>> typenameToProps;
 
 CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent)
     : QWidget(parent), ui(new Ui::CSVImportConfigurationWidget),

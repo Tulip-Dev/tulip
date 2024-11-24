@@ -212,7 +212,7 @@ public:
     DoubleProperty::StandardMetaValueCalculator edgeFn =
         static_cast<DoubleProperty::StandardMetaValueCalculator>(edgeFunctions.getCurrent());
     QuotientLabelCalculator viewLabelCalc(metaLabel, useSubGraphName);
-    std::unordered_map<PropertyInterface *, PropertyInterface::MetaValueCalculator *> prevCalcs;
+    tlp_hash_map<PropertyInterface *, PropertyInterface::MetaValueCalculator *> prevCalcs;
     for (const string &pName : quotientGraph->getProperties()) {
       PropertyInterface *prop = quotientGraph->getProperty(pName);
 
@@ -243,7 +243,7 @@ public:
     }
 
     // restore previous calculators
-    std::unordered_map<PropertyInterface *, PropertyInterface::MetaValueCalculator *>::iterator
+    tlp_hash_map<PropertyInterface *, PropertyInterface::MetaValueCalculator *>::iterator
         itC = prevCalcs.begin();
 
     while (itC != prevCalcs.end()) {

@@ -484,7 +484,7 @@ protected:
   std::set<PropertyInterface *> _properties, _invisibleProperties;
 
   PropertyInterface *_propertiesMap[NB_PROPS];
-  static std::unordered_map<std::string, PropertyName> _propertiesNameMap;
+  static tlp_hash_map<std::string, PropertyName> _propertiesNameMap;
 
   GlMetaNodeRenderer *_metaNodeRenderer;
   GlVertexArrayManager *_glVertexArrayManager;

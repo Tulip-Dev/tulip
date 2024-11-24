@@ -19,7 +19,7 @@
 
 #ifndef QUADTREE_H
 #define QUADTREE_H
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <vector>
 #include <tulip/Graph.h>
 #include <tulip/Vector.h>
@@ -46,7 +46,7 @@ private:
   tlp::Graph *graph;
   double splitRatio;
   typedef tlp::Vec2d Vec2D;
-  typedef std::unordered_map<Vec2D, tlp::node> MapVecNode;
+  typedef tlp_hash_map<Vec2D, tlp::node> MapVecNode;
   MapVecNode mapN;
   //=====================================
   tlp::node splitEdge(tlp::node a, tlp::node b);

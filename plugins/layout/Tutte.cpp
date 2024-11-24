@@ -17,7 +17,7 @@
  *
  */
 #include <set>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <tulip/TriconnectedTest.h>
 #include "Tutte.h"
 
@@ -31,8 +31,8 @@ Tutte::Tutte(const tlp::PluginContext *context) : LayoutAlgorithm(context) {}
 Tutte::~Tutte() {}
 //====================================================
 list<node> findCycle(Graph *sg) {
-  std::unordered_map<node, node> father;
-  std::unordered_map<node, bool> visited;
+  tlp_hash_map<node, node> father;
+  tlp_hash_map<node, bool> visited;
   std::list<node> bfs;
   node startNode = sg->getOneNode();
   unsigned int maxDeg = sg->deg(startNode);

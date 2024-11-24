@@ -19,7 +19,7 @@
 #include <cmath>
 #include <cfloat>
 #include <forward_list>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <tulip/LayoutProperty.h>
 
@@ -91,7 +91,7 @@ tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(const Grap
 template <>
 void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(
     tlp::edge e, const tlp::LineType::RealType &newValue) {
-  std::unordered_map<unsigned int, std::pair<tlp::Coord, tlp::Coord>>::const_iterator it =
+  tlp_hash_map<unsigned int, std::pair<tlp::Coord, tlp::Coord>>::const_iterator it =
       minMaxNode.begin();
 
   const std::vector<Coord> &oldV = this->getEdgeValue(e);

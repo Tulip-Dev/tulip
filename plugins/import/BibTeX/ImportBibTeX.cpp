@@ -1468,8 +1468,8 @@ public:
         ->setAllNodeValue(LabelPosition::Bottom);
     graph->getProperty<IntegerProperty>("viewShape")->setAllNodeValue(tlp::NodeShape::Icon);
 
-    std::unordered_map<std::string, node> authorsMap;
-    std::unordered_map<std::string, bool> publisMap;
+    tlp_hash_map<std::string, node> authorsMap;
+    tlp_hash_map<std::string, bool> publisMap;
 
     bool result = true;
 
@@ -1975,7 +1975,7 @@ public:
 
               node author;
               // check if the author already exists
-              std::unordered_map<std::string, node>::const_iterator itAuth = authorsMap.find(aKey);
+              tlp_hash_map<std::string, node>::const_iterator itAuth = authorsMap.find(aKey);
 
               if (itAuth != authorsMap.end()) {
                 authorNodes.push_back(author = itAuth->second);

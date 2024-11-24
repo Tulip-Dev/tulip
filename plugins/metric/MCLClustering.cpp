@@ -83,7 +83,7 @@ const double epsilon = 1E-9;
 
 //=================================================
 void MCLClustering::power(node n) {
-  std::unordered_map<node, double> newTargets;
+  tlp_hash_map<node, double> newTargets;
 
   for (auto &adjn : g.adj(n)) {
     if (!adjn.isOut())
@@ -103,7 +103,7 @@ void MCLClustering::power(node n) {
           if (ne.isValid())
             outW[ne] += v2;
           else {
-            std::unordered_map<node, double>::iterator it = newTargets.find(tgt);
+            tlp_hash_map<node, double>::iterator it = newTargets.find(tgt);
 
             if (it != newTargets.end())
               // newTargets[tgt] += v2;
@@ -116,7 +116,7 @@ void MCLClustering::power(node n) {
     }
   }
 
-  for (std::unordered_map<node, double>::iterator it = newTargets.begin(); it != newTargets.end();
+  for (tlp_hash_map<node, double>::iterator it = newTargets.begin(); it != newTargets.end();
        ++it) {
     edge ne;
     ne = g.addEdge(n, it->first);

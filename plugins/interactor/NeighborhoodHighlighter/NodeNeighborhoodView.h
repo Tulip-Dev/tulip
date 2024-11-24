@@ -20,7 +20,7 @@
 #ifndef REACHABLESUBGRAPHVIEW_H_
 #define REACHABLESUBGRAPHVIEW_H_
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <tulip/GraphDecorator.h>
 
 namespace tlp {
@@ -85,8 +85,8 @@ private:
   std::vector<node> graphViewNodes;
   std::vector<edge> graphViewEdges;
 
-  std::unordered_map<unsigned int, std::vector<node>> nodesAtDist;
-  std::unordered_map<unsigned int, std::vector<edge>> edgesAtDist;
+  tlp_hash_map<unsigned int, std::vector<node>> nodesAtDist;
+  tlp_hash_map<unsigned int, std::vector<edge>> edgesAtDist;
 
   NeighborNodesType neighborsType;
   unsigned int currentDist;

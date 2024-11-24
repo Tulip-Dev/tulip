@@ -102,7 +102,7 @@ bool ReachableSubGraphSelection::run() {
     Iterator<node> *itN = (result == startNodes) ? stableIterator(startNodes->getNodesEqualTo(true))
                                                  : startNodes->getNodesEqualTo(true);
 
-    std::unordered_map<node, bool> reachables;
+    tlp_hash_map<node, bool> reachables;
 
     result->setAllEdgeValue(false);
     result->setAllNodeValue(false);

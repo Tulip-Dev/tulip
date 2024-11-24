@@ -180,7 +180,7 @@ void HierarchicalGraph::DagLevelSpanningTree(tlp::Graph *sg, tlp::DoubleProperty
 //==============================================================================================================
 void HierarchicalGraph::computeEdgeBends(
     const tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout,
-    const std::unordered_map<tlp::edge, tlp::edge> &replacedEdges,
+    const tlp_hash_map<tlp::edge, tlp::edge> &replacedEdges,
     const std::vector<tlp::edge> &reversedEdges) {
   MutableContainer<bool> isReversed;
   isReversed.setAll(false);
@@ -307,7 +307,7 @@ bool HierarchicalGraph::run() {
 
   //========================================================================
   list<node> properAddedNodes;
-  std::unordered_map<edge, edge> replacedEdges;
+  tlp_hash_map<edge, edge> replacedEdges;
   IntegerProperty *edgeLength = nullptr;
 
   if (!TreeTest::isTree(mySGraph)) {

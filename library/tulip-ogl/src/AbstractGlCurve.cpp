@@ -469,20 +469,20 @@ static string curveFragmentShaderSrc =
 
 // clang-format on
 
-unordered_map<unsigned int, GLfloat *> AbstractGlCurve::curveVertexBuffersData;
-unordered_map<unsigned int, vector<GLushort *>> AbstractGlCurve::curveVertexBuffersIndices;
-unordered_map<unsigned int, GLuint *> AbstractGlCurve::curveVertexBuffersObject;
-unordered_map<string, GlShaderProgram *> AbstractGlCurve::curvesShadersMap;
-unordered_map<string, GlShaderProgram *> AbstractGlCurve::curvesBillboardShadersMap;
+tlp_hash_map<unsigned int, GLfloat *> AbstractGlCurve::curveVertexBuffersData;
+tlp_hash_map<unsigned int, vector<GLushort *>> AbstractGlCurve::curveVertexBuffersIndices;
+tlp_hash_map<unsigned int, GLuint *> AbstractGlCurve::curveVertexBuffersObject;
+tlp_hash_map<string, GlShaderProgram *> AbstractGlCurve::curvesShadersMap;
+tlp_hash_map<string, GlShaderProgram *> AbstractGlCurve::curvesBillboardShadersMap;
 GlShader *AbstractGlCurve::fisheyeDistortionVertexShader(nullptr);
 GlShader *AbstractGlCurve::curveVertexShaderNormalMain(nullptr);
 GlShader *AbstractGlCurve::curveVertexShaderBillboardMain(nullptr);
 GlShader *AbstractGlCurve::curveFragmentShader(nullptr);
 bool AbstractGlCurve::canUseGeometryShader = false;
-std::unordered_map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *>>
+tlp_hash_map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *>>
     AbstractGlCurve::curvesGeometryShadersMap;
 GlShader *AbstractGlCurve::curveVertexGeometryShaderNormalMain(nullptr);
-std::unordered_map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *>>
+tlp_hash_map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *>>
     AbstractGlCurve::curvesBillboardGeometryShadersMap;
 
 AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName,

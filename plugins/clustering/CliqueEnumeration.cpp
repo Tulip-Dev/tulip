@@ -24,7 +24,7 @@
 #include <sstream>
 #include <algorithm>
 #include <iterator>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 PLUGIN(CliqueEnumeration)
 
@@ -135,7 +135,7 @@ struct LessDegreeOrdering {
 void CliqueEnumeration::getDegenerateOrdering(vector<node> &ordering) {
   ordering.clear();
   tlp::Graph *sub = graph->addCloneSubGraph();
-  std::unordered_map<tlp::node, DegreeOrderingElem *> degrees;
+  tlp_hash_map<tlp::node, DegreeOrderingElem *> degrees;
   set<DegreeOrderingElem *, LessDegreeOrdering> sortednodes;
   for (auto n : sub->nodes()) {
     DegreeOrderingElem *elem = new DegreeOrderingElem(n, sub->deg(n));

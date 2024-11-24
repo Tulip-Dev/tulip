@@ -35,8 +35,8 @@ struct dfsFindSCCStruct {
 
 // dfs from n and its out neighbours
 // to find strongly connected components (used in directed case)
-void StrongComponent::findSCC(tlp::node n, std::unordered_map<tlp::node, bool> &finished,
-                              std::unordered_map<tlp::node, unsigned> &minTS,
+void StrongComponent::findSCC(tlp::node n, tlp_hash_map<tlp::node, bool> &finished,
+                              tlp_hash_map<tlp::node, unsigned> &minTS,
                               std::stack<tlp::node> &renum) {
   minTS[n] = curTS;
   renum.push(n);
@@ -113,8 +113,8 @@ struct dfsFindDEStruct {
 // dfs from n and its inout neighbours
 // to find the disconnecting edges (used in undirected case)
 void StrongComponent::findDE(tlp::node n, std::vector<tlp::edge> &de,
-                             std::unordered_map<tlp::node, unsigned int> &visitedTS,
-                             std::unordered_map<tlp::node, unsigned int> &minVisitedTS) {
+                             tlp_hash_map<tlp::node, unsigned int> &visitedTS,
+                             tlp_hash_map<tlp::node, unsigned int> &minVisitedTS) {
   // initialize n visitedTS and minVisitedTS
   // with the current time stamp
   visitedTS[n] = minVisitedTS[n] = curTS++;
@@ -190,10 +190,10 @@ bool StrongComponent::run() {
   if (directed) {
     // Tarjan algorithm
     // indicates if the dfs from a node has been done
-    std::unordered_map<node, bool> finished(graph->numberOfNodes());
+    tlp_hash_map<node, bool> finished(graph->numberOfNodes());
     // indicates the minimum time stamp encountered along the
     // dfs from a node
-    std::unordered_map<node, unsigned> minTS(graph->numberOfNodes());
+    tlp_hash_map<node, unsigned> minTS(graph->numberOfNodes());
     // record the nodes encountered along the dfs
     stack<node> renum;
 
@@ -206,17 +206,17 @@ bool StrongComponent::run() {
     std::vector<edge> de;
     {
       // records the time stamp when a node is first visited
-      std::unordered_map<tlp::node, unsigned int> visitedTS(graph->numberOfNodes());
+      tlp_hash_map<tlp::node, unsigned int> visitedTS(graph->numberOfNodes());
       // indicates the minimum time stamp encountered along the
       // dfs from a node
-      std::unordered_map<tlp::node, unsigned int> minVisitedTS(graph->numberOfNodes());
+      tlp_hash_map<tlp::node, unsigned int> minVisitedTS(graph->numberOfNodes());
       for (auto n : graph->nodes()) {
         if (visitedTS[n] == 0)
           findDE(n, de, visitedTS, minVisitedTS);
       }
     }
     if (!de.empty()) {
-      std::unordered_map<tlp::edge, bool> visited(graph->numberOfEdges());
+      tlp_hash_map<tlp::edge, bool> visited(graph->numberOfEdges());
       curComponent = 1;
       // mark disconnecting edges
       // as already visited

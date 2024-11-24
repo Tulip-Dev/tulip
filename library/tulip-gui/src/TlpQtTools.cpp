@@ -26,7 +26,7 @@
 #include <tulip/TlpQtTools.h>
 
 #include <iostream>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <QColorDialog>
 #include <QMetaEnum>
@@ -66,8 +66,8 @@ using namespace tlp;
 /**
  * Init property type to property label conversion map
  **/
-static unordered_map<string, QString> &buildPropertyTypeToPropertyTypeLabelMap() {
-  static unordered_map<string, QString> propertyTypeToPropertyTypeLabel;
+static tlp_hash_map<string, QString> &buildPropertyTypeToPropertyTypeLabelMap() {
+  static tlp_hash_map<string, QString> propertyTypeToPropertyTypeLabel;
   propertyTypeToPropertyTypeLabel[BooleanProperty::propertyTypename] = QString("Boolean");
   propertyTypeToPropertyTypeLabel[ColorProperty::propertyTypename] = QString("Color");
   propertyTypeToPropertyTypeLabel[DoubleProperty::propertyTypename] = QString("Double");
@@ -89,7 +89,7 @@ static unordered_map<string, QString> &buildPropertyTypeToPropertyTypeLabelMap()
 }
 
 // Property type to property label conversion map
-static const unordered_map<string, QString> &propertyTypeToPropertyTypeLabelMap =
+static const tlp_hash_map<string, QString> &propertyTypeToPropertyTypeLabelMap =
     buildPropertyTypeToPropertyTypeLabelMap();
 /**
  * Init property type label to property type conversion map

@@ -21,7 +21,7 @@
 #ifndef CSVGRAPHIMPORT_H
 #define CSVGRAPHIMPORT_H
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <tulip/CSVContentHandler.h>
 #include <tulip/Graph.h>
@@ -223,7 +223,7 @@ protected:
   virtual unsigned int buildIndexForRow(unsigned int row, const std::vector<std::string> &keys) = 0;
 
 protected:
-  std::unordered_map<std::string, unsigned int> valueToId;
+  tlp_hash_map<std::string, unsigned int> valueToId;
   tlp::Graph *graph;
   tlp::ElementType type;
   std::vector<unsigned int> columnIds;
@@ -324,8 +324,8 @@ public:
 
 private:
   tlp::Graph *graph;
-  std::unordered_map<std::string, unsigned int> srcValueToId;
-  std::unordered_map<std::string, unsigned int> tgtValueToId;
+  tlp_hash_map<std::string, unsigned int> srcValueToId;
+  tlp_hash_map<std::string, unsigned int> tgtValueToId;
   std::vector<unsigned int> srcColumnIds;
   std::vector<unsigned int> tgtColumnIds;
   std::vector<tlp::PropertyInterface *> srcProperties;
@@ -373,7 +373,7 @@ public:
 private:
   tlp::Graph *graph;
   CSVImportParameters importParameters;
-  std::unordered_map<unsigned int, tlp::PropertyInterface *> propertiesBuffer;
+  tlp_hash_map<unsigned int, tlp::PropertyInterface *> propertiesBuffer;
   QMessageBox::StandardButton overwritePropertiesButton;
   QWidget *parent;
   PropertyInterface *generateApproximateProperty(const std::string &name, const std::string &type);

@@ -23,22 +23,16 @@
 
 /**
  * @brief This file defines what class is used to provide a hashmap.
- * The TLP_HASH_MAP macro defines which implementation is used for hash maps.
- * The TLP_HASH_SET macro defines which implementation is used for hash sets.
+ * The tlp_hash_map macro defines which implementation is used for hash maps.
  *
- * TLP_BEGIN_HASH_NAMESPACE is defined to open the namespace in which the hash classes are defined,
- * to define new hashes (e.g. for Edge).
- * TLP_END_HASH_NAMESPACE is defined to close the namespace
- * TLP_HASH_NAMESPACE allows to use a specific hasher class when declaring a hash set or a hash map.
  */
-
-#include <unordered_map>
-#include <unordered_set>
-#define TLP_HASH_MAP std::unordered_map
-#define TLP_HASH_SET std::unordered_set
-#define TLP_HASH_NAMESPACE std
-#define TLP_BEGIN_HASH_NAMESPACE namespace std
-#define TLP_END_HASH_NAMESPACE
+// we tried to find a high-performance alternative to std::unordered_map
+// with the same api and an easy integration into Tulip.
+// see 
+// https://martin.ankerl.com/2022/08/27/hashmap-bench-01/
+// https://jacksonallan.github.io/c_cpp_hash_tables_benchmark/
+#include <tulip/unordered_dense.h>
+#define tlp_hash_map ankerl::unordered_dense::map
 
 // needed because the definition of tlp_hash_combine template
 // has been moved into TlpTools.h

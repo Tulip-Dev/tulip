@@ -282,7 +282,7 @@ void View::applySettings() {}
 // define a class to save/restore the View state associated
 // to a graph
 class ViewStatesMap : public tlp::Observable {
-  std::unordered_map<std::string, std::unordered_map<Graph *, DataSet>> mMap;
+  tlp_hash_map<std::string, tlp_hash_map<Graph *, DataSet>> mMap;
 
 public:
   void saveState(const std::string &viewName, Graph *graph, const DataSet &ds) {

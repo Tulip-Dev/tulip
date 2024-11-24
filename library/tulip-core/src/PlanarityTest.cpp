@@ -34,7 +34,7 @@ public:
   /**
    * @brief Stored results for graphs. When a graph is updated, its entry is removed from the map.
    **/
-  std::unordered_map<const Graph *, bool> resultsBuffer;
+  tlp_hash_map<const Graph *, bool> resultsBuffer;
 };
 
 void PlanarityTestListener::treatEvent(const Event &evt) {

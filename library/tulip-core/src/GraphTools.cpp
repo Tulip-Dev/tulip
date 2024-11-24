@@ -20,7 +20,7 @@
 #include <algorithm>
 #include <stack>
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <tulip/GraphTools.h>
 #include <tulip/GraphMeasure.h>
 #ifndef NDEBUG
@@ -91,7 +91,7 @@ EdgesIteratorFn getEdgesIterator(EDGE_TYPE direction) {
 
 //======================================================================
 void makeProperDag(Graph *graph, list<node> &addedNodes,
-                   std::unordered_map<edge, edge> &replacedEdges, IntegerProperty *edgeLength) {
+                   tlp_hash_map<edge, edge> &replacedEdges, IntegerProperty *edgeLength) {
   if (TreeTest::isTree(graph))
     return;
 
@@ -136,7 +136,7 @@ void makeProperDag(Graph *graph, list<node> &addedNodes,
     }
   }
 
-  for (std::unordered_map<edge, edge>::const_iterator it = replacedEdges.begin();
+  for (tlp_hash_map<edge, edge>::const_iterator it = replacedEdges.begin();
        it != replacedEdges.end(); ++it)
     graph->delEdge((*it).first);
 
@@ -785,7 +785,7 @@ bool selectShortestPaths(const Graph *const graph, node src, node tgt, ShortestP
 }
 
 void markReachableNodes(const Graph *graph, const node startNode,
-                        std::unordered_map<node, bool> &result, unsigned int maxDistance,
+                        tlp_hash_map<node, bool> &result, unsigned int maxDistance,
                         EDGE_TYPE direction) {
   deque<node> fifo;
   MutableContainer<bool> visited;
@@ -818,7 +818,7 @@ void markReachableNodes(const Graph *graph, const node startNode,
 
 void computeDijkstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
                      NodeStaticProperty<double> &nodeDistance, EDGE_TYPE direction,
-                     unordered_map<node, std::list<node>> &ancestors, std::stack<node> *queueNodes,
+                     tlp_hash_map<node, std::list<node>> &ancestors, std::stack<node> *queueNodes,
                      MutableContainer<int> *numberOfPaths) {
   Dijkstra dijkstra(graph, src, weights, nodeDistance, direction, queueNodes, numberOfPaths);
   dijkstra.ancestors(ancestors);

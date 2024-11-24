@@ -20,8 +20,8 @@
 #ifndef _TULIPREFLECT
 #define _TULIPREFLECT
 
-#include <unordered_map>
 #include <tulip/tulipconf.h>
+#include <tulip/tuliphash.h>
 #include <tulip/StlIterator.h>
 
 #include <string>
@@ -170,15 +170,15 @@ class DataTypeSerializerContainer {
 
 public:
   ~DataTypeSerializerContainer() {
-    std::unordered_map<std::string, DataTypeSerializer *>::iterator it = tnTodts.begin();
+    tlp_hash_map<std::string, DataTypeSerializer *>::iterator it = tnTodts.begin();
 
     for (; it != tnTodts.end(); ++it) {
       delete it->second;
     }
   }
 
-  std::unordered_map<std::string, DataTypeSerializer *> tnTodts;
-  std::unordered_map<std::string, DataTypeSerializer *> otnTodts;
+  tlp_hash_map<std::string, DataTypeSerializer *> tnTodts;
+  tlp_hash_map<std::string, DataTypeSerializer *> otnTodts;
 };
 ///@endcond
 

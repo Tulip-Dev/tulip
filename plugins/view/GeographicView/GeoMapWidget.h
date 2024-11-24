@@ -33,7 +33,7 @@
 #include <QRectF>
 
 #include <set>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <utility>
 
 #include <tulip/Coord.h>
@@ -123,7 +123,7 @@ public:
   // set the map visible region to the one enclosing the given nodes
   // and geo coordinates
   void setMapBounds(tlp::Graph *graph,
-                    const std::unordered_map<tlp::node, std::pair<double, double>> &nodesLatLngs);
+                    const tlp_hash_map<tlp::node, std::pair<double, double>> &nodesLatLngs);
 
   // set the map visible region to the one enclosing
   // the south west and north east given points

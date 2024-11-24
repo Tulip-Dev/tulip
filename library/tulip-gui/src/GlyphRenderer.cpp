@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
@@ -36,7 +36,7 @@ using namespace tlp;
 using namespace std;
 
 #define ALL_GLYPHS -1
-static std::unordered_map<int, QPixmap> nodePreviews;
+static tlp_hash_map<int, QPixmap> nodePreviews;
 static QPixmap renderNodeGlyph(int glyphId, int dim) {
   // Init graph parameters.
   GlGraphRenderingParameters parameters;
@@ -100,7 +100,7 @@ QPixmap GlyphRenderer::render(QString glyphName, int dim) {
   return render(GlyphManager::glyphId(QStringToTlpString(glyphName)), dim);
 }
 
-static std::unordered_map<int, QPixmap> eePreviews;
+static tlp_hash_map<int, QPixmap> eePreviews;
 static QPixmap renderEEGlyph(int glyphId, int dim) {
   QPixmap pxmp;
   eePreviews[EdgeExtremityShape::None] = pxmp;

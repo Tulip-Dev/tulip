@@ -835,7 +835,7 @@ void MixedModel::computeCoords() {
     nodeSize.set(n.id, c);
   }
 
-  unordered_map<node, node> father; // permet de connaître le noeud de référence
+  tlp_hash_map<node, node> father; // permet de connaître le noeud de référence
   assert(!V.empty());
 
   vector<node> C; // chemin courant

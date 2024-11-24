@@ -867,7 +867,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
     int nbNodesProcessed = 0;
 
     pair<double, double> latLng;
-    unordered_map<string, pair<double, double>> addressesLatLngMap;
+    tlp_hash_map<string, pair<double, double>> addressesLatLngMap;
 
     NominatimGeocoder nominatimGeocoder;
 
@@ -1062,6 +1062,7 @@ void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {
 
   // update scene items position
   if (noLayoutMsgBox) {
+    std::cout << "w = " << noLayoutMsgBox->width() << ", h = " << noLayoutMsgBox->height() << std::endl;
     noLayoutMsgBox->move(width() / 2 - noLayoutMsgBox->width() / 2,
                          height() / 2 - noLayoutMsgBox->height() / 2);
   }

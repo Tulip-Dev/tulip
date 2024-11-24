@@ -107,7 +107,7 @@ private:
 
   int gridStepSize;
 
-  std::unordered_map<tlp::Vec2i, bool> pointsSet;
+  tlp_hash_map<tlp::Vec2i, bool> pointsSet;
 
   tlp::IntegerProperty *shape;
 };

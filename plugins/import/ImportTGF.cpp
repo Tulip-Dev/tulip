@@ -119,7 +119,7 @@ public:
       pluginProgress->showPreview(false);
 
     tlp::StringProperty *labels = graph->getProperty<StringProperty>("viewLabel");
-    std::unordered_map<unsigned int, tlp::node> nodes;
+    tlp_hash_map<unsigned int, tlp::node> nodes;
     vector<std::string> tokens;
     std::string line;
     bool ok = true, inNodes = true;

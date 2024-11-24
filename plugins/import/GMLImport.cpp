@@ -18,7 +18,7 @@
  */
 
 #include <fstream>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <tulip/TulipPluginHeaders.h>
 
@@ -53,7 +53,7 @@ void edgeAttributeError() {
 //=================================================================================
 struct GMLGraphBuilder : public GMLTrue {
   Graph *_graph;
-  unordered_map<int, node> nodeIndex;
+  tlp_hash_map<int, node> nodeIndex;
   ~GMLGraphBuilder() override {}
   GMLGraphBuilder(Graph *graph) : _graph(graph) {}
   bool addNode(int id) {

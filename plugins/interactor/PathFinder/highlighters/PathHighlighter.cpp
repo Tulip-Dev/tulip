@@ -53,7 +53,7 @@ void PathHighlighter::clear() {
   if (backupScene) {
     GlLayer *layer = getWorkingLayer(backupScene);
 
-    for (unordered_map<string, bool>::iterator it = entities.begin(); it != entities.end(); ++it) {
+    for (tlp_hash_map<string, bool>::iterator it = entities.begin(); it != entities.end(); ++it) {
       string entityName(it->first);
       GlSimpleEntity *entity(layer->findGlEntity(entityName));
 

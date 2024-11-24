@@ -18,7 +18,7 @@
  */
 
 #include <algorithm>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <map>
 
 #include <tulip/Delaunay.h>
@@ -483,7 +483,7 @@ bool tlp::voronoiDiagram(vector<Coord> &sites, VoronoiDiagram &voronoiDiagram) {
   // now compute the dual voronoi diagram
   if (ret) {
     // Iterate over each delaunay simplex
-    std::unordered_map<Face, unsigned int> faceToCircumCenter;
+    tlp_hash_map<Face, unsigned int> faceToCircumCenter;
     map<Coord, unsigned int> circumCenterToIdx;
     tlp::Coord A(0), B(0), C(0), D(0);
 
@@ -558,7 +558,7 @@ bool tlp::voronoiDiagram(vector<Coord> &sites, VoronoiDiagram &voronoiDiagram) {
         face4 = Face(simplices[i][0], simplices[i][1], simplices[i][3]);
       }
 
-      std::unordered_map<Face, unsigned int>::const_iterator it = faceToCircumCenter.find(face1);
+      tlp_hash_map<Face, unsigned int>::const_iterator it = faceToCircumCenter.find(face1);
 
       if (it != faceToCircumCenter.end()) {
         VoronoiDiagram::Edge edge = make_pair(circumCenterIdx, faceToCircumCenter[face1]);

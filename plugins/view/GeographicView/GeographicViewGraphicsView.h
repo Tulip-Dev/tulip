@@ -20,7 +20,7 @@
 #ifndef GEOGRAPHIC_VIEW_GRAPHICSVIEW_H
 #define GEOGRAPHIC_VIEW_GRAPHICSVIEW_H
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include "AddressSelectionDialog.h"
 #include "GeoMapWidget.h"
@@ -163,8 +163,8 @@ private:
   GeographicView *_geoView;
   Graph *graph;
   GeoMapWidget *_geoMW;
-  std::unordered_map<node, std::pair<double, double>> nodeLatLng;
-  std::unordered_map<edge, std::vector<std::pair<double, double>>> edgeBendsLatLng;
+  tlp_hash_map<node, std::pair<double, double>> nodeLatLng;
+  tlp_hash_map<edge, std::vector<std::pair<double, double>>> edgeBendsLatLng;
   Camera globeCameraBackup;
   Camera mapCameraBackup;
 

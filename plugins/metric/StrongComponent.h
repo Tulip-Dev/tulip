@@ -21,7 +21,7 @@
 #define _STRONGCOMPONENT_H
 
 #include <stack>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <tulip/DoubleProperty.h>
 
 /** This plugin is an implementation of a strongly connected components decomposition.
@@ -47,10 +47,10 @@ public:
 
 private:
   unsigned curComponent, curTS;
-  void findSCC(tlp::node, std::unordered_map<tlp::node, bool> &,
-               std::unordered_map<tlp::node, unsigned> &, std::stack<tlp::node> &);
-  void findDE(tlp::node, std::vector<tlp::edge> &, std::unordered_map<tlp::node, unsigned int> &,
-              std::unordered_map<tlp::node, unsigned int> &);
+  void findSCC(tlp::node, tlp_hash_map<tlp::node, bool> &,
+               tlp_hash_map<tlp::node, unsigned> &, std::stack<tlp::node> &);
+  void findDE(tlp::node, std::vector<tlp::edge> &, tlp_hash_map<tlp::node, unsigned int> &,
+              tlp_hash_map<tlp::node, unsigned int> &);
 };
 
 #endif

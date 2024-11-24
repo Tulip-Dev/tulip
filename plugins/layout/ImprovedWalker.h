@@ -19,7 +19,7 @@
 #ifndef IMPROVEDWALKER_H
 #define IMPROVEDWALKER_H
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <vector>
 
 #include <tulip/LayoutProperty.h>
@@ -74,9 +74,9 @@ public:
 
 private:
   typedef std::vector<float> levelToFloatType;
-  typedef std::unordered_map<tlp::node, float> nodeToFloatType;
-  typedef std::unordered_map<tlp::node, int> nodeToIntegerPropertyType;
-  typedef std::unordered_map<tlp::node, tlp::node> nodeToNodeType;
+  typedef tlp_hash_map<tlp::node, float> nodeToFloatType;
+  typedef tlp_hash_map<tlp::node, int> nodeToIntegerPropertyType;
+  typedef tlp_hash_map<tlp::node, tlp::node> nodeToNodeType;
 
   tlp::Graph *tree;
 

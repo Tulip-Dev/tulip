@@ -17,7 +17,7 @@
  *
  */
 #include <algorithm>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <tulip/TLPBExportImport.h>
 #include <tulip/TlpTools.h>
@@ -32,7 +32,7 @@ using namespace std;
 // used to reindex the hierarchy to be saved with consecutive ids
 static unsigned int getExportedId(Graph *g = nullptr) {
   static unsigned int nextExportedId = 0;
-  static unordered_map<Graph *, unsigned int> ids;
+  static tlp_hash_map<Graph *, unsigned int> ids;
   if (g == nullptr) {
     // reset
     nextExportedId = 0;

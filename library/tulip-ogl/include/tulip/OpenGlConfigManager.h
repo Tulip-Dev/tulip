@@ -24,7 +24,7 @@
 #include <tulip/tulipconf.h>
 
 #include <string>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #define BUFFER_OFFSET(bytes) (reinterpret_cast<GLubyte *>(bytes))
 
@@ -105,7 +105,7 @@ public:
 private:
   static bool _glewIsInit;
   static bool _antialiased;
-  static std::unordered_map<std::string, bool> _checkedExtensions;
+  static tlp_hash_map<std::string, bool> _checkedExtensions;
 };
 } // namespace tlp
 

@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <GL/glew.h>
 
 #include <tulip/BoundingBox.h>
@@ -104,7 +104,7 @@ public:
 };
 
 static FontIcon defaultFontIcon;
-static unordered_map<string, FontIcon> fontIcons;
+static tlp_hash_map<string, FontIcon> fontIcons;
 
 static FontIcon &getFontIcon(const string &iconName) {
   auto it = fontIcons.find(iconName);

@@ -22,7 +22,7 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup clustering */

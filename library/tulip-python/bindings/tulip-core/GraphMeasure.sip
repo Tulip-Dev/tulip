@@ -228,10 +228,10 @@ at distance less or equal to a maximum one.
 
 %MethodCode
   if (a0->isElement(*a1)) {
-    std::unordered_map<tlp::node, bool> hResult;
+    tlp_hash_map<tlp::node, bool> hResult;
     markReachableNodes(a0, *a1, hResult, a3, a4);
-    std::unordered_map<tlp::node, bool>::const_iterator itr = hResult.begin();
-    std::unordered_map<tlp::node, bool>::const_iterator ite = hResult.end();
+    tlp_hash_map<tlp::node, bool>::const_iterator itr = hResult.begin();
+    tlp_hash_map<tlp::node, bool>::const_iterator ite = hResult.end();
     while (itr != ite) {
       a2->insert(itr->first);
       ++itr;

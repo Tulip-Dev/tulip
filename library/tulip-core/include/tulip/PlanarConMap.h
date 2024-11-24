@@ -22,7 +22,7 @@
 #define Tulip_PlanarConMap_H
 
 #include <vector>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <tulip/Face.h>
 #include <tulip/GraphDecorator.h>
@@ -163,11 +163,11 @@ private:
    */
   void delEdgeMap(edge, Face = Face());
 
-  typedef std::unordered_map<Face, std::vector<edge>> faceMap;
+  typedef tlp_hash_map<Face, std::vector<edge>> faceMap;
   typedef faceMap::value_type faceMapEntry;
-  typedef std::unordered_map<edge, std::vector<Face>> edgeMap;
+  typedef tlp_hash_map<edge, std::vector<Face>> edgeMap;
   typedef edgeMap::value_type edgeMapEntry;
-  typedef std::unordered_map<node, std::vector<Face>> nodeMap;
+  typedef tlp_hash_map<node, std::vector<Face>> nodeMap;
   typedef nodeMap::value_type nodeMapEntry;
 
   /** storage of faces */

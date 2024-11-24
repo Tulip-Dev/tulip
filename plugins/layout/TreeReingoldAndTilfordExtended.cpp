@@ -191,7 +191,7 @@ list<LR> *TreeReingoldAndTilfordExtended::mergeLRList(std::list<LR> *L, std::lis
 }
 //=============================================================================
 list<LR> *TreeReingoldAndTilfordExtended::TreePlace(tlp::node n,
-                                                    std::unordered_map<tlp::node, double> *p) {
+                                                    tlp_hash_map<tlp::node, double> *p) {
   if (tree->outdeg(n) == 0) {
     list<LR> *result = new list<LR>();
     LR tmpLR;
@@ -281,9 +281,9 @@ list<LR> *TreeReingoldAndTilfordExtended::TreePlace(tlp::node n,
 }
 //=============================================================================
 void TreeReingoldAndTilfordExtended::TreeLevelSizing(tlp::node n,
-                                                     std::unordered_map<int, double> &maxSize,
+                                                     tlp_hash_map<int, double> &maxSize,
                                                      int level,
-                                                     std::unordered_map<tlp::node, int> &levels) {
+                                                     tlp_hash_map<tlp::node, int> &levels) {
   levels[n] = level;
 
   if (maxSize.find(level) != maxSize.end()) {
@@ -306,9 +306,9 @@ void TreeReingoldAndTilfordExtended::TreeLevelSizing(tlp::node n,
 }
 //=============================================================================
 void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n,
-                                                std::unordered_map<tlp::node, double> *p, double x,
+                                                tlp_hash_map<tlp::node, double> *p, double x,
                                                 double y, int level,
-                                                unordered_map<int, double> &maxLevelSize) {
+                                                tlp_hash_map<int, double> &maxLevelSize) {
   Coord tmpCoord;
 
   if (!compactLayout)
@@ -348,7 +348,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n,
 }
 //===============================================================
 bool TreeReingoldAndTilfordExtended::run() {
-  std::unordered_map<node, double> posRelative;
+  tlp_hash_map<node, double> posRelative;
 
   result->setAllEdgeValue(vector<Coord>(0));
 
@@ -426,8 +426,8 @@ bool TreeReingoldAndTilfordExtended::run() {
   node startNode = tree->getSource();
   assert(startNode.isValid());
 
-  unordered_map<int, double> maxSizeLevel;
-  unordered_map<node, int> levels;
+  tlp_hash_map<int, double> maxSizeLevel;
+  tlp_hash_map<node, int> levels;
   TreeLevelSizing(startNode, maxSizeLevel, 0, levels);
 
   // check if the specified layer spacing is greater

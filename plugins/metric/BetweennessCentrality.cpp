@@ -19,7 +19,7 @@
 
 #include <stack>
 #include <queue>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/StaticProperty.h>
 #include <tulip/MutableContainer.h>
@@ -173,7 +173,7 @@ public:
         break;
 
       stack<node> S;
-      unordered_map<node, list<node>> P;
+      tlp_hash_map<node, list<node>> P;
       MutableContainer<int> sigma;
 
       if (weight)
@@ -241,7 +241,7 @@ public:
   }
 
 private:
-  void computeBFS(node s, bool directed, stack<node> &S, unordered_map<node, list<node>> &P,
+  void computeBFS(node s, bool directed, stack<node> &S, tlp_hash_map<node, list<node>> &P,
                   MutableContainer<int> &sigma) {
     sigma.setAll(0);
     sigma.set(s.id, 1);
@@ -275,7 +275,7 @@ private:
   }
 
   void computeDijkstra(node s, bool directed, NumericProperty *weight, stack<node> &S,
-                       unordered_map<node, list<node>> &P, MutableContainer<int> &sigma) {
+                       tlp_hash_map<node, list<node>> &P, MutableContainer<int> &sigma) {
     EdgeStaticProperty<double> eWeights(graph);
     eWeights.copyFromNumericProperty(weight);
     NodeStaticProperty<double> nodeDistance(graph);

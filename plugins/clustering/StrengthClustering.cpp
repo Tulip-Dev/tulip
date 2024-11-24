@@ -139,7 +139,7 @@ void StrengthClustering::computeNodePartition(double threshold, vector<unordered
 
   // Compute the node partition
   int index = 0;
-  unordered_map<double, int> resultIndex;
+  tlp_hash_map<double, int> resultIndex;
 
   for (auto n : tmpGraph->nodes()) {
     double val = connected.getNodeValue(n);

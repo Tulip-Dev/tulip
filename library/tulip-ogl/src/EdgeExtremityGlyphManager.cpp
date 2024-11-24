@@ -17,7 +17,7 @@
  *
  */
 #include <list>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/Glyph.h>
@@ -28,8 +28,8 @@ using namespace std;
 
 namespace tlp {
 static std::list<std::string> plugins;
-static std::unordered_map<int, std::string> eeglyphIdToName;
-static std::unordered_map<std::string, int> nameToEeGlyphId;
+static tlp_hash_map<int, std::string> eeglyphIdToName;
+static tlp_hash_map<std::string, int> nameToEeGlyphId;
 
 //====================================================
 string EdgeExtremityGlyphManager::glyphName(int id) {

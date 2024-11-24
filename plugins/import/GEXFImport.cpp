@@ -20,7 +20,7 @@
 #include <fstream>
 #include <string>
 #include <cctype>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <tulip/ImportModule.h>
 #include <tulip/TulipViewSettings.h>
@@ -162,7 +162,7 @@ public:
   // according to data types
   void createPropertiesFromAttributes(QXmlStreamReader &xmlReader) {
     bool nodeProperties = xmlReader.attributes().value("class") == QString("node");
-    unordered_map<string, PropertyInterface *> &propertiesMap =
+    tlp_hash_map<string, PropertyInterface *> &propertiesMap =
         nodeProperties ? nodePropertiesMap : edgePropertiesMap;
 
     while (!(xmlReader.isEndElement() && xmlReader.name() == QString("attributes"))) {
@@ -532,11 +532,11 @@ public:
 
 private:
   // maps associating attribute id to Tulip property
-  unordered_map<string, PropertyInterface *> nodePropertiesMap;
-  unordered_map<string, PropertyInterface *> edgePropertiesMap;
+  tlp_hash_map<string, PropertyInterface *> nodePropertiesMap;
+  tlp_hash_map<string, PropertyInterface *> edgePropertiesMap;
 
   // map associating GEXF node id to Tulip node
-  unordered_map<string, node> nodesMap;
+  tlp_hash_map<string, node> nodesMap;
 
   // vector to store edge information in case edges are declared before nodes in GEXF file
   vector<pair<string, string>> edgesTmp;

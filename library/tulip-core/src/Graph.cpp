@@ -1129,12 +1129,12 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll, bo
 
   // create new meta edges from nodes to metanode
   Graph *super = getSuperGraph();
-  std::unordered_map<node, bool> hasEdges;
-  std::unordered_map<node, edge> metaEdges;
-  std::unordered_map<edge, set<edge>> subEdges;
+  tlp_hash_map<node, bool> hasEdges;
+  tlp_hash_map<node, edge> metaEdges;
+  tlp_hash_map<edge, set<edge>> subEdges;
   // needed for the !multiEdges and !allGrouped case
-  std::unordered_map<node, bool> hasInvEdges;
-  std::unordered_map<node, edge> metaInvEdges;
+  tlp_hash_map<node, bool> hasInvEdges;
+  tlp_hash_map<node, edge> metaInvEdges;
 
   for (auto n : subGraph->nodes()) {
     for (auto e : getSuperGraph()->getInOutEdges(n)) {
@@ -1175,8 +1175,8 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll, bo
       }
 
       if (isElement(tgt) && subGraph->isElement(src)) {
-        std::unordered_map<node, bool> *hasLinks;
-        std::unordered_map<node, edge> *metaLinks;
+        tlp_hash_map<node, bool> *hasLinks;
+        tlp_hash_map<node, edge> *metaLinks;
         if (multiEdges || allGrouped) {
           hasLinks = &hasEdges;
           metaLinks = &metaEdges;
@@ -1321,7 +1321,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
       if (!super->isElement(metaEdge))
         continue;
       Color metaColor = graphColors->getEdgeValue(metaEdge);
-      std::unordered_map<node, std::unordered_map<node, set<edge>>> newMetaEdges;
+      tlp_hash_map<node, tlp_hash_map<node, set<edge>>> newMetaEdges;
 
       for (auto e : getEdgeMetaInfo(metaEdge)) {
         auto eEnds = super->ends(e);
@@ -1396,7 +1396,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
     buildMapping(root->getInOutNodes(metaNode), mappingC, metaInfo, node());
     buildMapping(metaGraph->getNodes(), mappingN, metaInfo, node());
 
-    std::unordered_map<node, Color> metaEdgeToColor;
+    tlp_hash_map<node, Color> metaEdgeToColor;
 
     for (auto metaEdge : super->getInOutEdges(metaNode)) {
       metaEdgeToColor[opposite(metaEdge, metaNode)] = graphColors->getEdgeValue(metaEdge);
@@ -1404,7 +1404,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
 
     // Remove the metagraph from the hierarchy and remove the metanode
     root->delNode(metaNode, true);
-    std::unordered_map<node, std::unordered_set<node>> edges;
+    tlp_hash_map<node, std::unordered_set<node>> edges;
     //=================================
     for (auto e : root->edges()) {
 
@@ -1462,10 +1462,10 @@ struct MetaEdge {
 void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector<node> &metaNodes,
                             bool inoutGrouped) {
   GraphProperty *metaInfo = static_cast<GraphAbstract *>(getRoot())->getMetaGraphProperty();
-  unordered_map<edge, set<edge>> eMapping;
+  tlp_hash_map<edge, set<edge>> eMapping;
   Observable::holdObservers();
   {
-    unordered_map<node, set<node>> nMapping;
+    tlp_hash_map<node, set<node>> nMapping;
 
     while (itS->hasNext()) {
       Graph *its = itS->next();

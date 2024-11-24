@@ -43,7 +43,7 @@ private:
   tlp::DoubleProperty *rot;
   tlp::Graph *graph;
   double splitRatio;
-  typedef std::unordered_map<tlp::Coord, tlp::node> MapVecNode;
+  typedef tlp_hash_map<tlp::Coord, tlp::node> MapVecNode;
   MapVecNode mapN;
   //=====================================
   tlp::node splitEdge(tlp::node a, tlp::node b);
