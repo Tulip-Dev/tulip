@@ -502,6 +502,7 @@ void initRandomSequence() /Deprecated/;
 tlp.initRandomSequence()
 
 .. deprecated:: 6.0.0
+
 Initializes a random sequence with the seed previously set.
     Use :func:`tlp.setSeedOfRandomSequence()` with no argument instead.
 
