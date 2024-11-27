@@ -60,10 +60,10 @@ Pip tool graphic interface
 
 As shown in the figure above, the Python IDE provides a graphic interface to interact with the pip tool of the Python environment used by Tulip. It allows to execute the following pip commands :
 
-        * install (a package in the user directory),
-        * list (packages in the user directory),
-        * list all (the installed packages),
-        * show (information about a package),
+        * install (a package in the current user home directory),
+        * list (packages installed in the current user home directory),
+        * list all (installed packages),
+        * show (package information),
         * uninstall (a package),
         * upgrade (a package).
 
