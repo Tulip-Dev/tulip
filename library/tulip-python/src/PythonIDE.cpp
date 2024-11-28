@@ -435,19 +435,19 @@ PythonIDE::PythonIDE()
 
   // add pip command gui
   _pipFrame = new QFrame();
-  auto pipLayout = new QHBoxLayout(_pipFrame);
-  pipLayout->setContentsMargins(0, 0, 3, 0);
-  pipLayout->setSpacing(3);
+  auto hLayout = new QHBoxLayout(_pipFrame);
+  hLayout->setContentsMargins(0, 0, 3, 0);
+  hLayout->setSpacing(3);
   // add a vertical line to separate from tabs
   auto vLine = new QFrame();
   vLine->setFrameShape(QFrame::VLine);
   vLine->setFrameShadow(QFrame::Sunken);
-  pipLayout->addWidget(vLine);
+  hLayout->addWidget(vLine);
   // indicate it involves the pip command
-  auto pipLabel = new QLabel("<b>pip</b>");
-  pipLabel->setToolTip(
+  auto label = new QLabel("<b>pip</b>");
+  label->setToolTip(
       "pip is the package installer for Python; here's a simple graphical interface for using it\nto manage the packages available for the current Python environment.");
-  pipLayout->addWidget(pipLabel);
+  hLayout->addWidget(label);
   // add QComboBox to choose pip sub-command
   _pipCombo = new QComboBox();
 #ifdef __APPLE__
@@ -455,7 +455,7 @@ PythonIDE::PythonIDE()
 #endif
   _pipCombo->setToolTip(
       "Choose the pip command to execute:\n- install (a home directory package),\n- list (home directory packages only),\n- list all (installed packages),\n- show (package information)\n- uninstall (a package)\n- upgrade (a package).");
-  pipLayout->addWidget(_pipCombo);
+  hLayout->addWidget(_pipCombo);
   _pipCombo->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
   // add QLineEdit to give package name
   _pipPackage = new QLineEdit();
@@ -467,7 +467,7 @@ PythonIDE::PythonIDE()
   connect(_pipPackage, &QLineEdit::returnPressed, [this] {
     this->executePipCommand(this->_pipCombo->currentIndex(), this->_pipPackage->text());
   });
-  pipLayout->addWidget(_pipPackage);
+  hLayout->addWidget(_pipPackage);
   // add pip command gui
   _ui->consoleTab->setCornerWidget(_pipFrame, Qt::TopRightCorner);
   // show pip command gui only when 'Python output' is visible
@@ -478,6 +478,20 @@ PythonIDE::PythonIDE()
   sizes.push_back(550);
   sizes.push_back(150);
   _ui->splitter->setSizes(sizes);
+
+  // customize tabWidget right corner
+  auto tabWidgetCorner = new QFrame();
+  hLayout = new QHBoxLayout(tabWidgetCorner);
+  hLayout->setContentsMargins(0, 0, 3, 0);
+  hLayout->setSpacing(3);
+  label = new QLabel();
+  QPixmap pythonLogo(":/tulip/gui/icons/python.png");
+  label->setPixmap(pythonLogo.scaled(20, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+  hLayout->addWidget(label);
+  label = new QLabel(QString("Python ") + PythonInterpreter::getInstance()->getPythonFullVersionStr());
+  hLayout->addWidget(label);
+  _ui->tabWidget->setCornerWidget(tabWidgetCorner);
+
 
   _scriptEditorsWidget = _ui->tabWidget->widget(0);
   _scriptControlWidget = _ui->stackedWidget->widget(0);

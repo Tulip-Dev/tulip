@@ -12,7 +12,6 @@ SET(${LibTulipPythonName}_LIB_SRCS
     TulipUtilsModule.cpp
     APIDataBase.cpp
     AutoCompletionDataBase.cpp
-    PythonTabWidget.cpp
     ConsoleHandlers.h
     PythonEditorsTabWidget.cpp
     PythonCppTypesConverter.cpp

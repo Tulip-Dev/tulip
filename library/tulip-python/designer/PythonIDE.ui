@@ -73,7 +73,7 @@ background-color: #A0A0A0;
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="PythonTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="tabWidget">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -1421,12 +1421,6 @@ cannot be undone but performance will be better
    <class>TreeViewComboBox</class>
    <extends>QComboBox</extends>
    <header>tulip/TreeViewComboBox.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>PythonTabWidget</class>
-   <extends>QTabWidget</extends>
-   <header location="global">tulip/PythonTabWidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
