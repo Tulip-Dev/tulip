@@ -488,10 +488,10 @@ PythonIDE::PythonIDE()
   QPixmap pythonLogo(":/tulip/gui/icons/python.png");
   label->setPixmap(pythonLogo.scaled(20, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));
   hLayout->addWidget(label);
-  label = new QLabel(QString("Python ") + PythonInterpreter::getInstance()->getPythonFullVersionStr());
+  label =
+      new QLabel(QString("Python ") + PythonInterpreter::getInstance()->getPythonFullVersionStr());
   hLayout->addWidget(label);
   _ui->tabWidget->setCornerWidget(tabWidgetCorner);
-
 
   _scriptEditorsWidget = _ui->tabWidget->widget(0);
   _scriptControlWidget = _ui->stackedWidget->widget(0);
