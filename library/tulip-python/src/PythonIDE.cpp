@@ -382,28 +382,33 @@ result = subprocess.run([)";
   return pipScript + pyExe + ", '-m', 'pip', '";
 }
 
-// display a warning message about python files
-// no longer saved in project files
-static void showWarningDialog() {
-  QDialog wd(Perspective::instance()->mainWindow());
-  auto ui = Ui::PythonIDEWarningDialog();
-  ui.setupUi(&wd);
-  tlpFixCBRBs(&wd);
-  wd.exec();
-  if (!ui.displayDialogCB->isChecked()) {
-    TulipSettings::instance().beginGroup("pythonIDE");
-    TulipSettings::instance().setValue("displayPythonIDEWarningDialog", false);
-    TulipSettings::instance().endGroup();
-  }
+// display a warning message on top of PythonIDE
+//  about python files no longer saved in project files
+static void showWarningDialog(PythonIDE *ide) {
+  QWidget *parent = ide->parentWidget();
+  // wait until parent is visible
+  if (parent && parent->isVisible()) {
+    QDialog wd(parent);
+    auto ui = Ui::PythonIDEWarningDialog();
+    ui.setupUi(&wd);
+    tlpFixCBRBs(&wd);
+    wd.exec();
+    if (!ui.displayDialogCB->isChecked()) {
+      TulipSettings::instance().beginGroup("pythonIDE");
+      TulipSettings::instance().setValue("displayPythonIDEWarningDialog", false);
+      TulipSettings::instance().endGroup();
+    }
+  } else
+    QTimer::singleShot(100, [ide]() { showWarningDialog(ide); });
 }
 
 PythonIDEInterface *PythonIDE::Builder::newIDE(GraphHierarchiesModel *model) {
+  auto ide = new PythonIDE();
   TulipSettings::instance().beginGroup("pythonIDE");
   if (TulipSettings::instance().value("displayPythonIDEWarningDialog", true).toBool())
     // display a warning message on top of Python IDE
-    QTimer::singleShot(1000, [=]() { showWarningDialog(); });
+    QTimer::singleShot(100, [ide]() { showWarningDialog(ide); });
   TulipSettings::instance().endGroup();
-  auto ide = new PythonIDE();
   ide->setGraphsModel(model);
   return ide;
 }
