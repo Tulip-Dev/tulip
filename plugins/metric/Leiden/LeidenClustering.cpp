@@ -62,7 +62,7 @@ static const char *paramHelp[] = {
  * https://github.com/vtraag/libleidenalg source code
  *
  * <b>HISTORY</b>
- * - 12/01/2023 Version 1.0: Initial release (Patrick Mary)
+ * - 16/01/2024 Version 1.0: Initial release (Patrick Mary)
  *
  * \author Patrick Mary, Labri
  *
@@ -71,7 +71,7 @@ static const char *paramHelp[] = {
 class LeidenClustering : public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATION(
-      "Leiden", "Patrick Mary", "16/01/23",
+      "Leiden", "Patrick Mary", "16/01/24",
       "Nodes partitioning measure used for community detection."
       "This is an implementation of the Leiden clustering algorithm first published in:<br/>"
       "<b>From Louvain to Leiden: guaranteeing well-connected communities.</b><br/>"
