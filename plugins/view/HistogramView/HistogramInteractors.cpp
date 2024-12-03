@@ -50,7 +50,8 @@ HistogramInteractorMetricMapping::HistogramInteractorMetricMapping(const PluginC
                           StandardInteractorPriority::ViewInteractor1) {}
 
 void HistogramInteractorMetricMapping::construct() {
-  setConfigurationWidgetText(QString("<h3>Metric mapping interactor</h3>") +
+  setConfigurationWidgetText(
+      QString("<h3>Metric mapping interactor</h3>") +
       "<p>This interactor allows to perform a metric mapping on nodes colors, nodes borders "
       "colors, nodes sizes, nodes borders widths or nodes glyphs in a visual way.</p>"
       "<p>To select the mapping type, do a right click on the scale located at the left of the "
@@ -193,31 +194,35 @@ protected:
 };
 
 HistogramInteractorGetInformation::HistogramInteractorGetInformation(const tlp::PluginContext *)
-  : InteractorViewExplorer(QString("<p>This interactor allows to navigate in the histogram view.</p>") +
-      "<p>When there is more than one graph properties selected, the corresponding histogram "
-      "previews are generated and displayed in a matrix form. By <b>double clicking on a histogram preview, " +
-      "this one is displayed in fullscreen </b> in a more detailed way and the others interactors "
-      "become available. To go back to the histogram previews matrix, double click anywhere "
-      "in the view.</p>" + "When the mouse cursor looks like <img src=\":/tulip/gui/icons/i_information.png\">, "
-      "indicating it is on top of a graph element (node or edge), "
-      "<b>Mouse left</b> click to display a panel showing the element properties.<br/>"
-      "As the properties panel is displayed, <b>Mouse left</b> click in a property row to edit the "
-      "corresponding value.<br/>"
-      "The visible properties can be filtered using the list of properties displayed in the "
-      "<b>Options</b> tab.<br/>"
-      "If none is filtered, when the element properties panel is displayed, the display of the "
-      "visual rendering properties can be then toggled using a dedicated check box." +
-      "<p>Otherwise, this interactor offers the same functionalities as the one in the \"Node "
-      "Link Diagram view\".<br/>The commands are described below:</p>" +
-      "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys </li></ul>"
+    : InteractorViewExplorer(
+          QString("<p>This interactor allows to navigate in the histogram view.</p>") +
+              "<p>When there is more than one graph properties selected, the corresponding histogram "
+              "previews are generated and displayed in a matrix form. By <b>double clicking on a histogram preview, " +
+              "this one is displayed in fullscreen </b> in a more detailed way and the others interactors "
+              "become available. To go back to the histogram previews matrix, double click anywhere "
+              "in the view.</p>" +
+              "When the mouse cursor looks like <img src=\":/tulip/gui/icons/i_information.png\">, "
+              "indicating it is on top of a graph element (node or edge), "
+              "<b>Mouse left</b> click to display a panel showing the element properties.<br/>"
+              "As the properties panel is displayed, <b>Mouse left</b> click in a property row to edit the "
+              "corresponding value.<br/>"
+              "The visible properties can be filtered using the list of properties displayed in the "
+              "<b>Options</b> tab.<br/>"
+              "If none is filtered, when the element properties panel is displayed, the display of the "
+              "visual rendering properties can be then toggled using a dedicated check box." +
+              "<p>Otherwise, this interactor offers the same functionalities as the one in the \"Node "
+              "Link Diagram view\".<br/>The commands are described below:</p>" +
+              "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys </li></ul>"
 #if !defined(__APPLE__)
-        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Ctrl + Mouse left</b> down "
-        "+ up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>"
+              "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Ctrl + Mouse left</b> down "
+              "+ up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>"
 #else
-        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>⌥ + Mouse left</b> down "
-        "+ up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>"
+              "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>⌥ + Mouse left</b> down "
+              "+ up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>"
 #endif
-                            , new HistogramViewNavigator, new HistogramMouseShowElementInfo) {}
+          ,
+          new HistogramViewNavigator, new HistogramMouseShowElementInfo) {
+}
 
 bool HistogramInteractorGetInformation::isCompatible(const std::string &viewName) const {
   return (viewName == ViewName::HistogramViewName);

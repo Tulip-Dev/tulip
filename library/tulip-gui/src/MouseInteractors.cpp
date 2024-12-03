@@ -466,9 +466,9 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
 
       if (qMouseEv->modifiers() &
 #if defined(__APPLE__)
-          Qt::AltModifier
+              Qt::AltModifier
 #else
-          Qt::ControlModifier
+              Qt::ControlModifier
 #endif
           && (view()->name() == NodeLinkDiagramComponent::viewName))
         currentMouse = new MouseZoomRotZ();

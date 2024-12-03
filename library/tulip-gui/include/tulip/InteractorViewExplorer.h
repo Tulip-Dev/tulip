@@ -56,14 +56,17 @@ class TLP_QT_SCOPE InteractorViewExplorer : public NodeLinkDiagramComponentInter
   MouseShowElementInfo *_elementInfo;
 
 public:
-  PLUGININFORMATION("InteractorViewExplorer", "Tulip Team", "01/12/2024",
-                    "Explore current view", "1.0", "Information")
+  PLUGININFORMATION("InteractorViewExplorer", "Tulip Team", "01/12/2024", "Explore current view",
+                    "1.0", "Information")
   /**
    * Default constructor
    */
-  InteractorViewExplorer(QString configText = QString(), InteractorComponent *interactor = nullptr, MouseShowElementInfo *elementInfo = new MouseShowElementInfo)
-    : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_explore.png",
-                                         "Explore current view", StandardInteractorPriority::Navigation), _configText(configText), _firstInteractor(interactor), _elementInfo(elementInfo) {}
+  InteractorViewExplorer(QString configText = QString(), InteractorComponent *interactor = nullptr,
+                         MouseShowElementInfo *elementInfo = new MouseShowElementInfo)
+      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_explore.png",
+                                           "Explore current view",
+                                           StandardInteractorPriority::Navigation),
+        _configText(configText), _firstInteractor(interactor), _elementInfo(elementInfo) {}
 
   /**
    * Construct chain of responsibility

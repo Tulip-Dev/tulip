@@ -29,7 +29,8 @@
 using namespace tlp;
 
 void InteractorViewExplorer::construct() {
-  setConfigurationWidgetText(QString("<h3>Explore %1</h3>").arg(view()->name().c_str()) + _configText);
+  setConfigurationWidgetText(QString("<h3>Explore %1</h3>").arg(view()->name().c_str()) +
+                             _configText);
   if (_firstInteractor)
     push_back(_firstInteractor);
   push_back(new MouseNKeysNavigator);
@@ -64,4 +65,3 @@ void InteractorViewExplorer::setVisibleProperties() {
     stringList = _propsList->getSelectedStringsList();
   _elementInfo->setVisibleProperties(stringList);
 }
-

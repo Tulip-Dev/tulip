@@ -1391,9 +1391,10 @@ static string &forceUtf8String(string &str) {
 class ImportBibTeX : public ImportFileModule {
 
 public:
-  PLUGININFORMATION("BibTeX", "Patrick Mary", "09/01/2014",
-                    "<p>File extension: bib</p><p>Imports a co-authorship graph from a BibTeX file.</p>",
-                    "1.1", "File")
+  PLUGININFORMATION(
+      "BibTeX", "Patrick Mary", "09/01/2014",
+      "<p>File extension: bib</p><p>Imports a co-authorship graph from a BibTeX file.</p>", "1.1",
+      "File")
 
   ImportBibTeX(const tlp::PluginContext *context) : ImportFileModule(context, {"bib"}) {
     addInParameter<StringCollection>(

@@ -234,23 +234,26 @@ void InteractorBoxPlot::construct() {
 }
 
 InteractorShowElementInfo::InteractorShowElementInfo(const tlp::PluginContext *)
-  : InteractorViewExplorer(QString("When the mouse cursor looks like <img src=\":/tulip/gui/icons/i_information.png\">, ") +
-      "indicating it is on top of a graph element (node or edge), "
-      "<b>Mouse left</b> click to display a panel showing the element properties.<br/>"
-      "<b>Mouse left</b> click on an element (the mouse cursor must be as <img "
-      "src=\":/tulip/gui/icons/i_information.png\">),<br/>"
-      "to display a panel showing its properties.<br/>"
-      "As the panel is displayed, <b>Mouse left</b> click in a property row to edit the "
-      "corresponding value.<br/><br/>"
-      "<u>2D Navigation on the view</u><br/><br/>" +
-      "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys </li></ul>" +
+    : InteractorViewExplorer(
+          QString(
+              "When the mouse cursor looks like <img src=\":/tulip/gui/icons/i_information.png\">, ") +
+              "indicating it is on top of a graph element (node or edge), "
+              "<b>Mouse left</b> click to display a panel showing the element properties.<br/>"
+              "<b>Mouse left</b> click on an element (the mouse cursor must be as <img "
+              "src=\":/tulip/gui/icons/i_information.png\">),<br/>"
+              "to display a panel showing its properties.<br/>"
+              "As the panel is displayed, <b>Mouse left</b> click in a property row to edit the "
+              "corresponding value.<br/><br/>"
+              "<u>2D Navigation on the view</u><br/><br/>" +
+              "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys </li></ul>" +
 #if !defined(__APPLE__)
-      "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Ctrl + Mouse left</b> down " +
+              "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Ctrl + Mouse left</b> down " +
 #else
-      "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>⌥ + Mouse left</b> down "
+              "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>⌥ + Mouse left</b> down "
 #endif
-      "+ up/down moves</li><li> or <b>Pg up/Pg down</b> keys.</li></ul>"
-                              , nullptr, new ParallelCoordsElementShowInfo) {}
+              "+ up/down moves</li><li> or <b>Pg up/Pg down</b> keys.</li></ul>",
+          nullptr, new ParallelCoordsElementShowInfo) {
+}
 
 bool InteractorShowElementInfo::isCompatible(const string &viewName) const {
   return (viewName == ViewName::ParallelCoordinatesViewName);

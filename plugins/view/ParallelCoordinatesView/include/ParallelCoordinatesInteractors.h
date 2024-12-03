@@ -170,8 +170,8 @@ public:
 class InteractorShowElementInfo : public InteractorViewExplorer {
 
 public:
-  PLUGININFORMATION("InteractorShowElementInfo", "Tulip Team", "02/04/2009",
-                    "Explore current view", "2.0", "Information")
+  PLUGININFORMATION("InteractorShowElementInfo", "Tulip Team", "02/04/2009", "Explore current view",
+                    "2.0", "Information")
   /**
    * Default constructor
    */
