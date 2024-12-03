@@ -620,14 +620,9 @@ The geographic view provides different map modes. You can switch between them by
 .. image:: _images/geoview_cartodb_dark_map.png
     :width: 400
 
-* Wikimedia Map:
+* Custom Tile Layer:
 
-.. image:: _images/geoview_wikimedia_map.png
-    :width: 400
-
-* Leaflet Custom Tile Layer:
-
-.. image:: _images/geoview_leaflet_custom_tile_layer.png
+.. image:: _images/geoview_custom_tile_layer.png
     :width: 600
 
 * Polygon:
