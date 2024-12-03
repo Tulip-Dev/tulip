@@ -21,7 +21,6 @@
 
 #include "ui_ElementInformationWidget.h"
 #include "GeographicViewInteractors.h"
-#include "../../utils/StandardInteractorPriority.h"
 #include "../../utils/PluginNames.h"
 
 #include <tulip/MouseInteractors.h>
@@ -31,6 +30,7 @@
 #include <tulip/GlSimpleEntityItemModel.h>
 #include <tulip/GlComplexPolygon.h>
 #include <tulip/Perspective.h>
+#include <tulip/StandardInteractorPriority.h>
 
 #include <QPropertyAnimation>
 #include <QLayout>
@@ -71,13 +71,13 @@ class GeographicViewInteractorGetInformation : public NodeLinkDiagramComponentIn
 
 public:
   PLUGININFORMATION("GeographicViewInteractorGetInformation", "Tulip Team", "06/2012",
-                    "Geographic View Get Information Interactor", "1.0", "Information")
+                    "Explore current View", "1.0", "Information")
   /**
    * Default constructor
    */
   GeographicViewInteractorGetInformation(const tlp::PluginContext *)
-      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png",
-                                           "Get information on nodes/edges",
+      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_explore.png",
+                                           "Explore current view",
                                            StandardInteractorPriority::GetInformation) {}
 
   /**
@@ -85,17 +85,17 @@ public:
    */
   void construct() override {
     setConfigurationWidgetText(
-        QString("<h3>Display node or edge properties</h3>") +
+        QString("<h3>Explore graph on the map</h3>") +
         "When the mouse cursor looks like <img src=\":/tulip/gui/icons/i_information.png\">, "
         "indicating it is on top of a graph element (node or edge), "
         "<b>Mouse left</b> click to display a panel showing the element properties.<br/>"
-        "As the panel is displayed, <b>Mouse left</b> click in a property row to edit the "
+        "As the properties panel is displayed, <b>Mouse left</b> click in a property row to edit the "
         "corresponding value.<br/>"
         "The visible properties can be filtered using the list of properties displayed in the "
         "<b>Options</b> tab.<br/>"
         "If none is filtered, when the element properties panel is displayed, the display of the "
         "visual rendering properties can be then toggled using a dedicated check box.<br/><br/>" +
-        "<u>2D Navigation in the graph</u><br/><br/>" +
+        "<u>2D Navigation on the map</u><br/><br/>" +
         "Translation: <ul><li><b>Mouse left</b> down + moves</li></ul>" +
 #if defined(__APPLE__)
         "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li></ul>"

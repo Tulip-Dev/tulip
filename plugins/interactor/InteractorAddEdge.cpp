@@ -22,8 +22,8 @@
 #include <tulip/MouseEdgeBuilder.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/StandardInteractorPriority.h>
 
-#include "../utils/StandardInteractorPriority.h"
 #include "../utils/PluginNames.h"
 
 using namespace tlp;

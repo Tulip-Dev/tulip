@@ -21,6 +21,7 @@
 #define PARALLELCOORDINATESINTERACTORS_H_
 
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include <tulip/InteractorViewExplorer.h>
 
 #include <QFrame>
 
@@ -166,21 +167,17 @@ public:
 /** \brief Parallel coordinates interactor to show element properties when clicking on it
  *
  */
-class InteractorShowElementInfo : public ParallelCoordinatesInteractor {
+class InteractorShowElementInfo : public InteractorViewExplorer {
 
 public:
   PLUGININFORMATION("InteractorShowElementInfo", "Tulip Team", "02/04/2009",
-                    "Show Element Info Interactor", "1.0", "Information")
-
+                    "Explore current view", "2.0", "Information")
   /**
    * Default constructor
    */
   InteractorShowElementInfo(const tlp::PluginContext *);
 
-  /**
-   * Construct chain of responsibility
-   */
-  void construct() override;
+  bool isCompatible(const std::string &viewName) const override;
 };
 
 /** \brief Parallel coordinates interactor to modify space between two consecutive axis by using the

@@ -20,7 +20,7 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/NodeLinkDiagramComponent.h>
-#include "../utils/StandardInteractorPriority.h"
+#include <tulip/StandardInteractorPriority.h>
 
 using namespace tlp;
 

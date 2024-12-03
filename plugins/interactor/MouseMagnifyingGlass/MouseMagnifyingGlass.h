@@ -22,8 +22,7 @@
 
 #include <tulip/GLInteractor.h>
 #include <tulip/GlMainWidget.h>
-
-#include "../../utils/StandardInteractorPriority.h"
+#include <tulip/StandardInteractorPriority.h>
 
 class QOpenGLFramebufferObject;
 class QLabel;

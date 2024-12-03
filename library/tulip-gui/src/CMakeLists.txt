@@ -57,6 +57,7 @@ SET(SRCS
   GLInteractor.cpp
   WorkspacePanel.cpp
   Interactor.cpp
+  InteractorViewExplorer.cpp
   ProcessingAnimationItem.cpp
   Workspace.cpp
   PlaceHolderWidget.cpp

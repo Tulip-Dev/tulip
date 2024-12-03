@@ -21,10 +21,10 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseSelector.h>
 #include <tulip/MouseShowElementInfo.h>
+#include <tulip/StandardInteractorPriority.h>
 #include "EditColorScaleInteractor.h"
 #include "ThresholdInteractor.h"
 
-#include "../../utils/StandardInteractorPriority.h"
 #include "../../utils/PluginNames.h"
 
 using namespace std;
@@ -44,7 +44,7 @@ bool SOMViewInteractor::isCompatible(const std::string &viewName) const {
 }
 
 SOMViewNavigation::SOMViewNavigation(PluginContext *)
-    : SOMViewInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate",
+    : SOMViewInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view",
                         StandardInteractorPriority::Navigation) {}
 
 void SOMViewNavigation::construct() {

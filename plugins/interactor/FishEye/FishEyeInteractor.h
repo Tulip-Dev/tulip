@@ -22,8 +22,7 @@
 
 #include <tulip/GLInteractor.h>
 #include <tulip/Coord.h>
-
-#include "../../utils/StandardInteractorPriority.h"
+#include <tulip/StandardInteractorPriority.h>
 
 namespace tlp {
 

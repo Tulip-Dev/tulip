@@ -18,7 +18,6 @@
  */
 
 #include "MouseLassoNodesSelector.h"
-#include "../../utils/StandardInteractorPriority.h"
 #include "../../utils/PluginNames.h"
 
 #include <QMouseEvent>
@@ -30,6 +29,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlNode.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/StandardInteractorPriority.h>
 
 using namespace std;
 using namespace tlp;

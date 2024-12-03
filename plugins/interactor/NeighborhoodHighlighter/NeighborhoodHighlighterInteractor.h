@@ -22,7 +22,6 @@
 
 #include "NeighborhoodHighlighterConfigWidget.h"
 #include "NodeNeighborhoodView.h"
-#include "../../utils/StandardInteractorPriority.h"
 
 #include <QObject>
 
@@ -30,6 +29,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlLayer.h>
 #include <tulip/GlScene.h>
+#include <tulip/StandardInteractorPriority.h>
 
 namespace tlp {
 

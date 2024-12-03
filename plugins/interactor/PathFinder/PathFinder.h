@@ -21,8 +21,8 @@
 #define PATHFINDER_H_
 
 #include <tulip/GLInteractor.h>
+#include <tulip/StandardInteractorPriority.h>
 
-#include "../../utils/StandardInteractorPriority.h"
 #include "PathFinding/PathAlgorithm.h"
 
 #define NO_METRIC "None"

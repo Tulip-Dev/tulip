@@ -20,29 +20,20 @@
 #ifndef PIXELORIENTEDVIEWINTERACTORS_H_
 #define PIXELORIENTEDVIEWINTERACTORS_H_
 
-#include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include <tulip/InteractorViewExplorer.h>
 #include "../../utils/PluginNames.h"
 
 namespace tlp {
 
-class PixelOrientedInteractor : public NodeLinkDiagramComponentInteractor {
-
-public:
-  PixelOrientedInteractor(const QString &iconPath, const QString &text,
-                          const unsigned int priority = 0);
-
-  bool isCompatible(const std::string &viewName) const override;
-};
-
-class PixelOrientedInteractorNavigation : public PixelOrientedInteractor {
+class PixelOrientedInteractorNavigation : public InteractorViewExplorer {
 
 public:
   PLUGININFORMATION(InteractorName::PixelOrientedInteractorNavigation, "Tulip Team", "02/04/2009",
-                    "Pixel Oriented Navigation Interactor", "1.0", "Navigation")
+                    "Explore current view", "1.0", "Navigation")
 
   PixelOrientedInteractorNavigation(const tlp::PluginContext *);
 
-  void construct() override;
+  bool isCompatible(const std::string &viewName) const override;
 };
 } // namespace tlp
 

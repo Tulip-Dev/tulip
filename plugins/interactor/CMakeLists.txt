@@ -8,10 +8,6 @@ ADD_SUBDIRECTORY(PathFinder)
 INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${OPENGL_INCLUDE_DIR})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(InteractorNavigation-${Tulip_VERSION} SHARED InteractorNavigation.cpp)
-TARGET_LINK_LIBRARIES(InteractorNavigation-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
-
-##----------------------------------------------------------------------------------------------------------------------------
 ADD_LIBRARY(InteractorGetInformation-${Tulip_VERSION} SHARED InteractorGetInformation.cpp)
 TARGET_LINK_LIBRARIES(InteractorGetInformation-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 
@@ -40,7 +36,6 @@ ADD_LIBRARY(InteractorDeleteElement-${Tulip_VERSION} SHARED InteractorDeleteElem
 TARGET_LINK_LIBRARIES(InteractorDeleteElement-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-TULIP_INSTALL_PLUGIN(InteractorNavigation-${Tulip_VERSION} ${TulipInteractorPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(InteractorGetInformation-${Tulip_VERSION} ${TulipInteractorPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(InteractorSelection-${Tulip_VERSION} ${TulipInteractorPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(InteractorSelectionModifier-${Tulip_VERSION} ${TulipInteractorPluginsInstallDir})

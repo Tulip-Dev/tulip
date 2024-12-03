@@ -440,7 +440,6 @@ void PixelOrientedView::generatePixelOverview(PixelOrientedOverview *pixelOvervi
 
 void PixelOrientedView::propertiesSelected(bool flag) {
   noPropertyMsgBox->setVisible(!flag);
-  toggleInteractors(flag);
   if (quickAccessBarVisible())
     _quickAccessBar->setEnabled(flag);
   setOverviewVisible(flag);
@@ -672,11 +671,8 @@ void PixelOrientedView::switchFromSmallMultiplesToDetailView(PixelOrientedOvervi
     propertiesSelectionWidget->setEnabled(false);
   }
 
-  if (tlp::inGuiTestingMode())
-    // sometimes we must wait a bit to ensure an effective centerView
-    QTimer::singleShot(200, this, SLOT(centerView()));
-  else
-    centerView();
+  // sometimes we must wait a bit to ensure an effective centerView
+  QTimer::singleShot(200, this, SLOT(centerView()));
 }
 
 void PixelOrientedView::switchFromDetailViewToSmallMultiples() {

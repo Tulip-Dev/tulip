@@ -499,7 +499,6 @@ void HistogramView::viewConfigurationChanged() {
 
 void HistogramView::propertiesSelected(bool flag) {
   noPropertyMsgBox->setVisible(!flag);
-  toggleInteractors(flag);
   if (quickAccessBarVisible())
     _quickAccessBar->setEnabled(flag);
   setOverviewVisible(flag);

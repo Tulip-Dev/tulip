@@ -21,6 +21,7 @@
 #define SCATTERPLOT2DINTERACTORS_H_
 
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include <tulip/InteractorViewExplorer.h>
 #include "../../utils/PluginNames.h"
 
 namespace tlp {
@@ -34,17 +35,6 @@ public:
                           const unsigned int priority = 0);
 
   bool isCompatible(const std::string &viewName) const override;
-};
-
-class ScatterPlot2DInteractorNavigation : public ScatterPlot2DInteractor {
-
-public:
-  PLUGININFORMATION(InteractorName::ScatterPlot2DInteractorNavigation, "Tulip Team", "02/04/2009",
-                    "Scatter Plot 2D Navigation Interactor", "1.0", "Navigation")
-
-  ScatterPlot2DInteractorNavigation(const tlp::PluginContext *);
-
-  void construct() override;
 };
 
 class ScatterPlot2DInteractorTrendLine : public ScatterPlot2DInteractor {
@@ -78,19 +68,14 @@ private:
 /**
  *  \brief interactor to get information about an element of the graph
  */
-class ScatterPlot2DInteractorGetInformation : public NodeLinkDiagramComponentInteractor {
+class ScatterPlot2DInteractorGetInformation : public InteractorViewExplorer {
 public:
   PLUGININFORMATION("ScatterPlot2DInteractorGetInformation", "Tulip Team", "18/06/2015",
-                    "Get Information Interactor", "1.0", "Information")
+                    "Explore current view", "2.0", "Information")
   /**
    * Default constructor
    */
   ScatterPlot2DInteractorGetInformation(const tlp::PluginContext *);
-
-  /**
-   * Construct chain of responsibility
-   */
-  void construct() override;
 
   bool isCompatible(const std::string &viewName) const override;
 };

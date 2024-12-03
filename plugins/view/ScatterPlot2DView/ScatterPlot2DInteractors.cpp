@@ -20,6 +20,7 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseShowElementInfo.h>
 #include <tulip/GraphElementModel.h>
+#include <tulip/StandardInteractorPriority.h>
 
 #include "ScatterPlot2DInteractors.h"
 #include "ScatterPlot2DViewNavigator.h"
@@ -29,7 +30,6 @@
 #include "ScatterPlot2D.h"
 #include "ScatterPlotCorrelCoeffSelectorOptionsWidget.h"
 
-#include "../../utils/StandardInteractorPriority.h"
 #include "../../utils/PluginNames.h"
 
 using namespace std;
@@ -44,49 +44,9 @@ bool ScatterPlot2DInteractor::isCompatible(const std::string &viewName) const {
   return (viewName == ViewName::ScatterPlot2DViewName);
 }
 
-PLUGIN(ScatterPlot2DInteractorNavigation)
 PLUGIN(ScatterPlot2DInteractorTrendLine)
 PLUGIN(ScatterPlot2DInteractorCorrelCoeffSelector)
 PLUGIN(ScatterPlot2DInteractorGetInformation)
-
-ScatterPlot2DInteractorNavigation::ScatterPlot2DInteractorNavigation(const tlp::PluginContext *)
-    : ScatterPlot2DInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view",
-                              StandardInteractorPriority::Navigation) {}
-
-void ScatterPlot2DInteractorNavigation::construct() {
-  setConfigurationWidgetText(
-      QString("<h3>View navigation interactor</h3>") +
-      "<p>This interactor allows to navigate in the scatter plot view.</p>" +
-      "<p>When there is more than one graph properties selected, the corresponding scatter plots "
-      "previews are generated and displayed in a matrix form. By <b>double clicking on a scatter "
-      "plot, " +
-      "this one is displayed in fullscreen </b> in a more detailed way and the others interactors "
-      "become available. To go back to the scatter plots matrix, double click anywhere in the "
-      "view.</p>" +
-      "<p>Otherwise, this interactor offers the same functionalities as the one in the \"Node "
-      "Link Diagram view\". The commands are described below:</p>" +
-      "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys "
-      "</li></ul>" +
-      "X or Y rotation: <ul><li><b>Shift + Mouse left</b> down + up/down or left/right "
-      "moves</li></ul>" +
-#if !defined(__APPLE__)
-      "Z rotation: <ul><li><b>Ctrl + Mouse left</b> down + left/right moves</li><li> or "
-      "<b>Insert</b> key</li></ul>" +
-      "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Ctrl + Mouse left</b> down "
-      "+ up/down moves</li><li> or <b>Pg "
-      "up/Pg down</b> keys</li></ul>"
-#else
-      "Z rotation: <ul><li><b>⌥ + Mouse left</b> down + left/right moves</li><li> or "
-      "<b>Insert</b> key</li></ul>" +
-      "Translation: <ul><li><b>Arrow</b> keys</li></ul>" +
-      "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>⌥ + Mouse left</b> down "
-      "+ up/down moves</li><li> or <b>Pg up/Pg "
-      "down</b> keys</li></ul>"
-#endif
-  );
-  push_back(new ScatterPlot2DViewNavigator);
-  push_back(new MouseNKeysNavigator);
-}
 
 ScatterPlot2DInteractorTrendLine::ScatterPlot2DInteractorTrendLine(const PluginContext *)
     : ScatterPlot2DInteractor(":/i_scatter_trendline.png", "Trend line",
@@ -168,28 +128,31 @@ protected:
 
 ScatterPlot2DInteractorGetInformation::ScatterPlot2DInteractorGetInformation(
     const tlp::PluginContext *)
-    : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png",
-                                         "Display node or edge properties",
-                                         StandardInteractorPriority::GetInformation) {}
-
-void ScatterPlot2DInteractorGetInformation::construct() {
-  setConfigurationWidgetText(
-      QString("<h3>Display node or edge properties</h3>") +
-      "When the mouse cursor looks like <img src=\":/tulip/gui/icons/i_information.png\">, "
+  : InteractorViewExplorer(QString("<p>This interactor allows to navigate in the  view.</p>") +
+      "<p>When there is more than one graph properties selected, the corresponding Scatter Plot 2D "
+      "previews are generated and displayed in a matrix form. By <b>double clicking on a Scatter Plot 2D preview, "
+      "this one is displayed in fullscreen </b> in a more detailed way and the others interactors "
+      "become available. To go back to the histogram previews matrix, double click anywhere "
+      "in the view.</p>When the mouse cursor looks like <img src=\":/tulip/gui/icons/i_information.png\">, "
       "indicating it is on top of a graph element (node or edge), "
       "<b>Mouse left</b> click to display a panel showing the element properties.<br/>"
-      "to display a panel showing its properties.<br/>"
-      "As the panel is displayed, <b>Mouse left</b> click in a property row to edit the "
-      "corresponding value.<br/><br/>"
-#if defined(__APPLE__)
-      "<b>Mouse wheel</b> down/up can be used to zoom/unzoom the view."
+      "As the properties panel is displayed, <b>Mouse left</b> click in a property row to edit the "
+      "corresponding value.<br/>"
+      "The visible properties can be filtered using the list of properties displayed in the "
+      "<b>Options</b> tab.<br/>"
+      "If none is filtered, when the element properties panel is displayed, the display of the "
+      "visual rendering properties can be then toggled using a dedicated check box."
+      "<p>Otherwise, this interactor offers the same functionalities as the one in the \"Node "
+      "Link Diagram view\".<br/>The commands are described below:</p>" +
+      "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys </li></ul>"
+#if !defined(__APPLE__)
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Ctrl + Mouse left</b> down "
+        "+ up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>"
 #else
-      "<b>Mouse wheel</b> up/down can be used to zoom/unzoom the view."
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>⌥ + Mouse left</b> down "
+        "+ up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>"
 #endif
-  );
-  push_back(new MousePanNZoomNavigator);
-  push_back(new ScatterPlot2DMouseShowElementInfo);
-}
+                           , new ScatterPlot2DViewNavigator, new ScatterPlot2DMouseShowElementInfo) {}
 
 bool ScatterPlot2DInteractorGetInformation::isCompatible(const std::string &viewName) const {
   return (viewName == ViewName::ScatterPlot2DViewName);

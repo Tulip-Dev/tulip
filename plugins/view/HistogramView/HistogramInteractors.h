@@ -20,7 +20,7 @@
 #ifndef HISTOGRAMINTERACTORS_H_
 #define HISTOGRAMINTERACTORS_H_
 
-#include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include <tulip/InteractorViewExplorer.h>
 #include "../../utils/PluginNames.h"
 
 namespace tlp {
@@ -35,17 +35,6 @@ public:
                       const unsigned int priority = 0);
 
   bool isCompatible(const std::string &viewName) const override;
-};
-
-class HistogramInteractorNavigation : public HistogramInteractor {
-
-public:
-  PLUGININFORMATION(InteractorName::HistogramInteractorNavigation, "Tulip Team", "02/04/2009",
-                    "Histogram Navigation Interactor", "1.0", "Navigation")
-
-  HistogramInteractorNavigation(const PluginContext *);
-
-  void construct() override;
 };
 
 class HistogramInteractorMetricMapping : public HistogramInteractor {
@@ -80,19 +69,14 @@ private:
 /**
  *  \brief interactor to get information about an element of the graph
  */
-class HistogramInteractorGetInformation : public NodeLinkDiagramComponentInteractor {
+class HistogramInteractorGetInformation : public InteractorViewExplorer {
 public:
   PLUGININFORMATION("HistogramInteractorGetInformation", "Tulip Team", "18/06/2015",
-                    "Get Information Interactor", "1.0", "Information")
+                    "Explore current view", "2.0", "Information")
   /**
    * Default constructor
    */
   HistogramInteractorGetInformation(const tlp::PluginContext *);
-
-  /**
-   * Construct chain of responsibility
-   */
-  void construct() override;
 
   bool isCompatible(const std::string &viewName) const override;
 };

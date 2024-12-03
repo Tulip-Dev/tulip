@@ -1061,12 +1061,9 @@ void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {
   resizeAttributionLabel();
 
   // update scene items position
-  if (noLayoutMsgBox) {
-    std::cout << "w = " << noLayoutMsgBox->width() << ", h = " << noLayoutMsgBox->height()
-              << std::endl;
+  if (noLayoutMsgBox)
     noLayoutMsgBox->move(width() / 2 - noLayoutMsgBox->width() / 2,
                          height() / 2 - noLayoutMsgBox->height() / 2);
-  }
   center->setPos((width() - 10) / 2, (height() - 10) / 2);
   scale->setPos(3, height() - 12);
 

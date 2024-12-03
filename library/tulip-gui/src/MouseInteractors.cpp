@@ -368,8 +368,11 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   GlMainWidget *glmainwidget = static_cast<GlMainWidget *>(widget);
   QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
 
-  if (mouseNavigationEnabled && e->type() == QEvent::MouseButtonDblClick &&
-      qMouseEv->button() == Qt::LeftButton) {
+  // check for meta node navigation (double mouse left click)
+  // only available for NodeLinkDiagram view
+  if ((mouseNavigationEnabled && e->type() == QEvent::MouseButtonDblClick) &&
+      (qMouseEv->button() == Qt::LeftButton) &&
+      (view()->name() == NodeLinkDiagramComponent::viewName)) {
 
     Graph *graph = glmainwidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
 
@@ -467,9 +470,10 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
 #else
           Qt::ControlModifier
 #endif
-      )
+          && (view()->name() == NodeLinkDiagramComponent::viewName))
         currentMouse = new MouseZoomRotZ();
-      else if (qMouseEv->modifiers() & Qt::ShiftModifier)
+      else if ((qMouseEv->modifiers() & Qt::ShiftModifier) &&
+               (view()->name() == NodeLinkDiagramComponent::viewName))
         currentMouse = new MouseRotXRotY();
       else {
         currentMouse = new MouseMove();
@@ -576,7 +580,8 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
 }
 
 void MouseNKeysNavigator::viewChanged(View *view) {
-  nldc = static_cast<NodeLinkDiagramComponent *>(view);
+  if (view && view->name() == NodeLinkDiagramComponent::viewName)
+    nldc = static_cast<NodeLinkDiagramComponent *>(view);
 }
 
 void MouseNKeysNavigator::clear() {}

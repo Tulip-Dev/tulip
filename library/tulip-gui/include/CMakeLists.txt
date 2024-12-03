@@ -8,12 +8,14 @@ INSTALL(FILES
   tulip/GraphPropertiesSelectionWidget.h
   tulip/Interactor.h
   tulip/InteractorComposite.h
+  tulip/InteractorViewExplorer.h
   tulip/MouseInteractors.h
   tulip/NodeLinkDiagramComponent.h
   tulip/NodeLinkDiagramComponentInteractor.h
   tulip/Perspective.h
   tulip/QtGlSceneZoomAndPanAnimator.h
   tulip/QuickAccessBar.h
+  tulip/StandardInteractorPriority.h
   tulip/SimplePluginProgressWidget.h
   tulip/StringsListSelectionWidget.h
   tulip/StringsListSelectionWidgetInterface.h

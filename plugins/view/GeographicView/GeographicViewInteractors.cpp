@@ -22,10 +22,10 @@
 #include <tulip/MouseSelector.h>
 #include <tulip/MouseSelectionEditor.h>
 #include <tulip/MouseEdgeBendEditor.h>
+#include <tulip/StandardInteractorPriority.h>
 
 #include "GeographicViewInteractors.h"
 
-#include "../../utils/StandardInteractorPriority.h"
 #include "../../utils/PluginNames.h"
 
 using namespace std;
@@ -39,17 +39,6 @@ bool GeographicViewInteractor::isCompatible(const std::string &viewName) const {
   return (viewName == ViewName::GeographicViewName);
 }
 
-GeographicViewInteractorNavigation::GeographicViewInteractorNavigation(const PluginContext *)
-    : GeographicViewInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view",
-                               StandardInteractorPriority::Navigation) {}
-
-void GeographicViewInteractorNavigation::construct() {
-  setConfigurationWidgetText(QString("<h3>Navigate on the map</h3>") +
-                             "Translation: <b>Mouse left</b> down + moves<br/>" +
-                             "Zoom/Unzoom: <b>Mouse wheel</b> up/down ");
-  push_back(new GeographicViewNavigator);
-}
-
 GeographicViewInteractorZoom::GeographicViewInteractorZoom(const PluginContext *)
     : GeographicViewInteractor(":/tulip/gui/icons/i_zoom.png", "Zoom on rectangle",
                                StandardInteractorPriority::ZoomOnRectangle) {}
@@ -61,7 +50,6 @@ void GeographicViewInteractorZoom::construct() {
       "the first corner.<br/> drag the mouse then <b>Mouse left</b> up indicates the opposite "
       "corner.<br/> <b>Double Mouse left</b> click to center the view.<br/><br/>" +
       "Zoom/Unzoom: <b>Mouse wheel</b> down/up");
-  push_back(new GeographicViewNavigator);
   push_back(new GeographicViewBoxZoomer);
 }
 
@@ -276,8 +264,6 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     return MouseNKeysNavigator::eventFilter(widget, e);
   }
 }
-
-PLUGIN(GeographicViewInteractorNavigation)
 
 GeographicViewBoxZoomer::GeographicViewBoxZoomer()
     : MouseBoxZoomer(Qt::LeftButton, Qt::NoModifier, false /* no viewport update*/) {}
