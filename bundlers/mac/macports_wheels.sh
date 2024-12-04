@@ -11,7 +11,7 @@ export COLUMNS=80
 pushd /tmp
 
 # install python supported versions
-for version in 3.9.13 3.10.11 3.11.9 3.12.7 3.13.0
+for version in 3.9.13 3.10.11 3.11.9 3.12.8 3.13.1
 do
   # download installer
   curl -LO https://www.python.org/ftp/python/${version}/python-${version}-macos11.pkg

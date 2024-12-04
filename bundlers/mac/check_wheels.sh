@@ -5,7 +5,7 @@ WHEELS_DIR=$1
 export COLUMNS=80
 
 # install python supported versions
-for PY_VER in 3.9.13 3.10.11 3.11.9 3.12.7 3.13.0
+for PY_VER in 3.9.13 3.10.11 3.11.9 3.12.8 3.13.1
 do
   # download installer
   curl -k -LO https://www.python.org/ftp/python/${PY_VER}/python-${PY_VER}-macos11.pkg
