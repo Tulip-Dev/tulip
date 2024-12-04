@@ -488,8 +488,8 @@ NEW-WINDOW:2,48:58720322,58720322,38955465,0,0,0:0x0+124+119:110,110:
 7,6,1303,120,0,0,0,33618055,9,'Logitech USB Optical Mouse'
 7,6,1303,119,0,0,0,33618063,9,'Logitech USB Optical Mouse'
 7,6,1304,118,0,0,0,33618119,9,'Logitech USB Optical Mouse'
-7,6,1304,117,0,0,0,33618127,9,'Logitech USB Optical Mouse'
-7,6,1304,116,0,0,0,33618151,9,'Logitech USB Optical Mouse'
+7,6,1284,117,0,0,0,33618127,9,'Logitech USB Optical Mouse'
+7,6,1284,116,0,0,0,33618151,9,'Logitech USB Optical Mouse'
 7,4,0,0,1,0,0,33618335,9,Logitech USB Optical Mouse
 6,4,0,0,1,0,0,33618335,2,Virtual core pointer
 7,5,0,0,1,0,0,33618463,9,Logitech USB Optical Mouse

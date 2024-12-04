@@ -663,103 +663,103 @@ NEW-WINDOW:5,49:52428870,52428870,662,640,407,0:0x0+124+119:110,110:
 7,6,304,688,0,0,0,5565384,9,'Logitech USB Optical Mouse'
 7,6,304,689,0,0,0,5565400,9,'Logitech USB Optical Mouse'
 7,6,304,691,0,0,0,5565408,9,'Logitech USB Optical Mouse'
-7,6,303,693,0,0,0,5565416,9,'Logitech USB Optical Mouse'
-7,6,302,694,0,0,0,5565440,9,'Logitech USB Optical Mouse'
-7,6,302,696,0,0,0,5565448,9,'Logitech USB Optical Mouse'
-7,6,302,697,0,0,0,5565464,9,'Logitech USB Optical Mouse'
-7,6,302,698,0,0,0,5565536,9,'Logitech USB Optical Mouse'
-7,6,302,699,0,0,0,5565544,9,'Logitech USB Optical Mouse'
-7,4,0,0,3,0,0,5566480,9,Logitech USB Optical Mouse
-6,4,0,0,3,0,0,5566480,2,Virtual core pointer
-7,5,0,0,3,0,0,5566640,9,Logitech USB Optical Mouse
-6,5,0,0,3,0,0,5566640,2,Virtual core pointer
-7,2,0,0,0,116,0,5567736,10,Dell Dell QuietKey Keyboard
-6,2,0,0,0,116,0,5567736,3,Virtual core keyboard
-7,3,0,0,0,116,0,5567848,10,Dell Dell QuietKey Keyboard
-6,3,0,0,0,116,0,5567848,3,Virtual core keyboard
-7,2,0,0,0,116,0,5568104,10,Dell Dell QuietKey Keyboard
-6,2,0,0,0,116,0,5568104,3,Virtual core keyboard
-7,3,0,0,0,116,0,5568248,10,Dell Dell QuietKey Keyboard
-6,3,0,0,0,116,0,5568248,3,Virtual core keyboard
-7,2,0,0,0,36,0,5568832,10,Dell Dell QuietKey Keyboard
-6,2,0,0,0,36,0,5568832,3,Virtual core keyboard
-0,21,0,0,0,0,0,5568843
+7,6,303,693,0,0,0,5585416,9,'Logitech USB Optical Mouse'
+7,6,302,694,0,0,0,5585440,9,'Logitech USB Optical Mouse'
+7,6,302,696,0,0,0,5585448,9,'Logitech USB Optical Mouse'
+7,6,302,697,0,0,0,5585464,9,'Logitech USB Optical Mouse'
+7,6,302,698,0,0,0,5585536,9,'Logitech USB Optical Mouse'
+7,6,302,699,0,0,0,5585544,9,'Logitech USB Optical Mouse'
+7,4,0,0,3,0,0,5586480,9,Logitech USB Optical Mouse
+6,4,0,0,3,0,0,5586480,2,Virtual core pointer
+7,5,0,0,3,0,0,5586640,9,Logitech USB Optical Mouse
+6,5,0,0,3,0,0,5586640,2,Virtual core pointer
+7,2,0,0,0,116,0,5587736,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,116,0,5587736,3,Virtual core keyboard
+7,3,0,0,0,116,0,5587848,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,116,0,5587848,3,Virtual core keyboard
+7,2,0,0,0,116,0,5588104,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,116,0,5588104,3,Virtual core keyboard
+7,3,0,0,0,116,0,5588248,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,116,0,5588248,3,Virtual core keyboard
+7,2,0,0,0,36,0,5588832,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,36,0,5588832,3,Virtual core keyboard
+0,21,0,0,0,0,0,5588843
 NEW-WINDOW:451,254:52428889,52428889,35234198,0,0,0:26x60+879+458:0,0:Exporting graph "Pajek - 'filename'="/tmp/tests_gui/data/netscience.net""
-0,21,0,0,0,0,0,5568843
-0,21,0,0,0,0,0,5568843
-0,21,0,0,0,0,0,5568843
-7,3,0,0,0,36,0,5568920,10,Dell Dell QuietKey Keyboard
-6,3,0,0,0,36,0,5568920,3,Virtual core keyboard
-7,2,0,0,0,28,0,5570272,10,Dell Dell QuietKey Keyboard
-6,2,0,0,0,28,0,5570272,3,Virtual core keyboard
-7,3,0,0,0,28,0,5570352,10,Dell Dell QuietKey Keyboard
-6,3,0,0,0,28,0,5570352,3,Virtual core keyboard
-7,2,0,0,0,26,0,5570720,10,Dell Dell QuietKey Keyboard
-6,2,0,0,0,26,0,5570720,3,Virtual core keyboard
-7,3,0,0,0,26,0,5570816,10,Dell Dell QuietKey Keyboard
-6,3,0,0,0,26,0,5570816,3,Virtual core keyboard
-7,2,0,0,0,39,0,5570960,10,Dell Dell QuietKey Keyboard
-6,2,0,0,0,39,0,5570960,3,Virtual core keyboard
-7,3,0,0,0,39,0,5571024,10,Dell Dell QuietKey Keyboard
-6,3,0,0,0,39,0,5571024,3,Virtual core keyboard
-7,2,0,0,0,28,0,5571224,10,Dell Dell QuietKey Keyboard
-6,2,0,0,0,28,0,5571224,3,Virtual core keyboard
-7,3,0,0,0,28,0,5571304,10,Dell Dell QuietKey Keyboard
-6,3,0,0,0,28,0,5571304,3,Virtual core keyboard
-7,2,0,0,0,17,0,5571560,10,Dell Dell QuietKey Keyboard
-6,2,0,0,0,17,0,5571560,3,Virtual core keyboard
-7,3,0,0,0,17,0,5571640,10,Dell Dell QuietKey Keyboard
-6,3,0,0,0,17,0,5571640,3,Virtual core keyboard
-7,2,0,0,0,42,0,5572216,10,Dell Dell QuietKey Keyboard
-6,2,0,0,0,42,0,5572216,3,Virtual core keyboard
-7,3,0,0,0,42,0,5572304,10,Dell Dell QuietKey Keyboard
-6,3,0,0,0,42,0,5572304,3,Virtual core keyboard
-7,2,0,0,0,30,0,5572304,10,Dell Dell QuietKey Keyboard
-6,2,0,0,0,30,0,5572304,3,Virtual core keyboard
-7,2,0,0,0,31,0,5572368,10,Dell Dell QuietKey Keyboard
-6,2,0,0,0,31,0,5572368,3,Virtual core keyboard
-7,3,0,0,0,30,0,5572432,10,Dell Dell QuietKey Keyboard
-6,3,0,0,0,30,0,5572432,3,Virtual core keyboard
-7,3,0,0,0,31,0,5572488,10,Dell Dell QuietKey Keyboard
-6,3,0,0,0,31,0,5572488,3,Virtual core keyboard
-7,2,0,0,0,62,0,5573016,10,Dell Dell QuietKey Keyboard
-6,2,0,0,0,62,0,5573016,3,Virtual core keyboard
-7,2,0,0,0,59,0,5573320,10,Dell Dell QuietKey Keyboard
-6,2,0,0,0,59,0,5573320,3,Virtual core keyboard
-7,3,0,0,0,59,0,5573376,10,Dell Dell QuietKey Keyboard
-6,3,0,0,0,59,0,5573376,3,Virtual core keyboard
-7,3,0,0,0,62,0,5573456,10,Dell Dell QuietKey Keyboard
-6,3,0,0,0,62,0,5573456,3,Virtual core keyboard
-7,2,0,0,0,28,0,5573704,10,Dell Dell QuietKey Keyboard
-6,2,0,0,0,28,0,5573704,3,Virtual core keyboard
-7,3,0,0,0,28,0,5573800,10,Dell Dell QuietKey Keyboard
-6,3,0,0,0,28,0,5573800,3,Virtual core keyboard
-7,2,0,0,0,46,0,5573896,10,Dell Dell QuietKey Keyboard
-6,2,0,0,0,46,0,5573896,3,Virtual core keyboard
-7,3,0,0,0,46,0,5574104,10,Dell Dell QuietKey Keyboard
-6,3,0,0,0,46,0,5574104,3,Virtual core keyboard
-7,2,0,0,0,33,0,5574120,10,Dell Dell QuietKey Keyboard
-6,2,0,0,0,33,0,5574120,3,Virtual core keyboard
-7,3,0,0,0,33,0,5574248,10,Dell Dell QuietKey Keyboard
-6,3,0,0,0,33,0,5574248,3,Virtual core keyboard
-7,2,0,0,0,36,0,5575160,10,Dell Dell QuietKey Keyboard
-6,2,0,0,0,36,0,5575160,3,Virtual core keyboard
-0,21,0,0,0,0,0,5575164
+0,21,0,0,0,0,0,5588843
+0,21,0,0,0,0,0,5588843
+0,21,0,0,0,0,0,5588843
+7,3,0,0,0,36,0,5588920,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,36,0,5588920,3,Virtual core keyboard
+7,2,0,0,0,28,0,5590272,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,28,0,5590272,3,Virtual core keyboard
+7,3,0,0,0,28,0,5590352,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,28,0,5590352,3,Virtual core keyboard
+7,2,0,0,0,26,0,5590720,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,26,0,5590720,3,Virtual core keyboard
+7,3,0,0,0,26,0,5590816,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,26,0,5590816,3,Virtual core keyboard
+7,2,0,0,0,39,0,5590960,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,39,0,5590960,3,Virtual core keyboard
+7,3,0,0,0,39,0,5591024,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,39,0,5591024,3,Virtual core keyboard
+7,2,0,0,0,28,0,5591224,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,28,0,5591224,3,Virtual core keyboard
+7,3,0,0,0,28,0,5591304,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,28,0,5591304,3,Virtual core keyboard
+7,2,0,0,0,17,0,5591560,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,17,0,5591560,3,Virtual core keyboard
+7,3,0,0,0,17,0,5591640,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,17,0,5591640,3,Virtual core keyboard
+7,2,0,0,0,42,0,5592216,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,42,0,5592216,3,Virtual core keyboard
+7,3,0,0,0,42,0,5592304,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,42,0,5592304,3,Virtual core keyboard
+7,2,0,0,0,30,0,5592304,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,30,0,5592304,3,Virtual core keyboard
+7,2,0,0,0,31,0,5592368,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,31,0,5592368,3,Virtual core keyboard
+7,3,0,0,0,30,0,5592432,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,30,0,5592432,3,Virtual core keyboard
+7,3,0,0,0,31,0,5592488,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,31,0,5592488,3,Virtual core keyboard
+7,2,0,0,0,62,0,5593016,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,62,0,5593016,3,Virtual core keyboard
+7,2,0,0,0,59,0,5593320,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,59,0,5593320,3,Virtual core keyboard
+7,3,0,0,0,59,0,5593376,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,59,0,5593376,3,Virtual core keyboard
+7,3,0,0,0,62,0,5593456,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,62,0,5593456,3,Virtual core keyboard
+7,2,0,0,0,28,0,5593704,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,28,0,5593704,3,Virtual core keyboard
+7,3,0,0,0,28,0,5593800,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,28,0,5593800,3,Virtual core keyboard
+7,2,0,0,0,46,0,5593896,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,46,0,5593896,3,Virtual core keyboard
+7,3,0,0,0,46,0,5594104,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,46,0,5594104,3,Virtual core keyboard
+7,2,0,0,0,33,0,5594120,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,33,0,5594120,3,Virtual core keyboard
+7,3,0,0,0,33,0,5594248,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,33,0,5594248,3,Virtual core keyboard
+7,2,0,0,0,36,0,5595160,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,36,0,5595160,3,Virtual core keyboard
+0,21,0,0,0,0,0,5595164
 NEW-WINDOW:451,217:52428889,52428889,662,451,217,0:451x217+879+458:0,0:Exporting graph "Pajek - 'filename'="/tmp/tests_gui/data/netscience.net""
-0,21,0,0,0,0,0,5575164
-0,21,0,0,0,0,0,5575164
-0,21,0,0,0,0,0,5575164
-0,21,0,0,0,0,0,5575164
-0,21,0,0,0,0,0,5575174
+0,21,0,0,0,0,0,5595164
+0,21,0,0,0,0,0,5595164
+0,21,0,0,0,0,0,5595164
+0,21,0,0,0,0,0,5595164
+0,21,0,0,0,0,0,5595174
 NEW-WINDOW:640,459:52428895,52428895,35239012,0,0,0:26x60+500+48:0,0:
-0,21,0,0,0,0,0,5575174
-0,21,0,0,0,0,0,5575174
-0,21,0,0,0,0,0,5575174
-0,21,0,0,0,0,0,5575192
+0,21,0,0,0,0,0,5595174
+0,21,0,0,0,0,0,5595174
+0,21,0,0,0,0,0,5595174
+0,21,0,0,0,0,0,5595192
 NEW-WINDOW:-1057857580,32636:52428895,52428895,662,640,422,0:14353472x0+1+0:14393744,14393744:
-0,21,0,0,0,0,0,5575192
-0,21,0,0,0,0,0,5575192
-0,21,0,0,0,0,0,5575192
-0,21,0,0,0,0,0,5575192
-7,3,0,0,0,36,0,5575272,10,Dell Dell QuietKey Keyboard
-6,3,0,0,0,36,0,5575272,3,Virtual core keyboard
+0,21,0,0,0,0,0,5595192
+0,21,0,0,0,0,0,5595192
+0,21,0,0,0,0,0,5595192
+0,21,0,0,0,0,0,5595192
+7,3,0,0,0,36,0,5595272,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,36,0,5595272,3,Virtual core keyboard

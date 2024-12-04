@@ -261,8 +261,8 @@ error-range                   0-0
 7,6,1224,119,0,0,0,33073759,9,'Logitech USB Optical Mouse'
 7,6,1224,118,0,0,0,33073984,9,'Logitech USB Optical Mouse'
 7,6,1224,118,0,0,0,33074136,9,'Logitech USB Optical Mouse'
-7,6,1224,117,0,0,0,33074159,9,'Logitech USB Optical Mouse'
-7,6,1224,116,0,0,0,33074232,9,'Logitech USB Optical Mouse'
+7,6,1204,117,0,0,0,33074159,9,'Logitech USB Optical Mouse'
+7,6,1204,116,0,0,0,33074232,9,'Logitech USB Optical Mouse'
 7,4,0,0,1,0,0,33074951,9,Logitech USB Optical Mouse
 6,4,0,0,1,0,0,33074951,2,Virtual core pointer
 7,5,0,0,1,0,0,33075135,9,Logitech USB Optical Mouse
