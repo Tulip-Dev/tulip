@@ -48,7 +48,7 @@
 #include <QNetworkReply>
 #include <QXmlStreamReader>
 
-static const QString RSS_URL = "https://tulip.labri.fr/site/?q=newsFeed.xml";
+static const QString RSS_URL = "https://sourceforge.net/p/auber/news/feed.rss";
 static const unsigned RSS_LIMIT = 3;
 
 using namespace tlp;
