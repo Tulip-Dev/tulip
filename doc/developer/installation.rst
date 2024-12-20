@@ -34,7 +34,7 @@ The following dependencies are required to build Tulip:
 * `OpenGL <https://www.opengl.org>`_ >= 2.0
 * `GLEW <http://glew.sourceforge.net/>`_ >= 1.4
 * `Python <https://www.python.org>`_ >= 3.9
-* `SIP Python Module <https://www.riverbankcomputing.com/software/sip/intro>`_ >= 6.8.5
+* `SIP Python Module <https://github.com/Python-SIP/sip>`_ >= 6.9.1
 * `Pip Python module <https://pypi.org/project/pip/>`_
 * `Qhull <http://www.qhull.org/>`_
 * `yajl <https://lloyd.github.io/yajl/>`_ >= 2.0

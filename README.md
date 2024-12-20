@@ -42,7 +42,7 @@ The Tulip framework offers numerous features, notably:
   
   * A large variety of graphs algorithms: clustering, metric, layout ... As Tulip is dedicated
   to graph visualization, it is provided with numerous state of the art graph layout algorithms
-  but also a bridge to the [Open Graph Drawing Framework](http://www.ogdf.net).
+  but also a bridge to the [Open Graph Drawing Framework](https://github.com/ogdf/ogdf).
   
   * A hardware accelerated graph rendering engine written in [OpenGL](https://www.opengl.org), 
   highly customizable in terms of visual encoding for graph nodes and edges, in order to 
@@ -106,7 +106,7 @@ The following dependencies are required to build Tulip:
   * [GLEW](http://glew.sourceforge.net/) >= 1.4
   * [Python](https://www.python.org) >= 3.9
   * [Pip] (https://pypi.org/project/pip/)
-  * [SIP](https://www.riverbankcomputing.com/software/sip/) >= 6.8.5 (to be installed via pip or on Debian/Ubuntu packages sipbuild and sip-tools)
+  * [SIP](https://github.com/Python-SIP/sip) >= 6.9.1 (to be installed via pip or on Debian/Ubuntu packages sipbuild and sip-tools)
   * [libzip](https://libzip.org)
   * [Qhull](http://www.qhull.org/)
   * [yajl](https://lloyd.github.io/yajl/) >= 2.0  

@@ -88,7 +88,7 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       ";\">www.opengl.org</a> </li>"
       "<li><b>OGDF</b> v" +
       OGDF_VERSION +
-      ": <a href=\"https://ogdf.net/\" style=\"color: " HTML_LINK_COLOR ";\">ogdf.net</a> </li>" +
+      ": <a href=\"https://github.com/ogdf/ogdf\" style=\"color: " HTML_LINK_COLOR ";\">github.com/ogdf/ogdf</a> </li>" +
       (PythonIDEInterface::exists()
            ? QString("  <li> <b> Python </b> ") + PythonIDEInterface::compiledVersion(true) +
                  ": <a href=\"https://www.python.org\" style=\"color:" HTML_LINK_COLOR

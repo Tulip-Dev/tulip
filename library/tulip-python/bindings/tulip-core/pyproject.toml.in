@@ -1,6 +1,6 @@
 # Specify the build system.
 [build-system]
-requires = ["sip>=6.8, <7"]
+requires = ["sip>=6.9, <7"]
 build-backend = "sipbuild.api"
 
 [project]

@@ -10,7 +10,7 @@ Welcome to Tulip Python documentation!
 
 Tulip_ is an information visualization framework written in C++ dedicated to the analysis and visualization of graphs.
 Tulip Python is a set of modules that exposes to Python almost all the content of the Tulip_ C++ API. The bindings
-has been developed with the SIP_ tool from Riverbank_. The main
+has been developed with the SIP_ tool. The main
 features provided by the bindings are listed below:
 
 * creation and manipulation of graphs
@@ -43,6 +43,4 @@ Indices and tables
 
 .. _Tulip: https://tulip.labri.fr
 
-.. _SIP: http://www.riverbankcomputing.co.uk/software/sip/intro
-
-.. _Riverbank: http://www.riverbankcomputing.co.uk/
+.. _SIP: https://github.com/Python-SIP/sip
