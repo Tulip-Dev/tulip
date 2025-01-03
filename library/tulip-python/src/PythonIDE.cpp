@@ -570,11 +570,11 @@ if result.returncode != 0:
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton_2, "increase font size", "-");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton_3, "increase font size", "-");
 
-  connect(_ui->mainScriptsTabWidget, SIGNAL(fileSaved(int)), this, SLOT(scriptSaved(int)));
+  connect(_ui->mainScriptsTabWidget, SIGNAL(fileSaved(int)), this, SLOT(saveScript(int)));
   connect(_ui->mainScriptsTabWidget, SIGNAL(fileEdited()), this, SLOT(fileEdited()));
-  connect(_ui->modulesTabWidget, SIGNAL(fileSaved(int)), this, SLOT(moduleSaved(int)));
+  connect(_ui->modulesTabWidget, SIGNAL(fileSaved(int)), this, SLOT(saveScript(int)));
   connect(_ui->modulesTabWidget, SIGNAL(fileEdited()), this, SLOT(fileEdited()));
-  connect(_ui->pluginsTabWidget, SIGNAL(fileSaved(int)), this, SLOT(pluginSaved(int)));
+  connect(_ui->pluginsTabWidget, SIGNAL(fileSaved(int)), this, SLOT(saveScript(int)));
   connect(_ui->pluginsTabWidget, SIGNAL(fileEdited()), this, SLOT(fileEdited()));
 
   connect(_ui->runScriptButton, SIGNAL(clicked()), this, SLOT(executeCurrentScript()));
@@ -584,7 +584,7 @@ if result.returncode != 0:
 
   connect(_ui->newMainScriptButton, SIGNAL(clicked()), this, SLOT(newScript()));
   connect(_ui->loadMainScriptButton, SIGNAL(clicked()), this, SLOT(loadScript()));
-  connect(_ui->saveMainScriptButton, SIGNAL(clicked()), this, SLOT(saveScript()));
+  connect(_ui->saveMainScriptButton, SIGNAL(clicked()), this, SLOT(saveMainScript()));
   connect(_ui->saveAsMainScriptButton, SIGNAL(clicked()), this, SLOT(saveAsScript()));
   connect(_ui->graphComboBox, SIGNAL(currentItemChanged()), this,
           SLOT(graphComboBoxIndexChanged()));
@@ -1424,12 +1424,6 @@ void PythonIDE::readProject(tlp::TulipProject *project) {
   }
 }
 
-void PythonIDE::scriptSaved(int /*idx*/) {}
-
-void PythonIDE::pluginSaved(int /*idx*/) {}
-
-void PythonIDE::moduleSaved(int /*idx*/) {}
-
 int PythonIDE::addMainScriptEditor(const QString &fileName) {
   int idx = _ui->mainScriptsTabWidget->addEditor(fileName);
   getMainScriptEditor(idx)->installEventFilter(this);
@@ -1508,8 +1502,8 @@ bool PythonIDE::loadScript(const QString &fileName, bool clear) {
   return true;
 }
 
-void PythonIDE::saveScript() {
-  saveScript(_ui->mainScriptsTabWidget->currentIndex(), true, true);
+void PythonIDE::saveMainScript() {
+  saveScript(_ui->mainScriptsTabWidget->currentIndex(), true, false);
 }
 
 void PythonIDE::saveAsScript() {

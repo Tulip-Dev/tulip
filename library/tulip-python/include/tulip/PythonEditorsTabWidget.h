@@ -53,10 +53,6 @@ public:
 
   bool eventFilter(QObject *, QEvent *) override;
 
-  void saveCurrentEditorContentToFile();
-
-  void saveEditorContentToFile(int);
-
   void increaseFontSize();
 
   void decreaseFontSize();

@@ -124,7 +124,6 @@ private:
   int addPluginEditor(const QString &fileName = "");
 
   bool loadScript(const QString &fileName, bool clear = true);
-  bool saveScript(int tabIdx, bool clear = true, bool saveAs = false);
 
   tlp::PythonCodeEditor *getCurrentMainScriptEditor() const;
   tlp::PythonCodeEditor *getMainScriptEditor(int idx) const;
@@ -155,15 +154,14 @@ private slots:
   void scrollToEditorLine(const QUrl &);
   void increaseFontSize();
   void decreaseFontSize();
-  void scriptSaved(int);
-  void pluginSaved(int);
-  void moduleSaved(int);
   void graphComboBoxIndexChanged();
   void fileEdited();
 
   void newScript();
   void loadScript();
-  void saveScript();
+  bool saveScript(int tabIdx, bool clear = true, bool saveAs = false);
+
+  void saveMainScript();
   void saveAsScript();
   void currentScriptPaused();
 
