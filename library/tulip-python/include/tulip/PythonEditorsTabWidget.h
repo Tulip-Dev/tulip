@@ -67,8 +67,6 @@ signals:
 
   void fileEdited();
 
-  void fileSaved(int);
-
   void filesReloaded();
 
 public slots:

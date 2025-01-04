@@ -115,19 +115,7 @@ void PythonEditorsTabWidget::clearErrorIndicators() {
 }
 
 bool PythonEditorsTabWidget::eventFilter(QObject *, QEvent *event) {
-#ifdef __APPLE__
-  Qt::KeyboardModifiers modifier = Qt::MetaModifier;
-#else
-  Qt::KeyboardModifiers modifier = Qt::ControlModifier;
-#endif
-
-  if (event->type() == QEvent::KeyPress) {
-    QKeyEvent *keyEvt = static_cast<QKeyEvent *>(event);
-
-    if (keyEvt->modifiers() == modifier && keyEvt->key() == Qt::Key_S) {
-          emit fileSaved(currentIndex());
-    }
-  } else if (event->type() == QEvent::FocusIn && !_dontTreatFocusIn) {
+  if (event->type() == QEvent::FocusIn && !_dontTreatFocusIn) {
     _dontTreatFocusIn = true;
     reloadCodeInEditorsIfNeeded();
     _dontTreatFocusIn = false;

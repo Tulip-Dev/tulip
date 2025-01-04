@@ -541,17 +541,7 @@ if result.returncode != 0:
 
   connect(_ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
 
-  connect(_ui->newModuleButton, SIGNAL(clicked()), this, SLOT(newModule()));
-  connect(_ui->loadModuleButton, SIGNAL(clicked()), this, SLOT(loadModule()));
-  connect(_ui->saveModuleButton, SIGNAL(clicked()), this, SLOT(saveModule()));
-  connect(_ui->saveAsModuleButton, SIGNAL(clicked()), this, SLOT(saveAsModule()));
-  connect(_ui->newPluginButton, SIGNAL(clicked()), this, SLOT(newPythonPlugin()));
-  connect(_ui->loadPluginButton, SIGNAL(clicked()), this, SLOT(loadPythonPlugin()));
-  connect(_ui->savePluginButton, SIGNAL(clicked()), this, SLOT(savePythonPlugin()));
-  connect(_ui->saveAsPluginButton, SIGNAL(clicked()), this, SLOT(saveAsPythonPlugin()));
-  connect(_ui->registerPluginButton, SIGNAL(clicked()), this, SLOT(registerPythonPlugin()));
-  connect(_ui->removePluginButton, SIGNAL(clicked()), this, SLOT(removePythonPlugin()));
-  connect(_ui->consoleWidget, SIGNAL(anchorClicked(const QUrl &)), this,
+    connect(_ui->consoleWidget, SIGNAL(anchorClicked(const QUrl &)), this,
           SLOT(scrollToEditorLine(const QUrl &)));
   connect(_ui->decreaseFontSizeButton, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
   connect(_ui->increaseFontSizeButton, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
@@ -570,22 +560,58 @@ if result.returncode != 0:
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton_2, "increase font size", "-");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton_3, "increase font size", "-");
 
-  connect(_ui->mainScriptsTabWidget, SIGNAL(fileSaved(int)), this, SLOT(saveScript(int)));
-  connect(_ui->mainScriptsTabWidget, SIGNAL(fileEdited()), this, SLOT(fileEdited()));
-  connect(_ui->modulesTabWidget, SIGNAL(fileSaved(int)), this, SLOT(saveScript(int)));
   connect(_ui->modulesTabWidget, SIGNAL(fileEdited()), this, SLOT(fileEdited()));
-  connect(_ui->pluginsTabWidget, SIGNAL(fileSaved(int)), this, SLOT(saveScript(int)));
-  connect(_ui->pluginsTabWidget, SIGNAL(fileEdited()), this, SLOT(fileEdited()));
 
-  connect(_ui->runScriptButton, SIGNAL(clicked()), this, SLOT(executeCurrentScript()));
-  connect(_ui->pauseScriptButton, SIGNAL(clicked()), this, SLOT(pauseCurrentScript()));
-  connect(_ui->stopScriptButton, SIGNAL(clicked()), this, SLOT(stopCurrentScript()));
-  _ui->progressBar->hide();
-
+  //scripts
   connect(_ui->newMainScriptButton, SIGNAL(clicked()), this, SLOT(newScript()));
   connect(_ui->loadMainScriptButton, SIGNAL(clicked()), this, SLOT(loadScript()));
   connect(_ui->saveMainScriptButton, SIGNAL(clicked()), this, SLOT(saveMainScript()));
   connect(_ui->saveAsMainScriptButton, SIGNAL(clicked()), this, SLOT(saveAsScript()));
+  shortCut = new QShortcut(QKeySequence::Save, _ui->mainScriptsTabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(saveMainScript()));
+  shortCut = new QShortcut(QKeySequence::SaveAs, _ui->mainScriptsTabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(saveAsScript()));
+  shortCut = new QShortcut(QKeySequence::New, _ui->mainScriptsTabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(newScript()));
+  shortCut = new QShortcut(QKeySequence::Open, _ui->mainScriptsTabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(loadScript()));
+  connect(_ui->runScriptButton, SIGNAL(clicked()), this, SLOT(executeCurrentScript()));
+  connect(_ui->pauseScriptButton, SIGNAL(clicked()), this, SLOT(pauseCurrentScript()));
+  connect(_ui->stopScriptButton, SIGNAL(clicked()), this, SLOT(stopCurrentScript()));
+  _ui->progressBar->hide();
+  connect(_ui->mainScriptsTabWidget, SIGNAL(fileEdited()), this, SLOT(fileEdited()));
+
+  //modules
+  connect(_ui->newModuleButton, SIGNAL(clicked()), this, SLOT(newModule()));
+  connect(_ui->loadModuleButton, SIGNAL(clicked()), this, SLOT(loadModule()));
+  connect(_ui->saveModuleButton, SIGNAL(clicked()), this, SLOT(saveModule()));
+  connect(_ui->saveAsModuleButton, SIGNAL(clicked()), this, SLOT(saveAsModule()));
+  shortCut = new QShortcut(QKeySequence::Save, _ui->modulesTabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(saveModule()));
+  shortCut = new QShortcut(QKeySequence::SaveAs, _ui->modulesTabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(saveAsModule()));
+  shortCut = new QShortcut(QKeySequence::New, _ui->modulesTabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(newModule()));
+  shortCut = new QShortcut(QKeySequence::Open, _ui->modulesTabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(loadModule()));
+
+  //plugins
+  shortCut = new QShortcut(QKeySequence::Save, _ui->pluginsTabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(savePythonPlugin()));
+  shortCut = new QShortcut(QKeySequence::SaveAs, _ui->pluginsTabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(saveAsPythonPlugin()));
+  shortCut = new QShortcut(QKeySequence::New, _ui->pluginsTabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(newPythonPlugin()));
+  shortCut = new QShortcut(QKeySequence::Open, _ui->pluginsTabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(loadPythonPlugin()));
+  connect(_ui->pluginsTabWidget, SIGNAL(fileEdited()), this, SLOT(fileEdited()));
+  connect(_ui->newPluginButton, SIGNAL(clicked()), this, SLOT(newPythonPlugin()));
+  connect(_ui->loadPluginButton, SIGNAL(clicked()), this, SLOT(loadPythonPlugin()));
+  connect(_ui->savePluginButton, SIGNAL(clicked()), this, SLOT(savePythonPlugin()));
+  connect(_ui->saveAsPluginButton, SIGNAL(clicked()), this, SLOT(saveAsPythonPlugin()));
+  connect(_ui->registerPluginButton, SIGNAL(clicked()), this, SLOT(registerPythonPlugin()));
+  connect(_ui->removePluginButton, SIGNAL(clicked()), this, SLOT(removePythonPlugin()));
+
   connect(_ui->graphComboBox, SIGNAL(currentItemChanged()), this,
           SLOT(graphComboBoxIndexChanged()));
 

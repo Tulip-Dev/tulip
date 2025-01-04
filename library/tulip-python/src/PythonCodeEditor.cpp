@@ -45,23 +45,23 @@
 using namespace std;
 using namespace tlp;
 
-class GrabKeyboardFocusEventFilter : public QObject {
-public:
-  bool eventFilter(QObject *, QEvent *event) override {
-    if (event->type() == QEvent::ShortcutOverride) {
-      // do not override decrease/increase font size shortcuts
-      QKeyEvent *ke = static_cast<QKeyEvent *>(event);
-      if ((ke->matches(QKeySequence::ZoomIn)) || (ke->matches(QKeySequence::ZoomOut)))
-        return false;
-      event->accept();
-      return true;
-    }
+// class GrabKeyboardFocusEventFilter : public QObject {
+// public:
+//   bool eventFilter(QObject *, QEvent *event) override {
+//     if (event->type() == QEvent::ShortcutOverride) {
+//       // do not override decrease/increase font size shortcuts
+//       QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+//       if ((ke->matches(QKeySequence::ZoomIn)) || (ke->matches(QKeySequence::ZoomOut)))
+//         return false;
+//       event->accept();
+//       return true;
+//     }
 
-    return false;
-  }
-};
+//     return false;
+//   }
+// };
 
-static GrabKeyboardFocusEventFilter keyboardFocusEventFilter;
+// static GrabKeyboardFocusEventFilter keyboardFocusEventFilter;
 
 static char sepChar[] = {' ', '\t', '=', '(', '[', '{', ',', '*', '+', '/', '^', '-', 0};
 
@@ -96,7 +96,7 @@ AutoCompletionList::AutoCompletionList() : QListWidget(), _codeEditor(nullptr) {
   setAttribute(Qt::WA_StaticContents);
   setFrameShape(StyledPanel);
   setFrameShadow(Plain);
-  installEventFilter(&keyboardFocusEventFilter);
+  // installEventFilter(&keyboardFocusEventFilter);
   _activated = false;
   _wasActivated = false;
   setToolTip("Use up and down arrow keys to navigate through the list (or use the mouse wheel).\n"
@@ -452,7 +452,7 @@ QMainWindow *PythonCodeEditor::_mainWindow = nullptr;
 
 PythonCodeEditor::PythonCodeEditor(QWidget *parent)
     : QPlainTextEdit(parent), _highlighter(nullptr), _tooltipActive(false), _indentPattern(4, ' ') {
-  installEventFilter(&keyboardFocusEventFilter);
+  // installEventFilter(&keyboardFocusEventFilter);
   setAutoIndentation(true);
   setIndentationGuides(true);
   setHighlightEditedLine(true);
