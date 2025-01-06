@@ -541,7 +541,7 @@ if result.returncode != 0:
 
   connect(_ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
 
-    connect(_ui->consoleWidget, SIGNAL(anchorClicked(const QUrl &)), this,
+  connect(_ui->consoleWidget, SIGNAL(anchorClicked(const QUrl &)), this,
           SLOT(scrollToEditorLine(const QUrl &)));
   connect(_ui->decreaseFontSizeButton, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
   connect(_ui->increaseFontSizeButton, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
@@ -549,13 +549,9 @@ if result.returncode != 0:
   connect(_ui->increaseFontSizeButton_2, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
   connect(_ui->decreaseFontSizeButton_3, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
   connect(_ui->increaseFontSizeButton_3, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
-  auto shortCut = new QShortcut(QKeySequence::ZoomOut, _ui->tabWidget);
-  connect(shortCut, SIGNAL(activated()), this, SLOT(decreaseFontSize()));
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton, "decrease font size", "-");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton_2, "decrease font size", "-");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton_3, "decrease font size", "-");
-  shortCut = new QShortcut(QKeySequence::ZoomIn, _ui->tabWidget);
-  connect(shortCut, SIGNAL(activated()), this, SLOT(increaseFontSize()));
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton, "increase font size", "-");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton_2, "increase font size", "-");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton_3, "increase font size", "-");
@@ -567,7 +563,7 @@ if result.returncode != 0:
   connect(_ui->loadMainScriptButton, SIGNAL(clicked()), this, SLOT(loadScript()));
   connect(_ui->saveMainScriptButton, SIGNAL(clicked()), this, SLOT(saveMainScript()));
   connect(_ui->saveAsMainScriptButton, SIGNAL(clicked()), this, SLOT(saveAsScript()));
-  shortCut = new QShortcut(QKeySequence::Save, _ui->mainScriptsTabWidget);
+  auto shortCut = new QShortcut(QKeySequence::Save, _ui->mainScriptsTabWidget);
   connect(shortCut, SIGNAL(activated()), this, SLOT(saveMainScript()));
   shortCut = new QShortcut(QKeySequence::SaveAs, _ui->mainScriptsTabWidget);
   connect(shortCut, SIGNAL(activated()), this, SLOT(saveAsScript()));
