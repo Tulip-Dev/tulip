@@ -60,6 +60,7 @@ class TLP_SCOPE IntegerEnumeratedProperty : public IntegerProperty {
   void printValueError(tlp::StoredType<int>::ReturnedConstValue v, const std::string &eltType);
 
 public:
+  using IntegerProperty::operator=;
   IntegerEnumeratedProperty(Graph *g, const std::string &n = "");
   void setNodeValue(const node n, tlp::StoredType<int>::ReturnedConstValue v) override;
   void setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v) override;
