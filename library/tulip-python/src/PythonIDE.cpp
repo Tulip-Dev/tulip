@@ -571,6 +571,10 @@ if result.returncode != 0:
   connect(shortCut, SIGNAL(activated()), this, SLOT(newScript()));
   shortCut = new QShortcut(QKeySequence::Open, _ui->mainScriptsTabWidget);
   connect(shortCut, SIGNAL(activated()), this, SLOT(loadScript()));
+  shortCut = new QShortcut(QKeySequence::ZoomIn, _ui->mainScriptsTabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(increaseFontSize()));
+  shortCut = new QShortcut(QKeySequence::ZoomOut, _ui->mainScriptsTabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(decreaseFontSize()));
   connect(_ui->runScriptButton, SIGNAL(clicked()), this, SLOT(executeCurrentScript()));
   connect(_ui->pauseScriptButton, SIGNAL(clicked()), this, SLOT(pauseCurrentScript()));
   connect(_ui->stopScriptButton, SIGNAL(clicked()), this, SLOT(stopCurrentScript()));
@@ -590,6 +594,10 @@ if result.returncode != 0:
   connect(shortCut, SIGNAL(activated()), this, SLOT(newModule()));
   shortCut = new QShortcut(QKeySequence::Open, _ui->modulesTabWidget);
   connect(shortCut, SIGNAL(activated()), this, SLOT(loadModule()));
+  shortCut = new QShortcut(QKeySequence::ZoomIn, _ui->modulesTabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(increaseFontSize()));
+  shortCut = new QShortcut(QKeySequence::ZoomOut, _ui->modulesTabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(decreaseFontSize()));
 
   //plugins
   shortCut = new QShortcut(QKeySequence::Save, _ui->pluginsTabWidget);
@@ -600,6 +608,11 @@ if result.returncode != 0:
   connect(shortCut, SIGNAL(activated()), this, SLOT(newPythonPlugin()));
   shortCut = new QShortcut(QKeySequence::Open, _ui->pluginsTabWidget);
   connect(shortCut, SIGNAL(activated()), this, SLOT(loadPythonPlugin()));
+  shortCut = new QShortcut(QKeySequence::ZoomIn, _ui->pluginsTabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(increaseFontSize()));
+  shortCut = new QShortcut(QKeySequence::ZoomOut, _ui->pluginsTabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(decreaseFontSize()));
+
   connect(_ui->pluginsTabWidget, SIGNAL(fileEdited()), this, SLOT(fileEdited()));
   connect(_ui->newPluginButton, SIGNAL(clicked()), this, SLOT(newPythonPlugin()));
   connect(_ui->loadPluginButton, SIGNAL(clicked()), this, SLOT(loadPythonPlugin()));
