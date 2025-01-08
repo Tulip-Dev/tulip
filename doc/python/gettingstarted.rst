@@ -73,14 +73,15 @@ After choosing the command, click in the *package name* input field, type the na
 
 - A **Plugins editor** (see :ref:`Figure 3<fig3>`): it enables to develop Tulip plugins in pure Python
   (see :ref:`Writing Tulip plugins in Python <tulippythonplugins>`).
-  These plugins are then immediately integrated in the Tulip GUI when requesting their registration
-  (if their source code is valid of course). Different kinds of plugins can be developed : General Algorithms,
-  Property Algorithms, Import plugins and Export plugins. When executing these plugins, standard and error output
+  These plugins are immediately integrated in the Tulip GUI when requesting their registration
+  (if their source code is valid of course). Different kinds of plugins can be developed: General Algorithms,
+  Property Algorithms, Import plugins and Export plugins. When executing these plugins, standard and error outputs
   will be displayed in the "Message Log" panel of the Tulip GUI.
 
 .. _fig3:
 .. figure:: tulipPythonPlugin.png
   :align: center
+  :class: with-border
 
   Figure 3: Screenshot of the **Plugins editor** tab in the Python IDE.
 

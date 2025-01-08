@@ -899,10 +899,11 @@ static bool checkAndGetPluginInfoFromSrcCode(const QString &pluginCode, QString 
       pos = pluginCode.indexOf(rx, pos + match.capturedLength(), &match);
     }
 
-    rx.setPattern(".*registerPlugin.*\\(\\s*['\"]([^\"']+)[\"']\\s*,\\s*['\"]([^\"']+)[\"'].*$");
+    rx.setPattern(".*registerPlugin.*\\(\\s*['\"][^\"']+[\"']\\s*,(\\s*['\"][^\"']+[\"'])");
     match = rx.match(pluginCode);
     if (match.hasMatch()) {
-      pluginName = match.captured(2);
+      pluginName = match.captured(1);
+      pluginName.remove(QRegularExpression("['\"]"));
       return true;
     }
   }
@@ -1062,22 +1063,11 @@ void PythonIDE::registerPythonPlugin(bool clear) {
     return;
 
   QString pluginFile = getPluginEditor(tabIdx)->getFileName();
+  QFileInfo fileInfo(pluginFile);
 
   savePythonPlugin();
 
-  QString moduleNameExt = _ui->pluginsTabWidget->tabText(tabIdx);
-  moduleNameExt = moduleNameExt.mid(moduleNameExt.lastIndexOf("]") + 2);
-  QString moduleName;
-
-  if (moduleNameExt[moduleNameExt.size() - 1] == '*')
-    moduleName = moduleNameExt.mid(0, moduleNameExt.size() - 4);
-  else
-    moduleName = moduleNameExt.mid(0, moduleNameExt.size() - 3);
-
-  moduleName = moduleName.replace(".py", "");
-
-  // workaround a Qt5 bug on linux
-  moduleName = moduleName.replace("&", "");
+  QString moduleName = fileInfo.completeBaseName();
 
   QString pluginCode = getPluginEditor(tabIdx)->getCleanCode();
 
@@ -1110,7 +1100,6 @@ void PythonIDE::registerPythonPlugin(bool clear) {
   _pythonInterpreter->runString("tulipplugins.setTestMode(True)");
 
   bool codeOk = false;
-  QFileInfo fileInfo(getPluginEditor(tabIdx)->getFileName());
 
   if (fileInfo.fileName() == getPluginEditor(tabIdx)->getFileName()) {
     codeOk = _pythonInterpreter->registerNewModuleFromString(
@@ -1136,12 +1125,12 @@ void PythonIDE::registerPythonPlugin(bool clear) {
       _pythonInterpreter->reloadModule(moduleName);
     }
 
-    _ui->pluginStatusLabel->setText("Plugin has been successfully registered.");
+    _ui->pluginStatusLabel->setText(pluginName+" plugin has been successfully registered.");
     _editedPluginsClassName[pluginFile] = pluginClassName;
     _editedPluginsType[pluginFile] = pluginType;
     _editedPluginsName[pluginFile] = pluginName;
   } else {
-    _ui->pluginStatusLabel->setText("Plugin registration has failed.");
+    _ui->pluginStatusLabel->setText(pluginName+" plugin registration has failed.");
     indicateErrors();
   }
 
@@ -1155,13 +1144,14 @@ void PythonIDE::removePythonPlugin() {
   if (tabIdx == -1)
     return;
 
-  QString pluginName = _editedPluginsName[getCurrentPluginEditor()->getFileName()];
+  QString qpluginName=_editedPluginsName[getCurrentPluginEditor()->getFileName()];
+  std::string pluginName = QStringToTlpString(qpluginName);
 
-  if (tlp::PluginLister::pluginExists(QStringToTlpString(pluginName))) {
-    tlp::PluginLister::removePlugin(QStringToTlpString(pluginName));
-    _ui->pluginStatusLabel->setText("Plugin has been successfully unregistered.");
+  if (tlp::PluginLister::pluginExists(pluginName)) {
+    tlp::PluginLister::removePlugin(pluginName);
+    _ui->pluginStatusLabel->setText(qpluginName+" plugin has been successfully unregistered.");
   } else {
-    _ui->pluginStatusLabel->setText("Plugin is not registered in the plugins list");
+    _ui->pluginStatusLabel->setText(qpluginName +" plugin is not registered.");
   }
 }
 
