@@ -71,7 +71,7 @@ background-color: #A0A0A0;
       </sizepolicy>
      </property>
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <widget class="QTabWidget" name="tabWidget">
       <property name="sizePolicy">
@@ -121,10 +121,10 @@ background-color: #A0A0A0;
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
+           <enum>QFrame::Shape::StyledPanel</enum>
           </property>
           <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
+           <enum>QFrame::Shadow::Raised</enum>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <property name="spacing">
@@ -160,7 +160,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>New &quot;main&quot; script</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;New script (Ctrl + N)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>&amp;New</string>
@@ -176,7 +176,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
@@ -198,7 +198,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Load &quot;main&quot; script from file</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Open a Python script (Ctrl + O)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>&amp;Open</string>
@@ -214,7 +214,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
@@ -236,7 +236,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Save the current script in the attached file</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save the current script (Ctrl + S)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>&amp;Save</string>
@@ -252,7 +252,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
@@ -274,7 +274,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Save the current script in an interactively chosen file</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save the current script with a new name (Ctrl + Shift + S)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>Save as</string>
@@ -290,14 +290,14 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
            <item>
             <widget class="Line" name="line">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
             </widget>
            </item>
@@ -399,10 +399,10 @@ background-color: #A0A0A0;
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
+           <enum>QFrame::Shape::StyledPanel</enum>
           </property>
           <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
+           <enum>QFrame::Shadow::Raised</enum>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <property name="spacing">
@@ -435,7 +435,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Create new Tulip Python plugin</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;New plugin (Ctrl + N)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>&amp;New</string>
@@ -451,7 +451,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
@@ -470,7 +470,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Load Tulip Python plugin from file</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Open plugin file (Ctrl + O)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>&amp;Open</string>
@@ -486,7 +486,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
@@ -505,7 +505,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Save the current plugin in the attached file</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save the current plugin (Ctrl + S)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>&amp;Save</string>
@@ -521,7 +521,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
@@ -540,7 +540,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Save the current plugin in an interactively chosen file</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save the current plugin with a new name (Ctrl + Shift + S)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>Save as</string>
@@ -556,14 +556,14 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
            <item>
             <spacer name="horizontalSpacer">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -642,10 +642,10 @@ background-color: #A0A0A0;
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
+           <enum>QFrame::Shape::StyledPanel</enum>
           </property>
           <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
+           <enum>QFrame::Shadow::Raised</enum>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_4">
            <property name="spacing">
@@ -678,7 +678,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>New module</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;New module (Ctrl + N)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>New</string>
@@ -694,7 +694,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
@@ -713,7 +713,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Load module from file</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Open module file (Ctrl + O)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>Open</string>
@@ -729,7 +729,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
@@ -748,7 +748,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Save the current module in the attached file</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save the current module (Ctrl + S)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>Save</string>
@@ -764,7 +764,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
@@ -783,7 +783,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Save current module in an interactively chosen file</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save the current module with a new name (Ctrl + Shift + S)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>Save as</string>
@@ -799,14 +799,14 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
            <item>
             <spacer name="horizontalSpacer_2">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -949,7 +949,7 @@ background-color: #A0A0A0;
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -983,10 +983,10 @@ background-color: #A0A0A0;
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
+          <enum>QFrame::Shape::StyledPanel</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
+          <enum>QFrame::Shadow::Raised</enum>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_8">
           <property name="leftMargin">
@@ -1091,7 +1091,7 @@ background-color: #A0A0A0;
           <item>
            <spacer name="horizontalSpacer_5">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -1129,7 +1129,7 @@ background-color: #A0A0A0;
           <item>
            <spacer name="horizontalSpacer_4">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -1160,7 +1160,7 @@ cannot be undone but performance will be better
           <item>
            <widget class="Line" name="line_2">
             <property name="orientation">
-             <enum>Qt::Vertical</enum>
+             <enum>Qt::Orientation::Vertical</enum>
             </property>
            </widget>
           </item>
@@ -1183,7 +1183,7 @@ cannot be undone but performance will be better
              </size>
             </property>
             <property name="toolTip">
-             <string>Decrease the size of the font of the python code editors</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Decrease font size (Ctrl -)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string> - </string>
@@ -1199,7 +1199,7 @@ cannot be undone but performance will be better
              </size>
             </property>
             <property name="toolTip">
-             <string>Increase the size of the font of the python code editors</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Increase font size (Ctrl +)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string> + </string>
@@ -1243,10 +1243,10 @@ cannot be undone but performance will be better
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
+          <enum>QFrame::Shape::StyledPanel</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
+          <enum>QFrame::Shadow::Raised</enum>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <property name="leftMargin">
@@ -1299,7 +1299,7 @@ cannot be undone but performance will be better
              <string/>
             </property>
             <property name="alignment">
-             <set>Qt::AlignCenter</set>
+             <set>Qt::AlignmentFlag::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -1317,6 +1317,9 @@ cannot be undone but performance will be better
               <width>19</width>
               <height>19</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Decrease font size (Ctrl -)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="autoFillBackground">
              <bool>false</bool>
@@ -1336,6 +1339,9 @@ cannot be undone but performance will be better
               <width>19</width>
               <height>19</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Increase font size (Ctrl +)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string> + </string>
@@ -1367,7 +1373,7 @@ cannot be undone but performance will be better
        <item>
         <spacer name="horizontalSpacer_3">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -1392,6 +1398,9 @@ cannot be undone but performance will be better
            <height>19</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Decrease font size (Ctrl +)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="text">
           <string> - </string>
          </property>
@@ -1404,6 +1413,9 @@ cannot be undone but performance will be better
            <width>19</width>
            <height>19</height>
           </size>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Increase font size (Ctrl +)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string> + </string>

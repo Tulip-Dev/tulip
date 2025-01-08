@@ -3,7 +3,7 @@
 Creating and manipulating Tulip visualizations with the :mod:`tulipgui` module
 ===============================================================================
 
-Starting the 4.4 release of Tulip, a new module called :mod:`tulipgui` is available
+Starting the 4.4 release of Tulip, a module called :mod:`tulipgui` is available
 allowing to create and manipulate Tulip views (typically node link diagram views).
 The module is usable from the Python Script editor integrated in the Tulip software GUI.
 

@@ -23,11 +23,12 @@ separated window. It can be displayed by clicking on the |icon_ide| **Python** b
 
 .. _fig1:
 .. figure:: tulipPythonIDE.png
-  :align: center
+    :class: with-border
+    :align: center
 
-  Figure 1: Screenshot of the **Python IDE** window displaying the Python interpreter.
+    Figure 1: Screenshot of the **Python IDE** window displaying the Python interpreter.
 
-The **Python interpreter** is the most basic way to dynamically interact with graph data. It enables to execute Python statements which are one after the other , read, evaluated then their result is printed. A combo box allows to select a graph from those already loaded in the Tulip GUI. The selected graph is then bound to a global Python variable named "graph".
+The **Python interpreter** is the most basic way to dynamically interact with graph data. It enables to execute Python statements which are one after the other, read, evaluated then their result is printed. A combo box allows to select a graph from those already loaded in the Tulip GUI. The selected graph is then bound to a global Python variable named "graph".
 Since Tulip 5.0, the undo feature on graph state is now handled in that component, meaning every graph modification performed by the executed Python statements can be reverted.
 
 .. |icon_run| image:: ../../library/tulip-gui/resources/icons/22/start.png
@@ -52,6 +53,7 @@ More sophisticated ways to write python code for graphs management purpose are p
 .. _fig2:
 .. figure:: tulipPythonScript.png
   :align: center
+  :class: with-border
 
   Figure 2: Screenshot of the **Scripts editor** tab in the Python IDE.
 
@@ -89,6 +91,7 @@ After choosing the command, click in the *package name* input field, type the na
 .. _fig4:
 .. figure:: tulipPythonModule.png
    :align: center
+   :class: with-border
 
    Figure 4: Screenshot of the **Modules editor** tab in the Python IDE.
 
@@ -198,7 +201,7 @@ Save your Python code in .py files
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Since Tulip 6, the code of the modules, plugins, scripts, you develop using Tulip Python IDE, is non longer saved in the Tulip projects files.
-You have to explicitely load/save them from/in .py file, using the **Load**, **Save**, **Save as** buttons available with the different editors.
+You have to explicitely open/save them from/in .py file, using the **Open**, **Save**, **Save as** buttons available with the different editors.
 
 .. _usingBindingsInShell:
 
@@ -216,10 +219,9 @@ Tulip-Python modules can be easily obtained by using the pip tool for Windows, M
 
 .. important::
 
-  Please not that the ``tulipgui`` module is no more distributed on the Python
-  Packaging Index since Tulip 5.3.
-  Nevertheless, it is still available to be used use from a standard Tulip
-  installation (see next section).
+  Please not that the ``tulipgui`` module is not available on the Python
+  Packaging Index. It is solely available inside the Tulip gui to be used as a remote
+  controller for the GUI (see :mod:`tulipgui`).
 
 To install the :mod:`tulip` module, issue the following command from a terminal prompt:
 
@@ -232,9 +234,9 @@ And you're done, you can now import the modules in your Python session.
 Setting up the environment from the Tulip software installation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In order to be able to import the Tulip-Python modules bundled with the Tulip software installation,
-their path must be provided to Python. In the following, <tulip_install_dir> represents the root directory of a Tulip installation.
-The Tulip-Python modules are installed in the following directory according to your system :
+In order to be able to import the Tulip-Python module bundled with the Tulip software installation,
+its path must be provided to Python. In the following, <tulip_install_dir> represents the root directory of a Tulip installation.
+The Tulip-Python module is installed in the following directory according to your system:
 
         * Linux : **<tulip_install_dir>/lib/tulip/python** (if you compiled Tulip yourself,
           <tulip_install_dir> corresponds to the value of the CMake variable CMAKE_INSTALL_PREFIX)
@@ -248,17 +250,10 @@ The Tulip-Python modules are installed in the following directory according to y
 This path has to be added to the list of Python module search paths. To do so, you can add it in the **PYTHONPATH**
 environment variable prior executing the Python interpreter or add it to the :data:`sys.path` list once you launched the interpreter.
 
-.. warning::
-
-  If you installed Tulip through a bundle (.dmg) on MacOS and want to successfully import the :mod:`tulipgui` module,
-  you also need to set the following path **/Applications/Tulip-x.y.z.app/Contents/Frameworks/** as the value of the
-  environment variables **DYLD_LIBRARY_PATH** and **DYLD_FRAMEWORK_PATH**.
-
-You should now be able to import the Tulip-Python modules through the classical Python shell. Issue the following commands
+You should now be able to import the Tulip-Python module through the classical Python shell. Issue the following commands
 at the shell prompt to perform that task::
 
     >>> from tulip import tlp
-    >>> from tulipgui import tlpgui
 
 Customizing the Python environment
 ----------------------------------
