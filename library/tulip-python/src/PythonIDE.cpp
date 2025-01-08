@@ -546,7 +546,7 @@ if result.returncode != 0:
 
   connect(_ui->modulesTabWidget, SIGNAL(fileEdited()), this, SLOT(fileEdited()));
 
-  //scripts
+  // scripts
   connect(_ui->newMainScriptButton, SIGNAL(clicked()), this, SLOT(newScript()));
   connect(_ui->loadMainScriptButton, SIGNAL(clicked()), this, SLOT(loadScript()));
   connect(_ui->saveMainScriptButton, SIGNAL(clicked()), this, SLOT(saveMainScript()));
@@ -573,7 +573,7 @@ if result.returncode != 0:
   _ui->progressBar->hide();
   connect(_ui->mainScriptsTabWidget, SIGNAL(fileEdited()), this, SLOT(fileEdited()));
 
-  //modules
+  // modules
   connect(_ui->newModuleButton, SIGNAL(clicked()), this, SLOT(newModule()));
   connect(_ui->loadModuleButton, SIGNAL(clicked()), this, SLOT(loadModule()));
   connect(_ui->saveModuleButton, SIGNAL(clicked()), this, SLOT(saveModule()));
@@ -595,7 +595,7 @@ if result.returncode != 0:
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton_module, "decrease font size", "-");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton_module, "increase font size", "+");
 
-  //plugins
+  // plugins
   shortCut = new QShortcut(QKeySequence::Save, _ui->pluginsTabWidget);
   connect(shortCut, SIGNAL(activated()), this, SLOT(savePythonPlugin()));
   shortCut = new QShortcut(QKeySequence::SaveAs, _ui->pluginsTabWidget);
@@ -1125,12 +1125,12 @@ void PythonIDE::registerPythonPlugin(bool clear) {
       _pythonInterpreter->reloadModule(moduleName);
     }
 
-    _ui->pluginStatusLabel->setText(pluginName+" plugin has been successfully registered.");
+    _ui->pluginStatusLabel->setText(pluginName + " plugin has been successfully registered.");
     _editedPluginsClassName[pluginFile] = pluginClassName;
     _editedPluginsType[pluginFile] = pluginType;
     _editedPluginsName[pluginFile] = pluginName;
   } else {
-    _ui->pluginStatusLabel->setText(pluginName+" plugin registration has failed.");
+    _ui->pluginStatusLabel->setText(pluginName + " plugin registration has failed.");
     indicateErrors();
   }
 
@@ -1144,14 +1144,14 @@ void PythonIDE::removePythonPlugin() {
   if (tabIdx == -1)
     return;
 
-  QString qpluginName=_editedPluginsName[getCurrentPluginEditor()->getFileName()];
+  QString qpluginName = _editedPluginsName[getCurrentPluginEditor()->getFileName()];
   std::string pluginName = QStringToTlpString(qpluginName);
 
   if (tlp::PluginLister::pluginExists(pluginName)) {
     tlp::PluginLister::removePlugin(pluginName);
-    _ui->pluginStatusLabel->setText(qpluginName+" plugin has been successfully unregistered.");
+    _ui->pluginStatusLabel->setText(qpluginName + " plugin has been successfully unregistered.");
   } else {
-    _ui->pluginStatusLabel->setText(qpluginName +" plugin is not registered.");
+    _ui->pluginStatusLabel->setText(qpluginName + " plugin is not registered.");
   }
 }
 
