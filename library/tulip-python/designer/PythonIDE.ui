@@ -1175,15 +1175,12 @@ cannot be undone but performance will be better
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="decreaseFontSizeButton_2">
+           <widget class="QToolButton" name="decreaseFontSizeButton_script">
             <property name="maximumSize">
              <size>
               <width>19</width>
               <height>19</height>
              </size>
-            </property>
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Decrease font size (Ctrl -)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string> - </string>
@@ -1191,15 +1188,12 @@ cannot be undone but performance will be better
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="increaseFontSizeButton_2">
+           <widget class="QToolButton" name="increaseFontSizeButton_script">
             <property name="maximumSize">
              <size>
               <width>19</width>
               <height>19</height>
              </size>
-            </property>
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Increase font size (Ctrl +)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string> + </string>
@@ -1311,15 +1305,12 @@ cannot be undone but performance will be better
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="decreaseFontSizeButton">
+           <widget class="QToolButton" name="decreaseFontSizeButton_plugin">
             <property name="maximumSize">
              <size>
               <width>19</width>
               <height>19</height>
              </size>
-            </property>
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Decrease font size (Ctrl -)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="autoFillBackground">
              <bool>false</bool>
@@ -1333,15 +1324,12 @@ cannot be undone but performance will be better
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="increaseFontSizeButton">
+           <widget class="QToolButton" name="increaseFontSizeButton_plugin">
             <property name="maximumSize">
              <size>
               <width>19</width>
               <height>19</height>
              </size>
-            </property>
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Increase font size (Ctrl +)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string> + </string>
@@ -1391,15 +1379,12 @@ cannot be undone but performance will be better
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="decreaseFontSizeButton_3">
+        <widget class="QToolButton" name="decreaseFontSizeButton_module">
          <property name="maximumSize">
           <size>
            <width>19</width>
            <height>19</height>
           </size>
-         </property>
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Decrease font size (Ctrl +)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string> - </string>
@@ -1407,15 +1392,12 @@ cannot be undone but performance will be better
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="increaseFontSizeButton_3">
+        <widget class="QToolButton" name="increaseFontSizeButton_module">
          <property name="maximumSize">
           <size>
            <width>19</width>
            <height>19</height>
           </size>
-         </property>
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Increase font size (Ctrl +)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string> + </string>

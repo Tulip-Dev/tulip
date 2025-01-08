@@ -543,18 +543,6 @@ if result.returncode != 0:
 
   connect(_ui->consoleWidget, SIGNAL(anchorClicked(const QUrl &)), this,
           SLOT(scrollToEditorLine(const QUrl &)));
-  connect(_ui->decreaseFontSizeButton, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
-  connect(_ui->increaseFontSizeButton, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
-  connect(_ui->decreaseFontSizeButton_2, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
-  connect(_ui->increaseFontSizeButton_2, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
-  connect(_ui->decreaseFontSizeButton_3, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
-  connect(_ui->increaseFontSizeButton_3, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton, "decrease font size", "-");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton_2, "decrease font size", "-");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton_3, "decrease font size", "-");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton, "increase font size", "-");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton_2, "increase font size", "-");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton_3, "increase font size", "-");
 
   connect(_ui->modulesTabWidget, SIGNAL(fileEdited()), this, SLOT(fileEdited()));
 
@@ -575,6 +563,10 @@ if result.returncode != 0:
   connect(shortCut, SIGNAL(activated()), this, SLOT(increaseFontSize()));
   shortCut = new QShortcut(QKeySequence::ZoomOut, _ui->mainScriptsTabWidget);
   connect(shortCut, SIGNAL(activated()), this, SLOT(decreaseFontSize()));
+  connect(_ui->decreaseFontSizeButton_script, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
+  connect(_ui->increaseFontSizeButton_script, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton_script, "decrease font size", "-");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton_script, "increase font size", "+");
   connect(_ui->runScriptButton, SIGNAL(clicked()), this, SLOT(executeCurrentScript()));
   connect(_ui->pauseScriptButton, SIGNAL(clicked()), this, SLOT(pauseCurrentScript()));
   connect(_ui->stopScriptButton, SIGNAL(clicked()), this, SLOT(stopCurrentScript()));
@@ -598,6 +590,10 @@ if result.returncode != 0:
   connect(shortCut, SIGNAL(activated()), this, SLOT(increaseFontSize()));
   shortCut = new QShortcut(QKeySequence::ZoomOut, _ui->modulesTabWidget);
   connect(shortCut, SIGNAL(activated()), this, SLOT(decreaseFontSize()));
+  connect(_ui->decreaseFontSizeButton_module, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
+  connect(_ui->increaseFontSizeButton_module, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton_module, "decrease font size", "-");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton_module, "increase font size", "+");
 
   //plugins
   shortCut = new QShortcut(QKeySequence::Save, _ui->pluginsTabWidget);
@@ -612,7 +608,10 @@ if result.returncode != 0:
   connect(shortCut, SIGNAL(activated()), this, SLOT(increaseFontSize()));
   shortCut = new QShortcut(QKeySequence::ZoomOut, _ui->pluginsTabWidget);
   connect(shortCut, SIGNAL(activated()), this, SLOT(decreaseFontSize()));
-
+  connect(_ui->decreaseFontSizeButton_plugin, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
+  connect(_ui->increaseFontSizeButton_plugin, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton_plugin, "decrease font size", "-");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton_plugin, "increase font size", "+");
   connect(_ui->pluginsTabWidget, SIGNAL(fileEdited()), this, SLOT(fileEdited()));
   connect(_ui->newPluginButton, SIGNAL(clicked()), this, SLOT(newPythonPlugin()));
   connect(_ui->loadPluginButton, SIGNAL(clicked()), this, SLOT(loadPythonPlugin()));
