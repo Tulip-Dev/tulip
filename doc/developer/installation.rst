@@ -23,14 +23,13 @@ depending on your system configuration.
 
 The following dependencies are required to build Tulip:
 
-* `CMake <https://cmake.org>`_ >= 3.22
-* A `C++17 <https://en.wikipedia.org/wiki/C%2B%2B17>`_ compiler : `GCC <https://gcc.gnu.org/>`_ > 8.0,
-  `Clang <https://clang.llvm.org/>`_ > 5.0 or
-  `Microsoft Visual Studio <https://www.visualstudio.com/>`_ >= 2017
+* `CMake <https://cmake.org>`_ >= 3.25
+* A `C++17 <https://en.wikipedia.org/wiki/C%2B%2B17>`_ compiler : `GCC <https://gcc.gnu.org/>`_ > 8.0 or
+  `Clang <https://clang.llvm.org/>`_ > 5.0
 * `FreeType <https://www.freetype.org>`_ 
 * `zlib <http://zlib.net>`_
 * `libzip <https://libzip.org/>`_
-* `Qt <https://www.qt.io>`_ >= 5.15
+* `Qt <https://www.qt.io>`_ 5.15 or >= 6.5
 * `OpenGL <https://www.opengl.org>`_ >= 2.0
 * `GLEW <http://glew.sourceforge.net/>`_ >= 1.4
 * `Python <https://www.python.org>`_ >= 3.9
