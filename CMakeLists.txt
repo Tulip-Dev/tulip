@@ -2,7 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.25...3.28)
 
 #Setting project name and version (W.X.Y.Z if necessary)
 PROJECT(Tulip
-    VERSION 6.0.0
+    VERSION 6.0.1
     DESCRIPTION "Large graphs analysis and drawing"
     HOMEPAGE_URL "https://tulip.labri.fr")
 message(STATUS "Configuring ${CMAKE_PROJECT_NAME} ${Tulip_VERSION}")
