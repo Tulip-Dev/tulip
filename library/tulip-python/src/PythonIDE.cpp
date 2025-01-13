@@ -830,8 +830,8 @@ void PythonIDE::newPythonPlugin() {
     int editorId = addPluginEditor("");
     QString editorSID = QString("%1").arg(reinterpret_cast<intptr_t>(getPluginEditor(editorId)));
     _ui->pluginsTabWidget->setTabToolTip(editorId, pluginCreationDialog.getPluginName());
-    _ui->pluginsTabWidget->setTabText(editorId,
-                                      pluginCreationDialog.getPluginType() + " - " + pluginName + '*');
+    _ui->pluginsTabWidget->setTabText(editorId, pluginCreationDialog.getPluginType() + " - " +
+                                                    pluginName + '*');
 
     _editedPluginsClassName[editorSID] = pluginCreationDialog.getPluginClassName();
     _editedPluginsType[editorSID] = pluginCreationDialog.getPluginType();
@@ -978,7 +978,8 @@ bool PythonIDE::loadPythonPlugin(const QString &fileName, bool clear) {
       int editorId = addPluginEditor(fileInfo.absoluteFilePath());
       _pythonInterpreter->addModuleSearchPath(modulePath);
       _ui->pluginsTabWidget->setTabToolTip(editorId, fileInfo.absoluteFilePath());
-      _ui->pluginsTabWidget->setTabText(editorId, pluginType + QString(" - ") + fileInfo.fileName());
+      _ui->pluginsTabWidget->setTabText(editorId,
+                                        pluginType + QString(" - ") + fileInfo.fileName());
       QString pluginFile = fileInfo.absoluteFilePath();
       _editedPluginsClassName[pluginFile] = pluginClassName;
       _editedPluginsType[pluginFile] = pluginType;
@@ -1067,7 +1068,8 @@ bool PythonIDE::savePythonPlugin(int tabIdx, bool saveAs) {
 
     getPluginEditor(tabIdx)->saveCodeToFile();
 
-    _ui->pluginsTabWidget->setTabText(tabIdx, _editedPluginsType[pluginFileName] + " - " + fileInfo.fileName());
+    _ui->pluginsTabWidget->setTabText(tabIdx, _editedPluginsType[pluginFileName] + " - " +
+                                                  fileInfo.fileName());
     _ui->pluginsTabWidget->setTabToolTip(tabIdx, getPluginEditor(tabIdx)->getFileName());
 
     getPluginEditor(tabIdx)->getCleanCode();
@@ -1108,7 +1110,8 @@ void PythonIDE::registerPythonPlugin(bool clear) {
   QString pluginClassName = "";
   QString pluginName = "";
 
-  checkAndGetPluginInfoFromSrcCode(pluginCode, pluginName, pluginClassName, pluginType, pluginClass);
+  checkAndGetPluginInfoFromSrcCode(pluginCode, pluginName, pluginClassName, pluginType,
+                                   pluginClass);
 
   _pythonInterpreter->setConsoleWidget(_ui->consoleWidget);
 
@@ -1124,7 +1127,8 @@ void PythonIDE::registerPythonPlugin(bool clear) {
   _pythonInterpreter->importModule("tulipplugins");
   _pythonInterpreter->runString("tulipplugins.setTestMode(True)");
 
-  bool codeOk = _pythonInterpreter->registerNewModuleFromString(moduleName, getPluginEditor(tabIdx)->getCleanCode());
+  bool codeOk = _pythonInterpreter->registerNewModuleFromString(
+      moduleName, getPluginEditor(tabIdx)->getCleanCode());
 
   _pythonInterpreter->runString("tulipplugins.setTestMode(False)");
 
@@ -1135,13 +1139,16 @@ void PythonIDE::registerPythonPlugin(bool clear) {
   oss << "plugin = " << moduleName << "." << pluginClassName << "(tlp.AlgorithmContext())";
 
   if (codeOk && _pythonInterpreter->runString(pythonCode)) {
-    _pythonInterpreter->registerNewModuleFromString(moduleName, getPluginEditor(tabIdx)->getCleanCode());
-    _ui->pluginStatusLabel->setText(QString("'%1' plugin has been successfully registered.").arg(pluginName));
+    _pythonInterpreter->registerNewModuleFromString(moduleName,
+                                                    getPluginEditor(tabIdx)->getCleanCode());
+    _ui->pluginStatusLabel->setText(
+        QString("'%1' plugin has been successfully registered.").arg(pluginName));
     _editedPluginsClassName[pluginFile] = pluginClassName;
     _editedPluginsType[pluginFile] = pluginType;
     _editedPluginsName[pluginFile] = pluginName;
   } else {
-    _ui->pluginStatusLabel->setText(QString("'%1' plugin registration has failed.").arg(pluginName));
+    _ui->pluginStatusLabel->setText(
+        QString("'%1' plugin registration has failed.").arg(pluginName));
     indicateErrors();
   }
 
