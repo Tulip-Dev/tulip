@@ -831,7 +831,7 @@ void PythonIDE::newPythonPlugin() {
     QString editorSID = QString("%1").arg(reinterpret_cast<intptr_t>(getPluginEditor(editorId)));
     _ui->pluginsTabWidget->setTabToolTip(editorId, pluginCreationDialog.getPluginName());
     _ui->pluginsTabWidget->setTabText(editorId,
-                                      pluginCreationDialog.getPluginType() + " - " + pluginName);
+                                      pluginCreationDialog.getPluginType() + " - " + pluginName + '*');
 
     _editedPluginsClassName[editorSID] = pluginCreationDialog.getPluginClassName();
     _editedPluginsType[editorSID] = pluginCreationDialog.getPluginType();
@@ -843,6 +843,8 @@ void PythonIDE::newPythonPlugin() {
         pluginCreationDialog.getPluginRelease(), pluginCreationDialog.getPluginGroup());
 
     getPluginEditor(editorId)->setPlainText(pluginSkeleton);
+    _ui->pluginStatusLabel->setText("");
+    fileEdited();
   }
 }
 
@@ -899,13 +901,36 @@ static bool checkAndGetPluginInfoFromSrcCode(const QString &pluginCode, QString 
       pos = pluginCode.indexOf(rx, pos + match.capturedLength(), &match);
     }
 
-    rx.setPattern(".*registerPlugin.*\\(\\s*['\"][^\"']+[\"']\\s*,(\\s*['\"][^\"']+[\"'])");
-    match = rx.match(pluginCode);
-    if (match.hasMatch()) {
-      pluginName = match.captured(1);
-      pluginName.remove(QRegularExpression("['\"]"));
-      return true;
+    // pluginName extraction
+    // which is the 2nd arg of the register plugin declaration
+    // first look for the beginning of the declaration
+    QString registerText = QString("tulipplugins.registerPlugin");
+    pos = pluginCode.indexOf(registerText);
+    if (pos == -1)
+      return false;
+
+    // then look for the first args separator
+    pos = pluginCode.indexOf(',', pos + registerText.size());
+    // look for the left delimiter of the second arg must be ' or "
+    QChar delim;
+    do {
+      delim = pluginCode.at(++pos);
+    } while (delim == ' ');
+    if (delim != '\'' && delim != '"')
+      return false;
+    auto leftPos = ++pos;
+    // look for the second args separator
+    pos = pluginCode.indexOf(',', pos + 1);
+    // look for the right delimiter of the second arg
+    while (true) {
+      if (--pos == leftPos)
+        return false;
+      if (pluginCode.at(pos) == delim)
+        break;
     }
+    // get pluginName
+    pluginName = pluginCode.mid(leftPos, pos - leftPos);
+    return true;
   }
 
   return false;
@@ -953,14 +978,12 @@ bool PythonIDE::loadPythonPlugin(const QString &fileName, bool clear) {
       int editorId = addPluginEditor(fileInfo.absoluteFilePath());
       _pythonInterpreter->addModuleSearchPath(modulePath);
       _ui->pluginsTabWidget->setTabToolTip(editorId, fileInfo.absoluteFilePath());
-      _ui->pluginsTabWidget->setTabText(editorId, QString("[") + pluginType + QString("] ") +
-                                                      fileInfo.fileName());
+      _ui->pluginsTabWidget->setTabText(editorId, pluginType + QString(" - ") + fileInfo.fileName());
       QString pluginFile = fileInfo.absoluteFilePath();
       _editedPluginsClassName[pluginFile] = pluginClassName;
       _editedPluginsType[pluginFile] = pluginType;
       _editedPluginsName[pluginFile] = pluginName;
       registerPythonPlugin(clear);
-      savePythonPlugin(editorId);
     }
   } else {
     QString name = "\nName of the plugin: " + (pluginName.isEmpty() ? "missing" : pluginName);
@@ -1015,37 +1038,36 @@ void PythonIDE::saveAsPythonPlugin() {
 bool PythonIDE::savePythonPlugin(int tabIdx, bool saveAs) {
   if (tabIdx >= 0 && tabIdx < _ui->pluginsTabWidget->count()) {
     auto pluginFileName = getPluginEditor(tabIdx)->getFileName();
+    QFileInfo fileInfo(pluginFileName);
     if (saveAs || pluginFileName.isEmpty()) {
       QString dir = "";
 
       if (!pluginFileName.isEmpty()) {
-        QFileInfo fileInfo(pluginFileName);
         dir = fileInfo.dir().absolutePath();
       }
       auto fileName =
           QFileDialog::getSaveFileName(this, "Save python plugin", dir, "Python plugin (*.py)");
       if (fileName.isEmpty())
         return false;
-      getPluginEditor(tabIdx)->setFileName(fileName);
-      PythonInterpreter::getInstance()->addModuleSearchPath(fileName);
+      fileInfo = QFileInfo(fileName);
+      getPluginEditor(tabIdx)->setFileName(fileInfo.absoluteFilePath());
 
       if (pluginFileName.isEmpty()) {
-        pluginFileName = fileName;
+        pluginFileName = fileInfo.absoluteFilePath();
+        PythonInterpreter::getInstance()->addModuleSearchPath(pluginFileName);
         QString id = QString("%1").arg(reinterpret_cast<intptr_t>(getPluginEditor(tabIdx)));
-
-        _editedPluginsClassName[fileName] = _editedPluginsClassName[id];
+        _editedPluginsClassName[pluginFileName] = _editedPluginsClassName[id];
         _editedPluginsClassName.remove(id);
-        _editedPluginsType[fileName] = _editedPluginsType[id];
+        _editedPluginsType[pluginFileName] = _editedPluginsType[id];
         _editedPluginsType.remove(id);
-        _editedPluginsName[fileName] = _editedPluginsName[id];
+        _editedPluginsName[pluginFileName] = _editedPluginsName[id];
         _editedPluginsName.remove(id);
       }
     }
 
     getPluginEditor(tabIdx)->saveCodeToFile();
 
-    _ui->pluginsTabWidget->setTabText(tabIdx, _editedPluginsType[pluginFileName] + " - " +
-                                                  _editedPluginsName[pluginFileName]);
+    _ui->pluginsTabWidget->setTabText(tabIdx, _editedPluginsType[pluginFileName] + " - " + fileInfo.fileName());
     _ui->pluginsTabWidget->setTabToolTip(tabIdx, getPluginEditor(tabIdx)->getFileName());
 
     getPluginEditor(tabIdx)->getCleanCode();
@@ -1063,11 +1085,21 @@ void PythonIDE::registerPythonPlugin(bool clear) {
     return;
 
   QString pluginFile = getPluginEditor(tabIdx)->getFileName();
-  QFileInfo fileInfo(pluginFile);
 
-  savePythonPlugin();
+  if (!savePythonPlugin(tabIdx))
+    return;
 
-  QString moduleName = fileInfo.completeBaseName();
+  QString oldPluginName = _editedPluginsName[pluginFile];
+  if (tlp::PluginLister::pluginExists(QStringToTlpString(oldPluginName))) {
+    tlp::PluginLister::removePlugin(QStringToTlpString(oldPluginName));
+  }
+
+  QString moduleNameExt = _ui->pluginsTabWidget->tabText(tabIdx);
+  moduleNameExt = moduleNameExt.mid(moduleNameExt.lastIndexOf(" - ") + 3);
+  QString moduleName = moduleNameExt.mid(0, moduleNameExt.indexOf("."));
+
+  // workaround a Qt5 bug on linux
+  moduleName = moduleName.replace("&", "");
 
   QString pluginCode = getPluginEditor(tabIdx)->getCleanCode();
 
@@ -1076,14 +1108,7 @@ void PythonIDE::registerPythonPlugin(bool clear) {
   QString pluginClassName = "";
   QString pluginName = "";
 
-  checkAndGetPluginInfoFromSrcCode(pluginCode, pluginName, pluginClassName, pluginType,
-                                   pluginClass);
-
-  QString oldPluginName = _editedPluginsName[pluginFile];
-
-  if (tlp::PluginLister::pluginExists(QStringToTlpString(oldPluginName))) {
-    tlp::PluginLister::removePlugin(QStringToTlpString(oldPluginName));
-  }
+  checkAndGetPluginInfoFromSrcCode(pluginCode, pluginName, pluginClassName, pluginType, pluginClass);
 
   _pythonInterpreter->setConsoleWidget(_ui->consoleWidget);
 
@@ -1099,14 +1124,7 @@ void PythonIDE::registerPythonPlugin(bool clear) {
   _pythonInterpreter->importModule("tulipplugins");
   _pythonInterpreter->runString("tulipplugins.setTestMode(True)");
 
-  bool codeOk = false;
-
-  if (fileInfo.fileName() == getPluginEditor(tabIdx)->getFileName()) {
-    codeOk = _pythonInterpreter->registerNewModuleFromString(
-        moduleName, getPluginEditor(tabIdx)->getCleanCode());
-  } else {
-    codeOk = _pythonInterpreter->reloadModule(moduleName);
-  }
+  bool codeOk = _pythonInterpreter->registerNewModuleFromString(moduleName, getPluginEditor(tabIdx)->getCleanCode());
 
   _pythonInterpreter->runString("tulipplugins.setTestMode(False)");
 
@@ -1117,20 +1135,13 @@ void PythonIDE::registerPythonPlugin(bool clear) {
   oss << "plugin = " << moduleName << "." << pluginClassName << "(tlp.AlgorithmContext())";
 
   if (codeOk && _pythonInterpreter->runString(pythonCode)) {
-
-    if (fileInfo.fileName() == getPluginEditor(tabIdx)->getFileName()) {
-      _pythonInterpreter->registerNewModuleFromString(moduleName,
-                                                      getPluginEditor(tabIdx)->getCleanCode());
-    } else {
-      _pythonInterpreter->reloadModule(moduleName);
-    }
-
-    _ui->pluginStatusLabel->setText(pluginName + " plugin has been successfully registered.");
+    _pythonInterpreter->registerNewModuleFromString(moduleName, getPluginEditor(tabIdx)->getCleanCode());
+    _ui->pluginStatusLabel->setText(QString("'%1' plugin has been successfully registered.").arg(pluginName));
     _editedPluginsClassName[pluginFile] = pluginClassName;
     _editedPluginsType[pluginFile] = pluginType;
     _editedPluginsName[pluginFile] = pluginName;
   } else {
-    _ui->pluginStatusLabel->setText(pluginName + " plugin registration has failed.");
+    _ui->pluginStatusLabel->setText(QString("'%1' plugin registration has failed.").arg(pluginName));
     indicateErrors();
   }
 
@@ -1857,7 +1868,7 @@ void PythonIDE::fileEdited() {
   auto current = _ui->tabWidget->currentIndex();
   auto curTabText = _ui->tabWidget->tabText(current);
   if (curTabText[curTabText.size() - 1] != '*') {
-    curTabText += "*";
+    curTabText += '*';
     _ui->tabWidget->setTabText(current, curTabText);
   }
 }
@@ -1903,12 +1914,14 @@ bool PythonIDE::eventFilter(QObject *obj, QEvent *event) {
 void PythonIDE::closeModuleTabRequested(int idx) {
   if (closeEditorTabRequested(_ui->modulesTabWidget, idx)) {
     _ui->modulesTabWidget->closeTab(idx);
+    checkUnsavedFiles(_ui->modulesTabWidget, true);
   }
 }
 
 void PythonIDE::closeScriptTabRequested(int idx) {
   if (closeEditorTabRequested(_ui->mainScriptsTabWidget, idx)) {
     _ui->mainScriptsTabWidget->closeTab(idx);
+    checkUnsavedFiles(_ui->mainScriptsTabWidget, true);
 
     if (_ui->mainScriptsTabWidget->count() == 0) {
       _ui->runScriptButton->setEnabled(false);
@@ -1918,19 +1931,32 @@ void PythonIDE::closeScriptTabRequested(int idx) {
 
 void PythonIDE::closePluginTabRequested(int idx) {
   QString pluginFile = getPluginEditor(idx)->getFileName();
-  QFileInfo fileInfo(pluginFile);
 
-  if (closeEditorTabRequested(_ui->pluginsTabWidget, idx)) {
+  bool closeTab = false;
+
+  if (pluginFile.isEmpty()) {
+    closeTab = true;
+    QString id = QString("%1").arg(reinterpret_cast<intptr_t>(getPluginEditor(idx)));
+    _editedPluginsClassName.remove(id);
+    _editedPluginsType.remove(id);
+    _editedPluginsName.remove(id);
+  } else if (closeEditorTabRequested(_ui->pluginsTabWidget, idx)) {
+    closeTab = true;
     _editedPluginsClassName.remove(pluginFile);
     _editedPluginsType.remove(pluginFile);
     _editedPluginsName.remove(pluginFile);
-
-    _ui->pluginsTabWidget->closeTab(idx);
-
+  }
+  if (closeTab) {
     if (_ui->pluginsTabWidget->count() == 1) {
       _ui->registerPluginButton->setEnabled(false);
       _ui->removePluginButton->setEnabled(false);
     }
+    if (idx == _ui->pluginsTabWidget->currentIndex()) {
+      _ui->pluginStatusLabel->setText("");
+      _ui->consoleWidget->clear();
+    }
+    _ui->pluginsTabWidget->closeTab(idx);
+    checkUnsavedFiles(_ui->pluginsTabWidget, true);
   }
 }
 
