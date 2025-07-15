@@ -162,11 +162,7 @@ void GeoMapWidget::paintEvent(QPaintEvent *) {
 void GeoMapWidget::mousePressEvent(QMouseEvent *ev) {
   if (ev->button() == Qt::LeftButton) {
     mousePressed = true;
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    mousePreviousPos = ev->pos();
-#else
     mousePreviousPos = ev->position().toPoint();
-#endif
   }
 }
 
@@ -176,11 +172,7 @@ void GeoMapWidget::mouseReleaseEvent(QMouseEvent *) {
 
 void GeoMapWidget::mouseMoveEvent(QMouseEvent *ev) {
   if (mousePressed) {
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    auto evPos = ev->pos();
-#else
     auto evPos = ev->position().toPoint();
-#endif
     translateView(mousePreviousPos - evPos);
     mousePreviousPos = evPos;
     update();

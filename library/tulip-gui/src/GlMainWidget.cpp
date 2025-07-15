@@ -47,7 +47,7 @@ using namespace std;
 
 namespace tlp {
 
-#if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+#if defined(__APPLE__)
 // needed to fix OpenGL selection failure on MACOS since Qt 5.10
 class GlBufferBinder {
   QOpenGLFramebufferObject *glFrameBuf;

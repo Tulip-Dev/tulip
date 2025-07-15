@@ -55,13 +55,9 @@ int CustomTreeView::sizeHintForColumn(int col) const {
 
   while (index.isValid()) {
     if (viewport()->rect().contains(visualRect(index))) {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-      auto w = itemDelegate(index)->sizeHint(viewOptions(), index).width();
-#else
       QStyleOptionViewItem option;
       initViewItemOption(&option);
       auto w = itemDelegateForIndex(index)->sizeHint(option, index).width();
-#endif
       hint = qMax(hint, visualRect(index).x() + w);
     }
 

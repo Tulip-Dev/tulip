@@ -73,11 +73,6 @@ ParameterListModel::configureTableView(QTableView *tableView,
   hHeader->setVisible(false);
   hHeader->setStretchLastSection(true);
   vHeader->setSectionResizeMode(QHeaderView::Fixed);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-  // parameters names are displayed in the vertical header
-  vHeader->setVisible(true);
-  tableView->setItemDelegate(new TulipItemDelegate(tableView));
-#else
   // parameters are displayed in column 0
   vHeader->setVisible(false);
   hHeader->resizeSection(0, model->parameterColumnMinWidth());
@@ -85,7 +80,6 @@ ParameterListModel::configureTableView(QTableView *tableView,
   tableView->setItemDelegateForColumn(1, new TulipItemDelegate(tableView));
   // avoid to show focus on parameters names
   tableView->setFocusPolicy(Qt::NoFocus);
-#endif
 
   return model;
 }
@@ -103,18 +97,12 @@ int ParameterListModel::rowCount(const QModelIndex &) const {
 }
 
 int ParameterListModel::columnCount(const QModelIndex &) const {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-  return 1;
-#else
   return 2;
-#endif
 }
 
 QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
   if (index.column() == 0) // parameters names
     return headerData(index.row(), Qt::Vertical, role);
-#endif
 
   if (role == GraphRole)
     return QVariant::fromValue<tlp::Graph *>(_graph);
@@ -158,14 +146,13 @@ QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
 }
 
 QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation, int role) const {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
   // use the standard font for a QHeaderView
   if (role == Qt::FontRole) {
     QFont font = QAbstractItemModel::headerData(section, orientation, role).value<QFont>();
     font.setBold(true);
     return QVariant::fromValue<QFont>(font);
   }
-#endif
+
   if (orientation == Qt::Vertical) {
     const ParameterDescription &info = _params[section];
 
@@ -178,16 +165,9 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
 
       return tlp::tlpStringToQString(info.getName().c_str());
     } else if (role == Qt::BackgroundRole) {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-      if (info.isMandatory())
-        return QColor(255, 255, 222);
-      else
-        return QColor(222, 255, 222);
-#else
       return QAbstractItemModel::headerData(section, orientation, role);
     } else if (role == Qt::ForegroundRole) {
       return _darkBackground ? QColor("white") : QColor("black");
-#endif
     } else if (role == Qt::ToolTipRole) {
       return data(createIndex(section, -1), role);
     } else if (role == Qt::DecorationRole && _showIcons) {
@@ -205,10 +185,8 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
 }
 
 Qt::ItemFlags ParameterListModel::flags(const QModelIndex &index) const {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
   if (index.column() == 0) // parameters names
     return Qt::ItemIsEnabled;
-#endif
   Qt::ItemFlags result = QAbstractItemModel::flags(index);
   const ParameterDescription &info = _params[index.row()];
   bool editable = info.isEditable();

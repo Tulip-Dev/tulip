@@ -50,11 +50,7 @@ public:
     if (ev->type() == QEvent::MouseButtonPress) {
       QMouseEvent *mouseEv = static_cast<QMouseEvent *>(ev);
 
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-      auto pos = mouseEv->globalPos();
-#else
       auto pos = mouseEv->globalPosition().toPoint();
-#endif
       if (!_view->geometry().contains(pos))
         _view->close();
       else {

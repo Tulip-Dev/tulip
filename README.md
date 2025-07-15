@@ -100,7 +100,7 @@ The following dependencies are required to build Tulip:
   [Clang](https://clang.llvm.org/) >= 5.0
   * [FreeType](https://www.freetype.org) 
   * [zlib](http://zlib.net)
-  * [Qt](https://www.qt.io) 5.15 or >= 6.5
+  * [Qt](https://www.qt.io) >= 6.5
   * [OpenGL](https://www.opengl.org) >= 2.0
   * [GLEW](http://glew.sourceforge.net/) >= 1.4
   * [Python](https://www.python.org) >= 3.9
