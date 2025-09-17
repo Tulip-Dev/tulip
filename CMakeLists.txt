@@ -107,7 +107,6 @@ SET(TulipIntVersion "${Tulip_VERSION_MAJOR}${TulipMinorVersionTwoDigits}${PROJEC
 SET(LibTulipCoreName "tulip-core-${TulipMMVersion}")
 SET(LibTulipOGLName "tulip-ogl-${TulipMMVersion}")
 SET(LibTulipGUIName "tulip-gui-${TulipMMVersion}")
-SET(LibTulipPythonName "tulip-python-${TulipMMVersion}")
 SET(LibTulipCorePythonBindingsName "tulip-core-python-bindings")
 SET(LibTulipGUIPythonBindingsName "tulip-gui-python-bindings")
 SET(TulipLibs ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
