@@ -43,8 +43,8 @@ public:
   unsigned int id;
   node();
   node(unsigned int);
-  bool __eq__(const tlp::node);
-  bool __ne__(const tlp::node);
+  bool __eq__(const tlp::node) const;
+  bool __ne__(const tlp::node) const;
   int __int__();
   bool isValid();
 %Docstring

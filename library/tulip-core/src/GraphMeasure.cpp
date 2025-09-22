@@ -169,7 +169,7 @@ void tlp::clusteringCoefficient(const Graph *graph, tlp::NodeStaticProperty<doub
 
     double nbEdge(graph->deg(n) + nbEdgesN);
     double nNode = reachables.size() + 1;
-    clusters[i] = nbEdge / ((nNode * (nNode - 1)) / 2);
+    clusters[i] = (nNode==1)?0:nbEdge / ((nNode * (nNode - 1)) / 2);
   });
 }
 //==================================================
