@@ -53,7 +53,7 @@ class FTContour
          * @param numberOfPoints
          */
         FTContour(FT_Vector* contour,
-#if FREETYPE_MAJOR==2 && FREETYPE_MINOR == 13 && FREETYPE_PATCH >= 3
+#if FREETYPE_MAJOR==2 && (FREETYPE_MINOR > 13 || (FREETYPE_MINOR == 13 && FREETYPE_PATCH >= 3))
                 unsigned
 #endif
         char* pointTags, unsigned int numberOfPoints);

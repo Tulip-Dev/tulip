@@ -127,7 +127,7 @@ void FTVectoriser::ProcessContours()
   for(int i = 0; i < ftContourCount; ++i)
     {
       FT_Vector* pointList = &outline.points[startIndex];
-#if FREETYPE_MAJOR==2 && FREETYPE_MINOR == 13 && FREETYPE_PATCH >= 3
+#if FREETYPE_MAJOR==2 && (FREETYPE_MINOR > 13 || (FREETYPE_MINOR == 13 && FREETYPE_PATCH >= 3))
       unsigned
 #endif
       char* tagList = &outline.tags[startIndex];
