@@ -10,8 +10,6 @@
 #include <exception>
 #include <deque>
 
-#include <cstdbool>
-
 //#ifdef DEBUG
 #include <iostream>
 using std::cerr;
