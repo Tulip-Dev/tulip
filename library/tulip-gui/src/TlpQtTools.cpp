@@ -237,7 +237,13 @@ public:
 
     GLuint *textureNum = new GLuint[spriteNumber];
 
-    image = image.mirrored().convertToFormat(QImage::Format_RGBA8888);
+#if (QT_VERSION > QT_VERSION_CHECK(6,9,0))
+    image = image.flipped();
+#else
+    image = image.mirrored();
+#endif
+
+    image = image.convertToFormat(QImage::Format_RGBA8888);
 
     glTexture.width = width;
     glTexture.height = height;

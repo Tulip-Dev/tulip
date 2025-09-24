@@ -248,7 +248,11 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
+#if (QT_VERSION > QT_VERSION_CHECK(6,9,0))
+  QImage image = getImage().flipped();
+#else
   QImage image = getImage().mirrored();
+#endif
 
   unsigned char *buff = image.bits();
 
