@@ -5,7 +5,9 @@
 #  IBERTY_INCLUDE_DIR
 #  IBERTY_LIBRARY
 
-FIND_PATH(IBERTY_INCLUDE_DIR NAMES libiberty.h)
+#under anaconda, the header is in a subdirectory called libiberty.
+#add more research path with PATH_SUFFIXES
+FIND_PATH(IBERTY_INCLUDE_DIR NAMES libiberty.h PATH_SUFFIXES libiberty)
 FIND_LIBRARY(IBERTY_LIBRARY NAMES iberty)
 
 MARK_AS_ADVANCED(IBERTY_INCLUDE_DIR IBERTY_LIBRARY)

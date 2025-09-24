@@ -13,16 +13,17 @@ IF(LINUX OR MINGW)
 
   FIND_PACKAGE(Iberty)
 
+  #libsframe from binutils is required. It is only given as a static lib for MINGW or anaconda under linux so we need to search for it
+  FIND_LIBRARY(SFRAME_LIBRARY sframe REQUIRED)
+  MARK_AS_ADVANCED(SFRAME_LIBRARY)
+
   IF(MINGW)
     # Check if libintl is present in the MinGW build environment
     FIND_PACKAGE(Intl)
     # the switch from binutils 2.39 to 2.40 added the two dependencies below
     # for libbfd.a which is needed by crashandling static library
-    # Check if libsframe is present in the MinGW build environment
-    # FIND_LIBRARY(SFRAME_LIBRARY sframe PATHS ${MINGW_LIB_PATH} ${MINGW_LIB64_PATH} REQUIRED)
-    FIND_LIBRARY(SFRAME_LIBRARY sframe REQUIRED)
     FIND_PACKAGE(Zstd)
-    MARK_AS_ADVANCED(SFRAME_LIBRARY)
+
   ENDIF(MINGW)
 
 ENDIF(LINUX OR MINGW)
