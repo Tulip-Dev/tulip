@@ -10,6 +10,14 @@ message(STATUS "Configuring ${CMAKE_PROJECT_NAME} ${Tulip_VERSION}")
 # First display CMake version
 MESSAGE(STATUS "Using CMake ${CMAKE_VERSION}")
 
+#Check if we are in a Conda environment
+IF(DEFINED ENV{CONDA_PREFIX})
+        IF(NOT "$ENV{CONDA_PREFIX}" STREQUAL "")
+                MESSAGE(STATUS "Conda detected. Adding $ENV{CONDA_PREFIX} to CMAKE_PREFIX_PATH")
+                SET(CMAKE_PREFIX_PATH $ENV{CONDA_PREFIX} ${CMAKE_PREFIX_PATH})
+        ENDIF(NOT "$ENV{CONDA_PREFIX}" STREQUAL "")
+ENDIF(DEFINED ENV{CONDA_PREFIX})
+
 # enable the use of ccache for Tulip developers to speed up the build process
 IF(NOT MSVC)
   OPTION(TULIP_USE_CCACHE "Do you want to use ccache to speed up the build process during Tulip development ? [OFF|ON]" OFF)
