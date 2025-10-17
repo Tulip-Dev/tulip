@@ -158,11 +158,13 @@ void tlp::clusteringCoefficient(const Graph *graph, tlp::NodeStaticProperty<doub
     }
 
     unsigned nbEdgesN(0);
-    auto itr = reachables.end();
-    for (auto i = reachables.begin(); i != itr - 1; ++i) {
-      for (auto j = i + 1; j != itr; ++j) {
-        if (graph->hasEdge(*i, *j, false)) {
-          ++nbEdgesN;
+    if(!reachables.empty()) {
+      auto itr = reachables.end();
+      for (auto i = reachables.begin(); i != itr - 1; ++i) {
+        for (auto j = i + 1; j != itr; ++j) {
+          if (graph->hasEdge(*i, *j, false)) {
+            ++nbEdgesN;
+          }
         }
       }
     }
