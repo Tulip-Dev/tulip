@@ -35,7 +35,7 @@ set pyexe=C:\Tulip5\python\tools\python.exe
 PATH C:\Tulip5\python\tools;C:\Tulip5\python\Scripts;%PATH%
 
 
-for %%G in (3.9.13 3.10.11 3.11.9 3.12.9 3.13.2) do (
+for %%G in (3.10.11 3.11.9 3.12.10 3.13.9 3.14.0) do (
 rem Install supported version of python with nuget
   nuget.exe install python -Version %%G -ExcludeVersion -OutputDirectory .
   %pyexe% -m pip install --upgrade pip
