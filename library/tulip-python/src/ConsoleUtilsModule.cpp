@@ -205,7 +205,7 @@ static PyTypeObject consoleutils_ConsoleOutputType = {
     ,
     0
 #endif
-#if PY_MINOR_VERSION >= 14
+#if PY_MINOR_VERSION > 14
 #error Python version PY_MAJOR_VERSION.PY_MINOR_VERSION not supported
 #endif
 
