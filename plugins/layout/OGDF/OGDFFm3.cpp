@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,6 +18,7 @@
  */
 
 #include <tulip/StringCollection.h>
+#include <tulip/TlpTools.h>
 
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
 #include <ogdf/energybased/FMMMLayout.h>
@@ -103,11 +104,11 @@ static const char *paramHelp[] = {
     "The node sizes.",
 
     // Unit edge length
-    "The unit edge length.",
+    "The unit edge length. Not used if \"edge length property\" is set.",
 
-    // New initial placement
-    "Indicates the initial placement before running algorithm. "
-    "This is a high level option inducing an implicit value to the 'Initial Placement Forces' "
+    // New initial layout
+    "Indicates the initial layout before running algorithm. "
+    "This is a high level option inducing an implicit value to the 'initial layout forces' "
     "parameter.",
 
     // Fixed iterations
@@ -139,11 +140,11 @@ static const char *paramHelp[] = {
     // Galaxy Choice
     "Specifies how sun nodes of galaxies are selected.",
 
-    // Max Iter Change
+    // max iterations change
     "Specifies how MaxIterations is changed in subsequent multilevels.",
 
-    // Initial Placement
-    "Specifies how the initial placement is generated.",
+    // Initial layout
+    "Specifies how the initial layout is generated.",
 
     // Force Model
     "Specifies the force-model.",
@@ -151,10 +152,9 @@ static const char *paramHelp[] = {
     // Repulsive Force Model
     "Specifies how to calculate repulsive forces.",
 
-    // Initial Placement Forces
-    "Specifies how the initial placement is done. "
-    "If not set do default, it supersedes the value induced by the 'New initial placement' "
-    "parameter.",
+    // Initial layout Forces
+    "Specifies how the initial layout is done. "
+    "If not set to default, it supersedes the value induced by the \"new initial layout\" parameter.",
 
     // Reduced Tree Construction
     "Specifies how the reduced bucket quadtree is constructed.",
@@ -201,10 +201,11 @@ static const char *repulsiveForceValuesDescription =
     "grid approximation <i>(grid approximation)</i>";
 
 static const char *initialPlacementValuesDescription =
-    "random seed <i>(random placement, based on random seed)</i><br>"
-    "random time <i>(random placement, based on current time)</i><br>"
-    "uniform grid <i>(uniform placement on a grid)</i><br>"
-    "keep positions <i>(No change in placement)</i>";
+    "default <i>(use default of \"new initial layout\" parameter)"
+    "random seed <i>(random layout, based on random seed)</i><br>"
+    "random time <i>(random layout, based on current time)</i><br>"
+    "uniform grid <i>(uniform layout on a grid)</i><br>"
+    "keep positions <i>(No change in layout)</i>";
 
 static const char *smallestCellFindingValuesDescription =
     "iteratively <i>(iteratively, in constant time)</i><br>"
@@ -218,7 +219,7 @@ public:
   PLUGININFORMATION("FM^3 (OGDF)", "Stephan Hachul", "09/11/2007",
                     "Implements the FM³ layout algorithm by Hachul and Jünger. It is a multilevel, "
                     "force-directed layout algorithm that can be applied to very large graphs.",
-                    "1.4", "Force Directed")
+                    "1.5", "Force Directed")
   OGDFFm3(const tlp::PluginContext *context);
   ~OGDFFm3() override;
   void beforeCall() override;
@@ -231,10 +232,10 @@ PLUGIN(OGDFFm3)
 
 OGDFFm3::OGDFFm3(const tlp::PluginContext *context)
     : OGDFLayoutPluginBase(context, context ? new ogdf::FMMMLayout() : nullptr) {
-  addInParameter<NumericProperty *>("edge length property", paramHelp[0], "viewMetric", false);
+  addInParameter<NumericProperty *>("edge length property", paramHelp[0], "", false);
   addInParameter<SizeProperty>("node size", paramHelp[1], "viewSize", false);
   addInParameter<double>("unit edge length", paramHelp[2], "10.0", false);
-  addInParameter<bool>("new initial placement", paramHelp[3], "true");
+  addInParameter<bool>("new initial layout", paramHelp[3], "true");
   addInParameter<int>("fixed iterations", paramHelp[4], "0");
   addInParameter<double>("threshold", paramHelp[5], "0.01");
   addInParameter<StringCollection>("page format", paramHelp[6], PAGEFORMATLIST, true,
@@ -252,15 +253,15 @@ OGDFFm3::OGDFFm3(const tlp::PluginContext *context)
                                    presortValuesDescription);
   addInParameter<StringCollection>("galaxy choice", paramHelp[12], GALAXYCHOICELIST, true,
                                    galaxyChoiceValuesDescription);
-  addInParameter<StringCollection>("max iter change", paramHelp[13], MAXITERCHANGELIST, true,
+  addInParameter<StringCollection>("max iterations change", paramHelp[13], MAXITERCHANGELIST, true,
                                    maxIterChangeValuesDescription);
-  addInParameter<StringCollection>("initial placement", paramHelp[14], INITIALPLACEMENTMULTLIST,
-                                   true, "advanced<br/>simple");
+  addInParameter<StringCollection>("initial layout", paramHelp[14], INITIALPLACEMENTMULTLIST, true,
+                                   "advanced<br/>simple");
   addInParameter<StringCollection>("force model", paramHelp[15], FORCEMODELLIST, true,
                                    forceModelValuesDescription);
   addInParameter<StringCollection>("repulsive force method", paramHelp[16],
                                    REPULSIVEFORCEMETHODLIST, true, repulsiveForceValuesDescription);
-  addInParameter<StringCollection>("initial placement forces", paramHelp[17],
+  addInParameter<StringCollection>("initial layout forces", paramHelp[17],
                                    INITIALPLACEMENTFORCESLIST, true,
                                    initialPlacementValuesDescription);
   addInParameter<StringCollection>("reduced tree construction", paramHelp[18],
@@ -275,19 +276,24 @@ OGDFFm3::~OGDFFm3() {}
 void OGDFFm3::beforeCall() {
   ogdf::FMMMLayout *fmmm = static_cast<ogdf::FMMMLayout *>(ogdfLayoutAlgo);
 
+  // init seed of possible random sequence
+  auto seed = tlp::getSeedOfRandomSequence();
+  if (seed != UINT_MAX)
+    fmmm->randSeed(seed);
+
   if (dataSet != nullptr) {
     double edgeLenth = 10;
 
-    if (dataSet->getDeprecated("unit edge length", "Unit edge length", edgeLenth))
+    if (dataSet->get("unit edge length", edgeLenth))
       fmmm->unitEdgeLength(edgeLenth);
 
     bool bval = false;
 
-    if (dataSet->getDeprecated("new initial placement", "New initial placement", bval)) {
+    if (dataSet->get("new initial layout", bval)) {
       fmmm->newInitialPlacement(bval);
     }
 
-    if (dataSet->getDeprecated("page format", "Page Format", stringCollection)) {
+    if (dataSet->get("page format", stringCollection)) {
       switch (stringCollection.getCurrent()) {
       case PORTRAIT:
         fmmm->pageFormat(FMMMOptions::PageFormatType::Portrait);
@@ -300,7 +306,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("quality vs speed", "Quality vs Speed", stringCollection)) {
+    if (dataSet->get("quality vs speed", stringCollection)) {
       switch (stringCollection.getCurrent()) {
       case NICEANDINCREDIBLESPEED:
         fmmm->qualityVersusSpeed(FMMMOptions::QualityVsSpeed::NiceAndIncredibleSpeed);
@@ -355,24 +361,23 @@ void OGDFFm3::beforeCall() {
 
     SizeProperty *size = nullptr;
 
-    if (dataSet->getDeprecated("node size", "Node Size", size))
+    if (dataSet->get("node size", size))
       tlpToOGDF->copyTlpNodeSizeToOGDF(size);
 
     int ival = 0;
 
-    if (dataSet->getDeprecated("fixed iterations", "Fixed iterations", ival)) {
+    if (dataSet->get("fixed iterations", ival)) {
       if (ival)
         fmmm->fixedIterations(ival);
     }
 
     double dval = 0;
 
-    if (dataSet->getDeprecated("threshold", "Threshold", dval)) {
+    if (dataSet->get("threshold", dval)) {
       fmmm->threshold(dval);
     }
 
-    if (dataSet->getDeprecated("edge length measurement", "Edge Length Measurement",
-                               stringCollection)) {
+    if (dataSet->get("edge length measurement", stringCollection)) {
       if (stringCollection.getCurrent() == BOUNDINGCIRCLE) {
         fmmm->edgeLengthMeasurement(FMMMOptions::EdgeLengthMeasurement::BoundingCircle);
       } else {
@@ -380,7 +385,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("allowed positions", "Allowed Positions", stringCollection)) {
+    if (dataSet->get("allowed positions", stringCollection)) {
       switch (stringCollection.getCurrent()) {
       case INTEGER:
         fmmm->allowedPositions(FMMMOptions::AllowedPositions::Integer);
@@ -393,7 +398,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("tip over", "Tip Over", stringCollection)) {
+    if (dataSet->get("tip over", stringCollection)) {
       switch (stringCollection.getCurrent()) {
       case NONE:
         fmmm->tipOverCCs(FMMMOptions::TipOver::None);
@@ -406,7 +411,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("presort", "Pre Sort", stringCollection)) {
+    if (dataSet->get("presort", stringCollection)) {
       if (stringCollection.getCurrent() == NONE) {
         fmmm->presortCCs(FMMMOptions::PreSort::None);
       } else if (stringCollection.getCurrent() == DECREASINGHEIGHT) {
@@ -416,7 +421,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("galaxy choice", "Galaxy Choice", stringCollection)) {
+    if (dataSet->get("galaxy choice", stringCollection)) {
       switch (stringCollection.getCurrent()) {
       case UNIFORMPROB:
         fmmm->galaxyChoice(FMMMOptions::GalaxyChoice::UniformProb);
@@ -429,7 +434,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("max iter change", "Max Iter Change", stringCollection)) {
+    if (dataSet->get("max iterations change", stringCollection)) {
       switch (stringCollection.getCurrent()) {
       case CONSTANT:
         fmmm->maxIterChange(FMMMOptions::MaxIterChange::Constant);
@@ -442,7 +447,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("initial placement", "Initial Placement Mult", stringCollection)) {
+    if (dataSet->get("initial layout", stringCollection)) {
       if (stringCollection.getCurrent() == ADVANCED) {
         fmmm->initialPlacementMult(FMMMOptions::InitialPlacementMult::Advanced);
       } else {
@@ -450,7 +455,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("force model", "Force Model", stringCollection)) {
+    if (dataSet->get("force model", stringCollection)) {
       switch (stringCollection.getCurrent()) {
       case FRUCHTERMANNREINGOLD:
         fmmm->forceModel(FMMMOptions::ForceModel::FruchtermanReingold);
@@ -463,8 +468,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("repulsive force method", "Repulsive Force Method",
-                               stringCollection)) {
+    if (dataSet->get("repulsive force method", stringCollection)) {
       switch (stringCollection.getCurrent()) {
       case EXACT:
         fmmm->repulsiveForcesCalculation(FMMMOptions::RepulsiveForcesMethod::Exact);
@@ -477,8 +481,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("initial placement forces", "Initial Placement Forces",
-                               stringCollection)) {
+    if (dataSet->get("initial layout forces", stringCollection)) {
       auto current = stringCollection.getCurrent();
       if (current != 0) {
         switch (current) {
@@ -499,8 +502,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("reduced tree construction", "Reduced Tree Construction",
-                               stringCollection)) {
+    if (dataSet->get("reduced tree construction", stringCollection)) {
       if (stringCollection.getCurrent() == SUBTREEBYSUBTREE) {
         fmmm->nmTreeConstruction(FMMMOptions::ReducedTreeConstruction::SubtreeBySubtree);
       } else {
@@ -508,8 +510,7 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("smallest cell finding", "Smallest Cell Finding",
-                               stringCollection)) {
+    if (dataSet->get("smallest cell finding", stringCollection)) {
       if (stringCollection.getCurrent() == ITERATIVELY) {
         fmmm->nmSmallCell(FMMMOptions::SmallestCellFinding::Iteratively);
       } else {
@@ -525,7 +526,7 @@ void OGDFFm3::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
 
   NumericProperty *length = nullptr;
 
-  if (dataSet->getDeprecated("edge length property", "Edge Length Property", length) && length) {
+  if (dataSet->get("edge length property", length) && length) {
     EdgeArray<double> edgeLength(tlpToOGDF->getOGDFGraph());
 
     const std::vector<tlp::edge> &edges = graph->edges();

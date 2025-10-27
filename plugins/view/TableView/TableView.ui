@@ -11,7 +11,16 @@
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_6">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -20,7 +29,16 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -55,11 +73,11 @@
            <string>Show/Hide table settings</string>
           </property>
           <property name="styleSheet">
-           <string>QToolButton {
+           <string notr="true">QToolButton {
 border: none;
 }
 QToolButton:checked {
-  border: 1px solid lightgray;
+  border: 1px solid lightgray; border-radius: 7px
 }
 </string>
           </property>
@@ -67,7 +85,7 @@ QToolButton:checked {
            <string/>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../../../library/tulip-gui/resources/TulipGUIResource.qrc">
             <normaloff>:/tulip/gui/icons/16/settings.png</normaloff>:/tulip/gui/icons/16/settings.png</iconset>
           </property>
           <property name="checkable">
@@ -114,7 +132,16 @@ font: bold; font-size: 22px; color: #A0A0A0A0</string>
          <property name="spacing">
           <number>5</number>
          </property>
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
@@ -123,7 +150,7 @@ font: bold; font-size: 22px; color: #A0A0A0A0</string>
             <number>5</number>
            </property>
            <property name="sizeConstraint">
-            <enum>QLayout::SetMinimumSize</enum>
+            <enum>QLayout::SizeConstraint::SetMinimumSize</enum>
            </property>
            <property name="leftMargin">
             <number>5</number>
@@ -144,11 +171,18 @@ font: bold; font-size: 22px; color: #A0A0A0A0</string>
               <string>Select row element type</string>
              </property>
              <property name="sizeAdjustPolicy">
-              <enum>QComboBox::AdjustToContents</enum>
+              <enum>QComboBox::SizeAdjustPolicy::AdjustToContentsOnFirstShow</enum>
              </property>
-             <property name="frame">
-              <bool>true</bool>
-             </property>
+             <item>
+               <property name="text">
+                 <string>Nodes</string>
+               </property>
+             </item>
+             <item>
+               <property name="text">
+                 <string>Edges</string>
+               </property>
+             </item>
             </widget>
            </item>
            <item>
@@ -175,17 +209,14 @@ the chosen selection property value is 'true'</string>
 the chosen selection property value is 'true'</string>
              </property>
              <property name="sizeAdjustPolicy">
-              <enum>QComboBox::AdjustToContents</enum>
-             </property>
-             <property name="frame">
-              <bool>true</bool>
+              <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
              </property>
             </widget>
            </item>
            <item>
             <widget class="Line" name="line">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
             </widget>
            </item>
@@ -202,7 +233,7 @@ the chosen selection property value is 'true'</string>
            <item>
             <widget class="QSpinBox" name="zoomSpinBox">
              <property name="buttonSymbols">
-              <enum>QAbstractSpinBox::PlusMinus</enum>
+              <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
              </property>
              <property name="keyboardTracking">
               <bool>false</bool>
@@ -227,10 +258,10 @@ the chosen selection property value is 'true'</string>
            <item>
             <spacer name="horizontalSpacer_2">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeType">
-              <enum>QSizePolicy::Expanding</enum>
+              <enum>QSizePolicy::Policy::Expanding</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -268,11 +299,18 @@ the chosen selection property value is 'true'</string>
 - 'like' for a sql like pattern.</string>
              </property>
              <property name="sizeAdjustPolicy">
-              <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+              <enum>QComboBox::SizeAdjustPolicy::AdjustToContentsOnFirstShow</enum>
              </property>
-             <property name="minimumContentsLength">
-              <number>8</number>
-             </property>
+             <item>
+              <property name="text">
+               <string>matching</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>like</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item>
@@ -313,13 +351,13 @@ Press 'Return' to validate.</string>
 the chosen column value matches the given regular expression</string>
              </property>
              <property name="layoutDirection">
-              <enum>Qt::RightToLeft</enum>
+              <enum>Qt::LayoutDirection::RightToLeft</enum>
              </property>
              <property name="text">
               <string>Any</string>
              </property>
              <property name="icon">
-              <iconset>
+              <iconset resource="../../../library/tulip-gui/resources/TulipGUIResource.qrc">
                <normaloff>:/tulip/gui/ui/combobox_arrow.png</normaloff>:/tulip/gui/ui/combobox_arrow.png</iconset>
              </property>
             </widget>
@@ -340,7 +378,6 @@ the chosen column value contains the given pattern</string>
              <property name="font">
               <font>
                <pointsize>8</pointsize>
-               <weight>50</weight>
                <italic>false</italic>
                <bold>false</bold>
               </font>
@@ -360,7 +397,7 @@ sensitive</string>
            <item>
             <spacer name="horizontalSpacer">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -401,9 +438,16 @@ matches the given regular expression.</string>
 - 'matching' for a regular expressio
 - 'like' for a sql like pattern.</string>
              </property>
-             <property name="minimumContentsLength">
-              <number>8</number>
-             </property>
+             <item>
+              <property name="text">
+               <string>matching</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>like</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item>
@@ -452,7 +496,7 @@ sensitive</string>
            <item>
             <spacer name="horizontalSpacer_4">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -468,9 +512,9 @@ sensitive</string>
        </widget>
       </item>
       <item>
-	<widget class="QFrame" name="frame_2">
-	  <property name="styleSheet">
-	    <string notr="true">
+       <widget class="QFrame" name="frame_2">
+        <property name="styleSheet">
+         <string notr="true">
 #frame_2 {
 border-right: 0px;
 }
@@ -478,46 +522,55 @@ QFrame[section] {
 border: 1px solid #D9D9D9;
 padding-top: 0px;
 }</string>
-	  </property>
-	  <property name="section" stdset="0">
-	    <bool>true</bool>
-	  </property>
-	  <layout class="QVBoxLayout" name="verticalLayout_2">
-	    <property name="spacing">
-	      <number>0</number>
-	    </property>
-	    <property name="margin">
-	      <number>0</number>
-	    </property>
-	    <item>
-	      <widget class="NavigableTableView" name="table">
-		<property name="contextMenuPolicy">
-		  <enum>Qt::CustomContextMenu</enum>
-		</property>
-		<property name="frameShape">
-		  <enum>QFrame::NoFrame</enum>
-		</property>
-		<property name="selectionBehavior">
-		  <enum>QAbstractItemView::SelectRows</enum>
-		</property>
-		<property name="sortingEnabled">
-		  <bool>true</bool>
-		</property>
-		<property name="wordWrap">
-		  <bool>false</bool>
-		</property>
-		<property name="cornerButtonEnabled">
-		  <bool>false</bool>
-		</property>
-		<attribute name="verticalHeaderMinimumSectionSize">
-		  <number>30</number>
-		</attribute>
-	      </widget>
-	    </item>
-	  </layout>
-	</widget>
+        </property>
+        <property name="section" stdset="0">
+         <bool>true</bool>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="NavigableTableView" name="table">
+           <property name="contextMenuPolicy">
+            <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::Shape::NoFrame</enum>
+           </property>
+           <property name="selectionBehavior">
+            <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+           </property>
+           <property name="sortingEnabled">
+            <bool>true</bool>
+           </property>
+           <property name="wordWrap">
+            <bool>false</bool>
+           </property>
+           <property name="cornerButtonEnabled">
+            <bool>false</bool>
+           </property>
+           <attribute name="verticalHeaderMinimumSectionSize">
+            <number>30</number>
+           </attribute>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </item>
-    </layout>
+     </layout>
     </widget>
    </item>
   </layout>
@@ -534,7 +587,9 @@ padding-top: 0px;
    <header>navigabletableview.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+ </resources>
  <connections/>
  <slots>
   <slot>setPropertyVisible(tlp::PropertyInterface*,bool)</slot>

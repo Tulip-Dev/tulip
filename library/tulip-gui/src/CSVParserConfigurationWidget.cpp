@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,7 +22,7 @@
 
 #include <QTextCodec>
 #include <QFileDialog>
-#include <QKeyEvent>
+#include <QMessageBox>
 
 #include <tulip/CSVParser.h>
 #include <tulip/TlpTools.h>
@@ -36,6 +36,11 @@ QString CSVParserConfigurationWidget::lastOpenedFile;
 CSVParserConfigurationWidget::CSVParserConfigurationWidget(QWidget *parent)
     : QWidget(parent), ui(new Ui::CSVParserConfigurationWidget) {
   ui->setupUi(this);
+#ifdef __APPLE__
+  ui->separatorComboBox->setMinimumContentsLength(7);
+  ui->textDelimiterComboBox->setMinimumContentsLength(3);
+  ui->decimalMarkComboBox->setMinimumContentsLength(3);
+#endif
   // Fill the encoding combo box
   fillEncodingComboBox();
   // Set the default encoding to UTF8
@@ -76,7 +81,8 @@ CSVParser *CSVParserConfigurationWidget::buildParser(unsigned int firstLine,
 
   if (isValid()) {
     parser = new CSVSimpleParser(getFile(), getSeparator(), getMergeSeparator(), getTextSeparator(),
-                                 getDecimalMark(), getEncoding(), firstLine, lastLine);
+                                 getDecimalMark(), getConsiderAsString(), getEncoding(), firstLine,
+                                 lastLine);
 
     if (invertMatrix()) {
       parser = new CSVInvertMatrixParser(parser);
@@ -141,42 +147,53 @@ void CSVParserConfigurationWidget::changeFileNameButtonPressed() {
 
 void CSVParserConfigurationWidget::setFileToOpen(const QString &fileToOpen) {
   if (!fileToOpen.isEmpty() && QFile::exists(fileToOpen)) {
-    ui->fileLineEdit->setText(fileToOpen);
-
     // Try to autodetect separator
     QFile file(fileToOpen);
 
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-      // Read the first line
-      QByteArray firstLine = file.readLine();
+      int maxOccurrence = -1;
+      while (!file.atEnd()) {
+        // Read until the first no empty line
+        QByteArray firstLine = file.readLine();
 
-      if (!firstLine.isEmpty()) {
-        QString line(firstLine);
-        // Search for the best matching separator in the default list
-        QVector<int> separatorOccurrence(ui->separatorComboBox->count());
+        if (!firstLine.isEmpty()) {
+          QString line(firstLine);
+          // Search for the best matching separator in the default list
+          QVector<int> separatorOccurrence(ui->separatorComboBox->count());
 
-        for (int i = 0; i < ui->separatorComboBox->count(); ++i) {
-          QString separator = getSeparator(i);
-          // Count the number of occurrence for this separator
-          separatorOccurrence[i] = line.count(separator);
-        }
-
-        int currentMaxOccurrence = -1;
-
-        for (int i = 0; i < ui->separatorComboBox->count(); ++i) {
-          if (separatorOccurrence[i] > currentMaxOccurrence) {
-            currentMaxOccurrence = separatorOccurrence[i];
-            // Set as separator the one with the greatest occurrence number.
-            ui->separatorComboBox->setCurrentIndex(i);
+          for (int i = 0; i < ui->separatorComboBox->count(); ++i) {
+            QString separator = getSeparator(i);
+            // Count the number of occurrence for this separator
+            separatorOccurrence[i] = line.count(separator);
           }
+
+          // Set as separator the one with the greatest occurrence number.
+          maxOccurrence = 0;
+          for (int i = 1; i < ui->separatorComboBox->count(); ++i) {
+            if (separatorOccurrence[i] > separatorOccurrence[maxOccurrence]) {
+              maxOccurrence = i;
+            }
+          }
+          // set current separator
+          // and emit parserChanged as a side effect
+          ui->fileLineEdit->setText(lastOpenedFile = fileToOpen);
+          if (maxOccurrence != ui->separatorComboBox->currentIndex())
+            ui->separatorComboBox->setCurrentIndex(maxOccurrence);
+          else
+            emit parserChanged();
+          break;
         }
       }
 
       file.close();
-    }
-
-    lastOpenedFile = fileToOpen;
-    emit parserChanged();
+      if (maxOccurrence != -1)
+        return;
+      else
+        QMessageBox::critical(this, QString("Open file failure"),
+                              QString("%1\nfile is empty.").arg(fileToOpen));
+    } else
+      QMessageBox::critical(this, QString("Open file failure"),
+                            QString("%1\n%2").arg(fileToOpen).arg(file.errorString()));
   }
 }
 
@@ -207,7 +224,9 @@ char CSVParserConfigurationWidget::getDecimalMark() const {
 bool CSVParserConfigurationWidget::getMergeSeparator() const {
   return ui->mergesep->isChecked();
 }
-
+bool CSVParserConfigurationWidget::getConsiderAsString() const {
+  return ui->considerAsString->isChecked();
+}
 bool CSVParserConfigurationWidget::invertMatrix() const {
   return ui->switchRowColumnCheckBox->isChecked();
 }

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,6 +18,7 @@
  */
 #include "ImportWizard.h"
 #include "ui_ImportWizard.h"
+#include "PluginDocDialog.h"
 
 #include <QAbstractButton>
 #include <QMessageBox>
@@ -40,8 +41,7 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
 
   _ui->setupUi(this);
 
-  bool darkBackground =
-      _ui->importModules->palette().color(backgroundRole()) != QColor(255, 255, 255);
+  bool darkBackground = _ui->importModules->palette().color(backgroundRole()) != QColor("white");
   // update foreground colors according to background color
   if (darkBackground) {
     auto ss = _ui->importModules->styleSheet();
@@ -54,20 +54,20 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
   _ui->importModules->setModel(model);
   _ui->importModules->setRootIndex(model->index(0, 0));
   _ui->importModules->expandAll();
-  connect(_ui->importModules->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-          this, SLOT(algorithmSelected(QModelIndex)));
+  connect(_ui->importModules->selectionModel(),
+          SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), this,
+          SLOT(moduleSelected(const QModelIndex &)));
 
-  _ui->parameters->setItemDelegate(new TulipItemDelegate(_ui->parameters));
-  _ui->parameters->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-  connect(_ui->importModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton),
-          SLOT(click()));
+  connect(_ui->importModules, SIGNAL(doubleClicked(const QModelIndex &)),
+          button(QWizard::FinishButton), SLOT(click()));
+  connect(_ui->searchBox, SIGNAL(textChanged(const QString &)), this,
+          SLOT(setFilter(const QString &)));
   // display OK instead of Finish
   setButtonText(QWizard::FinishButton, "OK");
   // Help button is used to display import plugin doc
   // as soon as an import plugin is selected
-  auto helpButton = button(QWizard::HelpButton);
-  helpButton->setVisible(false);
-  connect(helpButton, SIGNAL(clicked(bool)), this, SLOT(helpButtonClicked()));
+  button(QWizard::HelpButton)->setVisible(false);
+  connect(this, SIGNAL(helpRequested()), this, SLOT(helpButtonClicked()));
 
   _ui->parametersFrame->hide();
   QString importLabel("<html><head/><body><p align=\"justify\">Import a graph hierarchy into your "
@@ -84,7 +84,6 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
   importLabel += "<br/><br/>See <b>Edit</b> menu, then <b>Preferences</b> for more options when "
                  "importing a graph.</p></body></html>";
   _ui->label->setText(importLabel);
-
   updateFinishButton();
 }
 
@@ -93,46 +92,72 @@ ImportWizard::~ImportWizard() {
   delete _ui;
 }
 
-void ImportWizard::algorithmSelected(const QModelIndex &index) {
+void ImportWizard::initWithModuleFile(const std::string &module, const std::string &file) {
+  // used at perspective launch time
+  // to initialize file::filename default value with file
+  // we first have to select the module in _ui_>importModules
+  auto model = _ui->importModules->model();
+  // root is the "Import" item (non visible)
+  auto root = model->index(0, 1);
+  // Be warn, that we consider only two levels (groups, plugins of groups)
+  // loop on groups (File, Graph ...)
+  for (int i = 0; i < model->rowCount(root); ++i) {
+    auto index = model->index(i, 1, root);
+    // loop on current group import plugins
+    int j = 0;
+    for (; j < model->rowCount(index); j++) {
+      auto subIndex = model->index(j, 1, index);
+      if (subIndex.data().toString() == QString(module.c_str())) {
+        // select module
+        _ui->importModules->setCurrentIndex(subIndex);
+        break;
+      }
+    }
+    if (j < model->rowCount(index))
+      break;
+  }
+
+  ParameterListModel *paramModel = static_cast<ParameterListModel *>(_ui->parameters->model());
+  auto dataSet = paramModel->parametersValues();
+  // finally set file as default filename
+  dataSet.set("file::filename", file);
+  paramModel->setParametersValues(dataSet);
+}
+
+void ImportWizard::moduleSelected(const QModelIndex &index) {
   QString alg(index.data().toString());
   string algs = tlp::QStringToTlpString(alg);
   _ui->parametersFrame->setVisible(!alg.isEmpty());
-  QAbstractItemModel *oldModel = _ui->parameters->model();
-  QAbstractItemModel *newModel = nullptr;
   bool isGroup = index.model()->index(0, index.column(), index).isValid();
 
-  QString categoryText("<b>Category</b>");
   QString parametersText("<b>Parameters</b>");
 
   if (!isGroup && PluginLister::pluginExists(algs)) {
-    _index = &index;
-    newModel = new ParameterListModel(PluginLister::getPluginParameters(algs));
     parametersText += "&nbsp;<font size=-2>[" + alg + "]</font>";
-    std::string group = PluginLister::pluginInformation(algs).group();
-
-    if (!group.empty())
-      categoryText += "&nbsp;<font size=-2>[" + tlpStringToQString(group) + "]</font>";
-
     setButtonText(QWizard::HelpButton, QString("%1 documentation").arg(alg));
     button(QWizard::HelpButton)->setVisible(true);
-
+    _ui->parametersLabel->setEnabled(true);
+    QAbstractItemModel *oldModel = _ui->parameters->model();
+    ParameterListModel::configureTableView(_ui->parameters,
+                                           PluginLister::getPluginParameters(algs));
+    delete oldModel;
   } else {
-    categoryText += "&nbsp;<font size=-2>[" + alg + "]</font>";
     button(QWizard::HelpButton)->setVisible(false);
+    _ui->parametersLabel->setEnabled(false);
   }
 
-  _ui->categoryLabel->setText(categoryText);
   _ui->parametersLabel->setText(parametersText);
 
-  _ui->parameters->setModel(newModel);
-
-  delete oldModel;
   updateFinishButton();
 }
 
-QString ImportWizard::algorithm() const {
+std::string ImportWizard::module() const {
   if (_ui->importModules->selectionModel()->hasSelection())
-    return _ui->importModules->selectionModel()->selectedIndexes()[0].data().toString();
+    return _ui->importModules->selectionModel()
+        ->selectedIndexes()[0]
+        .data()
+        .toByteArray()
+        .toStdString();
 
   return "";
 }
@@ -148,10 +173,38 @@ tlp::DataSet ImportWizard::parameters() const {
 
 void ImportWizard::helpButtonClicked() {
   // display current import plugin documentation
-  QMessageBox::information(this, _index->data().toString().append(" documentation"),
-                           _index->data(Qt::ToolTipRole).toString());
+  ParameterListModel *model = static_cast<ParameterListModel *>(_ui->parameters->model());
+  auto index = _ui->importModules->selectionModel()->currentIndex();
+  PluginDocDialog::showDoc(parentWidget(), index.data().toString(),
+                           index.data(Qt::ToolTipRole).toString(), model);
 }
 
 void ImportWizard::updateFinishButton() {
   button(QWizard::FinishButton)->setEnabled(_ui->parameters->model() != nullptr);
+}
+
+void ImportWizard::setFilter(const QString &filter) {
+  auto model = _ui->importModules->model();
+  // root is the "Import" item (non visible)
+  auto root = model->index(0, 1);
+  bool noFilter = filter.isEmpty();
+  // Be warn, that we consider only two levels (groups, plugins of groups)
+  // loop on groups (File, Graph ...)
+  for (int i = 0; i < model->rowCount(root); ++i) {
+    auto index = model->index(i, 1, root);
+    auto name = index.data().toString();
+    bool hidden = true;
+    if (name.contains(filter, Qt::CaseInsensitive))
+      hidden = false;
+    // loop on current group import plugins
+    for (int j = 0; j < model->rowCount(index); j++) {
+      auto subIndex = model->index(j, 1, index);
+      name = subIndex.data().toString();
+      if (noFilter || name.contains(filter, Qt::CaseInsensitive))
+        _ui->importModules->setRowHidden(j, index, hidden = false);
+      else
+        _ui->importModules->setRowHidden(j, index, true);
+    }
+    _ui->importModules->setRowHidden(i, root, hidden);
+  }
 }

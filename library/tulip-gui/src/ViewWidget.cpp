@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -64,12 +64,6 @@ struct TulipGraphicsView : public QGraphicsView {
 
     if (scene())
       scene()->update();
-
-    // Hack : send a mouse event to force redraw of the scene (otherwise artifacts was displayed
-    // when maximizing or minimizing the graphics view)
-    QMouseEvent eventModif(QEvent::MouseMove, QPoint(size().width() / 2, size().height() / 2),
-                           Qt::NoButton, Qt::NoButton, Qt::NoModifier);
-    QApplication::sendEvent(this, &eventModif);
   }
 };
 
@@ -104,8 +98,11 @@ void ViewWidget::setupUi() {
 }
 
 void ViewWidget::currentInteractorChanged(tlp::Interactor *i) {
-  if (i)
+  if (i) {
     i->install(_centralWidget);
+    // gives focus to allow keyboard interaction
+    _centralWidgetItem->setFocus(Qt::MouseFocusReason);
+  }
 }
 
 void ViewWidget::graphDeleted(Graph *parentGraph) {

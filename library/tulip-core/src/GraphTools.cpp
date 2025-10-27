@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,24 +18,23 @@
  */
 
 #include <algorithm>
-#include <queue>
 #include <stack>
-#include <cmath>
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <tulip/GraphTools.h>
 #include <tulip/GraphMeasure.h>
+#ifndef NDEBUG
 #include <tulip/AcyclicTest.h>
+#include <tulip/ConnectedTest.h>
+#endif
 #include <tulip/TreeTest.h>
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/NumericProperty.h>
-#include <tulip/ConnectedTest.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/Ordering.h>
-#include <tulip/PlanarConMap.h>
 #include <tulip/GraphParallelTools.h>
 #include <tulip/Dijkstra.h>
 
@@ -91,8 +90,8 @@ EdgesIteratorFn getEdgesIterator(EDGE_TYPE direction) {
 }
 
 //======================================================================
-void makeProperDag(Graph *graph, list<node> &addedNodes,
-                   std::unordered_map<edge, edge> &replacedEdges, IntegerProperty *edgeLength) {
+void makeProperDag(Graph *graph, list<node> &addedNodes, tlp_hash_map<edge, edge> &replacedEdges,
+                   IntegerProperty *edgeLength) {
   if (TreeTest::isTree(graph))
     return;
 
@@ -137,7 +136,7 @@ void makeProperDag(Graph *graph, list<node> &addedNodes,
     }
   }
 
-  for (std::unordered_map<edge, edge>::const_iterator it = replacedEdges.begin();
+  for (tlp_hash_map<edge, edge>::const_iterator it = replacedEdges.begin();
        it != replacedEdges.end(); ++it)
     graph->delEdge((*it).first);
 
@@ -222,7 +221,7 @@ node graphCenterHeuristic(Graph *graph, PluginProgress *pluginProgress) {
   const vector<node> &nodes = graph->nodes();
   tlp::NodeStaticProperty<bool> toTreat(graph, true);
   tlp::NodeStaticProperty<unsigned int> dist(graph);
-  unsigned int i = 0, n = 0, result = 0;
+  unsigned int n = 0, result = 0;
   unsigned int cDist = UINT_MAX - 2;
   unsigned int nbTry = 2 + sqrt(nbNodes);
   unsigned int maxTries = nbTry;
@@ -238,7 +237,6 @@ node graphCenterHeuristic(Graph *graph, PluginProgress *pluginProgress) {
     }
 
     if (toTreat[n]) {
-      ++i;
       unsigned int di = tlp::maxDistance(graph, n, dist);
       toTreat[n] = false;
 
@@ -786,9 +784,8 @@ bool selectShortestPaths(const Graph *const graph, node src, node tgt, ShortestP
   return dijkstra.searchPaths(tgt, result);
 }
 
-void markReachableNodes(const Graph *graph, const node startNode,
-                        std::unordered_map<node, bool> &result, unsigned int maxDistance,
-                        EDGE_TYPE direction) {
+void markReachableNodes(const Graph *graph, const node startNode, tlp_hash_map<node, bool> &result,
+                        unsigned int maxDistance, EDGE_TYPE direction) {
   deque<node> fifo;
   MutableContainer<bool> visited;
   MutableContainer<unsigned int> distance;
@@ -820,7 +817,7 @@ void markReachableNodes(const Graph *graph, const node startNode,
 
 void computeDijkstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
                      NodeStaticProperty<double> &nodeDistance, EDGE_TYPE direction,
-                     unordered_map<node, std::list<node>> &ancestors, std::stack<node> *queueNodes,
+                     tlp_hash_map<node, std::list<node>> &ancestors, std::stack<node> *queueNodes,
                      MutableContainer<int> *numberOfPaths) {
   Dijkstra dijkstra(graph, src, weights, nodeDistance, direction, queueNodes, numberOfPaths);
   dijkstra.ancestors(ancestors);

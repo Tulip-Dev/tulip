@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -83,9 +83,9 @@ public:
   PLUGININFORMATION(
       "GEM (Frick)", "Tulip Team", "16/10/2008",
       "Implements the GEM-2d layout algorithm first published as:<br/>"
-      " <b>A fast, adaptive layout algorithm for undirected graphs</b>, A. Frick, A. "
+      " <b>A fast, adaptive layout algorithm for undirected graphs</b>,<br/>A. Frick, A. "
       "Ludwig, and H. Mehldau, Graph Drawing'94, Volume 894 of Lecture Notes in "
-      "Computer Science (1995), doi: <a "
+      "Computer Science (1995),<br/>doi: <a "
       "href=\"https://doi.org/10.1007/3-540-58950-3_393\">10.1007/3-540-58950-3_393</a>",
       "1.2", "Force Directed")
   GEMLayout(const tlp::PluginContext *context);

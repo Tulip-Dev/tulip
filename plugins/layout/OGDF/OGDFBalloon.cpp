@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -53,7 +53,7 @@ public:
     if (dataSet != nullptr) {
       bool val = false;
 
-      if (dataSet->getDeprecated("even angles", "Even angles", val))
+      if (dataSet->get("even angles", val))
         balloon->setEvenAngles(val);
     }
   }

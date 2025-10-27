@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -24,7 +24,7 @@ using namespace tlp;
 class EmptyGraphImport : public ImportModule {
 public:
   PLUGININFORMATION("Empty graph", "Tulip team", "05/09/2012",
-                    "A no-op plugin to import empty graphs", "1.0", "")
+                    "A no-op plugin to import an empty graph", "1.0", "")
 
   EmptyGraphImport(const tlp::PluginContext *context) : ImportModule(context) {}
 

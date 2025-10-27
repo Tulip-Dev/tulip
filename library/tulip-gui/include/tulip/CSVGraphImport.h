@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,7 +21,7 @@
 #ifndef CSVGRAPHIMPORT_H
 #define CSVGRAPHIMPORT_H
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <tulip/CSVContentHandler.h>
 #include <tulip/Graph.h>
@@ -32,6 +32,8 @@
 namespace tlp {
 class PropertyInterface;
 
+#define DEF_VALUE_SEPARATOR ','
+
 /**
  * @brief Store import parameters for a CSV file column.
  *
@@ -41,7 +43,7 @@ class PropertyInterface;
 class TLP_QT_SCOPE CSVColumn {
 public:
   CSVColumn(const std::string &columnName = "", const std::string &columnType = "")
-      : _used(true), _name(columnName), _type(columnType), _valueSeparator(0) {}
+      : _used(true), _name(columnName), _type(columnType), _valueSeparator(DEF_VALUE_SEPARATOR) {}
 
   /**
    * @brief Get the name of the column.
@@ -55,6 +57,14 @@ public:
    **/
   bool isUsed() const {
     return _used;
+  }
+
+  /**
+   * @brief Tells if the property has been updated by user.
+   **/
+  bool isDefault() const {
+    return (_name == _def_name) && (_type == _def_type) &&
+           (_valueSeparator == DEF_VALUE_SEPARATOR) && _exceptions.empty();
   }
 
   /**
@@ -101,8 +111,8 @@ public:
 
 protected:
   bool _used;
-  std::string _name;
-  std::string _type;
+  std::string _name, _def_name;
+  std::string _type, _def_type;
   char _valueSeparator;
   std::vector<Exception> _exceptions;
 };
@@ -213,7 +223,7 @@ protected:
   virtual unsigned int buildIndexForRow(unsigned int row, const std::vector<std::string> &keys) = 0;
 
 protected:
-  std::unordered_map<std::string, unsigned int> valueToId;
+  tlp_hash_map<std::string, unsigned int> valueToId;
   tlp::Graph *graph;
   tlp::ElementType type;
   std::vector<unsigned int> columnIds;
@@ -314,8 +324,8 @@ public:
 
 private:
   tlp::Graph *graph;
-  std::unordered_map<std::string, unsigned int> srcValueToId;
-  std::unordered_map<std::string, unsigned int> tgtValueToId;
+  tlp_hash_map<std::string, unsigned int> srcValueToId;
+  tlp_hash_map<std::string, unsigned int> tgtValueToId;
   std::vector<unsigned int> srcColumnIds;
   std::vector<unsigned int> tgtColumnIds;
   std::vector<tlp::PropertyInterface *> srcProperties;
@@ -363,7 +373,7 @@ public:
 private:
   tlp::Graph *graph;
   CSVImportParameters importParameters;
-  std::unordered_map<unsigned int, tlp::PropertyInterface *> propertiesBuffer;
+  tlp_hash_map<unsigned int, tlp::PropertyInterface *> propertiesBuffer;
   QMessageBox::StandardButton overwritePropertiesButton;
   QWidget *parent;
   PropertyInterface *generateApproximateProperty(const std::string &name, const std::string &type);
@@ -381,7 +391,7 @@ public:
                  const CSVImportParameters &importParameters);
   ~CSVGraphImport() override;
   bool begin() override;
-  bool line(unsigned int row, const std::vector<std::string> &lineTokens) override;
+  bool line(unsigned int row, const std::vector<CSVToken> &lineTokens) override;
   bool end(unsigned int rowNumber, unsigned int columnNumber) override;
 
 protected:

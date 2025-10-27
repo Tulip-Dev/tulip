@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -44,7 +44,7 @@ using namespace tlp;
 //============================================
 
 static const char *paramHelp[] = {
-    // layout
+    // initial layout
     "The input layout of the graph.",
 
     // size
@@ -84,7 +84,7 @@ static const char *paramHelp[] = {
 
 //============================================
 EdgeBundling::EdgeBundling(const PluginContext *context) : Algorithm(context) {
-  addInParameter<LayoutProperty>("layout", paramHelp[0], "viewLayout");
+  addInParameter<LayoutProperty>("initial layout", paramHelp[0], "viewLayout");
   addInParameter<SizeProperty>("node size", paramHelp[1], "viewSize");
   addInParameter<bool>("grid graph", paramHelp[2], "false");
   addInParameter<bool>("3D layout", paramHelp[3], "false");
@@ -220,17 +220,17 @@ bool EdgeBundling::run() {
   layout = graph->getProperty<LayoutProperty>("viewLayout");
 
   if (dataSet != nullptr) {
-    dataSet->getDeprecated("long edges", "long_edges", longEdges);
-    dataSet->getDeprecated("split ratio", "split_ratio", splitRatio);
+    dataSet->get("long edges", longEdges);
+    dataSet->get("split ratio", splitRatio);
     dataSet->get("iterations", MAX_ITER);
     dataSet->get("optimization", optimizationLevel);
-    dataSet->getDeprecated("edge node overlap", "edge_node_overlap", edgeNodeOverlap);
-    dataSet->getDeprecated("max thread", "max_thread", maxThread);
-    dataSet->getDeprecated("3D layout", "3D_layout", layout3D);
-    dataSet->getDeprecated("grid graph", "grid_graph", keepGrid);
-    dataSet->getDeprecated("sphere layout", "sphere_layout", sphereLayout);
-    dataSet->get("layout", layout);
-    dataSet->getDeprecated("node size", "size", size);
+    dataSet->get("edge node overlap", edgeNodeOverlap);
+    dataSet->get("max thread", maxThread);
+    dataSet->get("3D layout", layout3D);
+    dataSet->get("grid graph", keepGrid);
+    dataSet->get("sphere layout", sphereLayout);
+    dataSet->get("initial layout", layout);
+    dataSet->get("node size", size);
   }
 
   if (sphereLayout) {
@@ -239,7 +239,7 @@ bool EdgeBundling::run() {
 
   if (!layout3D) {
     // forbid edge bundling execution if the input layout is in 3D
-    // and it has not been explicitely asked to use the 3D version
+    // and it has not been explicitly asked to use the 3D version
     // of the algorithm.
     auto lMin = layout->getMin(graph);
     auto lMax = layout->getMax(graph);
@@ -247,7 +247,7 @@ bool EdgeBundling::run() {
       pluginProgress->setError("A 3D input layout has been detected while the default behavior "
                                "is to consider a 2D input layout. "
                                "You must set the \"3D_layout\" parameter to "
-                               "\"true\" to explicitely use 3D edge bundling.");
+                               "\"true\" to explicitly use 3D edge bundling.");
       return false;
     }
   }
@@ -291,7 +291,7 @@ bool EdgeBundling::run() {
       Graph *workGraph = graph->addCloneSubGraph();
       // we use a hash map to ease the retrieve of the vector of the nodes
       // having the same position
-      std::unordered_map<std::string, std::pair<node, unsigned int>> clusters;
+      tlp_hash_map<std::string, std::pair<node, unsigned int>> clusters;
 
       // iterate on graph nodes
       for (auto n : graph->nodes()) {
@@ -302,8 +302,7 @@ bool EdgeBundling::run() {
         // instead of relying on the x, y exact values
         std::string key = tlp::PointType::toString(coord);
 
-        std::unordered_map<std::string, std::pair<node, unsigned int>>::iterator it =
-            clusters.find(key);
+        tlp_hash_map<std::string, std::pair<node, unsigned int>>::iterator it = clusters.find(key);
 
         if (it == clusters.end())
           // register the first node at position represented by key

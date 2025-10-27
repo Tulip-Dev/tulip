@@ -1,4 +1,4 @@
-# This file is part of Tulip (http://tulip.labri.fr)
+# This file is part of Tulip (https://tulip.labri.fr)
 #
 # Authors: David Auber and the Tulip development Team
 # from LaBRI, University of Bordeaux
@@ -20,7 +20,7 @@ in Python in the plugins database.
 
 import sys
 import traceback
-from imp import reload # noqa
+from importlib import reload # noqa
 from tulip import tlp # noqa
 
 pluginFactory = {}

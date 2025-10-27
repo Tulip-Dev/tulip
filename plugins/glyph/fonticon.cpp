@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <GL/glew.h>
 
 #include <tulip/BoundingBox.h>
@@ -104,7 +104,7 @@ public:
 };
 
 static FontIcon defaultFontIcon;
-static unordered_map<string, FontIcon> fontIcons;
+static tlp_hash_map<string, FontIcon> fontIcons;
 
 static FontIcon &getFontIcon(const string &iconName) {
   auto it = fontIcons.find(iconName);
@@ -119,7 +119,7 @@ static FontIcon &getFontIcon(const string &iconName) {
     // use defaultFontIcon
     // initialization of defaultFontIcon is delayed
     if (defaultFontIcon.iconCodePoint == 0) {
-      static const std::string defaultIconName = "fa-question-circle";
+      static const std::string defaultIconName = "fas-circle-question";
       defaultFontIcon.iconCodePoint = TulipIconicFont::getIconCodePoint(defaultIconName);
       defaultFontIcon.fontFile = TulipIconicFont::getTTFLocation(defaultIconName);
     }

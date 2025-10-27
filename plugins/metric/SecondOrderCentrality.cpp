@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -54,11 +54,11 @@ class SecondOrderCentrality : public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATION(
       "Second Order Centrality", "Bruno Pinaud", "01/10/2020",
-      "<p>An implementation of the Second Order centrality measure first published as:<br>"
-      "Kermarrec, A.-M., et al. (2011). \"Second order centrality: Distributed assessment of nodes "
-      "criticity in complex networks.\" Computer Communications 34(5): 619-628, <br/>doi: <a "
-      "href=\"https://dx.doi.org/10.1016/j.comcom.2010.06.007\">https://dx.doi.org/10.1016/"
-      "j.comcom.2010.06.007</a>.</p>"
+      "An implementation of the Second Order centrality measure first published as:<br/>"
+      "<b>Second order centrality: Distributed assessment of nodes "
+      "criticity in complex networks</b>,<br/>Kermarrec, A.-M., et al. (2011). Computer Communications 34(5): 619-628, <br/>doi: <a "
+      "href=\"https://dx.doi.org/10.1016/j.comcom.2010.06.007\">10.1016/"
+      "j.comcom.2010.06.007</a>."
       "<p>This algorithm computes the standard deviation of the return time on each node of"
       " a random walker. Central nodes are those with the lower values.</p>",
       "1.1", "Clustering")
@@ -112,7 +112,7 @@ bool SecondOrderCentrality::randomWalk(NodeStaticProperty<vector<int>> &tickVect
   // if None, selects a node at random
   BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
   if (dataSet != nullptr) {
-    dataSet->getDeprecated("selection", "Selection", selection);
+    dataSet->get("selection", selection);
   }
   if (selection->hasNonDefaultValuatedNodes()) {
     auto *selNodesIt = selection->getNonDefaultValuatedNodes(graph);
@@ -211,7 +211,7 @@ bool SecondOrderCentrality::run() {
   res.copyToProperty(result);
   bool debug(false);
   if (dataSet != nullptr)
-    dataSet->getDeprecated("debug mode", "Debug mode", debug);
+    dataSet->get("debug mode", debug);
   if (debug) {
     IntegerVectorProperty *tickprop = graph->getProperty<IntegerVectorProperty>("tickVector");
     tickVector.copyToProperty(tickprop);

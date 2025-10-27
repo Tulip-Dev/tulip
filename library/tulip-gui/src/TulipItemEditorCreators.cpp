@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -16,20 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <QCheckBox>
-#include <QLabel>
-#include <QStylePainter>
-#include <QApplication>
-#include <QLinearGradient>
-#include <QPaintEvent>
 #include <QColorDialog>
-#include <QMainWindow>
 #include <QFileDialog>
-#include <QHBoxLayout>
 
-#include <tulip/TlpTools.h>
 #include <tulip/ColorScaleButton.h>
-#include <tulip/TulipMetaTypes.h>
 #include <tulip/CoordEditor.h>
 #include <tulip/StringEditor.h>
 #include <tulip/GlyphRenderer.h>
@@ -37,10 +27,8 @@
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/TulipFontDialog.h>
 #include <tulip/GlyphManager.h>
-#include <tulip/GraphPropertiesModel.h>
 #include <tulip/PluginLister.h>
 #include <tulip/TulipItemEditorCreators.h>
-#include <tulip/TulipFontAwesome.h>
 #include <tulip/TextureFileDialog.h>
 #include <tulip/TulipFontIconDialog.h>
 #include <tulip/TulipFontIconEngine.h>
@@ -110,9 +98,10 @@ bool ColorEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem &op
                                const QVariant &v, const QModelIndex &index) const {
   TulipItemEditorCreator::paint(painter, option, v, index);
   painter->setBrush(colorToQColor(v.value<tlp::Color>()));
-  painter->setPen(Qt::black);
-  painter->drawRect(option.rect.x() + 6, option.rect.y() + 6, option.rect.width() - 12,
-                    option.rect.height() - 12);
+  painter->setPen(QColor(207, 207, 207));
+  painter->setRenderHint(QPainter::Antialiasing, true);
+  painter->drawRoundedRect(option.rect.x() + 6, option.rect.y() + 6, option.rect.width() - 12,
+                           option.rect.height() - 12, 6, 6);
   return true;
 }
 
@@ -553,7 +542,7 @@ QSize TulipFileDescriptorEditorCreator::sizeHint(const QStyleOptionViewItem &opt
   QString text;
 
   if (fileInfo.isDir()) {
-    QDir d1 = fileInfo.dir();
+    QDir d1(fileInfo.dir());
     d1.cdUp();
     text = fileInfo.absoluteFilePath().remove(0, d1.absolutePath().length() - 1);
   } else {
@@ -678,15 +667,9 @@ bool TulipFontIconCreator::paint(QPainter *painter, const QStyleOptionViewItem &
     return true;
   }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
   QStyleOptionViewItem opt = option;
   opt.features |= QStyleOptionViewItem::HasDecoration;
   opt.features |= QStyleOptionViewItem::HasDisplay;
-#else
-  QStyleOptionViewItemV4 opt = option;
-  opt.features |= QStyleOptionViewItemV2::HasDecoration;
-  opt.features |= QStyleOptionViewItemV2::HasDisplay;
-#endif
 
   opt.icon.addPixmap(TulipFontIconEngine::pixmap(iconName, 16));
 
@@ -716,13 +699,7 @@ QWidget *NodeShapeEditorCreator::createWidget(QWidget *) const {
   // dialog with a QListWidget inside
   std::list<std::pair<QString, QPixmap>> shapes;
 
-  for (const auto &glyphName : PluginLister::availablePlugins<Glyph>()) {
-    QString shapeName = tlpStringToQString(glyphName);
-    QPixmap pixmap = GlyphRenderer::render(GlyphManager::glyphId(glyphName));
-    shapes.emplace_back(shapeName, pixmap);
-  }
-
-  return new ShapeDialog(std::move(shapes), QApplication::activeWindow());
+  return new ShapeDialog(true, QApplication::activeWindow());
 }
 
 void NodeShapeEditorCreator::setEditorData(QWidget *w, const QVariant &data, bool, tlp::Graph *) {
@@ -754,15 +731,9 @@ bool NodeShapeEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem
                                    const QVariant &data, const QModelIndex &index) const {
   TulipItemEditorCreator::paint(painter, option, data, index);
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
   QStyleOptionViewItem opt = option;
   opt.features |= QStyleOptionViewItem::HasDecoration;
   opt.features |= QStyleOptionViewItem::HasDisplay;
-#else
-  QStyleOptionViewItemV4 opt = option;
-  opt.features |= QStyleOptionViewItemV2::HasDecoration;
-  opt.features |= QStyleOptionViewItemV2::HasDisplay;
-#endif
 
   QPixmap pixmap = GlyphRenderer::render(data.value<NodeShape::NodeShapes>());
   opt.icon = QIcon(pixmap);
@@ -781,18 +752,7 @@ QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget *) const {
   // of items in a QGraphicsScene (popup has a too large height,
   // making the scrollbars unreachable ...), we use a native
   // dialog with a QListWidget inside
-  std::list<std::pair<QString, QPixmap>> shapes;
-  shapes.push_back(std::make_pair(QString("NONE"), QPixmap()));
-
-  for (const auto &glyphName : PluginLister::availablePlugins<EdgeExtremityGlyph>()) {
-    QString shapeName = tlpStringToQString(glyphName);
-    QPixmap pixmap =
-        EdgeExtremityGlyphRenderer::render(EdgeExtremityGlyphManager::glyphId(glyphName));
-    shapes.emplace_back(shapeName, pixmap);
-  }
-
-  ShapeDialog *shapeDialog = new ShapeDialog(std::move(shapes), QApplication::activeWindow());
-  shapeDialog->setWindowTitle("Select an edge extremity shape");
+  ShapeDialog *shapeDialog = new ShapeDialog(false, QApplication::activeWindow());
   return shapeDialog;
 }
 
@@ -819,15 +779,9 @@ bool EdgeExtremityShapeEditorCreator::paint(QPainter *painter, const QStyleOptio
                                             const QVariant &data, const QModelIndex &index) const {
   TulipItemEditorCreator::paint(painter, option, data, index);
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
   QStyleOptionViewItem opt = option;
   opt.features |= QStyleOptionViewItem::HasDecoration;
   opt.features |= QStyleOptionViewItem::HasDisplay;
-#else
-  QStyleOptionViewItemV4 opt = option;
-  opt.features |= QStyleOptionViewItemV2::HasDecoration;
-  opt.features |= QStyleOptionViewItemV2::HasDisplay;
-#endif
 
   QPixmap pixmap =
       EdgeExtremityGlyphRenderer::render(data.value<EdgeExtremityShape::EdgeExtremityShapes>());

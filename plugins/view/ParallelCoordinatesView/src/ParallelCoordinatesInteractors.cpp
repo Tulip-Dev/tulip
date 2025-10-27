@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,6 +21,7 @@
 
 #include <tulip/MouseInteractors.h>
 #include <tulip/Interactor.h>
+#include <tulip/StandardInteractorPriority.h>
 
 #include "ParallelCoordsElementHighlighter.h"
 #include "ParallelCoordsAxisSwapper.h"
@@ -31,7 +32,6 @@
 #include "ParallelCoordinatesView.h"
 #include "ParallelCoordsAxisSpacer.h"
 
-#include "../../utils/StandardInteractorPriority.h"
 #include "../../utils/PluginNames.h"
 
 #include <tulip/View.h>
@@ -110,7 +110,7 @@ void InteractorHighLighter::construct() {
       "<p>To <b>remove elements</b> from the current set of highlighted ones, hold the <b>shift "
       "key</b> while clicking on the elements to remove.</p>" +
       "<p>To reset the set of highlighted elements, position the mouse cursor so that there is no "
-      "elements under it and do a left click. This operation can also be done by right clicking in "
+      "elements under it and do a left click. This operation can also be performed by right clicking in "
       "the drawing and select the \"Reset highlighting of elements\" entry in the popup menu which "
       "appears.</p>" +
       "<p>To select the highlighted elements, do a right click in the drawing and choose the "
@@ -234,20 +234,29 @@ void InteractorBoxPlot::construct() {
 }
 
 InteractorShowElementInfo::InteractorShowElementInfo(const tlp::PluginContext *)
-    : ParallelCoordinatesInteractor(":/tulip/gui/icons/i_select.png",
-                                    "Get information on nodes/edges",
-                                    StandardInteractorPriority::GetInformation) {}
+    : InteractorViewExplorer(
+          QString(
+              "When the mouse cursor looks like <img src=\":/tulip/gui/icons/i_information.png\">, ") +
+              "indicating it is on top of a graph element (node or edge), "
+              "<b>Mouse left</b> click to display a panel showing the element properties.<br/>"
+              "<b>Mouse left</b> click on an element (the mouse cursor must be as <img "
+              "src=\":/tulip/gui/icons/i_information.png\">),<br/>"
+              "to display a panel showing its properties.<br/>"
+              "As the panel is displayed, <b>Mouse left</b> click in a property row to edit the "
+              "corresponding value.<br/><br/>"
+              "<u>2D Navigation on the view</u><br/><br/>" +
+              "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys </li></ul>" +
+#if !defined(__APPLE__)
+              "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Ctrl + Mouse left</b> down " +
+#else
+              "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>⌥ + Mouse left</b> down "
+#endif
+              "+ up/down moves</li><li> or <b>Pg up/Pg down</b> keys.</li></ul>",
+          nullptr, new ParallelCoordsElementShowInfo) {
+}
 
-void InteractorShowElementInfo::construct() {
-  setConfigurationWidgetText(QString("<html>") + "<head>" + "<title></title>" + "</head>" +
-                             "<body>" + "<h3>Show element properties interactor</h3>" +
-                             "<p>This interactor allows to view the properties associated to an "
-                             "element by clicking on it. Tulip will display all available "
-                             "properties of that node/edge using the Element tab of the Graph "
-                             "Editor sub-window</p>" +
-                             "</body>" + "</html>");
-  push_back(new ParallelCoordsElementShowInfo);
-  push_back(new MousePanNZoomNavigator);
+bool InteractorShowElementInfo::isCompatible(const string &viewName) const {
+  return (viewName == ViewName::ParallelCoordinatesViewName);
 }
 
 InteractorAxisSpacer::InteractorAxisSpacer(const tlp::PluginContext *)
@@ -259,11 +268,11 @@ void InteractorAxisSpacer::construct() {
       QString("<html>") + "<head>" + "<title></title>" + "</head>" + "<body>" +
       "<h3>Axis spacer interactor</h3>" +
       "<p>This interactor allows to modify the space between two consecutive axis.</p>" +
-      "<p>Put the mouse pointer under an axis, a red rectangle appears to indicate that the axis is "
+      "<p>Put the mouse pointer on an axis, a red rectangle appears to indicate that the axis is "
       "selected. Do a left click and keep the mouse button pressed while dragging the axis "
       "to its new position. The axis cannot be moved further than its neighbors.</p>" +
-      "<p>By double clicking anywhere in the view, all axis will be reset to their default positions"
-      "and equally spaced between each others.</p>" +
+      "<p>By double clicking anywhere in the view, all axis will be reset to their default positions "
+      "and equally spaced between from each other.</p>" +
       "<p>Positions will also be reset when the number of selected properties "
       "change.</p>" +
       "</body></html>");

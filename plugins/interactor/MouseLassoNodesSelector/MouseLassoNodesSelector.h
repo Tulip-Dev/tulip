@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -63,11 +63,10 @@ private:
 
   std::vector<Coord> polygon;
   Coord currentPointerScreenCoord;
-  bool drawInteractor;
   Camera *camera;
   Graph *graph;
   BooleanProperty *viewSelection;
-  bool dragStarted;
+  bool drawInteractor, dragStarted;
 };
 } // namespace tlp
 

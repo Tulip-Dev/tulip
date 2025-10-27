@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -27,10 +27,6 @@ using namespace std;
 using namespace tlp;
 
 enum ValType { TLP_DOUBLE = 0, TLP_STRING = 1, TLP_NOVAL = 2, TLP_NOTHING = 3, TLP_AND = 4 };
-
-static const char *paramHelp[] = {
-    // filename
-    "This parameter defines the pathname of the file to import."};
 
 /** \addtogroup import */
 
@@ -75,7 +71,7 @@ static const char *paramHelp[] = {
  * value 5
  *
  */
-class AdjacencyMatrixImport : public ImportModule {
+class AdjacencyMatrixImport : public ImportFileModule {
 public:
   PLUGININFORMATION("Adjacency Matrix", "Auber David", "05/09/2008",
                     "Imports a graph from a file coding an adjacency matrix.<br/>File format:<br/>\
@@ -103,9 +99,7 @@ A # E & 5<br/>\
 @ B<br/># @ C<br/>\
 Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E and has the value 5",
                     "1.2", "File")
-  AdjacencyMatrixImport(tlp::PluginContext *context) : ImportModule(context) {
-    addInParameter<string>("file::filename", paramHelp[0], "");
-  }
+  AdjacencyMatrixImport(tlp::PluginContext *context) : ImportFileModule(context) {}
   ~AdjacencyMatrixImport() override {}
 
   std::string icon() const override {
@@ -119,19 +113,12 @@ Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E an
     return false;
   }
 
-  bool importGraph() override {
-    string name2;
-
-    if (!(dataSet->get("file::filename", name2) ||
-          // ensure compatibility with old version
-          dataSet->get("file::name", name2)))
-      return false;
-
-    std::istream *in = tlp::getInputFileStream(name2);
+  bool importFile() override {
+    std::istream *in = tlp::getInputFileStream(filename);
     // check for open stream failure
     if (in->fail()) {
       std::stringstream ess;
-      ess << "Unable to open " << name2 << ": " << tlp::getStrError();
+      ess << "Unable to open " << filename << ": " << tlp::getStrError();
       pluginProgress->setError(ess.str());
       delete in;
       return false;
@@ -255,7 +242,7 @@ Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E an
     if (curLine == nodes.size())
       return true;
 
-    pluginProgress->setError(std::string("The number of lines in file ") + name2 +
+    pluginProgress->setError(std::string("The number of lines in file ") + filename +
                              "\n is different from the number of found nodes.");
     return false;
   }

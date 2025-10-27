@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -44,15 +44,12 @@ public:
 
     if (dataSet != nullptr) {
       dataSet->get("nodes", nbNodes);
-      if (!dataSet->get("directed", directed) &&
-          // for compatibility with version 1.1
-          dataSet->get("undirected", directed))
-        directed = !directed;
+      dataSet->get("directed", directed);
     }
 
     if (nbNodes == 0) {
       if (pluginProgress)
-        pluginProgress->setError("Error: number of nodes must be greater than 0");
+        pluginProgress->setError("Error: \"nodes\" parameter must be greater than 0");
 
       return false;
     }

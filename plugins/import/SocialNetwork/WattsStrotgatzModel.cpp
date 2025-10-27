@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
@@ -29,10 +29,10 @@ using namespace tlp;
 
 static const char *paramHelp[] = {
     // nodes
-    "This parameter defines the amount of nodes used to build the scale-free graph.",
+    "Number of nodes used to build the scale-free graph.",
 
     // k
-    "Number of edges added to each node in the initial ring lattice. Be careful that #nodes > k >  ln(#nodes)",
+    "Number of edges added to each node in the initial ring lattice. Be careful that #nodes &ge; k &ge; ln(#nodes)",
 
     // p
     "Probability in [0,1] to rewire an edge.",
@@ -60,9 +60,9 @@ struct WattsStrogatzModel : public ImportModule {
 
   WattsStrogatzModel(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "200");
-    addInParameter<unsigned int>("k", paramHelp[1], "3");
+    addInParameter<unsigned int>("k", paramHelp[1], "6");
     addInParameter<double>("p", paramHelp[2], "0.02");
-    addInParameter<bool>("original model", paramHelp[3], "false");
+    addInParameter<bool>("original model", paramHelp[3], "true");
   }
 
   bool importGraph() override {
@@ -80,15 +80,15 @@ struct WattsStrogatzModel : public ImportModule {
 
     // check arguments
     if (p < 0 || p > 1) {
-      pluginProgress->setError("p is not a probability,\nit does not belong to [0, 1]");
+      pluginProgress->setError("\"p\" must belong to [0, 1]");
       return false;
     }
     if (k >= nbNodes) {
-      pluginProgress->setError("The k parameter cannot be greater than the number of nodes.");
+      pluginProgress->setError("\"k\" cannot be greater than or equal \"nodes\"");
       return false;
     }
-    if (original_model && (nbNodes >= log(float(k)))) {
-      pluginProgress->setError("The number of nodes cannot be greater than ln(k)");
+    if (original_model && (k < log(float(nbNodes)))) {
+      pluginProgress->setError("\"k\" cannot be lesser than ln(\"nodes\")");
       return false;
     }
 
@@ -96,7 +96,7 @@ struct WattsStrogatzModel : public ImportModule {
       if (k % 2 == 1) {
         k--;
         pluginProgress->setComment(
-            "k must be an even number when used in the original model; rounding k down to" +
+            "\"k\" must be an even number when used in the original model; rounding \"k\" down to" +
             to_string(k) + ".");
       }
 

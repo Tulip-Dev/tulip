@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -106,21 +106,16 @@ bool MouseMagnifyingGlassInteractorComponent::eventFilter(QObject *, QEvent *e) 
 
   if (e->type() == QEvent::MouseMove) {
     QMouseEvent *me = static_cast<QMouseEvent *>(e);
-    float x = glWidget->width() - me->x();
-    float y = me->y();
+    float x = glWidget->width() - me->pos().x();
+    float y = me->pos().y();
     screenCoords = Coord(x, y, 0);
     boxCenter = camera->viewportTo3DWorld(glWidget->screenToViewport(screenCoords));
 
     updateMagnifyingGlass = true;
   } else if (e->type() == QEvent::Wheel) {
     QWheelEvent *wheelEvent = static_cast<QWheelEvent *>(e);
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-    float x = glWidget->width() - wheelEvent->x();
-    float y = wheelEvent->y();
-#else
     float x = glWidget->width() - wheelEvent->position().x();
     float y = wheelEvent->position().y();
-#endif
     screenCoords = Coord(x, y, 0);
     boxCenter = camera->viewportTo3DWorld(glWidget->screenToViewport(screenCoords));
     int vDelta = wheelEvent->angleDelta().y();

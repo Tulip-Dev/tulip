@@ -12,9 +12,9 @@ if [ $? -eq 1 ]; then
     MUST_EXIT=1
 fi
 
-TULIP=`which tulip_perspective`
+TULIP=`which tulip`
 if [ $? -eq 1 ]; then
-    echo 'tulip_perspective executable not found';
+    echo 'tulip executable not found';
     MUST_EXIT=1
 fi
 

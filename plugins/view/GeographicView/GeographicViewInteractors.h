@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,16 +22,17 @@
 
 #include <tulip/GLInteractor.h>
 #include <tulip/MouseInteractors.h>
+#include <tulip/MouseBoxZoomer.h>
 #include "GeographicView.h"
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <QCursor>
 
 namespace tlp {
 
-class GeographicViewInteractor : public GLInteractorComposite {
+class GeographicViewInteractor : public NodeLinkDiagramComponentInteractor {
 
 public:
-  GeographicViewInteractor(const QString &iconPath, const QString &text);
+  GeographicViewInteractor(const QString &iconPath, const QString &text, unsigned int priority = 0);
 
   bool isCompatible(const std::string &viewName) const override;
 };
@@ -40,7 +41,7 @@ class GeographicViewNavigator : public MouseNKeysNavigator {
 
 public:
   GeographicViewNavigator();
-  ~GeographicViewNavigator() override;
+  ~GeographicViewNavigator() {}
 
   bool eventFilter(QObject *, QEvent *) override;
   bool draw(GlMainWidget *) {
@@ -50,11 +51,19 @@ public:
   bool compute(GlMainWidget *) {
     return false;
   }
-  void viewChanged(View *) override;
 
 protected:
   int x, y;
   bool inRotation;
+};
+
+class GeographicViewBoxZoomer : public MouseBoxZoomer {
+
+public:
+  GeographicViewBoxZoomer();
+  ~GeographicViewBoxZoomer() {}
+
+  bool eventFilter(QObject *, QEvent *) override;
 };
 
 class GeographicViewInteractorNavigation : public GeographicViewInteractor {
@@ -66,9 +75,17 @@ public:
   GeographicViewInteractorNavigation(const PluginContext *);
 
   void construct() override;
+};
 
-  QWidget *configurationWidget() const override;
-  unsigned int priority() const override;
+class GeographicViewInteractorZoom : public GeographicViewInteractor {
+
+public:
+  PLUGININFORMATION("InteractorZoomGeographicView", "Tulip Team", "14/11/2022",
+                    "Geographic View Zoom Interactor", "1.0", "Navigation")
+
+  GeographicViewInteractorZoom(const PluginContext *);
+
+  void construct() override;
 };
 
 class GeographicViewInteractorSelection : public GeographicViewInteractor {
@@ -81,11 +98,7 @@ public:
 
   void construct() override;
 
-  QWidget *configurationWidget() const override;
-
   QCursor cursor() const override;
-
-  unsigned int priority() const override;
 };
 
 class GeographicViewInteractorSelectionEditor : public GeographicViewInteractor {
@@ -98,14 +111,10 @@ public:
 
   void construct() override;
 
-  QWidget *configurationWidget() const override;
-
   QCursor cursor() const override;
-
-  unsigned int priority() const override;
 };
 
-class GeographicViewInteractorAddEdges : public NodeLinkDiagramComponentInteractor {
+class GeographicViewInteractorAddEdges : public GeographicViewInteractor {
 
 public:
   PLUGININFORMATION("InteractorAddEdgesGeographicView", "Tulip Team", "02/06/2017",
@@ -116,11 +125,9 @@ public:
   void construct() override;
 
   QCursor cursor() const override;
-
-  bool isCompatible(const std::string &viewName) const override;
 };
 
-class GeographicViewInteractorEditEdgeBends : public NodeLinkDiagramComponentInteractor {
+class GeographicViewInteractorEditEdgeBends : public GeographicViewInteractor {
 
 public:
   PLUGININFORMATION("InteractorEditEdgeBendsGeographicView", "Tulip Team", "02/06/2017",
@@ -129,8 +136,6 @@ public:
   GeographicViewInteractorEditEdgeBends(const PluginContext *);
 
   void construct() override;
-
-  bool isCompatible(const std::string &viewName) const override;
 };
 } // namespace tlp
 

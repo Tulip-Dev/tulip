@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -151,28 +151,28 @@ public:
     if (dataSet != nullptr) {
       dataSet->get("width", width);
       dataSet->get("height", height);
-      dataSet->getDeprecated("opposite nodes connected", "oppositeNodesConnected", isTore);
+      dataSet->get("opposite nodes connected", isTore);
       dataSet->get("spacing", spacing);
       dataSet->get("connectivity", connectivity);
     }
 
     if (width == 0) {
       if (pluginProgress)
-        pluginProgress->setError(string("Error: width cannot be null"));
+        pluginProgress->setError(string("Error: \"width\" cannot be null"));
 
       return false;
     }
 
     if (height == 0) {
       if (pluginProgress)
-        pluginProgress->setError(string("Error: height cannot be null"));
+        pluginProgress->setError(string("Error: \"height\" cannot be null"));
 
       return false;
     }
 
-    if (spacing < 0.0) {
+    if (spacing < 0) {
       if (pluginProgress)
-        pluginProgress->setError(string("Error: spacing must be strictly positive"));
+        pluginProgress->setError(string("Error: \"spacing\" must be strictly positive"));
 
       return false;
     }

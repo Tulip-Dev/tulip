@@ -17,17 +17,18 @@ Tulip Python IDE
 .. |icon_ide| image:: tulipPythonIDEButton.png
     :width: 24
 
-A lightweight Python IDE can be accessed through the Tulip GUI. Some GUI reorganisation
+The Python IDE can be accessed through the Tulip GUI. Some GUI reorganisation
 has been made in Tulip 5.0 and all Python development features are now centralized in a
 separated window. It can be displayed by clicking on the |icon_ide| **Python** button located in the left side of the Tulip GUI.
 
 .. _fig1:
 .. figure:: tulipPythonIDE.png
-  :align: center
+    :class: with-border
+    :align: center
 
-  Figure 1: Screenshot of the **Python IDE** window displaying the Python interpreter.
+    Figure 1: Screenshot of the **Python IDE** window displaying the Python interpreter.
 
-The **Python interpreter** is the most basic way to dynamically interact with graph data. It enables to execute Python statements which are one after the other , read, evaluated then their result is printed. A combo box allows to select a graph from those already loaded in the Tulip GUI. The selected graph is then bound to a global Python variable named "graph".
+The **Python interpreter** is the most basic way to dynamically interact with graph data. It enables to execute Python statements which are one after the other, read, evaluated then their result is printed. A combo box allows to select a graph from those already loaded in the Tulip GUI. The selected graph is then bound to a global Python variable named "graph".
 Since Tulip 5.0, the undo feature on graph state is now handled in that component, meaning every graph modification performed by the executed Python statements can be reverted.
 
 .. |icon_run| image:: ../../library/tulip-gui/resources/icons/22/start.png
@@ -46,25 +47,41 @@ More sophisticated ways to write python code for graphs management purpose are p
   and is used as the script entry point. The graph currently selected through the combobox located in the upper
   part of the tab is wrapped as a :class:`tlp.Graph` object and provided as parameter of the "main" function.
   The currently edited script can be launched (|icon_run| button) through the control panel located in the lower part of the tab interface.
-  Once started, the script execution can be paused (|icon_pause| button) or stopped (|icon_stop| button); trigerring the update of Tulip visualizations each time.
+  Once started, the script execution can be paused (|icon_pause| button) or stopped (|icon_stop| button); triggering the update of Tulip visualizations each time.
   All modifications performed by a script on a graph can be cancelled/replayed through the Tulip undo/redo feature if the "enable undo" box is checked.
 
 .. _fig2:
 .. figure:: tulipPythonScript.png
   :align: center
+  :class: with-border
 
   Figure 2: Screenshot of the **Scripts editor** tab in the Python IDE.
 
+Pip tool graphic interface
+""""""""""""""""""""""""""
+
+As shown in the figure above, the Python IDE provides a graphic interface to interact with the pip tool of the Python environment used by Tulip. It allows to execute the following pip commands :
+
+        * install (a package in the current user home directory),
+        * list (packages installed in the current user home directory),
+        * list all (installed packages),
+        * show (package information),
+        * uninstall (a package),
+        * upgrade (a package).
+
+After choosing the command, click in the *package name* input field, type the name, if needed, and hit the **Enter** key to execute it. The command ouput will then be displayed in the **Python output** tab.
+
 - A **Plugins editor** (see :ref:`Figure 3<fig3>`): it enables to develop Tulip plugins in pure Python
   (see :ref:`Writing Tulip plugins in Python <tulippythonplugins>`).
-  These plugins are then immediately integrated in the Tulip GUI when requesting their registration
-  (if their source code is valid of course). Different kinds of plugins can be developed : General Algorithms,
-  Property Algorithms, Import plugins and Export plugins. When executing these plugins, standard and error output
+  These plugins are immediately integrated in the Tulip GUI when requesting their registration
+  (if their source code is valid of course). Different kinds of plugins can be developed: General Algorithms,
+  Property Algorithms, Import plugins and Export plugins. When executing these plugins, standard and error outputs
   will be displayed in the "Message Log" panel of the Tulip GUI.
 
 .. _fig3:
 .. figure:: tulipPythonPlugin.png
   :align: center
+  :class: with-border
 
   Figure 3: Screenshot of the **Plugins editor** tab in the Python IDE.
 
@@ -75,22 +92,9 @@ More sophisticated ways to write python code for graphs management purpose are p
 .. _fig4:
 .. figure:: tulipPythonModule.png
    :align: center
+   :class: with-border
 
    Figure 4: Screenshot of the **Modules editor** tab in the Python IDE.
-
-Backup and restore your Python code with Tulip projects
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The Tulip software uses a zipped project file format named TLPX to save and restore the state of a Tulip
-work session in a portable way. Notably it contains the graphs that was loaded in the software serialized to
-files but also the configuration of the views and components that was opened in the software.
-
-When working with the Python IDE, the source code of the scripts, plugins and modules currently edited
-are automatically saved to the current Tulip project. Nevertheless, the Tulip project must be explicitely
-saved to a .tlpx file in order for the Python files to be included in the resulting archive.
-When reopening the project file, the previously edited scripts, plugins and modules will still be available
-in the Python IDE even if you open the file on a computer different from the one you write your code.
-Python plugins will also be automatically loaded when reopening the project.
 
 Using the autocompletion to code faster
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -194,15 +198,19 @@ The autocompletion list facilitates the development of Tulip Python scripts espe
 
    Figure 10: Using the autocompletion list to get the subgraphs names.
 
+Save your Python code in .py files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Since Tulip 6, the code of the modules, plugins, scripts, you develop using Tulip Python IDE, is non longer saved in the Tulip projects files.
+You have to explicitely open/save them from/in .py file, using the **Open**, **Save**, **Save as** buttons available with the different editors.
+
 .. _usingBindingsInShell:
 
 Using the bindings from the Python Interpreter
 ----------------------------------------------
 
 The Tulip Python bindings can also be used through the classical Python Interpreter in an interactive shell.
-
 Since Tulip 4.8 release, the bindings modules are available on the `Python Packaging Index <https://pypi.python.org>`_.
-
 The modules are also located within the Tulip software installation, but some setup has to be done before being able to import them.
 
 Installing the Tulip-Python modules from the Python Packaging Index
@@ -212,10 +220,9 @@ Tulip-Python modules can be easily obtained by using the pip tool for Windows, M
 
 .. important::
 
-  Please not that the ``tulipgui`` module is no more distributed on the Python
-  Packaging Index since Tulip 5.3.
-  Nevertheless, it is still available to be used use from a standard Tulip
-  installation (see next section).
+  Please not that the ``tulipgui`` module is not available on the Python
+  Packaging Index. It is solely available inside the Tulip gui to be used as a remote
+  controller for the GUI (see :mod:`tulipgui`).
 
 To install the :mod:`tulip` module, issue the following command from a terminal prompt:
 
@@ -228,9 +235,9 @@ And you're done, you can now import the modules in your Python session.
 Setting up the environment from the Tulip software installation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In order to be able to import the Tulip-Python modules bundled with the Tulip software installation,
-their path must be provided to Python. In the following, <tulip_install_dir> represents the root directory of a Tulip installation.
-The Tulip-Python modules are installed in the following directory according to your system :
+In order to be able to import the Tulip-Python module bundled with the Tulip software installation,
+its path must be provided to Python. In the following, <tulip_install_dir> represents the root directory of a Tulip installation.
+The Tulip-Python module is installed in the following directory according to your system:
 
         * Linux : **<tulip_install_dir>/lib/tulip/python** (if you compiled Tulip yourself,
           <tulip_install_dir> corresponds to the value of the CMake variable CMAKE_INSTALL_PREFIX)
@@ -244,17 +251,10 @@ The Tulip-Python modules are installed in the following directory according to y
 This path has to be added to the list of Python module search paths. To do so, you can add it in the **PYTHONPATH**
 environment variable prior executing the Python interpreter or add it to the :data:`sys.path` list once you launched the interpreter.
 
-.. warning::
-
-  If you installed Tulip through a bundle (.dmg) on MacOS and want to successfully import the :mod:`tulipgui` module,
-  you also need to set the following path **/Applications/Tulip-x.y.z.app/Contents/Frameworks/** as the value of the
-  environment variables **DYLD_LIBRARY_PATH** and **DYLD_FRAMEWORK_PATH**.
-
-You should now be able to import the Tulip-Python modules through the classical Python shell. Issue the following commands
+You should now be able to import the Tulip-Python module through the classical Python shell. Issue the following commands
 at the shell prompt to perform that task::
 
     >>> from tulip import tlp
-    >>> from tulipgui import tlpgui
 
 Customizing the Python environment
 ----------------------------------

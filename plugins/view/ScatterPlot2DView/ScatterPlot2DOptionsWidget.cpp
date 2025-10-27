@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -19,12 +19,9 @@
 
 #include <QPainter>
 #include <QLinearGradient>
-#include <QMainWindow>
 
 #include "ScatterPlot2DOptionsWidget.h"
 #include "ui_ScatterPlot2DOptionsWidget.h"
-
-#include <tulip/Perspective.h>
 
 namespace tlp {
 

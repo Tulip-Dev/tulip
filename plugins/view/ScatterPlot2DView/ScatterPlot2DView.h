@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,7 +20,7 @@
 #ifndef SCATTERPLOT2DVIEW_H_
 #define SCATTERPLOT2DVIEW_H_
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <tulip/Graph.h>
 #include <tulip/GlMainView.h>
@@ -103,7 +103,7 @@ public:
   void graphChanged(Graph *graph) override;
   Graph *getScatterPlotGraph();
 
-  QList<QWidget *> configurationWidgets() const override;
+  std::list<QWidget *> configurationWidgets() const override;
 
   std::vector<ScatterPlot2D *> getSelectedScatterPlots() const;
   bool matrixViewSet() const {
@@ -163,7 +163,7 @@ public slots:
   void showPropertiesSelectionWidget();
 
 private:
-  void interactorsInstalled(const QList<tlp::Interactor *> &) override;
+  void interactorsInstalled(const std::list<tlp::Interactor *> &) override;
   void initGlWidget();
   void generateScatterPlots();
 
@@ -203,8 +203,8 @@ private:
 
   ElementType dataLocation;
   Graph *edgeAsNodeGraph;
-  std::unordered_map<edge, node> edgeToNode;
-  std::unordered_map<node, edge> nodeToEdge;
+  tlp_hash_map<edge, node> edgeToNode;
+  tlp_hash_map<node, edge> nodeToEdge;
 };
 } // namespace tlp
 

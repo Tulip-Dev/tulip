@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,13 +18,11 @@
  */
 
 #include <QFileDialog>
-#include <QHeaderView>
-#include <QLinearGradient>
 #include <QPainter>
 #include <QMessageBox>
 #include <QInputDialog>
 
-#include <algorithm>
+#include <map>
 #include <vector>
 
 #include <tulip/TlpQtTools.h>
@@ -44,6 +42,9 @@ map<QString, vector<Color>> ColorScaleConfigDialog::tulipImageColorScales;
 ColorScaleConfigDialog::ColorScaleConfigDialog(const ColorScale &colorScale, QWidget *parent)
     : QDialog(parent), _ui(new Ui::ColorScaleDialog), colorScale(colorScale) {
   _ui->setupUi(this);
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(this);
+
   _ui->colorsTable->setColumnWidth(0, _ui->colorsTable->width());
   _ui->colorsTable->horizontalHeader()->setHidden(true);
   QPalette palette;
@@ -73,6 +74,12 @@ ColorScaleConfigDialog::ColorScaleConfigDialog(const ColorScale &colorScale, QWi
   connect(_ui->globalAlphaCB, SIGNAL(toggled(bool)), this, SLOT(applyGlobalAlphaToColorScale()));
   connect(_ui->globalAlphaSB, SIGNAL(valueChanged(int)), this,
           SLOT(applyGlobalAlphaToColorScale()));
+
+  // relook colorbrewer html link
+  auto txt = _ui->colorbrewerLabel->text();
+  auto pos = txt.indexOf(" href=");
+  txt.insert(pos, " style=\"color:" HTML_LINK_COLOR "\"");
+  _ui->colorbrewerLabel->setText(txt);
 
   if (tulipImageColorScales.empty()) {
     loadTulipImageColorScales();

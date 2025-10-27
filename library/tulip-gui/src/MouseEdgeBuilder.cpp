@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -55,7 +55,8 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
     if (qMouseEv->buttons() == Qt::LeftButton) {
       if (!_started) {
-        bool result = glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity);
+        bool result =
+            glMainWidget->pickNodesEdges(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity);
 
         if (result && (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)) {
           _started = true;
@@ -67,7 +68,8 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
         return false;
       } else {
-        bool result = glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity);
+        bool result =
+            glMainWidget->pickNodesEdges(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity);
 
         if (result && (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)) {
           Observable::holdObservers();
@@ -81,7 +83,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
           Observable::unholdObservers();
 
         } else {
-          Coord point(glMainWidget->width() - qMouseEv->x(), qMouseEv->y(), 0);
+          Coord point(glMainWidget->width() - qMouseEv->pos().x(), qMouseEv->pos().y(), 0);
           _bends.push_back(glMainWidget->getScene()->getGraphCamera().viewportTo3DWorld(
               glMainWidget->screenToViewport(point)));
           glMainWidget->redraw();
@@ -91,7 +93,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
       return true;
     }
 
-    if (qMouseEv->buttons() == Qt::MidButton) {
+    if (qMouseEv->buttons() == Qt::MiddleButton) {
       _bends.clear();
       _started = false;
       _source = node();
@@ -107,7 +109,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     if (!_started) {
       SelectedEntity selectedEntity;
       bool hoveringOverNode =
-          glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) &&
+          glMainWidget->pickNodesEdges(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity) &&
           selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED;
 
       if (!hoveringOverNode) {
@@ -119,14 +121,14 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     } else {
       SelectedEntity selectedEntity;
 
-      if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) &&
+      if (glMainWidget->pickNodesEdges(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity) &&
           selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         glMainWidget->setCursor(QCursor(Qt::CrossCursor));
       } else {
         glMainWidget->setCursor(QCursor(Qt::ArrowCursor));
       }
 
-      Coord point(glMainWidget->width() - qMouseEv->x(), qMouseEv->y(), 0);
+      Coord point(glMainWidget->width() - qMouseEv->pos().x(), qMouseEv->pos().y(), 0);
       point = glMainWidget->getScene()->getGraphCamera().viewportTo3DWorld(
           glMainWidget->screenToViewport(point));
       _curPos.set(point[0], point[1], point[2]);
@@ -178,7 +180,7 @@ void MouseEdgeBuilder::treatEvent(const Event &evt) {
   if (typeid(evt) == typeid(GraphEvent)) {
     const GraphEvent *graphEvent = dynamic_cast<const GraphEvent *>(&evt);
 
-    if (graphEvent && graphEvent->getType() == GraphEvent::TLP_DEL_NODE &&
+    if (graphEvent && graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_NODE &&
         graphEvent->getNode() == _source) {
       _bends.clear();
       _started = false;

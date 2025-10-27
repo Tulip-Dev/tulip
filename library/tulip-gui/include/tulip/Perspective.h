@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -28,12 +28,11 @@
 #include <QVariantMap>
 #include <QSet>
 #include <QMenu>
-
-class QMainWindow;
-class QTcpSocket;
+#include <QMainWindow>
 
 namespace tlp {
 
+class Graph;
 class PluginProgress;
 class TulipProject;
 
@@ -47,12 +46,11 @@ static const std::string PERSPECTIVE_CATEGORY = "Perspective";
  */
 class TLP_QT_SCOPE PerspectiveContext : public tlp::PluginContext {
 public:
-  PerspectiveContext() : mainWindow(nullptr), project(nullptr), tulipPort(0) {}
+  PerspectiveContext() : mainWindow(nullptr), project(nullptr) {}
   QMainWindow *mainWindow;
   TulipProject *project;
   QString externalFile;
   QVariantMap parameters;
-  quint64 tulipPort;
   unsigned int id;
 };
 
@@ -62,13 +60,10 @@ public:
  *
  * A Perspective aims at using the multiple features available in Tulip to create a complete,
  * coherent workflow dedicated to a particular use-case.
- * Perspectives are chosen by the user when first running the Tulip agent. The main perspective is
- * called "Tulip". This perspective unveils all the Tulip features and aims at being a protyping and
- * researching platform.
+ * The main perspective is called "Tulip". This perspective unveils all the Tulip features and aims
+ * at being a protyping and researching platform.
  *
- * A Perspective always acts in its own process and communicate with the Tulip agent via TCP
- * sockets.
- * Thus, it is the Perspective's responsibility to offer the possibility to display graphs, run
+ * It is the Perspective's responsibility to offer the possibility to display graphs, run
  * plugins, etc. A lot of helper classes can be found into the tulip-gui API like pre-made widgets,
  * Qt models, etc.
  *
@@ -84,20 +79,17 @@ class TLP_QT_SCOPE Perspective : public QObject, public tlp::Plugin {
 
   static tlp::Perspective *_instance;
   QSet<QString> _reservedProperties;
-  QTcpSocket *_agentSocket;
   unsigned int _perspectiveId;
   bool _maximised;
-  void sendAgentMessage(const QString &);
-  void notifyProjectLocation(const QString &path);
 
 protected:
   /**
    * @brief The project associated to this perspective. This project can be empty or contain data
    * depending on how the Perspective was launched:
-   * To launch a perspective, the tulip_perspective executable is called with the following
+   * To launch a perspective, the tulip executable is called with the following
    * arguments:
    * @code
-   * tulip_perspective [--perspective=Name] [file_path]
+   * tulip exe [--perspective=Name] [file_path]
    * @endcode
    * @list
    * @li The --perspective argument forces Tulip to start the "Name" perspective. Even if the
@@ -120,7 +112,7 @@ protected:
   QMainWindow *_mainWindow;
 
   /**
-   * If the user provided a file to the tulip_perspective but this file is not recognized as a valid
+   * If the user provided a file to the tulip exe but this file is not recognized as a valid
    * TulipProject, the full path of the file will be stored into the _externalFile member.
    * @note Remember that perspectives should always store their data into TulipProject in order to
    * keep a consistent workflow.
@@ -132,7 +124,6 @@ protected:
    * considered to be Perspective-specific and are forwarded into this variable.
    */
   QVariantMap _parameters;
-  bool checkSocketConnected();
 
 public:
   enum ProgressOption {
@@ -151,7 +142,7 @@ public:
   }
 
   /**
-   * @brief Called at the beginning of the tulip_perspective to set the Perspective singleton.
+   * @brief Called at the beginning of the tulip exe to set the Perspective singleton.
    * @see instance()
    */
   static void setInstance(tlp::Perspective *);
@@ -201,10 +192,17 @@ public:
   progress(ProgressOptions options = ProgressOptions(IsPreviewable | IsStoppable | IsCancellable));
 
   /**
-   * @brief usage Displays a usage message when called from the tulip_perspective executable
+   * @brief usage Displays a usage message when called from the tulip executable
    */
   virtual void usage(std::string &usage_str) const {
     usage_str = "No options for this perspective.";
+  }
+
+  /**
+   * @return The Perspective's current graph.
+   */
+  virtual Graph *currentGraph() {
+    return nullptr;
   }
 
   /**
@@ -312,49 +310,19 @@ signals:
 
 protected slots:
   /**
-   * @brief Send a message to the Tulip agent to make him display the Plugins Center page.
-   */
-  void showPluginsCenter();
-
-  /**
    * @brief Call this slot to switch to full screen or windowed mode
    * @param f is true, switch to full screen mode. If false, switch to windowed mode
    */
   void showFullScreen(bool f);
 
   /**
-   * @brief Send a message to the Tulip agent to make him display the Projects page.
-   */
-  void showProjectsPage();
-
-  /**
-   * @brief Send a message to the Tulip agent to make him display the "About us" page.
-   */
-  void showAboutPage();
-
-  /**
-   * @brief Send a message to the Tulip agent to make him display a message in the system
-   * notification area.
-   * @param s The message to display.
-   */
-  void showTrayMessage(const QString &s);
-
-  /**
-   * @brief Send a message to the Tulip agent to make him display an error message that will be
-   * shown in the system notification as well as on the welcome page.
-   * @param title The message's title.
-   * @param s The message to display.
-   */
-  void showErrorMessage(const QString &title, const QString &s);
-
-  /**
-   * @brief Send a message to the Tulip agent to make him open a new Tulip Project.
+   * @brief Open a new Tulip Project.
    * @param path the absolute path of the project file.
    */
   virtual void openProjectFile(const QString &path);
 
   /**
-   * @brief Send a message to the Tulip agent to make him open a new Perspective without a project.
+   * @brief Open a new Perspective without a project.
    * @param name The name of the Perspective to create.
    */
   void createPerspective(const QString &name);

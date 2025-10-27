@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,39 +21,32 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StaticProperty.h>
-#include <tulip/ParallelTools.h>
+#include <tulip/GraphParallelTools.h>
 
 using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
     // property
-    "Input metric whose values will be mapped to sizes.",
+    "Metric whose values will be mapped to sizes.",
 
     // input
-    "If not all dimensions (width, height, depth) are checked below, the dimensions not computed "
-    "are copied from this property.",
+    "If not all dimensions (width, height, depth) are checked below, the dimensions not computed are copied from this property.",
 
     // width
-    "Adjusts width (along x axis) to represent the chosen property. If not chosen, the dimension "
-    "is copied "
-    "from input.",
+    "Adjusts size on x-axis to map the metric. If not, the size is copied from the \"input\" property.<br/>For edges, this is the size on the source node side.",
 
     // height
-    "Adjusts height (along y axis) to represent the chosen property. If not chosen, the dimension "
-    "is copied "
-    "from input.",
+    "Adjusts size on y-axis to map the metric. If not, the size is copied from the \"input\" property.<br/>For edges, this is the size on the target node side.",
 
-    //  depth
-    "Adjusts depth (along z axis) to represent the chosen property. If not chosen, the dimension "
-    "is copied "
-    "from input.",
+    // depth
+    "Adjusts size on z-axis to map the metric. If not, the size is copied from \"input\" property.<br/>Not used for edges.",
 
     // min
-    "Gives the minimum value of the range of computed sizes.",
+    "Minimum value of the range of computed sizes.<br/>A value of 0 would be better for edges.",
 
     // max
-    "Gives the maximum value of the range of computed sizes.",
+    "Maximum value of the range of computed sizes.<br/>A value of 1 would be better for edges.",
 
     // Mapping type
     "Type of mapping."
@@ -66,7 +59,7 @@ static const char *paramHelp[] = {
     "Whether sizes are computed for nodes or for edges.",
 
     // mapping proportionality
-    "The mapping can be either area/volume proportional, meaning that the areas/volumes will be proportional, or dimensions proportional that the width, height and depth will be."};
+    "For nodes only, the mapping can be either area/volume proportional, which means that the areas/volumes will be proportional, or dimensions proportional which means that the width, height and depth will be."};
 
 // error msg for invalid range value
 static const string rangeSizeErrorMsg = "max size must be greater than min size";
@@ -96,8 +89,13 @@ public:
       "Maps the size of the graph elements onto the values of a given numeric property.", "2.2",
       "Size")
   MetricSizeMapping(const PluginContext *context)
-      : SizeAlgorithm(context), entryMetric(nullptr), entrySize(nullptr), xaxis(true), yaxis(true),
-        zaxis(true), linearType(true), min(1), max(10), range(0), shift(0) {
+      // set second parameter of the constructor below to true because
+      // result needs to be an inout parameter
+      // in order to preserve the original values of non targeted elements
+      // i.e if "target" = "nodes", the values of edges must be preserved
+      // and if "target" = "edges", the values of nodes must be preserved
+      : SizeAlgorithm(context, true), entryMetric(nullptr), entrySize(nullptr), xaxis(true),
+        yaxis(true), zaxis(true), linearType(true), min(1), max(10), range(0), shift(0) {
     addInParameter<NumericProperty *>("metric", paramHelp[0], "viewMetric");
     addInParameter<SizeProperty>("input", paramHelp[1], "viewSize");
     addInParameter<bool>("width", paramHelp[2], "true");
@@ -111,12 +109,6 @@ public:
                                      "nodes<br/>edges");
     addInParameter<StringCollection>("mapping proportionality", paramHelp[9],
                                      "area/volume;dimensions", true, "area/volume<br/>dimensions");
-
-    // result needs to be an inout parameter
-    // in order to preserve the original values of non targeted elements
-    // i.e if "target" = "nodes", the values of edges must be preserved
-    // and if "target" = "edges", the values of nodes must be preserved
-    parameters.setDirection("result", INOUT_PARAM);
   }
 
   bool check(std::string &errorMsg) override {
@@ -132,29 +124,18 @@ public:
     targetType.setCurrent(NODES_TARGET);
 
     if (dataSet != nullptr) {
-      dataSet->getDeprecated("metric", "property", entryMetric);
+      dataSet->get("metric", entryMetric);
       dataSet->get("input", entrySize);
       dataSet->get("width", xaxis);
       dataSet->get("height", yaxis);
       dataSet->get("depth", zaxis);
       dataSet->get("min size", min);
       dataSet->get("max size", max);
-      // for compatibility with old parameter type
-      if (dataSet->getTypeName(MAPPING_TYPE) == dataSet->getTypeName<bool>())
-        dataSet->get(MAPPING_TYPE, linearType);
-      else {
-        dataSet->get(MAPPING_TYPE, mapping);
-        linearType = mapping.getCurrent() == LINEAR_MAPPING;
-      }
+      dataSet->get(MAPPING_TYPE, mapping);
+      linearType = mapping.getCurrent() == LINEAR_MAPPING;
       dataSet->get(TARGET_TYPE, targetType);
-      dataSet->getDeprecated("mapping proportionality", "area proportional", proportionalType);
+      dataSet->get("mapping proportionality", proportionalType);
       proportional = proportionalType.getCurrent();
-      // old parameter name and behavior
-      if (dataSet->exists("node/edge")) {
-        bool nodeoredge = true;
-        dataSet->get("node/edge", nodeoredge);
-        targetType.setCurrent(nodeoredge ? NODES_TARGET : EDGES_TARGET);
-      }
     }
 
     if (min >= max) {
@@ -173,7 +154,7 @@ public:
     }
 
     if (!xaxis && !yaxis && !zaxis) {
-      errorMsg = "You need at least one axis to map on.";
+      errorMsg = "You need at least one dimension (width, height or depth) to map on.";
       return false;
     }
 
@@ -200,7 +181,8 @@ public:
 
       // compute size of nodes
       NodeStaticProperty<Size> nodeSize(graph);
-      nodeSize.copyFromProperty(entrySize);
+      if (!xaxis || !yaxis || !zaxis)
+        nodeSize.copyFromProperty(entrySize);
 
       TLP_PARALLEL_MAP_NODES(graph, [&](const node &n) {
         double sizos = 0;
@@ -227,11 +209,17 @@ public:
       shift = entryMetric->getEdgeDoubleMin(graph);
       // compute size of edges
       EdgeStaticProperty<Size> edgeSize(graph);
+      if (!xaxis || !yaxis)
+        edgeSize.copyFromProperty(entrySize);
 
       TLP_PARALLEL_MAP_EDGES(graph, [&](const edge &e) {
         double sizos = min + (entryMetric->getEdgeDoubleValue(e) - shift) * (max - min) / range;
-        edgeSize[e][0] = float(sizos);
-        edgeSize[e][1] = float(sizos);
+
+        if (xaxis)
+          edgeSize[e][0] = float(sizos);
+
+        if (yaxis)
+          edgeSize[e][1] = float(sizos);
       });
       edgeSize.copyToProperty(result);
     }

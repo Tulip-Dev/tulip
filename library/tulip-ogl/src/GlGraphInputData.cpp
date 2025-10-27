@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -62,6 +62,9 @@ GlGraphInputData::~GlGraphInputData() {
   EdgeExtremityGlyphManager::clearGlyphList(&this->graph, this, extremityGlyphs);
   delete _metaNodeRenderer;
   delete _glGlyphRenderer;
+  // delete invisible properties
+  for (auto prop : _invisibleProperties)
+    delete prop;
 }
 
 // add this class to ensure proper deletion of the viewAnimationFrame property
@@ -73,6 +76,7 @@ public:
     needGraphListener = true;
     graph->addListener(this);
   }
+  using IntegerProperty::operator=;
   void treatEvent(const Event &evt) override {
     Graph *g = static_cast<Graph *>(evt.sender());
 
@@ -85,8 +89,7 @@ public:
   }
 };
 
-std::unordered_map<std::string, GlGraphInputData::PropertyName>
-    GlGraphInputData::_propertiesNameMap;
+tlp_hash_map<std::string, GlGraphInputData::PropertyName> GlGraphInputData::_propertiesNameMap;
 
 void GlGraphInputData::reloadGraphProperties() {
   if (_propertiesNameMap.empty()) {
@@ -111,8 +114,8 @@ void GlGraphInputData::reloadGraphProperties() {
     _propertiesNameMap["viewTgtAnchorShape"] = VIEW_TGTANCHORSHAPE;
     _propertiesNameMap["viewTgtAnchorSize"] = VIEW_TGTANCHORSIZE;
     _propertiesNameMap["viewAnimationFrame"] = VIEW_ANIMATIONFRAME;
-    _propertiesNameMap["viewIcon"] = VIEW_FONTAWESOMEICON;
     _propertiesNameMap["viewIcon"] = VIEW_ICON;
+    _propertiesNameMap["viewLengthRatio"] = VIEW_LENGTHRATIO;
   }
 
   if (graph) {
@@ -161,10 +164,17 @@ void GlGraphInputData::reloadGraphProperties() {
     _properties.insert(_propertiesMap[VIEW_TGTANCHORSIZE]);
     _propertiesMap[VIEW_ANIMATIONFRAME] = new GlViewAnimationFrameProperty(graph);
     _properties.insert(_propertiesMap[VIEW_ANIMATIONFRAME]);
-    _propertiesMap[VIEW_FONTAWESOMEICON] = graph->getProperty<StringProperty>("viewIcon");
-    _properties.insert(_propertiesMap[VIEW_FONTAWESOMEICON]);
     _propertiesMap[VIEW_ICON] = graph->getProperty<StringProperty>("viewIcon");
     _properties.insert(_propertiesMap[VIEW_ICON]);
+    if (graph->existProperty("viewLengthRatio"))
+      _propertiesMap[VIEW_LENGTHRATIO] = graph->getProperty<DoubleProperty>("viewLengthRatio");
+    else {
+      // use an invisible property
+      auto prop = new DoubleProperty(graph, "viewLengthRatio");
+      _propertiesMap[VIEW_LENGTHRATIO] = prop;
+      _invisibleProperties.insert(prop);
+    }
+    _properties.insert(_propertiesMap[VIEW_LENGTHRATIO]);
   }
 }
 
@@ -195,6 +205,17 @@ bool GlGraphInputData::installProperties(
 }
 
 void GlGraphInputData::treatEvent(const Event &ev) {
+  Graph *g = static_cast<Graph *>(ev.sender());
+
+  if (ev.type() == Event::TLP_DELETE && g == graph) {
+    // avoid possible crash if graph is deleted before this
+    // so ensure invisible properties are removed and deleted
+    // before destructor call
+    for (auto prop : _invisibleProperties)
+      delete prop;
+    _invisibleProperties.clear();
+  }
+
   if (dynamic_cast<const GraphEvent *>(&ev) != nullptr) {
     const GraphEvent *graphEv = static_cast<const GraphEvent *>(&ev);
 
@@ -203,12 +224,21 @@ void GlGraphInputData::treatEvent(const Event &ev) {
         graphEv->getType() == GraphEvent::TLP_ADD_INHERITED_PROPERTY ||
         graphEv->getType() == GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY) {
       if (_propertiesNameMap.count(graphEv->getPropertyName()) != 0) {
-        PropertyInterface *oldProperty =
-            _propertiesMap[_propertiesNameMap[graphEv->getPropertyName()]];
+        auto propName = graphEv->getPropertyName();
+        PropertyInterface *oldProperty = _propertiesMap[_propertiesNameMap[propName]];
         _properties.erase(oldProperty);
-        _propertiesMap[_propertiesNameMap[graphEv->getPropertyName()]] =
-            graph->getProperty(graphEv->getPropertyName());
-        _properties.insert(_propertiesMap[_propertiesNameMap[graphEv->getPropertyName()]]);
+        if (_invisibleProperties.count(oldProperty)) {
+          delete oldProperty;
+          _invisibleProperties.erase(oldProperty);
+        }
+        if ((propName == "viewLengthRatio") && !graph->existProperty(propName)) {
+          // use an invisible property
+          auto prop = new DoubleProperty(graph, "viewLengthRatio");
+          _propertiesMap[VIEW_LENGTHRATIO] = prop;
+          _invisibleProperties.insert(prop);
+        } else
+          _propertiesMap[_propertiesNameMap[propName]] = graph->getProperty(propName);
+        _properties.insert(_propertiesMap[_propertiesNameMap[propName]]);
       }
     }
   }

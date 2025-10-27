@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -27,15 +27,16 @@ using namespace ogdf;
 
 static const char *paramHelp[] = {
     // number of pivots
-    "Sets the number of pivots. If the new value is smaller or equal 0 the default value (250) is "
-    "used.",
+    "Sets the number of pivots. If the new value is less than or equal to 0 the default value (250) is used.",
 
     // use edge costs
     "Sets if the edge costs attribute has to be used.",
 
     // edge costs
-    "Sets the desired distance between adjacent nodes. If the new value is smaller or equal 0 the "
-    "default value (100) is used."};
+    "Sets the desired distance between adjacent nodes. If the new value is less than or equal to 0 the default value (100) is used.",
+
+    // 3D layout
+    "If true, the layout is computed in 3D, else it is computed in 2D."};
 
 class OGDFPivotMDS : public OGDFLayoutPluginBase {
 
@@ -51,6 +52,7 @@ public:
     addInParameter<int>("number of pivots", paramHelp[0], "250", false);
     addInParameter<bool>("use edge costs", paramHelp[1], "false", false);
     addInParameter<double>("edge costs", paramHelp[2], "100", false);
+    addInParameter<bool>("3D layout", paramHelp[3], "false");
   }
   ~OGDFPivotMDS() override {}
 
@@ -72,6 +74,21 @@ public:
 
       if (dataSet->get("use edge costs", bval))
         pivotMds->useEdgeCostsAttribute(bval);
+    }
+  }
+
+  void afterCall() {
+    bool bval = false;
+    dataSet->get("3D layout", bval);
+    if (!bval) {
+      const std::vector<tlp::node> &nodes = graph->nodes();
+      size_t nbElts = nodes.size();
+
+      for (unsigned int i = 0; i < nbElts; ++i) {
+        tlp::Coord nodeCoord = result->getNodeValue(nodes[i]);
+        nodeCoord[2] = 0.0;
+        result->setNodeValue(nodes[i], nodeCoord);
+      }
     }
   }
 };

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -317,7 +317,7 @@ CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<vector<string>> &tok
       for (unsigned int j = 0; j < keyTokens[i].size(); ++j)
         key.append(keyTokens[i][j]);
 
-      std::unordered_map<string, unsigned int>::iterator it = srcValueToId.find(key);
+      tlp_hash_map<string, unsigned int>::iterator it = srcValueToId.find(key);
 
       // token exists in the map
       if (it != srcValueToId.end()) {
@@ -368,7 +368,7 @@ CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<vector<string>> &tok
       }
     }
 
-    std::unordered_map<string, unsigned int> &valueToId =
+    tlp_hash_map<string, unsigned int> &valueToId =
         sameSrcTgtProperties ? srcValueToId : tgtValueToId;
 
     for (unsigned int i = 0; i < keyTokens.size(); ++i) {
@@ -379,7 +379,7 @@ CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<vector<string>> &tok
       for (unsigned int j = 0; j < keyTokens[i].size(); ++j)
         key.append(keyTokens[i][j]);
 
-      std::unordered_map<string, unsigned int>::iterator it = valueToId.find(key);
+      tlp_hash_map<string, unsigned int>::iterator it = valueToId.find(key);
 
       // token exists in the map
       if (it != valueToId.end()) {
@@ -434,18 +434,17 @@ CSVImportColumnToGraphPropertyMappingProxy::generateApproximateProperty(const st
 PropertyInterface *
 CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int column,
                                                                  const string &) {
-  std::unordered_map<unsigned int, PropertyInterface *>::iterator it =
-      propertiesBuffer.find(column);
+  tlp_hash_map<unsigned int, PropertyInterface *>::iterator it = propertiesBuffer.find(column);
 
   // No properties
   if (it == propertiesBuffer.end()) {
     string propertyType = importParameters.getColumnDataType(column);
     string propertyName = importParameters.getColumnName(column);
 
-    // If auto detection fail set to default type : string.
+    // If auto detection fails, set to default type : string.
     if (propertyType.empty()) {
-      qWarning() << __PRETTY_FUNCTION__ << " No type for the column " << propertyName
-                 << " set to string";
+      qWarning() << __PRETTY_FUNCTION__ << " No type for the column \"" << propertyName
+                 << "\", set it to string";
       propertyType = "string";
     }
 
@@ -456,7 +455,7 @@ CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int co
     if (graph->existProperty(propertyName)) {
       PropertyInterface *existingProperty = graph->getProperty(propertyName);
 
-      // If the properties are compatible query if we had to use existing.
+      // If the properties are compatible, query if we have to use existing.
       if (existingProperty->getTypename().compare(propertyType) == 0) {
         if (overwritePropertiesButton != QMessageBox::YesToAll &&
             overwritePropertiesButton != QMessageBox::NoToAll) {
@@ -476,13 +475,19 @@ CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int co
           interf = graph->getProperty(propertyName);
         }
       } else {
-        // If the properties are not compatible
-        // generate a new property with an approximate name
-        QMessageBox::critical(parent, parent->tr("Property already existing"),
-                              parent->tr("A property named \"") + tlpStringToQString(propertyName) +
-                                  parent->tr("\" already exists with a different type. A property "
-                                             "with an approximate name will be generated."));
-        interf = generateApproximateProperty(propertyName, propertyType);
+        // If the properties are not compatible,
+        // query if we have to use the existing one.
+        if (QMessageBox::question(
+                parent, "Property already exists",
+                QString(
+                    "A property named \"%0\" of type '%1' already exists.\nDo you want to use it ?\nIf not, a property with "
+                    "an approximate name will be generated.")
+                    .arg(propertyName.c_str())
+                    .arg(existingProperty->getTypename().c_str()),
+                QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+          interf = existingProperty;
+        else
+          interf = generateApproximateProperty(propertyName, propertyType);
       }
     } else {
       interf = graph->getProperty(propertyName, propertyType);
@@ -505,7 +510,7 @@ bool CSVGraphImport::begin() {
   return true;
 }
 
-bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
+bool CSVGraphImport::line(unsigned int row, const vector<CSVToken> &lineTokens) {
   // Check if user wants to import the line.
   if (!importParameters.importRow(row)) {
     return true;
@@ -518,8 +523,8 @@ bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
   for (size_t column = 0; column < lineTokens.size(); ++column) {
     if (importParameters.importColumn(column)) {
       PropertyInterface *property = props[column] =
-          propertiesManager->getPropertyInterface(column, lineTokens[column]);
-      const string &token = lineTokens[column];
+          propertiesManager->getPropertyInterface(column, lineTokens[column].value);
+      const string &token = lineTokens[column].value;
 
       // If the property does not exists or
       // if the token is empty no need to import the value
@@ -616,7 +621,7 @@ bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
             // We add one to the row number as in the configuration widget we start from row 1 not
             // row 0
             qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__ << " error when importing token \""
-                       << lineTokens[column] << "\" in property \"" << property->getName()
+                       << lineTokens[column].value << "\" in property \"" << property->getName()
                        << "\" of type \"" << property->getTypename() << "\" at line " << row + 1;
           }
         }
@@ -629,7 +634,7 @@ bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
             // We add one to the row number as in the configuration widget we start from row 1 not
             // row 0
             qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__ << " error when importing token \""
-                       << lineTokens[column] << "\" in property \"" << property->getName()
+                       << lineTokens[column].value << "\" in property \"" << property->getName()
                        << "\" of type \"" << property->getTypename() << "\" at line " << row + 1;
           }
         }

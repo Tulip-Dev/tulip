@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -84,26 +84,6 @@ public:
 private:
   Graph *graph;
   LayoutProperty *srcLayout, *destLayout, *viewLayout;
-};
-
-class NeighborNodesEdgeLengthOrdering : public binary_function<node, node, bool> {
-
-public:
-  NeighborNodesEdgeLengthOrdering(node centralNode, LayoutProperty *layout)
-      : centralNode(centralNode), layout(layout) {}
-
-  bool operator()(tlp::node n1, tlp::node n2) const {
-    Coord centralNodeCoord = layout->getNodeValue(centralNode);
-    Coord n1Coord = layout->getNodeValue(n1);
-    Coord n2Coord = layout->getNodeValue(n2);
-    float centralToN1Dist = centralNodeCoord.dist(n1Coord);
-    float centralToN2Dist = centralNodeCoord.dist(n2Coord);
-    return centralToN1Dist < centralToN2Dist;
-  }
-
-private:
-  node centralNode;
-  LayoutProperty *layout;
 };
 
 class MouseEventDiscardFilter : public QObject {
@@ -208,12 +188,8 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
 
   if (e->type() == QEvent::Wheel && centralNodeLocked && !circleLayoutSet) {
     QWheelEvent *we = static_cast<QWheelEvent *>(e);
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-    auto wePos = we->pos();
-#else
     auto wePos = we->position();
-#endif
+
     if (selectInAugmentedDisplayGraph(wePos.x(), wePos.y(), selectedEntity) &&
         selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
       if (selectedEntity.getComplexEntityId() == neighborhoodGraphCentralNode.id) {
@@ -239,7 +215,7 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
     QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
 
     if (!centralNodeLocked) {
-      node tmpNode = selectNodeInOriginalGraph(glWidget, qMouseEv->x(), qMouseEv->y());
+      node tmpNode = selectNodeInOriginalGraph(glWidget, qMouseEv->pos().x(), qMouseEv->pos().y());
 
       if (tmpNode != selectedNode) {
         buildNeighborhoodGraph(tmpNode, originalGraph);
@@ -252,7 +228,7 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
     } else {
       neighborhoodGraphColors->copy(neighborhoodGraphBackupColors);
 
-      if (selectInAugmentedDisplayGraph(qMouseEv->x(), qMouseEv->y(), selectedEntity) &&
+      if (selectInAugmentedDisplayGraph(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity) &&
           selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         if (selectedEntity.getComplexEntityId() != neighborhoodGraphCentralNode.id) {
           neighborhoodGraphColors->setNodeValue(node(selectedEntity.getComplexEntityId()),
@@ -369,19 +345,11 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
   return false;
 }
 node NeighborhoodHighlighter::selectNodeInOriginalGraph(GlMainWidget *glWidget, int x, int y) {
-  node n;
-  glWidget->makeCurrent();
-  vector<SelectedEntity> selectedElements;
-  glWidget->getScene()->selectEntities(
-      static_cast<RenderingEntitiesFlag>(RenderingNodes | RenderingWithoutRemove),
-      glWidget->screenToViewport(x - 1), glWidget->screenToViewport(y - 1),
-      glWidget->screenToViewport(3), glWidget->screenToViewport(3), nullptr, selectedElements);
-
-  if (!selectedElements.empty()) {
-    n = selectedElements[0].getNode();
-  }
-
-  return n;
+  SelectedEntity entity;
+  if (glWidget->pickNodesEdges(x, y, entity, nullptr, true, false) &&
+      entity.getEntityType() == SelectedEntity::NODE_SELECTED)
+    return node(entity.getComplexEntityId());
+  return node();
 }
 
 bool NeighborhoodHighlighter::selectInAugmentedDisplayGraph(const int x, const int y,
@@ -545,8 +513,15 @@ void NeighborhoodHighlighter::computeNeighborhoodGraphCircleLayout() {
     }
   }
 
+  auto layout = neighborhoodGraphLayout;
   sort(neighborsNodes.begin(), neighborsNodes.end(),
-       NeighborNodesEdgeLengthOrdering(neighborhoodGraphCentralNode, neighborhoodGraphLayout));
+       [centralNodeCoord, layout](tlp::node n1, tlp::node n2) {
+         Coord n1Coord = layout->getNodeValue(n1);
+         Coord n2Coord = layout->getNodeValue(n2);
+         float centralToN1Dist = centralNodeCoord.dist(n1Coord);
+         float centralToN2Dist = centralNodeCoord.dist(n2Coord);
+         return centralToN1Dist < centralToN2Dist;
+       });
 
   BoundingBox centralNodeBB(Coord(centralNodeCoord.getX() - centralNodeSize.getW() / 2,
                                   centralNodeCoord.getY() - centralNodeSize.getH() / 2, 0),
@@ -632,10 +607,9 @@ void NeighborhoodHighlighter::morphCircleAlphaAnimStep(int animStep) {
 float NeighborhoodHighlighter::computeNeighborhoodGraphRadius(
     LayoutProperty *neighborhoodGraphLayoutProp) {
   float radius = 0;
-  node n;
   const Coord &centralNodeCoord =
       neighborhoodGraphLayoutProp->getNodeValue(neighborhoodGraphCentralNode);
-  for (auto n : neighborhoodGraph->nodes()) {
+  for (node n : neighborhoodGraph->nodes()) {
     const Coord &nodeCoord = neighborhoodGraphLayoutProp->getNodeValue(n);
     const Size &nodeSize =
         originalGlGraphComposite->getInputData()->getElementSize()->getNodeValue(n);

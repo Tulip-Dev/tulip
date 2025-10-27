@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -19,128 +19,71 @@
 
 #include <vector>
 
-#include <tulip/Interactor.h>
-#include <tulip/MouseInteractors.h>
-#include <tulip/MouseShowElementInfo.h>
-#include <tulip/NodeLinkDiagramComponentInteractor.h>
-#include <tulip/NodeLinkDiagramComponent.h>
-#include <tulip/StringsListSelectionWidget.h>
-#include "../utils/StandardInteractorPriority.h"
-#include "../utils/PluginNames.h"
+#include <tulip/InteractorViewExplorer.h>
 
-#include <QLabel>
-#include <QVBoxLayout>
+#include "../utils/PluginNames.h"
 
 using namespace tlp;
 
-/** \brief Tulip interactor to get information about an element of the graph
- *
- */
-class InteractorGetInformation : public NodeLinkDiagramComponentInteractor {
-
-  class ConfigWidget : public QWidget {
-    InteractorGetInformation *_interactor;
-
-  public:
-    ConfigWidget(InteractorGetInformation *interactor) : _interactor(interactor) {}
-
-    void hideEvent(QHideEvent *) override {
-      _interactor->setVisibleProperties();
-    }
-  };
-
-  MouseShowElementInfo *_elementInfo;
-  ConfigWidget *_configWidget;
-  StringsListSelectionWidget *_propsList;
+class InteractorGetInformation : public InteractorViewExplorer {
 
 public:
-  PLUGININFORMATION("InteractorGetInformation", "Tulip Team", "01/04/2009",
-                    "Get Information Interactor", "1.0", "Information")
   /**
    * Default constructor
    */
-  InteractorGetInformation(const tlp::PluginContext *)
-      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png",
-                                           "Display node or edge properties",
-                                           StandardInteractorPriority::GetInformation) {}
+  InteractorGetInformation(const tlp::PluginContext *) : InteractorViewExplorer() {}
 
   /**
    * Construct chain of responsibility
    */
   void construct() override {
+    InteractorViewExplorer::construct();
     setConfigurationWidgetText(
-        QString("<h3>Display node or edge properties</h3>") +
-        "<b>Mouse left click</b> on an element (the mouse cursor must be as <img "
-        "src=\":/tulip/gui/icons/i_select.png\">),<br/>"
-        "to display a panel showing its properties.<br/>"
-        "As the panel is displayed, <b>Mouse left click</b> in a property row to edit the "
+        QString("<h3>Explore %1</h3>").arg(view()->name().c_str()) +
+        "When the mouse cursor looks like <img src=\":/tulip/gui/icons/i_information.png\">, "
+        "indicating it is on top of a graph element (node or edge), "
+        "<b>Mouse left</b> click to display a panel showing the element properties.<br/>"
+        "As the properties panel is displayed, <b>Mouse left</b> click in a property row to edit the "
         "corresponding value.<br/>"
         "The visible properties can be filtered using the list of properties displayed in the "
         "<b>Options</b> tab.<br/>"
         "If none is filtered, when the element properties panel is displayed, the display of the "
         "visual rendering properties can be then toggled using a dedicated check box.<br/><br/>" +
-        "<u>3D Navigation in the graph</u><br/><br/>" +
+        (view()->name() == NodeLinkDiagramComponent::viewName ? "<u>3D" : "<u>2D") +
+        " Navigation in the view</u><br/><br/>" +
         "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys "
         "</li></ul>" +
-        "X or Y rotation: <ul><li><b>Shift + Mouse left</b> down + up/down or left/right "
-        "moves</li></ul>" +
+        (view()->name() == NodeLinkDiagramComponent::viewName
+             ? "X or Y rotation: <ul><li><b>Shift + Mouse left</b> down + up/down or left/right "
+               "moves</li></ul>"
+             : "") +
 #if !defined(__APPLE__)
-        "Z rotation: <ul><li><b>Ctrl + Mouse left</b> down + left/right moves</li><li> or "
-        "<b>Insert</b> key</li></ul>" +
-        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Ctrl + Mouse left</b> down "
-        "+ up/down moves</li><li> or <b>Pg "
-        "up/Pg down</b> keys</li></ul>"
+        (view()->name() == NodeLinkDiagramComponent::viewName
+             ? "Z rotation: <ul><li><b>Ctrl + Mouse left</b> down + left/right moves</li><li> or <b>Insert</b> key</li></ul>"
+             : "") +
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Ctrl + Mouse left</b> down " +
 #else
-        "Z rotation: <ul><li><b>Alt + Mouse left</b> down + left/right moves</li><li> or "
-        "<b>Insert</b> key</li></ul>" +
-        "Translation: <ul><li><b>Arrow</b> keys</li></ul>" +
-        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>Alt + Mouse left</b> down "
-        "+ up/down moves</li><li> or <b>Pg up/Pg "
-        "down</b> keys</li></ul>"
+        (view()->name() == NodeLinkDiagramComponent::viewName
+             ? "Z rotation: <ul><li><b>⌥ + Mouse left</b> down + left/right moves</li><li> or <b>Insert</b> key</li></ul>"
+             : "") +
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>⌥ + Mouse left</b> down "
 #endif
-        +
-        "Meta node navigation: <ul><li><b>double Mouse left click</b> go inside the metanode</li>" +
-        "<li><b>Ctrl + double Mouse left click</b> go outside the metanode</li></ul>");
-    push_back(new MouseNKeysNavigator);
-    push_back(_elementInfo = new MouseShowElementInfo);
-    // build configuration widget
-    _configWidget = new ConfigWidget(this);
-    Interactor::setupConfigWidget(_configWidget);
-    QVBoxLayout *verticalLayout = new QVBoxLayout(_configWidget);
-    QLabel *label = new QLabel("Visible properties");
-    label->setObjectName("label");
-    verticalLayout->addWidget(label);
-    _propsList = new StringsListSelectionWidget(_configWidget,
-                                                StringsListSelectionWidget::NON_ORDERABLE_LIST, 0);
-    verticalLayout->addWidget(_propsList);
-
-    auto graph = view()->graph();
-    std::vector<std::string> stringsList;
-    for (auto propName : graph->getProperties()) {
-#ifdef NDEBUG
-      if (propName == "viewMetaGraph")
-        continue;
+        "+ up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>" +
+        (view()->name() == NodeLinkDiagramComponent::viewName
+             ? (QString(
+                    "Meta node navigation: <ul><li><b>double Mouse left</b> click go inside the metanode<br/>(press Shift to avoid element properties display)</li>") +
+#if !defined(__APPLE__)
+                "<li><b>Ctrl + Double Mouse left</b> click go outside the metanode</li></ul>"
+#else
+                "<li><b>⌥ or ⌘ + Double Mouse left</b> click go outside the metanode</li></ul>"
 #endif
-      stringsList.push_back(propName);
-    }
-    _propsList->setSelectedStringsList(stringsList);
-  }
-
-  QWidget *configurationOptionsWidget() const override {
-    return _configWidget;
+                )
+             : ""));
   }
 
   bool isCompatible(const std::string &viewName) const override {
-    return ((viewName == NodeLinkDiagramComponent::viewName) ||
-            (viewName == ViewName::PixelOrientedViewName));
-  }
-
-  void setVisibleProperties() {
-    auto stringList = _propsList->getUnselectedStringsList();
-    // an empty vector indicates that all the properties are visible
-    if (!stringList.empty())
-      stringList = _propsList->getSelectedStringsList();
-    _elementInfo->setVisibleProperties(stringList);
+    return ((viewName == ViewName::MatrixViewName) ||
+            (viewName == NodeLinkDiagramComponent::viewName));
   }
 };
 

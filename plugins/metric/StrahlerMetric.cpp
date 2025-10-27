@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -67,19 +67,15 @@ struct GreaterStackEval {
   }
 };
 
-Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref,
-                                         std::unordered_map<node, int> &tofree,
-                                         std::unordered_map<node, int> &prefix,
-                                         std::unordered_map<node, bool> &visited,
-                                         std::unordered_map<node, bool> &finished,
+Strahler StrahlerMetric::topSortStrahler(tlp::node n, SortInfos &nInfos, int &curPref,
+                                         std::unordered_map<node, SortInfos> &sortInfos,
                                          std::unordered_map<node, Strahler> &cachedValues) {
-  visited[n] = true;
   Strahler result;
-  prefix[n] = curPref;
-  curPref++;
+  nInfos.visited = true;
+  nInfos.prefix = curPref++;
 
   if (graph->outdeg(n) == 0) {
-    finished[n] = true;
+    nInfos.finished = true;
     return (result);
   }
 
@@ -88,28 +84,25 @@ Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref,
   // Construction des ensembles pour evaluer le strahler
 
   for (auto tmpN : graph->getOutNodes(n)) {
-
-    if (!visited[tmpN]) {
+    SortInfos &tmpInfos = sortInfos[tmpN];
+    if (!tmpInfos.visited) {
       // Arc Normal
-      tofree[n] = 0;
-      Strahler tmpValue =
-          topSortStrahler(tmpN, curPref, tofree, prefix, visited, finished, cachedValues);
+      nInfos.toFree = 0;
+      Strahler tmpValue = topSortStrahler(tmpN, tmpInfos, curPref, sortInfos, cachedValues);
       // Data for strahler evaluation on the spanning Dag.
       strahlerResult.push_front(tmpValue.strahler);
       // Counting current used stacks.
-      tmpEval.push_back(StackEval(tmpValue.stacks - tmpValue.usedStack + tofree[n],
-                                  tmpValue.usedStack - tofree[n]));
-      // Looking if we need more stacks to evaluate this node.
-      // old freeStacks=max(freeStacks,tmpValue.stacks-tmpValue.usedStack+tofree[n]);
+      tmpEval.emplace_back(tmpValue.stacks - tmpValue.usedStack + nInfos.toFree,
+                           tmpValue.usedStack - nInfos.toFree);
     } else {
-      if (finished[tmpN]) {
-        if (prefix[tmpN] < prefix[n]) {
+      if (tmpInfos.finished) {
+        if (tmpInfos.prefix < nInfos.prefix) {
           // Cross Edge
           Strahler tmpValue = cachedValues[tmpN];
           // Data for strahler evaluation on the spanning Dag.
           strahlerResult.push_front(tmpValue.strahler);
           // Looking if we need more stacks to evaluate this node.
-          tmpEval.push_back(StackEval(tmpValue.stacks, 0));
+          tmpEval.emplace_back(tmpValue.stacks, 0);
         } else {
           // Arc descent
           Strahler tmpValue = cachedValues[tmpN];
@@ -118,12 +111,11 @@ Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref,
         }
       } else {
         if (tmpN == n) {
-          tmpEval.push_back(StackEval(1, 0));
+          tmpEval.emplace_back(1, 0);
         } else {
           // New nested cycle.
-          tofree[tmpN]++;
-          tmpEval.push_back(StackEval(0, 1));
-          // result.usedStack++;
+          ++tmpInfos.toFree;
+          tmpEval.emplace_back(0, 1);
         }
 
         // Return edge
@@ -164,7 +156,7 @@ Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref,
 
   result.strahler = additional;
   strahlerResult.clear();
-  finished[n] = true;
+  nInfos.finished = true;
   cachedValues[n] = result;
   return result;
 }
@@ -197,14 +189,11 @@ bool StrahlerMetric::run() {
   computationTypes.setCurrent(0);
 
   if (dataSet != nullptr) {
-    dataSet->getDeprecated("all nodes", "All nodes", allNodes);
-    dataSet->getDeprecated("type", "Type", computationTypes);
+    dataSet->get("all nodes", allNodes);
+    dataSet->get("type", computationTypes);
   }
 
-  std::unordered_map<node, bool> visited;
-  std::unordered_map<node, bool> finished;
-  std::unordered_map<node, int> prefix;
-  std::unordered_map<node, int> tofree;
+  std::unordered_map<node, SortInfos> sortInfos;
   std::unordered_map<node, Strahler> cachedValues;
   int curPref = 0;
 
@@ -214,10 +203,11 @@ bool StrahlerMetric::run() {
     pluginProgress->showPreview(false);
 
   for (auto n : graph->nodes()) {
-    tofree[n] = 0;
+    SortInfos &nInfos = sortInfos[n];
+    nInfos.toFree = 0;
 
-    if (!finished[n]) {
-      topSortStrahler(n, curPref, tofree, prefix, visited, finished, cachedValues);
+    if (!nInfos.finished) {
+      topSortStrahler(n, nInfos, curPref, sortInfos, cachedValues);
     }
 
     if (allNodes) {
@@ -240,10 +230,7 @@ bool StrahlerMetric::run() {
         result->setNodeValue(n, cachedValues[n].stacks);
       }
 
-      visited.clear();
-      finished.clear();
-      prefix.clear();
-      tofree.clear();
+      sortInfos.clear();
       cachedValues.clear();
       curPref = 0;
     }

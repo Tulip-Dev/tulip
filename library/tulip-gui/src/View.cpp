@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -19,13 +19,7 @@
 
 #include <tulip/View.h>
 
-#include <QDebug>
-#include <QFile>
 #include <QGraphicsView>
-#include <QGraphicsItem>
-#include <QMenu>
-#include <QMainWindow>
-#include <QStatusBar>
 
 #include <tulip/Interactor.h>
 #include <tulip/Graph.h>
@@ -65,7 +59,7 @@ void View::toggleInteractors(const bool activate,
   }
 }
 
-void View::setInteractors(const QList<tlp::Interactor *> &inters) {
+void View::setInteractors(const std::list<tlp::Interactor *> &inters) {
   _interactors = inters;
 
   for (auto i : inters)
@@ -80,8 +74,9 @@ void View::setCurrentInteractor(tlp::Interactor *i) {
   if (_currentInteractor) {
     _currentInteractor->uninstall();
 
-    if (graphicsView() != nullptr)
-      graphicsView()->setCursor(QCursor()); // Force reset cursor when interactor is changed
+    if (graphicsView() != nullptr && i != _currentInteractor)
+      // Force cursor reset when changing interactor
+      graphicsView()->setCursor(QCursor());
   }
 
   _currentInteractor = i;
@@ -174,6 +169,9 @@ void View::setGraph(tlp::Graph *g) {
   _graph = g;
 
   graphChanged(g);
+  // ensure current interactor refresh
+  if (currentInteractor())
+    setCurrentInteractor(currentInteractor());
 
   if (_graph != nullptr)
     _graph->addListener(this);
@@ -213,11 +211,11 @@ void View::treatEvent(const Event &ev) {
   }
 }
 
-QList<QWidget *> View::configurationWidgets() const {
-  return QList<QWidget *>();
+std::list<QWidget *> View::configurationWidgets() const {
+  return std::list<QWidget *>();
 }
 
-void View::interactorsInstalled(const QList<tlp::Interactor *> &) {
+void View::interactorsInstalled(const std::list<tlp::Interactor *> &) {
   emit interactorsChanged();
 }
 
@@ -228,13 +226,17 @@ void View::centerView(bool /* graphChanged */) {
 /*
   Triggers
   */
-QSet<tlp::Observable *> View::triggers() const {
+std::list<tlp::Observable *> View::triggers() const {
   return _triggers;
 }
 
 void View::removeRedrawTrigger(tlp::Observable *obs) {
-  if (_triggers.remove(obs))
+  // to be changed for C++20. remove() returns the number of element removed. Returns void with
+  // c++17
+  if (std::find(_triggers.begin(), _triggers.end(), obs) != _triggers.end()) {
+    _triggers.remove(obs);
     obs->removeObserver(this);
+  }
 }
 
 void View::emitDrawNeededSignal() {
@@ -242,10 +244,10 @@ void View::emitDrawNeededSignal() {
 }
 
 void View::addRedrawTrigger(tlp::Observable *obs) {
-  if (_triggers.contains(obs) || obs == nullptr)
+  if ((obs == nullptr) || std::find(_triggers.begin(), _triggers.end(), obs) != _triggers.end())
     return;
 
-  _triggers.insert(obs);
+  _triggers.push_back(obs);
   obs->addObserver(this);
 }
 
@@ -254,11 +256,12 @@ void View::treatEvents(const std::vector<Event> &events) {
     Event e = events[i];
 
     // ensure redraw trigger is removed from the triggers set when it is deleted
-    if (e.type() == Event::TLP_DELETE && _triggers.contains(e.sender())) {
+    if (e.type() == Event::TLP_DELETE &&
+        std::find(_triggers.begin(), _triggers.end(), e.sender()) != _triggers.end()) {
       removeRedrawTrigger(e.sender());
     }
 
-    if (_triggers.contains(e.sender())) {
+    if (std::find(_triggers.begin(), _triggers.end(), e.sender()) != _triggers.end()) {
       emit drawNeeded();
       break;
     }
@@ -279,7 +282,7 @@ void View::applySettings() {}
 // define a class to save/restore the View state associated
 // to a graph
 class ViewStatesMap : public tlp::Observable {
-  std::unordered_map<std::string, std::unordered_map<Graph *, DataSet>> mMap;
+  tlp_hash_map<std::string, tlp_hash_map<Graph *, DataSet>> mMap;
 
 public:
   void saveState(const std::string &viewName, Graph *graph, const DataSet &ds) {

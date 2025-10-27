@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,15 +17,16 @@
  *
  */
 #include <iostream>
-#include <qapplication.h>
-#include <qtimer.h>
+#include <QNetworkAccessManager>
+#include <QApplication>
 #include <tulip/TulipPluginHeaders.h>
-#include <tulip/DownloadManager.h>
 #include <tulip/TlpQtTools.h>
 #include "WebImport.h"
 
 using namespace std;
 using namespace tlp;
+
+#define HTTP_PREFIX "https://"
 
 class UrlElement {
 public:
@@ -100,14 +101,18 @@ HttpContext::~HttpContext() {
 }
 
 void HttpContext::request(const std::string &url, bool head) {
+  static QNetworkAccessManager *manager = nullptr;
+  if (!manager)
+    manager = new QNetworkAccessManager();
+
   processed = isHtml = redirected = false;
   QNetworkRequest request(QUrl(url.c_str()));
 
   if (head) {
-    reply = DownloadManager::getInstance()->head(request);
+    reply = manager->head(request);
     connect(reply, SIGNAL(finished()), this, SLOT(headerReceived()));
   } else {
-    reply = DownloadManager::getInstance()->get(request);
+    reply = manager->get(request);
     connect(reply, SIGNAL(finished()), this, SLOT(finished()));
   }
 }
@@ -185,7 +190,7 @@ void HttpContext::setTimer(QTimer *timer) {
   connect(timer, SIGNAL(timeout()), SLOT(timeout()));
 }
 
-UrlElement::UrlElement() : http_prefix("http://"), data(""), context(nullptr) {}
+UrlElement::UrlElement() : http_prefix(HTTP_PREFIX), data(""), context(nullptr) {}
 UrlElement::UrlElement(const UrlElement &c)
     : http_prefix(c.http_prefix), data(""), server(c.server), url(c.url), clean_url(c.clean_url),
       context(nullptr) {}
@@ -259,7 +264,7 @@ bool UrlElement::siteconnect(const std::string &server, const std::string &path,
   else
     thePath = url;
 
-  string url("http://");
+  string url(HTTP_PREFIX);
   url += server.c_str() + thePath;
 
   // start the request
@@ -316,7 +321,7 @@ UrlElement UrlElement::parseUrl(const std::string &href) {
     host = true;
 
     if (lowercase[pos - 1] == 's')
-      newUrl.http_prefix = "https://";
+      newUrl.http_prefix = HTTP_PREFIX;
 
     pos += 3;
   }
@@ -376,13 +381,13 @@ UrlElement UrlElement::parseUrl(const std::string &href) {
           findUp = urlreference.rfind('/', findUp - 1);
 
           if (findUp == string::npos) {
-            tlp::warning() << "bad url reference, to much ../" << endl;
+            tlp::warning() << "bad url reference, too much ../" << endl;
             return newUrl;
           }
 
           urlreference = urlreference.substr(0, findUp + 1);
         } else {
-          tlp::warning() << "bad url reference, to much ../" << endl;
+          tlp::warning() << "bad url reference, too much ../" << endl;
           return newUrl;
         }
       }
@@ -402,7 +407,7 @@ UrlElement UrlElement::parseUrl(const std::string &href) {
 static const char *paramHelp[] = {
     // server
     "This parameter defines the web server that you want to inspect. No need for http:// at the "
-    "beginning; http protocol is always assumed. No need for / at the end.",
+    "beginning; https protocol is always assumed. No need for / at the end.",
 
     // initial page
     "This parameter defines the first web page to visit. No need for / at the beginning.",
@@ -711,6 +716,13 @@ struct WebImport : public ImportModule {
   }
 
   bool importGraph() override {
+    if (!checkInternetAccess()) {
+      if (pluginProgress)
+        pluginProgress->setError(
+            "There seems to be no internet access. Check your network configuration.");
+      return false;
+    }
+
     string server = "www.labri.fr";
     string url;
     bool computelayout = true;
@@ -734,11 +746,11 @@ struct WebImport : public ImportModule {
     }
 
     UrlElement mySite;
-    size_t pos = server.find("http://");
+    size_t pos = server.find(HTTP_PREFIX);
 
     if (pos == 0)
-      // remove http:// prefix
-      server = server.substr(7);
+      // remove https:// prefix
+      server = server.substr(8);
 
     // remove / prefix
     if (server[0] == '/')

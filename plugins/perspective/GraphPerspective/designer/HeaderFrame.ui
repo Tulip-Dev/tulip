@@ -25,11 +25,9 @@
   <property name="styleSheet">
    <string notr="true">#mainFrame, QToolButton, QPushButton, .QWidget {
 border-image:none;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
-stop: 0 #939393,
-stop: 0.4 #808080,
-stop: 0.401 #737373,
-stop: 1 #5a5a5a);
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1,
+stop:0 rgb(75,75,75),
+stop:1 rgb(60,60,60));
 border: 0px;
 color: white;
 }
@@ -40,23 +38,14 @@ color: white;
 }
 QComboBox:hover, QToolButton:hover, QPushButton:hover {
 border-image:none;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
-stop: 0 #8F8F8F,
-stop: 0.4 #7C7C7C,
-stop: 0.401 #6F6F6F,
-stop: 1 #565656);
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1,
+stop:0 rgb(155,155,155),
+stop:1 rgb(130,130,130));
 border: 0px;
 color: white;
 }
 QToolButton:pressed, QPushButton:pressed {
-border-image:none;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
-stop: 0 #777777,
-stop: 0.4 #646464,
-stop: 0.401 #575757,
-stop: 1 #3e3e3e);
-border: 0px;
-color: white;
+background-color: #D0D0D0;
 }
 
 #expandButton {
@@ -88,7 +77,16 @@ border-bottom-right-radius: 1px;
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -97,7 +95,16 @@ border-bottom-right-radius: 1px;
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -143,6 +150,9 @@ border-bottom-right-radius: 1px;
           <height>25</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Hide contents</string>
+        </property>
         <property name="iconSize">
          <size>
           <width>22</width>
@@ -154,9 +164,6 @@ border-bottom-right-radius: 1px;
         </property>
         <property name="checked">
          <bool>true</bool>
-        </property>
-	<property name="toolTip">
-	 <string>Hide contents</string>
         </property>
        </widget>
       </item>

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -34,7 +34,7 @@
  *
  *  - 12/09/2011 Version 1.0: Initial release
  *
- *  \author Patrick Mary of Tulip Team http://tulip.labri.fr/
+ *  \author Patrick Mary of Tulip Team https://tulip.labri.fr/
  *
  *
  */
@@ -190,35 +190,24 @@ bool tokenize(const string &str, vector<string> &tokens, const string &separator
 }
 } // namespace
 
-static const char *paramHelp[] = {
-    // filename
-    "This parameter indicates the pathname of the file in UCINET DL format to import.",
-
-    // Default metric
-    "This parameter indicates the name of the default metric."};
-
-class ImportUCINET : public ImportModule {
+class ImportUCINET : public ImportFileModule {
 
 public:
   PLUGININFORMATION(
       "UCINET", "Patrick Mary", "12/09/2011",
-      "<p>Supported extensions: txt</p><p>Imports a new graph from a text file in "
+      "<p>File extension: txt</p><p>Imports a new graph from a text file in "
       "UCINET DL input format<br/>as it is described in the UCINET reference manual<br/>"
       "(see <a "
       "href=\"http://www.analytictech.com/ucinet/documentation/reference.rtf\">http://"
       "www.analytictech.com/ucinet/documentation/reference.rtf</a>)</p>",
       "1.1", "File")
-  std::list<std::string> fileExtensions() const override {
-    std::list<std::string> l;
-    l.push_back("txt");
-    return l;
-  }
   ImportUCINET(const tlp::PluginContext *context)
-      : ImportModule(context), nbNodes(0), defaultMetric("weight"), n(0), nr(0), nc(0), nm(0),
-        current(0), dl_found(false), diagonal(true), diagonal_found(false), labels_known(false),
-        title_found(false), expectedLine(DL_HEADER), embedding(DL_NONE), dataFormat(DL_FM) {
-    addInParameter<string>("file::filename", paramHelp[0], "");
-    addInParameter<string>("default metric", paramHelp[1], "weight");
+      : ImportFileModule(context, {"txt"}), nbNodes(0), defaultMetric("weight"), n(0), nr(0), nc(0),
+        nm(0), current(0), dl_found(false), diagonal(true), diagonal_found(false),
+        labels_known(false), title_found(false), expectedLine(DL_HEADER), embedding(DL_NONE),
+        dataFormat(DL_FM) {
+    addInParameter<string>("default metric",
+                           "This parameter indicates the name of the default metric", "weight");
   }
 
   ~ImportUCINET() override {}
@@ -259,7 +248,7 @@ public:
   enum TypeOfData { DL_FM, DL_UH, DL_LH, DL_NL1, DL_NL2, DL_NL1B, DL_EL1, DL_EL2, DL_BM };
   // indicates the current format for the data to be read
   TypeOfData dataFormat;
-  std::unordered_map<std::string, node> labelToNode, colLabelToNode, rowLabelToNode;
+  tlp_hash_map<std::string, node> labelToNode, colLabelToNode, rowLabelToNode;
 
   bool readHeader(string &str, stringstream &error) {
     string token;
@@ -640,7 +629,7 @@ public:
   }
 
   bool readLabels(const string &str, stringstream &error,
-                  std::unordered_map<std::string, node> &labelsHMap, unsigned int nbLabels,
+                  tlp_hash_map<std::string, node> &labelsHMap, unsigned int nbLabels,
                   unsigned int offset, const vector<node> &nodes) {
     vector<std::string> labels;
     StringProperty *label = graph->getProperty<StringProperty>("viewLabel");
@@ -705,7 +694,7 @@ public:
               static_cast<int (*)(int)>(std::toupper));
 
     if (n /*embedding == DL_ALL*/) { // 1-mode
-      std::unordered_map<std::string, node>::iterator it = labelToNode.find(upcasetoken);
+      tlp_hash_map<std::string, node>::iterator it = labelToNode.find(upcasetoken);
 
       if (it != labelToNode.end())
         return (*it).second;
@@ -720,7 +709,7 @@ public:
     }
 
     if (findCol) {
-      std::unordered_map<std::string, node>::iterator it = colLabelToNode.find(upcasetoken);
+      tlp_hash_map<std::string, node>::iterator it = colLabelToNode.find(upcasetoken);
 
       if (it != colLabelToNode.end())
         return (*it).second;
@@ -733,7 +722,7 @@ public:
       graph->getProperty<StringProperty>("viewLabel")->setNodeValue(nodes[i - 1], token);
       return colLabelToNode[upcasetoken] = nodes[i - 1];
     } else {
-      std::unordered_map<std::string, node>::iterator it = rowLabelToNode.find(upcasetoken);
+      tlp_hash_map<std::string, node>::iterator it = rowLabelToNode.find(upcasetoken);
 
       if (it != rowLabelToNode.end())
         return (*it).second;
@@ -928,16 +917,8 @@ public:
     return false;
   }
 
-  bool importGraph() override {
-    string filename;
-
-    dataSet->get("file::filename", filename);
-    dataSet->getDeprecated("default metric", "Default metric", defaultMetric);
-
-    if (filename.empty()) {
-      pluginProgress->setError("Filename is empty.");
-      return false;
-    }
+  bool importFile() override {
+    dataSet->get("default metric", defaultMetric);
 
     std::istream *in = tlp::getInputFileStream(filename);
     // check for open stream failure

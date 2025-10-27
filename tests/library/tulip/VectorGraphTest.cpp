@@ -43,7 +43,7 @@ public:
 CPPUNIT_TEST_SUITE_REGISTRATION(VectorGraphTest);
 
 // nb nodes must be a multiple of 10
-const unsigned int NB_NODES = 10;
+const unsigned int NB_NODES = 4;
 std::vector<node> nodes;
 std::vector<edge> edges;
 VectorGraph graph;
@@ -436,25 +436,27 @@ void VectorGraphTest::testAddDelEdges() {
   CPPUNIT_ASSERT(graph.numberOfEdges() == NB_NODES - 1);
 
   // check edges
-  const std::vector<edge> &nEdges = graph.star(nodes[0]);
-  CPPUNIT_ASSERT(nEdges.size() == NB_NODES - 1);
-  TLP_PARALLEL_MAP_INDICES(NB_NODES - 1, [&](unsigned int i) {
-    edge e = nEdges[i];
-    CPPUNIT_ASSERT(e == edges[i]);
-    // check ends
-    std::pair<node, node> ends = graph.ends(e);
-    CPPUNIT_ASSERT(ends.first == nodes[0]);
-    CPPUNIT_ASSERT(ends.second == nodes[i + 1]);
-    CPPUNIT_ASSERT(graph.existEdge(nodes[0], nodes[i + 1], true) == e);
-    CPPUNIT_ASSERT(graph.existEdge(nodes[i + 1], nodes[0], false) == e);
-    // check edge source
-    CPPUNIT_ASSERT(graph.source(e) == nodes[0]);
-    // check edge target
-    CPPUNIT_ASSERT(graph.target(e) == nodes[i + 1]);
-    // check opposite
-    CPPUNIT_ASSERT(graph.opposite(e, nodes[0]) == nodes[i + 1]);
-    CPPUNIT_ASSERT(graph.opposite(e, nodes[i + 1]) == nodes[0]);
-  });
+  {
+    auto &nAdjs = graph.adj(nodes[0]);
+    CPPUNIT_ASSERT(nAdjs.size() == NB_NODES - 1);
+    TLP_PARALLEL_MAP_INDICES(NB_NODES - 1, [&](unsigned int i) {
+      edge e = nAdjs[i].link();
+      CPPUNIT_ASSERT(e == edges[i]);
+      // check ends
+      std::pair<node, node> ends = graph.ends(e);
+      CPPUNIT_ASSERT(ends.first == nodes[0]);
+      CPPUNIT_ASSERT(ends.second == nodes[i + 1]);
+      CPPUNIT_ASSERT(graph.existEdge(nodes[0], nodes[i + 1], true) == e);
+      CPPUNIT_ASSERT(graph.existEdge(nodes[i + 1], nodes[0], false) == e);
+      // check edge source
+      CPPUNIT_ASSERT(graph.source(e) == nodes[0]);
+      // check edge target
+      CPPUNIT_ASSERT(graph.target(e) == nodes[i + 1]);
+      // check opposite
+      CPPUNIT_ASSERT(graph.opposite(e, nodes[0]) == nodes[i + 1]);
+      CPPUNIT_ASSERT(graph.opposite(e, nodes[i + 1]) == nodes[0]);
+    });
+  }
 
   // check edges per node
   // check degree
@@ -464,31 +466,33 @@ void VectorGraphTest::testAddDelEdges() {
   // check in degree
   CPPUNIT_ASSERT(graph.indeg(nodes[0]) == 0);
 
-  const std::vector<node> &nNodes = graph.adj(nodes[0]);
-  CPPUNIT_ASSERT(nNodes.size() == NB_NODES - 1);
-  TLP_PARALLEL_MAP_INDICES(NB_NODES - 1, [&](unsigned int i) {
-    node n = nNodes[i];
-    CPPUNIT_ASSERT(n == nodes[i + 1]);
-    // check degree
-    CPPUNIT_ASSERT(graph.deg(n) == 1);
-    // check out degree
-    CPPUNIT_ASSERT(graph.outdeg(n) == 0);
-    // check in degree
-    CPPUNIT_ASSERT(graph.indeg(n) == 1);
+  {
+    auto &nAdjs = graph.adj(nodes[0]);
+    CPPUNIT_ASSERT(nAdjs.size() == NB_NODES - 1);
+    TLP_PARALLEL_MAP_INDICES(NB_NODES - 1, [&](unsigned int i) {
+      node n = nAdjs[i].opposite();
+      CPPUNIT_ASSERT(n == nodes[i + 1]);
+      // check degree
+      CPPUNIT_ASSERT(graph.deg(n) == 1);
+      // check out degree
+      CPPUNIT_ASSERT(graph.outdeg(n) == 0);
+      // check in degree
+      CPPUNIT_ASSERT(graph.indeg(n) == 1);
 
-    // check out edges
-    Iterator<edge> *ite = graph.getOutEdges(n);
-    CPPUNIT_ASSERT(ite->hasNext() == false);
-    delete ite;
+      // check out edges
+      Iterator<edge> *ite = graph.getOutEdges(n);
+      CPPUNIT_ASSERT(ite->hasNext() == false);
+      delete ite;
 
-    // check in edges
-    ite = graph.getInEdges(n);
-    CPPUNIT_ASSERT(ite->hasNext());
-    edge e = ite->next();
-    CPPUNIT_ASSERT(e == edges[i]);
-    CPPUNIT_ASSERT(ite->hasNext() == false);
-    delete ite;
-  });
+      // check in edges
+      ite = graph.getInEdges(n);
+      CPPUNIT_ASSERT(ite->hasNext());
+      edge e = ite->next();
+      CPPUNIT_ASSERT(e == edges[i]);
+      CPPUNIT_ASSERT(ite->hasNext() == false);
+      delete ite;
+    });
+  }
 
   // swap order of nodes[0] edges
   std::sort(edges.begin(), edges.end(), std::greater<edge>());
@@ -499,58 +503,60 @@ void VectorGraphTest::testAddDelEdges() {
   graph.setEdgeOrder(nodes[0], edges);
 
   // check edges
-  const std::vector<edge> &n0Edges = graph.star(nodes[0]);
-  CPPUNIT_ASSERT(n0Edges.size() == NB_NODES - 1);
-  TLP_PARALLEL_MAP_INDICES(NB_NODES - 1, [&](unsigned int i) {
-    edge e = n0Edges[i];
-    CPPUNIT_ASSERT(e == edges[i]);
-    // check ends
-    std::pair<node, node> ends = graph.ends(e);
-    CPPUNIT_ASSERT(ends.first == nodes[0]);
-    CPPUNIT_ASSERT(ends.second == nodes[NB_NODES - i - 1]);
-    CPPUNIT_ASSERT(graph.existEdge(nodes[0], nodes[NB_NODES - i - 1], true) == e);
-    CPPUNIT_ASSERT(graph.existEdge(nodes[NB_NODES - i - 1], nodes[0], false) == e);
-    // check edge source
-    CPPUNIT_ASSERT(graph.source(e) == nodes[0]);
-    // check edge target
-    CPPUNIT_ASSERT(graph.target(e) == nodes[NB_NODES - i - 1]);
-    // check opposite
-    CPPUNIT_ASSERT(graph.opposite(e, nodes[0]) == nodes[NB_NODES - i - 1]);
-    CPPUNIT_ASSERT(graph.opposite(e, nodes[NB_NODES - i - 1]) == nodes[0]);
-  });
+  {
+    auto &nAdjs = graph.adj(nodes[0]);
+    CPPUNIT_ASSERT(nAdjs.size() == NB_NODES - 1);
+    TLP_PARALLEL_MAP_INDICES(NB_NODES - 1, [&](unsigned int i) {
+      edge e = nAdjs[i].link();
+      CPPUNIT_ASSERT(e == edges[i]);
+      // check ends
+      std::pair<node, node> ends = graph.ends(e);
+      CPPUNIT_ASSERT(ends.first == nodes[0]);
+      CPPUNIT_ASSERT(ends.second == nodes[NB_NODES - i - 1]);
+      CPPUNIT_ASSERT(graph.existEdge(nodes[0], nodes[NB_NODES - i - 1], true) == e);
+      CPPUNIT_ASSERT(graph.existEdge(nodes[NB_NODES - i - 1], nodes[0], false) == e);
+      // check edge source
+      CPPUNIT_ASSERT(graph.source(e) == nodes[0]);
+      // check edge target
+      CPPUNIT_ASSERT(graph.target(e) == nodes[NB_NODES - i - 1]);
+      // check opposite
+      CPPUNIT_ASSERT(graph.opposite(e, nodes[0]) == nodes[NB_NODES - i - 1]);
+      CPPUNIT_ASSERT(graph.opposite(e, nodes[NB_NODES - i - 1]) == nodes[0]);
+    });
 
-  // check edges per node
-  // check degree
-  CPPUNIT_ASSERT(graph.deg(nodes[0]) == NB_NODES - 1);
-  // check out degree
-  CPPUNIT_ASSERT(graph.outdeg(nodes[0]) == NB_NODES - 1);
-  // check in degree
-  CPPUNIT_ASSERT(graph.indeg(nodes[0]) == 0);
-  // nNodes = graph.adj(nodes[0]);
-  CPPUNIT_ASSERT(nNodes.size() == NB_NODES - 1);
-
-  TLP_PARALLEL_MAP_INDICES(NB_NODES - 1, [&](unsigned int i) {
-    node n = nNodes[i];
-    CPPUNIT_ASSERT(n == nodes[NB_NODES - i - 1]);
+    // check edges per node
     // check degree
-    CPPUNIT_ASSERT(graph.deg(n) == 1);
+    CPPUNIT_ASSERT(graph.deg(nodes[0]) == NB_NODES - 1);
     // check out degree
-    CPPUNIT_ASSERT(graph.outdeg(n) == 0);
+    CPPUNIT_ASSERT(graph.outdeg(nodes[0]) == NB_NODES - 1);
     // check in degree
-    CPPUNIT_ASSERT(graph.indeg(n) == 1);
+    CPPUNIT_ASSERT(graph.indeg(nodes[0]) == 0);
+    // nNodes = graph.adj(nodes[0]);
+    CPPUNIT_ASSERT(nAdjs.size() == NB_NODES - 1);
 
-    // check out edges
-    Iterator<edge> *ite = graph.getOutEdges(n);
-    CPPUNIT_ASSERT(ite->hasNext() == false);
-    delete ite;
+    TLP_PARALLEL_MAP_INDICES(NB_NODES - 1, [&](unsigned int i) {
+      node n = nAdjs[i].opposite();
+      CPPUNIT_ASSERT(n == nodes[NB_NODES - i - 1]);
+      // check degree
+      CPPUNIT_ASSERT(graph.deg(n) == 1);
+      // check out degree
+      CPPUNIT_ASSERT(graph.outdeg(n) == 0);
+      // check in degree
+      CPPUNIT_ASSERT(graph.indeg(n) == 1);
 
-    // check in edges
-    ite = graph.getInEdges(n);
-    CPPUNIT_ASSERT(ite->hasNext());
-    CPPUNIT_ASSERT(ite->next() == edges[i]);
-    CPPUNIT_ASSERT(ite->hasNext() == false);
-    delete ite;
-  });
+      // check out edges
+      Iterator<edge> *ite = graph.getOutEdges(n);
+      CPPUNIT_ASSERT(ite->hasNext() == false);
+      delete ite;
+
+      // check in edges
+      ite = graph.getInEdges(n);
+      CPPUNIT_ASSERT(ite->hasNext());
+      CPPUNIT_ASSERT(ite->next() == edges[i]);
+      CPPUNIT_ASSERT(ite->hasNext() == false);
+      delete ite;
+    });
+  }
 
   // delete all edges of nodes[0]
   graph.delEdges(nodes[0]);

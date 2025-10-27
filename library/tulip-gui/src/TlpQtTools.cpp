@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -25,48 +25,36 @@
 
 #include <tulip/TlpQtTools.h>
 
-#include <ostream>
-#include <ios>
-#include <unordered_map>
+#include <iostream>
+#include <tulip/tuliphash.h>
 
-#include <QDebug>
 #include <QColorDialog>
-#include <QAbstractButton>
-#include <QMessageBox>
-#include <QImage>
-#include <QEvent>
 #include <QMetaEnum>
 #include <QApplication>
 #include <QDir>
-#include <QApplication>
 #include <QStandardPaths>
-#if defined(__MINGW32__) && defined(TULIP_BUILD_PYTHON_COMPONENTS)
+#if defined(__MINGW32__)
 #include <QSslSocket>
 #endif
+#include <QTcpSocket>
+#include <QTimer>
+#include <QWidget>
+#include <QCheckBox>
+#include <QListWidget>
+#include <QRadioButton>
+#include <QTreeView>
+#include <QWizard>
 
-#include <tulip/DataSet.h>
 #include <tulip/TulipSettings.h>
 #include <tulip/Interactor.h>
-#include <tulip/View.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/GraphProperty.h>
-#include <tulip/IntegerProperty.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/StringProperty.h>
 #include <tulip/SystemDefinition.h>
-#include <tulip/TlpTools.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginLister.h>
-#include <tulip/PluginManager.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlTextureManager.h>
-#include <tulip/TulipMetaTypes.h>
-#include <tulip/PythonVersionChecker.h>
+#include <tulip/PythonIDEInterface.h>
 #include <tulip/TulipItemEditorCreators.h>
 #include <tulip/GlOffscreenRenderer.h>
 /**
@@ -78,8 +66,8 @@ using namespace tlp;
 /**
  * Init property type to property label conversion map
  **/
-static unordered_map<string, QString> &buildPropertyTypeToPropertyTypeLabelMap() {
-  static unordered_map<string, QString> propertyTypeToPropertyTypeLabel;
+static tlp_hash_map<string, QString> &buildPropertyTypeToPropertyTypeLabelMap() {
+  static tlp_hash_map<string, QString> propertyTypeToPropertyTypeLabel;
   propertyTypeToPropertyTypeLabel[BooleanProperty::propertyTypename] = QString("Boolean");
   propertyTypeToPropertyTypeLabel[ColorProperty::propertyTypename] = QString("Color");
   propertyTypeToPropertyTypeLabel[DoubleProperty::propertyTypename] = QString("Double");
@@ -101,7 +89,7 @@ static unordered_map<string, QString> &buildPropertyTypeToPropertyTypeLabelMap()
 }
 
 // Property type to property label conversion map
-static const unordered_map<string, QString> &propertyTypeToPropertyTypeLabelMap =
+static const tlp_hash_map<string, QString> &propertyTypeToPropertyTypeLabelMap =
     buildPropertyTypeToPropertyTypeLabelMap();
 /**
  * Init property type label to property type conversion map
@@ -130,27 +118,6 @@ static map<QString, string> buildPropertyTypeLabelToPropertyTypeMap() {
 // Property type label to property type conversion map
 static const map<QString, string> &propertyTypeLabelToPropertyTypeMap =
     buildPropertyTypeLabelToPropertyTypeMap();
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 8, 0))
-// Allow to print a human readable representation of Qt events,
-// for debugging purpose (through the use of qDebug() )
-QDebug operator<<(QDebug str, const QEvent *ev) {
-  str << "QEvent";
-
-  if (ev) {
-    static int eventEnumIndex = QEvent::staticMetaObject.indexOfEnumerator("Type");
-    QString name = QEvent::staticMetaObject.enumerator(eventEnumIndex).valueToKey(ev->type());
-
-    if (!name.isEmpty()) {
-      str << name;
-    } else {
-      str << ev->type();
-    }
-  }
-
-  return str.maybeSpace();
-}
-#endif
 
 namespace tlp {
 
@@ -182,7 +149,7 @@ QString getPluginPackageName(const QString &pluginName) {
 }
 
 QString getPluginLocalInstallationDir() {
-  return QStandardPaths::standardLocations(QStandardPaths::DataLocation).at(0) + "/plugins";
+  return QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0) + "/plugins";
 }
 
 QString localPluginsPath() {
@@ -270,7 +237,13 @@ public:
 
     GLuint *textureNum = new GLuint[spriteNumber];
 
-    image = image.mirrored().convertToFormat(QImage::Format_RGBA8888);
+#if (QT_VERSION > QT_VERSION_CHECK(6,9,0))
+    image = image.flipped();
+#else
+    image = image.mirrored();
+#endif
+
+    image = image.convertToFormat(QImage::Format_RGBA8888);
 
     glTexture.width = width;
     glTexture.height = height;
@@ -352,16 +325,11 @@ public:
   }
 };
 
-void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
+void initTulipSoftware(tlp::PluginLoader *loader) {
 
   QLocale::setDefault(QLocale(QLocale::English));
   TulipSettings::applyProxySettings();
   TulipSettings::initSeedOfRandomSequence();
-
-  if (TulipSettings::isFirstTulipMMRun()) {
-    TulipSettings::addRemoteLocation(PluginManager::STABLE_LOCATION);
-    TulipSettings::addRemoteLocation(PluginManager::TESTING_LOCATION);
-  }
 
   QDir::home().mkpath(tlp::localPluginsPath());
   QLocale::setDefault(QLocale(QLocale::English));
@@ -370,35 +338,25 @@ void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../");
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../lib/");
 #elif defined(WIN32)
-#if defined(TULIP_BUILD_PYTHON_COMPONENTS)
 #if defined(__MINGW32__)
   // When using MSYS2 platform to compile Tulip, force the dynamic loading of
   // OpenSSL libraries Qt was compiled against before Python initialization to
   // avoid a DLL Hell on windows
   QSslSocket::supportsSsl();
 #endif
-#if (_WIN32_WINNT >= 0x0502)
-  // MS stated that SetDllDirectory only exists since WinXP SP1
-
   // Python on windows can be installed for current user only.
   // In that case, the Python dll is not located in system path but in the Python home directory.
   // So add the Python home directory in the Dll search paths in order to be able to load plugins
   // depending on Python.
-  auto pythonHome = tlp::PythonVersionChecker::getPythonHome();
-  if (!pythonHome.isEmpty())
+  auto pythonHome = tlp::PythonIDEInterface::getPythonHome();
+  if (!pythonHome.isEmpty()) {
+#if (QT_VERSION > QT_VERSION_CHECK(6, 6, 0))
+    SetDllDirectory(const_cast<wchar_t *>(pythonHome.toStdWString().c_str()));
+#else
     SetDllDirectory(pythonHome.toUtf8().data());
 #endif
-#endif
-#endif
-
-  if (removeDiscardedPlugins) {
-    for (const QString &plugin : tlp::PluginManager::markedForRemoval()) {
-      QFile f(plugin);
-      f.remove();
-      tlp::PluginManager::unmarkForRemoval(
-          plugin); // whether or not the removal succeeded, do not try again
-    }
   }
+#endif
 
   tlp::initTulipLib();
   initQTypeSerializers();
@@ -415,9 +373,17 @@ void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
   tlp::GlyphManager::loadGlyphPlugins();
   tlp::EdgeExtremityGlyphManager::loadGlyphPlugins();
 
-  // Explicitely create a shared OpenGL context to
+  // Explicitly create a shared OpenGL context to
   // ensure it is initialized before using it
-  GlOffscreenRenderer::getInstance()->getOpenGLContext();
+  if (GlOffscreenRenderer::getInstance()->isValid()) {
+    GlOffscreenRenderer::getInstance()->makeOpenGLContextCurrent();
+    auto vs = OpenGlConfigManager::getOpenGLVersionString();
+    if (vs.find("Mesa Intel(R) HD Graphics") == 0)
+      // workaround for GL_SELECT rendering crash (Tulip bugs #813)
+      // when using the Mesa crocus driver for legacy Intel GPUs
+      qputenv("DRAW_USE_LLVM", "0");
+    GlOffscreenRenderer::getInstance()->doneOpenGLContextCurrent();
+  }
 }
 
 // tlp::debug redirection
@@ -632,5 +598,104 @@ void convertLikeFilter(QString &filter) {
       filter.replace(pos - 1, 1, "");
   }
 }
+
+bool checkInternetAccess(unsigned int time) {
+  QTcpSocket checkInternetSocket;
+  // initiate a connection to google on https port (443)
+  checkInternetSocket.connectToHost("google.com", 443);
+  unsigned int steps = time / 100;
+  if (time % 100)
+    ++steps;
+  bool error = false;
+  // error detection
+  QObject::connect(&checkInternetSocket, &QTcpSocket::errorOccurred, [&error]() { error = true; });
+  while (steps) {
+    --steps;
+    time = 100;
+    // wait for time elapsed
+    QTimer::singleShot(100, [&time]() { time = 0; });
+    while (time) {
+      QApplication::processEvents();
+      if (error) {
+        switch (checkInternetSocket.error()) {
+        case QAbstractSocket::HostNotFoundError:
+        case QAbstractSocket::NetworkError:
+        case QAbstractSocket::SocketAccessError:
+          return false;
+        default:
+          break;
+        }
+      }
+      if (checkInternetSocket.state() == QAbstractSocket::ConnectedState)
+        return true;
+    }
+  }
+  return checkInternetSocket.state() == QTcpSocket::ConnectedState;
+}
+
+#ifdef _LINUX
+// define a specific class to fix the display of QCheckBox, QListWidget,
+// QRadioButton and QTreeView when in dark mode
+class CBRBsFixer : public QObject {
+public:
+  // QCheckBox, QListWidget, QRadioButton and QTreeView children must be fixed
+  // at first show time
+  bool eventFilter(QObject *obj, QEvent *ev) override {
+    if (ev->type() == QEvent::Show) {
+      QWidget *w = dynamic_cast<QWidget *>(obj);
+      fixCBRBs(w);
+      removeEventFilter(this);
+    }
+    return false;
+  }
+
+  void fixCBRBs(QWidget *parent) {
+    if (dynamic_cast<QCheckBox *>(parent) || dynamic_cast<QRadioButton *>(parent) ||
+        dynamic_cast<QListWidget *>(parent) || dynamic_cast<QTreeView *>(parent)) {
+      // because their indicator border is displayed in black
+      // we must use lightgray instead
+      QPalette p = parent->palette();
+      p.setColor(QPalette::Window, Qt::lightGray);
+      parent->setPalette(p);
+    } else {
+      // a loop on children does not work when a QCheckBox, a QListWidget
+      // a QRadioButton or a QTreeView is a child of a non current page
+      // of a QTabWidget.
+      // So we must do a loop on the different pages
+      // if parent is a QTabWidget
+      QTabWidget *tw = dynamic_cast<QTabWidget *>(parent);
+      if (tw) {
+        auto current = tw->currentIndex();
+        auto cnt = tw->count();
+        for (int i = 0; i < cnt; i++) {
+          tw->setCurrentIndex(i);
+          fixCBRBs(tw->widget(i));
+        }
+        tw->setCurrentIndex(current);
+      } else {
+        // with QWizard we must do a loop on its pages
+        QWizard *wz = dynamic_cast<QWizard *>(parent);
+        if (wz) {
+          for (auto id : wz->pageIds())
+            fixCBRBs(wz->page(id));
+        } else {
+          // loop on QWidget children
+          for (auto widget : parent->findChildren<QWidget *>(QString(), Qt::FindDirectChildrenOnly))
+            fixCBRBs(widget);
+        }
+      }
+    }
+  }
+};
+
+// fix display of QCheckBox, QListWidget, QRadioButton and QTreeView
+// when in dark mode.
+// Because their indicator border is displayed in black
+// we must use lightgray instead
+void tlpFixCBRBs(QWidget *parent) {
+  static CBRBsFixer fixer;
+  parent->installEventFilter(&fixer);
+}
+#endif
 
 } // namespace tlp

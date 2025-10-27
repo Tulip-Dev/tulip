@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -38,11 +38,9 @@ using namespace tlp;
 SOMPropertiesWidget::SOMPropertiesWidget(SOMView *view, QWidget *parent)
     : QWidget(parent), _ui(new Ui::SOMPropertiesWidget), view(view) {
   _ui->setupUi(this);
-  dimensionConfigurationWidget = new tlp::ComputeSOMWidget(parent);
+  dimensionConfigurationWidget = new tlp::ComputeSOMWidget();
 
   defaultScale = new ColorScale(ColorScalesManager::getLatestColorScale());
-
-  defaultScale->addObserver(this);
 
   QVBoxLayout *sizeMappingLayout = new QVBoxLayout(_ui->nodeSizeMappingFrame);
 #ifndef __APPLE__
@@ -65,14 +63,10 @@ SOMPropertiesWidget::SOMPropertiesWidget(SOMView *view, QWidget *parent)
   setWindowTitle("Options");
 }
 
-QList<QWidget *> SOMPropertiesWidget::configurationWidgets() const {
+std::list<QWidget *> SOMPropertiesWidget::configurationWidgets() const {
 
-  QList<QWidget *> widgets;
-
-  widgets << dimensionConfigurationWidget
-          << const_cast<QWidget *>(static_cast<const QWidget *>(this));
-
-  return widgets;
+  return std::list<QWidget *>{dimensionConfigurationWidget,
+                              const_cast<QWidget *>(static_cast<const QWidget *>(this))};
 }
 
 unsigned int SOMPropertiesWidget::getGridWidth() const {
@@ -308,11 +302,7 @@ void SOMPropertiesWidget::setData(const DataSet &data) {
     string propertiesString;
     data.get("properties", propertiesString);
     // Use QString split function to parse string.
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
-    auto skipEmpty = QString::SkipEmptyParts;
-#else
     auto skipEmpty = Qt::SkipEmptyParts;
-#endif
     QStringList list = tlpStringToQString(propertiesString).split(";", skipEmpty);
     vector<string> properties;
 

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -212,21 +212,17 @@ void GlOffscreenRenderer::renderExternalScene(GlScene *scene, const bool antiali
   scene->setViewport(backupViewport);
 }
 
-bool GlOffscreenRenderer::frameBufferOk() const {
-  return glFrameBuf->isValid();
+static inline QImage convertImage(const QImage &image, bool alpha) {
+  QImage qimg(image.constBits(), image.width(), image.height(), QImage::Format_ARGB32);
+  return alpha ? qimg : qimg.convertToFormat(QImage::Format_RGB32);
 }
 
-static inline QImage convertImage(const QImage &image) {
-  return QImage(image.constBits(), image.width(), image.height(), QImage::Format_ARGB32)
-      .convertToFormat(QImage::Format_RGB32);
-}
-
-QImage GlOffscreenRenderer::getImage() {
+QImage GlOffscreenRenderer::getImage(bool alpha) {
   makeOpenGLContextCurrent();
   if (!antialiasedFbo)
-    return convertImage(glFrameBuf->toImage());
+    return convertImage(glFrameBuf->toImage(), alpha);
   else
-    return convertImage(glFrameBuf2->toImage());
+    return convertImage(glFrameBuf2->toImage(), alpha);
 }
 
 GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
@@ -252,7 +248,11 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
+#if (QT_VERSION > QT_VERSION_CHECK(6,9,0))
+  QImage image = getImage().flipped();
+#else
   QImage image = getImage().mirrored();
+#endif
 
   unsigned char *buff = image.bits();
 
@@ -293,18 +293,27 @@ void GlOffscreenRenderer::doneOpenGLContextCurrent() {
   getOpenGLContext()->doneCurrent();
 }
 
-void GlOffscreenRenderer::renderGlMainWidget(GlMainWidget *glWidget, bool redrawNeeded) {
+bool GlOffscreenRenderer::isValid() {
+  return getOpenGLContext()->isValid();
+}
+
+QImage GlOffscreenRenderer::renderGlMainWidget(GlMainWidget *glWidget, bool redrawNeeded) {
+  setViewPortSize(glWidget->screenToViewport(glWidget->width()),
+                  glWidget->screenToViewport(glWidget->height()));
   makeOpenGLContextCurrent();
   initFrameBuffers(true);
   glFrameBuf2->bind();
   glPushAttrib(GL_ALL_ATTRIB_BITS);
-  if (redrawNeeded) {
-    glWidget->render(GlMainWidget::RenderingOptions(GlMainWidget::RenderScene), false);
-  } else {
-    glWidget->render(GlMainWidget::RenderingOptions(), false);
-  }
+  glWidget->render(redrawNeeded ? GlMainWidget::RenderingOptions(GlMainWidget::RenderScene)
+                                : GlMainWidget::RenderingOptions(),
+                   false);
   glPopAttrib();
   glFrameBuf2->release();
+
+  QImage img = getImage();
+  img.setDevicePixelRatio(glWidget->devicePixelRatio());
+
+  return img;
 }
 
 } // namespace tlp

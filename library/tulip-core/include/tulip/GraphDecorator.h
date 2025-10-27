@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -71,10 +71,11 @@ public:
 
   //============================================================
   node createMetaNode(const std::vector<node> &nodes, bool multiEdges = true,
-                      bool delAllEdge = true) override;
-  void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
-                       std::vector<node> &metaNodes) override;
-  node createMetaNode(Graph *subGraph, bool multiEdges = true, bool delAllEdge = true) override;
+                      bool delAllEdge = true, bool allGrouped = true) override;
+  void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, std::vector<node> &metaNodes,
+                       bool inoutGrouped) override;
+  node createMetaNode(Graph *subGraph, bool multiEdges = true, bool delAllEdge = true,
+                      bool allGrouped = true) override;
 
   //============================================================
   node getOneNode() const override;

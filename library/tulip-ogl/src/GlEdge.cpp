@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,21 +20,10 @@
 
 #include <tulip/GlEdge.h>
 #include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/Coord.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/StringProperty.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/IntegerProperty.h>
-#include <tulip/ColorProperty.h>
 #include <tulip/GlShaderProgram.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/Curves.h>
-#include <tulip/GlGraphStaticData.h>
-#include <tulip/GlLines.h>
-#include <tulip/OcclusionTest.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/Camera.h>
 #include <tulip/GlBezierCurve.h>
@@ -44,7 +33,6 @@
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/ParametricCurves.h>
 #include <tulip/GlGraphInputData.h>
-#include <tulip/GlScene.h>
 #include <tulip/GlGlyphRenderer.h>
 #include <tulip/TulipViewSettings.h>
 
@@ -205,9 +193,11 @@ void GlEdge::draw(float lod, const GlGraphInputData *data, Camera *camera) {
     return;
   }
 
+  float lengthRatio = hasBends ? 1.0 : data->getEdgeLengthRatio()->getEdgeValue(e);
   Coord srcAnchor, tgtAnchor, beginLineAnchor, endLineAnchor;
 
-  getEdgeAnchor(data, src, tgt, bends, srcCoord, tgtCoord, srcSize, tgtSize, srcAnchor, tgtAnchor);
+  getEdgeAnchor(data, src, tgt, bends, srcCoord, tgtCoord, srcSize, tgtSize, srcAnchor, tgtAnchor,
+                lengthRatio);
 
   if (data->parameters->isViewArrow()) {
     EdgeExtremityGlyph *startEdgeGlyph =
@@ -450,13 +440,20 @@ void GlEdge::drawLabel(GlLabel &label, OcclusionTest *test, const GlGraphInputDa
   label.setTranslationAfterRotation(Coord());
 
   const Coord &srcCoord = data->getElementLayout()->getNodeValue(src);
-  const Coord &tgtCoord = data->getElementLayout()->getNodeValue(tgt);
+  Coord tgtCoord = data->getElementLayout()->getNodeValue(tgt);
   const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
   Coord position;
   float angle;
 
   if (bends.empty()) {
-    position = (srcCoord + tgtCoord) / 2.f;
+    float lengthRatio = data->getEdgeLengthRatio()->getEdgeValue(e);
+    if (lengthRatio < 1) {
+      auto d = tgtCoord - srcCoord;
+      d *= lengthRatio;
+      tgtCoord = srcCoord + d;
+    }
+
+    position = ((srcCoord + tgtCoord) / 2.f);
     angle = atan((tgtCoord[1] - srcCoord[1]) / (tgtCoord[0] - srcCoord[0])) * float(180. / M_PI);
   } else {
     if (bends.size() % 2 == 0) {
@@ -528,7 +525,7 @@ void GlEdge::drawLabel(GlLabel &label, OcclusionTest *test, const GlGraphInputDa
 
 size_t GlEdge::getVertices(const GlGraphInputData *data, const edge e, const node src,
                            const node tgt, Coord &srcCoord, Coord &tgtCoord, Size &srcSize,
-                           Size &tgtSize, std::vector<Coord> &vertices) {
+                           Size &tgtSize, std::vector<Coord> &vertices, float lengthRatio) {
   const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
   bool hasBends(!bends.empty());
 
@@ -550,7 +547,8 @@ size_t GlEdge::getVertices(const GlGraphInputData *data, const edge e, const nod
   maxTgtSize = std::max(tgtSize[0], tgtSize[1]);
 
   Coord srcAnchor, tgtAnchor;
-  getEdgeAnchor(data, src, tgt, bends, srcCoord, tgtCoord, srcSize, tgtSize, srcAnchor, tgtAnchor);
+  getEdgeAnchor(data, src, tgt, bends, srcCoord, tgtCoord, srcSize, tgtSize, srcAnchor, tgtAnchor,
+                lengthRatio);
 
   EdgeExtremityGlyph *startEdgeGlyph =
       data->extremityGlyphs.get(data->getElementSrcAnchorShape()->getEdgeValue(e));
@@ -661,21 +659,27 @@ void GlEdge::getEdgeSize(const GlGraphInputData *data, edge e, const Size &srcSi
 void GlEdge::getEdgeAnchor(const GlGraphInputData *data, const node src, const node tgt,
                            const LineType::RealType &bends, const Coord &srcCoord,
                            const Coord &tgtCoord, const Size &srcSize, const Size &tgtSize,
-                           Coord &srcAnchor, Coord &tgtAnchor) {
+                           Coord &srcAnchor, Coord &tgtAnchor, float lengthRatio) {
   double srcRot = data->getElementRotation()->getNodeValue(src);
   double tgtRot = data->getElementRotation()->getNodeValue(tgt);
 
   // compute anchor, (clip line with the glyph)
   int srcGlyphId = data->getElementShape()->getNodeValue(src);
   Glyph *srcGlyph = data->glyphs.get(srcGlyphId);
-  srcAnchor = (bends.size() > 0) ? bends.front() : tgtCoord;
+  srcAnchor = (!bends.empty()) ? bends.front() : tgtCoord;
   srcAnchor = srcGlyph->getAnchor(srcCoord, srcAnchor, srcSize, srcRot);
 
   // compute anchor, (clip line with the glyph)
   int tgtGlyphId = data->getElementShape()->getNodeValue(tgt);
   Glyph *tgtGlyph = data->glyphs.get(tgtGlyphId);
-  tgtAnchor = (bends.size() > 0) ? bends.back() : srcAnchor;
+  tgtAnchor = (!bends.empty()) ? bends.back() : srcAnchor;
   tgtAnchor = tgtGlyph->getAnchor(tgtCoord, tgtAnchor, tgtSize, tgtRot);
+
+  if (lengthRatio < 1) {
+    auto d = tgtAnchor - srcAnchor;
+    d *= lengthRatio;
+    tgtAnchor = srcAnchor + d;
+  }
 }
 
 float GlEdge::getEdgeWidthLod(const Coord &edgeCoord, const Size &edgeSize, Camera *camera) {
@@ -764,7 +768,7 @@ void GlEdge::displayArrowAndAdjustAnchor(const GlGraphInputData *data, const edg
         noShaderGlyphs.insert(EdgeExtremityShape::GlowSphere);
         noShaderGlyphs.insert(EdgeExtremityShape::Sphere);
         noShaderGlyphs.insert(EdgeExtremityShape::Cube);
-        noShaderGlyphs.insert(EdgeExtremityShape::FontAwesomeIcon);
+        noShaderGlyphs.insert(EdgeExtremityShape::Icon);
       }
 
       Color borderColor = data->parameters->isEdgeColorInterpolate()

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,14 +18,11 @@
  */
 #include "tulip/Workspace.h"
 
-#include <QPainter>
-#include <QPaintEvent>
-#include <QGraphicsView>
-#include <QGraphicsEffect>
-#include <QGraphicsSceneDragDropEvent>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QRegularExpression>
 #include <QTimer>
 #include <QXmlStreamWriter>
-#include <QXmlStreamReader>
 
 #include <tulip/PluginLister.h>
 #include <tulip/TulipMetaTypes.h>
@@ -58,28 +55,22 @@ Workspace::Workspace(QWidget *parent)
 
   // This map allows us to know how much slots we have for each mode and which widget corresponds to
   // those slots
-  _modeToSlots[_ui->startupPage] = QVector<PlaceHolderWidget *>();
-  _modeToSlots[_ui->singlePage] = QVector<PlaceHolderWidget *>() << _ui->singlePage;
-  _modeToSlots[_ui->splitPage] = QVector<PlaceHolderWidget *>()
-                                 << _ui->splitPagePanel1 << _ui->splitPagePanel2;
-  _modeToSlots[_ui->splitPageHorizontal] = QVector<PlaceHolderWidget *>()
-                                           << _ui->splitPageHorizontalPanel1
-                                           << _ui->splitPageHorizontalPanel2;
-  _modeToSlots[_ui->split3Page] = QVector<PlaceHolderWidget *>()
-                                  << _ui->split3PagePanel1 << _ui->split3PagePanel2
-                                  << _ui->split3PagePanel3;
-  _modeToSlots[_ui->split32Page] = QVector<PlaceHolderWidget *>()
-                                   << _ui->split32Panel1 << _ui->split32Panel2
-                                   << _ui->split32Panel3;
-  _modeToSlots[_ui->split33Page] = QVector<PlaceHolderWidget *>()
-                                   << _ui->split33Panel1 << _ui->split33Panel2
-                                   << _ui->split33Panel3;
-  _modeToSlots[_ui->gridPage] = QVector<PlaceHolderWidget *>()
-                                << _ui->gridPagePanel1 << _ui->gridPagePanel2 << _ui->gridPagePanel3
-                                << _ui->gridPagePanel4;
-  _modeToSlots[_ui->sixPage] = QVector<PlaceHolderWidget *>()
-                               << _ui->sixMode1 << _ui->sixMode2 << _ui->sixMode3 << _ui->sixMode4
-                               << _ui->sixMode5 << _ui->sixMode6;
+  _modeToSlots[_ui->startupPage] = std::vector<PlaceHolderWidget *>();
+  _modeToSlots[_ui->singlePage] = std::vector<PlaceHolderWidget *>{_ui->singlePage};
+  _modeToSlots[_ui->splitPage] =
+      std::vector<PlaceHolderWidget *>{_ui->splitPagePanel1, _ui->splitPagePanel2};
+  _modeToSlots[_ui->splitPageHorizontal] = std::vector<PlaceHolderWidget *>{
+      _ui->splitPageHorizontalPanel1, _ui->splitPageHorizontalPanel2};
+  _modeToSlots[_ui->split3Page] = std::vector<PlaceHolderWidget *>{
+      _ui->split3PagePanel1, _ui->split3PagePanel2, _ui->split3PagePanel3};
+  _modeToSlots[_ui->split32Page] =
+      std::vector<PlaceHolderWidget *>{_ui->split32Panel1, _ui->split32Panel2, _ui->split32Panel3};
+  _modeToSlots[_ui->split33Page] =
+      std::vector<PlaceHolderWidget *>{_ui->split33Panel1, _ui->split33Panel2, _ui->split33Panel3};
+  _modeToSlots[_ui->gridPage] = std::vector<PlaceHolderWidget *>{
+      _ui->gridPagePanel1, _ui->gridPagePanel2, _ui->gridPagePanel3, _ui->gridPagePanel4};
+  _modeToSlots[_ui->sixPage] = std::vector<PlaceHolderWidget *>{
+      _ui->sixMode1, _ui->sixMode2, _ui->sixMode3, _ui->sixMode4, _ui->sixMode5, _ui->sixMode6};
 
   // This map allows us to know which widget can toggle a mode
   _modeSwitches[_ui->singlePage] = _ui->singleModeButton;
@@ -125,7 +116,7 @@ void Workspace::closeAll() {
   // if expose mode activated, close it before closing views to prevent a crash
   hideExposeMode();
 
-  QList<WorkspacePanel *> panels(_panels);
+  std::vector<WorkspacePanel *> panels(_panels);
   // iterate on a _panels clone to allow successive calls to panelDestroyed
   // which will do the cleanup job
   for (auto p : panels) {
@@ -134,8 +125,9 @@ void Workspace::closeAll() {
   emit panelsEmpty();
 }
 
-QList<tlp::View *> Workspace::panels() const {
-  QList<tlp::View *> result;
+std::vector<tlp::View *> Workspace::panels() const {
+  std::vector<tlp::View *> result;
+  result.reserve(_panels.size());
 
   for (auto panel : _panels) {
     result.push_back(panel->view());
@@ -147,15 +139,16 @@ QList<tlp::View *> Workspace::panels() const {
 QString Workspace::panelTitle(tlp::WorkspacePanel *panel) const {
   int digit = 0;
 
-  QRegExp regExp("^.*(?:<([^>])*>){1}$");
+  QRegularExpression regExp("^.*(?:<([^>])*>){1}$");
 
   for (auto other : _panels) {
     if (other == panel)
       continue;
 
     if (other->viewName() == panel->viewName()) {
-      if (regExp.exactMatch(other->windowTitle()))
-        digit = std::max<int>(digit, regExp.cap(1).toInt());
+      QRegularExpressionMatch match;
+      if (other->windowTitle().indexOf(regExp, 0, &match) != -1)
+        digit = std::max<int>(digit, match.captured(1).toInt());
       else
         digit = std::max<int>(digit, 1);
     }
@@ -194,12 +187,13 @@ int Workspace::addPanel(tlp::View *view) {
     updatePanels();
   }
 
-  // Force the first panel's graph combo box update when underlaying model has been updated.
+  // Force the first panel's graph combo box update when underlying model has been updated.
   panel->viewGraphSet(view->graph());
   setFocusedPanel(panel);
   // Slightly delay view content centering as the panel widget
   // can take some time to get correctly resized in the workspace
-  QTimer::singleShot(100, view, SLOT(centerView()));
+  if (view->centeredWhenAddedToWorkspace())
+    QTimer::singleShot(100, view, SLOT(centerView()));
   return _panels.size() - 1;
 }
 
@@ -207,13 +201,11 @@ void Workspace::delView(tlp::View *view) {
   for (auto it : _panels) {
     if (it->view() == view) {
       delete it;
-      _panels.removeOne(it);
-      if (_panels.empty()) {
-        emit panelsEmpty();
-      }
-      return;
+      break;
     }
   }
+  if (!_panels.size())
+    emit panelsEmpty();
 }
 
 void Workspace::panelDestroyed(QObject *obj) {
@@ -222,13 +214,20 @@ void Workspace::panelDestroyed(QObject *obj) {
   if (panel == _focusedPanel)
     _focusedPanel = nullptr;
 
-  int removeCount = _panels.removeAll(panel);
+  unsigned int i = 0;
+  for (auto it : _panels) {
+    if (it == panel) {
+      _panels.erase(_panels.begin() + i);
+      break;
+    }
+    ++i;
+  }
 
   if (_panels.empty()) {
     emit panelsEmpty();
   }
 
-  if (removeCount == 0)
+  if (i > _panels.size())
     return;
 
   // To prevent segfaults due to Qt's event queue handling when deleting views, we reset the
@@ -343,7 +342,7 @@ QWidget *Workspace::currentModeWidget() const {
   return _ui->workspaceContents->currentWidget();
 }
 
-QVector<PlaceHolderWidget *> Workspace::currentModeSlots() const {
+std::vector<PlaceHolderWidget *> Workspace::currentModeSlots() const {
   return _modeToSlots[currentModeWidget()];
 }
 
@@ -369,21 +368,18 @@ void Workspace::updatePanels() {
     if (mode == currentModeWidget())
       continue;
 
-    QVector<PlaceHolderWidget *> panelSlots = _modeToSlots[mode];
+    std::vector<PlaceHolderWidget *> panelSlots = _modeToSlots[mode];
 
     for (auto panel : panelSlots) {
       panel->setWidget(nullptr);
     }
   }
 
-  if (_currentPanelIndex < 0)
-    _currentPanelIndex = 0;
-
-  if (uint(_currentPanelIndex) > _panels.size() - currentSlotsCount())
+  if (_currentPanelIndex > _panels.size() - currentSlotsCount())
     _currentPanelIndex = _panels.size() - currentSlotsCount();
 
   //   Fill up slots according to the current index until there is no panel to show
-  int i = _currentPanelIndex;
+  unsigned int i = _currentPanelIndex;
 
   for (auto slt : currentModeSlots()) {
     if (i >= _panels.size()) {
@@ -413,7 +409,7 @@ void Workspace::updatePanels() {
   }
 
   if (!_modeSwitches[currentModeWidget()]->isEnabled()) {
-    int maxSize = 0;
+    unsigned int maxSize = 0;
     QWidget *fallbackMode = _ui->startupPage;
 
     // Current mode is not available, fallback to the largest available mode
@@ -449,8 +445,12 @@ void Workspace::setExposeModeSwitch(QAbstractButton *b) {
 }
 
 void Workspace::setActivePanel(tlp::View *view) {
-  int newIndex = panels().indexOf(view);
-  _currentPanelIndex = newIndex;
+  for (unsigned int i = 0; i < _panels.size(); ++i) {
+    if (_panels[i]->view() == view) {
+      _currentPanelIndex = i;
+      break;
+    }
+  }
   updatePanels();
 }
 
@@ -542,13 +542,7 @@ void Workspace::showExposeMode() {
   _ui->nextPageButton->setEnabled(false);
   _ui->previousPageButton->setEnabled(false);
 
-  QVector<WorkspacePanel *> panels;
-
-  for (auto p : _panels) {
-    panels << p;
-  }
-
-  _ui->exposeMode->setData(panels, _currentPanelIndex);
+  _ui->exposeMode->setData(_panels, _currentPanelIndex);
   _ui->workspaceContents->setCurrentWidget(_ui->exposePage);
   _exposeButton->setChecked(true);
 }
@@ -562,7 +556,7 @@ void Workspace::hideExposeMode() {
     return;
 
   _exposeButton->setChecked(false);
-  QVector<WorkspacePanel *> newPanels = _ui->exposeMode->panels();
+  std::vector<WorkspacePanel *> newPanels = _ui->exposeMode->panels();
   _panels.clear();
 
   for (auto p : newPanels)
@@ -586,11 +580,11 @@ QWidget *Workspace::suitableMode(QWidget *oldMode) {
   if (_modeSwitches.contains(oldMode) && _modeSwitches[oldMode]->isEnabled())
     return oldMode;
 
-  int maxSlots = 0;
+  unsigned int maxSlots = 0;
   QWidget *result = _ui->startupPage;
 
   for (auto mode : _modeToSlots.keys()) {
-    int slotCount = _modeToSlots[mode].size();
+    unsigned int slotCount = _modeToSlots[mode].size();
 
     if (slotCount <= _panels.size() && slotCount > maxSlots) {
       maxSlots = slotCount;
@@ -709,8 +703,8 @@ void Workspace::readProject(TulipProject *project, QMap<QString, Graph *> rootId
 
   if (doc.readNextStartElement()) {
     if (!doc.hasError()) {
-      int current = doc.attributes().value("current").toString().toInt();
-      int mode = doc.attributes().value("mode").toString().toInt();
+      unsigned int current = doc.attributes().value("current").toString().toUInt();
+      unsigned int mode = doc.attributes().value("mode").toString().toUInt();
 
       for (auto modeWidget : _modeToSlots.keys()) {
         if (_modeToSlots[modeWidget].size() == mode) {
@@ -764,8 +758,14 @@ void Workspace::swapPanelsRequested(WorkspacePanel *panel) {
   WorkspacePanel *sourcePanel = static_cast<WorkspacePanel *>(sender());
 
   if (sourcePanel) {
-    auto pb = _panels.begin();
-    std::iter_swap(pb + _panels.indexOf(sourcePanel), pb + _panels.indexOf(panel));
+    int i = 0;
+    for (auto it : _panels) {
+      if (it == panel)
+        _panels[i] = sourcePanel;
+      else if (it == sourcePanel)
+        _panels[i] = panel;
+      ++i;
+    }
     updatePanels();
   }
 }

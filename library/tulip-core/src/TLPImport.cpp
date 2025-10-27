@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -28,11 +28,8 @@
 #include <tulip/ImportModule.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/TulipRelease.h>
-#include <tulip/PropertyTypes.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
-#include <tulip/TlpTools.h>
 #include <tulip/TLPParser.h>
 
 #define TLP "tlp"
@@ -848,11 +845,19 @@ struct TLPDefaultPropertyBuilder : public TLPFalse {
   bool addString(const std::string &val) override {
     if (i == 0) {
       i++;
+      // ensure ascendant compatibility for viewIcon default value
+      // "fas-circle-question" instead of "fa-question-circle" since Tulip 5.7
+      if ((propertyBuilder->property->getName() == "viewIcon") && (val == "fa-question-circle"))
+        return propertyBuilder->setAllNodeValue("fas-circle-question");
       return propertyBuilder->setAllNodeValue(val);
     }
 
     if (i == 1) {
       i++;
+      // ensure ascendant compatibility for viewIcon default value
+      // "fas-circle-question" instead of "fa-question-circle" since Tulip 5.7
+      if ((propertyBuilder->property->getName() == "viewIcon") && (val == "fa-question-circle"))
+        return propertyBuilder->setAllEdgeValue("fas-circle-question");
       return propertyBuilder->setAllEdgeValue(val);
     }
     parser->errorMsg = "invalid property default value format";
@@ -926,57 +931,47 @@ namespace tlp {
  * choosing "File->Import->TLP" menu item is the same that using
  * "File->Open" menu item.
  */
-class TLPImport : public ImportModule {
+class TLPImport : public ImportFileModule {
+  std::string data;
+
 public:
   PLUGININFORMATION("TLP Import", "Auber", "16/02/2001",
-                    "<p>Supported extensions: tlp, tlpz (compressed), tlp.gz "
+                    "<p>File extensions: tlp, tlpz (compressed), tlp.gz "
                     "(compressed)</p><p>Imports a graph recorded in a file using the TLP format "
                     "(Tulip Software Graph Format).<br/>See "
                     "<a "
-                    "href=\"https://tulip.labri.fr/site/?q=tlp-file-format\">https://"
-                    "tulip.labri.fr->Framework->TLP File Format</a> for "
+                    "href=\"https://tulip.labri.fr/site/?q=tlp-file-format\">"
+                    "TLP File Format</a> for "
                     "description.<br/>Note: When using the Tulip graphical user "
                     "interface,<br/>choosing <b>File->Import->TLP</b> menu item is the same as "
                     "using <b>File->Open</b> menu item.</p>",
                     "1.0", "File")
-  std::list<std::string> fileExtensions() const override {
-    std::list<std::string> l;
-    l.push_back("tlp");
-    return l;
-  }
 
-  std::list<std::string> gzipFileExtensions() const override {
-    std::list<std::string> ext;
-    ext.push_back("tlp.gz");
-    ext.push_back("tlpz");
-    return ext;
-  }
-
-  TLPImport(tlp::PluginContext *context) : ImportModule(context) {
-    addInParameter<std::string>("file::filename", "The pathname of the TLP file to import.", "");
-  }
+  TLPImport(tlp::PluginContext *context) : ImportFileModule(context, {"tlp", "tlp.gz", "tlpz"}) {}
   ~TLPImport() override {}
 
   std::string icon() const override {
     return ":/tulip/gui/icons/logo32x32.png";
   }
 
-  bool importGraph() override {
-    std::string filename;
-    std::string data;
+  bool check() override {
+    return ImportFileModule::check() ||
+           // file::data is an hidden parameter
+           // used in GraphPerspective.cpp to copy a Graph
+           dataSet->get<std::string>("file::data", data);
+  }
+
+  bool importFile() override {
     std::stringstream *tmpss = nullptr;
     int size;
     std::istream *input;
     bool result;
 
-    if (dataSet->exists("file::filename")) {
-      dataSet->get<std::string>("file::filename", filename);
-
-      std::list<std::string> &&gexts = gzipFileExtensions();
+    if (data.empty()) {
       bool gzip(false);
 
-      for (const std::string &ext : gexts) {
-        if (filename.rfind(ext) == (filename.length() - ext.length())) {
+      for (auto ext = ++extensions.begin(); ext != extensions.end(); ++ext) {
+        if (filename.rfind(*ext) == (filename.length() - (*ext).length())) {
           gzip = true;
           // we first open a "standard" stream to retrieve the original size
           // of the file compressed with gzip.
@@ -1019,7 +1014,6 @@ public:
         input->seekg(0, std::ios::beg);
       }
     } else {
-      dataSet->get<std::string>("file::data", data);
       size = data.size();
       tmpss = new std::stringstream;
       (*tmpss) << data;

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -56,7 +56,10 @@ int NavigableTableView::sizeHintForRow(int row) const {
       continue;
 
     QModelIndex index = model()->index(row, column);
-    hint = qMax(hint, itemDelegate(index)->sizeHint(viewOptions(), index).height());
+    QStyleOptionViewItem option;
+    initViewItemOption(&option);
+    auto h = itemDelegateForIndex(index)->sizeHint(option, index).height();
+    hint = qMax(hint, h);
   }
 
   return hint;
@@ -80,7 +83,10 @@ int NavigableTableView::sizeHintForColumn(int col) const {
 
   for (int row = top; row <= bottom; ++row) {
     QModelIndex index = model()->index(row, col);
-    hint = qMax(hint, itemDelegate(index)->sizeHint(viewOptions(), index).width());
+    QStyleOptionViewItem option;
+    initViewItemOption(&option);
+    auto w = itemDelegateForIndex(index)->sizeHint(option, index).width();
+    hint = qMax(hint, w);
   }
 
   return hint;

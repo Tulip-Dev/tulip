@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -33,7 +33,7 @@ public:
   /**
    * @brief Stored results for graphs. When a graph is updated, its entry is removed from the map.
    **/
-  std::unordered_map<const Graph *, bool> resultsBuffer;
+  tlp_hash_map<const Graph *, bool> resultsBuffer;
 };
 
 void TestAcyclicListener::treatEvent(const Event &evt) {
@@ -52,11 +52,11 @@ void TestAcyclicListener::treatEvent(const Event &evt) {
       resultsBuffer.erase(graph);
       break;
 
-    case GraphEvent::TLP_DEL_EDGE:
+    case GraphEvent::TLP_AFTER_DEL_EDGE:
 
       if (resultsBuffer[graph])
         return;
-
+      [[fallthrough]];
     case GraphEvent::TLP_REVERSE_EDGE:
       graph->removeListener(this);
       resultsBuffer.erase(graph);
@@ -78,12 +78,12 @@ void TestAcyclicListener::treatEvent(const Event &evt) {
 static TestAcyclicListener instance;
 //**********************************************************************
 bool AcyclicTest::isAcyclic(const Graph *graph) {
-  if (instance.resultsBuffer.find(graph) == instance.resultsBuffer.end()) {
-    instance.resultsBuffer[graph] = acyclicTest(graph);
-    graph->addListener(instance);
-  }
+  auto it = instance.resultsBuffer.find(graph);
+  if (it != instance.resultsBuffer.end())
+    return it->second;
 
-  return instance.resultsBuffer[graph];
+  graph->addListener(instance);
+  return instance.resultsBuffer[graph] = acyclicTest(graph);
 }
 //**********************************************************************
 void AcyclicTest::makeAcyclic(Graph *graph, vector<edge> &reversed,
@@ -144,14 +144,14 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
       neighboursToVisit.push(graph->getOutEdges(curNode));
 
       while (!nodesToVisit.empty()) {
-        node curNode = nodesToVisit.top();
+        curNode = nodesToVisit.top();
         Iterator<edge> *ite = neighboursToVisit.top();
 
         // check if dfs traversal of curNode neighbours is finished
         if (!ite->hasNext()) {
           // unstack curNode
           nodesToVisit.pop();
-          // delete & unstack neightbours iterator
+          // delete & unstack neighbours iterator
           delete neighboursToVisit.top();
           neighboursToVisit.pop();
           // mark curNode as to be skipped

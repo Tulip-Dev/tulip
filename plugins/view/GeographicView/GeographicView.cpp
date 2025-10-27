@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -26,9 +26,10 @@
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/TulipViewSettings.h>
 
-#include <QMenu>
-#include <QComboBox>
 #include <QApplication>
+#include <QComboBox>
+#include <QMenu>
+#include <QMessageBox>
 #include <QTimer>
 
 #include <iostream>
@@ -68,7 +69,8 @@ void GeographicView::setupUi() {
           SLOT(mapToPolygon()));
 
   geolocalisationConfigWidget = new GeolocalisationConfigWidget();
-  connect(geolocalisationConfigWidget, SIGNAL(computeGeoLayout()), this, SLOT(computeGeoLayout()));
+  connect(geolocalisationConfigWidget, &GeolocalisationConfigWidget::computeGeoLayout, this,
+          [this] { computeGeoLayout(true); });
 
   sceneConfigurationWidget = new SceneConfigWidget();
   sceneConfigurationWidget->setGlMainWidget(geoViewGraphicsView->getGlMainWidget());
@@ -85,36 +87,30 @@ void GeographicView::setupUi() {
 }
 
 void GeographicView::graphChanged(Graph *g) {
-  setState(getState(g));
-
-  if (g->isEmpty()) {
-    // we perform an acceptable automatic configuration
-    // in order to allow an interactive creation of the graph
-    // over the geographic map, using the 'Add nodes/edges'
-    // and 'Edit edge bends' view interactors
-    auto prop = g->getProperty<SizeProperty>("viewSize");
-    if (prop->getNodeDefaultValue() == TulipViewSettings::defaultSize(ElementType::NODE))
-      prop->setNodeDefaultValue({0.0005, 0.0005, 0.0005});
-    computeGeoLayout();
-  }
+  geolocalisationConfigWidget->setGraph(g);
+  geoViewGraphicsView->setGraph(g);
 }
 
-void GeographicView::mapTypeChanged(QString mapTypeName) {
+void GeographicView::switchMapType(MapType type) {
   QComboBox *comboBox = geoViewGraphicsView->getMapTypeComboBox();
 
   if (comboBox == nullptr)
     return;
 
-  disconnect(comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(mapTypeChanged(QString)));
+  disconnect(comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(mapTypeChanged(int)));
 
-  _mapType = getMapType(mapTypeName);
+  _mapType = type;
 
   geoViewGraphicsView->switchMapType();
 
   comboBox->setCurrentIndex(0);
-  comboBox->setItemText(0, mapTypeName);
+  comboBox->setItemText(0, mapLayers[_mapType].name);
 
-  connect(comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(mapTypeChanged(QString)));
+  connect(comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(mapTypeChanged(int)));
+}
+
+void GeographicView::mapTypeChanged(int i) {
+  switchMapType(MapType(i - 2));
 }
 
 void GeographicView::fillContextMenu(QMenu *menu, const QPointF &pf) {
@@ -143,20 +139,26 @@ void GeographicView::fillContextMenu(QMenu *menu, const QPointF &pf) {
 
   QAction *action = menu->addAction("Zoom +");
   action->setToolTip(QString("Increase zoom level"));
-  connect(action, SIGNAL(triggered()), this, SLOT(zoomIn()));
+  connect(action, SIGNAL(triggered()), geoViewGraphicsView, SLOT(zoomIn()));
   action = menu->addAction("Zoom -");
-  action->setToolTip(QString("Increase zoom level"));
-  connect(action, SIGNAL(triggered()), this, SLOT(zoomOut()));
+  action->setToolTip(QString("Decrease zoom level"));
+  connect(action, SIGNAL(triggered()), geoViewGraphicsView, SLOT(zoomOut()));
   menu->addSeparator();
   menu->addAction("Augmented display")->setEnabled(false);
   menu->addSeparator();
+  QAction *a = menu->addAction("Show cross center", geoViewGraphicsView, SLOT(showCenter(bool)));
+  a->setToolTip(QString("Show/hide a cross on the viewport center"));
+  a->setCheckable(true);
+  a->setChecked(geoViewGraphicsView->centerVisible());
+  a = menu->addAction("Show distance scale", geoViewGraphicsView, SLOT(showScale(bool)));
+  a->setToolTip(QString("Show/hide the distance scale in the left bottom viewport corner"));
+  a->setCheckable(true);
+  a->setChecked(geoViewGraphicsView->scaleVisible());
+
   View::fillContextMenu(menu, pf);
 }
 
 void GeographicView::setState(const DataSet &dataSet) {
-  geolocalisationConfigWidget->setGraph(graph());
-  geoViewGraphicsView->setGraph(graph());
-
   updatePoly(true);
 
   if (dataSet.exists("configurationWidget")) {
@@ -170,43 +172,9 @@ void GeographicView::setState(const DataSet &dataSet) {
   loadStoredPolyInformation(dataSet);
 
   int mapType = 0;
-  if (dataSet.get("viewType", mapType)) {
-    // ensure compatibility with previous version
-    switch (mapType) {
-    case OpenTopoMap: // 1
-      mapType = EsriSatellite;
-      break;
+  dataSet.get("mapType", mapType);
 
-    case EsriStreetMap: // 2
-      mapType = EsriTopoMap;
-      break;
-
-    case EsriTopoMap: // 3
-      mapType = EsriLightGrayCanvas;
-      break;
-
-    case EsriNatGeoMap: // 4
-      mapType = LeafletCustomTileLayer;
-      break;
-
-    case EsriSatellite: // 5
-      mapType = Polygon;
-      break;
-
-    case EsriLightGrayCanvas: // 6
-      mapType = Globe;
-
-    default:
-      break;
-    }
-  } else
-    dataSet.get("mapType", mapType);
-
-  _mapType = MapType(mapType);
-
-  string mapTypeName = QStringToTlpString(getViewName(_mapType));
-
-  mapTypeChanged(mapTypeName.c_str());
+  switchMapType(MapType(mapType));
 
   sceneLayersConfigurationWidget->setGlMainWidget(geoViewGraphicsView->getGlMainWidget());
   sceneConfigurationWidget->setGlMainWidget(geoViewGraphicsView->getGlMainWidget());
@@ -254,9 +222,9 @@ void GeographicView::setState(const DataSet &dataSet) {
 
   View::setState(dataSet);
 
-  mapCenterLatitudeInit = 44.8084;
-  mapCenterLongitudeInit = -40;
-  mapZoomInit = 3;
+  mapCenterLatitudeInit = GeoMapWidget::initialCenterLat;
+  mapCenterLongitudeInit = GeoMapWidget::initialCenterLng;
+  mapZoomInit = GeoMapWidget::initialZoom;
   dataSet.get("mapCenterLatitude", mapCenterLatitudeInit);
   dataSet.get("mapCenterLongitude", mapCenterLongitudeInit);
   dataSet.get("mapZoom", mapZoomInit);
@@ -265,9 +233,22 @@ void GeographicView::setState(const DataSet &dataSet) {
 }
 
 void GeographicView::initMap() {
-  geoViewGraphicsView->getLeafletMapsPage()->setMapCenter(mapCenterLatitudeInit,
-                                                          mapCenterLongitudeInit);
-  geoViewGraphicsView->getLeafletMapsPage()->setCurrentZoom(mapZoomInit);
+  auto gmw = getGeoMapWidget();
+  gmw->setMapCenter(mapCenterLatitudeInit, mapCenterLongitudeInit);
+  gmw->setCurrentZoom(mapZoomInit);
+  if (graph()->isEmpty()) {
+    QMessageBox::warning(
+        graphicsView(), QString("Graph \"%1\" is empty").arg(graph()->getName().c_str()),
+        QString("The geographic view is inoperable with an empty graph."), QMessageBox::Ok);
+    // we perform an acceptable automatic configuration
+    // in order to allow an interactive creation of the graph
+    // over the geographic map, using the 'Add nodes/edges'
+    // and 'Edit edge bends' view interactors
+    auto prop = graph()->getProperty<SizeProperty>("viewSize");
+    if (prop->getNodeDefaultValue() == TulipViewSettings::defaultSize(ElementType::NODE))
+      prop->setNodeDefaultValue({0.0005, 0.0005, 0.0005});
+    computeGeoLayout();
+  }
 }
 
 DataSet GeographicView::state() const {
@@ -275,10 +256,11 @@ DataSet GeographicView::state() const {
   DataSet configurationWidget = geoViewConfigWidget->state();
   dataSet.set("configurationWidget", configurationWidget);
   dataSet.set("mapType", int(_mapType));
-  pair<double, double> mapCenter = geoViewGraphicsView->getLeafletMapsPage()->getCurrentMapCenter();
-  dataSet.set("mapCenterLatitude", mapCenter.first);
-  dataSet.set("mapCenterLongitude", mapCenter.second);
-  dataSet.set("mapZoom", geoViewGraphicsView->getLeafletMapsPage()->getCurrentMapZoom());
+  auto gmw = getGeoMapWidget();
+  auto mapCenter = gmw->getMapCenter();
+  dataSet.set("mapCenterLatitude", mapCenter.second);
+  dataSet.set("mapCenterLongitude", mapCenter.first);
+  dataSet.set("mapZoom", gmw->getCurrentZoom());
   dataSet.set("renderingParameters", geoViewGraphicsView->getGlMainWidget()
                                          ->getScene()
                                          ->getGlGraphComposite()
@@ -313,7 +295,7 @@ void GeographicView::refresh() {
   geoViewGraphicsView->draw();
 }
 
-void GeographicView::computeGeoLayout() {
+void GeographicView::computeGeoLayout(bool centerView) {
   if (geolocalisationConfigWidget->geolocateByAddress()) {
     geoViewGraphicsView->createLayoutWithAddresses(
         geolocalisationConfigWidget->getAddressGraphPropertyName(),
@@ -339,7 +321,8 @@ void GeographicView::computeGeoLayout() {
     }
   }
 
-  geoViewGraphicsView->centerView();
+  if (centerView)
+    geoViewGraphicsView->centerView();
   // check for shared properties
   // before computing view layout
   updateSharedProperties();
@@ -356,21 +339,9 @@ void GeographicView::centerOnNode() {
   geoViewGraphicsView->centerMapOnNode(_nodeUnderMouse);
 }
 
-void GeographicView::zoomIn() {
-  geoViewGraphicsView->zoomIn();
-}
-
-void GeographicView::zoomOut() {
-  geoViewGraphicsView->zoomOut();
-}
-
-void GeographicView::currentZoomChanged() {
-  geoViewGraphicsView->currentZoomChanged();
-}
-
-QList<QWidget *> GeographicView::configurationWidgets() const {
-  return QList<QWidget *>() << geolocalisationConfigWidget << geoViewConfigWidget
-                            << sceneConfigurationWidget << sceneLayersConfigurationWidget;
+std::list<QWidget *> GeographicView::configurationWidgets() const {
+  return std::list<QWidget *>{geolocalisationConfigWidget, geoViewConfigWidget,
+                              sceneConfigurationWidget, sceneLayersConfigurationWidget};
 }
 
 void GeographicView::applySettings() {
@@ -416,17 +387,17 @@ void GeographicView::updatePoly(bool force) {
   if (geoViewConfigWidget->polyOptionsChanged() || force) {
     switch (geoViewConfigWidget->polyFileType()) {
     case GeographicViewConfigWidget::CsvFile: {
-      geoViewGraphicsView->loadCsvFile(geoViewConfigWidget->getCsvFile());
+      geoViewGraphicsView->loadFile(true, geoViewConfigWidget->getCsvFile());
       break;
     }
 
     case GeographicViewConfigWidget::PolyFile: {
-      geoViewGraphicsView->loadPolyFile(geoViewConfigWidget->getPolyFile());
+      geoViewGraphicsView->loadFile(false, geoViewConfigWidget->getPolyFile());
       break;
     }
 
     default: {
-      geoViewGraphicsView->loadDefaultMap();
+      geoViewGraphicsView->loadFile();
       break;
     }
     }
@@ -506,10 +477,17 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
     QGraphicsProxyWidget *gWidget = dynamic_cast<QGraphicsProxyWidget *>(item);
 
     if (gWidget && gWidget->isVisible()) {
+      if (dynamic_cast<QLabel *>(gWidget->widget()))
+        // show attribution label
+        continue;
       gWidget->hide();
       gWidgetsToRestore.push_back(gWidget);
     }
   }
+
+  // hide viewport cross center
+  bool centerVisibility = geoViewGraphicsView->centerVisible();
+  geoViewGraphicsView->showCenter(false);
 
   int width = geoViewGraphicsView->width();
   int height = geoViewGraphicsView->height();
@@ -518,6 +496,9 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
   QPainter painter(&snapshotImage);
   geoViewGraphicsView->scene()->render(&painter);
   painter.end();
+
+  // restore viewport cross center
+  geoViewGraphicsView->showCenter(centerVisibility);
 
   // restore the graphics widgets previously hidden
   for (auto gWidget : gWidgetsToRestore) {
@@ -528,21 +509,13 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
       .scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 }
 
-GeographicView::MapType GeographicView::getMapType(const QString &name) {
-  for (unsigned int i = 0; i < mapLayers.size(); ++i) {
-    if (name == mapLayers[i].name)
-      return MapType(i);
-  }
-  return OpenStreetMap;
-}
-
 const char *GeographicView::getViewName(GeographicView::MapType mapType) {
   if (mapType < 0 || mapType >= mapLayers.size())
     return mapLayers[OpenStreetMap].name;
   return mapLayers[mapType].name;
 }
 
-const vector<LeafletMaps::MapLayer> &GeographicView::getMapLayers() {
+const vector<MapLayer> &GeographicView::getMapLayers() {
   return mapLayers;
 }
 

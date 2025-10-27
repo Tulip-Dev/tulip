@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -666,9 +666,9 @@ Returns the state of the z-ordered rendering.
 %Docstring
 tlpgui.GlGraphRenderingParameters.setEdge3D(edge3d)
 
-enable/disable the 3d display of edges instead of 2d lines.
+enable/disable the 3D display of edges instead of 2D lines.
 
-:param edge3d: the state of the 3d edge rendering
+:param edge3d: the state of the 3D edge rendering
 :type edge3d: boolean
 %End
 
@@ -678,7 +678,7 @@ enable/disable the 3d display of edges instead of 2d lines.
 %Docstring
 tlpgui.GlGraphRenderingParameters.isEdge3D()
 
-Returns the state of the 3d edge rendering.
+Returns the state of the 3D edge rendering.
 
 :rtype: boolean
 %End

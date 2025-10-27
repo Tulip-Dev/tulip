@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,7 +18,7 @@
  */
 #ifndef Tulip_HierarchicalGraph_H
 #define Tulip_HierarchicalGraph_H
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <tulip/TulipPluginHeaders.h>
 
 class LessThanNode2 {
@@ -48,11 +48,12 @@ public:
 class HierarchicalGraph : public tlp::LayoutAlgorithm {
 
 public:
-  PLUGININFORMATION("Hierarchical Graph", "David Auber", "23/05/2000",
-                    "Implements the hierarchical layout algorithm  first published as:<br/>"
-                    "<b>Tulip - A Huge Graph Visualization Framework</b>, D. Auber, Book. Graph "
-                    "Drawing Software. (Ed. Michael Junger & Petra Mutzel) pages 105--126. (2004).",
-                    "1.0", "Hierarchical")
+  PLUGININFORMATION(
+      "Hierarchical Graph", "David Auber", "23/05/2000",
+      "Implements the hierarchical layout algorithm first published as:<br/>"
+      "<b>Tulip - A Huge Graph Visualization Framework</b>,<br/>D. Auber, Book. Graph "
+      "Drawing Software. (Ed. Michael Junger & Petra Mutzel) pages 105--126. (2004).",
+      "1.0", "Hierarchical")
   HierarchicalGraph(const tlp::PluginContext *context);
   ~HierarchicalGraph() override;
   bool run() override;
@@ -64,7 +65,7 @@ private:
   void twoLayerCrossReduction(tlp::Graph *sg, unsigned int freeLayer);
   void crossReduction(tlp::Graph *sg);
   void computeEdgeBends(const tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout,
-                        const std::unordered_map<tlp::edge, tlp::edge> &replacedEdges,
+                        const tlp_hash_map<tlp::edge, tlp::edge> &replacedEdges,
                         const std::vector<tlp::edge> &reversedEdges);
   void computeSelfLoops(tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout,
                         std::vector<tlp::SelfLoops> &listSelfLoops);

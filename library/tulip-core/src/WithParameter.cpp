@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -53,7 +53,10 @@ using namespace std;
 #define INOUT_DIRECTION "input/output"
 
 static string html_help_def(const string &A, const string &B) {
-  return "<tr><td><b>" + A + "</b><td class=\"b\">" + B + "</td></tr>";
+  // class="A" is used by doc/python/gen_plugins_doc.py
+  // and gives a reliable way to extract parameter "type" or "values"
+  return "<tr><td><b>" + A + "</b><td style=\"padding-left: 5px;\" class=\"" + A + "\">" + B +
+         "</td></tr>";
 }
 
 static string getParameterTypename(const string &name, const string &typeId) {
@@ -85,32 +88,17 @@ static string getParameterTypename(const string &name, const string &typeId) {
   }
 }
 
-#define HTML_HELP_OPEN()                                                                           \
-  "<!DOCTYPE html><html><head>\
-<style type=\"text/css\">.body { font-family: \"Segoe UI\", Candara, \"Bitstream Vera Sans\", \"DejaVu Sans\", \"Bitstream Vera Sans\", \"Trebuchet MS\", Verdana, \"Verdana Ref\", sans-serif; }\
-    .paramtable { width: 100%; border: 0px; border-bottom: 1px solid #C9C9C9; padding: 5px; }\
-    .help { font-style: italic; font-size: 90%; }\
-    .b { padding-left: 5px; }</style>\
-</head><body><table border=\"0\" class=\"paramtable\">"
-
-#define HTML_HELP_DEF(A, B) "<tr><td><b>" A "</b><td class=\"b\">" B "</td></tr>"
-
-#define HTML_HELP_BODY() "</table><p class=\"help\">"
-
-#define HTML_HELP_CLOSE() "</p></body></html>"
-
 string ParameterDescriptionList::generateParameterHTMLDocumentation(
     const string &name, const string &help, const string &type, const string &defaultValue,
     const string &valuesDescription, const ParameterDirection &direction) {
 
-  static string htmlDocheader = HTML_HELP_OPEN();
+  string doc;
 
-  // for backward compatibility for external plugins using the old plugin parameters doc system
-  if (help.substr(0, htmlDocheader.size()) == htmlDocheader) {
-    return help;
-  }
-
-  string doc = htmlDocheader;
+  // class="description" is used by doc/python/gen_plugins_doc.py
+  // and gives a reliable way to extract parameter description
+  doc += "<div style=\"font-style: italic; font-size: 90%;\" class=\"help\">";
+  doc += help + "</div>";
+  doc += "<table border=\"0\" class=\"paramtable\">";
   doc += html_help_def(TYPE_SECTION, getParameterTypename(name, type));
 
   if (!valuesDescription.empty()) {
@@ -133,12 +121,7 @@ string ParameterDescriptionList::generateParameterHTMLDocumentation(
     doc += html_help_def(DIRECTION_SECTION, INOUT_DIRECTION);
   }
 
-  if (!help.empty()) {
-    doc += HTML_HELP_BODY();
-    doc += help;
-  }
-
-  doc += HTML_HELP_CLOSE();
+  doc += "</table>";
 
   return doc;
 }
@@ -165,12 +148,32 @@ ParameterDescription *ParameterDescriptionList::getParameter(const string &name)
   return nullptr;
 }
 
+void ParameterDescriptionList::remove(const std::string &name) {
+  auto sz = parameters.size();
+  for (unsigned int i = 0; i < sz; ++i) {
+    if (name == parameters[i].getName()) {
+      --sz;
+      for (; i < sz; ++i)
+        parameters[i] = parameters[i + 1];
+      parameters.resize(sz);
+      return;
+    }
+  }
+#ifndef NDEBUG
+  tlp::warning() << __PRETTY_FUNCTION__ << name << " does not exists";
+#endif
+}
+
 const string &ParameterDescriptionList::getDefaultValue(const string &name) const {
   return const_cast<ParameterDescriptionList *>(this)->getParameter(name)->getDefaultValue();
 }
 
 void ParameterDescriptionList::setDefaultValue(const string &name, const string &val) {
   getParameter(name)->setDefaultValue(val);
+}
+
+ParameterDirection ParameterDescriptionList::getDirection(const string &name) const {
+  return const_cast<ParameterDescriptionList *>(this)->getParameter(name)->getDirection();
 }
 
 void ParameterDescriptionList::setDirection(const string &name, ParameterDirection direction) {

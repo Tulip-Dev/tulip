@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -119,19 +119,19 @@ class PySize : tlp::Vec3f /PyName=Size, TypeHint="tlp.Size"/ {
 
   PySize(const tlp::Vec3f &s);
 
-  tlp::PySize operator*(const tlp::Vec3f &) const;
+  tlp::PySize __mul__(const tlp::Vec3f &) const;
 
-  tlp::PySize operator*(const float &) const;
+  tlp::PySize __mul__(const float &) const;
 
-  tlp::PySize operator+(const tlp::Vec3f &) const;
+  tlp::PySize __add__(const tlp::Vec3f &) const;
 
-  tlp::PySize operator+(const float &) const;
+  tlp::PySize __add__(const float &) const;
 
-  tlp::PySize operator-(const tlp::Vec3f &) const;
+  tlp::PySize __sub__(const tlp::Vec3f &) const;
 
-  tlp::PySize operator-(const float &) const;
+  tlp::PySize __sub__(const float &) const;
 
-  tlp::PySize operator/(const tlp::Vec3f &) const;
+  tlp::PySize __truediv__(const tlp::Vec3f &) const;
 %MethodCode
   if ((*a1)[0] && (*a1)[1] && (*a1)[2]) {
     sipRes = new tlp::PySize((*a0 / *a1));
@@ -141,7 +141,7 @@ class PySize : tlp::Vec3f /PyName=Size, TypeHint="tlp.Size"/ {
   }
 %End
 
-  tlp::PySize operator/(const float &) const;
+  tlp::PySize __truediv__(const float &) const;
 %MethodCode
   if (a1 != 0) {
     sipRes = new tlp::PySize((*a0 / a1));
@@ -203,7 +203,7 @@ typedef tlp::PySize Size;
     if (!PyList_Check(sipPy)) {
       return 0;
     }
-    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+    for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
       PyObject *item = PyList_GET_ITEM(sipPy, i);
       if (!sipCanConvertToType(item, kpTypeDef, SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
         return 0;
@@ -214,7 +214,7 @@ typedef tlp::PySize Size;
 
   std::vector<tlp::PySize> *v = new std::vector<tlp::PySize>();
   v->reserve(PyList_GET_SIZE(sipPy));
-  for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+  for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
     int state;
     tlp::PySize* p = reinterpret_cast<tlp::PySize*>(sipConvertToType(PyList_GET_ITEM(sipPy, i), kpTypeDef, sipTransferObj, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, sipIsErr));
 

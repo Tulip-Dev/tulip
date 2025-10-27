@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -36,17 +36,12 @@
  *
  *  - 09/05/2011 Version 1.0: Initial release
  *
- *  \author Patrick Mary of Tulip Team http://tulip.labri.fr/
+ *  \author Patrick Mary of Tulip Team https://tulip.labri.fr/
  *
  *
  */
 using namespace std;
 using namespace tlp;
-
-static const char *paramHelp[] = {
-    // filename
-    "This parameter indicates the pathname of the Pajek file (.net or .paj) to import.",
-};
 
 namespace {
 bool tokenize(const string &str, vector<string> &tokens, const string &delimiters) {
@@ -105,11 +100,11 @@ bool tokenize(const string &str, vector<string> &tokens, const string &delimiter
 }
 } // namespace
 
-class ImportPajek : public ImportModule {
+class ImportPajek : public ImportFileModule {
 
 public:
   PLUGININFORMATION("Pajek", "Patrick Mary", "09/05/2011",
-                    "<p>Supported extensions: net, paj</p><p>Imports a new graph from a file "
+                    "<p>File extensions: net, paj</p><p>Imports a new graph from a file "
                     "(.net) in Pajek NET format<br/>as it is described in the Pajek manual "
                     "(<a "
                     "href=\"http://mrvar.fdv.uni-lj.si/pajek/pajekman.pdf\">http://"
@@ -118,19 +113,11 @@ public:
                     "description of the edges with Matrix (adjacency lists)is not yet "
                     "supported.</p>",
                     "1.0", "File")
-  std::list<std::string> fileExtensions() const override {
-    std::list<std::string> l;
-    l.push_back("net");
-    l.push_back("paj");
-    return l;
-  }
 
   ImportPajek(const tlp::PluginContext *context)
-      : ImportModule(context), nbNodes(0), weights(nullptr), labels(nullptr), layout(nullptr),
-        sizes(nullptr), expectedLine(NET_UNKNOWN), partition(nullptr), curNodeId(0),
-        vectorProp(nullptr) {
-    addInParameter<string>("file::filename", paramHelp[0], "");
-  }
+      : ImportFileModule(context, {"net", "paj"}), nbNodes(0), weights(nullptr), labels(nullptr),
+        layout(nullptr), sizes(nullptr), expectedLine(NET_UNKNOWN), partition(nullptr),
+        curNodeId(0), vectorProp(nullptr) {}
 
   ~ImportPajek() override {}
 
@@ -480,16 +467,7 @@ public:
     return true;
   }
 
-  bool importGraph() override {
-    string filename;
-
-    dataSet->get<string>("file::filename", filename);
-
-    if (filename.empty()) {
-      pluginProgress->setError("Filename is empty.");
-      return false;
-    }
-
+  bool importFile() override {
     std::istream *in = tlp::getInputFileStream(filename);
     // check for open stream failure
     if (in->fail()) {

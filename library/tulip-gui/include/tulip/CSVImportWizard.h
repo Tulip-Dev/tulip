@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -25,6 +25,7 @@
 #include <QWizardPage>
 
 #include <tulip/tulipconf.h>
+#include <tulip/CSVContentHandler.h>
 
 namespace Ui {
 class CSVImportWizard;
@@ -43,11 +44,15 @@ class CSVImportParameters;
 /**
  * @brief QWIzardPage encapsulating a CSVParserConfigurationWidget and a preview.
  **/
-class CSVParsingConfigurationQWizardPage : public QWizardPage {
+class CSVParsingConfigurationQWizardPage : public QWizardPage, public CSVContentHandler {
   Q_OBJECT
 public:
   CSVParsingConfigurationQWizardPage(QWidget *parent = nullptr);
+  bool begin() override;
+  bool line(unsigned int row, const std::vector<CSVToken> &lineTokens) override;
+  bool end(unsigned int rowNumber, unsigned int columnNumber) override;
   bool isComplete() const override;
+  bool validatePage() override;
   CSVParser *buildParser(int firstLine = 0) const;
   int getFirstLineIndex() const;
 
@@ -55,7 +60,8 @@ private:
   void updatePreview();
   CSVParserConfigurationWidget *parserConfigurationWidget;
   CSVTableWidget *previewTableWidget;
-  unsigned int previewLineNumber;
+  unsigned int previewLineNumber, columnCount;
+  bool validColumnCount;
 
 private slots:
   void parserChanged();

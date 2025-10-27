@@ -9,14 +9,24 @@ yum -y update
 
 # install base build system
 yum -y install epel-release
-yum -y install xz cmake3 tar gzip make wget ccache
+if [ ! -f /usr/local/bin/cmake ]; then
+    yum -y install cmake3
+    ln -s /usr/bin/cmake3 /usr/bin/cmake
+fi
+yum -y install xz tar gzip make wget ccache
 
 # if needed install GCC 7 as OGDF requires a quite advanced C++11 compiler
 which gcc > /dev/null 2>&1
 if [ ! $? -eq 0 ]; then
+    GCC_VERSION=0
+else
+    GCC_VERSION=$(gcc -dumpversion)
+fi
+
+if [ $GCC_VERSION -lt 9 ]; then
   yum -y install centos-release-scl
-  yum -y install devtoolset-7
-  COMPILER_DEFINES="-DCMAKE_C_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/gcc -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/g++"
+  yum -y install devtoolset-9
+  COMPILER_DEFINES="-DCMAKE_C_COMPILER=/opt/rh/devtoolset-9/root/usr/bin/gcc -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-9/root/usr/bin/g++"
 fi
 
 # install tulip deps
@@ -35,17 +45,11 @@ fi
 
 if [ "$3" == "" ]; then
   # install qt5
-  yum install -y qt5-qtbase-devel qt5-qtwebkit-devel
+  yum install -y qt5-qtbase-devel
   QT_PATH=$USR_LIB/qt5
 else
   # we can use our own build of qt5
   QT_PATH=$3
-fi
-
-# install Python 3.6 needed packages
-if [ "$PYTHON_EXECUTABLE" == "" ]; then
-  yum -y install rh-python36-python rh-python36-python-devel rh-python36-python-sphinx
-  PYTHON_EXECUTABLE=$(scl enable rh-python36 'which python3.6')
 fi
 
 # build and install tulip
@@ -67,7 +71,11 @@ else
   RUN_TESTS=OFF
 fi
 
-cmake3 $COMPILER_DEFINES -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=$QT_PATH -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE -DTULIP_USE_CCACHE=$CCACHE -DTULIP_BUILD_FOR_APPIMAGE=ON -DTULIP_BUILD_TESTS=$RUN_TESTS ..
+# ensure pip and sip installation
+$PYTHON_EXECUTABLE -m ensurepip --upgrade
+$PYTHON_EXECUTABLE -m pip install sip
+
+cmake $COMPILER_DEFINES -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=$QT_PATH -DPython_EXECUTABLE=$PYTHON_EXECUTABLE -DTULIP_USE_CCACHE=$CCACHE -DTULIP_BUILD_FOR_APPIMAGE=ON -DTULIP_BUILD_TESTS=$RUN_TESTS ..
 make -j4 install
 
 # run unit tests

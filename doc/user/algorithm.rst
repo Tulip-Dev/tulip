@@ -8,8 +8,6 @@ Algorithms
 
 Algorithms can modify the layout, the set of selected elements, the size and color of elements, or compute a metric. As explained in the :ref:`quick presentation of the GUI <algo_window>`, algorithms are accessed through the *Algorithm* list, located in the left panel.
 
-The standard Tulip tool contains a lot of frequently updated and improved algorithms. With its plugin manager system, you can also search among databases to import or even implement your own algorithms and integrate them in Tulip.
-
 
 .. _algo_algorithm:
 

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -233,7 +233,7 @@ void SOMAlgorithm::propagateModification(SOMMap *map, const DynamicVector<double
 }
 
 void SOMAlgorithm::computeMapping(SOMMap *map, InputSample &inputSample,
-                                  std::unordered_map<tlp::node, std::set<tlp::node>> &mappingTab,
+                                  tlp_hash_map<tlp::node, std::set<tlp::node>> &mappingTab,
                                   double &medDist, unsigned int &maxElement) {
 
   double cumDist = 0;

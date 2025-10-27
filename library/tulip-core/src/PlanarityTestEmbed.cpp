@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -54,13 +54,12 @@ void PlanarityTestImpl::embedRoot(Graph *sG, int n) {
     return;
 
   list<node> traversedNodes;
-  edge e;
-  node r = nodeWithDfsPos.get(n), u;
+  node r = nodeWithDfsPos.get(n);
   state.set(r.id, VISITED);
   //  tlp::debug() << "   " << dfsPosNum.get(r.id) << ": ";
   /// forall_out_edges(e, r)
   for (auto e : stableIterator(sG->getOutEdges(r))) {
-    u = sG->target(e);
+    node u = sG->target(e);
 
     if (dfsPosNum.get(u.id) < dfsPosNum.get(r.id) && isBackEdge(sG, e)) {
       //      edgeReversal(e);
@@ -91,7 +90,7 @@ void PlanarityTestImpl::embedRoot(Graph *sG, int n) {
   BmdList<edge> el1, l1;
 
   for (int i = 1; i <= nH; ++i) {
-    e = backEdge[i];
+    edge e = backEdge[i];
 
     if (e != NULL_EDGE) {
       node predU = sG->source(e);
@@ -332,33 +331,33 @@ map<node, list<edge>> PlanarityTestImpl::groupBackEdgesByRepr(Graph *sG, list<ed
   for (auto it = listBackEdges.begin(); it != listBackEdges.end(); ++it) {
     edge e = *it;
     list<node> S;
-    node u = sG->source(e), pNode = u; // pNode is never a c-node;
+    node n = sG->source(e), pNode = n; // pNode is never a c-node;
 
-    while (state.get(u.id) == NOT_VISITED) {
-      if (!isCNode(u))
-        pNode = u;
+    while (state.get(n.id) == NOT_VISITED) {
+      if (!isCNode(n))
+        pNode = n;
 
-      if (state.get(u.id) == NOT_VISITED) {
-        state.set(u.id, VISITED);
-        nl.push_back(u);
-        S.push_front(u);
+      if (state.get(n.id) == NOT_VISITED) {
+        state.set(n.id, VISITED);
+        nl.push_back(n);
+        S.push_front(n);
       }
 
-      u = parent.get(u.id);
+      n = parent.get(n.id);
     }
 
     node repr;
 
-    if (!isCNode(backEdgeRepresentant[u]))
-      repr = backEdgeRepresentant[u];
+    if (!isCNode(backEdgeRepresentant[n]))
+      repr = backEdgeRepresentant[n];
     else {
       repr = pNode;
       traversedNodes.push_back(repr);
     }
 
     // forall(u, S)
-    for (auto it = S.begin(); it != S.end(); ++it) {
-      node u = *it;
+    for (auto sit = S.begin(); sit != S.end(); ++sit) {
+      node u = *sit;
 
       if (isCNode(u) && isCNode(parent.get(u.id)))
         backEdgeRepresentant[u] = backEdgeRepresentant[parent.get(u.id)];
@@ -699,12 +698,12 @@ int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG, node, node repr, list<edge>
 }
 //=================================================================
 /*
- * Algebric criteria to check the plane map...
+ * Algebraic criteria to check the plane map...
  */
 bool PlanarityTestImpl::isPlanarEmbedding(const tlp::Graph *sG) {
-  int n = sG->numberOfNodes();
+  int nb = sG->numberOfNodes();
 
-  if (n == 1)
+  if (nb == 1)
     return true;
 
   int m = sG->numberOfEdges();
@@ -745,7 +744,7 @@ bool PlanarityTestImpl::isPlanarEmbedding(const tlp::Graph *sG) {
           //  tlp::warning() << "-(" << e1.id << ")->" << n.id << flush;
           ++count;
 
-          if (count > 2 * sG->numberOfEdges() + 1)
+          if (count > (2 * sG->numberOfEdges() + 1))
             break; // needed for trees or non biconnected graphs
         } while ((e1 != e) || (n != n_tmp));
 
@@ -754,7 +753,7 @@ bool PlanarityTestImpl::isPlanarEmbedding(const tlp::Graph *sG) {
     }
   }
 
-  if (fc != m - n + 2) {
+  if (fc != m - nb + 2) {
     return false;
   }
 

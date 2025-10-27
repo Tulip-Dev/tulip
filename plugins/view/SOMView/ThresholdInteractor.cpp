@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -324,8 +324,7 @@ bool ThresholdInteractor::eventFilter(QObject *widget, QEvent *event) {
     // Update Camera for selection
     layer->set2DMode();
     glMainWidget->getScene()->addExistingLayer(layer);
-    glMainWidget->getScene()->selectEntities(RenderingSimpleEntities, me->x(), me->y(), 0, 0, layer,
-                                             selectedEntities);
+    glMainWidget->pickGlEntities(me->pos().x(), me->pos().y(), selectedEntities);
     glMainWidget->getScene()->removeLayer(layer, false);
 
     if (!selectedEntities.empty()) {
@@ -367,7 +366,7 @@ bool ThresholdInteractor::eventFilter(QObject *widget, QEvent *event) {
         // mouvingSlider = *finalSelectedEntities.begin();
         assert(mouvingSlider);
         mouvingSlider->beginShift();
-        XPosCursor = me->x();
+        XPosCursor = me->pos().x();
         glMainWidget->getScene()->getGraphCamera().initGl();
 
         layer->setVisible(false);
@@ -384,8 +383,8 @@ bool ThresholdInteractor::eventFilter(QObject *widget, QEvent *event) {
 
   if (event->type() == QEvent::MouseMove) {
     if (startDrag) {
-      float xShift = me->x() - XPosCursor;
-      XPosCursor = me->x();
+      float xShift = me->pos().x() - XPosCursor;
+      XPosCursor = me->pos().x();
 
       if (xShift == 0) {
         return true;
@@ -430,7 +429,7 @@ bool ThresholdInteractor::eventFilter(QObject *widget, QEvent *event) {
 void ThresholdInteractor::performSelection(SOMView *view, tlp::Iterator<node> *it) {
   BooleanProperty *selection = view->graph()->getProperty<BooleanProperty>("viewSelection");
   set<node> mask;
-  unordered_map<node, set<node>> &mappingTab = view->getMappingTab();
+  tlp_hash_map<node, set<node>> &mappingTab = view->getMappingTab();
   Observable::holdObservers();
   selection->setAllNodeValue(false);
 

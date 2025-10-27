@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -204,7 +204,8 @@ private:
   edge addEdgeInternal(edge);
   void reverseInternal(const edge, const node src, const node tgt);
   void setEndsInternal(const edge, node src, node tgt, const node newSrc, const node newTgt);
-  void addNodesInternal(unsigned int nbAdded, const std::vector<node> *nodes);
+  void addNodesInternal(unsigned int nbAdded, const std::vector<node> *nodes,
+                        bool addNodeData = true);
   void addEdgesInternal(unsigned int nbAdded, const std::vector<edge> *edges,
                         const std::vector<std::pair<node, node>> &ends);
 };

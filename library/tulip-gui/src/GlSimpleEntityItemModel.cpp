@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -78,7 +78,8 @@ QVariant GlSimpleEntityItemModel::headerData(int section, Qt::Orientation orient
       f = p->font();
 
     f.setBold(true);
-    f.setPointSize(f.pointSize() - 1);
+    if (f.pointSize() > 1)
+      f.setPointSize(f.pointSize() - 1);
     return f;
   }
 

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,20 +17,16 @@
  *
  */
 
-#include <GL/glew.h>
-
 #include "tulip/SnapshotDialog.h"
 #include "ui_SnapshotDialog.h"
 
-#include <QLabel>
-#include <QEvent>
 #include <QMessageBox>
 #include <QImageWriter>
 #include <QFileDialog>
 #include <QGraphicsItem>
 #include <QClipboard>
 #include <QGraphicsScene>
-#include <QPixmap>
+//#include <QPixmap>
 #include <QPushButton>
 
 #include <tulip/View.h>
@@ -236,11 +232,7 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
   // resize snapshotLabel
   QSize sSize = ui->snapshotWidget->size();
   sSize -= QSize(2, 2);
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
-  QSize psize = ui->snapshotLabel->pixmap()->size();
-#else
   QSize psize = ui->snapshotLabel->pixmap(Qt::ReturnByValue).size();
-#endif
   psize.scale(sSize, Qt::KeepAspectRatio);
   ui->snapshotLabel->resize(psize);
   sSize -= psize;

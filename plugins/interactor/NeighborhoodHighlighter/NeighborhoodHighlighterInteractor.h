@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,7 +22,6 @@
 
 #include "NeighborhoodHighlighterConfigWidget.h"
 #include "NodeNeighborhoodView.h"
-#include "../../utils/StandardInteractorPriority.h"
 
 #include <QObject>
 
@@ -30,6 +29,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlLayer.h>
 #include <tulip/GlScene.h>
+#include <tulip/StandardInteractorPriority.h>
 
 namespace tlp {
 
@@ -55,7 +55,7 @@ public:
 
   void construct() override;
 
-  QWidget *configurationWidget() const override {
+  QWidget *configurationOptionsWidget() const override {
     return configWidget;
   }
 

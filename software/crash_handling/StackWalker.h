@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -129,26 +129,6 @@ private:
 #ifdef HAVE_BFD
   std::map<std::string, BfdWrapper *> bfdMap;
 #endif
-};
-
-#elif defined(_MSC_VER)
-
-class StackWalkerMSVC : public StackWalker {
-public:
-  StackWalkerMSVC();
-  ~StackWalkerMSVC();
-
-  void printCallStack(std::ostream &os, unsigned int maxDepth = 50);
-  void setExtraSymbolsSearchPaths(const std::string &searchPaths) {
-    extraSymbolsSearchPaths = searchPaths;
-  }
-  void setContext(CONTEXT *context) {
-    this->context = context;
-  }
-
-private:
-  CONTEXT *context;
-  std::string extraSymbolsSearchPaths;
 };
 
 #endif

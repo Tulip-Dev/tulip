@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -139,11 +139,10 @@ bool PathLengthMetric::run() {
 }
 //=======================================
 bool PathLengthMetric::check(std::string &erreurMsg) {
-  if (AcyclicTest::isAcyclic(graph))
-    return true;
-  else {
+  if (!AcyclicTest::isAcyclic(graph)) {
     erreurMsg = "The graph must be acyclic.";
     return false;
   }
+  return true;
 }
 //=======================================

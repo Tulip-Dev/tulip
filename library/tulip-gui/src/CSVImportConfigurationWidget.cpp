@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,9 +21,9 @@
 #include "ui_CSVImportConfigurationWidget.h"
 #include "ui_CSVPropertyDialog.h"
 
-#include <QLabel>
 #include <QPainter>
 #include <QPushButton>
+#include <QCheckBox>
 #include <QStyleOptionButton>
 #include <QStylePainter>
 
@@ -66,23 +66,28 @@ const string &PropertyConfigurationWidget::getPropertyType() const {
   return _type;
 }
 
-void PropertyConfigurationWidget::setPropertyType(const string &pType) {
+void PropertyConfigurationWidget::setPropertyType(const string &pType, bool defValue) {
   _type = pType.empty() ? "string" : pType;
   propertyEditButton->setText(
       QString("%1\n[%2]").arg(getPropertyName()).arg(propertyTypeToPropertyTypeLabel(_type)));
+  if (defValue)
+    _def_type = _type;
 }
 
 QString PropertyConfigurationWidget::getPropertyName() const {
   return tlpStringToQString(_name);
 }
-void PropertyConfigurationWidget::setPropertyName(const QString &pName) {
+void PropertyConfigurationWidget::setPropertyName(const QString &pName, bool defValue) {
   _name = QStringToTlpString(pName);
-  propertyEditButton->setText(QString("%1\n[%2]").arg(pName).arg(QString(_type.c_str())));
+  propertyEditButton->setText(
+      QString("%1<br/><center>[%2]</center>").arg(pName).arg(QString(_type.c_str())));
   propertyEditButton->setToolTip(QString("<center><b>Column #%1</b></center>name: %2<br/>type: "
                                          "%3<br>Click for more import options.")
                                      .arg(propertyNumber)
                                      .arg(pName)
                                      .arg(_type.c_str()));
+  if (defValue)
+    _def_name = _name;
 }
 
 unsigned int PropertyConfigurationWidget::getPropertyNumber() const {
@@ -102,20 +107,24 @@ void PropertyConfigurationWidget::typeCBChanged(const QString &type) {
   int nbItems = ui->nameCB->count();
   for (int i = 1; i < nbItems; ++i)
     ui->nameCB->removeItem(1);
-  const std::set<std::string> &props =
-      CSVImportConfigurationWidget::getPropsForTypename(propertyTypeLabelToPropertyType(type));
-  for (const std::string &prop : props)
+  auto p = propertyTypeLabelToPropertyType(type);
+  for (const std::string &prop : CSVImportConfigurationWidget::getPropsForTypename(p))
     ui->nameCB->addItem(tlpStringToQString(prop));
 }
 
 void PropertyConfigurationWidget::addException() {
+  addException("edit the value", CSVColumn::ASSIGN_NO_VALUE);
+}
+
+void PropertyConfigurationWidget::addException(const std::string &value, CSVColumn::Action action) {
   QTableWidget *w = ui->exceptionTableWidget;
   auto row = w->rowCount();
   w->insertRow(row);
-  w->setItem(row, 0, new QTableWidgetItem(QString("edit the value")));
+  w->setItem(row, 0, new QTableWidgetItem(QString(value.c_str())));
   QComboBox *actionCB = new QComboBox(w);
   actionCB->addItem(QString("Assign no value"));
   actionCB->addItem(QString("Ignore the row"));
+  actionCB->setCurrentIndex(static_cast<int>(action));
   w->setCellWidget(row, 1, actionCB);
 }
 
@@ -130,6 +139,9 @@ void PropertyConfigurationWidget::showPropertyCreationDialog() {
   QDialog dialog(this);
   ui = new Ui_CSVPropertyDialog();
   ui->setupUi(&dialog);
+#ifdef __APPLE__
+  ui->separatorCB->setMinimumContentsLength(4);
+#endif
   ui->columnLabel->setText(QString("Column #%1").arg(propertyNumber + 1));
   propertyNameValidator->setCurrentIndex(propertyNumber);
   ui->nameCB->setValidator(propertyNameValidator);
@@ -178,6 +190,9 @@ void PropertyConfigurationWidget::showPropertyCreationDialog() {
       ui->separatorCB->setCurrentIndex(index);
   }
 
+  for (const auto &exception : _exceptions)
+    addException(exception.value, exception.action);
+
   ui->exceptionTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
   connect(ui->addExceptionButton, SIGNAL(released()), this, SLOT(addException()));
   connect(ui->delCurrentExceptionButton, SIGNAL(released()), this, SLOT(delCurrentException()));
@@ -194,6 +209,11 @@ void PropertyConfigurationWidget::showPropertyCreationDialog() {
       CSVColumn::addException(value, CSVColumn::Action(action));
     }
   }
+
+  // visual feedback to indicate if the column is configured as default or not
+  propertyEditButton->setStyleSheet(
+      QString("QPushButton {font-weight: %1}").arg(isDefault() ? "normal" : "bold"));
+
   delete ui;
 }
 
@@ -209,29 +229,19 @@ void CSVTableHeader::paintSection(QPainter *painter, const QRect &rect, int logi
   QHeaderView::paintSection(painter, rect, logicalIndex);
   painter->restore();
   QStyleOptionButton cb;
+  auto bpal = parentWidget()->palette();
+  auto pal = bpal;
+  pal.setColor(QPalette::Window, QColor("lightgray"));
+  parentWidget()->setPalette(pal);
   cb.initFrom(parentWidget());
+  parentWidget()->setPalette(bpal);
   cb.state = QStyle::State_Enabled |
              (widgets[logicalIndex]->isUsed() ? QStyle::State_On : QStyle::State_Off);
-  auto cbRect = style()->subElementRect(QStyle::SE_CheckBoxIndicator, &cb);
-#ifdef __APPLE__
-  // this a specific MacOSX hack because on this platform
-  // style()->drawPrimitive(QStyle::PE_IndicatorCheckBox, &cb, painter)
-  // executes always as if cb.rect.x() = cb.rect.y() = 0
-  cb.rect = QRect(0, 0, cbRect.width(), cbRect.height());
-  QPixmap pix(cbRect.width(), cbRect.height());
-  QStylePainter pixpainter(&pix, parentWidget());
-  pixpainter.fillRect(0, 0, cbRect.width(), cbRect.height(), cb.palette.brush(QPalette::Midlight));
-  style()->drawPrimitive(QStyle::PE_IndicatorCheckBox, &cb, &pixpainter);
-  pixpainter.end();
-  painter->drawPixmap(rect.x() + (rect.width() - cbRect.width()) / 2,
-                      rect.y() + (rect.height() - cbRect.height()) / 2, pix, 0, 0, cbRect.width(),
-                      cbRect.height());
-#else
+  auto cbRect = style()->subElementRect(QStyle::SE_CheckBoxClickRect, &cb);
   cb.rect =
       QRect(rect.x() + (rect.width() - cbRect.width()) / 2,
             rect.y() + (rect.height() - cbRect.height()) / 2, cbRect.width(), cbRect.height());
-  style()->drawPrimitive(QStyle::PE_IndicatorCheckBox, &cb, painter);
-#endif
+  style()->drawControl(QStyle::CE_CheckBox, &cb, painter);
 }
 
 void CSVTableHeader::checkBoxPressed(int logicalIndex) {
@@ -243,6 +253,13 @@ CSVTableWidget::CSVTableWidget(QWidget *parent)
     : QTableWidget(parent), maxLineNumber(UINT_MAX), firstLineIndex(0), checkCommentsLines(true),
       nbCommentsLines(0) {
   horizontalHeader()->setMinimumSectionSize(50);
+#ifdef __APPLE__
+  // specific MacOSX hack to ensure visibility
+  // of disabled QTableWidgetItem on dark background
+  QPalette palette = this->palette();
+  palette.setColor(QPalette::Disabled, QPalette::Text, QColor("gray"));
+  this->setPalette(palette);
+#endif
 }
 
 bool CSVTableWidget::begin() {
@@ -254,7 +271,7 @@ bool CSVTableWidget::begin() {
   return true;
 }
 
-bool CSVTableWidget::line(unsigned int row, const vector<string> &lineTokens) {
+bool CSVTableWidget::line(unsigned int row, const vector<CSVToken> &lineTokens) {
 
   if ((row < firstLineIndex) || // Wait for the first line index
                                 // If the maximum line number is reached ignore the token.
@@ -262,9 +279,10 @@ bool CSVTableWidget::line(unsigned int row, const vector<string> &lineTokens) {
     return true;
 
   if (checkCommentsLines) {
-    if (lineTokens[0][0] == '#')
-      ++nbCommentsLines;
-    else if (lineTokens[0].substr(0, 2) == "//")
+    auto token = lineTokens[0].value.data();
+    // no need to check token size
+    // because a token contains at least one char plus the null ending char
+    if ((token[0] == '#') || ((token[0] == '/') && token[1] == '/'))
       ++nbCommentsLines;
     else
       checkCommentsLines = false;
@@ -281,7 +299,7 @@ bool CSVTableWidget::line(unsigned int row, const vector<string> &lineTokens) {
     }
 
     // Fill the table
-    setItem(currentRow, column, new QTableWidgetItem(tlpStringToQString(lineTokens[column])));
+    setItem(currentRow, column, new QTableWidgetItem(tlpStringToQString(lineTokens[column].value)));
   }
 
   return true;
@@ -291,7 +309,7 @@ bool CSVTableWidget::end(unsigned int, unsigned int) {
   return true;
 }
 
-static std::unordered_map<std::string, std::set<std::string>> typenameToProps;
+static tlp_hash_map<std::string, std::set<std::string>> typenameToProps;
 
 CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent)
     : QWidget(parent), ui(new Ui::CSVImportConfigurationWidget),
@@ -393,7 +411,7 @@ bool CSVImportConfigurationWidget::begin() {
   return true;
 }
 
-bool CSVImportConfigurationWidget::line(unsigned int row, const vector<string> &lineTokens) {
+bool CSVImportConfigurationWidget::line(unsigned int row, const vector<CSVToken> &lineTokens) {
   ui->previewTableWidget->line(row, lineTokens);
 
   if (keepPropertyWidgets)
@@ -422,7 +440,9 @@ bool CSVImportConfigurationWidget::line(unsigned int row, const vector<string> &
       if (propertyWidgets.size() <= column) {
         QString columnName = generateColumnName(column);
         // Store the first token type
-        columnHeaderType.push_back(guessDataType(lineTokens[column]));
+        columnHeaderType.push_back(lineTokens[column].considerAsString
+                                       ? StringProperty::propertyTypename
+                                       : guessDataType(lineTokens[column].value));
         // Mark the column type as uninitialized
         columnType.push_back("");
         // Create the new column widget. The default type is string
@@ -431,7 +451,10 @@ bool CSVImportConfigurationWidget::line(unsigned int row, const vector<string> &
       } else {
         // If the widget is not initialized do not use the default type
         string previousPropertyType = columnType[column];
-        string propertyType = guessPropertyDataType(lineTokens[column], previousPropertyType);
+        string propertyType =
+            lineTokens[column].considerAsString
+                ? StringProperty::propertyTypename
+                : guessPropertyDataType(lineTokens[column].value, previousPropertyType);
         // Store the new type
         columnType[column] = propertyType;
       }
@@ -505,12 +528,12 @@ void CSVImportConfigurationWidget::updateTableHeaders() {
   QStringList itemsLabels;
 
   for (unsigned int i = 0; i < columnCount(); ++i) {
-    // Update the column name
+    // set the default column name
     QString columnName = generateColumnName(i);
     itemsLabels << ""; // columnName;
-    propertyWidgets[i]->setPropertyName(columnName);
-    // Update the column type.
-    propertyWidgets[i]->setPropertyType(getColumnType(i));
+    propertyWidgets[i]->setPropertyName(columnName, true);
+    // set the default column type.
+    propertyWidgets[i]->setPropertyType(getColumnType(i), true);
   }
 
   ui->previewTableWidget->setHorizontalHeaderLabels(itemsLabels);
@@ -750,7 +773,7 @@ const string &CSVImportConfigurationWidget::guessDataType(const string &data) co
   bool b;
 
   if (BooleanType::fromString(b, std::string(ptr), true)) {
-    // The type is boolean
+    // The type is Boolean
     return BooleanProperty::propertyTypename;
   }
 

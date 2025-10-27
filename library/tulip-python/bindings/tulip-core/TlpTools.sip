@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -116,7 +116,7 @@ X being the major version, Y the minor version, and Z the patch version.
 %End
 
 %MethodCode
-  sipRes = new std::string(TULIP_RELEASE);
+  sipRes = new std::string(TULIP_VERSION);
 %End
 
 //=====================================================================
@@ -147,7 +147,7 @@ The plug-ins directory can be defined in different ways, given by order of preva
 
 //=====================================================================
 
-void loadPlugins(tlp::PluginLoader *plug=0);
+void loadPlugins(tlp::PluginLoader *plug=SIP_NULLPTR);
 %Docstring
 tlp.loadPlugins()
 
@@ -163,7 +163,7 @@ by calling the :func:`tlp.initTulipLib` function.
 
 //=====================================================================
 
-void loadPluginsFromDir(const std::string &pluginsDir, tlp::PluginLoader *plug=0, bool loadPythonPlugins=true);
+void loadPluginsFromDir(const std::string &pluginsDir, tlp::PluginLoader *plug=SIP_NULLPTR, bool loadPythonPlugins=true);
 %Docstring
 tlp.loadPluginsFromDir(pluginsDir)
 
@@ -191,7 +191,7 @@ each subdirectory will be visited to search for plugins to load.
 
 //=====================================================================
 
-bool loadPlugin(const std::string &filename, tlp::PluginLoader *plug=0);
+bool loadPlugin(const std::string &filename, tlp::PluginLoader *plug=SIP_NULLPTR);
 %Docstring
 tlp.loadPlugin(filename)
 
@@ -219,7 +219,7 @@ Returns :const:`True` if the plugin was correctly loaded.
 
 //=====================================================================
 
-void loadPluginsCheckDependencies(tlp::PluginLoader* loader=0);
+void loadPluginsCheckDependencies(tlp::PluginLoader* loader=SIP_NULLPTR);
 %Docstring
 tlp.loadPluginsCheckDependencies()
 
@@ -234,7 +234,7 @@ it is unloaded and removed from the current plugins database.
 
 //=====================================================================
 
-SIP_PYOBJECT getDefaultPluginParameters(const std::string &pluginName, tlp::Graph *graph = 0);
+SIP_PYOBJECT getDefaultPluginParameters(const std::string &pluginName, tlp::Graph *graph = SIP_NULLPTR);
 %Docstring
 tlp.getDefaultPluginParameters(pluginName, graph=None)
 
@@ -443,19 +443,53 @@ unsigned int getSeedOfRandomSequence();
 %Docstring
 tlp.getSeedOfRandomSequence()
 
-Returns the value of the seed used for further initialization of a random sequence
+Returns the value of the seed used to initialize the random number generator.
 
 :rtype: integer
 %End
 
 //=====================================================================
+unsigned int randomUnsignedInteger(unsigned int max);
+%Docstring
+tlp.randomUnsignedInteger(max)
 
-void setSeedOfRandomSequence(unsigned int seed);
+Returns a random unsigned integer in the range [0, max]
+
+:param max: the maximum number to generate
+:rtype: integer
+%End
+
+//=====================================================================
+int randomInteger(int max);
+%Docstring
+tlp.randomInteger(max)
+
+  Returns a random integer in the range [0, max] if max>0 else between [max, 0].
+
+:param max: the maximum or minimum number to generate
+:rtype: integer
+%End
+
+//=====================================================================
+double randomDouble(double max=1.0);
+%Docstring
+tlp.randomDouble(max)
+
+Returns a random double in the range [0, max]
+
+:param max: the maximum number to generate
+:rtype: double
+%End
+
+//=====================================================================
+
+void setSeedOfRandomSequence(unsigned int seed=UINT_MAX);
 %Docstring
 tlp.setSeedOfRandomSequence(seed)
 
-Gives the value of the seed used for further initialization of a random sequence (with further calls to rand() or rand_r(...)).
-Set seed to UINT_MAX if you need a random choice of the seed.
+Gives the value of the seed used for further generation of random numbers.
+Do not pass an argument if you prefer a random choice of the seed.
+Also initializes the random number generator with the new seed.
 
 :param seed: the value of the seed
 :type seed: integer
@@ -463,12 +497,14 @@ Set seed to UINT_MAX if you need a random choice of the seed.
 
 //=====================================================================
 
-void initRandomSequence();
+void initRandomSequence() /Deprecated/;
 %Docstring
 tlp.initRandomSequence()
 
+.. deprecated:: 6.0.0
+
 Initializes a random sequence with the seed previously set.
-Further calls to rand() or rand_r(...) will return the elements of that sequence
+    Use :func:`tlp.setSeedOfRandomSequence()` with no argument instead.
 
 %End
 

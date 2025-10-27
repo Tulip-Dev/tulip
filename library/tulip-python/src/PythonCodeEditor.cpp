@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,6 +21,7 @@
 #include "tulip/PythonCodeEditor.h"
 #include "tulip/PythonCodeHighlighter.h"
 #include "tulip/ParenMatcherHighlighter.h"
+#include "tulip/TlpQtTools.h"
 
 #include <tulip/Perspective.h>
 #include <tulip/TulipSettings.h>
@@ -29,39 +30,20 @@
 #include <QPainter>
 #include <QTextBlock>
 #include <QApplication>
-#include <QMainWindow>
 #include <QToolTip>
 #include <QScrollBar>
 #include <QMessageBox>
 #include <QMimeData>
-#include <QDesktopWidget>
 #include <QFileInfo>
+#include <QRegularExpression>
 #include <QScreen>
 #include <QPushButton>
+#include <QWindow>
 
 #include "ui_FindReplaceDialog.h"
 
 using namespace std;
 using namespace tlp;
-
-class GrabKeyboardFocusEventFilter : public QObject {
-public:
-  bool eventFilter(QObject *, QEvent *event) override {
-    if (event->type() == QEvent::ShortcutOverride) {
-      // do not override decrease/increase font size shortcuts
-      QKeyEvent *ke = static_cast<QKeyEvent *>(event);
-      if ((ke->modifiers() & Qt::ControlModifier) &&
-          (ke->key() == Qt::Key_Minus || ke->key() == Qt::Key_Plus))
-        return false;
-      event->accept();
-      return true;
-    }
-
-    return false;
-  }
-};
-
-static GrabKeyboardFocusEventFilter keyboardFocusEventFilter;
 
 static char sepChar[] = {' ', '\t', '=', '(', '[', '{', ',', '*', '+', '/', '^', '-', 0};
 
@@ -96,7 +78,6 @@ AutoCompletionList::AutoCompletionList() : QListWidget(), _codeEditor(nullptr) {
   setAttribute(Qt::WA_StaticContents);
   setFrameShape(StyledPanel);
   setFrameShadow(Plain);
-  installEventFilter(&keyboardFocusEventFilter);
   _activated = false;
   _wasActivated = false;
   setToolTip("Use up and down arrow keys to navigate through the list (or use the mouse wheel).\n"
@@ -258,6 +239,9 @@ FindReplaceDialog::FindReplaceDialog(QPlainTextEdit *editor, QWidget *parent)
                                            Qt::WindowTitleHint | Qt::WindowCloseButtonHint)),
       _ui(new Ui::FindReplaceDialogData), _editor(editor) {
   _ui->setupUi(this);
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(this);
+
   _findButton = _ui->buttonBox->button(QDialogButtonBox::Reset);
   _findButton->setText("Find");
   connect(_findButton, SIGNAL(clicked()), this, SLOT(doFind()));
@@ -349,7 +333,7 @@ bool FindReplaceDialog::doFind() {
   if (!_ui->regexpCB->isChecked()) {
     sel = _editor->document()->find(text, _editor->textCursor(), findFlags);
   } else {
-    sel = _editor->document()->find(QRegExp(text), _editor->textCursor(), findFlags);
+    sel = _editor->document()->find(QRegularExpression(text), _editor->textCursor(), findFlags);
   }
 
   bool ret = !sel.isNull();
@@ -368,7 +352,7 @@ bool FindReplaceDialog::doFind() {
     if (!_ui->regexpCB->isChecked()) {
       sel = _editor->document()->find(text, cursor, findFlags);
     } else {
-      sel = _editor->document()->find(QRegExp(text), cursor, findFlags);
+      sel = _editor->document()->find(QRegularExpression(text), cursor, findFlags);
     }
 
     ret = !sel.isNull();
@@ -445,10 +429,10 @@ void FindReplaceDialog::doReplaceAll() {
 
 AutoCompletionList *PythonCodeEditor::_autoCompletionList = nullptr;
 AutoCompletionDataBase *PythonCodeEditor::_autoCompletionDb = nullptr;
+QMainWindow *PythonCodeEditor::_mainWindow = nullptr;
 
 PythonCodeEditor::PythonCodeEditor(QWidget *parent)
     : QPlainTextEdit(parent), _highlighter(nullptr), _tooltipActive(false), _indentPattern(4, ' ') {
-  installEventFilter(&keyboardFocusEventFilter);
   setAutoIndentation(true);
   setIndentationGuides(true);
   setHighlightEditedLine(true);
@@ -610,9 +594,7 @@ void PythonCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event) {
   }
 }
 
-static float clamp(float f, float minV, float maxV) {
-  return std::min(std::max(f, minV), maxV);
-}
+#define CLAMP(f, minV, maxV) std::min(std::max(f, minV), maxV)
 
 void PythonCodeEditor::updateTabWidth() {
   setTabWidth(textWidth(_indentPattern));
@@ -622,7 +604,7 @@ void PythonCodeEditor::zoomIn() {
   QTextCursor cursor = textCursor();
   selectAll();
   QTextCharFormat format = currentCharFormat();
-  _currentFont.setPointSize(clamp(_currentFont.pointSize() + 1, 6, 30));
+  _currentFont.setPointSize(CLAMP(_currentFont.pointSize() + 1, 6, 30));
   format.setFont(_currentFont);
   setCurrentCharFormat(format);
   setTextCursor(cursor);
@@ -633,7 +615,7 @@ void PythonCodeEditor::zoomOut() {
   QTextCursor cursor = textCursor();
   selectAll();
   QTextCharFormat format = currentCharFormat();
-  _currentFont.setPointSize(clamp(_currentFont.pointSize() - 1, 6, 30));
+  _currentFont.setPointSize(CLAMP(_currentFont.pointSize() - 1, 6, 30));
   format.setFont(_currentFont);
   setCurrentCharFormat(format);
   setTextCursor(cursor);
@@ -897,7 +879,7 @@ void PythonCodeEditor::highlightCurrentLine() {
 
   if (highlightEditedLine() && !isReadOnly() && selectedText().isEmpty()) {
     QTextEdit::ExtraSelection selection;
-    QColor lineColor(_darkBackground ? "#D0D0D0" : "#D8D8D8");
+    QColor lineColor(_darkBackground ? "#CECECE" : "#D8D8D8");
     selection.format = textCursor().block().charFormat();
     selection.format.setBackground(lineColor);
     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
@@ -1178,7 +1160,14 @@ void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
 
 void PythonCodeEditor::wheelEvent(QWheelEvent *event) {
   if (!_autoCompletionList->isVisible()) {
-    QPlainTextEdit::wheelEvent(event);
+    if (event->modifiers() == Qt::ControlModifier) {
+      if (event->angleDelta().y() > 0)
+        zoomIn();
+      else
+        zoomOut();
+      event->accept();
+    } else
+      QPlainTextEdit::wheelEvent(event);
   }
 }
 
@@ -1246,7 +1235,7 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
   int pos = lineNumberAreaWidth() + left + 1;
   int stop = 0;
 
-  for (int i = textBeforeCursor.length(); i >= 0; --i) {
+  for (int i = textBeforeCursor.length() - 1; i >= 0; --i) {
     if (textBeforeCursor[i] == '\t' || textBeforeCursor[i] == ' ' || textBeforeCursor[i] == '.' ||
         textBeforeCursor[i] == '(' || textBeforeCursor[i] == '[') {
       stop = i + 1;
@@ -1263,7 +1252,7 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
   }
 
   if (mapToGlobal(QPoint(0, bottom + _autoCompletionList->height())).y() >
-      QApplication::primaryScreen()->geometry().height())
+      _mainWindow->windowHandle()->screen()->geometry().height())
     _autoCompletionList->move(mapToGlobal(QPoint(pos, top - _autoCompletionList->height())));
   else
     _autoCompletionList->move(mapToGlobal(QPoint(pos, bottom)));
@@ -1283,7 +1272,7 @@ void PythonCodeEditor::updateAutoCompletionList(bool dotContext) {
 
   QString textBeforeCursorTrimmed = textBeforeCursor.trimmed();
 
-  // string litteral edition : don't show autocompletion list
+  // string literal edition : don't show autocompletion list
   if (dotContext && (textBeforeCursorTrimmed.count("\"") % 2 == 1 ||
                      textBeforeCursorTrimmed.count("\'") % 2 == 1))
     return;
@@ -1304,8 +1293,8 @@ QString PythonCodeEditor::getEditedFunctionName() const {
 
   QString funcName = "global";
   QString className = "";
-  QRegExp funcRegexp("^def [A-Za-z_][A-Za-z0-9_]*\\(.*\\)[ \t]*:$");
-  QRegExp classRegexp("^class [A-Za-z_][A-Za-z0-9_]*.*:$");
+  QRegularExpression funcRegexp("^def [A-Za-z_][A-Za-z0-9_]*\\(.*\\)[ \t]*:$");
+  QRegularExpression classRegexp("^class [A-Za-z_][A-Za-z0-9_]*.*:$");
 
   QTextBlock block = textCursor().block();
   QString currentLine = block.text();
@@ -1320,7 +1309,7 @@ QString PythonCodeEditor::getEditedFunctionName() const {
       if (currentLine.startsWith('#') || currentLine.isEmpty())
         continue;
 
-      if (funcName == "global" && funcRegexp.indexIn(currentLine.trimmed()) != -1) {
+      if (funcName == "global" && currentLine.trimmed().indexOf(funcRegexp) != -1) {
         funcName = currentLine.trimmed();
         funcName = funcName.mid(4, funcName.indexOf('(') - 4);
 
@@ -1329,7 +1318,7 @@ QString PythonCodeEditor::getEditedFunctionName() const {
         }
       }
 
-      if (classRegexp.indexIn(currentLine.trimmed()) != -1) {
+      if (currentLine.trimmed().indexOf(classRegexp) != -1) {
         className = currentLine.trimmed();
 
         if (className.indexOf('(') != -1)
@@ -1684,7 +1673,6 @@ bool PythonCodeEditor::saveCodeToFile() {
   if (getFileName() == fileInfo.absoluteFilePath() &&
       file.open(QIODevice::WriteOnly | QIODevice::Text)) {
     QTextStream out(&file);
-    out.setCodec("UTF-8");
     out << getCleanCode();
     file.close();
     QFileInfo fileInfo(file);

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -29,30 +29,25 @@
 #define __GLEW_H__
 
 #include <QSurfaceFormat>
-#include <QOffscreenSurface>
 
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
-#include <tulip/Graph.h>
-#include <tulip/GlTools.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/Gl2DRect.h>
 #include <tulip/GlQuadTreeLODCalculator.h>
 #include <tulip/GLInteractor.h>
 #include <tulip/GlGraphComposite.h>
-#include <tulip/Interactor.h>
-#include <tulip/GlCompositeHierarchyManager.h>
-#include <tulip/GlVertexArrayManager.h>
 #include <tulip/View.h>
 #include <tulip/Camera.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlOffscreenRenderer.h>
-#include <tulip/GlTextureManager.h>
+#include <tulip/Perspective.h>
+
 using namespace std;
 
 namespace tlp {
 
-#if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+#if defined(__APPLE__)
 // needed to fix OpenGL selection failure on MACOS since Qt 5.10
 class GlBufferBinder {
   QOpenGLFramebufferObject *glFrameBuf;
@@ -94,6 +89,12 @@ GlMainWidget::GlMainWidget(QWidget *parent, View *view)
   getScene()->setViewOrtho(TulipSettings::isViewOrtho());
   OpenGlConfigManager::initExtensions();
   QOpenGLWidget::doneCurrent();
+  // To ensure devicePixelRatio() returned value is 'correct',
+  // we get it from the host window system ancestor, if there is one;
+  // if not, we get the value from the main window.
+  // By doing this the returned value remains 'correct'
+  // even if the window is moved from one screen to another.
+  wdpr = window()->windowHandle() ? window() : Perspective::instance()->mainWindow();
 }
 //==================================================
 GlMainWidget::~GlMainWidget() {
@@ -143,7 +144,6 @@ void GlMainWidget::deleteFramebuffers() {
   delete glFrameBuf2;
   glFrameBuf2 = nullptr;
 }
-
 //==================================================
 void GlMainWidget::render(RenderingOptions options, bool checkVisibility) {
 
@@ -398,68 +398,61 @@ QImage GlMainWidget::createPicture(int width, int height, bool center, QImage::F
   QOpenGLFramebufferObjectFormat fboFormat;
   fboFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
   fboFormat.setSamples(OpenGlConfigManager::maxNumberOfSamples());
-  QOpenGLFramebufferObject *frameBuf = new QOpenGLFramebufferObject(width, height, fboFormat);
-  QOpenGLFramebufferObject *frameBuf2 = new QOpenGLFramebufferObject(width, height);
+  {
+    QOpenGLFramebufferObject frameBuf(width, height, fboFormat);
 
-  if (frameBuf->isValid() && frameBuf2->isValid()) {
-    frameBuf->bind();
+    if (frameBuf.isValid()) {
+      frameBuf.bind();
 
-    int oldWidth = scene.getViewport()[2];
-    int oldHeight = scene.getViewport()[3];
-    vector<Camera> oldCameras;
-    const vector<pair<string, GlLayer *>> &layersList = scene.getLayersList();
+      int oldWidth = scene.getViewport()[2];
+      int oldHeight = scene.getViewport()[3];
+      vector<Camera> oldCameras;
+      const vector<pair<string, GlLayer *>> &layersList = scene.getLayersList();
 
-    if (center) {
-      for (auto &itl : layersList) {
-        if (!itl.second->useSharedCamera())
-          oldCameras.push_back(itl.second->getCamera());
-      }
-    }
-
-    scene.setViewport(0, 0, width, height);
-
-    if (center)
-      scene.adjustSceneToSize(width, height);
-
-    computeInteractors();
-    scene.draw();
-    drawInteractors();
-    frameBuf->release();
-
-    QOpenGLFramebufferObject::blitFramebuffer(frameBuf2, QRect(0, 0, width, height), frameBuf,
-                                              QRect(0, 0, width, height));
-
-    resultImage = frameBuf2->toImage();
-
-    scene.setViewport(0, 0, oldWidth, oldHeight);
-
-    if (center) {
-      int i = 0;
-
-      for (auto &itl : layersList) {
-        if (!itl.second->useSharedCamera()) {
-          Camera &camera = itl.second->getCamera();
-          camera.setCenter(oldCameras[i].getCenter());
-          camera.setEyes(oldCameras[i].getEyes());
-          camera.setSceneRadius(oldCameras[i].getSceneRadius());
-          camera.setUp(oldCameras[i].getUp());
-          camera.setZoomFactor(oldCameras[i].getZoomFactor());
+      if (center) {
+        for (auto &itl : layersList) {
+          if (!itl.second->useSharedCamera())
+            oldCameras.push_back(itl.second->getCamera());
         }
+      }
 
-        i++;
+      scene.setViewport(0, 0, width, height);
+
+      if (center)
+        scene.adjustSceneToSize(width, height);
+
+      computeInteractors();
+      scene.draw();
+      drawInteractors();
+      frameBuf.release();
+
+      resultImage = frameBuf.toImage();
+      scene.setViewport(0, 0, oldWidth, oldHeight);
+
+      if (center) {
+        int i = 0;
+
+        for (auto &itl : layersList) {
+          if (!itl.second->useSharedCamera()) {
+            Camera &camera = itl.second->getCamera();
+            camera.setCenter(oldCameras[i].getCenter());
+            camera.setEyes(oldCameras[i].getEyes());
+            camera.setSceneRadius(oldCameras[i].getSceneRadius());
+            camera.setUp(oldCameras[i].getUp());
+            camera.setZoomFactor(oldCameras[i].getZoomFactor());
+          }
+
+          i++;
+        }
       }
     }
   }
-
-  delete frameBuf;
-  delete frameBuf2;
-
   // The QOpenGLFramebufferObject returns the wrong image format
   // QImage::Format_ARGB32_Premultiplied. We need to create an image from original data with the
   // right format QImage::Format_ARGB32. We need to clone the data as when the image var will be
   // destroy at the end of the function it's data will be destroyed too and the newly created image
   // object will have invalid data pointer.
-  return QImage(resultImage.bits(), resultImage.width(), resultImage.height(),
+  return QImage(resultImage.constBits(), resultImage.width(), resultImage.height(),
                 QImage::Format_ARGB32)
       .convertToFormat(format);
 }

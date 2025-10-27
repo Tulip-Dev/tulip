@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -143,7 +143,7 @@ void PathFinder::construct() {
   connect(_configurationWidget, SIGNAL(setTolerance(int)), this, SLOT(setTolerance(int)));
 }
 
-QWidget *PathFinder::configurationWidget() const {
+QWidget *PathFinder::configurationOptionsWidget() const {
   return _configurationWidget;
 }
 

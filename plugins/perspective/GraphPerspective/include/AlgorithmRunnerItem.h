@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -30,12 +30,13 @@ class AlgorithmRunnerItem;
 namespace tlp {
 class Graph;
 class ParameterListModel;
+class WorkspacePanel;
 } // namespace tlp
 
 class AlgorithmRunnerItem : public QWidget {
   Q_OBJECT
   Ui::AlgorithmRunnerItem *_ui;
-  QString _pluginName;
+  QString _pluginName, settingsButtonIconName;
   tlp::Graph *_graph;
   bool _storeResultAsLocal;
   QPointF _dragStartPosition;
@@ -64,13 +65,14 @@ public slots:
   void setStoreResultAsLocal(bool);
   void favoriteChanged(int state);
 
-  void run(tlp::Graph *g = nullptr);
+  void run(tlp::Graph *g = nullptr, tlp::WorkspacePanel *wsp = nullptr);
 
 signals:
   void favorized(bool);
 
 protected slots:
   void afterRun(tlp::Graph *, const tlp::DataSet &);
+  void updateSettings(bool checked);
   void initModel();
 };
 #endif // ALGORITHMRUNNERITEM_H

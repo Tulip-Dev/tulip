@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -29,26 +29,17 @@
 
 namespace tlp {
 
-class TLP_QT_SCOPE ChooseColorButton : public QPushButton {
+class TLP_QT_SCOPE ColorButton : public QPushButton {
   Q_OBJECT
   Q_PROPERTY(QColor color READ color WRITE setColor)
   Q_PROPERTY(Color tulipColor READ tulipColor WRITE setTulipColor)
 
 public:
-  explicit ChooseColorButton(QWidget *parent = nullptr);
+  explicit ColorButton(QWidget *parent = nullptr);
 
   QColor color() const;
   QString text() const;
   Color tulipColor() const;
-
-protected:
-  QColor _color;
-  QString _text;
-  QString _dialogTitle;
-
-signals:
-  void colorChanged(QColor);
-  void tulipColorChanged(Color);
 
 public slots:
   void setColor(const QColor &);
@@ -56,19 +47,21 @@ public slots:
   void setTulipColor(const Color &);
   void setDialogTitle(const QString &);
 
+signals:
+  void colorChanged(QColor);
+  void tulipColorChanged(Color);
+
+protected:
+  QColor _color;
+  QString _text;
+  QString _dialogTitle;
+
+  void paintEvent(QPaintEvent *) override;
+
 protected slots:
   void chooseColor();
 };
 
-class TLP_QT_SCOPE ColorButton : public ChooseColorButton {
-  Q_OBJECT
-
-public:
-  explicit ColorButton(QWidget *parent = nullptr) : ChooseColorButton(parent) {}
-
-protected:
-  void paintEvent(QPaintEvent *) override;
-};
 } // namespace tlp
 
 #endif // COLORBUTTON_H

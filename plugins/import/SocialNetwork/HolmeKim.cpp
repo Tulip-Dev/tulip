@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
@@ -32,7 +32,7 @@ static const char *paramHelp[] = {
     // m
     "Number of edges added at each time step.",
 
-    // proba
+    // p
     "Probability of adding a triangle after adding a random edge."};
 
 /**
@@ -72,12 +72,12 @@ struct HolmeKim : public ImportModule {
 
     // check arguments
     if (m > n) {
-      pluginProgress->setError("The m parameter cannot be greater than the number of nodes.");
+      pluginProgress->setError("\"m\" cannot be greater than \"nodes\"");
       return false;
     }
 
     if (mu > 1 || mu < 0) {
-      pluginProgress->setError("The p parameter must belong to [0, 1].");
+      pluginProgress->setError("\"p\" must belong to [0, 1]");
       return false;
     }
 

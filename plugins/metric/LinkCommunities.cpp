@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -41,9 +41,10 @@ using namespace tlp;
  * if they are part of the same group.
  * The result for a node shows the number of groups to which it belongs.
  *
- * @note To create subgraphs using the result of this algortihm use "Equal Value" with parameter
+ * @note To create subgraphs using the result of this algorithm use "Equal Value" with parameter
  *Type="edges".
  *
+
  * @todo Deal with directed graphs.
  *
  **/
@@ -52,9 +53,10 @@ public:
   PLUGININFORMATION(
       "Link Communities", "François Queyroi", "25/02/11",
       "Edges partitioning measure used for community detection.<br>"
-      "It is an implementation of a fuzzy clustering procedure. First introduced in:<br>"
-      " <b>Link communities reveal multiscale complexity in networks</b>, Ahn, Y.Y. and Bagrow, "
-      "J.P. and Lehmann, S., Nature vol:466, 761--764 (2010)",
+      "It is an implementation of a fuzzy clustering procedure. First introduced in:<br/>"
+      "<b>Link communities reveal multiscale complexity in networks</b>,<br/>"
+      " Ahn, Y.Y. and Bagrow, J.P. and Lehmann, S., Nature vol:466, 761--764 (2010)<br>"
+      "doi: <a href=\"https://doi.org/10.1038/nature09182\">10.1038/nature09182</a>",
       "1.1", "Clustering")
 
   LinkCommunities(const tlp::PluginContext *);
@@ -134,8 +136,8 @@ bool LinkCommunities::run() {
 
   if (dataSet != nullptr) {
     dataSet->get("metric", metric);
-    dataSet->getDeprecated("group isthmus", "Group isthmus", group_isthmus);
-    dataSet->getDeprecated("number of steps", "Number of steps", nb_steps);
+    dataSet->get("group isthmus", group_isthmus);
+    dataSet->get("number of steps", nb_steps);
   }
 
   const std::vector<edge> &edges = graph->edges();
@@ -359,11 +361,8 @@ double LinkCommunities::computeAverageDensity(double threshold, const std::vecto
       while (!dnToVisit.empty()) {
         dn = dnToVisit.front();
         dnToVisit.pop_front();
-        const std::vector<edge> &curEdges = dual.star(dn);
-        unsigned int eSz = curEdges.size();
-
-        for (unsigned int j = 0; j < eSz; ++j) {
-          edge e = curEdges[j];
+        for (auto &adj : dual.adj(dn)) {
+          edge e = adj.link();
 
           if (similarity[e] > threshold) {
             node neighbour = dual.opposite(e, dn);
@@ -429,11 +428,8 @@ void LinkCommunities::setEdgeValues(double threshold, bool group_isthmus,
       while (!dnToVisit.empty()) {
         dn = dnToVisit.front();
         dnToVisit.pop_front();
-        const std::vector<edge> &curEdges = dual.star(dn);
-        unsigned int eSz = curEdges.size();
-
-        for (unsigned int j = 0; j < eSz; ++j) {
-          edge e = curEdges[j];
+        for (auto &adj : dual.adj(dn)) {
+          edge e = adj.link();
 
           if (similarity[e] > threshold) {
             node neighbour = dual.opposite(e, dn);

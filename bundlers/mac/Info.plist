@@ -19,7 +19,7 @@
   <string>Tulip</string>
 
   <key>CFBundleGetInfoString</key>
-  <string>Tulip from http://tulip.labri.fr</string>
+  <string>Tulip from https://tulip.labri.fr</string>
 
   <key>CFBundleIconFile</key>
   <string>tulip.icns</string>

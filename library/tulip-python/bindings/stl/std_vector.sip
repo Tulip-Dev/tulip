@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -43,12 +43,12 @@ template<TYPE>
   const sipTypeDef* kpTypeDef = getSipType("TYPE");
 
   if (!kpTypeDef) {
-    return NULL;
+    return SIP_NULLPTR;
   }
 
   // Create the Python list of the correct length.
-  if ((l = PyList_New(sipCpp -> size())) == NULL) {
-    return NULL;
+  if ((l = PyList_New(sipCpp -> size())) == SIP_NULLPTR) {
+    return SIP_NULLPTR;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -59,10 +59,10 @@ template<TYPE>
 
     // Get the Python wrapper for the Type instance, creating a new
     // one if necessary, and handle any ownership transfer.
-    if ((pobj = sipConvertFromNewType(cpp, kpTypeDef, sipTransferObj)) == NULL) {
+    if ((pobj = sipConvertFromNewType(cpp, kpTypeDef, sipTransferObj)) == SIP_NULLPTR) {
       // There was an error so garbage collect the Python list.
       Py_XDECREF(l);
-      return NULL;
+      return SIP_NULLPTR;
     }
 
     // Add the wrapper to the list.
@@ -82,11 +82,11 @@ template<TYPE>
   }
 
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == SIP_NULLPTR) {
     if (!PyList_Check(sipPy)) {
       return 0;
     }
-    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+    for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
       PyObject *item = PyList_GET_ITEM(sipPy, i);
       if (!sipCanConvertToType(item, kpTypeDef, SIP_NOT_NONE)) {
         //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to TYPE");
@@ -99,7 +99,7 @@ template<TYPE>
   // Convert Python list of TYPE to  std::vector<TYPE>
   std::vector<TYPE> *v = new std::vector<TYPE>();
   v->reserve(PyList_GET_SIZE(sipPy));
-  for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+  for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
     int state;
     TYPE* p = static_cast<TYPE*>(sipConvertToType(PyList_GET_ITEM(sipPy, i), kpTypeDef, sipTransferObj, SIP_NOT_NONE, &state, sipIsErr));
 
@@ -131,12 +131,12 @@ template<TYPE*>
   const sipTypeDef* kpTypeDef = getSipType("TYPE");
 
   if (!kpTypeDef) {
-    return NULL;
+    return SIP_NULLPTR;
   }
 
   // Create the Python list of the correct length.
-  if ((l = PyList_New(sipCpp -> size())) == NULL) {
-    return NULL;
+  if ((l = PyList_New(sipCpp -> size())) == SIP_NULLPTR) {
+    return SIP_NULLPTR;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -146,10 +146,10 @@ template<TYPE*>
 
     // Get the Python wrapper for the Type instance, creating a new
     // one if necessary, and handle any ownership transfer.
-    if ((pobj = sipConvertFromType(sipCpp -> at(i), kpTypeDef, sipTransferObj)) == NULL) {
+    if ((pobj = sipConvertFromType(sipCpp -> at(i), kpTypeDef, sipTransferObj)) == SIP_NULLPTR) {
       // There was an error so garbage collect the Python list.
       Py_XDECREF(l);
-      return NULL;
+      return SIP_NULLPTR;
     }
 
     // Add the wrapper to the list.
@@ -169,11 +169,11 @@ template<TYPE*>
   }
 
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == SIP_NULLPTR) {
     if (!PyList_Check(sipPy)) {
       return 0;
     }
-    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+    for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
       PyObject *item = PyList_GET_ITEM(sipPy, i);
       if (!sipCanConvertToType(item, kpTypeDef, SIP_NOT_NONE)) {
         //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to TYPE");
@@ -186,10 +186,10 @@ template<TYPE*>
   // Convert Python list of TYPE to std::vector<TYPE*>
   std::vector<TYPE*> *v = new std::vector<TYPE*>();
   v->reserve(PyList_GET_SIZE(sipPy));
-  for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+  for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
     int state;
     PyObject *item = PyList_GET_ITEM(sipPy, i);
-    TYPE* p = static_cast<TYPE*>(sipConvertToType(item, kpTypeDef, NULL, SIP_NOT_NONE, &state, sipIsErr));
+    TYPE* p = static_cast<TYPE*>(sipConvertToType(item, kpTypeDef, SIP_NULLPTR, SIP_NOT_NONE, &state, sipIsErr));
 
     if (*sipIsErr) {
       sipReleaseType(p, kpTypeDef, state);
@@ -221,8 +221,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create the Python list of the correct length.
-  if ((l = PyList_New(sipCpp -> size())) == NULL) {
-    return NULL;
+  if ((l = PyList_New(sipCpp -> size())) == SIP_NULLPTR) {
+    return SIP_NULLPTR;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -238,11 +238,11 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == SIP_NULLPTR) {
     if (!PyList_Check(sipPy)) {
       return 0;
     }
-    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+    for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
       PyObject *item = PyList_GET_ITEM(sipPy, i);
       if (!PyNumber_Check(item)) {
         //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to double");
@@ -255,7 +255,7 @@ template<TYPE*>
   // Convert Python list of numbers to a std::vector<double>
   std::vector<double> *v = new std::vector<double>();
   v->reserve(PyList_GET_SIZE(sipPy));
-  for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+  for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
     PyObject *f = PyNumber_Float(PyList_GET_ITEM(sipPy, i));
     v->push_back(PyFloat_AsDouble(f));
     Py_XDECREF(f);
@@ -279,8 +279,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create the Python list of the correct length.
-  if ((l = PyList_New(sipCpp -> size())) == NULL) {
-    return NULL;
+  if ((l = PyList_New(sipCpp -> size())) == SIP_NULLPTR) {
+    return SIP_NULLPTR;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -296,11 +296,11 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == SIP_NULLPTR) {
     if (!PyList_Check(sipPy)) {
       return 0;
     }
-    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+    for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
       PyObject *item = PyList_GET_ITEM(sipPy, i);
       if (!PyNumber_Check(item)) {
         //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to float");
@@ -313,7 +313,7 @@ template<TYPE*>
   // Convert Python list of numbers to a std::vector<double>
   std::vector<float> *v = new std::vector<float>();
   v->reserve(PyList_GET_SIZE(sipPy));
-  for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+  for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
     PyObject *f = PyNumber_Float(PyList_GET_ITEM(sipPy, i));
     v->push_back(float(PyFloat_AsDouble(f)));
     Py_XDECREF(f);
@@ -338,8 +338,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create the Python list of the correct length.
-  if ((l = PyList_New(sipCpp -> size())) == NULL) {
-    return NULL;
+  if ((l = PyList_New(sipCpp -> size())) == SIP_NULLPTR) {
+    return SIP_NULLPTR;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -355,11 +355,11 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == SIP_NULLPTR) {
     if (!PyList_Check(sipPy)) {
       return 0;
     }
-    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+    for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
       PyObject *item = PyList_GET_ITEM(sipPy, i);
       if (!PyLong_Check(item)) {
         //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to int");
@@ -372,8 +372,12 @@ template<TYPE*>
   // Convert Python list of integers to a std::vector<int>
   std::vector<int> *v = new std::vector<int>();
   v->reserve(PyList_GET_SIZE(sipPy));
-  for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+  for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+    #if PY_MINOR_VERSION < 13
     v->push_back(int(PyLong_AsLong(PyList_GET_ITEM(sipPy, i))));
+  #else
+  v->push_back(PyLong_AsInt(PyList_GET_ITEM(sipPy, i)));
+  #endif
   }
 
   *sipCppPtr = v;
@@ -395,8 +399,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create the Python list of the correct length.
-  if ((l = PyList_New(sipCpp -> size())) == NULL) {
-    return NULL;
+  if ((l = PyList_New(sipCpp -> size())) == SIP_NULLPTR) {
+    return SIP_NULLPTR;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -412,11 +416,11 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == SIP_NULLPTR) {
     if (!PyList_Check(sipPy)) {
       return 0;
     }
-    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+    for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
       PyObject *item = PyList_GET_ITEM(sipPy, i);
       if (!PyLong_Check(item)) {
         //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to int");
@@ -429,7 +433,7 @@ template<TYPE*>
   // Convert Python list of integers to a std::vector<int>
   std::vector<unsigned int> *v = new std::vector<unsigned int>();
   v->reserve(PyList_GET_SIZE(sipPy));
-  for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+  for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
     v->push_back(uint(PyLong_AsUnsignedLong(PyList_GET_ITEM(sipPy, i))));
   }
 
@@ -452,8 +456,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create the Python list of the correct length.
-  if ((l = PyList_New(sipCpp -> size())) == NULL) {
-    return NULL;
+  if ((l = PyList_New(sipCpp -> size())) == SIP_NULLPTR) {
+    return SIP_NULLPTR;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -469,11 +473,11 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == SIP_NULLPTR) {
     if (!PyList_Check(sipPy)) {
       return 0;
     }
-    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+    for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
       PyObject *item = PyList_GET_ITEM(sipPy, i);
       if (!PyLong_Check(item)) {
         //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to long");
@@ -486,7 +490,7 @@ template<TYPE*>
   // Convert Python list of integers to a std::vector<int>
   std::vector<long> *v = new std::vector<long>();
   v->reserve(PyList_GET_SIZE(sipPy));
-  for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+  for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
     v->push_back(PyLong_AsLong(PyList_GET_ITEM(sipPy, i)));
   }
 
@@ -509,8 +513,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create the Python list of the correct length.
-  if ((l = PyList_New(sipCpp -> size())) == NULL) {
-    return NULL;
+  if ((l = PyList_New(sipCpp -> size())) == SIP_NULLPTR) {
+    return SIP_NULLPTR;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -526,11 +530,11 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == SIP_NULLPTR) {
     if (!PyList_Check(sipPy)) {
       return 0;
     }
-    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+    for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
       PyObject *item = PyList_GET_ITEM(sipPy, i);
       if (!PyLong_Check(item)) {
         //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to unsigned long");
@@ -543,7 +547,7 @@ template<TYPE*>
   // Convert Python list of integers to a std::vector<int>
   std::vector<unsigned long> *v = new std::vector<unsigned long>();
   v->reserve(PyList_GET_SIZE(sipPy));
-  for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+  for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
     v->push_back(PyLong_AsUnsignedLong(PyList_GET_ITEM(sipPy, i)));
   }
 
@@ -566,8 +570,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create the Python list of the correct length.
-  if ((l = PyList_New(sipCpp -> size())) == NULL) {
-    return NULL;
+  if ((l = PyList_New(sipCpp -> size())) == SIP_NULLPTR) {
+    return SIP_NULLPTR;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -583,11 +587,11 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == SIP_NULLPTR) {
     if (!PyList_Check(sipPy)) {
       return 0;
     }
-    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+    for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
       PyObject *item = PyList_GET_ITEM(sipPy, i);
       if (!PyBool_Check(item)) {
         //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to bool");
@@ -597,10 +601,10 @@ template<TYPE*>
     return 1;
   }
 
-  // Convert Python list of booleans to a std::vector<bool>
+  // Convert Python list of Booleans to a std::vector<bool>
   std::vector<bool> *v = new std::vector<bool>();
   v->reserve(PyList_GET_SIZE(sipPy));	
-  for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+  for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
     v->push_back(PyList_GET_ITEM(sipPy, i) == Py_True);
   }
 

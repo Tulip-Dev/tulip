@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,7 +20,6 @@
 #include <tulip/ConnectedTest.h>
 #include <tulip/ConnectedTestListener.h>
 #include <tulip/Graph.h>
-#include <tulip/MutableContainer.h>
 #include <tulip/StaticProperty.h>
 
 using namespace std;
@@ -67,13 +66,14 @@ static bool connectedTest(const Graph *const graph) {
 #endif
 //=================================================================
 bool ConnectedTest::isConnected(const tlp::Graph *const graph) {
-  if (instance.resultsBuffer.find(graph) != instance.resultsBuffer.end())
-    return instance.resultsBuffer[graph];
+  auto it = instance.resultsBuffer.find(graph);
+  if (it != instance.resultsBuffer.end())
+    return it->second;
 
   if (graph->isEmpty())
     return true;
 
-  // trees are the minimally connected graphs
+  // trees are connected graphs with the minimum number of edges
   if (graph->numberOfEdges() < graph->numberOfNodes() - 1)
     return false;
 
@@ -154,6 +154,9 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
           }
         }
       }
+      // stop if graph is connected
+      if (i == 0 && (component.size() == graph->numberOfNodes()))
+        return;
     }
   });
 }

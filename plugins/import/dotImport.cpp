@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -41,10 +41,6 @@ namespace {
 #pragma GCC diagnostic pop
 #endif
 
-static const char *paramHelp[] = {
-    // filename
-    "The dot file to import."};
-
 /** \addtogroup import */
 
 /** This plugin enables to import a graph coded with in dot format
@@ -60,39 +56,29 @@ static const char *paramHelp[] = {
  *    - this parser can be largely optimized ...
  *
  */
-class DotImport : public ImportModule {
+class DotImport : public ImportFileModule {
 public:
   PLUGININFORMATION("graphviz", "Gerald Gainant", "01/03/2004",
-                    "<p>Supported extensions: dot</p><p>Imports a new graph from a file in the dot "
+                    "<p>File extension: dot</p><p>Imports a new graph from a file in the dot "
                     "input format.</p>"
                     "<p>(see <a "
                     "href=\"https://www.graphviz.org/doc/info/lang.html\">https://www.graphviz.org/"
                     "doc/info/lang.html</a>)</p>",
                     "1.0", "File")
-  std::list<std::string> fileExtensions() const override {
-    std::list<std::string> l;
-    l.push_back("dot");
-    return l;
-  }
-  DotImport(tlp::PluginContext *context) : ImportModule(context) {
-    addInParameter<string>("file::filename", paramHelp[0], "");
-  }
+  DotImport(tlp::PluginContext *context) : ImportFileModule(context, {"dot"}) {}
   ~DotImport() override {}
 
   std::string icon() const override {
     return ":/tulip/graphperspective/icons/32/import_graphviz.png";
   }
 
-  bool importGraph() override {
-
+  bool importFile() override {
     // Open input stream
-    string fn;
-    dataSet->get("file::filename", fn);
 #ifndef WIN32
-    FILE *fd = fopen(fn.c_str(), "r");
+    FILE *fd = fopen(filename.c_str(), "r");
 #else
     wstring wfn;
-    utf8::utf8to16(fn.begin(), fn.end(), back_inserter(wfn));
+    utf8::utf8to16(filename.begin(), filename.end(), back_inserter(wfn));
     FILE *fd = _wfopen(wfn.c_str(), L"r");
 #endif
 

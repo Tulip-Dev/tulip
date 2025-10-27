@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -63,8 +63,8 @@ static const char *paramHelp[] = {
     // page ratio
     "Sets the option page ratio.",
 
-    // minCliqueSize
-    "If preprocessing of cliques is considered, this option determines the minimal size of cliques "
+    // min clique size
+    "If preprocessing of cliques is considered, this option determines the minimum size of cliques "
     "to search for",
 
     // Embedder
@@ -85,7 +85,7 @@ public:
       : OGDFLayoutPluginBase(context, context ? new ogdf::PlanarizationLayout() : nullptr),
         pl(static_cast<ogdf::PlanarizationLayout *>(ogdfLayoutAlgo)) {
     addInParameter<double>("page ratio", paramHelp[0], "1.1");
-    addInParameter<int>("minimal clique size", paramHelp[1], "3");
+    addInParameter<int>("min clique size", paramHelp[1], "3");
     addInParameter<StringCollection>("embedder", paramHelp[2], EMBEDDER_LIST, true,
                                      embedderValuesDescription);
     addOutParameter<int>("number of crossings", paramHelp[3]);
@@ -102,10 +102,10 @@ public:
       if (dataSet->get("page ratio", dval))
         pl->pageRatio(dval);
 
-      if (dataSet->get("minimal clique size", clique_size))
+      if (dataSet->get("min clique size", clique_size))
         pl->minCliqueSize(clique_size);
 
-      if (dataSet->getDeprecated("embedder", "Embedder", sc)) {
+      if (dataSet->get("embedder", sc)) {
         switch (sc.getCurrent()) {
         case EMBEDDER_MAXFACE:
           pl->setEmbedder(new ogdf::EmbedderMaxFace());

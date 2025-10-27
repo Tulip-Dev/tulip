@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,6 +21,7 @@
 #ifndef PARAMETERLISTMODEL_H
 #define PARAMETERLISTMODEL_H
 
+#include <QTableView>
 #include <vector>
 
 #include <tulip/TulipModel.h>
@@ -33,12 +34,18 @@ class TLP_QT_SCOPE ParameterListModel : public TulipModel {
   std::vector<ParameterDescription> _params;
   tlp::DataSet _data;
   tlp::Graph *_graph;
-  bool _showIcons;
+  bool _showIcons, _darkBackground;
 
 public:
   explicit ParameterListModel(const tlp::ParameterDescriptionList &params,
                               tlp::Graph *graph = nullptr, QObject *parent = nullptr,
-                              bool showIcons = false);
+                              bool showIcons = false, bool darkBackground = false);
+
+  static ParameterListModel *configureTableView(QTableView *table,
+                                                const tlp::ParameterDescriptionList &params,
+                                                tlp::Graph *graph = nullptr,
+                                                QObject *parent = nullptr, bool showIcons = false);
+
   tlp::DataSet parametersValues() const;
   void setParametersValues(const tlp::DataSet &data);
 
@@ -50,6 +57,10 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
   Qt::ItemFlags flags(const QModelIndex &index) const override;
   bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+  QString getParameterName(int section);
+  QString getParameterHelp(int section);
+  bool isMandatory(int section);
+  int parameterColumnMinWidth();
 };
 } // namespace tlp
 

@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -42,7 +42,7 @@ class Color {
       return 0;
     }
 
-    for (SIP_SSIZE_T i = 0; i < PyTuple_GET_SIZE(sipPy); ++i) {
+    for (Py_ssize_t i = 0; i < PyTuple_GET_SIZE(sipPy); ++i) {
       PyObject *item = PyTuple_GET_ITEM(sipPy, i);
       if (PyBool_Check(item)) {
         return 0;
@@ -282,7 +282,7 @@ Sets the value component of the color in the HSV color space (must be in the ran
 
 %End
 
-  unsigned short operator[](const unsigned int i) const;
+  unsigned short __getitem__(const unsigned int i) const;
 %MethodCode
   if (a0 < 4) {
     sipRes = (*sipCpp)[a0];
@@ -302,8 +302,8 @@ Sets the value component of the color in the HSV color space (must be in the ran
   }
 %End
 
-  bool operator!=(const tlp::Color &) const;
-  bool operator==(const tlp::Color &) const;
+  bool __eq__(const tlp::Color &) const;
+  bool __ne__(const tlp::Color &) const;
 
   std::string __repr__() const;
 %MethodCode

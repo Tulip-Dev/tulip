@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,9 +22,9 @@
 #define DELAUNAY_H
 #include <vector>
 #include <set>
-#include <unordered_map>
 
 #include <tulip/Coord.h>
+#include <tulip/tuliphash.h>
 
 namespace tlp {
 
@@ -44,7 +44,9 @@ TLP_SCOPE bool delaunayTriangulation(std::vector<Coord> &points,
                                      std::vector<std::pair<unsigned int, unsigned int>> &edges,
                                      std::vector<std::vector<unsigned int>> &simplices,
                                      bool voronoiMode = false);
-
+struct QhullFacade {
+  static std::string QhullVersion();
+};
 /**
  * @ingroup Graph
  * @brief The VoronoiDiagram class
@@ -64,48 +66,49 @@ public:
   typedef std::set<unsigned int> Cell;
 
   // Returns the number of voronoi sites
-  unsigned int nbSites() const {
+  inline unsigned int nbSites() const {
     return sites.size();
   }
 
   // Returns the number of voronoi vertices
-  unsigned int nbVertices() const {
+  inline unsigned int nbVertices() const {
     return vertices.size();
   }
 
   // Returns the number of voronoi edges
-  unsigned int nbEdges() const {
+  inline unsigned int nbEdges() const {
     return edges.size();
   }
 
   // Returns the ith site
-  const Site &site(const unsigned int siteIdx) {
+  inline const Site &site(const unsigned int siteIdx) {
     return sites[siteIdx];
   }
 
   // Returns the ith voronoi vertex
-  const Vertex &vertex(const unsigned int vertexIdx) {
+  inline const Vertex &vertex(const unsigned int vertexIdx) {
     return vertices[vertexIdx];
   }
 
   // Returns the ith voronoi edge
-  const Edge &edge(const unsigned int edgeIdx) {
+  inline const Edge &edge(const unsigned int edgeIdx) {
     return edges[edgeIdx];
   }
 
   // Returns the ith voronoi cell
-  const Cell &cell(const unsigned int cellIdx) {
+  inline const Cell &cell(const unsigned int cellIdx) {
     return cells[cellIdx];
   }
 
   // Returns the degree of the ith voronoi vertex
-  unsigned int degreeOfVertex(const unsigned int vertexIdx) {
+  inline unsigned int degreeOfVertex(const unsigned int vertexIdx) {
     return verticesDegree[vertexIdx];
   }
 
   // Returns the edges of the voronoi cell for the ith site
   std::vector<Edge> voronoiEdgesForSite(const unsigned int siteIdx) {
-    std::vector<Edge> ret;
+    auto &site = siteToCellEdges[siteIdx];
+    std::vector<Edge> ret(site.size());
 
     for (size_t i = 0; i < siteToCellEdges[siteIdx].size(); ++i) {
       ret.push_back(edges[siteToCellEdges[siteIdx][i]]);
@@ -115,7 +118,7 @@ public:
   }
 
   // Returns the cell for the ith site
-  const Cell &voronoiCellForSite(const unsigned int siteIdx) {
+  inline const Cell &voronoiCellForSite(const unsigned int siteIdx) {
     return cells[siteToCell[siteIdx]];
   }
 
@@ -124,9 +127,9 @@ public:
   std::vector<Vertex> vertices;
   std::vector<Edge> edges;
   std::vector<Cell> cells;
-  std::unordered_map<unsigned int, std::vector<unsigned int>> siteToCellEdges;
-  std::unordered_map<unsigned int, unsigned int> siteToCell;
-  std::unordered_map<unsigned int, unsigned int> verticesDegree;
+  tlp_hash_map<unsigned int, std::vector<unsigned int>> siteToCellEdges;
+  tlp_hash_map<unsigned int, unsigned int> siteToCell;
+  tlp_hash_map<unsigned int, unsigned int> verticesDegree;
 };
 
 /**

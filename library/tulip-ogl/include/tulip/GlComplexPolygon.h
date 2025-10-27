@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -132,6 +132,11 @@ public:
    * @brief Set size of outline
    */
   void setOutlineSize(double size);
+
+  /**
+   * @brief Set if the outline is stippled or not
+   */
+  void setOutlineStippled(bool stippled);
 
   /**
    * @brief Get fill color of GlComplexPolygon
@@ -268,12 +273,11 @@ protected:
   std::vector<float> verticesData;
   std::vector<unsigned int> verticesIndices;
   int currentVector;
-  bool outlined;
+  bool outlined, outlineStippled, textured;
   Color fillColor;
   Color outlineColor;
   double outlineSize;
   std::string textureName;
-  bool textured;
   float textureZoom;
   std::vector<bool> quadBorderActivated;
   std::vector<float> quadBorderWidth;

@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -73,8 +73,8 @@ public:
     VIEW_TGTANCHORSHAPE,   /**< shape of target arrow edge extremity */
     VIEW_TGTANCHORSIZE,    /**< size of target arrow edge extremity */
     VIEW_ANIMATIONFRAME,   /**< animation frame */
-    VIEW_FONTAWESOMEICON,  /**< font awesome icon name for the font awesome icon glyph*/
-    VIEW_ICON,             /**< icon name for the icon glyph*/
+    VIEW_ICON,             /**< icon name for the icon glyph */
+    VIEW_LENGTHRATIO,      /**< edge length ratio to display */
     NB_PROPS               /** must be the last, give the number of enum props */
   };
 
@@ -439,6 +439,14 @@ public:
     setProperty(VIEW_ICON, property);
   }
 
+  DoubleProperty *getEdgeLengthRatio() const {
+    return getProperty<DoubleProperty>(VIEW_LENGTHRATIO);
+  }
+
+  void setEdgeLengthRatio(DoubleProperty *property) {
+    setProperty(VIEW_LENGTHRATIO, property);
+  }
+
   const std::set<tlp::PropertyInterface *> &properties() const {
     return _properties;
   }
@@ -473,10 +481,10 @@ public:
   MutableContainer<EdgeExtremityGlyph *> extremityGlyphs;
 
 protected:
-  std::set<PropertyInterface *> _properties;
+  std::set<PropertyInterface *> _properties, _invisibleProperties;
 
   PropertyInterface *_propertiesMap[NB_PROPS];
-  static std::unordered_map<std::string, PropertyName> _propertiesNameMap;
+  static tlp_hash_map<std::string, PropertyName> _propertiesNameMap;
 
   GlMetaNodeRenderer *_metaNodeRenderer;
   GlVertexArrayManager *_glVertexArrayManager;

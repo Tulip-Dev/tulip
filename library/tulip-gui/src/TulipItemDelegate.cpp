@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,20 +18,16 @@
  */
 #include "tulip/TulipItemDelegate.h"
 
-#include <QDebug>
 #include <QEvent>
-#include <QDialog>
 #include <QVBoxLayout>
+#include <QDialog>
 #include <QDialogButtonBox>
-#include <QMainWindow>
 #include <QLabel>
 #include <QTableView>
 
-#include <tulip/TulipModel.h>
-#include <tulip/TulipMetaTypes.h>
-#include <tulip/TulipItemEditorCreators.h>
 #include <tulip/GraphModel.h>
 #include <tulip/Perspective.h>
+#include <tulip/TulipItemEditorCreators.h>
 
 using namespace tlp;
 
@@ -123,7 +119,7 @@ QWidget *TulipItemDelegate::createEditor(QWidget *parent, const QStyleOptionView
 }
 
 QString TulipItemDelegate::displayText(const QVariant &value, const QLocale &locale) const {
-  if (value.type() == QVariant::String)
+  if (value.canConvert<QString>())
     return value.toString();
 
   TulipItemEditorCreator *c = creator(value.userType());
@@ -159,7 +155,7 @@ void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
                               const QModelIndex &index) const {
   QVariant bgColor = index.data(Qt::BackgroundRole), fgColor = index.data(Qt::ForegroundRole);
 
-  if (bgColor.isValid() && bgColor.type() == QVariant::Color)
+  if (bgColor.isValid() && bgColor.canConvert<QColor>())
     painter->setBrush(bgColor.value<QColor>());
   else {
     QTableView *tv = static_cast<QTableView *>(parent());
@@ -168,7 +164,7 @@ void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
                           : option.palette.base());
   }
 
-  if (fgColor.isValid() && fgColor.type() == QVariant::Color)
+  if (fgColor.isValid() && fgColor.canConvert<QColor>())
     painter->setPen(fgColor.value<QColor>());
   else
     painter->setPen(option.palette.windowText().color());
@@ -257,7 +253,8 @@ void TulipItemDelegate::comboDataChanged() {
 
 QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType, tlp::PropertyInterface *pi,
                                              tlp::Graph *g, TulipItemDelegate *delegate,
-                                             QWidget *dialogParent, unsigned int id) {
+                                             QWidget *dialogParent, unsigned int id,
+                                             QString dialogTitle) {
   QVariant value;
   bool valid;
   if (elType == tlp::NODE) {
@@ -316,6 +313,8 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType, tlp::Prope
   }
 
   QVariant result;
+  if (!dialogTitle.isEmpty())
+    dlg->setWindowTitle(dialogTitle);
 
   if (dlg->exec() == QDialog::Accepted)
     result = creator->editorData(w, g);

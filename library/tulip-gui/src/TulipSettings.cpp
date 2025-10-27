@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,16 +20,14 @@
 #include "tulip/TulipSettings.h"
 
 #include <tulip/TulipMetaTypes.h>
-#include <tulip/PropertyTypes.h>
-#include <tulip/GlGraphStaticData.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
 
-#include <QtCore/QFileInfo>
-#include <QtCore/QStringList>
+#include <QFileInfo>
+#include <QStringList>
 #ifdef __APPLE__
 #include <QProcess>
 #include <QSysInfo>
@@ -40,9 +38,7 @@ using namespace std;
 
 TulipSettings *TulipSettings::_instance = nullptr;
 
-static const QString TS_RemoteLocations = "app/remote_locations";
 static const QString TS_RecentDocuments = "app/recent_documents";
-static const QString TS_PluginsToRemove = "app/pluginsToRemove";
 static const QString TS_DefaultColor = "graph/defaults/color/";
 static const QString TS_DefaultLabelColor = "graph/defaults/color/labels";
 static const QString TS_DefaultSize = "graph/defaults/size/";
@@ -113,10 +109,10 @@ QStringList TulipSettings::recentDocuments() {
 }
 
 void TulipSettings::checkRecentDocuments() {
-  QList<QVariant> recentDocumentsValue = instance().value(TS_RecentDocuments).toList();
+  auto recentDocumentsValue = recentDocuments();
 
-  for (const QVariant &doc : recentDocumentsValue) {
-    if (!QFileInfo(doc.toString()).exists())
+  for (auto doc : recentDocumentsValue) {
+    if (!QFileInfo(doc).exists())
       recentDocumentsValue.removeAll(doc);
   }
 
@@ -124,7 +120,7 @@ void TulipSettings::checkRecentDocuments() {
 }
 
 void TulipSettings::addToRecentDocuments(const QString &name) {
-  QList<QVariant> recentDocumentsValue = instance().value(TS_RecentDocuments).toList();
+  auto recentDocumentsValue = recentDocuments();
 
   if (recentDocumentsValue.contains(name))
     recentDocumentsValue.removeAll(name);
@@ -135,54 +131,6 @@ void TulipSettings::addToRecentDocuments(const QString &name) {
     recentDocumentsValue.pop_back();
 
   _instance->setValue(TS_RecentDocuments, recentDocumentsValue);
-}
-
-void TulipSettings::addRemoteLocation(const QString &remoteLocation) {
-  QStringList remoteLocations = instance().value(TS_RemoteLocations).toStringList();
-
-  if (!remoteLocations.contains(remoteLocation)) {
-    remoteLocations.append(remoteLocation);
-  }
-
-  _instance->setValue(TS_RemoteLocations, remoteLocations);
-}
-
-void TulipSettings::removeRemoteLocation(const QString &remoteLocation) {
-  QStringList remoteLocations = instance().value(TS_RemoteLocations).toStringList();
-
-  if (remoteLocations.contains(remoteLocation)) {
-    remoteLocations.removeOne(remoteLocation);
-  }
-
-  _instance->setValue(TS_RemoteLocations, remoteLocations);
-}
-
-const QStringList TulipSettings::remoteLocations() {
-  return instance().value(TS_RemoteLocations).toStringList();
-}
-
-const QStringList TulipSettings::pluginsToRemove() {
-  return instance().value(TS_PluginsToRemove).toStringList();
-}
-
-void TulipSettings::markPluginForRemoval(const QString &pluginLibrary) {
-  QStringList markedPlugins = instance().value(TS_PluginsToRemove).toStringList();
-
-  if (!markedPlugins.contains(pluginLibrary)) {
-    markedPlugins.append(pluginLibrary);
-  }
-
-  _instance->setValue(TS_PluginsToRemove, markedPlugins);
-}
-
-void TulipSettings::unmarkPluginForRemoval(const QString &pluginLibrary) {
-  QStringList markedPlugins = instance().value(TS_PluginsToRemove).toStringList();
-
-  if (markedPlugins.contains(pluginLibrary)) {
-    markedPlugins.removeAll(pluginLibrary);
-  }
-
-  _instance->setValue(TS_PluginsToRemove, markedPlugins);
 }
 
 QString TulipSettings::elementKey(const QString &configEntry, tlp::ElementType elem) {
@@ -269,11 +217,8 @@ void TulipSettings::setDefaultSelectionColor(const tlp::Color &color) {
 
 QSet<QString> TulipSettings::favoriteAlgorithms() {
   auto ls = instance().value(TS_FavoriteAlgorithms, QStringList()).toStringList();
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-  return ls.toSet();
-#else
+
   return QSet<QString>(ls.begin(), ls.end());
-#endif
 }
 
 void TulipSettings::addFavoriteAlgorithm(const QString &name) {
@@ -418,11 +363,7 @@ void TulipSettings::setViewOrtho(bool f) {
 }
 
 void TulipSettings::setFavoriteAlgorithms(const QSet<QString> &lst) {
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-  instance().setValue(TS_FavoriteAlgorithms, static_cast<QStringList>(lst.toList()));
-#else
   instance().setValue(TS_FavoriteAlgorithms, QStringList(lst.begin(), lst.end()));
-#endif
 }
 
 bool TulipSettings::isResultPropertyStored() {
@@ -497,14 +438,6 @@ bool TulipSettings::isDisplayInDarkMode() {
 void TulipSettings::setDisplayInDarkMode(bool f) {
   if (f != isDisplayInDarkMode())
     instance().setValue(TS_DisplayInDarkMode, f);
-}
-
-bool TulipSettings::showStatusBar() {
-  return instance().value(TS_ShowStatusBar, true).toBool();
-}
-
-void TulipSettings::setShowStatusBar(bool f) {
-  instance().setValue(TS_ShowStatusBar, f);
 }
 
 bool TulipSettings::loggerAnchored() {

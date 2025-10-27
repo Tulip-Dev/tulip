@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -193,26 +193,12 @@ public:
                                 BoundingBox *sceneBoundingBox = nullptr,
                                 float *zoomFactor = nullptr);
 
-  // use computeAdjustSceneToSize instead
-  _DEPRECATED void computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye,
-                                           float *sceneRadius, float *xWhiteFactor,
-                                           float *yWhiteFactor,
-                                           BoundingBox *sceneBoundingBox = nullptr,
-                                           float *zoomFactor = nullptr) {
-    computeAdjustSceneToSize(width, height, center, eye, sceneRadius, xWhiteFactor, yWhiteFactor,
-                             sceneBoundingBox, zoomFactor);
-  }
-
   /**
    * Adjust camera to have entities near borders
    * @param width requested width
    * @param height requested height
    */
   void adjustSceneToSize(int width, int height);
-
-  _DEPRECATED inline void ajustSceneToSize(int width, int height) {
-    adjustSceneToSize(width, height);
-  }
 
   /**
    * @brief Zoom by step to given x,y screen coordinates
@@ -252,11 +238,6 @@ public:
    * @param z rotation over Z axis in degree
    */
   void rotateCamera(const int x, const int y, const int z);
-
-  // use rotateCamera instead
-  _DEPRECATED inline void rotateScene(const int x, const int y, const int z) {
-    rotateCamera(x, y, z);
-  }
 
   /**
    * @brief Select entities in scene

@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -36,20 +36,11 @@ class DataSet;
 
 /**
  * @addtogroup Plugins
- * @brief Base class for import plug-ins.
+ * @brief Base class for import plugins.
  **/
-class ImportModule : public tlp::Plugin {
+class TLP_SCOPE ImportModule : public tlp::Plugin {
 public:
-  ImportModule(const tlp::PluginContext *context) {
-    if (context != nullptr) {
-      const tlp::AlgorithmContext *algoritmContext =
-          static_cast<const tlp::AlgorithmContext *>(context);
-      graph = algoritmContext->graph;
-      pluginProgress = algoritmContext->pluginProgress;
-      dataSet = algoritmContext->dataSet;
-    }
-  }
-
+  ImportModule(const tlp::PluginContext *context);
   /**
    * @brief Gets the extensions of the file formats the plugin can import.
    * e.g. a TLP import would return 'tlp'.
@@ -58,32 +49,6 @@ public:
    **/
   virtual std::list<std::string> fileExtensions() const {
     return std::list<std::string>();
-  }
-
-  /**
-   * @brief Gets the extensions of the gzipped file formats this plugin can import.
-   * e.g. a TLP import would return 'tlp.gz and tlpz'.
-   *
-   * @since Tulip 5.0
-   *
-   * @return the list of gzipped file extensions the plugin can import.
-   **/
-  virtual std::list<std::string> gzipFileExtensions() const {
-    return std::list<std::string>();
-  }
-
-  /**
-   * @brief Gets all the extensions (normal and gzipped) of the file formats this plugin can import.
-   *
-   * @since Tulip 5.0
-   *
-   * @return the list of file extensions the plugin can import.
-   **/
-  std::list<std::string> allFileExtensions() const {
-    std::list<std::string> zext(gzipFileExtensions());
-    std::list<std::string> ext(fileExtensions());
-    ext.splice(ext.end(), zext);
-    return ext;
   }
 
   std::string category() const override {
@@ -116,6 +81,49 @@ public:
    **/
   DataSet *dataSet;
 };
+
+/**
+ * @addtogroup Plugins
+ * @brief Base class for plugins importing from a file.
+ **/
+class TLP_SCOPE ImportFileModule : public ImportModule {
+protected:
+  /**
+   * @brief The pathname of the file to import
+   **/
+  std::string filename;
+
+  /**
+   * @brief The supported file extensions
+   **/
+  std::list<std::string> extensions;
+
+public:
+  ImportFileModule(const tlp::PluginContext *context, std::list<std::string> exts = {});
+
+  /**
+   * @brief override the inherited method
+   **/
+  std::list<std::string> fileExtensions() const override {
+    return extensions;
+  }
+
+  /**
+   * @brief check plugin parameters
+   **/
+  virtual bool check();
+
+  /**
+   * @brief create the graph contents from the file data
+   **/
+  virtual bool importFile() = 0;
+
+  /**
+   * @brief override the inherited method
+   **/
+  bool importGraph() override;
+};
+
 } // namespace tlp
 #endif
 ///@endcond

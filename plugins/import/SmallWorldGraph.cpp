@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -33,7 +33,7 @@ static const char *paramHelp[] = {
     // degree
     "Average degree of the nodes in the final graph.",
 
-    // degree
+    // long edge
     "If true, long distance edges are added in the grid approximation."};
 
 /*
@@ -72,14 +72,14 @@ public:
 
     if (nbNodes == 0) {
       if (pluginProgress)
-        pluginProgress->setError("Error: the number of nodes cannot be null");
+        pluginProgress->setError("Error: \"nodes\" cannot be null");
 
       return false;
     }
 
     if (avgDegree == 0) {
       if (pluginProgress)
-        pluginProgress->setError("Error: the average degree cannot be null");
+        pluginProgress->setError("Error: \"degree\" cannot be null");
 
       return false;
     }

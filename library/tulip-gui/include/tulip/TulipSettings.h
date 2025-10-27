@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -67,33 +67,6 @@ public:
     @brief Check recently opened documents list and remove non-existing ones
     */
   static void checkRecentDocuments();
-
-  /**
-   * @brief Adds a remote location from which to list plugins.
-   *
-   * @param remoteLocation The URL of the plugin server.
-   * @return void
-   **/
-  static void addRemoteLocation(const QString &remoteLocation);
-
-  /**
-   * @brief Removes a location from which to list plugins.
-   *
-   * @param remoteLocation The URL of the plugin server.
-   * @return void
-   **/
-  static void removeRemoteLocation(const QString &remoteLocation);
-
-  /**
-   * @brief Retrieves the list of locations from which to list plugins.
-   *
-   * @return const QStringList
-   **/
-  static const QStringList remoteLocations();
-  static const QStringList pluginsToRemove();
-
-  static void markPluginForRemoval(const QString &pluginLibrary);
-  static void unmarkPluginForRemoval(const QString &pluginLibrary);
 
   static tlp::Color defaultColor(tlp::ElementType elem, bool tulipDefault = false);
   static void setDefaultColor(tlp::ElementType elem, const tlp::Color &color);
@@ -182,10 +155,6 @@ public:
 
   static bool isDisplayInDarkMode();
   static void setDisplayInDarkMode(bool);
-
-  // no longer used
-  _DEPRECATED static bool showStatusBar();
-  _DEPRECATED static void setShowStatusBar(bool);
 
   static bool loggerAnchored();
   static void setLoggerAnchored(bool);

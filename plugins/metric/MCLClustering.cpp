@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -56,7 +56,7 @@ public:
       "MCL Clustering", "D. Auber & R. Bourqui", "10/10/2005",
       "Nodes partitioning measure of Markov Cluster algorithm<br/>used for community detection."
       "This is an implementation of the MCL algorithm first published as:<br/>"
-      "<b>Graph Clustering by Flow Simulation</b>, Stijn van Dongen PhD Thesis, University of "
+      "<b>Graph Clustering by Flow Simulation</b>,<br/>Stijn van Dongen PhD Thesis, University of "
       "Utrecht (2000).",
       "1.1", "Clustering")
 
@@ -83,23 +83,27 @@ const double epsilon = 1E-9;
 
 //=================================================
 void MCLClustering::power(node n) {
-  std::unordered_map<node, double> newTargets;
+  tlp_hash_map<node, double> newTargets;
 
-  for (auto e1 : g.getOutEdges(n)) {
-    double v1 = inW[e1];
+  for (auto &adjn : g.adj(n)) {
+    if (!adjn.isOut())
+      continue;
+    double vn = inW[adjn.link()];
 
-    if (v1 > epsilon) {
-      for (auto e2 : g.getOutEdges(g.target(e1))) {
-        double v2 = inW[e2] * v1;
+    if (vn > epsilon) {
+      for (auto &adjo : g.adj(adjn.opposite())) {
+        if (!adjo.isOut())
+          continue;
+        double v2 = inW[adjo.link()] * vn;
 
         if (v2 > epsilon) {
-          node tgt = g.target(e2);
+          node tgt = adjo.opposite();
           edge ne = g.existEdge(n, tgt, true);
 
           if (ne.isValid())
             outW[ne] += v2;
           else {
-            std::unordered_map<node, double>::iterator it = newTargets.find(tgt);
+            tlp_hash_map<node, double>::iterator it = newTargets.find(tgt);
 
             if (it != newTargets.end())
               // newTargets[tgt] += v2;
@@ -112,8 +116,7 @@ void MCLClustering::power(node n) {
     }
   }
 
-  for (std::unordered_map<node, double>::iterator it = newTargets.begin(); it != newTargets.end();
-       ++it) {
+  for (tlp_hash_map<node, double>::iterator it = newTargets.begin(); it != newTargets.end(); ++it) {
     edge ne;
     ne = g.addEdge(n, it->first);
     inW[ne] = 0.;
@@ -140,7 +143,10 @@ void MCLClustering::prune(node n) {
   // - avoid a costly stable iteration when deleting edges
   std::vector<pair<double, edge>> pvect;
   pvect.reserve(outdeg);
-  for (auto e : g.getOutEdges(n)) {
+  for (auto &adj : g.adj(n)) {
+    if (!adj.isOut())
+      continue;
+    auto e = adj.link();
     pvect.push_back(pair<double, edge>(outW[e], e));
   }
 
@@ -167,7 +173,10 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
   pvect.reserve(sz);
 
   double sum = 0.;
-  for (auto e : g.getOutEdges(n)) {
+  for (auto &adj : g.adj(n)) {
+    if (!adj.isOut())
+      continue;
+    auto e = adj.link();
     double outVal = outW[e];
     sum += pow(outVal, r);
     pvect.push_back(pair<double, edge>(outVal, e));
@@ -290,15 +299,12 @@ struct DegreeSort {
 //==============================================================================
 bool MCLClustering::run() {
 
-  g.alloc(inW);
-  g.alloc(outW);
-
   weights = nullptr;
   _r = 2.;
   _k = 5;
 
   if (dataSet != nullptr) {
-    dataSet->getDeprecated("metric", "weights", weights);
+    dataSet->get("metric", weights);
     dataSet->get("inflate", _r);
     dataSet->get("pruning", _k);
   }
@@ -306,17 +312,19 @@ bool MCLClustering::run() {
   NodeStaticProperty<node> nodeMapping(graph);
   const std::vector<node> &tlpNodes = graph->nodes();
   unsigned int nbNodes = tlpNodes.size();
-  g.reserveNodes(nbNodes);
+  g.addNodes(nbNodes);
+  g.alloc(inW);
+  g.alloc(outW);
 
   // add nodes to g
   TLP_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
-    g.reserveAdj(nodeMapping[i] = g.addNode(), 2 * graph->deg(n) + 1);
+    g.reserveAdj(nodeMapping[i] = node(i), 2 * graph->deg(n) + 1);
   });
 
   for (auto e : graph->edges()) {
     auto eEnds = graph->ends(e);
-    node src = nodeMapping[eEnds.first];
-    node tgt = nodeMapping[eEnds.second];
+    node src = nodeMapping[graph->nodePos(eEnds.first)];
+    node tgt = nodeMapping[graph->nodePos(eEnds.second)];
     edge tmp = g.addEdge(src, tgt);
 
     double weight = (weights != nullptr) ? weights->getEdgeDoubleValue(e) : 1.0;
@@ -337,7 +345,10 @@ bool MCLClustering::run() {
 
     if (weights != nullptr) {
       double tmpVal = inW[tmp] = 0.;
-      for (auto e : g.getOutEdges(n)) {
+      for (auto &adj : g.adj(n)) {
+        if (!adj.isOut())
+          continue;
+        auto e = adj.link();
         double eVal = inW[e];
         sum += eVal;
 
@@ -351,8 +362,11 @@ bool MCLClustering::run() {
     }
 
     double oos = 1. / sum;
-    for (auto e : g.getOutEdges(n))
-      inW[e] *= oos;
+    for (auto &adj : g.adj(n)) {
+      if (!adj.isOut())
+        continue;
+      inW[adj.link()] *= oos;
+    }
   }
 
   // output for mcl
@@ -428,7 +442,8 @@ bool MCLClustering::run() {
         node nq = fifo.front();
         result->setNodeValue(tlpNodes[nq.id], curVal);
         fifo.pop();
-        for (auto ni : g.adj(nq)) {
+        for (auto &adj : g.adj(nq)) {
+          auto ni = adj.opposite();
           if (!visited[ni]) {
             fifo.push(ni);
             visited[ni] = true;

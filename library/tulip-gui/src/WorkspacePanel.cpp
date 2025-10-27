@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,29 +17,23 @@
  *
  */
 
+#include <algorithm>
+
 #include "tulip/WorkspacePanel.h"
 #include "tulip/InteractorConfigWidget.h"
 #include "ui_WorkspacePanel.h"
 
 #include <QGraphicsView>
-#include <QCloseEvent>
-#include <QPushButton>
-#include <QApplication>
 #include <QGraphicsProxyWidget>
-#include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
-#include <QTabWidget>
-#include <QGraphicsSceneContextMenuEvent>
-#include <QDialogButtonBox>
-#include <QVBoxLayout>
 #include <QScrollBar>
+#include <QTimer>
 #include <QPropertyAnimation>
 
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/ProcessingAnimationItem.h>
 #include <tulip/Interactor.h>
 #include <tulip/View.h>
-#include <tulip/Graph.h>
 #include <tulip/GraphHierarchiesModel.h>
 #include <tulip/PluginLister.h>
 #include <tulip/TulipMimes.h>
@@ -89,23 +83,30 @@ public:
 protected:
   QSize tabSizeHint(int index) const {
     int width = QTabBar::tabSizeHint(index).width();
-#if (QT_VERSION < QT_VERSION_CHECK(5, 11, 0))
-    return QSize(width, fontMetrics().width(tabText(index)) * 2 + iconSize().width());
-#else
+
     return QSize(width, fontMetrics().horizontalAdvance(tabText(index)) * 2 + iconSize().width());
-#endif
   }
 };
+
+#endif
 
 class CustomTabWidget : public QTabWidget {
 
 public:
   CustomTabWidget(QWidget *parent = 0) : QTabWidget(parent) {
+#ifdef WIN32
     setTabBar(new CustomTabBar());
+#endif
+  }
+
+  // workaround for a QT bug which propagates unused wheel events
+  // of configuration widgets to the view
+  void wheelEvent(QWheelEvent *e) override {
+    QWidget::wheelEvent(e);
+    // block event propagation
+    e->accept();
   }
 };
-
-#endif
 
 // ========================
 
@@ -172,11 +173,11 @@ void WorkspacePanel::setView(tlp::View *view) {
 
   _view = view;
 
-  QList<Interactor *> compatibleInteractors;
-  QList<std::string> interactorNames = InteractorLister::compatibleInteractors(view->name());
+  std::list<Interactor *> compatibleInteractors;
+  std::list<std::string> interactorNames = InteractorLister::compatibleInteractors(view->name());
 
   for (const std::string &name : interactorNames) {
-    compatibleInteractors << PluginLister::getPluginObject<Interactor>(name);
+    compatibleInteractors.push_back(PluginLister::getPluginObject<Interactor>(name));
   }
 
   _view->setInteractors(compatibleInteractors);
@@ -187,7 +188,7 @@ void WorkspacePanel::setView(tlp::View *view) {
   refreshInteractorsToolbar();
 
   if (!compatibleInteractors.empty())
-    setCurrentInteractor(compatibleInteractors[0]);
+    setCurrentInteractor(compatibleInteractors.front());
 
   connect(_view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
   connect(_view, SIGNAL(graphSet(tlp::Graph *)), this, SLOT(viewGraphSet(tlp::Graph *)));
@@ -196,11 +197,7 @@ void WorkspacePanel::setView(tlp::View *view) {
   _view->graphicsView()->scene()->installEventFilter(this);
 
   if (!_view->configurationWidgets().empty()) {
-#ifdef WIN32
     QTabWidget *viewConfigurationTabs = new CustomTabWidget();
-#else
-    QTabWidget *viewConfigurationTabs = new QTabWidget();
-#endif
     // use the main window style sheet
     auto ss = Perspective::styleSheet();
     // remove QTabBar specs
@@ -289,6 +286,8 @@ QTabBar::close-button:!selected:hover {
       w->installEventFilter(this);
       w->resize(w->width(), w->sizeHint().height());
       viewConfigurationTabs->addTab(w, w->windowTitle());
+      // fix display of QCheckBox and QRadioButton children
+      tlpFixCBRBs(w);
     }
 
     _viewConfigurationWidgets = new QGraphicsProxyWidget(_view->centralItem());
@@ -361,11 +360,12 @@ void WorkspacePanel::closeEvent(QCloseEvent *event) {
 
 bool WorkspacePanel::eventFilter(QObject *obj, QEvent *ev) {
   if (_view != nullptr) {
+    auto lcw = _view->configurationWidgets();
     if (ev->type() == QEvent::GraphicsSceneContextMenu) {
       return _view->showContextMenu(QCursor::pos(),
                                     static_cast<QGraphicsSceneContextMenuEvent *>(ev)->scenePos());
     } else if (_viewConfigurationWidgets != nullptr &&
-               _view->configurationWidgets().contains(qobject_cast<QWidget *>(obj)))
+               std::find(lcw.begin(), lcw.end(), qobject_cast<QWidget *>(obj)) != lcw.end())
       return true;
 
     else if (ev->type() == QEvent::MouseButtonPress && !_viewConfigurationExpanded &&
@@ -401,7 +401,8 @@ void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {
   _ui->currentInteractorButton->setIcon(i->action()->icon());
   _ui->currentInteractorButton->setToolTip(
       QString("Active tool:<br/><b>") + i->action()->text() +
-      QString(_view->currentInteractor()->configurationWidget()
+      QString((_view->currentInteractor()->configurationOptionsWidget() ||
+               _view->currentInteractor()->configurationDocWidget())
                   ? "</b><br/><i>click to show/hide its configuration panel.</i>"
                   : "</b>"));
   _view->graphicsView()->setFocus();
@@ -456,7 +457,7 @@ void WorkspacePanel::refreshInteractorsToolbar() {
   }
 
   delete _ui->interactorsFrame->layout();
-  bool interactorsUiShown = !compatibleInteractors.isEmpty();
+  bool interactorsUiShown = !compatibleInteractors.empty();
   _ui->currentInteractorButton->setVisible(interactorsUiShown);
   _ui->interactorsFrame->setVisible(interactorsUiShown);
   _ui->sep2->setVisible(interactorsUiShown);
@@ -483,7 +484,7 @@ void WorkspacePanel::refreshInteractorsToolbar() {
     }
 
     _ui->interactorsFrame->setLayout(interactorsLayout);
-    setCurrentInteractor(compatibleInteractors[0]);
+    setCurrentInteractor(compatibleInteractors.front());
   }
 }
 
@@ -515,6 +516,8 @@ void WorkspacePanel::scrollInteractorsLeft() {
 }
 
 void WorkspacePanel::resetInteractorsScrollButtonsVisibility() {
+  if (!_ui) // can be null on deletion
+    return;
   QScrollBar *scrollBar = _ui->scrollArea->horizontalScrollBar();
   bool interactorScrollBtnVisible = scrollBar->minimum() != scrollBar->maximum();
   _ui->interactorsLeft->setVisible(interactorScrollBtnVisible);
@@ -573,7 +576,8 @@ void WorkspacePanel::resizeEvent(QResizeEvent *ev) {
     setConfigurationTabExpanded(_viewConfigurationExpanded, false);
   }
 
-  resetInteractorsScrollButtonsVisibility();
+  // delay the call to ensure the scroll bar has been correctly resized
+  QTimer::singleShot(5, [=]() { resetInteractorsScrollButtonsVisibility(); });
 
   QWidget::resizeEvent(ev);
 }
@@ -701,7 +705,7 @@ bool WorkspacePanel::handleDropEvent(const QMimeData *mimedata) {
   }
 
   else if (algorithmMime) {
-    algorithmMime->run(view()->graph());
+    algorithmMime->run(view()->graph(), this);
   }
 
   setOverlayMode(false);

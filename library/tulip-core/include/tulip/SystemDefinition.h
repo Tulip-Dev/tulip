@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -45,8 +45,6 @@
 #define OS_COMPILER "Clang"
 #elif defined(__GNUC__)
 #define OS_COMPILER "gcc"
-#elif defined(_MSC_VER)
-#define OS_COMPILER "MSVC"
 #endif
 
 #endif // SYSTEMDEFINITION_H

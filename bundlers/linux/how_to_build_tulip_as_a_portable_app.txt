@@ -15,7 +15,7 @@ yum -y install devtoolset-7
 yum -y install rh-python36-python rh-python36-python-devel rh-python36-python-sphinx
 
 # install devel packages needed by Tulip
-yum -y install freetype-devel glew-devel qt5-qtbase-devel qt5-qtwebkit-devel zlib-devel
+yum -y install freetype-devel glew-devel qt5-qtbase-devel zlib-devel
 
 # get Tulip latest source
 wget -O tulip_latest_src.zip https://sourceforge.net/projects/auber/files/latest/download

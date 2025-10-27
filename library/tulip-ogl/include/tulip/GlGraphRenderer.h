@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,7 +20,7 @@
 #ifndef Tulip_GLGRAPHRENDERER_H
 #define Tulip_GLGRAPHRENDERER_H
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <tulip/GlScene.h>
 #include <tulip/tulipconf.h>
@@ -99,7 +99,7 @@ protected:
 
   bool selectionDrawActivate;
   RenderingEntitiesFlag selectionType;
-  std::unordered_map<unsigned int, SelectedEntity> *selectionIdMap;
+  tlp_hash_map<unsigned int, SelectedEntity> *selectionIdMap;
   unsigned int *selectionCurrentId;
 };
 } // namespace tlp

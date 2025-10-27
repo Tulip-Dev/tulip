@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -89,17 +89,18 @@ Graph *GraphDecorator::getSuperGraph() const {
 
 //============================================================
 node GraphDecorator::createMetaNode(const std::vector<node> &nodes, bool multiEdges,
-                                    bool delAllEdge) {
-  return graph_component->createMetaNode(nodes, multiEdges, delAllEdge);
+                                    bool delAllEdge, bool allGrouped) {
+  return graph_component->createMetaNode(nodes, multiEdges, delAllEdge, allGrouped);
 }
 
 void GraphDecorator::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
-                                     std::vector<node> &metaNodes) {
-  graph_component->createMetaNodes(itS, quotientGraph, metaNodes);
+                                     std::vector<node> &metaNodes, bool inoutGrouped) {
+  graph_component->createMetaNodes(itS, quotientGraph, metaNodes, inoutGrouped);
 }
 
-node GraphDecorator::createMetaNode(Graph *subGraph, bool multiEdges, bool delAllEdge) {
-  return graph_component->createMetaNode(subGraph, multiEdges, delAllEdge);
+node GraphDecorator::createMetaNode(Graph *subGraph, bool multiEdges, bool delAllEdge,
+                                    bool allGrouped) {
+  return graph_component->createMetaNode(subGraph, multiEdges, delAllEdge, allGrouped);
 }
 
 //============================================================
@@ -386,8 +387,9 @@ void GraphDecorator::removeEdge(const edge) {
 
 //============================================================
 void GraphDecorator::delNode(const node n, bool deleteInAllGraphs) {
-  notifyDelNode(n);
+  notifyBeforeDelNode(n);
   graph_component->delNode(n, deleteInAllGraphs);
+  notifyAfterDelNode(n);
 }
 
 //============================================================
@@ -401,8 +403,9 @@ void GraphDecorator::delNodes(Iterator<node> *itN, bool deleteInAllGraphs) {
 
 //============================================================
 void GraphDecorator::delEdge(const edge e, bool deleteInAllGraphs) {
-  notifyDelEdge(e);
+  notifyBeforeDelEdge(e);
   graph_component->delEdge(e, deleteInAllGraphs);
+  notifyAfterDelEdge(e);
 }
 
 //=========================================================================

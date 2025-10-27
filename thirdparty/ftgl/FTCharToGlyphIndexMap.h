@@ -90,7 +90,7 @@ class FTCharToGlyphIndexMap
             Indices = 0;
         }
 
-        const GlyphIndex find(CharacterCode c)
+        GlyphIndex find(CharacterCode c)
         {
             int OuterIdx = (c >> (BucketIdxBits * 2)) & BucketIdxMask;
             int InnerIdx = (c >> BucketIdxBits) & BucketIdxMask;

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -130,8 +130,6 @@ public:
 
   QString getPythonFullVersionStr() const;
 
-  double getPythonVersion() const;
-
   QString getPythonShellBanner();
 
   void setDefaultSIGINTHandler();
@@ -146,6 +144,8 @@ public:
                                         const QString &prefixFilter = "");
 
   QString getVariableType(const QString &varName);
+
+  QString getSysVariable(const QString &varName);
 
   void setDefaultConsoleWidget(QPlainTextEdit *consoleWidget);
   void setDefaultConsoleWidget(QTextBrowser *consoleWidget);

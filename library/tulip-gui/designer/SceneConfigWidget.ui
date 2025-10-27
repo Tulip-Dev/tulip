@@ -93,7 +93,7 @@ font-weight: bold; font-size: 18px; color: #A0A0A0A0</string>
         <x>0</x>
         <y>0</y>
         <width>387</width>
-        <height>635</height>
+        <height>638</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -677,7 +677,7 @@ font-weight: bold; font-size: 18px; color: #A0A0A0A0</string>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_6">
+           <widget class="QLabel" name="fontLimitsLabel">
             <property name="text">
              <string>Font size limits</string>
             </property>
@@ -835,6 +835,12 @@ font-weight: bold; font-size: 18px; color: #A0A0A0A0</string>
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>23</height>
+                </size>
                </property>
                <property name="toolTip">
                 <string>specify the quantity of labels to be displayed</string>
@@ -1028,7 +1034,7 @@ of the scene remains unchanged.</string>
                <string>Parallel lines are preserved.</string>
               </property>
               <property name="text">
-               <string>O&amp;rthogonal (no shape distorsion)</string>
+               <string>O&amp;rthogonal (no shape distortion)</string>
               </property>
               <attribute name="buttonGroup">
                <string notr="true">buttonGroup</string>
@@ -1041,7 +1047,7 @@ of the scene remains unchanged.</string>
                <string>&lt;p&gt;As in the human view perception,&lt;br/&gt;parallel lines are not necessarily represented as parallel&lt;br/&gt;and closer the nodes are, the bigger they are represented.&lt;/p&gt;</string>
               </property>
               <property name="text">
-               <string>Central perspecti&amp;ve (shape distorsion)</string>
+               <string>Central perspecti&amp;ve (shape distortion)</string>
               </property>
               <attribute name="buttonGroup">
                <string notr="true">buttonGroup</string>
@@ -1316,7 +1322,7 @@ of the scene remains unchanged.</string>
   <slot>applySettings()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="buttonGroup1"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup1"/>
  </buttongroups>
 </ui>

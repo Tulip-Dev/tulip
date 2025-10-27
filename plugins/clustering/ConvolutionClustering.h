@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -42,11 +42,11 @@ public:
   PLUGININFORMATION(
       "Convolution", "David Auber", "14/08/2001",
       "Discretization and filtering of the distribution of a node metric using a convolution "
-      "following: <br>"
-      "Strahler based graph clustering using convolution, "
+      "following: <br/>"
+      "<b>Strahler based graph clustering using convolution</b>,<br/>"
       "D. Auber, M. Delest and Y. Chiricota, "
       "Proceedings of the Eighth International Conference on Information Visualisation, 2004. IV "
-      "2004, "
+      "2004,<br/>"
       "doi: <a href=\"https://doi.org/10.1109/IV.2004.1320123\">10.1109/IV.2004.1320123</a>",
       "2.1", "Clustering")
   ConvolutionClustering(tlp::PluginContext *context);

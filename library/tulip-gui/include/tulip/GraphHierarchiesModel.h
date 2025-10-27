@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -24,6 +24,7 @@
 #include <tulip/tulipconf.h>
 #include <tulip/TulipModel.h>
 #include <tulip/Observable.h>
+#include <tulip/Graph.h>
 
 #include <QList>
 #include <QSet>
@@ -34,7 +35,9 @@ class GraphNeedsSavingObserver;
 class TulipProject;
 class PluginProgress;
 
-class TLP_QT_SCOPE GraphHierarchiesModel : public tlp::TulipModel, public tlp::Observable {
+class TLP_QT_SCOPE GraphHierarchiesModel : public tlp::TulipModel,
+                                           public tlp::Observable,
+                                           public tlp::ImportGraphObserver {
   Q_OBJECT
 
   QList<tlp::Graph *> _graphs;
@@ -99,10 +102,12 @@ public:
   QModelIndex indexOf(const Graph *);
   QModelIndex forceGraphIndex(Graph *);
 
-  // Methods inherited from the observable system
+  // inherited from Observable
   void treatEvent(const tlp::Event &) override;
-
   void treatEvents(const std::vector<tlp::Event> &) override;
+
+  // inherited from ImportGraphObserver
+  void graphImported(tlp::Graph *) override;
 
   // active graph handling
   void setCurrentGraph(tlp::Graph *);
@@ -112,7 +117,6 @@ signals:
   void currentGraphChanged(tlp::Graph *);
 
 public slots:
-  void addGraph(tlp::Graph *);
   void removeGraph(tlp::Graph *);
 
   QMap<QString, tlp::Graph *> readProject(tlp::TulipProject *, tlp::PluginProgress *);

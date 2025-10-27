@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -184,7 +184,7 @@ public:
     if (_useIcons) {
       tlp::IntegerProperty *viewShape = graph->getProperty<tlp::IntegerProperty>("viewShape");
       viewShape->setAllNodeValue(tlp::NodeShape::Icon);
-      _fontIcon->setAllNodeValue("fa-file-o");
+      _fontIcon->setAllNodeValue("far-file");
     }
 
     tlp::ColorProperty *viewColor = graph->getProperty<tlp::ColorProperty>("viewColor");
@@ -264,11 +264,7 @@ private:
     tlp::node n = g->addNode();
     _absolutePaths->setNodeValue(n, tlp::QStringToTlpString(info.absoluteFilePath()));
     _baseNames->setNodeValue(n, tlp::QStringToTlpString(info.baseName()));
-#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
-    _createdDates->setNodeValue(n, tlp::QStringToTlpString(info.created().toString()));
-#else
     _createdDates->setNodeValue(n, tlp::QStringToTlpString(info.birthTime().toString()));
-#endif
     _fileNames->setNodeValue(n, tlp::QStringToTlpString(info.fileName()));
     _isDir->setNodeValue(n, info.isDir());
     _isExecutable->setNodeValue(n, info.isExecutable());
@@ -286,35 +282,35 @@ private:
       std::string extension = QStringToTlpString(info.suffix());
 
       if (info.isDir()) {
-        _fontIcon->setNodeValue(n, "fa-folder-o");
+        _fontIcon->setNodeValue(n, "far-folder");
         tlp::ColorProperty *viewColor = graph->getProperty<tlp::ColorProperty>("viewColor");
         viewColor->setNodeValue(n, dirColor);
       } else if (std::find(commonTextFilesExt.begin(), commonTextFilesExt.end(), extension) !=
                  commonTextFilesExt.end()) {
-        _fontIcon->setNodeValue(n, "fa-file-text-o");
+        _fontIcon->setNodeValue(n, "far-file-lines");
       } else if (std::find(commonArchiveFilesExt.begin(), commonArchiveFilesExt.end(), extension) !=
                  commonArchiveFilesExt.end()) {
-        _fontIcon->setNodeValue(n, "fa-file-archive-o");
+        _fontIcon->setNodeValue(n, "far-file-zipper");
       } else if (std::find(commonAudioFilesExt.begin(), commonAudioFilesExt.end(), extension) !=
                  commonAudioFilesExt.end()) {
-        _fontIcon->setNodeValue(n, "fa-file-audio-o");
+        _fontIcon->setNodeValue(n, "far-file-audio");
       } else if (std::find(commonImageFilesExt.begin(), commonImageFilesExt.end(), extension) !=
                  commonImageFilesExt.end()) {
-        _fontIcon->setNodeValue(n, "fa-file-image-o");
+        _fontIcon->setNodeValue(n, "far-file-image");
       } else if (std::find(commonVideoFilesExt.begin(), commonVideoFilesExt.end(), extension) !=
                  commonVideoFilesExt.end()) {
-        _fontIcon->setNodeValue(n, "fa-file-video-o");
+        _fontIcon->setNodeValue(n, "far-file-video");
       } else if (std::find(commonDevFilesExt.begin(), commonDevFilesExt.end(), extension) !=
                  commonDevFilesExt.end()) {
-        _fontIcon->setNodeValue(n, "file-file-code-o");
+        _fontIcon->setNodeValue(n, "far-file-code");
       } else if (extension == "pdf") {
-        _fontIcon->setNodeValue(n, "file-file-pdf-o");
+        _fontIcon->setNodeValue(n, "far-file-pdf");
       } else if (extension == "doc" || extension == "docx") {
-        _fontIcon->setNodeValue(n, "file-file-word-o");
+        _fontIcon->setNodeValue(n, "far-file-word");
       } else if (extension == "xls" || extension == "xlsx") {
-        _fontIcon->setNodeValue(n, "file-file-excel-o");
+        _fontIcon->setNodeValue(n, "far-file-excel");
       } else if (extension == "ppt" || extension == "pptx") {
-        _fontIcon->setNodeValue(n, "file-file-powerpoint-o");
+        _fontIcon->setNodeValue(n, "far-file-powerpoint");
       }
     }
 

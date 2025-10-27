@@ -3,11 +3,11 @@ rem of msys2 latest version
 echo on
 
 rem Download https://github.com/msys2/msys2-installer/releases/latest page
-curl -L https://github.com/msys2/msys2-installer/releases/latest -o msys2_latest
+curl -L https://www.msys2.org -o msys2_latest
 
 rem Extract url of latest msys2 install
-PowerShell -Command "Select-String \"releases/download\" msys2_latest | Select-String -NotMatch \"base\" | Select-String '.exe\"' > msys2_exe_line"
-PowerShell -Command "Select-String \"exe\" msys2_exe_line | Foreach-Object -process {$_.Line.Split('\"')[1]} > msys2_exe_url"
+PowerShell -Command "Select-String \"Download the installer\" msys2_latest > msys2_exe_line"
+PowerShell -Command "Select-String \"https\" msys2_exe_line | Foreach-Object -process {$_.Line.Split('\"')[1]} > msys2_exe_url"
 set /P MSYS2_EXE_URL= < msys2_exe_url
 
 rem Download msys2.exe

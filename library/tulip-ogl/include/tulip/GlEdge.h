@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -88,7 +88,7 @@ public:
    */
   size_t getVertices(const GlGraphInputData *data, const edge e, const node src, const node tgt,
                      Coord &srcCoord, Coord &tgtCoord, Size &srcSize, Size &tgtSize,
-                     std::vector<Coord> &vertices);
+                     std::vector<Coord> &vertices, float lengthRatio = 1);
 
   /**
    * This function is used by the engine to get line colors of the edge
@@ -108,7 +108,8 @@ public:
    */
   void getEdgeAnchor(const GlGraphInputData *data, const node src, const node tgt,
                      const LineType::RealType &bends, const Coord &srcCoord, const Coord &tgtCoord,
-                     const Size &srcSize, const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor);
+                     const Size &srcSize, const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor,
+                     float lengthRatio = 1);
 
   void setSelectionDraw(bool selectDraw) {
     selectionDraw = selectDraw;

@@ -130,6 +130,8 @@ Main window
     :width: 20
 .. |icon_wsm_node_shape_set| image:: ../../library/tulip-gui/resources/icons/20/set_node_shape.png
     :width: 20
+.. |icon_wsm_node_icon_set| image:: ../../library/tulip-gui/resources/icons/20/set_node_icon.png
+    :width: 20
 .. |icon_wsm_edge_shape_set| image:: ../../library/tulip-gui/resources/icons/20/set_edge_shape.png
     :width: 20
 .. |icon_wsm_node_size_set| image:: ../../library/tulip-gui/resources/icons/20/set_node_size.png
@@ -186,6 +188,8 @@ This part of the panel shows the graph. From here, the user can exploit two elem
   * |icon_wsm_edge_border_color_set|: Set the border color of the selected edges, if any, of all the edges, if none.
 
   * |icon_wsm_node_shape_set|: Set the shape of the selected nodes, if any, of all the nodes, if none.
+
+  * |icon_wsm_node_icon_set|: Set the icon of the selected nodes, if any, of all the nodes, if none.
 
   * |icon_wsm_edge_shape_set|: Set the shape of the selected edges, if any, of all the edges, if none.
 
@@ -616,14 +620,9 @@ The geographic view provides different map modes. You can switch between them by
 .. image:: _images/geoview_cartodb_dark_map.png
     :width: 400
 
-* Wikimedia Map:
+* Custom Tile Layer:
 
-.. image:: _images/geoview_wikimedia_map.png
-    :width: 400
-
-* Leaflet Custom Tile Layer:
-
-.. image:: _images/geoview_leaflet_custom_tile_layer.png
+.. image:: _images/geoview_custom_tile_layer.png
     :width: 600
 
 * Polygon:
@@ -655,6 +654,8 @@ The tools available in this view represent a subset of those introduced in the N
 * |icon_wst_add_nodes_edges|: add nodes/edges.
 
 * |icon_wst_edit_edge_bends|: edit edges bends.
+
+* |icon_wst_zoom_rect|: zoom on rectangle.
 
 Otherwise, the toolbar should be used as usual, the left side containing the tool definition and the instructions on how to use it, whereas the rightside display a list of all the opened graphs. Just click on one to load it in the concerned view.
 

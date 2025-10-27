@@ -145,7 +145,7 @@ FTTextureGlyphImpl::FTTextureGlyphImpl(FT_GlyphSlot glyph, int id, int xOffset,
                     unsigned char* src = bitmap.pitch < 0
                       ? bitmap.buffer + (y - destHeight + 1) * bitmap.pitch
                       : bitmap.buffer + y * bitmap.pitch;
-                    unsigned char c;
+                    unsigned char c = 0;
                     for(int x = 0; x < destWidth; ++x)
                     {
                         if (x % 8 == 0)
@@ -186,7 +186,7 @@ FTTextureGlyphImpl::~FTTextureGlyphImpl()
 
 
 const FTPoint& FTTextureGlyphImpl::RenderImpl(const FTPoint& pen,
-                                              int renderMode)
+                                              int /*renderMode*/)
 {
     float dx, dy;
 

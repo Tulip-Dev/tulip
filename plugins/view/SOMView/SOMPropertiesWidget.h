@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -24,7 +24,6 @@
 #include <tulip/DataSet.h>
 
 #include <QWidget>
-#include <QList>
 
 #include "GradientManager.h"
 #include "ComputeSOMWidget.h"
@@ -78,7 +77,7 @@ public:
   unsigned getIterationNumber() const;
   unsigned getConnectivityIndex() const;
   SizeMappingType getSizeMapping() const;
-  QList<QWidget *> configurationWidgets() const;
+  std::list<QWidget *> configurationWidgets() const;
 
   void update(std::set<tlp::Observable *>::iterator begin,
               std::set<tlp::Observable *>::iterator end);

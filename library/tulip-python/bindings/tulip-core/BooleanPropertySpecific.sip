@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -42,7 +42,7 @@ i.e :const:`True` => :const:`False`, :const:`False` => :const:`True`.
 tlp.BooleanProperty.reverseEdgeDirection(graph = None)
 
 Reverses all the direction of edges in the attached graph
-which are set to :const:`True` in this boolean property.
+which are set to :const:`True` in this Boolean property.
 
 :param graph: a subgraph can be given in parameter, in that case reverse
   only the direction of edges belonging to it

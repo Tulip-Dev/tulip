@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -105,8 +105,7 @@ tlp::lazyEnclosingCircle(const std::vector<tlp::Circle<Obj, OTYPE>> &circles) {
   tlp::Circle<Obj, OTYPE> result(center, radius);
 
   // compute circle hull
-  for (typename std::vector<tlp::Circle<Obj, OTYPE>>::const_iterator it = circles.begin();
-       it != circles.end(); ++it)
+  for (it = circles.begin(); it != circles.end(); ++it)
     result.merge(*it);
 
   return result;
@@ -118,7 +117,7 @@ tlp::Circle<Obj, OTYPE> tlp::enclosingCircle(const std::vector<tlp::Circle<Obj, 
     const std::vector<tlp::Circle<Obj, OTYPE>> *circles;
     std::vector<unsigned> enclosedCircles;
     unsigned first, last;
-    unsigned b1, b2;
+    unsigned sc1, sc2;
     tlp::Circle<Obj, OTYPE> result;
 
     static tlp::Circle<Obj, OTYPE> enclosingCircle(const tlp::Circle<Obj, OTYPE> &c1,
@@ -251,13 +250,13 @@ tlp::Circle<Obj, OTYPE> tlp::enclosingCircle(const std::vector<tlp::Circle<Obj, 
 
     void process2() {
       if (isEmpty()) {
-        result = tlp::enclosingCircle((*circles)[b1], (*circles)[b2]);
+        result = tlp::enclosingCircle((*circles)[sc1], (*circles)[sc2]);
       } else {
         unsigned selectedCircle = popBack();
         process2();
 
         if (!(*circles)[selectedCircle].isIncludeIn(result)) {
-          result = enclosingCircle((*circles)[b1], (*circles)[b2], (*circles)[selectedCircle]);
+          result = enclosingCircle((*circles)[sc1], (*circles)[sc2], (*circles)[selectedCircle]);
           pushFront(selectedCircle);
         } else {
           pushBack(selectedCircle);
@@ -267,13 +266,13 @@ tlp::Circle<Obj, OTYPE> tlp::enclosingCircle(const std::vector<tlp::Circle<Obj, 
 
     void process1() {
       if (isEmpty()) {
-        result = (*circles)[b1];
+        result = (*circles)[sc1];
       } else {
         unsigned selectedCircle = popBack();
         process1();
 
         if (!(*circles)[selectedCircle].isIncludeIn(result)) {
-          b2 = selectedCircle;
+          sc2 = selectedCircle;
           process2();
           pushFront(selectedCircle);
         } else {
@@ -289,7 +288,7 @@ tlp::Circle<Obj, OTYPE> tlp::enclosingCircle(const std::vector<tlp::Circle<Obj, 
         process0();
 
         if (!(*circles)[selectedCircle].isIncludeIn(result)) {
-          b1 = selectedCircle;
+          sc1 = selectedCircle;
           process1();
           pushFront(selectedCircle);
         } else {
@@ -305,9 +304,9 @@ tlp::Circle<Obj, OTYPE> tlp::enclosingCircle(const std::vector<tlp::Circle<Obj, 
       enclosedCircles[first] = c;
     }
     unsigned popBack() {
-      unsigned result = enclosedCircles[last];
+      unsigned tmp = enclosedCircles[last];
       last = (last + enclosedCircles.size() - 1) % enclosedCircles.size();
-      return result;
+      return tmp;
     }
     void pushBack(unsigned c) {
       last = (last + 1) % enclosedCircles.size();
@@ -315,7 +314,7 @@ tlp::Circle<Obj, OTYPE> tlp::enclosingCircle(const std::vector<tlp::Circle<Obj, 
     }
 
   public:
-    OptimumCircleHull() : circles(nullptr), first(0), last(0), b1(0), b2(0) {}
+    OptimumCircleHull() : circles(nullptr), first(0), last(0), sc1(0), sc2(0) {}
 
     tlp::Circle<Obj, OTYPE> operator()(const std::vector<tlp::Circle<Obj, OTYPE>> &circlesSet) {
       circles = &circlesSet;

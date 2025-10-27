@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -179,7 +179,7 @@ bool Dijkstra::searchPaths(node n, BooleanProperty *result) {
 }
 
 //========================================
-bool Dijkstra::ancestors(unordered_map<node, std::list<node>> &result) {
+bool Dijkstra::ancestors(tlp_hash_map<node, std::list<node>> &result) {
   result.clear();
   result[src].push_back(src);
   for (auto n : graph->getNodes()) {

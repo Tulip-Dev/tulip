@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
@@ -27,9 +27,9 @@ using namespace tlp;
 
 static const char *paramHelp[] = {
     // nodes
-    "This parameter defines the amount of nodes used to build the scale-free graph.",
+    "This parameter defines the number of nodes used to build the scale-free graph.",
 
-    // d
+    // min degree
     "Minimum degree."};
 
 /**
@@ -55,7 +55,7 @@ struct BollobasModel : public ImportModule {
 
   BollobasModel(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "2000");
-    addInParameter<unsigned int>("minimum degree", paramHelp[1], "4");
+    addInParameter<unsigned int>("min degree", paramHelp[1], "4");
   }
 
   bool importGraph() override {
@@ -64,12 +64,12 @@ struct BollobasModel : public ImportModule {
 
     if (dataSet != nullptr) {
       dataSet->get("nodes", n);
-      dataSet->get("minimum degree", d);
+      dataSet->get("min degree", d);
     }
 
     // check arguments
     if (d > n) {
-      pluginProgress->setError("The minimum degree cannot be greater than the number of nodes.");
+      pluginProgress->setError("\"min degree\" cannot be greater than \"nodes\"");
       return false;
     }
 

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -23,12 +23,8 @@
 #include <QApplication>
 #include <QGraphicsProxyWidget>
 #include <QContextMenuEvent>
-#include <QGraphicsScene>
 #include <QPainter>
 
-#include <tulip/GlTextureManager.h>
-#include <tulip/GlQuad.h>
-#include <tulip/GlTools.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlOffscreenRenderer.h>
 
@@ -80,7 +76,6 @@ QRectF GlMainWidgetGraphicsItem::boundingRect() const {
 }
 
 void GlMainWidgetGraphicsItem::resize(int width, int height) {
-
   this->width = width;
   this->height = height;
   glMainWidget->resize(width, height);
@@ -107,63 +102,52 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
     emit widgetPainted(_graphChanged);
   }
 
-  GlOffscreenRenderer::getInstance()->setViewPortSize(width, height);
+  auto img = GlOffscreenRenderer::getInstance()->renderGlMainWidget(glMainWidget, _redrawNeeded);
+  _redrawNeeded = false;
 
-  if (_redrawNeeded) {
-    GlOffscreenRenderer::getInstance()->renderGlMainWidget(glMainWidget);
-    _redrawNeeded = false;
-  } else {
-    GlOffscreenRenderer::getInstance()->renderGlMainWidget(glMainWidget, false);
-  }
-
-  painter->drawImage(QRect(0, 0, width, height), GlOffscreenRenderer::getInstance()->getImage());
+  painter->drawImage(QRect(0, 0, width, height), img);
 }
 
 void GlMainWidgetGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-  QMouseEvent eventModif(QEvent::MouseMove, QPoint(event->pos().x(), event->pos().y()),
+  QMouseEvent eventModif(QEvent::MouseMove, event->pos(), event->scenePos(), event->screenPos(),
                          Qt::NoButton, event->buttons(), event->modifiers());
   QApplication::sendEvent(glMainWidget, &eventModif);
   event->setAccepted(eventModif.isAccepted());
 }
 
 void GlMainWidgetGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-  QMouseEvent eventModif(QEvent::MouseButtonPress, QPoint(event->pos().x(), event->pos().y()),
-                         event->button(), event->buttons(), event->modifiers());
+  QMouseEvent eventModif(QEvent::MouseButtonPress, event->pos(), event->scenePos(),
+                         event->screenPos(), event->button(), event->buttons(), event->modifiers());
   QApplication::sendEvent(glMainWidget, &eventModif);
   event->setAccepted(eventModif.isAccepted());
 }
 
 void GlMainWidgetGraphicsItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
-  QMouseEvent eventModif(QEvent::MouseButtonDblClick, QPoint(event->pos().x(), event->pos().y()),
-                         event->button(), event->buttons(), event->modifiers());
+  QMouseEvent eventModif(QEvent::MouseButtonDblClick, event->pos(), event->scenePos(),
+                         event->screenPos(), event->button(), event->buttons(), event->modifiers());
   QApplication::sendEvent(glMainWidget, &eventModif);
   event->setAccepted(eventModif.isAccepted());
 }
 
 void GlMainWidgetGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-  QMouseEvent eventModif(QEvent::MouseButtonRelease, QPoint(event->pos().x(), event->pos().y()),
-                         event->button(), event->buttons(), event->modifiers());
+  QMouseEvent eventModif(QEvent::MouseButtonRelease, event->pos(), event->scenePos(),
+                         event->screenPos(), event->button(), event->buttons(), event->modifiers());
   QApplication::sendEvent(glMainWidget, &eventModif);
   event->setAccepted(eventModif.isAccepted());
 }
 
 void GlMainWidgetGraphicsItem::wheelEvent(QGraphicsSceneWheelEvent *event) {
-#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
-  QWheelEvent eventModif(event->pos(), event->delta(), event->buttons(), event->modifiers(),
-                         event->orientation());
-#else
   QWheelEvent eventModif(event->pos(), QPointF(event->screenPos()), QPoint(),
                          (event->orientation() == Qt::Vertical) ? QPoint(0, event->delta())
                                                                 : QPoint(event->delta(), 0),
                          event->buttons(), event->modifiers(), Qt::NoScrollPhase, false,
                          Qt::MouseEventNotSynthesized);
-#endif
   QApplication::sendEvent(glMainWidget, &eventModif);
   event->setAccepted(eventModif.isAccepted());
 }
 
 void GlMainWidgetGraphicsItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
-  QMouseEvent eventModif(QEvent::MouseMove, QPoint(event->pos().x(), event->pos().y()),
+  QMouseEvent eventModif(QEvent::MouseMove, event->pos(), event->scenePos(), event->screenPos(),
                          Qt::NoButton, Qt::NoButton, event->modifiers());
   QApplication::sendEvent(glMainWidget, &eventModif);
   event->setAccepted(eventModif.isAccepted());
@@ -171,7 +155,7 @@ void GlMainWidgetGraphicsItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
 
 void GlMainWidgetGraphicsItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
   QContextMenuEvent eventModif(static_cast<QContextMenuEvent::Reason>(event->reason()),
-                               QPoint(event->pos().x(), event->pos().y()));
+                               QPoint(event->pos().x(), event->pos().y()), event->screenPos());
   QApplication::sendEvent(glMainWidget, &eventModif);
   event->setAccepted(eventModif.isAccepted());
 }

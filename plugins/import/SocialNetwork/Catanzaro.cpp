@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
@@ -34,7 +34,7 @@ static const char *paramHelp[] = {
     "Number of nodes added at each time step.",
 
     // p
-    "p defines the probality a new node is wired to an existing one"};
+    "p defines the probability a new node is wired to an existing one"};
 
 /**
  *
@@ -74,10 +74,10 @@ struct Catanzaro : public ImportModule {
 
     // check arguments
     if (m > n) {
-      pluginProgress->setError("The m parameter cannot be greater than the number of nodes");
+      pluginProgress->setError("\"m\" cannot be greater than \"nodes\"");
       return false;
     } else if (p < 0 || p > 1) {
-      pluginProgress->setError("p is not a probability,\nit does not belong to [0, 1]");
+      pluginProgress->setError("\"p\" must belong to [0, 1]");
       return false;
     }
 

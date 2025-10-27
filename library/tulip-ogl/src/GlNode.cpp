@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,28 +17,16 @@
  *
  */
 
-#include <set>
-
 #include <tulip/GlNode.h>
 
-#include <tulip/Coord.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/StringProperty.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/IntegerProperty.h>
-#include <tulip/ColorProperty.h>
 #include <tulip/GlMetaNodeRenderer.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/Glyph.h>
 #include <tulip/GlTools.h>
-#include <tulip/GlSceneVisitor.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlGlyphRenderer.h>
-#include <tulip/TulipViewSettings.h>
 
 //====================================================
 

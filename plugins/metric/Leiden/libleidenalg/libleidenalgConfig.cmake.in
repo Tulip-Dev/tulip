@@ -1,0 +1,22 @@
+# - Config file for the libleidenalg package
+# It defines the following variables
+#  LIBLEIDENALG_INCLUDEDIR - include directories for libleidenalg
+#  LIBLEIDENALG_LIBRARIES    - libraries to link against
+
+set(LIBLEIDENALG_VERSION "@PACKAGE_VERSION_BASE@")
+
+@PACKAGE_INIT@
+
+# Compute paths
+set_and_check(LIBLEIDENALG_INCLUDEDIR "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@")
+
+# Our library dependencies (contains definitions for IMPORTED targets)
+if(NOT TARGET libleidenalg AND NOT LIBLEIDENALG_BINARY_DIR)
+  include("${CMAKE_CURRENT_LIST_DIR}/libleidenalgTargets.cmake")
+endif()
+
+# These are IMPORTED targets created by libleidenalgTargets.cmake
+set_and_check(LIBLEIDENALG_LIBRARIES "@PACKAGE_CMAKE_INSTALL_LIBDIR@")
+
+check_required_components(libleidenalg)
+

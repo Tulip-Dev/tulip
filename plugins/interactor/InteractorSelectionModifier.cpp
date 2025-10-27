@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,8 +22,8 @@
 #include <tulip/MouseSelector.h>
 #include <tulip/MouseSelectionEditor.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/StandardInteractorPriority.h>
 
-#include "../utils/StandardInteractorPriority.h"
 #include "../utils/PluginNames.h"
 
 using namespace tlp;
@@ -53,12 +53,20 @@ public:
         QString("<h3>Move/Reshape rectangle selection</h3>") + "<u>Modify selection</u><br/><br/>" +
         "Resize: <ul><li><b>Mouse left</b> down on triangle + moves</li></ul>" +
         "<ul><li><b>Mouse left</b> down on square + moves</li></ul>" +
+#if !defined(__APPLE__)
         "Only change node size: <ul><li><b>Ctrl + Mouse left</b> down on triangle + "
+#else
+        "Only change node size: <ul><li><b>⌥ + Mouse left</b> down on triangle + "
+#endif
         "moves</li></ul>" +
         "Only change selection size: <ul><li><b>Shift + Mouse left</b> down on triangle + "
         "moves</li></ul>" +
         "Rotate: <ul><li><b>Mouse left</b> down on circle + moves</li></ul>" +
+#if !defined(__APPLE__)
         "Only rotate nodes: <ul><li><b>Ctrl + Mouse left</b> down on circle + moves</li></ul>" +
+#else
+        "Only rotate nodes: <ul><li><b>⌥ + Mouse left</b> down on circle + moves</li></ul>" +
+#endif
         "Only rotate selection: <ul><li><b>Shift + Mouse left</b> down on circle + "
         "moves</li></ul>" +
         "Translate: <ul><li><b>Mouse left</b> down inside rectangle + moves</li>"
@@ -69,14 +77,8 @@ public:
         "right zone</li></ul>" +
         "<u>Navigation in the graph</u><br/><br/>" +
         "Translation (if no selection): <ul><li><b>Arrow</b> keys</li></ul>" +
-#if !defined(__APPLE__)
-        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Pg up/Pg "
-        "down</b> keys</li></ul>"
-#else
         "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>Pg up/Pg "
-        "down</b> keys</li></ul>"
-#endif
-    );
+        "down</b> keys</li></ul>");
     push_back(new MouseNKeysNavigator(false));
     push_back(new MouseSelector);
     push_back(new MouseSelectionEditor);

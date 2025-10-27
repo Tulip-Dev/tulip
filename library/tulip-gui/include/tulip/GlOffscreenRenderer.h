@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -77,7 +77,6 @@ public:
   void setViewPortSize(const unsigned int viewPortWidth, const unsigned int viewPortHeight);
   unsigned int getViewportWidth();
   unsigned int getViewportHeight();
-  bool frameBufferOk() const;
 
   GlScene *getScene() {
     return &scene;
@@ -117,13 +116,13 @@ public:
 
   void renderExternalScene(GlScene *scene, const bool antialiased = false);
 
-  void renderGlMainWidget(GlMainWidget *glWidget, bool redrawNeeded = true);
+  QImage renderGlMainWidget(GlMainWidget *glWidget, bool redrawNeeded);
 
   /**
    * @brief Generate a QImage from the scene. You need to call the renderScene function before this
    *function.
    **/
-  QImage getImage();
+  QImage getImage(bool alpha = false);
   /**
    * @brief Generate an open gl texture from the scene. You need to call the renderScene function
    *before this function.
@@ -133,6 +132,7 @@ public:
   QOpenGLContext *getOpenGLContext();
   void makeOpenGLContextCurrent();
   void doneOpenGLContextCurrent();
+  bool isValid();
 
 private:
   GlOffscreenRenderer();

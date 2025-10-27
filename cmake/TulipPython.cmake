@@ -1,270 +1,177 @@
-SET(TULIP_PYTHON_SITE_INSTALL OFF CACHE BOOL "Do you want to install Tulip Python modules in a Python standard module folder on your system ?
-The selected folder path will be the first in the list returned by site.getsitepackages() whose prefix equals ${CMAKE_INSTALL_PREFIX}.
-If no such folder is found, the path will be the one returned by site.getusersitepackages().
-This should only be used when packaging Tulip for a Linux distribution or MSYS2. [OFF|ON]")
+SET(PYTHON_VERSION_NO_DOT ${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
+SET(PYTHON_VERSION ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR})
+SET(TulipPythonModulesInstallDir ${CMAKE_INSTALL_PREFIX}/${TulipLibInstallDir}/tulip/python)
 
-# After finding the Python interpreter, try to find if SIP and its dev tools are installed on the host system.
-# If not, compile the SIP version located in thirdparty.
-FIND_PACKAGE(PythonInterp 3.7 REQUIRED)
+MACRO(TULIP_DISABLE_COMPILER_WARNINGS_PYTHON)
+    TULIP_SET_CXX_COMPILER_FLAG("-Wno-old-style-cast -Wno-deprecated-copy -Wno-unused-variable -Wno-overloaded-virtual -Wno-missing-field-initializers")
+    TULIP_SET_C_COMPILER_FLAG("-Wno-old-style-cast -Wno-deprecated-copy -Wno-unused-variable -Wno-overloaded-virtual -Wno-missing-field-initializers")
+ENDMACRO(TULIP_DISABLE_COMPILER_WARNINGS_PYTHON)
 
-EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} --version OUTPUT_VARIABLE PYTHON_VERSION_RAW ERROR_VARIABLE PYTHON_VERSION_RAW)
-STRING(REPLACE "\n" "" PYTHON_VERSION_RAW "${PYTHON_VERSION_RAW}")
-STRING(REGEX MATCH "[0-9]\\.[0-9]+" PYTHON_VERSION "${PYTHON_VERSION_RAW}")
-STRING(REGEX MATCH "[0-9]\\.[0-9]+\\.[0-9]+" PYTHON_VERSION_WITH_PATCH "${PYTHON_VERSION_RAW}")
-STRING(REPLACE "." "" PYTHON_VERSION_NO_DOT ${PYTHON_VERSION})
-
-IF(TULIP_PYTHON_SITE_INSTALL)
-
-  EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "
-from __future__ import print_function
-import site
-import sys
-from distutils.sysconfig import get_python_lib
-py_version = str(sys.version_info[0]) + '.' + str(sys.version_info[1])
-for path in site.getsitepackages():
-  # check that we select a valid install path
-  if path.startswith('${CMAKE_INSTALL_PREFIX}') and py_version in path:
-    # avoid to install in /usr/local when CMAKE_INSTALL_PREFIX is /usr on debian
-    if '${CMAKE_INSTALL_PREFIX}' == '/usr' and '/usr/local' in path:
-      continue
-    print(path)
-    exit()
-print(site.getusersitepackages())
-"
-                  OUTPUT_VARIABLE TulipPythonModulesInstallDir)
-  STRING(REPLACE "\n" "" TulipPythonModulesInstallDir "${TulipPythonModulesInstallDir}")
-
-ELSE(TULIP_PYTHON_SITE_INSTALL)
-  SET(TulipPythonModulesInstallDir ${CMAKE_INSTALL_PREFIX}/${TulipLibInstallDir}/tulip/python)
-ENDIF(TULIP_PYTHON_SITE_INSTALL)
-
-# Unset the previous values of the CMake cache variables related to Python libraries
-# in case the value of PYTHON_EXECUTABLE CMake variable changed
-UNSET(PYTHONLIBS_FOUND CACHE)
-UNSET(PYTHON_LIBRARY CACHE)
-UNSET(PYTHON_INCLUDE_DIR CACHE)
-UNSET(PYTHON_INCLUDE_PATH CACHE)
-
-# Find the Python library with the same version as the interpreter
-# Python 3.2 library is suffixed by mu and Python >= 3.3 by m on some systems, also handle these cases
-SET(Python_ADDITIONAL_VERSIONS ${PYTHON_VERSION}mu ${PYTHON_VERSION}m ${PYTHON_VERSION})
-
-GET_FILENAME_COMPONENT(PYTHON_HOME_PATH ${PYTHON_EXECUTABLE} PATH)
+GET_FILENAME_COMPONENT(PYTHON_HOME_PATH ${Python_EXECUTABLE} DIRECTORY)
 
 # Ensure the detection of Python library installed through a bundle downloaded from Python.org or through a macports installation
 IF(APPLE)
-  IF(NOT "${PYTHON_EXECUTABLE}" MATCHES "^/usr/bin/python.*$")
+  IF(NOT "${Python_EXECUTABLE}" MATCHES "^/usr/bin/python.*$")
     EXECUTE_PROCESS(COMMAND bash -c "cd ${PYTHON_HOME_PATH}/.. > /dev/null; echo -n $(pwd)" OUTPUT_VARIABLE PYTHON_DIR_PATH)
     SET(CMAKE_PREFIX_PATH ${PYTHON_HOME_PATH}/.. ${CMAKE_PREFIX_PATH})
   ENDIF()
 ENDIF(APPLE)
 
-# Ensure that correct Python include path is selected by CMake on Windows
-IF(WIN32)
-  SET(CMAKE_INCLUDE_PATH ${PYTHON_HOME_PATH}/include ${CMAKE_INCLUDE_PATH})
-  # Ensure that correct Python include path and library are selected by CMake on Linux (in case of non standard installation)
-ELSEIF(LINUX)
-  SET(CMAKE_INCLUDE_PATH ${PYTHON_HOME_PATH}/../include ${CMAKE_INCLUDE_PATH})
-  SET(CMAKE_LIBRARY_PATH ${PYTHON_HOME_PATH}/../lib ${CMAKE_LIBRARY_PATH})
-ENDIF(WIN32)
-
-FIND_PACKAGE(PythonLibs REQUIRED)
-
-IF(MINGW)
-  # Check if Python is provided by MSYS2 (it is compiled with GCC in that case instead of MSVC)
-  EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; print(sys.version)" OUTPUT_VARIABLE PYTHON_VERSION_FULL ERROR_VARIABLE PYTHON_VERSION_FULL)
-  STRING(REGEX MATCH "GCC" MSYS2_PYTHON "${PYTHON_VERSION_FULL}")
-
-  # Python 64bits does not provide a dll import library for MinGW.
-  # Fortunately, we can directly link to the Python dll with that compiler.
-  # So find the location of that dll and overwrite the PYTHON_LIBRARY CMake cache variable with it
-  STRING(REPLACE "\\" "/" WINDIR $ENV{WINDIR})
-
-  IF(MSYS2_PYTHON)
-    IF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll)
-      SET(PYTHON_LIBRARY ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll CACHE FILEPATH "" FORCE)
-    ELSEIF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}m.dll)
-      SET(PYTHON_LIBRARY ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}m.dll CACHE FILEPATH "" FORCE)
-    ENDIF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll)
-  ELSE(MSYS2_PYTHON)
-    # Check if the Python dll is located in the Python home directory (when Python is installed for current user only)
-    IF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
-      SET(PYTHON_LIBRARY ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
-      #If not, the Python dll is located in %WINDIR%/System32 (when Python is installed for all users)
-    ELSE(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
-      IF(NOT WIN_AMD64 OR X64)
-        SET(PYTHON_LIBRARY ${WINDIR}/System32/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
-      ELSE(NOT WIN_AMD64 OR X64)
-        SET(PYTHON_LIBRARY ${WINDIR}/SysWOW64/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
-      ENDIF(NOT WIN_AMD64 OR X64)
-    ENDIF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
-  ENDIF(MSYS2_PYTHON)
-
-ENDIF(MINGW)
-
 # Ensure headers correspond to the ones associated to the detected Python library on MacOS
-IF(APPLE AND NOT "${PYTHON_EXECUTABLE}" MATCHES "^/usr/bin/python.*$")
-  SET(PYTHON_INCLUDE_DIR ${PYTHON_HOME_PATH}/../Headers CACHE PATH "" FORCE)
+IF(APPLE AND NOT "${Python_EXECUTABLE}" MATCHES "^/usr/bin/python.*$"
+   AND EXISTS ${PYTHON_HOME_PATH}/../Headers)
+  SET(Python_INCLUDE_DIRS ${PYTHON_HOME_PATH}/../Headers CACHE PATH "" FORCE)
 ENDIF()
 
-SET(SIP_VERSION_THIRDPARTY 4.19.25)
-SET(SIP_OK FALSE CACHE INTERNAL "")
-FIND_PACKAGE(SIP)
-SET(SIP_OK ${SIP_FOUND})
-IF(SIP_OK AND NOT ${SIP_VERSION_STR} VERSION_LESS ${SIP_VERSION_THIRDPARTY})
-  SET(SIP_EXE "${SIP_EXECUTABLE}")
-  SET(SYSTEM_SIP TRUE)
-  SET(SIP_MODULE "sip")
-ELSE(SIP_OK AND NOT ${SIP_VERSION_STR} VERSION_LESS ${SIP_VERSION_THIRDPARTY})
-  SET(SIP_LIB sip)
-  SET(SYSTEM_SIP FALSE)
-  SET(SIP_MODULE "tulip.native.sip")
-  IF(SIP_OK)
-    IF(NOT "${SIP_VERSION}" STREQUAL "${LAST_FOUND_SIP_VERSION}")
-      MESSAGE(STATUS "SIP was found on the system but its version is lesser than the required one (${SIP_VERSION_THIRDPARTY}).")
-    ENDIF(NOT "${SIP_VERSION}" STREQUAL "${LAST_FOUND_SIP_VERSION}")
-    SET(SIP_FOUND FALSE)
-  ENDIF(SIP_OK)
+SET(SIP_BUILD ${Python_EXECUTABLE} -m sipbuild.tools.build) #instead of sip-build
+SET(SIP_MODULE_PROG ${Python_EXECUTABLE} -m sipbuild.tools.module) #instead of sip-module
+SET(SIP_VERSION 6.9.1)
+#check if sip is installed (it is up to the user to install it)
+#use the detected python interpreter to call sip instead of the command line tool
+#to be sure to use the correct version (command line tool may not be in the PATH)
+execute_process(
+        COMMAND ${SIP_BUILD} --version
+        RESULT_VARIABLE EXIT_CODE
+        OUTPUT_QUIET
+)
 
-  TRY_COMPILE(SIP_OK ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen sip
-    CMAKE_FLAGS -DCMAKE_OSX_SYSROOT=${CMAKE_OSX_SYSROOT} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
-    -DPYTHON_INCLUDE_DIR=${PYTHON_INCLUDE_DIR} -DPYTHON_INCLUDE_DIR2=${PYTHON_INCLUDE_DIR2}
-    -DPYTHON_INCLUDE_PATH=${PYTHON_INCLUDE_PATH} -DPYTHON_LIBRARY=${PYTHON_LIBRARY}
-    -DSIP_LIB=${SIP_LIB}
-    OUTPUT_VARIABLE SIP_COMPILE_OUTPUT)
+if (NOT ${EXIT_CODE} EQUAL 0)
+    message(FATAL_ERROR
+            "The \"sip\" Python package is not installed. Please install it using a command like this one: \"${Python_EXECUTABLE} -m pip install sip\".")
+endif()
 
-  IF(SIP_OK)
-    SET(SIP_VERSION_STR "${SIP_VERSION_THIRDPARTY}")
-    IF(WIN32 AND EXISTS "${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen/Debug/sip.exe")
-      SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen/Debug/sip.exe)
-    ELSE()
-      SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen/sip)
-    ENDIF()
-    SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/siplib/)
-  ELSE(SIP_OK)
-    MESSAGE(FATAL_ERROR "SIP build failed:\n${SIP_COMPILE_OUTPUT}")
-  ENDIF(SIP_OK)
-ENDIF(SIP_OK AND NOT ${SIP_VERSION_STR} VERSION_LESS ${SIP_VERSION_THIRDPARTY})
-
-IF (NOT "${SIP_VERSION_STR}${SYSTEM_SIP}" STREQUAL "${LAST_FOUND_SIP_CONFIG}")
-  MESSAGE(STATUS "Found SIP ${SIP_VERSION_STR}: ${SIP_EXE}")
-ENDIF (NOT "${SIP_VERSION_STR}${SYSTEM_SIP}" STREQUAL "${LAST_FOUND_SIP_CONFIG}")
-
-SET(LAST_FOUND_SIP_CONFIG "${SIP_VERSION_STR}${SYSTEM_SIP}" CACHE INTERNAL "")
-
+#check sip version
+EXECUTE_PROCESS(COMMAND ${SIP_BUILD} --version OUTPUT_VARIABLE SIP_MODULE_OUTPUT)
+STRING(STRIP ${SIP_MODULE_OUTPUT} SIP_MODULE_OUTPUT)
+IF(${SIP_MODULE_OUTPUT} VERSION_GREATER_EQUAL ${SIP_VERSION})
+    MESSAGE(STATUS "Found SIP version ${SIP_MODULE_OUTPUT}")
+ELSE()
+    MESSAGE(FATAL_ERROR "SIP Python package at least version ${SIP_VERSION} not found (found ${SIP_MODULE_OUTPUT}).")
+ENDIF()
+##########################################################
 IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
-  STRING(REGEX REPLACE "[^0-9.]" "" TULIP_PYTHON_WHEEL_VERSION "${TulipMajorVersion}.${TulipMinorVersion}.${TulipReleaseVersion}")
-
+  # STRING(REGEX REPLACE "[^0-9.]" "" TULIP_PYTHON_WHEEL_VERSION "${Tulip_VERSION}")
+  SET(TULIP_PYTHON_WHEEL_NAME tulip-python)
+  string(REPLACE "-" "_" TULIP_PYTHON_WHEEL_NAME_ ${TULIP_PYTHON_WHEEL_NAME})
   IF(WIN32)
     SET(WHEEL_INSTALL_PATH "\\")
   ELSE(WIN32)
     SET(WHEEL_INSTALL_PATH "/")
   ENDIF(WIN32)
+  #check for build
+  execute_process(
+          COMMAND ${Python_EXECUTABLE} -m pip show build
+          RESULT_VARIABLE EXIT_CODE
+          OUTPUT_QUIET
+  )
+  if (NOT ${EXIT_CODE} EQUAL 0)
+      message(FATAL_ERROR
+              "The \"build\" Python package is not installed. Please install it using a command like this one: \"${Python_EXECUTABLE} -m pip install build\".")
+  endif()
 
   ADD_CUSTOM_TARGET(wheel
-    COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+    COMMAND ${Python_EXECUTABLE} -m build --wheel
     WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER})
 
-  # check generation of test wheels
-  STRING(COMPARE NOTEQUAL "${TULIP_PYTHON_TEST_WHEEL_SUFFIX}" "" TULIP_GENERATE_TESTPYPI_WHEEL)
-
-  IF(TULIP_GENERATE_TESTPYPI_WHEEL)
-    SET(TULIP_PYTHON_TEST_WHEEL_VERSION ${TULIP_PYTHON_WHEEL_VERSION}.${TULIP_PYTHON_TEST_WHEEL_SUFFIX})
-
-    ADD_CUSTOM_TARGET(test-wheel
-      COMMAND ${PYTHON_EXECUTABLE} setuptest.py bdist_wheel
-            WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER})
-    ADD_DEPENDENCIES(test-wheel wheel)
-  ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
-
-  IF(NOT LINUX)
-
-    EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import wheel" RESULT_VARIABLE WHEEL_OK OUTPUT_QUIET ERROR_QUIET)
-    EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import twine" RESULT_VARIABLE TWINE_OK OUTPUT_QUIET ERROR_QUIET)
-    IF(NOT WHEEL_OK EQUAL 0)
-      MESSAGE("The 'wheel' Python module has to be installed to generate wheels for tulip modules.")
-      MESSAGE("You can install it through the 'pip' tool ($ pip install wheel)")
-    ENDIF(NOT WHEEL_OK EQUAL 0)
-    IF(NOT TWINE_OK EQUAL 0)
-      MESSAGE("The 'twine' Python module has to be installed to upload tulip wheels on PyPi.")
-      MESSAGE("You can install it through the 'pip' tool ($ pip install twine)")
-    ENDIF(NOT TWINE_OK EQUAL 0)
-
-  ELSE(NOT LINUX)
-
-    IF(NOT EXISTS ${PYTHON_HOME_PATH}/wheel)
-      EXECUTE_PROCESS(COMMAND ${PYTHON_HOME_PATH}/pip install --upgrade wheel)
-    ENDIF(NOT EXISTS ${PYTHON_HOME_PATH}/wheel)
-    IF(NOT EXISTS ${PYTHON_HOME_PATH}/twine)
-      EXECUTE_PROCESS(COMMAND ${PYTHON_HOME_PATH}/pip install --upgrade twine)
-    ENDIF(NOT EXISTS ${PYTHON_HOME_PATH}/twine)
-
-    # When building Python binary wheels on Linux, produced binaries have to be patched
-    # in order for the tulip modules to be successfully imported and loaded on every computer.
-    # The 'auditwheel' tool (see https://github.com/pypa/auditwheel) has been developed
-    # in order to ease that patching task.
-    # We use our patched version of the auditwheel tool
-    # as the official one does not repair tulip-gui wheel correctly
-    IF(NOT IS_DIRECTORY /tmp/auditwheel)
-      EXECUTE_PROCESS(COMMAND bash -c "echo $(dirname $(readlink /usr/local/bin/auditwheel))" OUTPUT_VARIABLE PYBIN OUTPUT_STRIP_TRAILING_WHITESPACE)
-      EXECUTE_PROCESS(COMMAND bash -c "${PYBIN}/pip uninstall -y auditwheel; cd /tmp; curl -LO http://tulip.labri.fr/code/auditwheel.tar.gz; tar zxvf auditwheel.tar.gz; ${PYBIN}/pip install /tmp/auditwheel")
-    ENDIF(NOT IS_DIRECTORY /tmp/auditwheel)
-
-    ADD_CUSTOM_COMMAND(TARGET wheel POST_BUILD
-      COMMAND bash -c "auditwheel repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
-      COMMAND bash -c "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
+  IF(LINUX)
+  #where to put wheel after having it repaired
+  IF(NOT TULIP_WHEELS_PREFIX)
+    SET(TULIP_WHEELS_PREFIX ./dist)
+  ENDIF()
+  #check for auditwheel (installed by default on manylinux)
+  find_program(AUDITWHEEL_CMD auditwheel REQUIRED)
+  #filename under linux does not implement Python_SOABI well => cp${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-linux_x86_64 instead of cpython-${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-x86_64-linux-gnu
+  SET(TULIP_PYTHON_WHEEL_FILE ${TULIP_PYTHON_WHEEL_NAME_}-${Tulip_VERSION}-cp${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-cp${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-linux_x86_64.whl)
+  ADD_CUSTOM_COMMAND(TARGET wheel POST_BUILD
+      COMMAND bash -xc "LD_LIBRARY_PATH=${Qhull_LIBDIR}:$ENV{LD_LIBRARY_PATH} ${AUDITWHEEL_CMD} repair -L native -w ${TULIP_WHEELS_PREFIX} ./dist/${TULIP_PYTHON_WHEEL_FILE}"
       WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
-      COMMENT "patching linux tulip-core wheel" VERBATIM)
-
-    IF(TULIP_GENERATE_TESTPYPI_WHEEL)
-      ADD_CUSTOM_COMMAND(TARGET test-wheel POST_BUILD
-        COMMAND bash -c "auditwheel repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
-        COMMAND bash -c "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
-        WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
-        COMMENT "patching linux tulip-core test wheel" VERBATIM)
-    ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
-
-  ENDIF(NOT LINUX)
-
-  # In order to upload the generated wheels, an account must be created on PyPi
-  # and the following configuration must be stored in the ~/.pypirc file
-  ##############################################################
-  # [distutils]
-  # index-servers=
-  #     pypi
-  #     testpypi
-  #
-  # [testpypi]
-  # repository: https://test.pypi.org/legacy/
-  # username: <your user name goes here>
-  # password: <your password goes here>
-  #
-  # [pypi]
-  # repository: https://upload.pypi.org/legacy/
-  # username: <your user name goes here>
-  # password: <your password goes here>
-  ###############################################################
-
-
-  SET(TWINE twine)
-  IF(EXISTS ${PYTHON_HOME_PATH}/twine)
-    SET(TWINE ${PYTHON_HOME_PATH}/twine)
-  ENDIF(EXISTS ${PYTHON_HOME_PATH}/twine)
+      COMMENT "Repairing tulip-core wheel" VERBATIM)
+  ENDIF(LINUX)
+  GET_FILENAME_COMPONENT(PYTHON_EXE_PATH ${Python_EXECUTABLE} DIRECTORY)
+  EXECUTE_PROCESS(COMMAND ${Python_EXECUTABLE} -m site --user-base OUTPUT_VARIABLE USER_EXE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+  IF(LINUX OR APPLE)
+    SET(USER_EXE_PATH "${USER_EXE_PATH}/bin")
+  ELSE()
+    SET(USER_EXE_PATH "${USER_EXE_PATH}/../Scripts")
+    SET(PYTHON_EXE_PATH "${PYTHON_EXE_PATH}/Scripts")
+  ENDIF()
   IF(WIN32)
-    SET(TWINE ${PYTHON_INCLUDE_DIR}/../Scripts/twine.exe)
+    find_program(DELVEWHEEL_CMD delvewheel HINTS ${USER_EXE_PATH} ${PYTHON_EXE_PATH} REQUIRED)
+    FILE(TO_NATIVE_PATH "${TULIP_WHEELS_PREFIX}" TULIP_WHEELS_PREFIX)
+    SET(TULIP_PYTHON_WHEEL_FILE ${TULIP_PYTHON_WHEEL_NAME_}-${Tulip_VERSION}-cp${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-${Python_SOABI}.whl)
+    ADD_CUSTOM_COMMAND(TARGET wheel POST_BUILD
+        #ignore-existing parameter below is important to tell delvewheel to not consider libtulip-core-x.dll
+        COMMAND ${DELVEWHEEL_CMD} repair -v --ignore-existing --add-path=${TULIP_PYTHON_NATIVE_FOLDER} --wheel-dir=${TULIP_WHEELS_PREFIX} ./dist/${TULIP_PYTHON_WHEEL_FILE}
+        WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
+        COMMENT "Repairing tulip-core wheel" VERBATIM)
   ENDIF(WIN32)
-  SET(WHEEL_FILES_REGEXP "*${TULIP_PYTHON_WHEEL_VERSION}-cp*")
-  ADD_CUSTOM_TARGET(wheel-upload
-    COMMAND bash -c "echo -e 'uploading wheels:\\n' $(ls ${TULIP_PYTHON_ROOT_FOLDER}/dist/${WHEEL_FILES_REGEXP})"
-    COMMAND ${TWINE} upload -r pypi dist/${WHEEL_FILES_REGEXP}
-    WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER} VERBATIM)
+  IF(APPLE)
+    find_program(DELOCATE delocate-wheel HINTS ${USER_EXE_PATH} ${PYTHON_EXE_PATH} REQUIRED)
+    FILE(TO_NATIVE_PATH "${TULIP_WHEELS_PREFIX}" TULIP_WHEELS_PREFIX)
+    # as the built wheel is not an "universal2" wheel, it has to be renamed
+    # with the architecture used by the current build, before repairing
+    IF (CMAKE_OSX_ARCHITECTURES)
+      SET(ARCH ${CMAKE_OSX_ARCHITECTURES})
+    ELSE()
+      EXECUTE_PROCESS(COMMAND uname -m
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        OUTPUT_VARIABLE ARCH)
+    ENDIF()
+    EXECUTE_PROCESS(COMMAND sw_vers -productVersion
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        OUTPUT_VARIABLE MACOS_VERSION)
+    STRING(REGEX MATCH "^[0-9]+\.[0-9]+" MACOS_VERSION ${MACOS_VERSION})
+    STRING(REPLACE "." "_" MACOS_VERSION ${MACOS_VERSION})
+    SET(TULIP_PYTHON_WHEEL_FILE ${TULIP_PYTHON_WHEEL_NAME_}-${Tulip_VERSION}-cp${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-cp${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-macosx_${MACOS_VERSION}_${ARCH}.whl)
+    ADD_CUSTOM_COMMAND(TARGET wheel POST_BUILD
+        COMMAND bash -c -x "mv ./dist/${TULIP_PYTHON_WHEEL_NAME_}-${Tulip_VERSION}-cp${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-*.whl ./dist/${TULIP_PYTHON_WHEEL_FILE}"
+        COMMAND ${DELOCATE} ./dist/${TULIP_PYTHON_WHEEL_FILE} -w ${TULIP_WHEELS_PREFIX}
+        WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
+        COMMENT "Repairing tulip-core wheel" VERBATIM)
+  ENDIF(APPLE)
+ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+##########################################################
+#generate the sip module sources
+SET(SIP_MODULE tulip.native.sip)
+string(REPLACE "." "_" SIP_MODULE_ ${SIP_MODULE})
+SET(SIP_LIB sip)
+SET(SIP_INCLUDE_DIR ${PROJECT_BINARY_DIR}/thirdparty/sip)
 
-  IF(TULIP_GENERATE_TESTPYPI_WHEEL)
-    SET(TEST_WHEEL_FILES_REGEXP "*${TULIP_PYTHON_TEST_WHEEL_VERSION}*")
-    ADD_CUSTOM_TARGET(test-wheel-upload
-      COMMAND bash -c "echo -e 'uploading test wheels:\\n' $(ls ${TULIP_PYTHON_ROOT_FOLDER}/dist/${TEST_WHEEL_FILES_REGEXP})"
-      COMMAND ${TWINE} upload -r testpypi dist/${TEST_WHEEL_FILES_REGEXP}
-      WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER} VERBATIM)
-  ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
+FILE(MAKE_DIRECTORY ${SIP_INCLUDE_DIR})
+execute_process(
+    COMMAND ${SIP_MODULE_PROG} --sdist --target-dir=${SIP_INCLUDE_DIR} ${SIP_MODULE}
+    COMMAND_ERROR_IS_FATAL ANY)
+FILE(GLOB SIP_DIST LIST_DIRECTORIES false CONFIGURE_DEPENDS ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-*.tar.gz)
+STRING(REGEX MATCH "[0-9]+\.[0-9]+\.[0-9]+" SIP_API_FULL ${SIP_DIST})
+STRING(REGEX MATCH "^[0-9]+\.[0-9]+" SIP_API ${SIP_API_FULL}) #used in pyproject.toml files
+FILE(ARCHIVE_EXTRACT INPUT ${SIP_DIST} DESTINATION ${SIP_INCLUDE_DIR} PATTERNS *.c *.h)
+SET (SIP_H_DIR ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-${SIP_API_FULL})
+#######################
+#compile the sip module on our own instead of pip (produce faulty binaries on Windows and module is not compiled with gcc)
+SET(SIP_PYTHON_MODULE_SRC
+    ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-${SIP_API_FULL}/sip_array.c
+    ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-${SIP_API_FULL}/sip_core.c
+    ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-${SIP_API_FULL}/sip_enum.c
+    ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-${SIP_API_FULL}/sip_descriptors.c
+    ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-${SIP_API_FULL}/sip_int_convertors.c
+    ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-${SIP_API_FULL}/sip_object_map.c
+    ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-${SIP_API_FULL}/sip_threads.c
+    ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-${SIP_API_FULL}/sip_voidptr.c
+)
+
+Python_add_library(${SIP_LIB} MODULE WITH_SOABI ${SIP_PYTHON_MODULE_SRC})
+target_include_directories(${SIP_LIB} PUBLIC ${Python_INCLUDE_DIRS})
+SET_TARGET_PROPERTIES(${SIP_LIB} PROPERTIES COMPILE_OPTIONS -w)
+TARGET_COMPILE_DEFINITIONS(${SIP_LIB} PUBLIC "DYNAMIC_ANNOTATIONS_ENABLED=1")
+SET_TARGET_PROPERTIES(${SIP_LIB} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${TULIP_PYTHON_NATIVE_FOLDER})
+SET_TARGET_PROPERTIES(${SIP_LIB} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TULIP_PYTHON_NATIVE_FOLDER})
+SET_TARGET_PROPERTIES(${SIP_LIB} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE ${TULIP_PYTHON_NATIVE_FOLDER})
+SET_TARGET_PROPERTIES(${SIP_LIB} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL ${TULIP_PYTHON_NATIVE_FOLDER})
+SET_TARGET_PROPERTIES(${SIP_LIB} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${TULIP_PYTHON_NATIVE_FOLDER})
+SET_TARGET_PROPERTIES(${SIP_LIB} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${TULIP_PYTHON_NATIVE_FOLDER})
+SET_TARGET_PROPERTIES(${SIP_LIB} PROPERTIES OUTPUT_NAME sip)
+IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+  ADD_DEPENDENCIES(wheel ${SIP_LIB})
 ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 
+TULIP_INSTALL_PYTHON_FILES(tulip/native ${SIP_LIB})

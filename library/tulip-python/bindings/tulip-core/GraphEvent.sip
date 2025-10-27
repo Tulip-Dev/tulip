@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -36,36 +36,38 @@ To get the graph that sent the event, use the :meth:`tlp.GraphEvent.getGraph`.
 The type of graph event can be retrieved through the :meth:`tlp.GraphEvent.getType` method.
 Below is an exhaustive list of those types :
 
-  * :const:`tlp.GraphEvent.TLP_ADD_NODE` : a node has been added in the graph (use :meth:`tlp.GraphEvent.getNode` to get the concerned node)
-  * :const:`tlp.GraphEvent.TLP_DEL_NODE` : a node has been deleted in the graph (use :meth:`tlp.GraphEvent.getNode` to get the concerned node)
-  * :const:`tlp.GraphEvent.TLP_ADD_EDGE` : an edge has been added in the graph (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
-  * :const:`tlp.GraphEvent.TLP_DEL_EDGE` : an edge has been deleted in the graph (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
-  * :const:`tlp.GraphEvent.TLP_REVERSE_EDGE` : the direction of an edge has been reversed in the graph (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
-  * :const:`tlp.GraphEvent.TLP_BEFORE_SET_ENDS` : the extremities of an edge is about to be modified (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
-  * :const:`tlp.GraphEvent.TLP_AFTER_SET_ENDS` : the extremities of an edge have been modified (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
-  * :const:`tlp.GraphEvent.TLP_ADD_NODES` : several nodes have been added in the graph (use :meth:`tlp.GraphEvent.getNodes` to get the list of concerned nodes)
-  * :const:`tlp.GraphEvent.TLP_ADD_EDGES` : several edges have been added in the graph (use :meth:`tlp.GraphEvent.getEdges` to get the list of concerned edges)
-  * :const:`tlp.GraphEvent.TLP_BEFORE_ADD_DESCENDANTGRAPH` : a descendant graph (i.e. not necessarily a direct subgraph) is about to be added in the subgraphs hierarchy. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
-  * :const:`tlp.GraphEvent.TLP_AFTER_ADD_DESCENDANTGRAPH` : a descendant graph (i.e. not necessarily a direct subgraph) has been added in the subgraphs hierarchy. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
-  * :const:`tlp.GraphEvent.TLP_BEFORE_DEL_DESCENDANTGRAPH` : a descendant graph (i.e. not necessarily a direct subgraph) is about to be removed in the subgraphs hierarchy. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
-  * :const:`tlp.GraphEvent.TLP_AFTER_DEL_DESCENDANTGRAPH` : a descendant graph (i.e. not necessarily a direct subgraph) has been removed in the subgraphs hierarchy. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
-  * :const:`tlp.GraphEvent.TLP_BEFORE_ADD_SUBGRAPH` : a subgraph is about to be added in the graph. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
-  * :const:`tlp.GraphEvent.TLP_AFTER_ADD_SUBGRAPH` : a subgraph has been added in the graph. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
-  * :const:`tlp.GraphEvent.TLP_BEFORE_DEL_SUBGRAPH` : a subgraph is about to be removed in the graph. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
-  * :const:`tlp.GraphEvent.TLP_AFTER_DEL_SUBGRAPH` : a subgraph has been removed in the graph. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
-  * :const:`tlp.GraphEvent.TLP_BEFORE_ADD_LOCAL_PROPERTY` : a local property is about to be added in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
-  * :const:`tlp.GraphEvent.TLP_ADD_LOCAL_PROPERTY` : a local property has been added in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
-  * :const:`tlp.GraphEvent.TLP_BEFORE_DEL_LOCAL_PROPERTY` : a local property is about to be deleted in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
-  * :const:`tlp.GraphEvent.TLP_AFTER_DEL_LOCAL_PROPERTY` : a local property has been deleted in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
-  * :const:`tlp.GraphEvent.TLP_BEFORE_ADD_INHERITED_PROPERTY` : an inherited property (not attached to the graph itself but one of its parent) is about to be added in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
-  * :const:`tlp.GraphEvent.TLP_ADD_INHERITED_PROPERTY` : an inherited property (not attached to the graph itself but one of its parent) has been added in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
-  * :const:`tlp.GraphEvent.TLP_BEFORE_DEL_INHERITED_PROPERTY` : an inherited property (not attached to the graph itself but one of its parent) is about to be deleted in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
-  * :const:`tlp.GraphEvent.TLP_AFTER_DEL_INHERITED_PROPERTY` : an inherited property (not attached to the graph itself but one of its parent) has been deleted in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
-  * :const:`tlp.GraphEvent.TLP_BEFORE_SET_ATTRIBUTE` : an attribute of the graph is about to be set/modified. Use :meth:`tlp.GraphEvent.getAttributeName` to get the name of the concerned attribute.
-  * :const:`tlp.GraphEvent.TLP_AFTER_SET_ATTRIBUTE` : an attribute of the graph has been set/modified. Use :meth:`tlp.GraphEvent.getAttributeName` to get the name of the concerned attribute.
-  * :const:`tlp.GraphEvent.TLP_REMOVE_ATTRIBUTE` : an attribute of the graph has been removed. Use :meth:`tlp.GraphEvent.getAttributeName` to get the name of the concerned attribute.
-  * :const:`tlp.GraphEvent.TLP_BEFORE_RENAME_LOCAL_PROPERTY` : a local property of the graph is about to be renamed. Use :meth:`tlp.GraphEvent.getProperty` to get the concerned property and :meth:`tlp.GraphEvent.getPropertyNewName` to get the new property name.
-  * :const:`tlp.GraphEvent.TLP_AFTER_RENAME_LOCAL_PROPERTY` : a local property of the graph has been renamed. Use :meth:`tlp.GraphEvent.getProperty` to get the concerned property and :meth:`tlp.GraphEvent.getPropertyOldName` to get the old property name.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_ADD_NODE` : a node has been added in the graph (use :meth:`tlp.GraphEvent.getNode` to get the concerned node)
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_BEFORE_DEL_NODE` : a node is about to be deleted in the graph (use :meth:`tlp.GraphEvent.getNode` to get the concerned node)
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_AFTER_DEL_NODE` : a node has been deleted in the graph (use :meth:`tlp.GraphEvent.getNode` to get the concerned node)
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_ADD_EDGE` : an edge has been added in the graph (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_BEFORE_DEL_EDGE` : an edge is about to be deleted in the graph (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_AFTER_DEL_EDGE` : an edge has been deleted in the graph (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_REVERSE_EDGE` : the direction of an edge has been reversed in the graph (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_BEFORE_SET_ENDS` : the extremities of an edge is about to be modified (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_AFTER_SET_ENDS` : the extremities of an edge have been modified (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_ADD_NODES` : several nodes have been added in the graph (use :meth:`tlp.GraphEvent.getNodes` to get the list of concerned nodes)
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_ADD_EDGES` : several edges have been added in the graph (use :meth:`tlp.GraphEvent.getEdges` to get the list of concerned edges)
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_BEFORE_ADD_DESCENDANTGRAPH` : a descendant graph (i.e. not necessarily a direct subgraph) is about to be added in the subgraphs hierarchy. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_AFTER_ADD_DESCENDANTGRAPH` : a descendant graph (i.e. not necessarily a direct subgraph) has been added in the subgraphs hierarchy. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_BEFORE_DEL_DESCENDANTGRAPH` : a descendant graph (i.e. not necessarily a direct subgraph) is about to be removed in the subgraphs hierarchy. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_AFTER_DEL_DESCENDANTGRAPH` : a descendant graph (i.e. not necessarily a direct subgraph) has been removed in the subgraphs hierarchy. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_BEFORE_ADD_SUBGRAPH` : a subgraph is about to be added in the graph. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_AFTER_ADD_SUBGRAPH` : a subgraph has been added in the graph. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_BEFORE_DEL_SUBGRAPH` : a subgraph is about to be removed in the graph. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_AFTER_DEL_SUBGRAPH` : a subgraph has been removed in the graph. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_BEFORE_ADD_LOCAL_PROPERTY` : a local property is about to be added in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_ADD_LOCAL_PROPERTY` : a local property has been added in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_BEFORE_DEL_LOCAL_PROPERTY` : a local property is about to be deleted in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_AFTER_DEL_LOCAL_PROPERTY` : a local property has been deleted in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_BEFORE_ADD_INHERITED_PROPERTY` : an inherited property (not attached to the graph itself but one of its parent) is about to be added in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_ADD_INHERITED_PROPERTY` : an inherited property (not attached to the graph itself but one of its parent) has been added in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_BEFORE_DEL_INHERITED_PROPERTY` : an inherited property (not attached to the graph itself but one of its parent) is about to be deleted in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_AFTER_DEL_INHERITED_PROPERTY` : an inherited property (not attached to the graph itself but one of its parent) has been deleted in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_BEFORE_SET_ATTRIBUTE` : an attribute of the graph is about to be set/modified. Use :meth:`tlp.GraphEvent.getAttributeName` to get the name of the concerned attribute.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_AFTER_SET_ATTRIBUTE` : an attribute of the graph has been set/modified. Use :meth:`tlp.GraphEvent.getAttributeName` to get the name of the concerned attribute.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_REMOVE_ATTRIBUTE` : an attribute of the graph has been removed. Use :meth:`tlp.GraphEvent.getAttributeName` to get the name of the concerned attribute.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_BEFORE_RENAME_LOCAL_PROPERTY` : a local property of the graph is about to be renamed. Use :meth:`tlp.GraphEvent.getProperty` to get the concerned property and :meth:`tlp.GraphEvent.getPropertyNewName` to get the new property name.
+  * :const:`tlp.GraphEvent.GraphEventType.TLP_AFTER_RENAME_LOCAL_PROPERTY` : a local property of the graph has been renamed. Use :meth:`tlp.GraphEvent.getProperty` to get the concerned property and :meth:`tlp.GraphEvent.getPropertyOldName` to get the old property name.
 
 %End
 
@@ -79,37 +81,39 @@ Below is an exhaustive list of those types :
 
 public:
 
-  enum GraphEventType {
-    TLP_ADD_NODE = 0,
-    TLP_DEL_NODE = 1,
-    TLP_ADD_EDGE = 2,
-    TLP_DEL_EDGE = 3,
-    TLP_REVERSE_EDGE = 4,
-    TLP_BEFORE_SET_ENDS = 5,
-    TLP_AFTER_SET_ENDS = 6,
-    TLP_ADD_NODES = 7,
-    TLP_ADD_EDGES = 8,
-    TLP_BEFORE_ADD_DESCENDANTGRAPH = 9,
-    TLP_AFTER_ADD_DESCENDANTGRAPH = 10,
-    TLP_BEFORE_DEL_DESCENDANTGRAPH = 11,
-    TLP_AFTER_DEL_DESCENDANTGRAPH = 12,
-    TLP_BEFORE_ADD_SUBGRAPH = 13,
-    TLP_AFTER_ADD_SUBGRAPH = 14,
-    TLP_BEFORE_DEL_SUBGRAPH = 15,
-    TLP_AFTER_DEL_SUBGRAPH = 16,
-    TLP_ADD_LOCAL_PROPERTY = 17,
-    TLP_BEFORE_DEL_LOCAL_PROPERTY = 18,
-    TLP_AFTER_DEL_LOCAL_PROPERTY = 19,
-    TLP_ADD_INHERITED_PROPERTY = 20,
-    TLP_BEFORE_DEL_INHERITED_PROPERTY = 21,
-    TLP_AFTER_DEL_INHERITED_PROPERTY = 22,
-    TLP_BEFORE_RENAME_LOCAL_PROPERTY = 23,
-    TLP_AFTER_RENAME_LOCAL_PROPERTY = 24,
-    TLP_BEFORE_SET_ATTRIBUTE = 25,
-    TLP_AFTER_SET_ATTRIBUTE = 26,
-    TLP_REMOVE_ATTRIBUTE = 27,
-    TLP_BEFORE_ADD_LOCAL_PROPERTY = 28,
-    TLP_BEFORE_ADD_INHERITED_PROPERTY = 29
+  enum GraphEventType /BaseType=IntEnum/ {
+    TLP_ADD_NODE = GraphEvent::GraphEventType::TLP_ADD_NODE,
+    TLP_BEFORE_DEL_NODE = GraphEvent::GraphEventType::TLP_BEFORE_DEL_NODE,
+    TLP_AFTER_DEL_NODE = GraphEvent::GraphEventType::TLP_AFTER_DEL_NODE,
+    TLP_ADD_EDGE = GraphEvent::GraphEventType::TLP_ADD_EDGE,
+    TLP_BEFORE_DEL_EDGE = GraphEvent::GraphEventType::TLP_BEFORE_DEL_EDGE,
+    TLP_AFTER_DEL_EDGE = GraphEvent::GraphEventType::TLP_AFTER_DEL_EDGE,
+    TLP_REVERSE_EDGE = GraphEvent::GraphEventType::TLP_REVERSE_EDGE,
+    TLP_BEFORE_SET_ENDS = GraphEvent::GraphEventType::TLP_BEFORE_SET_ENDS,
+    TLP_AFTER_SET_ENDS = GraphEvent::GraphEventType::TLP_AFTER_SET_ENDS,
+    TLP_ADD_NODES = GraphEvent::GraphEventType::TLP_ADD_NODES,
+    TLP_ADD_EDGES = GraphEvent::GraphEventType::TLP_ADD_EDGES,
+    TLP_BEFORE_ADD_DESCENDANTGRAPH = GraphEvent::GraphEventType::TLP_BEFORE_ADD_DESCENDANTGRAPH,
+    TLP_AFTER_ADD_DESCENDANTGRAPH = GraphEvent::GraphEventType::TLP_AFTER_ADD_DESCENDANTGRAPH,
+    TLP_BEFORE_DEL_DESCENDANTGRAPH = GraphEvent::GraphEventType::TLP_BEFORE_DEL_DESCENDANTGRAPH,
+    TLP_AFTER_DEL_DESCENDANTGRAPH = GraphEvent::GraphEventType::TLP_AFTER_DEL_DESCENDANTGRAPH,
+    TLP_BEFORE_ADD_SUBGRAPH = GraphEvent::GraphEventType::TLP_BEFORE_ADD_SUBGRAPH,
+    TLP_AFTER_ADD_SUBGRAPH = GraphEvent::GraphEventType::TLP_AFTER_ADD_SUBGRAPH,
+    TLP_BEFORE_DEL_SUBGRAPH = GraphEvent::GraphEventType::TLP_BEFORE_DEL_SUBGRAPH,
+    TLP_AFTER_DEL_SUBGRAPH = GraphEvent::GraphEventType::TLP_AFTER_DEL_SUBGRAPH,
+    TLP_ADD_LOCAL_PROPERTY = GraphEvent::GraphEventType::TLP_ADD_LOCAL_PROPERTY,
+    TLP_BEFORE_DEL_LOCAL_PROPERTY = GraphEvent::GraphEventType::TLP_BEFORE_DEL_LOCAL_PROPERTY,
+    TLP_AFTER_DEL_LOCAL_PROPERTY = GraphEvent::GraphEventType::TLP_AFTER_DEL_LOCAL_PROPERTY,
+    TLP_ADD_INHERITED_PROPERTY = GraphEvent::GraphEventType::TLP_ADD_INHERITED_PROPERTY,
+    TLP_BEFORE_DEL_INHERITED_PROPERTY = GraphEvent::GraphEventType::TLP_BEFORE_DEL_INHERITED_PROPERTY,
+    TLP_AFTER_DEL_INHERITED_PROPERTY = GraphEvent::GraphEventType::TLP_AFTER_DEL_INHERITED_PROPERTY,
+    TLP_BEFORE_RENAME_LOCAL_PROPERTY = GraphEvent::GraphEventType::TLP_BEFORE_RENAME_LOCAL_PROPERTY,
+    TLP_AFTER_RENAME_LOCAL_PROPERTY = GraphEvent::GraphEventType::TLP_AFTER_RENAME_LOCAL_PROPERTY,
+    TLP_BEFORE_SET_ATTRIBUTE = GraphEvent::GraphEventType::TLP_BEFORE_SET_ATTRIBUTE,
+    TLP_AFTER_SET_ATTRIBUTE = GraphEvent::GraphEventType::TLP_AFTER_SET_ATTRIBUTE,
+    TLP_REMOVE_ATTRIBUTE = GraphEvent::GraphEventType::TLP_REMOVE_ATTRIBUTE,
+    TLP_BEFORE_ADD_LOCAL_PROPERTY = GraphEvent::GraphEventType::TLP_BEFORE_ADD_LOCAL_PROPERTY,
+    TLP_BEFORE_ADD_INHERITED_PROPERTY = GraphEvent::GraphEventType::TLP_BEFORE_ADD_INHERITED_PROPERTY
   };
 
   GraphEvent(const tlp::Graph& g, GraphEventType graphEvtType, unsigned int id,
@@ -218,7 +222,7 @@ tlp.GraphEvent.getType()
 
 Returns the type of graph event.
 
-:rtype: :const:`tlp.GraphEvent.TLP_*` (cf. class description above)
+:rtype: :const:`tlp.GraphEvent.GraphEventType.TLP_*` (cf. class description above)
 %End
 
 // ========================================================================================

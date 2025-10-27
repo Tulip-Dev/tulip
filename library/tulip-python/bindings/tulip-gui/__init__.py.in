@@ -1,0 +1,51 @@
+# This file is part of Tulip (https://tulip.labri.fr)
+#
+# Authors: David Auber and the Tulip development Team
+# from LaBRI, University of Bordeaux
+#
+# Tulip is free software; you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License
+# as published by the Free Software Foundation, either version 3
+# of the License, or (at your option) any later version.
+#
+# Tulip is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+
+__all__ = ['tlpgui']
+__author__ = 'David Auber and the Tulip development Team'
+__license__ = 'LGPLv3'
+__version__ = "@Tulip_VERSION@"
+__email__ = 'tulipdev@labri.fr'
+__status__ = 'Production'
+
+import os.path
+import sys
+import platform
+
+
+_tulipGuiNativeLibsPath = '%s/native/' % os.path.dirname(__file__)
+_tulipGuiPluginsPath = '%s/plugins/' % os.path.dirname(__file__)
+
+sys.path.append(_tulipGuiNativeLibsPath)
+import os
+
+if platform.system() == 'Windows':
+    os.environ['PATH'] = '%s../../../;%s' % (
+        _tulipGuiNativeLibsPath, os.environ['PATH'])
+    for p in os.environ['PATH'].split(";"):
+        if os.path.exists(p):
+            os.add_dll_directory(p)
+
+from tulip import tlp
+
+import _tulipgui # noqa
+
+sys.path.pop()
+
+class tlpgui(_tulipgui.tlpgui):
+    pass
+
+# load python plugins from the python/tulipgui/plugins directory (interactors for instance)
+tlp.loadTulipPluginsFromDir(_tulipGuiPluginsPath)

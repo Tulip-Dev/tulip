@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -48,7 +48,6 @@ public:
 
 private slots:
 
-  void openUrlInBrowser(const QString &url);
   void rssReply(QNetworkReply *);
 
 private:

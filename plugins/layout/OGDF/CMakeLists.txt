@@ -27,9 +27,9 @@ OGDFPlanarizationLayout.cpp
 OGDFNodeRespecter.cpp
 )
 
-DISABLE_COMPILER_WARNINGS()
+TULIP_DISABLE_COMPILER_WARNINGS()
 
-ADD_LIBRARY(OGDFPlugins-${TulipVersion} SHARED ${PLUGINS_SRCS})
-TARGET_LINK_LIBRARIES(OGDFPlugins-${TulipVersion} ${LibTulipCoreName} ${OGDFLibrary})
+ADD_LIBRARY(OGDFPlugins-${Tulip_VERSION} SHARED ${PLUGINS_SRCS})
+TARGET_LINK_LIBRARIES(OGDFPlugins-${Tulip_VERSION} ${LibTulipCoreName} ${OGDFLibrary})
 
-TULIP_INSTALL_PLUGIN(OGDFPlugins-${TulipVersion} ${TulipPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(OGDFPlugins-${Tulip_VERSION} ${TulipPluginsInstallDir})

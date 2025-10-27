@@ -1,0 +1,368 @@
+/**
+ *
+ * This file is part of Tulip (https://tulip.labri.fr)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
+
+#include <QApplication>
+#include <QMessageBox>
+#include <QStandardPaths>
+#include <QScreen>
+#include <QWindow>
+#include <QCommandLineParser>
+#include <QJsonDocument>
+#include <QJsonParseError>
+
+#include <CrashHandling.h>
+
+#include <tulip/TulipException.h>
+#include <tulip/TulipRelease.h>
+#include <tulip/TlpTools.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/TulipProject.h>
+#include <tulip/SimplePluginProgressWidget.h>
+#include <tulip/PluginLister.h>
+#include <tulip/Perspective.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/TulipSettings.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/GlOffscreenRenderer.h>
+#include <tulip/GlTextureManager.h>
+
+#include "TulipPerspectiveMainWindow.h"
+
+#include <iostream>
+
+#ifdef WIN32
+#include <windows.h>
+#endif
+
+#ifdef interface
+#undef interface
+#endif
+
+using namespace std;
+using namespace tlp;
+
+struct PluginLoaderToProgress : public PluginLoader {
+  PluginProgress *_progress;
+  bool _debug_output;
+  int max_step;
+  int step;
+
+  PluginLoaderToProgress(PluginProgress *progress = nullptr, bool debug_output = false)
+      : _progress(progress), _debug_output(debug_output), max_step(0), step(0) {}
+
+  void start(const std::string &path) override {
+    step = 0;
+    _progress->setComment("Entering " + path);
+    if (_debug_output)
+      tlp::debug() << "Entering " << path << std::endl;
+  }
+
+  void finished(bool state, const std::string &msg) override {
+    if (state) {
+      _progress->setComment("Plugins successfully loaded");
+      if (_debug_output)
+        tlp::debug() << "Plugins successfully loaded" << std::endl;
+    } else {
+      _progress->setComment(msg);
+      if (_debug_output)
+        tlp::debug() << msg << std::endl;
+    }
+  }
+
+  void numberOfFiles(int n) override {
+    max_step = n;
+  }
+
+  void loading(const std::string &filename) override {
+    step++;
+    _progress->progress(step, max_step);
+    _progress->setComment("Loading " + filename);
+    if (_debug_output)
+      tlp::debug() << "Loading " << filename << std::endl;
+  }
+
+  void loaded(const tlp::Plugin *plugin, const std::list<tlp::Dependency> &) override {
+    if (_debug_output)
+      tlp::debug() << "  - Plugin '" << plugin->name() << "' registered" << std::endl;
+  }
+
+  void aborted(const std::string &fileName, const std::string &errorMsg) override {
+    tlp::error() << "[Warning] Failed to load " << fileName << ": " << errorMsg << std::endl;
+  }
+};
+
+SimplePluginProgressDialog *createProgress(QString &title) {
+  SimplePluginProgressDialog *progress = new SimplePluginProgressDialog();
+  progress->setStopButtonVisible(false);
+  progress->setCancelButtonVisible(false);
+  progress->showPreview(false);
+  progress->showLogo(true);
+
+  progress->resize(500, std::min(50, progress->height()));
+  progress->setComment(QString("Initializing ") + title);
+  progress->setWindowTitle(title);
+  progress->progress(0, 100);
+
+  progress->show();
+
+  return progress;
+}
+
+int main(int argc, char **argv) {
+
+//force Tulip to be an X11 window
+//temporary workaround for systems with Wayland instead of X11.
+//we need to add opengl ES support (replace glew by qt call at least. Huge work...)
+#ifdef _LINUX
+qputenv("QT_QPA_PLATFORM", "xcb");
+#endif
+
+  CrashHandling::installCrashHandler();
+
+  // Enables resource sharing between the OpenGL contexts
+  QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
+
+  QApplication tulip(argc, argv);
+  tulip.setApplicationName("@PROJECT_NAME@");
+  tulip.setApplicationVersion(TULIP_VERSION);
+
+  QCommandLineParser parser;
+  parser.setApplicationDescription("@PROJECT_DESCRIPTION@");
+  parser.addHelpOption();
+  parser.addVersionOption();
+  parser.addPositionalArgument("FILE", "a Tulip project file to open. The perspective to use will be read from the project "
+          "meta-information. If the \"--perspective\" option is used, tulip will try to "
+          "open the file with the given perspective (the project meta-information is ignored).");
+
+  //Tulip 5 --geometry option changed to gui_geometry (hidden option)
+  //Tulip 5 --icon option automatically handled by Qt (see tulip --help-all)
+  //Tulip 5 --title option automatically handled by Qt (see tulip --help-all)
+
+  //options hidden from help
+  QCommandLineOption idOption("id", "Set internal perspective id", "id number");
+  idOption.setFlags(QCommandLineOption::HiddenFromHelp);
+
+  QCommandLineOption guiTestingOption("gui_testing", "GUI Testing mode");
+  guiTestingOption.setFlags(QCommandLineOption::HiddenFromHelp);
+
+  QCommandLineOption guiGeomOption("gui_geometry", "GUI Geometry for GUI Testing mode", "geometry x,y,w,h");
+  guiGeomOption.setFlags(QCommandLineOption::HiddenFromHelp);
+
+  parser.addOptions({
+        // Perspective name
+        {{"perspective","p"},
+             "Start the specified perspective. If not specified, starts the Tulip default perspective.",
+             "perspective name"
+      },
+      {{"list-perspective","l"},
+              "List all available perspectives and exit"
+      },
+      {{"extra-perspective-params","e"},
+        "Extra arguments for the perspective in a json file.",
+        "json file"
+      },
+      idOption,
+      {{"debug_plugin_load", "d"},
+       "increase verbosity when loading plugins at startup"
+      },
+      guiTestingOption,
+      guiGeomOption,
+        });
+
+  parser.process(tulip);
+
+  const QStringList args = parser.positionalArguments();
+  QString projectFilePath = args.isEmpty() ? QString() : args.first();
+  QString perspectiveName("");
+  // Check arguments
+  if(parser.isSet("p")) {
+    perspectiveName = parser.value("p");
+  }
+  if(parser.isSet("l")) {
+      tlp::initTulipSoftware();
+      list<string> perspectives = PluginLister::availablePlugins<Perspective>();
+      cout << "Available perspectives:" << endl;
+      for (auto &name : perspectives) {
+        cout << name << ":" << endl;
+        string usage_str("");
+        auto p = PluginLister::getPluginObject<Perspective>(name);
+        p->usage(usage_str);
+        delete p;
+        cout << " " << usage_str << endl;
+        cout << endl;
+        parser.showHelp();
+      }
+  }
+
+  QRect windowGeometry;
+  if(parser.isSet("gui_geometry")) {
+    QStringList geom = parser.value("gui_geometry").split(u',');
+    windowGeometry = QRect(geom[0].toInt(), geom[1].toInt(),
+                          geom[2].toInt(), geom[3].toInt());
+
+  }
+
+
+  PerspectiveContext *context = new PerspectiveContext();
+
+  if(parser.isSet("id")) {
+    context->id = parser.value("id").toUInt();
+    QString dumpPath = QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0))
+                           .filePath("tulip-" + parser.value("id") + ".log");
+    CrashHandling::setDumpPath(QStringToTlpString(dumpPath));
+  }
+  bool debugPluginLoad = parser.isSet("debug_plugin_load");
+
+  QVariantMap extraParams;
+
+  if(parser.isSet("e")) {
+    QFile jsonFile(parser.value("e"));
+    if (!jsonFile.open(QIODevice::ReadOnly)) {
+      tlp::warning() << "Could not open json file." << endl;
+      parser.showHelp(1);
+    }
+    QByteArray jsonData = jsonFile.readAll();
+    QJsonParseError err;
+    QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonData,&err));
+    if(jsonDoc.isNull()) {
+      tlp::warning() << "incorrect json file: " << QStringToTlpString(err.errorString())  << endl;
+      parser.showHelp(1);
+    }
+    //parse json file
+    extraParams = jsonDoc.toVariant().toMap();
+  }
+
+  if(parser.isSet("gui_testing")) {
+    extraParams["gui_testing"] = "1";
+  }
+
+  initTulipLib(QStringToTlpString(QApplication::applicationDirPath()).c_str());
+
+#ifdef _MSC_VER
+  // Add path to Tulip pdb files generated by Visual Studio (for configurations Debug and
+  // RelWithDebInfo)
+  // It allows to get a detailed stack trace when Tulip crashes.
+  CrashHandling::setExtraSymbolsSearchPaths(tlp::TulipShareDir + "pdb");
+#endif
+
+  // create Progress bar dialog
+  QString title(QCoreApplication::applicationName());
+  SimplePluginProgressDialog *progress = createProgress(title);
+
+  // Init tulip
+  try {
+    // show progress
+    tulip.processEvents();
+    PluginLoaderToProgress loader(progress, debugPluginLoad);
+    tlp::initTulipSoftware(&loader);
+  } catch (tlp::TulipException &e) {
+    QMessageBox::warning(nullptr, "Error", e.what());
+    exit(1);
+  }
+
+  int result;
+  bool start = true;
+  while (start) {
+    QFileInfo fileInfo(projectFilePath);
+
+    if (!projectFilePath.isEmpty() && (!fileInfo.exists() || fileInfo.isDir())) {
+      tlp::warning() << "File " << tlp::QStringToTlpString(projectFilePath) << " not found or is a directory" << endl;
+      parser.showHelp(1);
+    }
+
+    TulipProject *project = nullptr;
+    if (!projectFilePath.isEmpty() && projectFilePath.endsWith(".tlpx")) {
+      project = TulipProject::openProject(projectFilePath, progress);
+      if (perspectiveName.isEmpty())
+        perspectiveName = project->perspective();
+    } else {
+      context->externalFile = projectFilePath;
+      project = TulipProject::newProject();
+    }
+    if (perspectiveName.isEmpty()) {
+      // set Tulip as default perspective
+      perspectiveName = "Tulip";
+    }
+
+    context->project = project;
+    context->parameters = extraParams;
+    project->setPerspective(perspectiveName);
+    // Initialize main window.
+    progress->progress(100, 100);
+    progress->setComment("Setting up GUI (this can take some time)");
+    // Create perspective's window
+    TulipPerspectiveProcessMainWindow *mainWindow = new TulipPerspectiveProcessMainWindow(title);
+    mainWindow->setVisible(false);
+
+    context->mainWindow = mainWindow;
+
+    // Create perspective object
+    Perspective *perspective = PluginLister::getPluginObject<Perspective>(
+        tlp::QStringToTlpString(perspectiveName), context);
+
+    if (perspective == nullptr) {
+      tlp::warning() << "Cannot open perspective: " << QStringToTlpString(perspectiveName) <<
+                          "\nWrong plugin type or plugin not found." << endl;
+      parser.showHelp(1);
+    }
+
+    Perspective::setInstance(perspective);
+    mainWindow->setProject(project);
+
+    perspective->start(progress);
+
+    mainWindow->projectFileChanged(projectFilePath);
+
+    mainWindow->setWindowIcon(progress->windowIcon());
+    mainWindow->show();
+    // ensure to show on top
+    mainWindow->activateWindow();
+    progress->hide();
+
+    // the delay of geometry update until perspective execution
+    // seems to ensure that the four parameters (x,y,w,h)
+    // are taken into account
+    if (windowGeometry.isValid()) {
+      mainWindow->setGeometry(windowGeometry);
+    } else {
+      mainWindow->move(0, 0);
+      mainWindow->resize(mainWindow->windowHandle()->screen()->availableGeometry().size() * 0.9);
+    }
+
+    TulipSettings::setFirstRun(false);
+    TulipSettings::setFirstTulipMMRun(false);
+    result = tulip.exec();
+
+    if ((start = perspective->needRestart())) {
+      projectFilePath = project->projectFile();
+    }
+
+    delete perspective;
+    delete mainWindow;
+  }
+  delete progress;
+  delete context;
+
+  // We need to clear allocated OpenGL resources
+  // to remove a segfault when we close tulip
+  GlTextureManager::deleteAllTextures();
+  delete GlOffscreenRenderer::getInstance();
+
+  return result;
+}

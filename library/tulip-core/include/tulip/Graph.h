@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -25,7 +25,7 @@
 #include <set>
 #include <string>
 #include <vector>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <climits>
 #include <tulip/tulipconf.h>
@@ -59,7 +59,7 @@ enum ElementType {
  * @brief Loads a graph from a file (extension can be any of the Tulip supported input graph file
  *format).
  *
- * This function loads a graph serialized in a file trough the available Tulip import plugins.
+ * This function loads a graph serialized in a file through the available Tulip import plugins.
  * Since Tulip 4.8, the selection of the import plugin is based on the provided filename extension.
  * The import will fail if the selected import plugin is not loaded.
  * The graph file formats that can currently be imported are : TLP (*.tlp, *.tlp.gz, *.tlpz), TLP
@@ -146,14 +146,29 @@ TLP_SCOPE Graph *importGraph(const std::string &format, DataSet &dataSet,
  * @ingroup Graph
  * @brief Creates a new, empty graph.
  *
- * This is a simple method factory to create a Graph implementation (remember, Graph is only an
- *interface).
+ * This is a simple method factory to create a Graph implementation
+ * (remember, Graph is only an interface).
  *
  * This is the recommended way to create a new Graph.
  *
  * @return :Graph* A new, empty graph.
  **/
 TLP_SCOPE Graph *newGraph();
+
+/**
+ * @ingroup Graph
+ * @brief new graph observation.
+ *
+ * This is a simple class with only one virtual method which is called
+ * each time a new graph is imported (tlp::importGraph(), tlp::newGraph()).
+ *
+ */
+class TLP_SCOPE ImportGraphObserver {
+public:
+  ImportGraphObserver();
+  virtual ~ImportGraphObserver();
+  virtual void graphImported(Graph *g) = 0;
+};
 
 /**
  * @ingroup Graph
@@ -246,7 +261,7 @@ public:
   /**
    * @brief Applies an algorithm plugin, identified by its name.
    * Algorithm plugins are subclasses of the tlp::Algorithm interface.
-   * Parameters are transmitted to the algorithm trough the DataSet.
+   * Parameters are transmitted to the algorithm through the DataSet.
    * To determine a plugin's parameters, you can either:
    *
    * * refer to its documentation
@@ -1593,10 +1608,13 @@ public:
    * @param nodes The vector of nodes to put into the meta node.
    * @param multiEdges Whether a meta edge should be created for each underlying edge.
    * @param delAllEdge Whether the underlying edges will be removed from the whole hierarchy.
+   * @param allGrouped In the no multi edges case, indicates if the underlying edges will be grouped
+   in a unique meta edge or in one for the in edges and one for the out edges.
+
    * @return The newly created meta node.
    */
   virtual node createMetaNode(const std::vector<node> &nodes, bool multiEdges = true,
-                              bool delAllEdge = true);
+                              bool delAllEdge = true, bool allGrouped = true);
 
   /**
    *  @brief Populates a quotient graph with one meta node
@@ -1605,10 +1623,12 @@ public:
    * @param itS a Graph iterator, (typically a subgraph iterator)
    * @param quotientGraph the graph that will contain the meta nodes
    * @param metaNodes will contains all the added meta nodes after the call
+   * @param inoutGrouped indicates if the underlying edges will be grouped
+   * in distinct meta-edges according their direction.
    *
    */
   virtual void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
-                               std::vector<node> &metaNodes);
+                               std::vector<node> &metaNodes, bool inoutGrouped = true);
   /**
    * @brief Closes an existing subgraph into a metanode.  Edges from nodes
    * in the subgraph to nodes outside the subgraph are replaced with
@@ -1618,8 +1638,11 @@ public:
    * @param subGraph an existing subgraph
    * @param multiEdges indicates if a meta edge will be created for each underlying edge
    * @param delAllEdge indicates if the underlying edges will be removed from the entire hierarchy
+   * @param allGrouped In the no multi edges case, indicates if the underlying edges will be grouped
+   * in a unique meta edge or in one for the in edges and one for the out edges.
    */
-  virtual node createMetaNode(Graph *subGraph, bool multiEdges = true, bool delAllEdge = true);
+  virtual node createMetaNode(Graph *subGraph, bool multiEdges = true, bool delAllEdge = true,
+                              bool allGrouped = true);
 
   /**
    * @brief Opens a metanode and replaces all edges between that
@@ -1678,13 +1701,21 @@ protected:
   void notifyAfterSetEnds(Graph *, const edge e) {
     notifyAfterSetEnds(e);
   }
-  void notifyDelNode(const node n);
-  void notifyDelNode(Graph *, const node n) {
-    notifyDelNode(n);
+  void notifyBeforeDelNode(const node n);
+  void notifyBeforeDelNode(Graph *, const node n) {
+    notifyBeforeDelNode(n);
   }
-  void notifyDelEdge(const edge e);
-  void notifyDelEdge(Graph *, const edge e) {
-    notifyDelEdge(e);
+  void notifyAfterDelNode(const node n);
+  void notifyAfterDelNode(Graph *, const node n) {
+    notifyAfterDelNode(n);
+  }
+  void notifyBeforeDelEdge(const edge e);
+  void notifyBeforeDelEdge(Graph *, const edge e) {
+    notifyBeforeDelEdge(e);
+  }
+  void notifyAfterDelEdge(const edge e);
+  void notifyAfterDelEdge(Graph *, const edge e) {
+    notifyAfterDelEdge(e);
   }
   void notifyReverseEdge(const edge e);
   void notifyReverseEdge(Graph *, const edge e) {
@@ -1740,7 +1771,7 @@ protected:
   }
 
   unsigned int id;
-  std::unordered_map<std::string, tlp::PropertyInterface *> circularCalls;
+  tlp_hash_map<std::string, tlp::PropertyInterface *> circularCalls;
   ///@endcond
 };
 
@@ -1754,35 +1785,37 @@ public:
   // in the enum below because it is used in some assertions
   enum GraphEventType {
     TLP_ADD_NODE = 0,
-    TLP_DEL_NODE = 1,
-    TLP_ADD_EDGE = 2,
-    TLP_DEL_EDGE = 3,
-    TLP_REVERSE_EDGE = 4,
-    TLP_BEFORE_SET_ENDS = 5,
-    TLP_AFTER_SET_ENDS = 6,
-    TLP_ADD_NODES = 7,
-    TLP_ADD_EDGES = 8,
-    TLP_BEFORE_ADD_DESCENDANTGRAPH = 9,
-    TLP_AFTER_ADD_DESCENDANTGRAPH = 10,
-    TLP_BEFORE_DEL_DESCENDANTGRAPH = 11,
-    TLP_AFTER_DEL_DESCENDANTGRAPH = 12,
-    TLP_BEFORE_ADD_SUBGRAPH = 13,
-    TLP_AFTER_ADD_SUBGRAPH = 14,
-    TLP_BEFORE_DEL_SUBGRAPH = 15,
-    TLP_AFTER_DEL_SUBGRAPH = 16,
-    TLP_ADD_LOCAL_PROPERTY = 17,
-    TLP_BEFORE_DEL_LOCAL_PROPERTY = 18,
-    TLP_AFTER_DEL_LOCAL_PROPERTY = 19,
-    TLP_ADD_INHERITED_PROPERTY = 20,
-    TLP_BEFORE_DEL_INHERITED_PROPERTY = 21,
-    TLP_AFTER_DEL_INHERITED_PROPERTY = 22,
-    TLP_BEFORE_RENAME_LOCAL_PROPERTY = 23,
-    TLP_AFTER_RENAME_LOCAL_PROPERTY = 24,
-    TLP_BEFORE_SET_ATTRIBUTE = 25,
-    TLP_AFTER_SET_ATTRIBUTE = 26,
-    TLP_REMOVE_ATTRIBUTE = 27,
-    TLP_BEFORE_ADD_LOCAL_PROPERTY = 28,
-    TLP_BEFORE_ADD_INHERITED_PROPERTY = 29
+    TLP_BEFORE_DEL_NODE,
+    TLP_AFTER_DEL_NODE,
+    TLP_ADD_EDGE,
+    TLP_BEFORE_DEL_EDGE,
+    TLP_AFTER_DEL_EDGE,
+    TLP_REVERSE_EDGE,
+    TLP_BEFORE_SET_ENDS,
+    TLP_AFTER_SET_ENDS,
+    TLP_ADD_NODES,
+    TLP_ADD_EDGES,
+    TLP_BEFORE_ADD_DESCENDANTGRAPH,
+    TLP_AFTER_ADD_DESCENDANTGRAPH,
+    TLP_BEFORE_DEL_DESCENDANTGRAPH,
+    TLP_AFTER_DEL_DESCENDANTGRAPH,
+    TLP_BEFORE_ADD_SUBGRAPH,
+    TLP_AFTER_ADD_SUBGRAPH,
+    TLP_BEFORE_DEL_SUBGRAPH,
+    TLP_AFTER_DEL_SUBGRAPH,
+    TLP_ADD_LOCAL_PROPERTY,
+    TLP_BEFORE_DEL_LOCAL_PROPERTY,
+    TLP_AFTER_DEL_LOCAL_PROPERTY,
+    TLP_ADD_INHERITED_PROPERTY,
+    TLP_BEFORE_DEL_INHERITED_PROPERTY,
+    TLP_AFTER_DEL_INHERITED_PROPERTY,
+    TLP_BEFORE_RENAME_LOCAL_PROPERTY,
+    TLP_AFTER_RENAME_LOCAL_PROPERTY,
+    TLP_BEFORE_SET_ATTRIBUTE,
+    TLP_AFTER_SET_ATTRIBUTE,
+    TLP_REMOVE_ATTRIBUTE,
+    TLP_BEFORE_ADD_LOCAL_PROPERTY,
+    TLP_BEFORE_ADD_INHERITED_PROPERTY
   };
 
   // constructor for node/edge/nodes/edges events
@@ -1831,7 +1864,7 @@ public:
   }
 
   edge getEdge() const {
-    assert(evtType > TLP_DEL_NODE && evtType < TLP_ADD_NODES);
+    assert(evtType > TLP_AFTER_DEL_NODE && evtType < TLP_ADD_NODES);
     return edge(info.eltId);
   }
 

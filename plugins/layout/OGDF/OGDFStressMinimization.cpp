@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -88,7 +88,6 @@ public:
     addInParameter<double>("edge costs", paramHelp[7], "100");
     addInParameter<bool>("use edge costs property", paramHelp[8], "false");
     addInParameter<tlp::NumericProperty *>("edge costs property", paramHelp[9], "viewMetric");
-    declareDeprecatedName("Stress Majorization (OGDF)");
   }
 
   ~OGDFStressMinimization() override {}
@@ -103,7 +102,7 @@ public:
       StringCollection sc;
       tlp::NumericProperty *edgeCosts = graph->getProperty<tlp::DoubleProperty>("viewMetric");
 
-      if (dataSet->getDeprecated("termination criterion", "terminationCriterion", sc)) {
+      if (dataSet->get("termination criterion", sc)) {
         switch (sc.getCurrent()) {
         case POSITION_DIFFERENCE:
           stressm->convergenceCriterion(
@@ -117,40 +116,39 @@ public:
         }
       }
 
-      if (dataSet->getDeprecated("fix x coordinates", "fixXCoordinates", bval)) {
+      if (dataSet->get("fix x coordinates", bval)) {
         stressm->fixXCoordinates(bval);
       }
 
-      if (dataSet->getDeprecated("fix y coordinates", "fixYCoordinates", bval)) {
-        stressm->fixXCoordinates(bval);
+      if (dataSet->get("fix y coordinates", bval)) {
+        stressm->fixYCoordinates(bval);
       }
 
-      if (dataSet->getDeprecated("fix z coordinates", "fixZCoordinates", bval)) {
+      if (dataSet->get("fix z coordinates", bval)) {
         stressm->fixZCoordinates(bval);
       }
 
-      if (dataSet->getDeprecated("has initial layout", "hasInitialLayout", bval)) {
+      if (dataSet->get("has initial layout", bval)) {
         stressm->hasInitialLayout(bval);
       }
 
-      if (dataSet->getDeprecated("layout components separately", "layoutComponentsSeparately",
-                                 bval)) {
+      if (dataSet->get("layout components separately", bval)) {
         stressm->layoutComponentsSeparately(bval);
       }
 
-      if (dataSet->getDeprecated("number of iterations", "numberOfIterations", ival)) {
+      if (dataSet->get("number of iterations", ival)) {
         stressm->setIterations(ival);
       }
 
-      if (dataSet->getDeprecated("edge costs", "edgeCosts", dval)) {
+      if (dataSet->get("edge costs", dval)) {
         stressm->setEdgeCosts(dval);
       }
 
-      if (dataSet->getDeprecated("use edge costs property", "useEdgeCostsProperty", bval)) {
+      if (dataSet->get("use edge costs property", bval)) {
         stressm->useEdgeCostsAttribute(bval);
 
         if (bval) {
-          dataSet->getDeprecated("edge costs property", "edgeCostsProperty", edgeCosts);
+          dataSet->get("edge costs property", edgeCosts);
           tlpToOGDF->copyTlpNumericPropertyToOGDFEdgeLength(edgeCosts);
         }
       }

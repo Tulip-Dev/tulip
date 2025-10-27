@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -19,8 +19,6 @@
 
 #include "tulip/RangeSlider.h"
 #include <QKeyEvent>
-#include <QMouseEvent>
-#include <QApplication>
 #include <QStyleOptionSlider>
 
 namespace tlp {
@@ -215,7 +213,7 @@ void RangeSlider::triggerAction(QAbstractSlider::SliderAction action, bool main)
   case QAbstractSlider::SliderMove:
     if ((main && mainControl == UpperHandle) || (!main && altControl == UpperHandle))
       up = true;
-
+    [[fallthrough]];
   case QAbstractSlider::SliderNoAction:
     no = true;
     break;

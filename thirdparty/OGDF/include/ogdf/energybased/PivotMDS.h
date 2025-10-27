@@ -34,19 +34,16 @@
 
 #pragma once
 
+#include <ogdf/basic/LayoutModule.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/graphalg/ShortestPathAlgorithms.h>
-#include <ogdf/basic/LayoutModule.h>
 
 namespace ogdf {
 
 template<typename T>
-inline bool isinf(T value)
-{
-	return std::numeric_limits<T>::has_infinity &&
-		value == std::numeric_limits<T>::infinity();
+inline bool isinf(T value) {
+	return std::numeric_limits<T>::has_infinity && value == std::numeric_limits<T>::infinity();
 }
-
 
 //! The Pivot MDS (multi-dimensional scaling) layout algorithm.
 /**
@@ -54,41 +51,49 @@ inline bool isinf(T value)
  */
 class OGDF_EXPORT PivotMDS : public LayoutModule {
 public:
-	PivotMDS() : m_numberOfPivots(250), m_edgeCosts(100), m_hasEdgeCostsAttribute(false) { }
+	PivotMDS()
+		: m_numberOfPivots(250)
+		, m_dimensionCount(2)
+		, m_edgeCosts(100)
+		, m_hasEdgeCostsAttribute(false)
+		, m_forcing2DLayout(false) { }
 
 	virtual ~PivotMDS() { }
 
 	//! Sets the number of pivots. If the new value is smaller or equal 0
 	//! the default value (250) is used.
 	void setNumberOfPivots(int numberOfPivots) {
-		m_numberOfPivots = (numberOfPivots < DIMENSION_COUNT) ? DIMENSION_COUNT : numberOfPivots;
+		m_numberOfPivots = std::max(numberOfPivots, m_dimensionCount);
 	}
 
 	//! Sets the desired distance between adjacent nodes. If the new value is smaller or equal
 	//! 0 the default value (100) is used.
-	void setEdgeCosts(double edgeCosts){
-		m_edgeCosts = edgeCosts;
-	}
+	void setEdgeCosts(double edgeCosts) { m_edgeCosts = edgeCosts; }
+
+	//! Sets whether a 2D-layout should be calculated even when
+	//! GraphAttributes::threeD is set.
+	void setForcing2DLayout(bool forcing2DLayout) { m_forcing2DLayout = forcing2DLayout; }
+
+	//! Returns whether a 2D-layout is calculated even when
+	//! GraphAttributes::threeD is set.
+	bool isForcing2DLayout() const { return m_forcing2DLayout; }
 
 	//! Calls the layout algorithm for graph attributes \p GA.
+	/**
+	 * Calculates a 3D-layout if GraphAttributes::threeD is set for \p GA, and a
+	 * 2D-layout otherwise.
+	 * You can use setForcing2DLayout() to force the calculation of a 2D-layout
+	 * even when GraphAttributes::threeD is set.
+	 */
 	virtual void call(GraphAttributes& GA) override;
-
 
 	void useEdgeCostsAttribute(bool useEdgeCostsAttribute) {
 		m_hasEdgeCostsAttribute = useEdgeCostsAttribute;
 	}
 
-	bool useEdgeCostsAttribute() const {
-		return m_hasEdgeCostsAttribute;
-	}
+	bool useEdgeCostsAttribute() const { return m_hasEdgeCostsAttribute; }
 
 private:
-
-	//! The dimension count determines the number of evecs that
-	//! will be computed. Nevertheless PivotMDS only takes the first two
-	//! with the highest eigenwert into account.
-	const static int DIMENSION_COUNT = 2;
-
 	//! Convergence factor used for power iteration.
 	const static double EPSILON;
 
@@ -101,6 +106,11 @@ private:
 	//! The number of pivots.
 	int m_numberOfPivots;
 
+	//! The dimension count determines the number of evecs that
+	//! will be computed. Nevertheless PivotMDS only takes the first two
+	//! with the highest eigenwert into account.
+	int m_dimensionCount;
+
 	//! The costs to traverse an edge.
 	double m_edgeCosts;
 
@@ -108,8 +118,12 @@ private:
 	//! edge costs attribute
 	bool m_hasEdgeCostsAttribute;
 
+	//! Whether a 2D-layout is calculated even when
+	//! GraphAttributes::threeD is set.
+	bool m_forcing2DLayout;
+
 	//! Centers the pivot matrix.
-	void centerPivotmatrix(Array<Array<double> >& pivotMatrix);
+	void centerPivotmatrix(Array<Array<double>>& pivotMatrix);
 
 	//! Computes the pivot mds layout of the given connected graph of \p GA.
 	void pivotMDSLayout(GraphAttributes& GA);
@@ -120,13 +134,11 @@ private:
 	void doPathLayout(GraphAttributes& GA, const node& v);
 
 	//! Computes the eigen value decomposition based on power iteration.
-	void eigenValueDecomposition(
-		Array<Array<double> >& K,
-		Array<Array<double> >& eVecs,
-		Array<double>& eValues);
+	void eigenValueDecomposition(Array<Array<double>>& K, Array<Array<double>>& eVecs,
+			Array<double>& eValues);
 
 	//! Computes the pivot distance matrix based on the maxmin strategy
-	void getPivotDistanceMatrix(const GraphAttributes& GA, Array<Array<double> >& pivDistMatrix);
+	void getPivotDistanceMatrix(const GraphAttributes& GA, Array<Array<double>>& pivDistMatrix);
 
 	//! Checks whether the given graph is a path or not.
 	node getRootedPath(const Graph& G);
@@ -138,16 +150,14 @@ private:
 	double prod(const Array<double>& x, const Array<double>& y);
 
 	//! Fills the given \p matrix with random doubles d 0 <= d <= 1.
-	void randomize(Array<Array<double> >& matrix);
+	void randomize(Array<Array<double>>& matrix);
 
 	//! Computes the self product of \p d.
-	void selfProduct(const Array<Array<double> >&d, Array<Array<double> >& result);
+	void selfProduct(const Array<Array<double>>& d, Array<Array<double>>& result);
 
 	//! Computes the singular value decomposition of matrix \p K.
-	void singularValueDecomposition(
-		Array<Array<double> >& K,
-		Array<Array<double> >& eVecs,
-		Array<double>& eVals);
+	void singularValueDecomposition(Array<Array<double>>& K, Array<Array<double>>& eVecs,
+			Array<double>& eVals);
 };
 
 }

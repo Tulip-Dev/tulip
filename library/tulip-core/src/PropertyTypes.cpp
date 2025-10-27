@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -23,8 +23,9 @@
 #include <tulip/StringCollection.h>
 #include <tulip/TulipException.h>
 
+#include <climits>
+#include <cfloat>
 #include <cstdint>
-#include <limits>
 
 using namespace std;
 using namespace tlp;
@@ -389,7 +390,7 @@ void BooleanVectorType::writeb(ostream &oss, const RealType &v) {
   vector<char> vc;
   vc.resize(vSize);
 
-  // loop to write boolean as char
+  // loop to write Boolean as char
   char *data = vc.data();
 
   for (unsigned int i = 0; i < vSize; ++i, ++data) {
@@ -514,7 +515,7 @@ bool BooleanVectorType::readb(istream &iss, RealType &v) {
   vector<char> vc;
   vc.resize(vSize);
 
-  // loop to write boolean as char
+  // loop to write Boolean as char
   char *data = vc.data();
 
   if (!bool(iss.read(data, vSize)))

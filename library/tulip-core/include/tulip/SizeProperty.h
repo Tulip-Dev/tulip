@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,7 +20,7 @@
 #ifndef TULIP_SIZES_H
 #define TULIP_SIZES_H
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
@@ -40,6 +40,7 @@ class TLP_SCOPE SizeProperty : public AbstractSizeProperty {
 
 public:
   SizeProperty(Graph *, const std::string &n = "");
+  using AbstractSizeProperty::operator=;
 
   Size getMax(const Graph *sg = nullptr);
   Size getMin(const Graph *sg = nullptr);
@@ -67,8 +68,8 @@ protected:
   void resetMinMax();
 
 private:
-  std::unordered_map<unsigned int, Size> max, min;
-  std::unordered_map<unsigned int, bool> minMaxOk;
+  tlp_hash_map<unsigned int, Size> max, min;
+  tlp_hash_map<unsigned int, bool> minMaxOk;
   void computeMinMax(const Graph *sg = nullptr);
 };
 
@@ -81,6 +82,7 @@ class TLP_SCOPE SizeVectorProperty
 public:
   SizeVectorProperty(Graph *g, const std::string &n = "")
       : AbstractVectorProperty<SizeVectorType, SizeType>(g, n) {}
+  using AbstractVectorProperty<tlp::SizeVectorType, tlp::SizeType>::operator=;
 
   // redefinition of some PropertyInterface methods
   PropertyInterface *clonePrototype(Graph *, const std::string &) const override;

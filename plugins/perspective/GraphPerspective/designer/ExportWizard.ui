@@ -75,11 +75,10 @@
          </size>
         </property>
         <property name="toolTip">
-         <string>Choose the export file location</string>
+         <string>Browse to select the export file location</string>
         </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>:/tulip/graphperspective/icons/16/document-open.png</normaloff>:/tulip/graphperspective/icons/16/document-open.png</iconset>
+        <property name="text">
+         <string>...</string>
         </property>
        </widget>
       </item>
@@ -91,7 +90,7 @@
        <bool>false</bool>
       </property>
       <property name="styleSheet">
-	<string notr="true">
+       <string notr="true">
 #categoryFrame, #parametersFrame {
 border: 1px solid #C9C9C9;
 }
@@ -104,9 +103,18 @@ border: 0px;
 }</string>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
-	<property name="margin">
-          <number>0</number>
-	</property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QFrame" name="categoryFrame">
          <property name="sizePolicy">
@@ -117,9 +125,18 @@ border: 0px;
          </property>
          <layout class="QVBoxLayout" name="leftLayout">
           <property name="spacing">
-           <number>10</number>
+           <number>0</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -188,7 +205,16 @@ border: 0px;
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -205,9 +231,18 @@ border: 0px;
             <widget class="QFrame" name="parametersFrame">
              <layout class="QVBoxLayout" name="rLayout2">
               <property name="spacing">
-               <number>10</number>
+               <number>0</number>
               </property>
-              <property name="margin">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
                <number>0</number>
               </property>
               <item>
@@ -237,21 +272,6 @@ border: 0px;
                 <property name="selectionMode">
                  <enum>QAbstractItemView::SingleSelection</enum>
                 </property>
-                <attribute name="horizontalHeaderVisible">
-                 <bool>false</bool>
-                </attribute>
-                <attribute name="horizontalHeaderDefaultSectionSize">
-                 <number>200</number>
-                </attribute>
-                <attribute name="horizontalHeaderMinimumSectionSize">
-                 <number>150</number>
-                </attribute>
-                <attribute name="horizontalHeaderStretchLastSection">
-                 <bool>true</bool>
-                </attribute>
-                <attribute name="verticalHeaderVisible">
-                 <bool>true</bool>
-                </attribute>
                </widget>
               </item>
              </layout>

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -45,8 +45,8 @@ static const char *paramHelp[] = {
     // gravitation factor
     "This parameter allows to set the factor of gravitation.",
 
-    // nodes to skip
-    "This boolean property is used to skip nodes in computation when their value are set to true.",
+    // unmovable nodes
+    "This property indicate the unmovable nodes, those whose associated value is set to true and for which a new position will not be computed by the algorithm.",
 
     // initial layout
     "The layout property used to compute the initial position of the graph elements. If none is "
@@ -60,7 +60,7 @@ LinLogAlgorithm::LinLogAlgorithm(const tlp::PluginContext *context) : LayoutAlgo
   addInParameter<float>("repulsion exponent", paramHelp[4], "0.0");
   addInParameter<float>("attraction exponent", paramHelp[5], "1.0");
   addInParameter<float>("gravitation factor", paramHelp[6], "0.05");
-  addInParameter<BooleanProperty>("skip nodes", paramHelp[7], "", false);
+  addInParameter<BooleanProperty>("unmovable nodes", paramHelp[7], "", false);
   addInParameter<LayoutProperty>("initial layout", paramHelp[8], "", false);
 }
 
@@ -86,7 +86,7 @@ bool LinLogAlgorithm::run() {
     dataSet->get("attraction exponent", aExp);
     dataSet->get("repulsion exponent", rExp);
     dataSet->get("gravitation factor", gFac);
-    dataSet->get("skip nodes", skipNodes);
+    dataSet->get("unmovable nodes", skipNodes);
     dataSet->get("initial layout", layout);
   }
 

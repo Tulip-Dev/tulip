@@ -1,25 +1,25 @@
 ####################################
 #         System information       #
 ####################################
-# Date:                   2014:01:27 
-# Time:                   07:38:23 
+# Date:                   2024:06:10 
+# Time:                   17:13:29 
 # Xnee program:           cnee 
-# Xnee version:           3.11 
+# Xnee version:           3.19 
 # Xnee home:              http://www.gnu.org/software/xnee/ 
 # Xnee info mailing list: info-xnee@gnu.org 
 # Xnee bug mailing list:  bug-xnee@gnu.org 
 # X version:              11 
 # X revision:             0 
 # X vendor:               The X.Org Foundation 
-# X vendor release:       11103000 
+# X vendor release:       12101004 
 # Record version major:   1
 # Record version minor:   13
 # OS name:                Linux 
-# OS Release:             3.2.0-58-generic 
-# OS Version:             #88-Ubuntu SMP Tue Dec 3 17:37:58 UTC 2013 
+# OS Release:             5.15.0-112-generic 
+# OS Version:             #122-Ubuntu SMP Thu May 23 07:48:21 UTC 2024 
 # Machine:                x86_64 
-# Nodename:               pm-Precision-M4600 
-# Display name:           :0.0
+# Nodename:               ubuntu-laptop 
+# Display name:           :1
 # Dimension:              1920x1080
 
 
@@ -27,20 +27,20 @@
 ##############################################
 #      Xnee application arguments            #
 ##############################################
-#  /usr/bin/cnee -rec -etr -1 --keyboard --mouse -sk End -o layout_linlog.xns 
+#  /home/pm/xnee-3.19/cnee/src//cnee -rec -etr -1 --keyboard --mouse -sk End -o itt.xns 
 
 
 ##############################################
 #      Displays                              #
 ##############################################
-# display :0.0
+# display :1
 # distribute
 
 
 ##############################################
 #      Files                                 #
 ##############################################
-# out-file layout_linlog.xns
+# out-file itt.xns
 # err-file stderr
 
 
@@ -134,7 +134,7 @@ feedback-xosd
 #          Record settings              #
 #########################################
 #   data_flags          7
-#   rState              0x21f2010
+#   rState              0x1c742b0
 #   xids[0]             3
 #   xids[1]             0
 # Number of Ranges      2
@@ -156,1637 +156,1291 @@ extension-request-minor-range  0-0
 extension-reply-major-range   0-0
 extension-reply-minor-range   0-0 
 delivered-event-range         0-0 
-device-event-range            100-105 
+device-event-range            66-71 
 error-range                   0-0 
-7,6,253,142,0,0,0,1761388,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,252,140,0,0,0,1761388
-6,6,252,140,0,0,0,1761388,2,'Virtual core pointer'
-7,6,252,140,0,0,0,1761398,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,251,136,0,0,0,1761398
-6,6,251,136,0,0,0,1761398,2,'Virtual core pointer'
-7,6,251,136,0,0,0,1761407,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,249,134,0,0,0,1761407
-6,6,249,134,0,0,0,1761407,2,'Virtual core pointer'
-7,6,249,134,0,0,0,1761418,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,248,131,0,0,0,1761418
-6,6,248,131,0,0,0,1761418,2,'Virtual core pointer'
-7,6,248,131,0,0,0,1761427,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,248,130,0,0,0,1761427
-6,6,248,130,0,0,0,1761427,2,'Virtual core pointer'
-7,6,248,130,0,0,0,1761437,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,247,130,0,0,0,1761437
-6,6,247,130,0,0,0,1761437,2,'Virtual core pointer'
-7,6,247,130,0,0,0,1761447,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,247,130,0,0,0,1761447
-6,6,247,130,0,0,0,1761447,2,'Virtual core pointer'
-7,6,247,130,0,0,0,1761466,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,247,130,0,0,0,1761467
-6,6,247,130,0,0,0,1761467,2,'Virtual core pointer'
-7,6,247,130,0,0,0,1761496,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,246,130,0,0,0,1761496
-6,6,246,130,0,0,0,1761496,2,'Virtual core pointer'
-7,6,246,130,0,0,0,1761965,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,246,129,0,0,0,1761965
-6,6,246,129,0,0,0,1761965,2,'Virtual core pointer'
-7,6,246,129,0,0,0,1761975,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,246,128,0,0,0,1761975
-6,6,246,128,0,0,0,1761975,2,'Virtual core pointer'
-7,6,246,128,0,0,0,1761985,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,246,127,0,0,0,1761985
-6,6,246,127,0,0,0,1761985,2,'Virtual core pointer'
-7,6,246,127,0,0,0,1762160,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,246,127,0,0,0,1762161
-6,6,246,127,0,0,0,1762161,2,'Virtual core pointer'
-7,6,246,127,0,0,0,1762170,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,246,130,0,0,0,1762171
-6,6,246,130,0,0,0,1762171,2,'Virtual core pointer'
-7,6,246,130,0,0,0,1762180,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,246,133,0,0,0,1762180
-6,6,246,133,0,0,0,1762180,2,'Virtual core pointer'
-7,6,246,133,0,0,0,1762190,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,244,135,0,0,0,1762190
-6,6,244,135,0,0,0,1762190,2,'Virtual core pointer'
-7,6,244,135,0,0,0,1762200,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,242,138,0,0,0,1762200
-6,6,242,138,0,0,0,1762200,2,'Virtual core pointer'
-7,6,242,138,0,0,0,1762209,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,241,140,0,0,0,1762209
-6,6,241,140,0,0,0,1762209,2,'Virtual core pointer'
-7,6,241,140,0,0,0,1762219,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,240,142,0,0,0,1762219
-6,6,240,142,0,0,0,1762219,2,'Virtual core pointer'
-7,6,240,142,0,0,0,1762229,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,239,143,0,0,0,1762229
-6,6,239,143,0,0,0,1762229,2,'Virtual core pointer'
-7,6,239,143,0,0,0,1762239,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,238,143,0,0,0,1762239
-6,6,238,143,0,0,0,1762239,2,'Virtual core pointer'
-7,6,238,143,0,0,0,1762249,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,238,143,0,0,0,1762249
-6,6,238,143,0,0,0,1762249,2,'Virtual core pointer'
-7,6,238,143,0,0,0,1762288,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,143,0,0,0,1762288
-6,6,237,143,0,0,0,1762288,2,'Virtual core pointer'
-7,6,237,143,0,0,0,1762307,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,144,0,0,0,1762307
-6,6,237,144,0,0,0,1762307,2,'Virtual core pointer'
-7,6,237,144,0,0,0,1762318,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,144,0,0,0,1762318
-6,6,237,144,0,0,0,1762318,2,'Virtual core pointer'
-7,6,237,144,0,0,0,1762327,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,144,0,0,0,1762327
-6,6,237,144,0,0,0,1762327,2,'Virtual core pointer'
-7,6,237,144,0,0,0,1762336,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,144,0,0,0,1762336
-6,6,237,144,0,0,0,1762336,2,'Virtual core pointer'
-7,6,237,144,0,0,0,1762356,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,145,0,0,0,1762356
-6,6,237,145,0,0,0,1762356,2,'Virtual core pointer'
-7,6,237,145,0,0,0,1762366,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,145,0,0,0,1762366
-6,6,237,145,0,0,0,1762366,2,'Virtual core pointer'
-7,6,237,145,0,0,0,1762405,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,145,0,0,0,1762405
-6,6,237,145,0,0,0,1762405,2,'Virtual core pointer'
-7,6,237,145,0,0,0,1762943,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,145,0,0,0,1762943
-6,6,237,145,0,0,0,1762943,2,'Virtual core pointer'
-7,6,237,145,0,0,0,1762953,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,144,0,0,0,1762953
-6,6,237,144,0,0,0,1762953,2,'Virtual core pointer'
-7,6,237,144,0,0,0,1762962,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,144,0,0,0,1762962
-6,6,237,144,0,0,0,1762962,2,'Virtual core pointer'
-7,6,237,144,0,0,0,1763011,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,144,0,0,0,1763011
-6,6,237,144,0,0,0,1763011,2,'Virtual core pointer'
-7,6,237,144,0,0,0,1763265,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,143,0,0,0,1763265
-6,6,237,143,0,0,0,1763265,2,'Virtual core pointer'
-7,6,237,143,0,0,0,1763275,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,143,0,0,0,1763275
-6,6,237,143,0,0,0,1763275,2,'Virtual core pointer'
-7,4,0,0,1,0,0,1763469,12,AlpsPS/2 ALPS DualPoint TouchPad
-0,4,0,0,1,0,0,1763469
-6,4,0,0,1,0,0,1763469,2,Virtual core pointer
-7,5,0,0,1,0,0,1763519,12,AlpsPS/2 ALPS DualPoint TouchPad
-0,5,0,0,1,0,0,1763520
-6,5,0,0,1,0,0,1763519,2,Virtual core pointer
-7,6,237,143,0,0,0,1763823,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,138,0,0,0,1763823
-6,6,237,138,0,0,0,1763823,2,'Virtual core pointer'
-7,6,237,138,0,0,0,1763832,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,130,0,0,0,1763832
-6,6,237,130,0,0,0,1763832,2,'Virtual core pointer'
-7,2,0,0,0,46,0,1764450,10,AT Translated Set 2 keyboard
-0,2,0,0,0,46,0,1764450
-6,2,0,0,0,46,0,1764450,3,Virtual core keyboard
-7,3,0,0,0,46,0,1764540,10,AT Translated Set 2 keyboard
-0,3,0,0,0,46,0,1764540
-6,3,0,0,0,46,0,1764540,3,Virtual core keyboard
-7,2,0,0,0,31,0,1764701,10,AT Translated Set 2 keyboard
-0,2,0,0,0,31,0,1764701
-6,2,0,0,0,31,0,1764701,3,Virtual core keyboard
-7,3,0,0,0,31,0,1764771,10,AT Translated Set 2 keyboard
-0,3,0,0,0,31,0,1764771
-6,3,0,0,0,31,0,1764771,3,Virtual core keyboard
-7,2,0,0,0,57,0,1764951,10,AT Translated Set 2 keyboard
-0,2,0,0,0,57,0,1764952
-6,2,0,0,0,57,0,1764952,3,Virtual core keyboard
-7,3,0,0,0,57,0,1765032,10,AT Translated Set 2 keyboard
-0,3,0,0,0,57,0,1765032
-6,3,0,0,0,57,0,1765032,3,Virtual core keyboard
-7,2,0,0,0,46,0,1765293,10,AT Translated Set 2 keyboard
-0,2,0,0,0,46,0,1765293
-6,2,0,0,0,46,0,1765293,3,Virtual core keyboard
-7,3,0,0,0,46,0,1765373,10,AT Translated Set 2 keyboard
-0,3,0,0,0,46,0,1765373
-6,3,0,0,0,46,0,1765373,3,Virtual core keyboard
-7,2,0,0,0,32,0,1765513,10,AT Translated Set 2 keyboard
-0,2,0,0,0,32,0,1765514
-6,2,0,0,0,32,0,1765514,3,Virtual core keyboard
-7,3,0,0,0,32,0,1765584,10,AT Translated Set 2 keyboard
-0,3,0,0,0,32,0,1765584
-6,3,0,0,0,32,0,1765584,3,Virtual core keyboard
-7,2,0,0,0,42,0,1765774,10,AT Translated Set 2 keyboard
-0,2,0,0,0,42,0,1765774
-6,2,0,0,0,42,0,1765774,3,Virtual core keyboard
-7,6,237,130,0,0,0,1765804,11,'DualPoint Stick'
-0,6,237,129,0,0,0,1765804
-6,6,237,129,0,0,0,1765804,2,'Virtual core pointer'
-7,6,237,129,0,0,0,1765817,11,'DualPoint Stick'
-0,6,237,128,0,0,0,1765817
-6,6,237,128,0,0,0,1765817,2,'Virtual core pointer'
-7,3,0,0,0,42,0,1765855,10,AT Translated Set 2 keyboard
-0,3,0,0,0,42,0,1765855
-6,3,0,0,0,42,0,1765855,3,Virtual core keyboard
-7,6,237,128,0,0,0,1766696,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,131,0,0,0,1766696
-6,6,237,131,0,0,0,1766696,2,'Virtual core pointer'
-7,6,237,131,0,0,0,1766706,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,135,0,0,0,1766706
-6,6,237,135,0,0,0,1766706,2,'Virtual core pointer'
-7,6,237,135,0,0,0,1766716,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,137,0,0,0,1766716
-6,6,237,137,0,0,0,1766716,2,'Virtual core pointer'
-7,6,237,137,0,0,0,1766726,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,236,138,0,0,0,1766726
-6,6,236,138,0,0,0,1766726,2,'Virtual core pointer'
-7,6,236,138,0,0,0,1766736,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,234,140,0,0,0,1766737
-6,6,234,140,0,0,0,1766737,2,'Virtual core pointer'
-7,6,234,140,0,0,0,1766745,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,232,142,0,0,0,1766745
-6,6,232,142,0,0,0,1766745,2,'Virtual core pointer'
-7,6,232,142,0,0,0,1766755,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,231,143,0,0,0,1766755
-6,6,231,143,0,0,0,1766755,2,'Virtual core pointer'
-7,6,231,143,0,0,0,1766765,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,230,145,0,0,0,1766765
-6,6,230,145,0,0,0,1766765,2,'Virtual core pointer'
-7,6,230,145,0,0,0,1766775,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,228,147,0,0,0,1766775
-6,6,228,147,0,0,0,1766775,2,'Virtual core pointer'
-7,6,228,147,0,0,0,1766784,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,226,149,0,0,0,1766784
-6,6,226,149,0,0,0,1766784,2,'Virtual core pointer'
-7,6,226,149,0,0,0,1766794,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,226,151,0,0,0,1766794
-6,6,226,151,0,0,0,1766794,2,'Virtual core pointer'
-7,6,226,151,0,0,0,1766804,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,224,153,0,0,0,1766804
-6,6,224,153,0,0,0,1766804,2,'Virtual core pointer'
-7,6,224,153,0,0,0,1766814,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,223,155,0,0,0,1766814
-6,6,223,155,0,0,0,1766814,2,'Virtual core pointer'
-7,6,223,155,0,0,0,1766825,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,223,156,0,0,0,1766825
-6,6,223,156,0,0,0,1766825,2,'Virtual core pointer'
-7,6,223,156,0,0,0,1766834,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,222,158,0,0,0,1766834
-6,6,222,158,0,0,0,1766834,2,'Virtual core pointer'
-7,6,222,158,0,0,0,1766843,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,221,160,0,0,0,1766843
-6,6,221,160,0,0,0,1766843,2,'Virtual core pointer'
-7,6,221,160,0,0,0,1766853,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,220,162,0,0,0,1766853
-6,6,220,162,0,0,0,1766853,2,'Virtual core pointer'
-7,6,220,162,0,0,0,1766863,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,219,164,0,0,0,1766863
-6,6,219,164,0,0,0,1766863,2,'Virtual core pointer'
-7,6,219,164,0,0,0,1766872,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,219,166,0,0,0,1766872
-6,6,219,166,0,0,0,1766872,2,'Virtual core pointer'
-7,6,219,166,0,0,0,1766883,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,218,168,0,0,0,1766883
-6,6,218,168,0,0,0,1766883,2,'Virtual core pointer'
-7,6,218,168,0,0,0,1766892,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,218,169,0,0,0,1766892
-6,6,218,169,0,0,0,1766892,2,'Virtual core pointer'
-7,6,218,169,0,0,0,1766902,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,217,171,0,0,0,1766902
-6,6,217,171,0,0,0,1766902,2,'Virtual core pointer'
-7,6,217,171,0,0,0,1766913,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,217,173,0,0,0,1766913
-6,6,217,173,0,0,0,1766913,2,'Virtual core pointer'
-7,6,217,173,0,0,0,1766921,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,216,175,0,0,0,1766921
-6,6,216,175,0,0,0,1766921,2,'Virtual core pointer'
-7,6,216,175,0,0,0,1766931,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,216,177,0,0,0,1766931
-6,6,216,177,0,0,0,1766931,2,'Virtual core pointer'
-7,6,216,177,0,0,0,1766941,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,216,179,0,0,0,1766941
-6,6,216,179,0,0,0,1766941,2,'Virtual core pointer'
-7,6,216,179,0,0,0,1766951,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,215,180,0,0,0,1766951
-6,6,215,180,0,0,0,1766951,2,'Virtual core pointer'
-7,6,215,180,0,0,0,1766961,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,215,181,0,0,0,1766961
-6,6,215,181,0,0,0,1766961,2,'Virtual core pointer'
-7,6,215,181,0,0,0,1766971,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,214,183,0,0,0,1766971
-6,6,214,183,0,0,0,1766971,2,'Virtual core pointer'
-7,6,214,183,0,0,0,1766980,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,214,184,0,0,0,1766980
-6,6,214,184,0,0,0,1766980,2,'Virtual core pointer'
-7,6,214,184,0,0,0,1766990,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,214,185,0,0,0,1766990
-6,6,214,185,0,0,0,1766990,2,'Virtual core pointer'
-7,6,214,185,0,0,0,1767000,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,214,187,0,0,0,1767000
-6,6,214,187,0,0,0,1767000,2,'Virtual core pointer'
-7,6,214,187,0,0,0,1767009,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,213,188,0,0,0,1767009
-6,6,213,188,0,0,0,1767009,2,'Virtual core pointer'
-7,6,213,188,0,0,0,1767019,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,213,189,0,0,0,1767019
-6,6,213,189,0,0,0,1767019,2,'Virtual core pointer'
-7,6,213,189,0,0,0,1767029,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,213,190,0,0,0,1767029
-6,6,213,190,0,0,0,1767029,2,'Virtual core pointer'
-7,6,213,190,0,0,0,1767039,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,213,191,0,0,0,1767039
-6,6,213,191,0,0,0,1767039,2,'Virtual core pointer'
-7,6,213,191,0,0,0,1767049,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,213,193,0,0,0,1767049
-6,6,213,193,0,0,0,1767049,2,'Virtual core pointer'
-7,6,213,193,0,0,0,1767059,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,213,196,0,0,0,1767059
-6,6,213,196,0,0,0,1767059,2,'Virtual core pointer'
-7,6,213,196,0,0,0,1767068,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,213,198,0,0,0,1767068
-6,6,213,198,0,0,0,1767068,2,'Virtual core pointer'
-7,6,213,198,0,0,0,1767078,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,213,202,0,0,0,1767078
-6,6,213,202,0,0,0,1767078,2,'Virtual core pointer'
-7,6,213,202,0,0,0,1767088,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,212,206,0,0,0,1767088
-6,6,212,206,0,0,0,1767088,2,'Virtual core pointer'
-7,6,212,206,0,0,0,1767097,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,211,209,0,0,0,1767097
-6,6,211,209,0,0,0,1767097,2,'Virtual core pointer'
-7,6,211,209,0,0,0,1767107,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,210,212,0,0,0,1767107
-6,6,210,212,0,0,0,1767107,2,'Virtual core pointer'
-7,6,210,212,0,0,0,1767117,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,210,214,0,0,0,1767117
-6,6,210,214,0,0,0,1767117,2,'Virtual core pointer'
-7,6,210,214,0,0,0,1767127,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,209,216,0,0,0,1767127
-6,6,209,216,0,0,0,1767127,2,'Virtual core pointer'
-7,6,209,216,0,0,0,1767137,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,208,217,0,0,0,1767137
-6,6,208,217,0,0,0,1767137,2,'Virtual core pointer'
-7,6,208,217,0,0,0,1767146,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,208,217,0,0,0,1767147
-6,6,208,217,0,0,0,1767147,2,'Virtual core pointer'
-7,6,208,217,0,0,0,1767156,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,208,218,0,0,0,1767156
-6,6,208,218,0,0,0,1767156,2,'Virtual core pointer'
-7,6,208,218,0,0,0,1767254,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,208,218,0,0,0,1767254
-6,6,208,218,0,0,0,1767254,2,'Virtual core pointer'
-7,6,208,218,0,0,0,1767264,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,208,219,0,0,0,1767264
-6,6,208,219,0,0,0,1767264,2,'Virtual core pointer'
-7,6,208,219,0,0,0,1767273,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,208,219,0,0,0,1767273
-6,6,208,219,0,0,0,1767273,2,'Virtual core pointer'
-7,6,208,219,0,0,0,1767283,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,208,220,0,0,0,1767283
-6,6,208,220,0,0,0,1767283,2,'Virtual core pointer'
-7,6,208,220,0,0,0,1767361,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,208,220,0,0,0,1767361
-6,6,208,220,0,0,0,1767361,2,'Virtual core pointer'
-7,6,208,220,0,0,0,1767381,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,208,220,0,0,0,1767381
-6,6,208,220,0,0,0,1767381,2,'Virtual core pointer'
-7,6,208,220,0,0,0,1767400,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,208,221,0,0,0,1767400
-6,6,208,221,0,0,0,1767400,2,'Virtual core pointer'
-7,6,208,221,0,0,0,1767410,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,208,221,0,0,0,1767410
-6,6,208,221,0,0,0,1767410,2,'Virtual core pointer'
-7,6,208,221,0,0,0,1767420,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,208,222,0,0,0,1767420
-6,6,208,222,0,0,0,1767420,2,'Virtual core pointer'
-7,6,208,222,0,0,0,1767430,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,207,222,0,0,0,1767430
-6,6,207,222,0,0,0,1767430,2,'Virtual core pointer'
-7,6,207,222,0,0,0,1767441,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,207,222,0,0,0,1767441
-6,6,207,222,0,0,0,1767441,2,'Virtual core pointer'
-7,6,207,222,0,0,0,1767449,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,207,223,0,0,0,1767449
-6,6,207,223,0,0,0,1767449,2,'Virtual core pointer'
-7,6,207,223,0,0,0,1767518,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,207,223,0,0,0,1767518
-6,6,207,223,0,0,0,1767518,2,'Virtual core pointer'
-7,6,207,223,0,0,0,1767696,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,207,223,0,0,0,1767696
-6,6,207,223,0,0,0,1767696,2,'Virtual core pointer'
-7,4,0,0,1,0,0,1767897,12,AlpsPS/2 ALPS DualPoint TouchPad
-0,4,0,0,1,0,0,1767897
-6,4,0,0,1,0,0,1767897,2,Virtual core pointer
-7,5,0,0,1,0,0,1767919,12,AlpsPS/2 ALPS DualPoint TouchPad
-0,5,0,0,1,0,0,1767919
-6,5,0,0,1,0,0,1767919,2,Virtual core pointer
-7,6,207,223,0,0,0,1768202,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,207,223,0,0,0,1768202
-6,6,207,223,0,0,0,1768202,2,'Virtual core pointer'
-7,6,207,223,0,0,0,1768222,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,206,223,0,0,0,1768222
-6,6,206,223,0,0,0,1768222,2,'Virtual core pointer'
-7,6,206,223,0,0,0,1768242,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,206,223,0,0,0,1768242
-6,6,206,223,0,0,0,1768242,2,'Virtual core pointer'
-7,6,206,223,0,0,0,1768251,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,205,220,0,0,0,1768251
-6,6,205,220,0,0,0,1768251,2,'Virtual core pointer'
-7,6,205,220,0,0,0,1769327,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,205,222,0,0,0,1769327
-6,6,205,222,0,0,0,1769327,2,'Virtual core pointer'
-7,6,205,222,0,0,0,1769337,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,205,225,0,0,0,1769337
-6,6,205,225,0,0,0,1769337,2,'Virtual core pointer'
-7,6,205,225,0,0,0,1769347,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,205,227,0,0,0,1769347
-6,6,205,227,0,0,0,1769347,2,'Virtual core pointer'
-7,6,205,227,0,0,0,1769356,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,206,229,0,0,0,1769356
-6,6,206,229,0,0,0,1769356,2,'Virtual core pointer'
-7,6,206,229,0,0,0,1769365,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,208,231,0,0,0,1769366
-6,6,208,231,0,0,0,1769366,2,'Virtual core pointer'
-7,6,208,231,0,0,0,1769375,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,210,233,0,0,0,1769375
-6,6,210,233,0,0,0,1769375,2,'Virtual core pointer'
-7,6,210,233,0,0,0,1769385,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,212,235,0,0,0,1769385
-6,6,212,235,0,0,0,1769385,2,'Virtual core pointer'
-7,6,212,235,0,0,0,1769395,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,214,237,0,0,0,1769395
-6,6,214,237,0,0,0,1769395,2,'Virtual core pointer'
-7,6,214,237,0,0,0,1769406,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,216,239,0,0,0,1769406
-6,6,216,239,0,0,0,1769406,2,'Virtual core pointer'
-7,6,216,239,0,0,0,1769415,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,218,241,0,0,0,1769415
-6,6,218,241,0,0,0,1769415,2,'Virtual core pointer'
-7,6,218,241,0,0,0,1769424,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,220,242,0,0,0,1769424
-6,6,220,242,0,0,0,1769424,2,'Virtual core pointer'
-7,6,220,242,0,0,0,1769434,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,223,244,0,0,0,1769434
-6,6,223,244,0,0,0,1769434,2,'Virtual core pointer'
-7,6,223,244,0,0,0,1769444,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,225,246,0,0,0,1769444
-6,6,225,246,0,0,0,1769444,2,'Virtual core pointer'
-7,6,225,246,0,0,0,1769453,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,228,249,0,0,0,1769453
-6,6,228,249,0,0,0,1769453,2,'Virtual core pointer'
-7,6,228,249,0,0,0,1769464,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,230,250,0,0,0,1769464
-6,6,230,250,0,0,0,1769464,2,'Virtual core pointer'
-7,6,230,250,0,0,0,1769473,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,233,253,0,0,0,1769473
-6,6,233,253,0,0,0,1769473,2,'Virtual core pointer'
-7,6,233,253,0,0,0,1769483,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,235,255,0,0,0,1769483
-6,6,235,255,0,0,0,1769483,2,'Virtual core pointer'
-7,6,235,255,0,0,0,1769494,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,237,258,0,0,0,1769494
-6,6,237,258,0,0,0,1769494,2,'Virtual core pointer'
-7,6,237,258,0,0,0,1769502,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,239,260,0,0,0,1769502
-6,6,239,260,0,0,0,1769502,2,'Virtual core pointer'
-7,6,239,260,0,0,0,1769512,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,242,263,0,0,0,1769512
-6,6,242,263,0,0,0,1769512,2,'Virtual core pointer'
-7,6,242,263,0,0,0,1769522,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,244,265,0,0,0,1769522
-6,6,244,265,0,0,0,1769522,2,'Virtual core pointer'
-7,6,244,265,0,0,0,1769532,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,248,267,0,0,0,1769532
-6,6,248,267,0,0,0,1769532,2,'Virtual core pointer'
-7,6,248,267,0,0,0,1769542,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,251,270,0,0,0,1769542
-6,6,251,270,0,0,0,1769542,2,'Virtual core pointer'
-7,6,251,270,0,0,0,1769551,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,255,272,0,0,0,1769551
-6,6,255,272,0,0,0,1769551,2,'Virtual core pointer'
-7,6,255,272,0,0,0,1769561,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,259,275,0,0,0,1769561
-6,6,259,275,0,0,0,1769561,2,'Virtual core pointer'
-7,6,259,275,0,0,0,1769571,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,264,277,0,0,0,1769571
-6,6,264,277,0,0,0,1769571,2,'Virtual core pointer'
-7,6,264,277,0,0,0,1769581,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,268,279,0,0,0,1769581
-6,6,268,279,0,0,0,1769581,2,'Virtual core pointer'
-7,6,268,279,0,0,0,1769591,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,271,281,0,0,0,1769591
-6,6,271,281,0,0,0,1769591,2,'Virtual core pointer'
-7,6,271,281,0,0,0,1769600,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,283,0,0,0,1769600
-6,6,275,283,0,0,0,1769600,2,'Virtual core pointer'
-7,6,275,283,0,0,0,1769610,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,278,285,0,0,0,1769610
-6,6,278,285,0,0,0,1769610,2,'Virtual core pointer'
-7,6,278,285,0,0,0,1769620,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,280,287,0,0,0,1769620
-6,6,280,287,0,0,0,1769620,2,'Virtual core pointer'
-7,6,280,287,0,0,0,1769630,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,282,290,0,0,0,1769630
-6,6,282,290,0,0,0,1769630,2,'Virtual core pointer'
-7,6,282,290,0,0,0,1769640,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,284,292,0,0,0,1769640
-6,6,284,292,0,0,0,1769640,2,'Virtual core pointer'
-7,6,284,292,0,0,0,1769649,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,285,294,0,0,0,1769649
-6,6,285,294,0,0,0,1769649,2,'Virtual core pointer'
-7,6,285,294,0,0,0,1769659,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,287,296,0,0,0,1769659
-6,6,287,296,0,0,0,1769659,2,'Virtual core pointer'
-7,6,287,296,0,0,0,1769669,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,289,298,0,0,0,1769669
-6,6,289,298,0,0,0,1769669,2,'Virtual core pointer'
-7,6,289,298,0,0,0,1769679,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,291,300,0,0,0,1769679
-6,6,291,300,0,0,0,1769679,2,'Virtual core pointer'
-7,6,291,300,0,0,0,1769688,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,292,303,0,0,0,1769688
-6,6,292,303,0,0,0,1769688,2,'Virtual core pointer'
-7,6,292,303,0,0,0,1769701,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,294,305,0,0,0,1769701
-6,6,294,305,0,0,0,1769701,2,'Virtual core pointer'
-7,6,294,305,0,0,0,1769717,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,296,308,0,0,0,1769717
-6,6,296,308,0,0,0,1769717,2,'Virtual core pointer'
-7,6,296,308,0,0,0,1769718,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,299,311,0,0,0,1769718
-6,6,299,311,0,0,0,1769718,2,'Virtual core pointer'
-7,6,299,311,0,0,0,1769728,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,301,314,0,0,0,1769728
-6,6,301,314,0,0,0,1769728,2,'Virtual core pointer'
-7,6,301,314,0,0,0,1769737,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,303,316,0,0,0,1769737
-6,6,303,316,0,0,0,1769737,2,'Virtual core pointer'
-7,6,303,316,0,0,0,1769752,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,304,318,0,0,0,1769752
-6,6,304,318,0,0,0,1769752,2,'Virtual core pointer'
-7,6,304,318,0,0,0,1769757,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,305,321,0,0,0,1769757
-6,6,305,321,0,0,0,1769757,2,'Virtual core pointer'
-7,6,305,321,0,0,0,1769767,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,307,323,0,0,0,1769767
-6,6,307,323,0,0,0,1769767,2,'Virtual core pointer'
-7,6,307,323,0,0,0,1769776,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,308,326,0,0,0,1769777
-6,6,308,326,0,0,0,1769777,2,'Virtual core pointer'
-7,6,308,326,0,0,0,1769786,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,311,329,0,0,0,1769786
-6,6,311,329,0,0,0,1769786,2,'Virtual core pointer'
-7,6,311,329,0,0,0,1769796,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,313,333,0,0,0,1769796
-6,6,313,333,0,0,0,1769796,2,'Virtual core pointer'
-7,6,313,333,0,0,0,1769806,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,315,337,0,0,0,1769806
-6,6,315,337,0,0,0,1769806,2,'Virtual core pointer'
-7,6,315,337,0,0,0,1769816,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,317,341,0,0,0,1769816
-6,6,317,341,0,0,0,1769816,2,'Virtual core pointer'
-7,6,317,341,0,0,0,1769825,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,320,345,0,0,0,1769825
-6,6,320,345,0,0,0,1769825,2,'Virtual core pointer'
-7,6,320,345,0,0,0,1769835,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,322,350,0,0,0,1769835
-6,6,322,350,0,0,0,1769835,2,'Virtual core pointer'
-7,6,322,350,0,0,0,1769845,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,325,354,0,0,0,1769845
-6,6,325,354,0,0,0,1769845,2,'Virtual core pointer'
-7,6,325,354,0,0,0,1769855,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,327,359,0,0,0,1769855
-6,6,327,359,0,0,0,1769855,2,'Virtual core pointer'
-7,6,327,359,0,0,0,1769864,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,330,364,0,0,0,1769865
-6,6,330,364,0,0,0,1769865,2,'Virtual core pointer'
-7,6,330,364,0,0,0,1769874,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,332,368,0,0,0,1769874
-6,6,332,368,0,0,0,1769874,2,'Virtual core pointer'
-7,6,332,368,0,0,0,1769884,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,333,373,0,0,0,1769884
-6,6,333,373,0,0,0,1769884,2,'Virtual core pointer'
-7,6,333,373,0,0,0,1769894,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,335,378,0,0,0,1769894
-6,6,335,378,0,0,0,1769894,2,'Virtual core pointer'
-7,6,335,378,0,0,0,1769903,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,338,382,0,0,0,1769903
-6,6,338,382,0,0,0,1769903,2,'Virtual core pointer'
-7,6,338,382,0,0,0,1769913,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,340,387,0,0,0,1769913
-6,6,340,387,0,0,0,1769913,2,'Virtual core pointer'
-7,6,340,387,0,0,0,1769923,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,343,393,0,0,0,1769923
-6,6,343,393,0,0,0,1769923,2,'Virtual core pointer'
-7,6,343,393,0,0,0,1769933,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,347,398,0,0,0,1769933
-6,6,347,398,0,0,0,1769933,2,'Virtual core pointer'
-7,6,347,398,0,0,0,1769944,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,351,404,0,0,0,1769944
-6,6,351,404,0,0,0,1769944,2,'Virtual core pointer'
-7,6,351,404,0,0,0,1769953,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,356,410,0,0,0,1769953
-6,6,356,410,0,0,0,1769953,2,'Virtual core pointer'
-7,6,356,410,0,0,0,1769962,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,360,416,0,0,0,1769962
-6,6,360,416,0,0,0,1769962,2,'Virtual core pointer'
-7,6,360,416,0,0,0,1769972,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,368,422,0,0,0,1769972
-6,6,368,422,0,0,0,1769972,2,'Virtual core pointer'
-7,6,368,422,0,0,0,1769981,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,377,427,0,0,0,1769981
-6,6,377,427,0,0,0,1769981,2,'Virtual core pointer'
-7,6,377,427,0,0,0,1769992,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,386,434,0,0,0,1769992
-6,6,386,434,0,0,0,1769992,2,'Virtual core pointer'
-7,6,386,434,0,0,0,1770001,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,394,440,0,0,0,1770001
-6,6,394,440,0,0,0,1770001,2,'Virtual core pointer'
-7,6,394,440,0,0,0,1770011,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,402,447,0,0,0,1770011
-6,6,402,447,0,0,0,1770011,2,'Virtual core pointer'
-7,6,402,447,0,0,0,1770021,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,410,452,0,0,0,1770021
-6,6,410,452,0,0,0,1770021,2,'Virtual core pointer'
-7,6,410,452,0,0,0,1770031,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,416,457,0,0,0,1770031
-6,6,416,457,0,0,0,1770031,2,'Virtual core pointer'
-7,6,416,457,0,0,0,1770040,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,421,460,0,0,0,1770040
-6,6,421,460,0,0,0,1770040,2,'Virtual core pointer'
-7,6,421,460,0,0,0,1770050,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,423,462,0,0,0,1770050
-6,6,423,462,0,0,0,1770050,2,'Virtual core pointer'
-7,6,423,462,0,0,0,1770060,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,424,463,0,0,0,1770060
-6,6,424,463,0,0,0,1770060,2,'Virtual core pointer'
-7,6,424,463,0,0,0,1770069,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,465,0,0,0,1770069
-6,6,426,465,0,0,0,1770069,2,'Virtual core pointer'
-7,6,426,465,0,0,0,1770079,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,427,465,0,0,0,1770079
-6,6,427,465,0,0,0,1770079,2,'Virtual core pointer'
-7,6,427,465,0,0,0,1770412,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,465,0,0,0,1770412
-6,6,426,465,0,0,0,1770412,2,'Virtual core pointer'
-7,6,426,465,0,0,0,1770451,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,465,0,0,0,1770451
-6,6,426,465,0,0,0,1770451,2,'Virtual core pointer'
-7,6,426,465,0,0,0,1770480,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,466,0,0,0,1770480
-6,6,426,466,0,0,0,1770480,2,'Virtual core pointer'
-7,6,426,466,0,0,0,1770500,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,466,0,0,0,1770500
-6,6,426,466,0,0,0,1770500,2,'Virtual core pointer'
-7,6,426,466,0,0,0,1770510,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,467,0,0,0,1770510
-6,6,426,467,0,0,0,1770510,2,'Virtual core pointer'
-7,6,426,467,0,0,0,1770520,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,467,0,0,0,1770520
-6,6,426,467,0,0,0,1770520,2,'Virtual core pointer'
-7,6,426,467,0,0,0,1770529,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,468,0,0,0,1770529
-6,6,426,468,0,0,0,1770529,2,'Virtual core pointer'
-7,6,426,468,0,0,0,1770539,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,468,0,0,0,1770539
-6,6,426,468,0,0,0,1770539,2,'Virtual core pointer'
-7,6,426,468,0,0,0,1770549,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,469,0,0,0,1770549
-6,6,426,469,0,0,0,1770549,2,'Virtual core pointer'
-7,6,426,469,0,0,0,1770559,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,469,0,0,0,1770559
-6,6,426,469,0,0,0,1770559,2,'Virtual core pointer'
-7,6,426,469,0,0,0,1770568,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,470,0,0,0,1770568
-6,6,426,470,0,0,0,1770568,2,'Virtual core pointer'
-7,6,426,470,0,0,0,1770578,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,470,0,0,0,1770578
-6,6,426,470,0,0,0,1770578,2,'Virtual core pointer'
-7,6,426,470,0,0,0,1770588,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,471,0,0,0,1770588
-6,6,426,471,0,0,0,1770588,2,'Virtual core pointer'
-7,6,426,471,0,0,0,1770598,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,471,0,0,0,1770598
-6,6,426,471,0,0,0,1770598,2,'Virtual core pointer'
-7,6,426,471,0,0,0,1770607,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,471,0,0,0,1770607
-6,6,426,471,0,0,0,1770607,2,'Virtual core pointer'
-7,6,426,471,0,0,0,1770617,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,472,0,0,0,1770617
-6,6,426,472,0,0,0,1770617,2,'Virtual core pointer'
-7,6,426,472,0,0,0,1770647,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,472,0,0,0,1770647
-6,6,426,472,0,0,0,1770647,2,'Virtual core pointer'
-7,6,426,472,0,0,0,1770707,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,472,0,0,0,1770707
-6,6,426,472,0,0,0,1770707,2,'Virtual core pointer'
-7,6,426,472,0,0,0,1770734,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,473,0,0,0,1770735
-6,6,426,473,0,0,0,1770735,2,'Virtual core pointer'
-7,6,426,473,0,0,0,1770744,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,475,0,0,0,1770744
-6,6,426,475,0,0,0,1770744,2,'Virtual core pointer'
-7,6,426,475,0,0,0,1770754,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,476,0,0,0,1770754
-6,6,426,476,0,0,0,1770754,2,'Virtual core pointer'
-7,6,426,476,0,0,0,1770862,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,476,0,0,0,1770862
-6,6,426,476,0,0,0,1770862,2,'Virtual core pointer'
-7,6,426,476,0,0,0,1770891,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,426,477,0,0,0,1770891
-6,6,426,477,0,0,0,1770891,2,'Virtual core pointer'
-7,4,0,0,1,0,0,1771230,12,AlpsPS/2 ALPS DualPoint TouchPad
-0,4,0,0,1,0,0,1771230
-6,4,0,0,1,0,0,1771230,2,Virtual core pointer
-7,5,0,0,1,0,0,1771288,12,AlpsPS/2 ALPS DualPoint TouchPad
-0,5,0,0,1,0,0,1771289
-6,5,0,0,1,0,0,1771288,2,Virtual core pointer
-7,2,0,0,0,65,0,1773010,10,AT Translated Set 2 keyboard
-0,2,0,0,0,65,0,1773010
-6,2,0,0,0,65,0,1773010,3,Virtual core keyboard
-7,3,0,0,0,65,0,1773100,10,AT Translated Set 2 keyboard
-0,3,0,0,0,65,0,1773100
-6,3,0,0,0,65,0,1773100,3,Virtual core keyboard
-7,2,0,0,0,116,0,1773752,10,AT Translated Set 2 keyboard
-0,2,0,0,0,116,0,1773753
-6,2,0,0,0,116,0,1773753,3,Virtual core keyboard
-7,3,0,0,0,116,0,1773883,10,AT Translated Set 2 keyboard
-0,3,0,0,0,116,0,1773883
-6,3,0,0,0,116,0,1773883,3,Virtual core keyboard
-7,2,0,0,0,36,0,1774565,10,AT Translated Set 2 keyboard
-0,2,0,0,0,36,0,1774565
-6,2,0,0,0,36,0,1774565,3,Virtual core keyboard
-7,3,0,0,0,36,0,1774648,10,AT Translated Set 2 keyboard
-0,3,0,0,0,36,0,1774648
-6,3,0,0,0,36,0,1774648,3,Virtual core keyboard
-7,6,426,477,0,0,0,1775643,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,423,477,0,0,0,1775643
-6,6,423,477,0,0,0,1775643,2,'Virtual core pointer'
-7,6,423,477,0,0,0,1775653,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,421,477,0,0,0,1775653
-6,6,421,477,0,0,0,1775653,2,'Virtual core pointer'
-7,6,421,477,0,0,0,1775662,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,421,477,0,0,0,1775662
-6,6,421,477,0,0,0,1775662,2,'Virtual core pointer'
-7,6,421,477,0,0,0,1775672,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,421,477,0,0,0,1775672
-6,6,421,477,0,0,0,1775672,2,'Virtual core pointer'
-7,6,421,477,0,0,0,1775682,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,420,477,0,0,0,1775682
-6,6,420,477,0,0,0,1775682,2,'Virtual core pointer'
-7,6,420,477,0,0,0,1775691,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,419,477,0,0,0,1775691
-6,6,419,477,0,0,0,1775691,2,'Virtual core pointer'
-7,6,419,477,0,0,0,1775701,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,418,477,0,0,0,1775701
-6,6,418,477,0,0,0,1775701,2,'Virtual core pointer'
-7,6,418,477,0,0,0,1775711,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,417,476,0,0,0,1775711
-6,6,417,476,0,0,0,1775711,2,'Virtual core pointer'
-7,6,417,476,0,0,0,1775724,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,417,473,0,0,0,1775724
-6,6,417,473,0,0,0,1775724,2,'Virtual core pointer'
-7,6,417,473,0,0,0,1775731,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,416,471,0,0,0,1775731
-6,6,416,471,0,0,0,1775731,2,'Virtual core pointer'
-7,6,416,471,0,0,0,1775741,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,416,468,0,0,0,1775741
-6,6,416,468,0,0,0,1775741,2,'Virtual core pointer'
-7,6,416,468,0,0,0,1775750,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,415,467,0,0,0,1775750
-6,6,415,467,0,0,0,1775750,2,'Virtual core pointer'
-7,6,415,467,0,0,0,1775760,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,414,466,0,0,0,1775760
-6,6,414,466,0,0,0,1775760,2,'Virtual core pointer'
-7,6,414,466,0,0,0,1775769,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,414,464,0,0,0,1775769
-6,6,414,464,0,0,0,1775769,2,'Virtual core pointer'
-7,6,414,464,0,0,0,1775779,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,413,463,0,0,0,1775779
-6,6,413,463,0,0,0,1775779,2,'Virtual core pointer'
-7,6,413,463,0,0,0,1775789,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,411,462,0,0,0,1775789
-6,6,411,462,0,0,0,1775789,2,'Virtual core pointer'
-7,6,411,462,0,0,0,1775799,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,411,461,0,0,0,1775799
-6,6,411,461,0,0,0,1775799,2,'Virtual core pointer'
-7,6,411,461,0,0,0,1775809,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,410,459,0,0,0,1775809
-6,6,410,459,0,0,0,1775809,2,'Virtual core pointer'
-7,6,410,459,0,0,0,1775819,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,409,457,0,0,0,1775819
-6,6,409,457,0,0,0,1775819,2,'Virtual core pointer'
-7,6,409,457,0,0,0,1775828,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,407,455,0,0,0,1775828
-6,6,407,455,0,0,0,1775828,2,'Virtual core pointer'
-7,6,407,455,0,0,0,1775838,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,406,453,0,0,0,1775838
-6,6,406,453,0,0,0,1775838,2,'Virtual core pointer'
-7,6,406,453,0,0,0,1775848,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,404,450,0,0,0,1775848
-6,6,404,450,0,0,0,1775848,2,'Virtual core pointer'
-7,6,404,450,0,0,0,1775858,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,403,447,0,0,0,1775858
-6,6,403,447,0,0,0,1775858,2,'Virtual core pointer'
-7,6,403,447,0,0,0,1775869,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,401,444,0,0,0,1775869
-6,6,401,444,0,0,0,1775869,2,'Virtual core pointer'
-7,6,401,444,0,0,0,1775877,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,399,441,0,0,0,1775877
-6,6,399,441,0,0,0,1775877,2,'Virtual core pointer'
-7,6,399,441,0,0,0,1775887,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,397,437,0,0,0,1775887
-6,6,397,437,0,0,0,1775887,2,'Virtual core pointer'
-7,6,397,437,0,0,0,1775897,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,395,433,0,0,0,1775897
-6,6,395,433,0,0,0,1775897,2,'Virtual core pointer'
-7,6,395,433,0,0,0,1775907,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,392,429,0,0,0,1775907
-6,6,392,429,0,0,0,1775907,2,'Virtual core pointer'
-7,6,392,429,0,0,0,1775916,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,389,426,0,0,0,1775916
-6,6,389,426,0,0,0,1775916,2,'Virtual core pointer'
-7,6,389,426,0,0,0,1775926,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,386,423,0,0,0,1775926
-6,6,386,423,0,0,0,1775926,2,'Virtual core pointer'
-7,6,386,423,0,0,0,1775936,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,383,419,0,0,0,1775936
-6,6,383,419,0,0,0,1775936,2,'Virtual core pointer'
-7,6,383,419,0,0,0,1775946,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,380,415,0,0,0,1775946
-6,6,380,415,0,0,0,1775946,2,'Virtual core pointer'
-7,6,380,415,0,0,0,1775955,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,376,410,0,0,0,1775955
-6,6,376,410,0,0,0,1775955,2,'Virtual core pointer'
-7,6,376,410,0,0,0,1775965,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,372,405,0,0,0,1775965
-6,6,372,405,0,0,0,1775965,2,'Virtual core pointer'
-7,6,372,405,0,0,0,1775975,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,368,400,0,0,0,1775975
-6,6,368,400,0,0,0,1775975,2,'Virtual core pointer'
-7,6,368,400,0,0,0,1775985,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,365,394,0,0,0,1775985
-6,6,365,394,0,0,0,1775985,2,'Virtual core pointer'
-7,6,365,394,0,0,0,1775994,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,361,387,0,0,0,1775995
-6,6,361,387,0,0,0,1775995,2,'Virtual core pointer'
-7,6,361,387,0,0,0,1776004,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,357,380,0,0,0,1776004
-6,6,357,380,0,0,0,1776004,2,'Virtual core pointer'
-7,6,357,380,0,0,0,1776014,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,354,374,0,0,0,1776014
-6,6,354,374,0,0,0,1776014,2,'Virtual core pointer'
-7,6,354,374,0,0,0,1776024,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,352,369,0,0,0,1776024
-6,6,352,369,0,0,0,1776024,2,'Virtual core pointer'
-7,6,352,369,0,0,0,1776034,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,348,364,0,0,0,1776034
-6,6,348,364,0,0,0,1776034,2,'Virtual core pointer'
-7,6,348,364,0,0,0,1776043,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,345,359,0,0,0,1776043
-6,6,345,359,0,0,0,1776043,2,'Virtual core pointer'
-7,6,345,359,0,0,0,1776053,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,342,355,0,0,0,1776053
-6,6,342,355,0,0,0,1776053,2,'Virtual core pointer'
-7,6,342,355,0,0,0,1776063,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,338,352,0,0,0,1776063
-6,6,338,352,0,0,0,1776063,2,'Virtual core pointer'
-7,6,338,352,0,0,0,1776073,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,335,348,0,0,0,1776073
-6,6,335,348,0,0,0,1776073,2,'Virtual core pointer'
-7,6,335,348,0,0,0,1776082,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,331,345,0,0,0,1776082
-6,6,331,345,0,0,0,1776082,2,'Virtual core pointer'
-7,6,331,345,0,0,0,1776093,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,328,341,0,0,0,1776093
-6,6,328,341,0,0,0,1776093,2,'Virtual core pointer'
-7,6,328,341,0,0,0,1776102,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,325,337,0,0,0,1776102
-6,6,325,337,0,0,0,1776102,2,'Virtual core pointer'
-7,6,325,337,0,0,0,1776112,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,321,333,0,0,0,1776112
-6,6,321,333,0,0,0,1776112,2,'Virtual core pointer'
-7,6,321,333,0,0,0,1776122,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,319,329,0,0,0,1776122
-6,6,319,329,0,0,0,1776122,2,'Virtual core pointer'
-7,6,319,329,0,0,0,1776131,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,316,325,0,0,0,1776131
-6,6,316,325,0,0,0,1776131,2,'Virtual core pointer'
-7,6,316,325,0,0,0,1776141,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,313,321,0,0,0,1776141
-6,6,313,321,0,0,0,1776141,2,'Virtual core pointer'
-7,6,313,321,0,0,0,1776151,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,311,317,0,0,0,1776151
-6,6,311,317,0,0,0,1776151,2,'Virtual core pointer'
-7,6,311,317,0,0,0,1776161,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,309,315,0,0,0,1776161
-6,6,309,315,0,0,0,1776161,2,'Virtual core pointer'
-7,6,309,315,0,0,0,1776170,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,307,312,0,0,0,1776170
-6,6,307,312,0,0,0,1776170,2,'Virtual core pointer'
-7,6,307,312,0,0,0,1776180,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,305,309,0,0,0,1776180
-6,6,305,309,0,0,0,1776180,2,'Virtual core pointer'
-7,6,305,309,0,0,0,1776190,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,304,306,0,0,0,1776190
-6,6,304,306,0,0,0,1776190,2,'Virtual core pointer'
-7,6,304,306,0,0,0,1776200,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,301,304,0,0,0,1776200
-6,6,301,304,0,0,0,1776200,2,'Virtual core pointer'
-7,6,301,304,0,0,0,1776210,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,300,301,0,0,0,1776210
-6,6,300,301,0,0,0,1776210,2,'Virtual core pointer'
-7,6,300,301,0,0,0,1776220,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,299,298,0,0,0,1776220
-6,6,299,298,0,0,0,1776220,2,'Virtual core pointer'
-7,6,299,298,0,0,0,1776229,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,297,295,0,0,0,1776229
-6,6,297,295,0,0,0,1776229,2,'Virtual core pointer'
-7,6,297,295,0,0,0,1776239,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,296,293,0,0,0,1776239
-6,6,296,293,0,0,0,1776239,2,'Virtual core pointer'
-7,6,296,293,0,0,0,1776249,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,294,292,0,0,0,1776249
-6,6,294,292,0,0,0,1776249,2,'Virtual core pointer'
-7,6,294,292,0,0,0,1776259,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,294,290,0,0,0,1776259
-6,6,294,290,0,0,0,1776259,2,'Virtual core pointer'
-7,6,294,290,0,0,0,1776269,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,293,288,0,0,0,1776269
-6,6,293,288,0,0,0,1776269,2,'Virtual core pointer'
-7,6,293,288,0,0,0,1776278,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,291,286,0,0,0,1776278
-6,6,291,286,0,0,0,1776278,2,'Virtual core pointer'
-7,6,291,286,0,0,0,1776288,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,290,283,0,0,0,1776288
-6,6,290,283,0,0,0,1776288,2,'Virtual core pointer'
-7,6,290,283,0,0,0,1776298,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,288,281,0,0,0,1776298
-6,6,288,281,0,0,0,1776298,2,'Virtual core pointer'
-7,6,288,281,0,0,0,1776307,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,287,278,0,0,0,1776307
-6,6,287,278,0,0,0,1776307,2,'Virtual core pointer'
-7,6,287,278,0,0,0,1776317,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,286,276,0,0,0,1776317
-6,6,286,276,0,0,0,1776317,2,'Virtual core pointer'
-7,6,286,276,0,0,0,1776327,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,285,275,0,0,0,1776327
-6,6,285,275,0,0,0,1776327,2,'Virtual core pointer'
-7,6,285,275,0,0,0,1776337,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,283,273,0,0,0,1776337
-6,6,283,273,0,0,0,1776337,2,'Virtual core pointer'
-7,6,283,273,0,0,0,1776347,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,283,271,0,0,0,1776347
-6,6,283,271,0,0,0,1776347,2,'Virtual core pointer'
-7,6,283,271,0,0,0,1776356,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,281,269,0,0,0,1776356
-6,6,281,269,0,0,0,1776356,2,'Virtual core pointer'
-7,6,281,269,0,0,0,1776366,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,281,268,0,0,0,1776366
-6,6,281,268,0,0,0,1776366,2,'Virtual core pointer'
-7,6,281,268,0,0,0,1776376,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,280,266,0,0,0,1776376
-6,6,280,266,0,0,0,1776376,2,'Virtual core pointer'
-7,6,280,266,0,0,0,1776386,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,280,265,0,0,0,1776386
-6,6,280,265,0,0,0,1776386,2,'Virtual core pointer'
-7,6,280,265,0,0,0,1776395,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,280,264,0,0,0,1776395
-6,6,280,264,0,0,0,1776395,2,'Virtual core pointer'
-7,6,280,264,0,0,0,1776405,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,279,263,0,0,0,1776405
-6,6,279,263,0,0,0,1776405,2,'Virtual core pointer'
-7,6,279,263,0,0,0,1776415,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,279,261,0,0,0,1776415
-6,6,279,261,0,0,0,1776415,2,'Virtual core pointer'
-7,6,279,261,0,0,0,1776425,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,278,259,0,0,0,1776425
-6,6,278,259,0,0,0,1776425,2,'Virtual core pointer'
-7,6,278,259,0,0,0,1776435,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,278,257,0,0,0,1776435
-6,6,278,257,0,0,0,1776435,2,'Virtual core pointer'
-7,6,278,257,0,0,0,1776444,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,277,254,0,0,0,1776444
-6,6,277,254,0,0,0,1776444,2,'Virtual core pointer'
-7,6,277,254,0,0,0,1776454,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,277,251,0,0,0,1776454
-6,6,277,251,0,0,0,1776454,2,'Virtual core pointer'
-7,6,277,251,0,0,0,1776464,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,248,0,0,0,1776464
-6,6,276,248,0,0,0,1776464,2,'Virtual core pointer'
-7,6,276,248,0,0,0,1776473,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,246,0,0,0,1776473
-6,6,276,246,0,0,0,1776473,2,'Virtual core pointer'
-7,6,276,246,0,0,0,1776484,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,244,0,0,0,1776484
-6,6,276,244,0,0,0,1776484,2,'Virtual core pointer'
-7,6,276,244,0,0,0,1776493,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,243,0,0,0,1776493
-6,6,275,243,0,0,0,1776493,2,'Virtual core pointer'
-7,6,275,243,0,0,0,1776503,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,243,0,0,0,1776503
-6,6,275,243,0,0,0,1776503,2,'Virtual core pointer'
-7,6,275,243,0,0,0,1776523,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,243,0,0,0,1776523
-6,6,275,243,0,0,0,1776523,2,'Virtual core pointer'
-7,6,275,243,0,0,0,1776552,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,243,0,0,0,1776552
-6,6,275,243,0,0,0,1776552,2,'Virtual core pointer'
-7,6,275,243,0,0,0,1776581,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,242,0,0,0,1776581
-6,6,275,242,0,0,0,1776581,2,'Virtual core pointer'
-7,6,275,242,0,0,0,1776591,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,242,0,0,0,1776591
-6,6,275,242,0,0,0,1776591,2,'Virtual core pointer'
-7,6,275,242,0,0,0,1776601,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,242,0,0,0,1776601
-6,6,275,242,0,0,0,1776601,2,'Virtual core pointer'
-7,6,275,242,0,0,0,1776620,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,242,0,0,0,1776620
-6,6,275,242,0,0,0,1776620,2,'Virtual core pointer'
-7,6,275,242,0,0,0,1776679,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,241,0,0,0,1776679
-6,6,275,241,0,0,0,1776679,2,'Virtual core pointer'
-7,6,275,241,0,0,0,1776708,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,241,0,0,0,1776708
-6,6,275,241,0,0,0,1776708,2,'Virtual core pointer'
-7,6,275,241,0,0,0,1776729,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,240,0,0,0,1776729
-6,6,275,240,0,0,0,1776729,2,'Virtual core pointer'
-7,6,275,240,0,0,0,1776737,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,240,0,0,0,1776737
-6,6,275,240,0,0,0,1776737,2,'Virtual core pointer'
-7,6,275,240,0,0,0,1776747,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,239,0,0,0,1776747
-6,6,275,239,0,0,0,1776747,2,'Virtual core pointer'
-7,6,275,239,0,0,0,1776757,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,239,0,0,0,1776757
-6,6,275,239,0,0,0,1776757,2,'Virtual core pointer'
-7,6,275,239,0,0,0,1776767,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,239,0,0,0,1776767
-6,6,275,239,0,0,0,1776767,2,'Virtual core pointer'
-7,6,275,239,0,0,0,1776777,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,238,0,0,0,1776777
-6,6,275,238,0,0,0,1776777,2,'Virtual core pointer'
-7,6,275,238,0,0,0,1776786,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,238,0,0,0,1776786
-6,6,275,238,0,0,0,1776786,2,'Virtual core pointer'
-7,6,275,238,0,0,0,1776796,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,238,0,0,0,1776796
-6,6,275,238,0,0,0,1776796,2,'Virtual core pointer'
-7,6,275,238,0,0,0,1776806,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,237,0,0,0,1776807
-6,6,275,237,0,0,0,1776807,2,'Virtual core pointer'
-7,6,275,237,0,0,0,1776826,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,237,0,0,0,1776826
-6,6,275,237,0,0,0,1776826,2,'Virtual core pointer'
-7,6,275,237,0,0,0,1776836,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,237,0,0,0,1776836
-6,6,275,237,0,0,0,1776836,2,'Virtual core pointer'
-7,6,275,237,0,0,0,1776855,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,236,0,0,0,1776855
-6,6,275,236,0,0,0,1776855,2,'Virtual core pointer'
-7,6,275,236,0,0,0,1776865,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,235,0,0,0,1776865
-6,6,275,235,0,0,0,1776865,2,'Virtual core pointer'
-7,6,275,235,0,0,0,1776875,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,233,0,0,0,1776875
-6,6,275,233,0,0,0,1776875,2,'Virtual core pointer'
-7,6,275,233,0,0,0,1776884,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,232,0,0,0,1776884
-6,6,275,232,0,0,0,1776884,2,'Virtual core pointer'
-7,6,275,232,0,0,0,1776894,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,231,0,0,0,1776894
-6,6,275,231,0,0,0,1776894,2,'Virtual core pointer'
-7,6,275,231,0,0,0,1776904,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,230,0,0,0,1776904
-6,6,275,230,0,0,0,1776904,2,'Virtual core pointer'
-7,6,275,230,0,0,0,1776914,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,230,0,0,0,1776914
-6,6,275,230,0,0,0,1776914,2,'Virtual core pointer'
-7,6,275,230,0,0,0,1776924,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,230,0,0,0,1776924
-6,6,275,230,0,0,0,1776924,2,'Virtual core pointer'
-7,6,275,230,0,0,0,1776953,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,230,0,0,0,1776953
-6,6,275,230,0,0,0,1776953,2,'Virtual core pointer'
-7,6,275,230,0,0,0,1776963,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,229,0,0,0,1776963
-6,6,275,229,0,0,0,1776963,2,'Virtual core pointer'
-7,6,275,229,0,0,0,1776973,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,229,0,0,0,1776973
-6,6,275,229,0,0,0,1776973,2,'Virtual core pointer'
-7,6,275,229,0,0,0,1777002,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,229,0,0,0,1777002
-6,6,275,229,0,0,0,1777002,2,'Virtual core pointer'
-7,6,275,229,0,0,0,1777011,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,228,0,0,0,1777011
-6,6,275,228,0,0,0,1777011,2,'Virtual core pointer'
-7,4,0,0,1,0,0,1777418,12,AlpsPS/2 ALPS DualPoint TouchPad
-0,4,0,0,1,0,0,1777418
-6,4,0,0,1,0,0,1777418,2,Virtual core pointer
-7,5,0,0,1,0,0,1777461,12,AlpsPS/2 ALPS DualPoint TouchPad
-0,5,0,0,1,0,0,1777461
-6,5,0,0,1,0,0,1777461,2,Virtual core pointer
-0,21,0,0,0,0,0,1777492
-NEW-WINDOW:650,328:52429037,52429037,12585287,0,0,0:0x0+500+66:0,0:LinLog
-0,21,0,0,0,0,0,1777492
-0,21,0,0,0,0,0,1777492
-0,21,0,0,0,0,0,1777492
-7,6,275,228,0,0,0,1778537,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,228,0,0,0,1778537
-6,6,275,228,0,0,0,1778537,2,'Virtual core pointer'
-7,6,275,228,0,0,0,1778546,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,228,0,0,0,1778546
-6,6,276,228,0,0,0,1778546,2,'Virtual core pointer'
-7,6,276,228,0,0,0,1778556,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,228,0,0,0,1778556
-6,6,276,228,0,0,0,1778556,2,'Virtual core pointer'
-7,6,276,228,0,0,0,1781059,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,229,0,0,0,1781059
-6,6,276,229,0,0,0,1781059,2,'Virtual core pointer'
-7,6,276,229,0,0,0,1781069,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,230,0,0,0,1781069
-6,6,276,230,0,0,0,1781069,2,'Virtual core pointer'
-7,6,276,230,0,0,0,1781079,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,230,0,0,0,1781080
-6,6,276,230,0,0,0,1781080,2,'Virtual core pointer'
-7,6,276,230,0,0,0,1781098,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,230,0,0,0,1781098
-6,6,276,230,0,0,0,1781098,2,'Virtual core pointer'
-7,6,276,230,0,0,0,1781108,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,230,0,0,0,1781108
-6,6,276,230,0,0,0,1781108,2,'Virtual core pointer'
-7,6,276,230,0,0,0,1781118,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,231,0,0,0,1781118
-6,6,276,231,0,0,0,1781118,2,'Virtual core pointer'
-7,6,276,231,0,0,0,1781128,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,232,0,0,0,1781128
-6,6,276,232,0,0,0,1781128,2,'Virtual core pointer'
-7,6,276,232,0,0,0,1781137,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,234,0,0,0,1781137
-6,6,276,234,0,0,0,1781137,2,'Virtual core pointer'
-7,6,276,234,0,0,0,1781147,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,238,0,0,0,1781147
-6,6,276,238,0,0,0,1781147,2,'Virtual core pointer'
-7,6,276,238,0,0,0,1781157,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,242,0,0,0,1781157
-6,6,276,242,0,0,0,1781157,2,'Virtual core pointer'
-7,6,276,242,0,0,0,1781166,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,249,0,0,0,1781167
-6,6,276,249,0,0,0,1781167,2,'Virtual core pointer'
-7,6,276,249,0,0,0,1781176,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,256,0,0,0,1781176
-6,6,276,256,0,0,0,1781176,2,'Virtual core pointer'
-7,6,276,256,0,0,0,1781186,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,262,0,0,0,1781186
-6,6,276,262,0,0,0,1781186,2,'Virtual core pointer'
-7,6,276,262,0,0,0,1781196,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,268,0,0,0,1781196
-6,6,276,268,0,0,0,1781196,2,'Virtual core pointer'
-7,6,276,268,0,0,0,1781206,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,274,0,0,0,1781206
-6,6,276,274,0,0,0,1781206,2,'Virtual core pointer'
-7,6,276,274,0,0,0,1781215,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,280,0,0,0,1781216
-6,6,276,280,0,0,0,1781216,2,'Virtual core pointer'
-7,6,276,280,0,0,0,1781225,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,286,0,0,0,1781225
-6,6,276,286,0,0,0,1781225,2,'Virtual core pointer'
-7,6,276,286,0,0,0,1781235,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,292,0,0,0,1781235
-6,6,276,292,0,0,0,1781235,2,'Virtual core pointer'
-7,6,276,292,0,0,0,1781245,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,297,0,0,0,1781245
-6,6,276,297,0,0,0,1781245,2,'Virtual core pointer'
-7,6,276,297,0,0,0,1781254,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,302,0,0,0,1781254
-6,6,276,302,0,0,0,1781254,2,'Virtual core pointer'
-7,6,276,302,0,0,0,1781264,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,307,0,0,0,1781264
-6,6,276,307,0,0,0,1781264,2,'Virtual core pointer'
-7,6,276,307,0,0,0,1781274,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,313,0,0,0,1781274
-6,6,276,313,0,0,0,1781274,2,'Virtual core pointer'
-7,6,276,313,0,0,0,1781284,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,319,0,0,0,1781284
-6,6,276,319,0,0,0,1781284,2,'Virtual core pointer'
-7,6,276,319,0,0,0,1781294,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,326,0,0,0,1781294
-6,6,276,326,0,0,0,1781294,2,'Virtual core pointer'
-7,6,276,326,0,0,0,1781303,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,334,0,0,0,1781303
-6,6,276,334,0,0,0,1781303,2,'Virtual core pointer'
-7,6,276,334,0,0,0,1781313,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,343,0,0,0,1781313
-6,6,276,343,0,0,0,1781313,2,'Virtual core pointer'
-7,6,276,343,0,0,0,1781323,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,352,0,0,0,1781323
-6,6,276,352,0,0,0,1781323,2,'Virtual core pointer'
-7,6,276,352,0,0,0,1781333,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,361,0,0,0,1781333
-6,6,276,361,0,0,0,1781333,2,'Virtual core pointer'
-7,6,276,361,0,0,0,1781343,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,370,0,0,0,1781343
-6,6,276,370,0,0,0,1781343,2,'Virtual core pointer'
-7,6,276,370,0,0,0,1781352,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,378,0,0,0,1781352
-6,6,276,378,0,0,0,1781352,2,'Virtual core pointer'
-7,6,276,378,0,0,0,1781362,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,386,0,0,0,1781362
-6,6,276,386,0,0,0,1781362,2,'Virtual core pointer'
-7,6,276,386,0,0,0,1781372,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,392,0,0,0,1781372
-6,6,276,392,0,0,0,1781372,2,'Virtual core pointer'
-7,6,276,392,0,0,0,1781381,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,397,0,0,0,1781382
-6,6,275,397,0,0,0,1781382,2,'Virtual core pointer'
-7,6,275,397,0,0,0,1781392,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,403,0,0,0,1781392
-6,6,275,403,0,0,0,1781392,2,'Virtual core pointer'
-7,6,275,403,0,0,0,1781401,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,409,0,0,0,1781401
-6,6,275,409,0,0,0,1781401,2,'Virtual core pointer'
-7,6,275,409,0,0,0,1781411,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,415,0,0,0,1781411
-6,6,275,415,0,0,0,1781411,2,'Virtual core pointer'
-7,6,275,415,0,0,0,1781421,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,274,424,0,0,0,1781421
-6,6,274,424,0,0,0,1781421,2,'Virtual core pointer'
-7,6,274,424,0,0,0,1781431,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,274,433,0,0,0,1781431
-6,6,274,433,0,0,0,1781431,2,'Virtual core pointer'
-7,6,274,433,0,0,0,1781440,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,274,442,0,0,0,1781440
-6,6,274,442,0,0,0,1781440,2,'Virtual core pointer'
-7,6,274,442,0,0,0,1781450,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,274,451,0,0,0,1781450
-6,6,274,451,0,0,0,1781450,2,'Virtual core pointer'
-7,6,274,451,0,0,0,1781460,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,274,462,0,0,0,1781460
-6,6,274,462,0,0,0,1781460,2,'Virtual core pointer'
-7,6,274,462,0,0,0,1781470,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,274,474,0,0,0,1781470
-6,6,274,474,0,0,0,1781470,2,'Virtual core pointer'
-7,6,274,474,0,0,0,1781479,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,274,486,0,0,0,1781479
-6,6,274,486,0,0,0,1781479,2,'Virtual core pointer'
-7,6,274,486,0,0,0,1781489,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,274,499,0,0,0,1781490
-6,6,274,499,0,0,0,1781490,2,'Virtual core pointer'
-7,6,274,499,0,0,0,1781499,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,274,512,0,0,0,1781499
-6,6,274,512,0,0,0,1781499,2,'Virtual core pointer'
-7,6,274,512,0,0,0,1781508,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,274,525,0,0,0,1781509
-6,6,274,525,0,0,0,1781509,2,'Virtual core pointer'
-7,6,274,525,0,0,0,1781519,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,273,537,0,0,0,1781519
-6,6,273,537,0,0,0,1781519,2,'Virtual core pointer'
-7,6,273,537,0,0,0,1781528,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,272,548,0,0,0,1781528
-6,6,272,548,0,0,0,1781528,2,'Virtual core pointer'
-7,6,272,548,0,0,0,1781538,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,271,560,0,0,0,1781538
-6,6,271,560,0,0,0,1781538,2,'Virtual core pointer'
-7,6,271,560,0,0,0,1781548,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,271,570,0,0,0,1781548
-6,6,271,570,0,0,0,1781548,2,'Virtual core pointer'
-7,6,271,570,0,0,0,1781558,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,271,581,0,0,0,1781558
-6,6,271,581,0,0,0,1781558,2,'Virtual core pointer'
-7,6,271,581,0,0,0,1781567,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,271,592,0,0,0,1781567
-6,6,271,592,0,0,0,1781567,2,'Virtual core pointer'
-7,6,271,592,0,0,0,1781578,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,271,604,0,0,0,1781578
-6,6,271,604,0,0,0,1781578,2,'Virtual core pointer'
-7,6,271,604,0,0,0,1781588,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,270,614,0,0,0,1781588
-6,6,270,614,0,0,0,1781588,2,'Virtual core pointer'
-7,6,270,614,0,0,0,1781597,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,270,625,0,0,0,1781597
-6,6,270,625,0,0,0,1781597,2,'Virtual core pointer'
-7,6,270,625,0,0,0,1781607,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,270,635,0,0,0,1781607
-6,6,270,635,0,0,0,1781607,2,'Virtual core pointer'
-7,6,270,635,0,0,0,1781616,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,270,644,0,0,0,1781616
-6,6,270,644,0,0,0,1781616,2,'Virtual core pointer'
-7,6,270,644,0,0,0,1781626,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,270,649,0,0,0,1781626
-6,6,270,649,0,0,0,1781626,2,'Virtual core pointer'
-7,6,270,649,0,0,0,1781900,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,270,651,0,0,0,1781900
-6,6,270,651,0,0,0,1781900,2,'Virtual core pointer'
-7,6,270,651,0,0,0,1781910,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,270,655,0,0,0,1781910
-6,6,270,655,0,0,0,1781910,2,'Virtual core pointer'
-7,6,270,655,0,0,0,1781919,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,270,660,0,0,0,1781919
-6,6,270,660,0,0,0,1781919,2,'Virtual core pointer'
-7,6,270,660,0,0,0,1781929,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,270,666,0,0,0,1781929
-6,6,270,666,0,0,0,1781929,2,'Virtual core pointer'
-7,6,270,666,0,0,0,1781940,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,271,670,0,0,0,1781940
-6,6,271,670,0,0,0,1781940,2,'Virtual core pointer'
-7,6,271,670,0,0,0,1781949,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,272,674,0,0,0,1781949
-6,6,272,674,0,0,0,1781949,2,'Virtual core pointer'
-7,6,272,674,0,0,0,1781958,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,272,676,0,0,0,1781958
-6,6,272,676,0,0,0,1781958,2,'Virtual core pointer'
-7,6,272,676,0,0,0,1781968,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,272,677,0,0,0,1781968
-6,6,272,677,0,0,0,1781968,2,'Virtual core pointer'
-7,6,272,677,0,0,0,1781978,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,272,677,0,0,0,1781978
-6,6,272,677,0,0,0,1781978,2,'Virtual core pointer'
-7,6,272,677,0,0,0,1781988,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,272,678,0,0,0,1781988
-6,6,272,678,0,0,0,1781988,2,'Virtual core pointer'
-7,6,272,678,0,0,0,1782007,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,273,678,0,0,0,1782007
-6,6,273,678,0,0,0,1782007,2,'Virtual core pointer'
-7,6,273,678,0,0,0,1782017,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,274,679,0,0,0,1782017
-6,6,274,679,0,0,0,1782017,2,'Virtual core pointer'
-7,6,274,679,0,0,0,1782027,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,275,681,0,0,0,1782027
-6,6,275,681,0,0,0,1782027,2,'Virtual core pointer'
-7,6,275,681,0,0,0,1782037,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,682,0,0,0,1782037
-6,6,276,682,0,0,0,1782037,2,'Virtual core pointer'
-7,6,276,682,0,0,0,1782046,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,684,0,0,0,1782046
-6,6,276,684,0,0,0,1782046,2,'Virtual core pointer'
-7,6,276,684,0,0,0,1782056,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,686,0,0,0,1782056
-6,6,276,686,0,0,0,1782056,2,'Virtual core pointer'
-7,6,276,686,0,0,0,1782066,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,276,688,0,0,0,1782066
-6,6,276,688,0,0,0,1782066,2,'Virtual core pointer'
-7,6,276,688,0,0,0,1782076,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,277,690,0,0,0,1782076
-6,6,277,690,0,0,0,1782076,2,'Virtual core pointer'
-7,6,277,690,0,0,0,1782086,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,277,692,0,0,0,1782087
-6,6,277,692,0,0,0,1782087,2,'Virtual core pointer'
-7,6,277,692,0,0,0,1782095,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,277,693,0,0,0,1782096
-6,6,277,693,0,0,0,1782096,2,'Virtual core pointer'
-7,6,277,693,0,0,0,1782105,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,277,694,0,0,0,1782105
-6,6,277,694,0,0,0,1782105,2,'Virtual core pointer'
-7,6,277,694,0,0,0,1782115,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,277,695,0,0,0,1782115
-6,6,277,695,0,0,0,1782115,2,'Virtual core pointer'
-7,6,277,695,0,0,0,1782125,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,277,695,0,0,0,1782125
-6,6,277,695,0,0,0,1782125,2,'Virtual core pointer'
-7,6,277,695,0,0,0,1782134,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,277,695,0,0,0,1782135
-6,6,277,695,0,0,0,1782135,2,'Virtual core pointer'
-7,6,277,695,0,0,0,1782144,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,277,696,0,0,0,1782144
-6,6,277,696,0,0,0,1782144,2,'Virtual core pointer'
-7,6,277,696,0,0,0,1782154,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,277,698,0,0,0,1782154
-6,6,277,698,0,0,0,1782154,2,'Virtual core pointer'
-7,6,277,698,0,0,0,1782164,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,278,699,0,0,0,1782164
-6,6,278,699,0,0,0,1782164,2,'Virtual core pointer'
-7,6,278,699,0,0,0,1782175,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,278,701,0,0,0,1782175
-6,6,278,701,0,0,0,1782175,2,'Virtual core pointer'
-7,6,278,701,0,0,0,1782183,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,278,702,0,0,0,1782183
-6,6,278,702,0,0,0,1782183,2,'Virtual core pointer'
-7,6,278,702,0,0,0,1782193,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,278,704,0,0,0,1782193
-6,6,278,704,0,0,0,1782193,2,'Virtual core pointer'
-7,6,278,704,0,0,0,1782203,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,279,706,0,0,0,1782203
-6,6,279,706,0,0,0,1782203,2,'Virtual core pointer'
-7,6,279,706,0,0,0,1782213,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,279,707,0,0,0,1782213
-6,6,279,707,0,0,0,1782213,2,'Virtual core pointer'
-7,6,279,707,0,0,0,1782222,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,279,709,0,0,0,1782222
-6,6,279,709,0,0,0,1782222,2,'Virtual core pointer'
-7,6,279,709,0,0,0,1782233,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,279,710,0,0,0,1782233
-6,6,279,710,0,0,0,1782233,2,'Virtual core pointer'
-7,6,279,710,0,0,0,1782242,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,279,710,0,0,0,1782242
-6,6,279,710,0,0,0,1782242,2,'Virtual core pointer'
-7,6,279,710,0,0,0,1782252,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,279,711,0,0,0,1782252
-6,6,279,711,0,0,0,1782252,2,'Virtual core pointer'
-7,6,279,711,0,0,0,1782262,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,279,711,0,0,0,1782262
-6,6,279,711,0,0,0,1782262,2,'Virtual core pointer'
-7,6,279,711,0,0,0,1782379,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,279,711,0,0,0,1782379
-6,6,279,711,0,0,0,1782379,2,'Virtual core pointer'
-7,6,279,711,0,0,0,1782399,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,279,712,0,0,0,1782399
-6,6,279,712,0,0,0,1782399,2,'Virtual core pointer'
-7,6,279,712,0,0,0,1782535,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,279,712,0,0,0,1782535
-6,6,279,712,0,0,0,1782535,2,'Virtual core pointer'
-7,6,279,712,0,0,0,1782574,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,280,712,0,0,0,1782575
-6,6,280,712,0,0,0,1782575,2,'Virtual core pointer'
-7,6,280,712,0,0,0,1782584,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,281,712,0,0,0,1782584
-6,6,281,712,0,0,0,1782584,2,'Virtual core pointer'
-7,6,281,712,0,0,0,1782604,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,281,711,0,0,0,1782604
-6,6,281,711,0,0,0,1782604,2,'Virtual core pointer'
-7,4,0,0,3,0,0,1783368,12,AlpsPS/2 ALPS DualPoint TouchPad
-0,4,0,0,3,0,0,1783368
-6,4,0,0,3,0,0,1783368,2,Virtual core pointer
-7,5,0,0,3,0,0,1783418,12,AlpsPS/2 ALPS DualPoint TouchPad
-0,5,0,0,3,0,0,1783418
-6,5,0,0,3,0,0,1783418,2,Virtual core pointer
-7,6,281,711,0,0,0,1783943,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,281,712,0,0,0,1783943
-6,6,281,712,0,0,0,1783943,2,'Virtual core pointer'
-7,6,281,712,0,0,0,1783953,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,281,713,0,0,0,1783953
-6,6,281,713,0,0,0,1783953,2,'Virtual core pointer'
-7,6,281,713,0,0,0,1783963,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,281,714,0,0,0,1783963
-6,6,281,714,0,0,0,1783963,2,'Virtual core pointer'
-7,6,281,714,0,0,0,1783972,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,281,714,0,0,0,1783972
-6,6,281,714,0,0,0,1783972,2,'Virtual core pointer'
-7,6,281,714,0,0,0,1783982,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,281,715,0,0,0,1783982
-6,6,281,715,0,0,0,1783982,2,'Virtual core pointer'
-7,6,281,715,0,0,0,1783992,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,282,716,0,0,0,1783992
-6,6,282,716,0,0,0,1783992,2,'Virtual core pointer'
-7,6,282,716,0,0,0,1784001,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,284,717,0,0,0,1784001
-6,6,284,717,0,0,0,1784001,2,'Virtual core pointer'
-7,6,284,717,0,0,0,1784011,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,285,718,0,0,0,1784011
-6,6,285,718,0,0,0,1784011,2,'Virtual core pointer'
-7,6,285,718,0,0,0,1784022,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,286,720,0,0,0,1784022
-6,6,286,720,0,0,0,1784022,2,'Virtual core pointer'
-7,6,286,720,0,0,0,1784031,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,286,721,0,0,0,1784031
-6,6,286,721,0,0,0,1784031,2,'Virtual core pointer'
-7,6,286,721,0,0,0,1784041,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,287,723,0,0,0,1784041
-6,6,287,723,0,0,0,1784041,2,'Virtual core pointer'
-7,6,287,723,0,0,0,1784051,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,289,724,0,0,0,1784051
-6,6,289,724,0,0,0,1784051,2,'Virtual core pointer'
-7,6,289,724,0,0,0,1784060,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,289,726,0,0,0,1784060
-6,6,289,726,0,0,0,1784060,2,'Virtual core pointer'
-7,6,289,726,0,0,0,1784070,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,290,728,0,0,0,1784070
-6,6,290,728,0,0,0,1784070,2,'Virtual core pointer'
-7,6,290,728,0,0,0,1784080,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,292,730,0,0,0,1784080
-6,6,292,730,0,0,0,1784080,2,'Virtual core pointer'
-7,6,292,730,0,0,0,1784090,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,292,731,0,0,0,1784090
-6,6,292,731,0,0,0,1784090,2,'Virtual core pointer'
-7,6,292,731,0,0,0,1784100,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,294,732,0,0,0,1784100
-6,6,294,732,0,0,0,1784100,2,'Virtual core pointer'
-7,6,294,732,0,0,0,1784109,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,295,734,0,0,0,1784109
-6,6,295,734,0,0,0,1784109,2,'Virtual core pointer'
-7,6,295,734,0,0,0,1784119,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,296,734,0,0,0,1784119
-6,6,296,734,0,0,0,1784119,2,'Virtual core pointer'
-7,6,296,734,0,0,0,1784129,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,296,735,0,0,0,1784129
-6,6,296,735,0,0,0,1784129,2,'Virtual core pointer'
-7,6,296,735,0,0,0,1784138,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,297,736,0,0,0,1784138
-6,6,297,736,0,0,0,1784138,2,'Virtual core pointer'
-7,6,297,736,0,0,0,1784148,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,297,736,0,0,0,1784148
-6,6,297,736,0,0,0,1784148,2,'Virtual core pointer'
-7,6,297,736,0,0,0,1784158,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,298,737,0,0,0,1784158
-6,6,298,737,0,0,0,1784158,2,'Virtual core pointer'
-7,6,298,737,0,0,0,1784168,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,299,738,0,0,0,1784168
-6,6,299,738,0,0,0,1784168,2,'Virtual core pointer'
-7,6,299,738,0,0,0,1784178,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,299,738,0,0,0,1784178
-6,6,299,738,0,0,0,1784178,2,'Virtual core pointer'
-7,6,299,738,0,0,0,1784188,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,300,739,0,0,0,1784188
-6,6,300,739,0,0,0,1784188,2,'Virtual core pointer'
-7,6,300,739,0,0,0,1784197,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,300,739,0,0,0,1784197
-6,6,300,739,0,0,0,1784197,2,'Virtual core pointer'
-7,6,300,739,0,0,0,1784207,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,301,739,0,0,0,1784207
-6,6,301,739,0,0,0,1784207,2,'Virtual core pointer'
-7,6,301,739,0,0,0,1784216,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,301,739,0,0,0,1784216
-6,6,301,739,0,0,0,1784216,2,'Virtual core pointer'
-7,6,301,739,0,0,0,1784226,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,302,739,0,0,0,1784226
-6,6,302,739,0,0,0,1784226,2,'Virtual core pointer'
-7,6,302,739,0,0,0,1784236,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,302,740,0,0,0,1784236
-6,6,302,740,0,0,0,1784236,2,'Virtual core pointer'
-7,6,302,740,0,0,0,1784246,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,303,740,0,0,0,1784246
-6,6,303,740,0,0,0,1784246,2,'Virtual core pointer'
-7,6,303,740,0,0,0,1784257,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,304,740,0,0,0,1784257
-6,6,304,740,0,0,0,1784257,2,'Virtual core pointer'
-7,6,304,740,0,0,0,1784266,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,304,741,0,0,0,1784266
-6,6,304,741,0,0,0,1784266,2,'Virtual core pointer'
-7,6,304,741,0,0,0,1784275,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,305,742,0,0,0,1784275
-6,6,305,742,0,0,0,1784275,2,'Virtual core pointer'
-7,6,305,742,0,0,0,1784286,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,305,742,0,0,0,1784286
-6,6,305,742,0,0,0,1784286,2,'Virtual core pointer'
-7,6,305,742,0,0,0,1784295,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,306,742,0,0,0,1784295
-6,6,306,742,0,0,0,1784295,2,'Virtual core pointer'
-7,6,306,742,0,0,0,1784304,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,306,742,0,0,0,1784304
-6,6,306,742,0,0,0,1784304,2,'Virtual core pointer'
-7,6,306,742,0,0,0,1784315,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,306,743,0,0,0,1784315
-6,6,306,743,0,0,0,1784315,2,'Virtual core pointer'
-7,6,306,743,0,0,0,1784324,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,307,743,0,0,0,1784324
-6,6,307,743,0,0,0,1784324,2,'Virtual core pointer'
-7,6,307,743,0,0,0,1784501,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,307,743,0,0,0,1784501
-6,6,307,743,0,0,0,1784501,2,'Virtual core pointer'
-7,4,0,0,1,0,0,1784526,12,AlpsPS/2 ALPS DualPoint TouchPad
-0,4,0,0,1,0,0,1784526
-6,4,0,0,1,0,0,1784526,2,Virtual core pointer
-7,6,307,743,0,0,0,1784569,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,307,743,0,0,0,1784569
-6,6,307,743,0,0,0,1784569,2,'Virtual core pointer'
-7,5,0,0,1,0,0,1784569,12,AlpsPS/2 ALPS DualPoint TouchPad
-0,5,0,0,1,0,0,1784569
-6,5,0,0,1,0,0,1784569,2,Virtual core pointer
-0,21,0,0,0,0,0,1784609
-NEW-WINDOW:461,197:52429062,52429062,12585326,0,0,0:0x0+879+458:0,0:Export of graph "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false           "
-0,21,0,0,0,0,0,1784609
-0,21,0,0,0,0,0,1784609
-0,21,0,0,0,0,0,1784609
-7,6,307,743,0,0,0,1784745,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,308,743,0,0,0,1784745
-6,6,308,743,0,0,0,1784745,2,'Virtual core pointer'
-7,6,308,743,0,0,0,1784757,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,309,743,0,0,0,1784757
-6,6,309,743,0,0,0,1784757,2,'Virtual core pointer'
-7,6,309,743,0,0,0,1784764,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,310,743,0,0,0,1784764
-6,6,310,743,0,0,0,1784764,2,'Virtual core pointer'
-7,6,310,743,0,0,0,1784774,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,311,743,0,0,0,1784774
-6,6,311,743,0,0,0,1784774,2,'Virtual core pointer'
-7,6,311,743,0,0,0,1784784,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,312,740,0,0,0,1784784
-6,6,312,740,0,0,0,1784784,2,'Virtual core pointer'
-7,2,0,0,0,28,0,1786106,10,AT Translated Set 2 keyboard
-0,2,0,0,0,28,0,1786107
-6,2,0,0,0,28,0,1786107,3,Virtual core keyboard
-7,3,0,0,0,28,0,1786177,10,AT Translated Set 2 keyboard
-0,3,0,0,0,28,0,1786177
-6,3,0,0,0,28,0,1786177,3,Virtual core keyboard
-7,2,0,0,0,26,0,1786347,10,AT Translated Set 2 keyboard
-0,2,0,0,0,26,0,1786348
-6,2,0,0,0,26,0,1786348,3,Virtual core keyboard
-7,3,0,0,0,26,0,1786408,10,AT Translated Set 2 keyboard
-0,3,0,0,0,26,0,1786408
-6,3,0,0,0,26,0,1786408,3,Virtual core keyboard
-7,2,0,0,0,39,0,1786558,10,AT Translated Set 2 keyboard
-0,2,0,0,0,39,0,1786558
-6,2,0,0,0,39,0,1786558,3,Virtual core keyboard
-7,3,0,0,0,39,0,1786618,10,AT Translated Set 2 keyboard
-0,3,0,0,0,39,0,1786618
-6,3,0,0,0,39,0,1786618,3,Virtual core keyboard
-7,2,0,0,0,28,0,1786779,10,AT Translated Set 2 keyboard
-0,2,0,0,0,28,0,1786779
-6,2,0,0,0,28,0,1786779,3,Virtual core keyboard
-7,3,0,0,0,28,0,1786839,10,AT Translated Set 2 keyboard
-0,3,0,0,0,28,0,1786839
-6,3,0,0,0,28,0,1786839,3,Virtual core keyboard
-7,2,0,0,0,17,0,1786950,10,AT Translated Set 2 keyboard
-0,2,0,0,0,17,0,1786950
-6,2,0,0,0,17,0,1786950,3,Virtual core keyboard
-7,3,0,0,0,17,0,1787030,10,AT Translated Set 2 keyboard
-0,3,0,0,0,17,0,1787030
-6,3,0,0,0,17,0,1787030,3,Virtual core keyboard
-7,2,0,0,0,42,0,1787321,10,AT Translated Set 2 keyboard
-0,2,0,0,0,42,0,1787321
-6,2,0,0,0,42,0,1787321,3,Virtual core keyboard
-7,2,0,0,0,30,0,1787381,10,AT Translated Set 2 keyboard
-0,2,0,0,0,30,0,1787381
-6,2,0,0,0,30,0,1787381,3,Virtual core keyboard
-7,3,0,0,0,42,0,1787391,10,AT Translated Set 2 keyboard
-0,3,0,0,0,42,0,1787391
-6,3,0,0,0,42,0,1787391,3,Virtual core keyboard
-7,2,0,0,0,31,0,1787471,10,AT Translated Set 2 keyboard
-0,2,0,0,0,31,0,1787472
-6,2,0,0,0,31,0,1787472,3,Virtual core keyboard
-7,3,0,0,0,30,0,1787532,10,AT Translated Set 2 keyboard
-0,3,0,0,0,30,0,1787532
-6,3,0,0,0,30,0,1787532,3,Virtual core keyboard
-7,3,0,0,0,31,0,1787592,10,AT Translated Set 2 keyboard
-0,3,0,0,0,31,0,1787592
-6,3,0,0,0,31,0,1787592,3,Virtual core keyboard
-7,2,0,0,0,62,0,1788104,10,AT Translated Set 2 keyboard
-0,2,0,0,0,62,0,1788104
-6,2,0,0,0,62,0,1788104,3,Virtual core keyboard
-7,2,0,0,0,59,0,1788385,10,AT Translated Set 2 keyboard
-0,2,0,0,0,59,0,1788385
-6,2,0,0,0,59,0,1788385,3,Virtual core keyboard
-7,3,0,0,0,59,0,1788455,10,AT Translated Set 2 keyboard
-0,3,0,0,0,59,0,1788455
-6,3,0,0,0,59,0,1788455,3,Virtual core keyboard
-7,3,0,0,0,62,0,1788546,10,AT Translated Set 2 keyboard
-0,3,0,0,0,62,0,1788546
-6,3,0,0,0,62,0,1788546,3,Virtual core keyboard
-7,2,0,0,0,28,0,1788770,10,AT Translated Set 2 keyboard
-0,2,0,0,0,28,0,1788770
-6,2,0,0,0,28,0,1788770,3,Virtual core keyboard
-7,3,0,0,0,28,0,1788827,10,AT Translated Set 2 keyboard
-0,3,0,0,0,28,0,1788827
-6,3,0,0,0,28,0,1788827,3,Virtual core keyboard
-7,2,0,0,0,46,0,1788887,10,AT Translated Set 2 keyboard
-0,2,0,0,0,46,0,1788887
-6,2,0,0,0,46,0,1788887,3,Virtual core keyboard
-7,3,0,0,0,46,0,1789118,10,AT Translated Set 2 keyboard
-0,3,0,0,0,46,0,1789118
-6,3,0,0,0,46,0,1789118,3,Virtual core keyboard
-7,2,0,0,0,33,0,1789198,10,AT Translated Set 2 keyboard
-0,2,0,0,0,33,0,1789198
-6,2,0,0,0,33,0,1789198,3,Virtual core keyboard
-7,3,0,0,0,33,0,1789359,10,AT Translated Set 2 keyboard
-0,3,0,0,0,33,0,1789359
-6,3,0,0,0,33,0,1789359,3,Virtual core keyboard
-7,2,0,0,0,36,0,1790222,10,AT Translated Set 2 keyboard
-0,2,0,0,0,36,0,1790222
-6,2,0,0,0,36,0,1790222,3,Virtual core keyboard
-0,21,0,0,0,0,0,1790278
-NEW-WINDOW:650,337:52429070,52429070,12585350,0,0,0:0x0+500+37:0,0:TLP Export
-0,21,0,0,0,0,0,1790278
-0,21,0,0,0,0,0,1790278
-0,21,0,0,0,0,0,1790278
-7,3,0,0,0,36,0,1790313,10,AT Translated Set 2 keyboard
-0,3,0,0,0,36,0,1790313
-6,3,0,0,0,36,0,1790313,3,Virtual core keyboard
-0,21,0,0,0,0,0,1790359
-NEW-WINDOW:460,169:52429062,52429062,746,0,0,0:460x169+879+458:0,0:Export of graph "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false           "
-0,21,0,0,0,0,0,1790359
-0,21,0,0,0,0,0,1790359
-0,21,0,0,0,0,0,1790359
-0,21,0,0,0,0,0,1790359
+7,6,300,707,0,0,0,34108287,9,'Logitech USB Optical Mouse'
+7,6,300,707,0,0,0,34108295,9,'Logitech USB Optical Mouse'
+7,6,300,704,0,0,0,34108303,9,'Logitech USB Optical Mouse'
+7,6,299,700,0,0,0,34108311,9,'Logitech USB Optical Mouse'
+7,6,298,697,0,0,0,34108319,9,'Logitech USB Optical Mouse'
+7,6,298,691,0,0,0,34108327,9,'Logitech USB Optical Mouse'
+7,6,296,683,0,0,0,34108335,9,'Logitech USB Optical Mouse'
+7,6,295,675,0,0,0,34108343,9,'Logitech USB Optical Mouse'
+7,6,295,662,0,0,0,34108351,9,'Logitech USB Optical Mouse'
+7,6,292,653,0,0,0,34108359,9,'Logitech USB Optical Mouse'
+7,6,291,643,0,0,0,34108367,9,'Logitech USB Optical Mouse'
+7,6,287,632,0,0,0,34108375,9,'Logitech USB Optical Mouse'
+7,6,284,623,0,0,0,34108383,9,'Logitech USB Optical Mouse'
+7,6,283,616,0,0,0,34108391,9,'Logitech USB Optical Mouse'
+7,6,282,611,0,0,0,34108399,9,'Logitech USB Optical Mouse'
+7,6,282,608,0,0,0,34108407,9,'Logitech USB Optical Mouse'
+7,6,282,603,0,0,0,34108415,9,'Logitech USB Optical Mouse'
+7,6,281,598,0,0,0,34108423,9,'Logitech USB Optical Mouse'
+7,6,281,594,0,0,0,34108431,9,'Logitech USB Optical Mouse'
+7,6,278,587,0,0,0,34108439,9,'Logitech USB Optical Mouse'
+7,6,278,583,0,0,0,34108447,9,'Logitech USB Optical Mouse'
+7,6,278,577,0,0,0,34108455,9,'Logitech USB Optical Mouse'
+7,6,278,571,0,0,0,34108463,9,'Logitech USB Optical Mouse'
+7,6,277,567,0,0,0,34108471,9,'Logitech USB Optical Mouse'
+7,6,277,562,0,0,0,34108479,9,'Logitech USB Optical Mouse'
+7,6,277,555,0,0,0,34108487,9,'Logitech USB Optical Mouse'
+7,6,277,549,0,0,0,34108495,9,'Logitech USB Optical Mouse'
+7,6,277,539,0,0,0,34108503,9,'Logitech USB Optical Mouse'
+7,6,276,531,0,0,0,34108511,9,'Logitech USB Optical Mouse'
+7,6,276,522,0,0,0,34108519,9,'Logitech USB Optical Mouse'
+7,6,274,514,0,0,0,34108527,9,'Logitech USB Optical Mouse'
+7,6,271,502,0,0,0,34108535,9,'Logitech USB Optical Mouse'
+7,6,270,492,0,0,0,34108543,9,'Logitech USB Optical Mouse'
+7,6,268,484,0,0,0,34108551,9,'Logitech USB Optical Mouse'
+7,6,268,474,0,0,0,34108559,9,'Logitech USB Optical Mouse'
+7,6,267,463,0,0,0,34108567,9,'Logitech USB Optical Mouse'
+7,6,264,458,0,0,0,34108575,9,'Logitech USB Optical Mouse'
+7,6,263,448,0,0,0,34108583,9,'Logitech USB Optical Mouse'
+7,6,261,441,0,0,0,34108591,9,'Logitech USB Optical Mouse'
+7,6,260,433,0,0,0,34108599,9,'Logitech USB Optical Mouse'
+7,6,260,425,0,0,0,34108607,9,'Logitech USB Optical Mouse'
+7,6,258,421,0,0,0,34108615,9,'Logitech USB Optical Mouse'
+7,6,258,415,0,0,0,34108623,9,'Logitech USB Optical Mouse'
+7,6,256,409,0,0,0,34108631,9,'Logitech USB Optical Mouse'
+7,6,256,399,0,0,0,34108639,9,'Logitech USB Optical Mouse'
+7,6,253,387,0,0,0,34108647,9,'Logitech USB Optical Mouse'
+7,6,253,379,0,0,0,34108655,9,'Logitech USB Optical Mouse'
+7,6,250,369,0,0,0,34108663,9,'Logitech USB Optical Mouse'
+7,6,249,360,0,0,0,34108671,9,'Logitech USB Optical Mouse'
+7,6,249,352,0,0,0,34108679,9,'Logitech USB Optical Mouse'
+7,6,247,344,0,0,0,34108687,9,'Logitech USB Optical Mouse'
+7,6,246,334,0,0,0,34108695,9,'Logitech USB Optical Mouse'
+7,6,243,323,0,0,0,34108703,9,'Logitech USB Optical Mouse'
+7,6,243,316,0,0,0,34108711,9,'Logitech USB Optical Mouse'
+7,6,242,308,0,0,0,34108719,9,'Logitech USB Optical Mouse'
+7,6,242,298,0,0,0,34108727,9,'Logitech USB Optical Mouse'
+7,6,240,289,0,0,0,34108735,9,'Logitech USB Optical Mouse'
+7,6,239,282,0,0,0,34108743,9,'Logitech USB Optical Mouse'
+7,6,236,274,0,0,0,34108751,9,'Logitech USB Optical Mouse'
+7,6,236,269,0,0,0,34108759,9,'Logitech USB Optical Mouse'
+7,6,235,263,0,0,0,34108767,9,'Logitech USB Optical Mouse'
+7,6,235,258,0,0,0,34108775,9,'Logitech USB Optical Mouse'
+7,6,234,252,0,0,0,34108783,9,'Logitech USB Optical Mouse'
+7,6,234,249,0,0,0,34108791,9,'Logitech USB Optical Mouse'
+7,6,233,243,0,0,0,34108799,9,'Logitech USB Optical Mouse'
+7,6,233,239,0,0,0,34108807,9,'Logitech USB Optical Mouse'
+7,6,231,233,0,0,0,34108815,9,'Logitech USB Optical Mouse'
+7,6,230,228,0,0,0,34108823,9,'Logitech USB Optical Mouse'
+7,6,230,226,0,0,0,34108831,9,'Logitech USB Optical Mouse'
+7,6,230,223,0,0,0,34108839,9,'Logitech USB Optical Mouse'
+7,6,230,222,0,0,0,34108847,9,'Logitech USB Optical Mouse'
+7,6,230,221,0,0,0,34108855,9,'Logitech USB Optical Mouse'
+7,6,230,218,0,0,0,34108863,9,'Logitech USB Optical Mouse'
+7,6,230,217,0,0,0,34108871,9,'Logitech USB Optical Mouse'
+7,6,230,216,0,0,0,34108879,9,'Logitech USB Optical Mouse'
+7,6,230,213,0,0,0,34108887,9,'Logitech USB Optical Mouse'
+7,6,230,211,0,0,0,34108895,9,'Logitech USB Optical Mouse'
+7,6,230,207,0,0,0,34108903,9,'Logitech USB Optical Mouse'
+7,6,230,204,0,0,0,34108911,9,'Logitech USB Optical Mouse'
+7,6,230,201,0,0,0,34108919,9,'Logitech USB Optical Mouse'
+7,6,230,197,0,0,0,34108927,9,'Logitech USB Optical Mouse'
+7,6,230,193,0,0,0,34108935,9,'Logitech USB Optical Mouse'
+7,6,230,191,0,0,0,34108943,9,'Logitech USB Optical Mouse'
+7,6,230,188,0,0,0,34108951,9,'Logitech USB Optical Mouse'
+7,6,230,187,0,0,0,34108959,9,'Logitech USB Optical Mouse'
+7,6,230,185,0,0,0,34108975,9,'Logitech USB Optical Mouse'
+7,6,230,182,0,0,0,34108991,9,'Logitech USB Optical Mouse'
+7,6,230,180,0,0,0,34108999,9,'Logitech USB Optical Mouse'
+7,6,230,178,0,0,0,34109007,9,'Logitech USB Optical Mouse'
+7,6,230,177,0,0,0,34109015,9,'Logitech USB Optical Mouse'
+7,6,230,176,0,0,0,34109023,9,'Logitech USB Optical Mouse'
+7,6,230,172,0,0,0,34109031,9,'Logitech USB Optical Mouse'
+7,6,230,170,0,0,0,34109039,9,'Logitech USB Optical Mouse'
+7,6,230,167,0,0,0,34109047,9,'Logitech USB Optical Mouse'
+7,6,230,165,0,0,0,34109055,9,'Logitech USB Optical Mouse'
+7,6,230,162,0,0,0,34109063,9,'Logitech USB Optical Mouse'
+7,6,230,160,0,0,0,34109071,9,'Logitech USB Optical Mouse'
+7,6,230,156,0,0,0,34109079,9,'Logitech USB Optical Mouse'
+7,6,230,155,0,0,0,34109095,9,'Logitech USB Optical Mouse'
+7,6,230,153,0,0,0,34109127,9,'Logitech USB Optical Mouse'
+7,6,230,152,0,0,0,34109143,9,'Logitech USB Optical Mouse'
+7,6,230,151,0,0,0,34109151,9,'Logitech USB Optical Mouse'
+7,6,230,149,0,0,0,34109159,9,'Logitech USB Optical Mouse'
+7,6,230,148,0,0,0,34109167,9,'Logitech USB Optical Mouse'
+7,6,230,147,0,0,0,34109183,9,'Logitech USB Optical Mouse'
+7,6,230,144,0,0,0,34109199,9,'Logitech USB Optical Mouse'
+7,6,230,142,0,0,0,34109207,9,'Logitech USB Optical Mouse'
+7,6,230,141,0,0,0,34109223,9,'Logitech USB Optical Mouse'
+7,6,230,139,0,0,0,34109247,9,'Logitech USB Optical Mouse'
+7,6,230,138,0,0,0,34109311,9,'Logitech USB Optical Mouse'
+7,6,230,137,0,0,0,34109327,9,'Logitech USB Optical Mouse'
+7,6,230,136,0,0,0,34109359,9,'Logitech USB Optical Mouse'
+7,6,230,134,0,0,0,34109375,9,'Logitech USB Optical Mouse'
+7,6,230,134,0,0,0,34109383,9,'Logitech USB Optical Mouse'
+7,6,230,133,0,0,0,34109391,9,'Logitech USB Optical Mouse'
+7,6,230,132,0,0,0,34109399,9,'Logitech USB Optical Mouse'
+7,6,230,130,0,0,0,34109407,9,'Logitech USB Optical Mouse'
+7,6,230,129,0,0,0,34109415,9,'Logitech USB Optical Mouse'
+7,6,230,128,0,0,0,34109431,9,'Logitech USB Optical Mouse'
+7,4,0,0,1,0,0,34109575,9,Logitech USB Optical Mouse
+6,4,0,0,1,0,0,34109575,2,Virtual core pointer
+7,5,0,0,1,0,0,34109759,9,Logitech USB Optical Mouse
+6,5,0,0,1,0,0,34109759,2,Virtual core pointer
+7,2,0,0,0,45,0,34110903,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,45,0,34110903,3,Virtual core keyboard
+7,3,0,0,0,45,0,34110983,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,45,0,34110983,3,Virtual core keyboard
+7,2,0,0,0,27,0,34111375,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,27,0,34111375,3,Virtual core keyboard
+7,3,0,0,0,27,0,34111455,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,27,0,34111455,3,Virtual core keyboard
+7,2,0,0,0,30,0,34111719,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,30,0,34111719,3,Virtual core keyboard
+7,3,0,0,0,30,0,34111791,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,30,0,34111791,3,Virtual core keyboard
+7,2,0,0,0,39,0,34112063,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,39,0,34112063,3,Virtual core keyboard
+7,3,0,0,0,39,0,34112151,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,39,0,34112151,3,Virtual core keyboard
+7,6,230,127,0,0,0,34113047,9,'Logitech USB Optical Mouse'
+7,6,231,128,0,0,0,34113055,9,'Logitech USB Optical Mouse'
+7,6,233,132,0,0,0,34113063,9,'Logitech USB Optical Mouse'
+7,6,235,134,0,0,0,34113071,9,'Logitech USB Optical Mouse'
+7,6,236,138,0,0,0,34113079,9,'Logitech USB Optical Mouse'
+7,6,237,139,0,0,0,34113087,9,'Logitech USB Optical Mouse'
+7,6,238,142,0,0,0,34113095,9,'Logitech USB Optical Mouse'
+7,6,238,144,0,0,0,34113103,9,'Logitech USB Optical Mouse'
+7,6,240,147,0,0,0,34113111,9,'Logitech USB Optical Mouse'
+7,6,241,149,0,0,0,34113119,9,'Logitech USB Optical Mouse'
+7,6,242,152,0,0,0,34113127,9,'Logitech USB Optical Mouse'
+7,6,242,154,0,0,0,34113135,9,'Logitech USB Optical Mouse'
+7,6,243,156,0,0,0,34113151,9,'Logitech USB Optical Mouse'
+7,6,243,156,0,0,0,34113167,9,'Logitech USB Optical Mouse'
+7,6,244,158,0,0,0,34113175,9,'Logitech USB Optical Mouse'
+7,6,245,159,0,0,0,34113191,9,'Logitech USB Optical Mouse'
+7,6,246,160,0,0,0,34113199,9,'Logitech USB Optical Mouse'
+7,6,246,162,0,0,0,34113207,9,'Logitech USB Optical Mouse'
+7,6,247,163,0,0,0,34113215,9,'Logitech USB Optical Mouse'
+7,6,247,164,0,0,0,34113223,9,'Logitech USB Optical Mouse'
+7,6,248,165,0,0,0,34113231,9,'Logitech USB Optical Mouse'
+7,6,248,166,0,0,0,34113239,9,'Logitech USB Optical Mouse'
+7,6,248,167,0,0,0,34113247,9,'Logitech USB Optical Mouse'
+7,6,250,169,0,0,0,34113263,9,'Logitech USB Optical Mouse'
+7,6,251,171,0,0,0,34113279,9,'Logitech USB Optical Mouse'
+7,6,251,172,0,0,0,34113287,9,'Logitech USB Optical Mouse'
+7,6,252,173,0,0,0,34113295,9,'Logitech USB Optical Mouse'
+7,6,252,174,0,0,0,34113311,9,'Logitech USB Optical Mouse'
+7,6,253,177,0,0,0,34113327,9,'Logitech USB Optical Mouse'
+7,6,254,178,0,0,0,34113343,9,'Logitech USB Optical Mouse'
+7,6,255,179,0,0,0,34113359,9,'Logitech USB Optical Mouse'
+7,6,256,182,0,0,0,34113375,9,'Logitech USB Optical Mouse'
+7,6,257,183,0,0,0,34113391,9,'Logitech USB Optical Mouse'
+7,4,0,0,1,0,0,34113703,9,Logitech USB Optical Mouse
+6,4,0,0,1,0,0,34113703,2,Virtual core pointer
+7,5,0,0,1,0,0,34113839,9,Logitech USB Optical Mouse
+6,5,0,0,1,0,0,34113839,2,Virtual core pointer
+0,21,0,0,0,0,0,34113849
+NEW-WINDOW:640,444:58720322,58720322,37903144,0,0,0:26x60+500+78:0,0:Kruskal
+0,21,0,0,0,0,0,34113849
+0,21,0,0,0,0,0,34113849
+0,21,0,0,0,0,0,34113849
+0,21,0,0,0,0,0,34114090
+NEW-WINDOW:640,407:58720322,58720322,662,640,407,0:640x407+500+78:0,0:Kruskal
+0,21,0,0,0,0,0,34114090
+0,21,0,0,0,0,0,34114090
+0,21,0,0,0,0,0,34114090
+0,21,0,0,0,0,0,34114090
+7,6,257,184,0,0,0,34114359,9,'Logitech USB Optical Mouse'
+7,2,0,0,0,37,0,34115415,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,37,0,34115415,3,Virtual core keyboard
+7,2,0,0,0,50,0,34115743,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,50,0,34115743,3,Virtual core keyboard
+7,2,0,0,0,42,0,34116303,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,42,0,34116303,3,Virtual core keyboard
+7,3,0,0,0,42,0,34116367,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,42,0,34116367,3,Virtual core keyboard
+7,3,0,0,0,50,0,34116447,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,50,0,34116447,3,Virtual core keyboard
+7,3,0,0,0,37,0,34116463,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,37,0,34116463,3,Virtual core keyboard
+7,6,257,185,0,0,0,34117815,9,'Logitech USB Optical Mouse'
+7,6,257,185,0,0,0,34117823,9,'Logitech USB Optical Mouse'
+7,6,257,191,0,0,0,34117831,9,'Logitech USB Optical Mouse'
+7,6,257,198,0,0,0,34117839,9,'Logitech USB Optical Mouse'
+7,6,257,204,0,0,0,34117847,9,'Logitech USB Optical Mouse'
+7,6,257,210,0,0,0,34117855,9,'Logitech USB Optical Mouse'
+7,6,257,216,0,0,0,34117863,9,'Logitech USB Optical Mouse'
+7,6,257,221,0,0,0,34117871,9,'Logitech USB Optical Mouse'
+7,6,257,227,0,0,0,34117879,9,'Logitech USB Optical Mouse'
+7,6,257,233,0,0,0,34117887,9,'Logitech USB Optical Mouse'
+7,6,257,239,0,0,0,34117895,9,'Logitech USB Optical Mouse'
+7,6,257,247,0,0,0,34117903,9,'Logitech USB Optical Mouse'
+7,6,257,254,0,0,0,34117911,9,'Logitech USB Optical Mouse'
+7,6,257,260,0,0,0,34117919,9,'Logitech USB Optical Mouse'
+7,6,257,266,0,0,0,34117927,9,'Logitech USB Optical Mouse'
+7,6,257,273,0,0,0,34117935,9,'Logitech USB Optical Mouse'
+7,6,257,277,0,0,0,34117943,9,'Logitech USB Optical Mouse'
+7,6,257,285,0,0,0,34117951,9,'Logitech USB Optical Mouse'
+7,6,257,291,0,0,0,34117959,9,'Logitech USB Optical Mouse'
+7,6,261,298,0,0,0,34117967,9,'Logitech USB Optical Mouse'
+7,6,263,306,0,0,0,34117975,9,'Logitech USB Optical Mouse'
+7,6,264,313,0,0,0,34117983,9,'Logitech USB Optical Mouse'
+7,6,268,323,0,0,0,34117991,9,'Logitech USB Optical Mouse'
+7,6,270,330,0,0,0,34117999,9,'Logitech USB Optical Mouse'
+7,6,270,340,0,0,0,34118007,9,'Logitech USB Optical Mouse'
+7,6,271,349,0,0,0,34118015,9,'Logitech USB Optical Mouse'
+7,6,271,357,0,0,0,34118023,9,'Logitech USB Optical Mouse'
+7,6,271,367,0,0,0,34118031,9,'Logitech USB Optical Mouse'
+7,6,271,376,0,0,0,34118039,9,'Logitech USB Optical Mouse'
+7,6,271,382,0,0,0,34118047,9,'Logitech USB Optical Mouse'
+7,6,271,390,0,0,0,34118055,9,'Logitech USB Optical Mouse'
+7,6,271,395,0,0,0,34118063,9,'Logitech USB Optical Mouse'
+7,6,271,401,0,0,0,34118071,9,'Logitech USB Optical Mouse'
+7,6,270,406,0,0,0,34118079,9,'Logitech USB Optical Mouse'
+7,6,268,412,0,0,0,34118087,9,'Logitech USB Optical Mouse'
+7,6,268,415,0,0,0,34118095,9,'Logitech USB Optical Mouse'
+7,6,268,420,0,0,0,34118103,9,'Logitech USB Optical Mouse'
+7,6,268,424,0,0,0,34118111,9,'Logitech USB Optical Mouse'
+7,6,268,429,0,0,0,34118119,9,'Logitech USB Optical Mouse'
+7,6,268,431,0,0,0,34118127,9,'Logitech USB Optical Mouse'
+7,6,268,435,0,0,0,34118135,9,'Logitech USB Optical Mouse'
+7,6,269,441,0,0,0,34118143,9,'Logitech USB Optical Mouse'
+7,6,269,447,0,0,0,34118151,9,'Logitech USB Optical Mouse'
+7,6,269,452,0,0,0,34118159,9,'Logitech USB Optical Mouse'
+7,6,269,455,0,0,0,34118167,9,'Logitech USB Optical Mouse'
+7,6,269,459,0,0,0,34118175,9,'Logitech USB Optical Mouse'
+7,6,269,462,0,0,0,34118183,9,'Logitech USB Optical Mouse'
+7,6,269,464,0,0,0,34118191,9,'Logitech USB Optical Mouse'
+7,6,269,467,0,0,0,34118199,9,'Logitech USB Optical Mouse'
+7,6,269,469,0,0,0,34118207,9,'Logitech USB Optical Mouse'
+7,6,269,470,0,0,0,34118215,9,'Logitech USB Optical Mouse'
+7,6,269,472,0,0,0,34118223,9,'Logitech USB Optical Mouse'
+7,6,269,474,0,0,0,34118231,9,'Logitech USB Optical Mouse'
+7,6,269,475,0,0,0,34118239,9,'Logitech USB Optical Mouse'
+7,6,269,478,0,0,0,34118247,9,'Logitech USB Optical Mouse'
+7,6,269,480,0,0,0,34118255,9,'Logitech USB Optical Mouse'
+7,6,269,483,0,0,0,34118263,9,'Logitech USB Optical Mouse'
+7,6,269,485,0,0,0,34118271,9,'Logitech USB Optical Mouse'
+7,6,269,488,0,0,0,34118279,9,'Logitech USB Optical Mouse'
+7,6,269,489,0,0,0,34118287,9,'Logitech USB Optical Mouse'
+7,6,269,490,0,0,0,34118303,9,'Logitech USB Optical Mouse'
+7,6,269,492,0,0,0,34118319,9,'Logitech USB Optical Mouse'
+7,6,269,493,0,0,0,34118343,9,'Logitech USB Optical Mouse'
+7,6,269,494,0,0,0,34118359,9,'Logitech USB Optical Mouse'
+7,6,269,497,0,0,0,34118367,9,'Logitech USB Optical Mouse'
+7,6,270,499,0,0,0,34118375,9,'Logitech USB Optical Mouse'
+7,6,270,503,0,0,0,34118383,9,'Logitech USB Optical Mouse'
+7,6,270,505,0,0,0,34118391,9,'Logitech USB Optical Mouse'
+7,6,271,509,0,0,0,34118399,9,'Logitech USB Optical Mouse'
+7,6,271,512,0,0,0,34118407,9,'Logitech USB Optical Mouse'
+7,6,273,515,0,0,0,34118415,9,'Logitech USB Optical Mouse'
+7,6,273,518,0,0,0,34118423,9,'Logitech USB Optical Mouse'
+7,6,273,522,0,0,0,34118431,9,'Logitech USB Optical Mouse'
+7,6,274,525,0,0,0,34118439,9,'Logitech USB Optical Mouse'
+7,6,274,527,0,0,0,34118447,9,'Logitech USB Optical Mouse'
+7,6,274,530,0,0,0,34118455,9,'Logitech USB Optical Mouse'
+7,6,275,533,0,0,0,34118463,9,'Logitech USB Optical Mouse'
+7,6,275,535,0,0,0,34118471,9,'Logitech USB Optical Mouse'
+7,6,275,540,0,0,0,34118479,9,'Logitech USB Optical Mouse'
+7,6,276,543,0,0,0,34118487,9,'Logitech USB Optical Mouse'
+7,6,278,547,0,0,0,34118495,9,'Logitech USB Optical Mouse'
+7,6,279,549,0,0,0,34118503,9,'Logitech USB Optical Mouse'
+7,6,279,550,0,0,0,34118511,9,'Logitech USB Optical Mouse'
+7,6,279,551,0,0,0,34118527,9,'Logitech USB Optical Mouse'
+7,6,279,553,0,0,0,34118551,9,'Logitech USB Optical Mouse'
+7,6,280,554,0,0,0,34118559,9,'Logitech USB Optical Mouse'
+7,6,280,555,0,0,0,34118567,9,'Logitech USB Optical Mouse'
+7,6,280,558,0,0,0,34118575,9,'Logitech USB Optical Mouse'
+7,6,280,559,0,0,0,34118583,9,'Logitech USB Optical Mouse'
+7,6,280,561,0,0,0,34118591,9,'Logitech USB Optical Mouse'
+7,6,280,565,0,0,0,34118599,9,'Logitech USB Optical Mouse'
+7,6,280,568,0,0,0,34118607,9,'Logitech USB Optical Mouse'
+7,6,281,574,0,0,0,34118615,9,'Logitech USB Optical Mouse'
+7,6,283,579,0,0,0,34118623,9,'Logitech USB Optical Mouse'
+7,6,284,583,0,0,0,34118631,9,'Logitech USB Optical Mouse'
+7,6,284,588,0,0,0,34118639,9,'Logitech USB Optical Mouse'
+7,6,284,594,0,0,0,34118647,9,'Logitech USB Optical Mouse'
+7,6,284,598,0,0,0,34118655,9,'Logitech USB Optical Mouse'
+7,6,284,603,0,0,0,34118663,9,'Logitech USB Optical Mouse'
+7,6,284,606,0,0,0,34118671,9,'Logitech USB Optical Mouse'
+7,6,284,611,0,0,0,34118679,9,'Logitech USB Optical Mouse'
+7,6,284,616,0,0,0,34118687,9,'Logitech USB Optical Mouse'
+7,6,284,621,0,0,0,34118695,9,'Logitech USB Optical Mouse'
+7,6,284,623,0,0,0,34118703,9,'Logitech USB Optical Mouse'
+7,6,284,625,0,0,0,34118711,9,'Logitech USB Optical Mouse'
+7,6,284,626,0,0,0,34118719,9,'Logitech USB Optical Mouse'
+7,6,283,628,0,0,0,34118727,9,'Logitech USB Optical Mouse'
+7,6,283,630,0,0,0,34118735,9,'Logitech USB Optical Mouse'
+7,6,283,631,0,0,0,34118743,9,'Logitech USB Optical Mouse'
+7,6,283,632,0,0,0,34118751,9,'Logitech USB Optical Mouse'
+7,6,282,633,0,0,0,34118767,9,'Logitech USB Optical Mouse'
+7,6,281,636,0,0,0,34118775,9,'Logitech USB Optical Mouse'
+7,6,279,638,0,0,0,34118783,9,'Logitech USB Optical Mouse'
+7,6,279,640,0,0,0,34118791,9,'Logitech USB Optical Mouse'
+7,6,278,641,0,0,0,34118799,9,'Logitech USB Optical Mouse'
+7,6,277,642,0,0,0,34118807,9,'Logitech USB Optical Mouse'
+7,6,276,644,0,0,0,34118815,9,'Logitech USB Optical Mouse'
+7,6,275,646,0,0,0,34118823,9,'Logitech USB Optical Mouse'
+7,6,274,647,0,0,0,34118831,9,'Logitech USB Optical Mouse'
+7,6,273,648,0,0,0,34118839,9,'Logitech USB Optical Mouse'
+7,6,272,649,0,0,0,34118847,9,'Logitech USB Optical Mouse'
+7,6,271,651,0,0,0,34118855,9,'Logitech USB Optical Mouse'
+7,6,269,653,0,0,0,34118871,9,'Logitech USB Optical Mouse'
+7,6,268,655,0,0,0,34118879,9,'Logitech USB Optical Mouse'
+7,6,267,658,0,0,0,34118887,9,'Logitech USB Optical Mouse'
+7,6,266,661,0,0,0,34118895,9,'Logitech USB Optical Mouse'
+7,6,264,663,0,0,0,34118903,9,'Logitech USB Optical Mouse'
+7,6,262,667,0,0,0,34118911,9,'Logitech USB Optical Mouse'
+7,6,260,669,0,0,0,34118919,9,'Logitech USB Optical Mouse'
+7,6,259,672,0,0,0,34118927,9,'Logitech USB Optical Mouse'
+7,6,258,674,0,0,0,34118935,9,'Logitech USB Optical Mouse'
+7,6,257,677,0,0,0,34118943,9,'Logitech USB Optical Mouse'
+7,6,256,678,0,0,0,34118951,9,'Logitech USB Optical Mouse'
+7,6,255,680,0,0,0,34118959,9,'Logitech USB Optical Mouse'
+7,6,254,682,0,0,0,34118967,9,'Logitech USB Optical Mouse'
+7,6,252,684,0,0,0,34118983,9,'Logitech USB Optical Mouse'
+7,6,252,685,0,0,0,34118991,9,'Logitech USB Optical Mouse'
+7,6,251,686,0,0,0,34119007,9,'Logitech USB Optical Mouse'
+7,6,250,687,0,0,0,34119015,9,'Logitech USB Optical Mouse'
+7,6,249,688,0,0,0,34119023,9,'Logitech USB Optical Mouse'
+7,6,247,689,0,0,0,34119031,9,'Logitech USB Optical Mouse'
+7,6,245,691,0,0,0,34119039,9,'Logitech USB Optical Mouse'
+7,6,243,692,0,0,0,34119055,9,'Logitech USB Optical Mouse'
+7,6,242,693,0,0,0,34119063,9,'Logitech USB Optical Mouse'
+7,6,241,693,0,0,0,34119071,9,'Logitech USB Optical Mouse'
+7,6,240,693,0,0,0,34119079,9,'Logitech USB Optical Mouse'
+7,6,237,694,0,0,0,34119087,9,'Logitech USB Optical Mouse'
+7,6,236,694,0,0,0,34119095,9,'Logitech USB Optical Mouse'
+7,6,234,696,0,0,0,34119103,9,'Logitech USB Optical Mouse'
+7,6,233,697,0,0,0,34119111,9,'Logitech USB Optical Mouse'
+7,6,232,697,0,0,0,34119119,9,'Logitech USB Optical Mouse'
+7,6,231,698,0,0,0,34119127,9,'Logitech USB Optical Mouse'
+7,6,228,699,0,0,0,34119143,9,'Logitech USB Optical Mouse'
+7,6,225,701,0,0,0,34119151,9,'Logitech USB Optical Mouse'
+7,6,224,701,0,0,0,34119159,9,'Logitech USB Optical Mouse'
+7,6,223,701,0,0,0,34119167,9,'Logitech USB Optical Mouse'
+7,6,222,702,0,0,0,34119175,9,'Logitech USB Optical Mouse'
+7,6,221,702,0,0,0,34119183,9,'Logitech USB Optical Mouse'
+7,6,219,703,0,0,0,34119191,9,'Logitech USB Optical Mouse'
+7,6,217,704,0,0,0,34119199,9,'Logitech USB Optical Mouse'
+7,6,214,704,0,0,0,34119207,9,'Logitech USB Optical Mouse'
+7,6,211,706,0,0,0,34119215,9,'Logitech USB Optical Mouse'
+7,6,208,706,0,0,0,34119223,9,'Logitech USB Optical Mouse'
+7,6,204,707,0,0,0,34119231,9,'Logitech USB Optical Mouse'
+7,6,201,708,0,0,0,34119239,9,'Logitech USB Optical Mouse'
+7,6,197,709,0,0,0,34119247,9,'Logitech USB Optical Mouse'
+7,6,195,709,0,0,0,34119255,9,'Logitech USB Optical Mouse'
+7,6,192,709,0,0,0,34119263,9,'Logitech USB Optical Mouse'
+7,6,189,709,0,0,0,34119271,9,'Logitech USB Optical Mouse'
+7,6,186,711,0,0,0,34119503,9,'Logitech USB Optical Mouse'
+7,6,185,710,0,0,0,34119615,9,'Logitech USB Optical Mouse'
+7,6,185,710,0,0,0,34119631,9,'Logitech USB Optical Mouse'
+7,6,185,708,0,0,0,34119639,9,'Logitech USB Optical Mouse'
+7,6,185,707,0,0,0,34119647,9,'Logitech USB Optical Mouse'
+7,6,184,705,0,0,0,34119655,9,'Logitech USB Optical Mouse'
+7,4,0,0,1,0,0,34120647,9,Logitech USB Optical Mouse
+6,4,0,0,1,0,0,34120647,2,Virtual core pointer
+7,5,0,0,1,0,0,34120783,9,Logitech USB Optical Mouse
+6,5,0,0,1,0,0,34120783,2,Virtual core pointer
+7,6,183,704,0,0,0,34121127,9,'Logitech USB Optical Mouse'
+7,6,184,705,0,0,0,34121135,9,'Logitech USB Optical Mouse'
+7,6,184,706,0,0,0,34121151,9,'Logitech USB Optical Mouse'
+7,6,185,708,0,0,0,34121167,9,'Logitech USB Optical Mouse'
+7,6,186,709,0,0,0,34121175,9,'Logitech USB Optical Mouse'
+7,6,187,710,0,0,0,34121183,9,'Logitech USB Optical Mouse'
+7,6,188,712,0,0,0,34121191,9,'Logitech USB Optical Mouse'
+7,6,189,713,0,0,0,34121199,9,'Logitech USB Optical Mouse'
+7,6,190,714,0,0,0,34121215,9,'Logitech USB Optical Mouse'
+7,6,191,715,0,0,0,34121223,9,'Logitech USB Optical Mouse'
+7,6,192,715,0,0,0,34121231,9,'Logitech USB Optical Mouse'
+7,6,193,716,0,0,0,34121247,9,'Logitech USB Optical Mouse'
+7,6,194,717,0,0,0,34121263,9,'Logitech USB Optical Mouse'
+7,6,195,718,0,0,0,34121271,9,'Logitech USB Optical Mouse'
+7,6,196,719,0,0,0,34121287,9,'Logitech USB Optical Mouse'
+7,6,197,720,0,0,0,34121295,9,'Logitech USB Optical Mouse'
+7,6,198,720,0,0,0,34121311,9,'Logitech USB Optical Mouse'
+7,6,200,722,0,0,0,34121327,9,'Logitech USB Optical Mouse'
+7,6,201,723,0,0,0,34121343,9,'Logitech USB Optical Mouse'
+7,6,202,723,0,0,0,34121351,9,'Logitech USB Optical Mouse'
+7,6,203,723,0,0,0,34121367,9,'Logitech USB Optical Mouse'
+7,6,204,723,0,0,0,34121375,9,'Logitech USB Optical Mouse'
+7,6,205,723,0,0,0,34121383,9,'Logitech USB Optical Mouse'
+7,6,206,724,0,0,0,34121423,9,'Logitech USB Optical Mouse'
+7,4,0,0,1,0,0,34121735,9,Logitech USB Optical Mouse
+6,4,0,0,1,0,0,34121735,2,Virtual core pointer
+7,5,0,0,1,0,0,34121895,9,Logitech USB Optical Mouse
+6,5,0,0,1,0,0,34121895,2,Virtual core pointer
+7,6,206,724,0,0,0,34122335,9,'Logitech USB Optical Mouse'
+7,6,207,724,0,0,0,34122359,9,'Logitech USB Optical Mouse'
+7,6,210,722,0,0,0,34122367,9,'Logitech USB Optical Mouse'
+7,6,212,720,0,0,0,34122375,9,'Logitech USB Optical Mouse'
+7,6,213,719,0,0,0,34122383,9,'Logitech USB Optical Mouse'
+7,6,216,716,0,0,0,34122391,9,'Logitech USB Optical Mouse'
+7,6,217,715,0,0,0,34122399,9,'Logitech USB Optical Mouse'
+7,6,218,714,0,0,0,34122407,9,'Logitech USB Optical Mouse'
+7,6,220,712,0,0,0,34122415,9,'Logitech USB Optical Mouse'
+7,6,221,710,0,0,0,34122423,9,'Logitech USB Optical Mouse'
+7,6,223,708,0,0,0,34122431,9,'Logitech USB Optical Mouse'
+7,6,224,707,0,0,0,34122439,9,'Logitech USB Optical Mouse'
+7,6,224,706,0,0,0,34122447,9,'Logitech USB Optical Mouse'
+7,6,225,705,0,0,0,34122455,9,'Logitech USB Optical Mouse'
+7,6,225,703,0,0,0,34122463,9,'Logitech USB Optical Mouse'
+7,6,227,701,0,0,0,34122471,9,'Logitech USB Optical Mouse'
+7,6,229,699,0,0,0,34122479,9,'Logitech USB Optical Mouse'
+7,6,231,696,0,0,0,34122487,9,'Logitech USB Optical Mouse'
+7,6,233,694,0,0,0,34122495,9,'Logitech USB Optical Mouse'
+7,6,234,692,0,0,0,34122503,9,'Logitech USB Optical Mouse'
+7,6,235,691,0,0,0,34122511,9,'Logitech USB Optical Mouse'
+7,6,237,688,0,0,0,34122519,9,'Logitech USB Optical Mouse'
+7,6,238,687,0,0,0,34122527,9,'Logitech USB Optical Mouse'
+7,6,239,685,0,0,0,34122543,9,'Logitech USB Optical Mouse'
+7,6,240,682,0,0,0,34122551,9,'Logitech USB Optical Mouse'
+7,6,242,680,0,0,0,34122559,9,'Logitech USB Optical Mouse'
+7,6,243,679,0,0,0,34122567,9,'Logitech USB Optical Mouse'
+7,6,244,676,0,0,0,34122575,9,'Logitech USB Optical Mouse'
+7,6,245,674,0,0,0,34122583,9,'Logitech USB Optical Mouse'
+7,6,247,670,0,0,0,34122591,9,'Logitech USB Optical Mouse'
+7,6,248,668,0,0,0,34122599,9,'Logitech USB Optical Mouse'
+7,6,249,665,0,0,0,34122607,9,'Logitech USB Optical Mouse'
+7,6,250,662,0,0,0,34122615,9,'Logitech USB Optical Mouse'
+7,6,252,659,0,0,0,34122623,9,'Logitech USB Optical Mouse'
+7,6,253,657,0,0,0,34122631,9,'Logitech USB Optical Mouse'
+7,6,254,653,0,0,0,34122639,9,'Logitech USB Optical Mouse'
+7,6,255,649,0,0,0,34122647,9,'Logitech USB Optical Mouse'
+7,6,257,645,0,0,0,34122655,9,'Logitech USB Optical Mouse'
+7,6,260,640,0,0,0,34122663,9,'Logitech USB Optical Mouse'
+7,6,260,634,0,0,0,34122671,9,'Logitech USB Optical Mouse'
+7,6,261,629,0,0,0,34122679,9,'Logitech USB Optical Mouse'
+7,6,263,626,0,0,0,34122687,9,'Logitech USB Optical Mouse'
+7,6,264,622,0,0,0,34122695,9,'Logitech USB Optical Mouse'
+7,6,265,617,0,0,0,34122703,9,'Logitech USB Optical Mouse'
+7,6,266,611,0,0,0,34122711,9,'Logitech USB Optical Mouse'
+7,6,269,605,0,0,0,34122719,9,'Logitech USB Optical Mouse'
+7,6,270,599,0,0,0,34122727,9,'Logitech USB Optical Mouse'
+7,6,273,589,0,0,0,34122735,9,'Logitech USB Optical Mouse'
+7,6,273,578,0,0,0,34122743,9,'Logitech USB Optical Mouse'
+7,6,276,569,0,0,0,34122751,9,'Logitech USB Optical Mouse'
+7,6,277,559,0,0,0,34122759,9,'Logitech USB Optical Mouse'
+7,6,277,552,0,0,0,34122767,9,'Logitech USB Optical Mouse'
+7,6,279,544,0,0,0,34122775,9,'Logitech USB Optical Mouse'
+7,6,280,535,0,0,0,34122783,9,'Logitech USB Optical Mouse'
+7,6,280,529,0,0,0,34122791,9,'Logitech USB Optical Mouse'
+7,6,283,522,0,0,0,34122799,9,'Logitech USB Optical Mouse'
+7,6,284,516,0,0,0,34122807,9,'Logitech USB Optical Mouse'
+7,6,285,513,0,0,0,34122815,9,'Logitech USB Optical Mouse'
+7,6,286,508,0,0,0,34122823,9,'Logitech USB Optical Mouse'
+7,6,288,504,0,0,0,34122831,9,'Logitech USB Optical Mouse'
+7,6,288,502,0,0,0,34122839,9,'Logitech USB Optical Mouse'
+7,6,288,498,0,0,0,34122847,9,'Logitech USB Optical Mouse'
+7,6,290,493,0,0,0,34122855,9,'Logitech USB Optical Mouse'
+7,6,290,487,0,0,0,34122863,9,'Logitech USB Optical Mouse'
+7,6,290,481,0,0,0,34122871,9,'Logitech USB Optical Mouse'
+7,6,290,475,0,0,0,34122879,9,'Logitech USB Optical Mouse'
+7,6,290,469,0,0,0,34122887,9,'Logitech USB Optical Mouse'
+7,6,290,461,0,0,0,34122895,9,'Logitech USB Optical Mouse'
+7,6,290,452,0,0,0,34122903,9,'Logitech USB Optical Mouse'
+7,6,290,442,0,0,0,34122911,9,'Logitech USB Optical Mouse'
+7,6,290,433,0,0,0,34122919,9,'Logitech USB Optical Mouse'
+7,6,290,427,0,0,0,34122927,9,'Logitech USB Optical Mouse'
+7,6,290,422,0,0,0,34122935,9,'Logitech USB Optical Mouse'
+7,6,290,419,0,0,0,34122943,9,'Logitech USB Optical Mouse'
+7,6,290,416,0,0,0,34122951,9,'Logitech USB Optical Mouse'
+7,6,291,415,0,0,0,34122959,9,'Logitech USB Optical Mouse'
+7,6,291,412,0,0,0,34122967,9,'Logitech USB Optical Mouse'
+7,6,291,410,0,0,0,34122975,9,'Logitech USB Optical Mouse'
+7,6,291,407,0,0,0,34122983,9,'Logitech USB Optical Mouse'
+7,6,291,405,0,0,0,34122991,9,'Logitech USB Optical Mouse'
+7,6,291,400,0,0,0,34122999,9,'Logitech USB Optical Mouse'
+7,6,291,395,0,0,0,34123007,9,'Logitech USB Optical Mouse'
+7,6,291,391,0,0,0,34123015,9,'Logitech USB Optical Mouse'
+7,6,291,387,0,0,0,34123023,9,'Logitech USB Optical Mouse'
+7,6,291,383,0,0,0,34123031,9,'Logitech USB Optical Mouse'
+7,6,291,380,0,0,0,34123039,9,'Logitech USB Optical Mouse'
+7,6,291,379,0,0,0,34123047,9,'Logitech USB Optical Mouse'
+7,6,291,377,0,0,0,34123055,9,'Logitech USB Optical Mouse'
+7,6,291,374,0,0,0,34123063,9,'Logitech USB Optical Mouse'
+7,6,291,373,0,0,0,34123071,9,'Logitech USB Optical Mouse'
+7,6,291,372,0,0,0,34123079,9,'Logitech USB Optical Mouse'
+7,6,291,368,0,0,0,34123087,9,'Logitech USB Optical Mouse'
+7,6,292,365,0,0,0,34123095,9,'Logitech USB Optical Mouse'
+7,6,292,364,0,0,0,34123103,9,'Logitech USB Optical Mouse'
+7,6,292,362,0,0,0,34123111,9,'Logitech USB Optical Mouse'
+7,6,292,359,0,0,0,34123119,9,'Logitech USB Optical Mouse'
+7,6,292,357,0,0,0,34123127,9,'Logitech USB Optical Mouse'
+7,6,292,354,0,0,0,34123135,9,'Logitech USB Optical Mouse'
+7,6,292,352,0,0,0,34123143,9,'Logitech USB Optical Mouse'
+7,6,292,348,0,0,0,34123151,9,'Logitech USB Optical Mouse'
+7,6,292,345,0,0,0,34123159,9,'Logitech USB Optical Mouse'
+7,6,292,343,0,0,0,34123167,9,'Logitech USB Optical Mouse'
+7,6,292,339,0,0,0,34123175,9,'Logitech USB Optical Mouse'
+7,6,292,338,0,0,0,34123183,9,'Logitech USB Optical Mouse'
+7,6,292,337,0,0,0,34123191,9,'Logitech USB Optical Mouse'
+7,6,292,334,0,0,0,34123207,9,'Logitech USB Optical Mouse'
+7,6,292,333,0,0,0,34123551,9,'Logitech USB Optical Mouse'
+7,6,292,330,0,0,0,34123559,9,'Logitech USB Optical Mouse'
+7,6,293,327,0,0,0,34123567,9,'Logitech USB Optical Mouse'
+7,6,293,325,0,0,0,34123575,9,'Logitech USB Optical Mouse'
+7,6,293,323,0,0,0,34123583,9,'Logitech USB Optical Mouse'
+7,6,294,320,0,0,0,34123591,9,'Logitech USB Optical Mouse'
+7,6,294,319,0,0,0,34123599,9,'Logitech USB Optical Mouse'
+7,6,294,318,0,0,0,34123607,9,'Logitech USB Optical Mouse'
+7,6,295,315,0,0,0,34123615,9,'Logitech USB Optical Mouse'
+7,6,295,314,0,0,0,34123623,9,'Logitech USB Optical Mouse'
+7,6,296,311,0,0,0,34123631,9,'Logitech USB Optical Mouse'
+7,6,296,310,0,0,0,34123639,9,'Logitech USB Optical Mouse'
+7,6,296,309,0,0,0,34123647,9,'Logitech USB Optical Mouse'
+7,6,297,307,0,0,0,34123655,9,'Logitech USB Optical Mouse'
+7,6,298,306,0,0,0,34123671,9,'Logitech USB Optical Mouse'
+7,6,298,305,0,0,0,34126407,9,'Logitech USB Optical Mouse'
+7,6,298,304,0,0,0,34126415,9,'Logitech USB Optical Mouse'
+7,6,299,300,0,0,0,34126423,9,'Logitech USB Optical Mouse'
+7,6,299,299,0,0,0,34126431,9,'Logitech USB Optical Mouse'
+7,6,299,296,0,0,0,34126447,9,'Logitech USB Optical Mouse'
+7,6,300,294,0,0,0,34126455,9,'Logitech USB Optical Mouse'
+7,6,300,292,0,0,0,34126463,9,'Logitech USB Optical Mouse'
+7,6,300,290,0,0,0,34126471,9,'Logitech USB Optical Mouse'
+7,6,300,287,0,0,0,34126479,9,'Logitech USB Optical Mouse'
+7,6,300,285,0,0,0,34126487,9,'Logitech USB Optical Mouse'
+7,6,300,284,0,0,0,34126495,9,'Logitech USB Optical Mouse'
+7,6,301,282,0,0,0,34126503,9,'Logitech USB Optical Mouse'
+7,6,301,281,0,0,0,34126511,9,'Logitech USB Optical Mouse'
+7,6,301,279,0,0,0,34126519,9,'Logitech USB Optical Mouse'
+7,6,301,276,0,0,0,34126527,9,'Logitech USB Optical Mouse'
+7,6,301,274,0,0,0,34126535,9,'Logitech USB Optical Mouse'
+7,6,301,271,0,0,0,34126543,9,'Logitech USB Optical Mouse'
+7,6,301,267,0,0,0,34126551,9,'Logitech USB Optical Mouse'
+7,6,301,263,0,0,0,34126559,9,'Logitech USB Optical Mouse'
+7,6,301,260,0,0,0,34126567,9,'Logitech USB Optical Mouse'
+7,6,301,258,0,0,0,34126575,9,'Logitech USB Optical Mouse'
+7,6,301,255,0,0,0,34126583,9,'Logitech USB Optical Mouse'
+7,6,301,253,0,0,0,34126591,9,'Logitech USB Optical Mouse'
+7,6,301,250,0,0,0,34126599,9,'Logitech USB Optical Mouse'
+7,6,301,249,0,0,0,34126607,9,'Logitech USB Optical Mouse'
+7,6,301,246,0,0,0,34126615,9,'Logitech USB Optical Mouse'
+7,6,301,242,0,0,0,34126623,9,'Logitech USB Optical Mouse'
+7,6,301,239,0,0,0,34126631,9,'Logitech USB Optical Mouse'
+7,6,301,236,0,0,0,34126639,9,'Logitech USB Optical Mouse'
+7,6,301,233,0,0,0,34126647,9,'Logitech USB Optical Mouse'
+7,6,301,229,0,0,0,34126655,9,'Logitech USB Optical Mouse'
+7,6,301,225,0,0,0,34126663,9,'Logitech USB Optical Mouse'
+7,6,301,222,0,0,0,34126671,9,'Logitech USB Optical Mouse'
+7,6,301,218,0,0,0,34126679,9,'Logitech USB Optical Mouse'
+7,6,297,209,0,0,0,34126687,9,'Logitech USB Optical Mouse'
+7,6,296,202,0,0,0,34126695,9,'Logitech USB Optical Mouse'
+7,6,295,194,0,0,0,34126703,9,'Logitech USB Optical Mouse'
+7,6,290,187,0,0,0,34126711,9,'Logitech USB Optical Mouse'
+7,6,289,179,0,0,0,34126719,9,'Logitech USB Optical Mouse'
+7,6,288,176,0,0,0,34126727,9,'Logitech USB Optical Mouse'
+7,6,288,173,0,0,0,34126735,9,'Logitech USB Optical Mouse'
+7,6,287,171,0,0,0,34126743,9,'Logitech USB Optical Mouse'
+7,6,287,168,0,0,0,34126751,9,'Logitech USB Optical Mouse'
+7,6,285,165,0,0,0,34126759,9,'Logitech USB Optical Mouse'
+7,6,284,162,0,0,0,34126767,9,'Logitech USB Optical Mouse'
+7,6,283,158,0,0,0,34126775,9,'Logitech USB Optical Mouse'
+7,6,283,156,0,0,0,34126783,9,'Logitech USB Optical Mouse'
+7,6,282,153,0,0,0,34126791,9,'Logitech USB Optical Mouse'
+7,6,280,150,0,0,0,34126799,9,'Logitech USB Optical Mouse'
+7,6,279,148,0,0,0,34126807,9,'Logitech USB Optical Mouse'
+7,6,279,147,0,0,0,34126815,9,'Logitech USB Optical Mouse'
+7,6,278,145,0,0,0,34126823,9,'Logitech USB Optical Mouse'
+7,6,278,144,0,0,0,34126831,9,'Logitech USB Optical Mouse'
+7,6,277,143,0,0,0,34126839,9,'Logitech USB Optical Mouse'
+7,6,277,142,0,0,0,34126847,9,'Logitech USB Optical Mouse'
+7,6,276,140,0,0,0,34126855,9,'Logitech USB Optical Mouse'
+7,6,275,139,0,0,0,34126863,9,'Logitech USB Optical Mouse'
+7,6,274,138,0,0,0,34126879,9,'Logitech USB Optical Mouse'
+7,6,274,137,0,0,0,34126887,9,'Logitech USB Optical Mouse'
+7,4,0,0,1,0,0,34127503,9,Logitech USB Optical Mouse
+6,4,0,0,1,0,0,34127503,2,Virtual core pointer
+7,6,273,136,0,0,0,34127927,9,'Logitech USB Optical Mouse'
+7,6,271,136,0,0,0,34128079,9,'Logitech USB Optical Mouse'
+7,6,271,136,0,0,0,34128087,9,'Logitech USB Optical Mouse'
+7,6,269,136,0,0,0,34128095,9,'Logitech USB Optical Mouse'
+7,6,265,136,0,0,0,34128103,9,'Logitech USB Optical Mouse'
+7,6,262,136,0,0,0,34128111,9,'Logitech USB Optical Mouse'
+7,6,259,136,0,0,0,34128119,9,'Logitech USB Optical Mouse'
+7,6,256,136,0,0,0,34128127,9,'Logitech USB Optical Mouse'
+7,6,251,136,0,0,0,34128135,9,'Logitech USB Optical Mouse'
+7,6,249,136,0,0,0,34128143,9,'Logitech USB Optical Mouse'
+7,6,246,135,0,0,0,34128151,9,'Logitech USB Optical Mouse'
+7,6,245,135,0,0,0,34128159,9,'Logitech USB Optical Mouse'
+7,6,244,135,0,0,0,34128175,9,'Logitech USB Optical Mouse'
+7,6,243,135,0,0,0,34128207,9,'Logitech USB Optical Mouse'
+7,6,242,135,0,0,0,34128223,9,'Logitech USB Optical Mouse'
+7,6,240,135,0,0,0,34128231,9,'Logitech USB Optical Mouse'
+7,6,239,135,0,0,0,34128239,9,'Logitech USB Optical Mouse'
+7,6,236,135,0,0,0,34128247,9,'Logitech USB Optical Mouse'
+7,6,234,135,0,0,0,34128255,9,'Logitech USB Optical Mouse'
+7,6,231,135,0,0,0,34128263,9,'Logitech USB Optical Mouse'
+7,6,230,135,0,0,0,34128271,9,'Logitech USB Optical Mouse'
+7,6,227,135,0,0,0,34128279,9,'Logitech USB Optical Mouse'
+7,6,225,135,0,0,0,34128287,9,'Logitech USB Optical Mouse'
+7,6,224,135,0,0,0,34128295,9,'Logitech USB Optical Mouse'
+7,6,219,133,0,0,0,34128311,9,'Logitech USB Optical Mouse'
+7,6,218,133,0,0,0,34128319,9,'Logitech USB Optical Mouse'
+7,6,216,133,0,0,0,34128367,9,'Logitech USB Optical Mouse'
+7,6,216,133,0,0,0,34128391,9,'Logitech USB Optical Mouse'
+7,6,215,133,0,0,0,34128399,9,'Logitech USB Optical Mouse'
+7,6,212,133,0,0,0,34128407,9,'Logitech USB Optical Mouse'
+7,6,210,133,0,0,0,34128415,9,'Logitech USB Optical Mouse'
+7,6,209,133,0,0,0,34128423,9,'Logitech USB Optical Mouse'
+7,6,206,133,0,0,0,34128431,9,'Logitech USB Optical Mouse'
+7,6,205,133,0,0,0,34128439,9,'Logitech USB Optical Mouse'
+7,6,204,133,0,0,0,34128447,9,'Logitech USB Optical Mouse'
+7,6,201,133,0,0,0,34128463,9,'Logitech USB Optical Mouse'
+7,6,200,133,0,0,0,34128479,9,'Logitech USB Optical Mouse'
+7,6,199,133,0,0,0,34128487,9,'Logitech USB Optical Mouse'
+7,6,197,133,0,0,0,34128495,9,'Logitech USB Optical Mouse'
+7,6,196,133,0,0,0,34128503,9,'Logitech USB Optical Mouse'
+7,6,194,132,0,0,0,34128551,9,'Logitech USB Optical Mouse'
+7,6,192,132,0,0,0,34128559,9,'Logitech USB Optical Mouse'
+7,6,191,132,0,0,0,34128567,9,'Logitech USB Optical Mouse'
+7,6,190,132,0,0,0,34128575,9,'Logitech USB Optical Mouse'
+7,6,187,132,0,0,0,34128583,9,'Logitech USB Optical Mouse'
+7,6,185,132,0,0,0,34128591,9,'Logitech USB Optical Mouse'
+7,6,184,132,0,0,0,34128599,9,'Logitech USB Optical Mouse'
+7,6,182,132,0,0,0,34128607,9,'Logitech USB Optical Mouse'
+7,6,181,132,0,0,0,34128615,9,'Logitech USB Optical Mouse'
+7,6,180,132,0,0,0,34128711,9,'Logitech USB Optical Mouse'
+7,6,179,132,0,0,0,34128735,9,'Logitech USB Optical Mouse'
+7,6,177,133,0,0,0,34128759,9,'Logitech USB Optical Mouse'
+7,6,175,134,0,0,0,34128783,9,'Logitech USB Optical Mouse'
+7,5,0,0,1,0,0,34129159,9,Logitech USB Optical Mouse
+6,5,0,0,1,0,0,34129159,2,Virtual core pointer
+7,2,0,0,0,41,0,34130631,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,41,0,34130631,3,Virtual core keyboard
+7,3,0,0,0,41,0,34130695,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,41,0,34130695,3,Virtual core keyboard
+7,2,0,0,0,27,0,34130823,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,27,0,34130823,3,Virtual core keyboard
+7,3,0,0,0,27,0,34130895,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,27,0,34130895,3,Virtual core keyboard
+7,2,0,0,0,26,0,34131143,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,26,0,34131143,3,Virtual core keyboard
+7,3,0,0,0,26,0,34131207,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,26,0,34131207,3,Virtual core keyboard
+7,2,0,0,0,26,0,34131303,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,26,0,34131303,3,Virtual core keyboard
+7,3,0,0,0,26,0,34131391,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,26,0,34131391,3,Virtual core keyboard
+7,6,173,134,0,0,0,34132143,9,'Logitech USB Optical Mouse'
+7,6,172,137,0,0,0,34132151,9,'Logitech USB Optical Mouse'
+7,6,175,146,0,0,0,34132159,9,'Logitech USB Optical Mouse'
+7,6,182,156,0,0,0,34132167,9,'Logitech USB Optical Mouse'
+7,6,186,165,0,0,0,34132175,9,'Logitech USB Optical Mouse'
+7,6,188,169,0,0,0,34132183,9,'Logitech USB Optical Mouse'
+7,6,190,172,0,0,0,34132191,9,'Logitech USB Optical Mouse'
+7,6,190,174,0,0,0,34132199,9,'Logitech USB Optical Mouse'
+7,6,192,177,0,0,0,34132215,9,'Logitech USB Optical Mouse'
+7,6,193,179,0,0,0,34132223,9,'Logitech USB Optical Mouse'
+7,6,194,180,0,0,0,34132231,9,'Logitech USB Optical Mouse'
+7,6,195,182,0,0,0,34132239,9,'Logitech USB Optical Mouse'
+7,6,198,185,0,0,0,34132247,9,'Logitech USB Optical Mouse'
+7,6,199,186,0,0,0,34132255,9,'Logitech USB Optical Mouse'
+7,6,200,187,0,0,0,34132263,9,'Logitech USB Optical Mouse'
+7,6,202,189,0,0,0,34132271,9,'Logitech USB Optical Mouse'
+7,6,203,191,0,0,0,34132279,9,'Logitech USB Optical Mouse'
+7,6,205,195,0,0,0,34132287,9,'Logitech USB Optical Mouse'
+7,6,206,196,0,0,0,34132295,9,'Logitech USB Optical Mouse'
+7,6,207,197,0,0,0,34132303,9,'Logitech USB Optical Mouse'
+7,6,208,198,0,0,0,34132311,9,'Logitech USB Optical Mouse'
+7,6,209,199,0,0,0,34132319,9,'Logitech USB Optical Mouse'
+7,6,210,200,0,0,0,34132335,9,'Logitech USB Optical Mouse'
+7,6,212,202,0,0,0,34132359,9,'Logitech USB Optical Mouse'
+7,6,213,203,0,0,0,34132391,9,'Logitech USB Optical Mouse'
+7,6,214,203,0,0,0,34132399,9,'Logitech USB Optical Mouse'
+7,6,217,205,0,0,0,34132407,9,'Logitech USB Optical Mouse'
+7,6,218,205,0,0,0,34132415,9,'Logitech USB Optical Mouse'
+7,6,221,206,0,0,0,34132423,9,'Logitech USB Optical Mouse'
+7,6,223,207,0,0,0,34132439,9,'Logitech USB Optical Mouse'
+7,6,224,207,0,0,0,34132455,9,'Logitech USB Optical Mouse'
+7,6,226,207,0,0,0,34132471,9,'Logitech USB Optical Mouse'
+7,6,228,208,0,0,0,34132479,9,'Logitech USB Optical Mouse'
+7,6,230,210,0,0,0,34132487,9,'Logitech USB Optical Mouse'
+7,6,232,211,0,0,0,34132495,9,'Logitech USB Optical Mouse'
+7,6,234,212,0,0,0,34132503,9,'Logitech USB Optical Mouse'
+7,6,238,214,0,0,0,34132511,9,'Logitech USB Optical Mouse'
+7,6,241,216,0,0,0,34132519,9,'Logitech USB Optical Mouse'
+7,6,243,218,0,0,0,34132527,9,'Logitech USB Optical Mouse'
+7,6,246,218,0,0,0,34132535,9,'Logitech USB Optical Mouse'
+7,6,247,219,0,0,0,34132543,9,'Logitech USB Optical Mouse'
+7,6,248,219,0,0,0,34132551,9,'Logitech USB Optical Mouse'
+7,6,251,221,0,0,0,34132559,9,'Logitech USB Optical Mouse'
+7,6,252,221,0,0,0,34132567,9,'Logitech USB Optical Mouse'
+7,6,255,221,0,0,0,34132575,9,'Logitech USB Optical Mouse'
+7,6,257,222,0,0,0,34132583,9,'Logitech USB Optical Mouse'
+7,6,258,222,0,0,0,34132591,9,'Logitech USB Optical Mouse'
+7,6,260,223,0,0,0,34132599,9,'Logitech USB Optical Mouse'
+7,6,261,223,0,0,0,34132623,9,'Logitech USB Optical Mouse'
+7,4,0,0,1,0,0,34132775,9,Logitech USB Optical Mouse
+6,4,0,0,1,0,0,34132775,2,Virtual core pointer
+7,5,0,0,1,0,0,34132903,9,Logitech USB Optical Mouse
+6,5,0,0,1,0,0,34132903,2,Virtual core pointer
+0,21,0,0,0,0,0,34132912
+NEW-WINDOW:-1261359148,32616:58720349,58720349,37907648,0,0,0:30020672x0+0+0:30060944,30060944:
+0,21,0,0,0,0,0,34132912
+0,21,0,0,0,0,0,34132912
+0,21,0,0,0,0,0,34132912
+0,21,0,0,0,0,0,34132924
+NEW-WINDOW:742,433:58720352,58720352,37907781,0,0,0:26x60+296+100:0,0:Tulip test result
+0,21,0,0,0,0,0,34132924
+0,21,0,0,0,0,0,34132924
+0,21,0,0,0,0,0,34132924
+7,6,262,223,0,0,0,34133831,9,'Logitech USB Optical Mouse'
+7,6,265,225,0,0,0,34133839,9,'Logitech USB Optical Mouse'
+7,6,272,232,0,0,0,34133847,9,'Logitech USB Optical Mouse'
+7,6,291,246,0,0,0,34133855,9,'Logitech USB Optical Mouse'
+7,6,311,260,0,0,0,34133863,9,'Logitech USB Optical Mouse'
+7,6,327,270,0,0,0,34133871,9,'Logitech USB Optical Mouse'
+7,6,347,279,0,0,0,34133879,9,'Logitech USB Optical Mouse'
+7,6,362,289,0,0,0,34133887,9,'Logitech USB Optical Mouse'
+7,6,377,295,0,0,0,34133895,9,'Logitech USB Optical Mouse'
+7,6,388,300,0,0,0,34133903,9,'Logitech USB Optical Mouse'
+7,6,400,304,0,0,0,34133911,9,'Logitech USB Optical Mouse'
+7,6,407,306,0,0,0,34133919,9,'Logitech USB Optical Mouse'
+7,6,413,307,0,0,0,34133927,9,'Logitech USB Optical Mouse'
+7,6,420,311,0,0,0,34133935,9,'Logitech USB Optical Mouse'
+7,6,428,314,0,0,0,34133943,9,'Logitech USB Optical Mouse'
+7,6,435,318,0,0,0,34133951,9,'Logitech USB Optical Mouse'
+7,6,443,321,0,0,0,34133959,9,'Logitech USB Optical Mouse'
+7,6,456,327,0,0,0,34133967,9,'Logitech USB Optical Mouse'
+7,6,470,334,0,0,0,34133975,9,'Logitech USB Optical Mouse'
+7,6,489,340,0,0,0,34133983,9,'Logitech USB Optical Mouse'
+7,6,502,345,0,0,0,34133991,9,'Logitech USB Optical Mouse'
+7,6,511,350,0,0,0,34133999,9,'Logitech USB Optical Mouse'
+7,6,522,355,0,0,0,34134007,9,'Logitech USB Optical Mouse'
+7,6,529,358,0,0,0,34134015,9,'Logitech USB Optical Mouse'
+7,6,536,359,0,0,0,34134023,9,'Logitech USB Optical Mouse'
+7,6,546,362,0,0,0,34134031,9,'Logitech USB Optical Mouse'
+7,6,553,366,0,0,0,34134039,9,'Logitech USB Optical Mouse'
+7,6,561,367,0,0,0,34134047,9,'Logitech USB Optical Mouse'
+7,6,570,369,0,0,0,34134055,9,'Logitech USB Optical Mouse'
+7,6,578,372,0,0,0,34134063,9,'Logitech USB Optical Mouse'
+7,6,589,375,0,0,0,34134071,9,'Logitech USB Optical Mouse'
+7,6,599,378,0,0,0,34134079,9,'Logitech USB Optical Mouse'
+7,6,607,379,0,0,0,34134087,9,'Logitech USB Optical Mouse'
+7,6,614,381,0,0,0,34134095,9,'Logitech USB Optical Mouse'
+7,6,623,383,0,0,0,34134103,9,'Logitech USB Optical Mouse'
+7,6,632,386,0,0,0,34134111,9,'Logitech USB Optical Mouse'
+7,6,642,389,0,0,0,34134119,9,'Logitech USB Optical Mouse'
+7,6,653,391,0,0,0,34134127,9,'Logitech USB Optical Mouse'
+7,6,666,396,0,0,0,34134135,9,'Logitech USB Optical Mouse'
+7,6,680,399,0,0,0,34134143,9,'Logitech USB Optical Mouse'
+7,6,691,402,0,0,0,34134151,9,'Logitech USB Optical Mouse'
+7,6,704,404,0,0,0,34134159,9,'Logitech USB Optical Mouse'
+7,6,713,406,0,0,0,34134167,9,'Logitech USB Optical Mouse'
+7,6,720,407,0,0,0,34134175,9,'Logitech USB Optical Mouse'
+7,6,724,407,0,0,0,34134183,9,'Logitech USB Optical Mouse'
+7,6,727,407,0,0,0,34134191,9,'Logitech USB Optical Mouse'
+7,6,731,407,0,0,0,34134199,9,'Logitech USB Optical Mouse'
+7,6,733,409,0,0,0,34134207,9,'Logitech USB Optical Mouse'
+7,6,738,410,0,0,0,34134215,9,'Logitech USB Optical Mouse'
+7,6,742,411,0,0,0,34134223,9,'Logitech USB Optical Mouse'
+7,6,747,411,0,0,0,34134231,9,'Logitech USB Optical Mouse'
+7,6,749,412,0,0,0,34134239,9,'Logitech USB Optical Mouse'
+7,6,752,412,0,0,0,34134247,9,'Logitech USB Optical Mouse'
+7,6,754,412,0,0,0,34134255,9,'Logitech USB Optical Mouse'
+7,6,759,414,0,0,0,34134271,9,'Logitech USB Optical Mouse'
+7,6,760,414,0,0,0,34134279,9,'Logitech USB Optical Mouse'
+7,6,762,414,0,0,0,34134287,9,'Logitech USB Optical Mouse'
+7,6,763,415,0,0,0,34134295,9,'Logitech USB Optical Mouse'
+7,6,765,416,0,0,0,34134303,9,'Logitech USB Optical Mouse'
+7,6,769,417,0,0,0,34134311,9,'Logitech USB Optical Mouse'
+7,6,776,420,0,0,0,34134319,9,'Logitech USB Optical Mouse'
+7,6,781,421,0,0,0,34134327,9,'Logitech USB Optical Mouse'
+7,6,787,424,0,0,0,34134335,9,'Logitech USB Optical Mouse'
+7,6,792,426,0,0,0,34134343,9,'Logitech USB Optical Mouse'
+7,6,800,429,0,0,0,34134351,9,'Logitech USB Optical Mouse'
+7,6,807,433,0,0,0,34134359,9,'Logitech USB Optical Mouse'
+7,6,814,436,0,0,0,34134367,9,'Logitech USB Optical Mouse'
+7,6,822,440,0,0,0,34134375,9,'Logitech USB Optical Mouse'
+7,6,826,441,0,0,0,34134383,9,'Logitech USB Optical Mouse'
+7,6,828,441,0,0,0,34134391,9,'Logitech USB Optical Mouse'
+7,6,831,442,0,0,0,34134399,9,'Logitech USB Optical Mouse'
+7,6,832,442,0,0,0,34134407,9,'Logitech USB Optical Mouse'
+7,6,833,442,0,0,0,34134423,9,'Logitech USB Optical Mouse'
+7,6,835,443,0,0,0,34134439,9,'Logitech USB Optical Mouse'
+7,6,838,445,0,0,0,34134447,9,'Logitech USB Optical Mouse'
+7,6,840,446,0,0,0,34134455,9,'Logitech USB Optical Mouse'
+7,6,843,447,0,0,0,34134463,9,'Logitech USB Optical Mouse'
+7,6,846,448,0,0,0,34134471,9,'Logitech USB Optical Mouse'
+7,6,850,450,0,0,0,34134479,9,'Logitech USB Optical Mouse'
+7,6,852,451,0,0,0,34134487,9,'Logitech USB Optical Mouse'
+7,6,853,451,0,0,0,34134495,9,'Logitech USB Optical Mouse'
+7,6,859,452,0,0,0,34134511,9,'Logitech USB Optical Mouse'
+7,6,862,453,0,0,0,34134519,9,'Logitech USB Optical Mouse'
+7,6,863,453,0,0,0,34134527,9,'Logitech USB Optical Mouse'
+7,6,866,453,0,0,0,34134535,9,'Logitech USB Optical Mouse'
+7,6,867,454,0,0,0,34134551,9,'Logitech USB Optical Mouse'
+7,6,868,455,0,0,0,34134623,9,'Logitech USB Optical Mouse'
+7,6,869,456,0,0,0,34134631,9,'Logitech USB Optical Mouse'
+7,6,870,456,0,0,0,34134639,9,'Logitech USB Optical Mouse'
+7,6,872,457,0,0,0,34134647,9,'Logitech USB Optical Mouse'
+7,6,875,457,0,0,0,34134655,9,'Logitech USB Optical Mouse'
+7,6,876,457,0,0,0,34134663,9,'Logitech USB Optical Mouse'
+7,6,877,457,0,0,0,34134671,9,'Logitech USB Optical Mouse'
+7,6,878,458,0,0,0,34134831,9,'Logitech USB Optical Mouse'
+7,6,879,455,0,0,0,34134959,9,'Logitech USB Optical Mouse'
+7,4,0,0,1,0,0,34135607,9,Logitech USB Optical Mouse
+6,4,0,0,1,0,0,34135607,2,Virtual core pointer
+7,5,0,0,1,0,0,34135711,9,Logitech USB Optical Mouse
+6,5,0,0,1,0,0,34135711,2,Virtual core pointer
+7,4,0,0,1,0,0,34135839,9,Logitech USB Optical Mouse
+6,4,0,0,1,0,0,34135839,2,Virtual core pointer
+7,5,0,0,1,0,0,34135927,9,Logitech USB Optical Mouse
+6,5,0,0,1,0,0,34135927,2,Virtual core pointer
+7,4,0,0,1,0,0,34136079,9,Logitech USB Optical Mouse
+6,4,0,0,1,0,0,34136079,2,Virtual core pointer
+7,5,0,0,1,0,0,34136271,9,Logitech USB Optical Mouse
+6,5,0,0,1,0,0,34136271,2,Virtual core pointer
+7,2,0,0,0,37,0,34137015,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,37,0,34137015,3,Virtual core keyboard
+7,2,0,0,0,54,0,34137519,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,54,0,34137519,3,Virtual core keyboard
+7,3,0,0,0,37,0,34137647,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,37,0,34137647,3,Virtual core keyboard
+7,3,0,0,0,54,0,34137647,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,54,0,34137647,3,Virtual core keyboard
+7,2,0,0,0,36,0,34138343,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,36,0,34138343,3,Virtual core keyboard
+0,21,0,0,0,0,0,34138347
+NEW-WINDOW:742,396:58720352,58720352,662,742,396,0:742x396+296+100:0,0:Tulip test result
+0,21,0,0,0,0,0,34138347
+0,21,0,0,0,0,0,34138347
+0,21,0,0,0,0,0,34138347
+0,21,0,0,0,0,0,34138347
+7,3,0,0,0,36,0,34138431,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,36,0,34138431,3,Virtual core keyboard
+7,6,879,455,0,0,0,34138887,9,'Logitech USB Optical Mouse'
+7,6,880,453,0,0,0,34138895,9,'Logitech USB Optical Mouse'
+7,6,885,447,0,0,0,34138903,9,'Logitech USB Optical Mouse'
+7,6,889,441,0,0,0,34138911,9,'Logitech USB Optical Mouse'
+7,6,896,433,0,0,0,34138919,9,'Logitech USB Optical Mouse'
+7,6,909,416,0,0,0,34138927,9,'Logitech USB Optical Mouse'
+7,6,923,400,0,0,0,34138935,9,'Logitech USB Optical Mouse'
+7,6,939,382,0,0,0,34138943,9,'Logitech USB Optical Mouse'
+7,6,955,366,0,0,0,34138951,9,'Logitech USB Optical Mouse'
+7,6,969,350,0,0,0,34138959,9,'Logitech USB Optical Mouse'
+7,6,983,332,0,0,0,34138967,9,'Logitech USB Optical Mouse'
+7,6,995,318,0,0,0,34138975,9,'Logitech USB Optical Mouse'
+7,6,1002,308,0,0,0,34138983,9,'Logitech USB Optical Mouse'
+7,6,1009,298,0,0,0,34138991,9,'Logitech USB Optical Mouse'
+7,6,1014,291,0,0,0,34138999,9,'Logitech USB Optical Mouse'
+7,6,1018,286,0,0,0,34139007,9,'Logitech USB Optical Mouse'
+7,6,1022,281,0,0,0,34139015,9,'Logitech USB Optical Mouse'
+7,6,1023,276,0,0,0,34139023,9,'Logitech USB Optical Mouse'
+7,6,1025,271,0,0,0,34139031,9,'Logitech USB Optical Mouse'
+7,6,1027,267,0,0,0,34139039,9,'Logitech USB Optical Mouse'
+7,6,1027,262,0,0,0,34139047,9,'Logitech USB Optical Mouse'
+7,6,1029,258,0,0,0,34139055,9,'Logitech USB Optical Mouse'
+7,6,1030,256,0,0,0,34139063,9,'Logitech USB Optical Mouse'
+7,6,1030,251,0,0,0,34139071,9,'Logitech USB Optical Mouse'
+7,6,1030,246,0,0,0,34139079,9,'Logitech USB Optical Mouse'
+7,6,1032,239,0,0,0,34139087,9,'Logitech USB Optical Mouse'
+7,6,1032,234,0,0,0,34139095,9,'Logitech USB Optical Mouse'
+7,6,1033,232,0,0,0,34139103,9,'Logitech USB Optical Mouse'
+7,6,1035,227,0,0,0,34139111,9,'Logitech USB Optical Mouse'
+7,6,1035,225,0,0,0,34139119,9,'Logitech USB Optical Mouse'
+7,6,1037,222,0,0,0,34139127,9,'Logitech USB Optical Mouse'
+7,6,1039,217,0,0,0,34139135,9,'Logitech USB Optical Mouse'
+7,6,1040,214,0,0,0,34139143,9,'Logitech USB Optical Mouse'
+7,6,1040,213,0,0,0,34139151,9,'Logitech USB Optical Mouse'
+7,6,1040,212,0,0,0,34139159,9,'Logitech USB Optical Mouse'
+7,6,1040,209,0,0,0,34139167,9,'Logitech USB Optical Mouse'
+7,6,1040,208,0,0,0,34139175,9,'Logitech USB Optical Mouse'
+7,6,1040,207,0,0,0,34139183,9,'Logitech USB Optical Mouse'
+7,6,1040,206,0,0,0,34139191,9,'Logitech USB Optical Mouse'
+7,6,1040,203,0,0,0,34139199,9,'Logitech USB Optical Mouse'
+7,6,1040,202,0,0,0,34139207,9,'Logitech USB Optical Mouse'
+7,6,1036,198,0,0,0,34139215,9,'Logitech USB Optical Mouse'
+7,6,1035,197,0,0,0,34139223,9,'Logitech USB Optical Mouse'
+7,6,1032,194,0,0,0,34139231,9,'Logitech USB Optical Mouse'
+7,6,1031,193,0,0,0,34139239,9,'Logitech USB Optical Mouse'
+7,6,1030,192,0,0,0,34139319,9,'Logitech USB Optical Mouse'
+7,6,1027,192,0,0,0,34139327,9,'Logitech USB Optical Mouse'
+7,6,1024,192,0,0,0,34139335,9,'Logitech USB Optical Mouse'
+7,6,1022,192,0,0,0,34139343,9,'Logitech USB Optical Mouse'
+7,6,1017,192,0,0,0,34139351,9,'Logitech USB Optical Mouse'
+7,6,1013,192,0,0,0,34139359,9,'Logitech USB Optical Mouse'
+7,6,1009,193,0,0,0,34139367,9,'Logitech USB Optical Mouse'
+7,6,1005,193,0,0,0,34139375,9,'Logitech USB Optical Mouse'
+7,6,1002,194,0,0,0,34139383,9,'Logitech USB Optical Mouse'
+7,6,1001,194,0,0,0,34139447,9,'Logitech USB Optical Mouse'
+7,6,1001,194,0,0,0,34139455,9,'Logitech USB Optical Mouse'
+7,6,1000,195,0,0,0,34139463,9,'Logitech USB Optical Mouse'
+7,6,997,195,0,0,0,34139471,9,'Logitech USB Optical Mouse'
+7,6,996,196,0,0,0,34139479,9,'Logitech USB Optical Mouse'
+7,6,995,196,0,0,0,34139487,9,'Logitech USB Optical Mouse'
+7,6,992,198,0,0,0,34139495,9,'Logitech USB Optical Mouse'
+7,6,991,199,0,0,0,34139511,9,'Logitech USB Optical Mouse'
+7,6,990,200,0,0,0,34139519,9,'Logitech USB Optical Mouse'
+7,6,988,200,0,0,0,34139527,9,'Logitech USB Optical Mouse'
+7,6,987,201,0,0,0,34139599,9,'Logitech USB Optical Mouse'
+7,6,987,202,0,0,0,34139607,9,'Logitech USB Optical Mouse'
+7,6,986,203,0,0,0,34139711,9,'Logitech USB Optical Mouse'
+7,4,0,0,1,0,0,34139823,9,Logitech USB Optical Mouse
+6,4,0,0,1,0,0,34139823,2,Virtual core pointer
+7,5,0,0,1,0,0,34139959,9,Logitech USB Optical Mouse
+6,5,0,0,1,0,0,34139959,2,Virtual core pointer
+7,6,986,204,0,0,0,34140143,9,'Logitech USB Optical Mouse'
+7,6,986,204,0,0,0,34140151,9,'Logitech USB Optical Mouse'
+7,6,986,207,0,0,0,34140159,9,'Logitech USB Optical Mouse'
+7,6,986,209,0,0,0,34140167,9,'Logitech USB Optical Mouse'
+7,6,986,211,0,0,0,34140175,9,'Logitech USB Optical Mouse'
+7,6,986,213,0,0,0,34140191,9,'Logitech USB Optical Mouse'
+7,6,986,214,0,0,0,34140487,9,'Logitech USB Optical Mouse'
+7,6,985,214,0,0,0,34140519,9,'Logitech USB Optical Mouse'
+7,6,984,213,0,0,0,34140527,9,'Logitech USB Optical Mouse'
+7,6,982,210,0,0,0,34140535,9,'Logitech USB Optical Mouse'
+7,6,981,208,0,0,0,34140543,9,'Logitech USB Optical Mouse'
+7,6,980,206,0,0,0,34140551,9,'Logitech USB Optical Mouse'
+7,6,980,205,0,0,0,34140559,9,'Logitech USB Optical Mouse'
+7,6,979,202,0,0,0,34140575,9,'Logitech USB Optical Mouse'
+7,6,979,201,0,0,0,34140639,9,'Logitech USB Optical Mouse'
+7,6,979,200,0,0,0,34140647,9,'Logitech USB Optical Mouse'
+7,4,0,0,1,0,0,34140919,9,Logitech USB Optical Mouse
+6,4,0,0,1,0,0,34140919,2,Virtual core pointer
+7,5,0,0,1,0,0,34141047,9,Logitech USB Optical Mouse
+6,5,0,0,1,0,0,34141047,2,Virtual core pointer
+0,21,0,0,0,0,0,34141054
+NEW-WINDOW:705,409:58720358,58720358,37910129,0,0,0:26x60+370+148:0,0:Create new property
+0,21,0,0,0,0,0,34141054
+0,21,0,0,0,0,0,34141054
+0,21,0,0,0,0,0,34141054
+7,6,978,199,0,0,0,34141487,9,'Logitech USB Optical Mouse'
+7,6,977,201,0,0,0,34141495,9,'Logitech USB Optical Mouse'
+7,6,977,204,0,0,0,34141503,9,'Logitech USB Optical Mouse'
+7,6,974,209,0,0,0,34141511,9,'Logitech USB Optical Mouse'
+7,6,974,213,0,0,0,34141519,9,'Logitech USB Optical Mouse'
+7,6,972,216,0,0,0,34141527,9,'Logitech USB Optical Mouse'
+7,6,971,219,0,0,0,34141535,9,'Logitech USB Optical Mouse'
+7,6,971,222,0,0,0,34141543,9,'Logitech USB Optical Mouse'
+7,6,971,225,0,0,0,34141551,9,'Logitech USB Optical Mouse'
+7,6,971,227,0,0,0,34141559,9,'Logitech USB Optical Mouse'
+7,6,970,229,0,0,0,34141567,9,'Logitech USB Optical Mouse'
+7,6,970,230,0,0,0,34141575,9,'Logitech USB Optical Mouse'
+7,6,970,234,0,0,0,34141583,9,'Logitech USB Optical Mouse'
+7,6,970,237,0,0,0,34141591,9,'Logitech USB Optical Mouse'
+7,6,970,239,0,0,0,34141599,9,'Logitech USB Optical Mouse'
+7,6,970,242,0,0,0,34141607,9,'Logitech USB Optical Mouse'
+7,6,970,244,0,0,0,34141615,9,'Logitech USB Optical Mouse'
+7,6,969,248,0,0,0,34141623,9,'Logitech USB Optical Mouse'
+7,6,969,250,0,0,0,34141631,9,'Logitech USB Optical Mouse'
+7,6,969,254,0,0,0,34141639,9,'Logitech USB Optical Mouse'
+7,6,967,258,0,0,0,34141647,9,'Logitech USB Optical Mouse'
+7,6,967,261,0,0,0,34141655,9,'Logitech USB Optical Mouse'
+7,6,967,265,0,0,0,34141663,9,'Logitech USB Optical Mouse'
+7,6,966,268,0,0,0,34141671,9,'Logitech USB Optical Mouse'
+7,6,966,270,0,0,0,34141679,9,'Logitech USB Optical Mouse'
+7,6,965,274,0,0,0,34141687,9,'Logitech USB Optical Mouse'
+7,6,965,275,0,0,0,34141695,9,'Logitech USB Optical Mouse'
+7,6,965,276,0,0,0,34141703,9,'Logitech USB Optical Mouse'
+7,6,965,279,0,0,0,34141711,9,'Logitech USB Optical Mouse'
+7,6,965,280,0,0,0,34141719,9,'Logitech USB Optical Mouse'
+7,6,964,281,0,0,0,34141727,9,'Logitech USB Optical Mouse'
+7,6,964,283,0,0,0,34141735,9,'Logitech USB Optical Mouse'
+7,6,964,285,0,0,0,34141743,9,'Logitech USB Optical Mouse'
+7,6,964,289,0,0,0,34141751,9,'Logitech USB Optical Mouse'
+7,6,962,294,0,0,0,34141759,9,'Logitech USB Optical Mouse'
+7,6,962,297,0,0,0,34141767,9,'Logitech USB Optical Mouse'
+7,6,961,303,0,0,0,34141775,9,'Logitech USB Optical Mouse'
+7,6,959,309,0,0,0,34141783,9,'Logitech USB Optical Mouse'
+7,6,959,315,0,0,0,34141791,9,'Logitech USB Optical Mouse'
+7,6,955,323,0,0,0,34141799,9,'Logitech USB Optical Mouse'
+7,6,955,327,0,0,0,34141807,9,'Logitech USB Optical Mouse'
+7,6,954,331,0,0,0,34141815,9,'Logitech USB Optical Mouse'
+7,6,954,336,0,0,0,34141823,9,'Logitech USB Optical Mouse'
+7,6,953,339,0,0,0,34141831,9,'Logitech USB Optical Mouse'
+7,6,952,342,0,0,0,34141839,9,'Logitech USB Optical Mouse'
+7,6,952,344,0,0,0,34141847,9,'Logitech USB Optical Mouse'
+7,6,952,348,0,0,0,34141855,9,'Logitech USB Optical Mouse'
+7,6,950,352,0,0,0,34141863,9,'Logitech USB Optical Mouse'
+7,6,950,354,0,0,0,34141871,9,'Logitech USB Optical Mouse'
+7,6,950,358,0,0,0,34141879,9,'Logitech USB Optical Mouse'
+7,6,950,359,0,0,0,34141887,9,'Logitech USB Optical Mouse'
+7,6,949,362,0,0,0,34141895,9,'Logitech USB Optical Mouse'
+7,6,949,364,0,0,0,34141903,9,'Logitech USB Optical Mouse'
+7,6,949,367,0,0,0,34141911,9,'Logitech USB Optical Mouse'
+7,6,948,369,0,0,0,34141919,9,'Logitech USB Optical Mouse'
+7,6,948,372,0,0,0,34141927,9,'Logitech USB Optical Mouse'
+7,6,947,377,0,0,0,34141935,9,'Logitech USB Optical Mouse'
+7,6,945,381,0,0,0,34141943,9,'Logitech USB Optical Mouse'
+7,6,943,385,0,0,0,34141951,9,'Logitech USB Optical Mouse'
+7,6,942,390,0,0,0,34141959,9,'Logitech USB Optical Mouse'
+7,6,941,393,0,0,0,34141967,9,'Logitech USB Optical Mouse'
+7,6,939,398,0,0,0,34141975,9,'Logitech USB Optical Mouse'
+7,6,938,401,0,0,0,34141983,9,'Logitech USB Optical Mouse'
+7,6,938,403,0,0,0,34141991,9,'Logitech USB Optical Mouse'
+7,6,937,407,0,0,0,34141999,9,'Logitech USB Optical Mouse'
+7,6,936,409,0,0,0,34142007,9,'Logitech USB Optical Mouse'
+7,6,936,411,0,0,0,34142015,9,'Logitech USB Optical Mouse'
+7,6,936,413,0,0,0,34142023,9,'Logitech USB Optical Mouse'
+7,6,935,417,0,0,0,34142031,9,'Logitech USB Optical Mouse'
+7,6,934,418,0,0,0,34142039,9,'Logitech USB Optical Mouse'
+7,6,934,420,0,0,0,34142047,9,'Logitech USB Optical Mouse'
+7,6,934,422,0,0,0,34142055,9,'Logitech USB Optical Mouse'
+7,6,933,423,0,0,0,34142063,9,'Logitech USB Optical Mouse'
+7,6,933,425,0,0,0,34142071,9,'Logitech USB Optical Mouse'
+7,6,933,427,0,0,0,34142079,9,'Logitech USB Optical Mouse'
+7,6,932,430,0,0,0,34142087,9,'Logitech USB Optical Mouse'
+7,6,932,432,0,0,0,34142095,9,'Logitech USB Optical Mouse'
+7,6,931,433,0,0,0,34142103,9,'Logitech USB Optical Mouse'
+7,6,931,436,0,0,0,34142111,9,'Logitech USB Optical Mouse'
+7,6,930,438,0,0,0,34142119,9,'Logitech USB Optical Mouse'
+7,6,929,440,0,0,0,34142127,9,'Logitech USB Optical Mouse'
+7,6,928,442,0,0,0,34142143,9,'Logitech USB Optical Mouse'
+7,6,928,445,0,0,0,34142151,9,'Logitech USB Optical Mouse'
+7,6,927,447,0,0,0,34142159,9,'Logitech USB Optical Mouse'
+7,6,927,448,0,0,0,34142167,9,'Logitech USB Optical Mouse'
+7,6,926,450,0,0,0,34142175,9,'Logitech USB Optical Mouse'
+7,6,926,451,0,0,0,34142191,9,'Logitech USB Optical Mouse'
+7,6,926,452,0,0,0,34142199,9,'Logitech USB Optical Mouse'
+7,6,926,453,0,0,0,34142239,9,'Logitech USB Optical Mouse'
+7,6,925,454,0,0,0,34142287,9,'Logitech USB Optical Mouse'
+7,6,924,454,0,0,0,34142471,9,'Logitech USB Optical Mouse'
+7,4,0,0,1,0,0,34142631,9,Logitech USB Optical Mouse
+6,4,0,0,1,0,0,34142631,2,Virtual core pointer
+7,5,0,0,1,0,0,34142783,9,Logitech USB Optical Mouse
+6,5,0,0,1,0,0,34142783,2,Virtual core pointer
+7,2,0,0,0,37,0,34143383,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,37,0,34143383,3,Virtual core keyboard
+7,2,0,0,0,55,0,34144007,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,55,0,34144007,3,Virtual core keyboard
+7,3,0,0,0,55,0,34144055,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,55,0,34144055,3,Virtual core keyboard
+7,3,0,0,0,37,0,34144143,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,37,0,34144143,3,Virtual core keyboard
+7,6,924,455,0,0,0,34144591,9,'Logitech USB Optical Mouse'
+7,6,925,457,0,0,0,34144599,9,'Logitech USB Optical Mouse'
+7,6,931,462,0,0,0,34144607,9,'Logitech USB Optical Mouse'
+7,6,939,468,0,0,0,34144615,9,'Logitech USB Optical Mouse'
+7,6,944,474,0,0,0,34144623,9,'Logitech USB Optical Mouse'
+7,6,949,478,0,0,0,34144631,9,'Logitech USB Optical Mouse'
+7,6,950,479,0,0,0,34144639,9,'Logitech USB Optical Mouse'
+7,6,952,481,0,0,0,34144647,9,'Logitech USB Optical Mouse'
+7,6,954,483,0,0,0,34144655,9,'Logitech USB Optical Mouse'
+7,6,956,484,0,0,0,34144663,9,'Logitech USB Optical Mouse'
+7,6,959,486,0,0,0,34144671,9,'Logitech USB Optical Mouse'
+7,6,962,489,0,0,0,34144679,9,'Logitech USB Optical Mouse'
+7,6,963,492,0,0,0,34144687,9,'Logitech USB Optical Mouse'
+7,6,965,494,0,0,0,34144695,9,'Logitech USB Optical Mouse'
+7,6,968,496,0,0,0,34144703,9,'Logitech USB Optical Mouse'
+7,6,970,498,0,0,0,34144711,9,'Logitech USB Optical Mouse'
+7,6,971,499,0,0,0,34144719,9,'Logitech USB Optical Mouse'
+7,6,972,500,0,0,0,34144727,9,'Logitech USB Optical Mouse'
+7,6,976,502,0,0,0,34144735,9,'Logitech USB Optical Mouse'
+7,6,977,503,0,0,0,34144743,9,'Logitech USB Optical Mouse'
+7,6,979,505,0,0,0,34144751,9,'Logitech USB Optical Mouse'
+7,6,982,508,0,0,0,34144759,9,'Logitech USB Optical Mouse'
+7,6,985,510,0,0,0,34144767,9,'Logitech USB Optical Mouse'
+7,6,987,514,0,0,0,34144775,9,'Logitech USB Optical Mouse'
+7,6,988,515,0,0,0,34144783,9,'Logitech USB Optical Mouse'
+7,6,991,518,0,0,0,34144791,9,'Logitech USB Optical Mouse'
+7,6,998,524,0,0,0,34144799,9,'Logitech USB Optical Mouse'
+7,6,1002,527,0,0,0,34144807,9,'Logitech USB Optical Mouse'
+7,6,1003,528,0,0,0,34144847,9,'Logitech USB Optical Mouse'
+7,6,1005,529,0,0,0,34144863,9,'Logitech USB Optical Mouse'
+7,6,1006,530,0,0,0,34144879,9,'Logitech USB Optical Mouse'
+7,6,1008,532,0,0,0,34144887,9,'Logitech USB Optical Mouse'
+7,6,1009,533,0,0,0,34144919,9,'Logitech USB Optical Mouse'
+7,6,1010,533,0,0,0,34144943,9,'Logitech USB Optical Mouse'
+7,6,1014,535,0,0,0,34144951,9,'Logitech USB Optical Mouse'
+7,6,1015,535,0,0,0,34144959,9,'Logitech USB Optical Mouse'
+7,6,1019,536,0,0,0,34144975,9,'Logitech USB Optical Mouse'
+7,6,1020,536,0,0,0,34144983,9,'Logitech USB Optical Mouse'
+7,6,1022,536,0,0,0,34144991,9,'Logitech USB Optical Mouse'
+7,4,0,0,1,0,0,34145527,9,Logitech USB Optical Mouse
+6,4,0,0,1,0,0,34145527,2,Virtual core pointer
+7,5,0,0,1,0,0,34145671,9,Logitech USB Optical Mouse
+6,5,0,0,1,0,0,34145671,2,Virtual core pointer
+0,21,0,0,0,0,0,34145679
+NEW-WINDOW:705,372:58720358,58720358,662,705,372,0:705x372+370+148:0,0:Create new property
+0,21,0,0,0,0,0,34145679
+0,21,0,0,0,0,0,34145679
+0,21,0,0,0,0,0,34145679
+0,21,0,0,0,0,0,34145679
+7,6,1024,537,0,0,0,34146031,9,'Logitech USB Optical Mouse'
+7,6,1021,538,0,0,0,34146039,9,'Logitech USB Optical Mouse'
+7,6,1010,543,0,0,0,34146047,9,'Logitech USB Optical Mouse'
+7,6,988,549,0,0,0,34146055,9,'Logitech USB Optical Mouse'
+7,6,962,555,0,0,0,34146063,9,'Logitech USB Optical Mouse'
+7,6,938,565,0,0,0,34146071,9,'Logitech USB Optical Mouse'
+7,6,912,579,0,0,0,34146079,9,'Logitech USB Optical Mouse'
+7,6,886,591,0,0,0,34146087,9,'Logitech USB Optical Mouse'
+7,6,860,601,0,0,0,34146095,9,'Logitech USB Optical Mouse'
+7,6,840,609,0,0,0,34146103,9,'Logitech USB Optical Mouse'
+7,6,818,613,0,0,0,34146111,9,'Logitech USB Optical Mouse'
+7,6,801,618,0,0,0,34146119,9,'Logitech USB Optical Mouse'
+7,6,784,622,0,0,0,34146127,9,'Logitech USB Optical Mouse'
+7,6,774,624,0,0,0,34146135,9,'Logitech USB Optical Mouse'
+7,6,760,624,0,0,0,34146143,9,'Logitech USB Optical Mouse'
+7,6,750,627,0,0,0,34146151,9,'Logitech USB Optical Mouse'
+7,6,744,628,0,0,0,34146159,9,'Logitech USB Optical Mouse'
+7,6,736,630,0,0,0,34146167,9,'Logitech USB Optical Mouse'
+7,6,731,631,0,0,0,34146175,9,'Logitech USB Optical Mouse'
+7,6,725,632,0,0,0,34146183,9,'Logitech USB Optical Mouse'
+7,6,720,635,0,0,0,34146191,9,'Logitech USB Optical Mouse'
+7,6,712,637,0,0,0,34146199,9,'Logitech USB Optical Mouse'
+7,6,695,644,0,0,0,34146207,9,'Logitech USB Optical Mouse'
+7,6,675,654,0,0,0,34146215,9,'Logitech USB Optical Mouse'
+7,6,651,664,0,0,0,34146223,9,'Logitech USB Optical Mouse'
+7,6,627,674,0,0,0,34146231,9,'Logitech USB Optical Mouse'
+7,6,603,684,0,0,0,34146239,9,'Logitech USB Optical Mouse'
+7,6,577,694,0,0,0,34146247,9,'Logitech USB Optical Mouse'
+7,6,555,704,0,0,0,34146255,9,'Logitech USB Optical Mouse'
+7,6,531,714,0,0,0,34146263,9,'Logitech USB Optical Mouse'
+7,6,509,724,0,0,0,34146271,9,'Logitech USB Optical Mouse'
+7,6,489,732,0,0,0,34146279,9,'Logitech USB Optical Mouse'
+7,6,473,740,0,0,0,34146287,9,'Logitech USB Optical Mouse'
+7,6,466,743,0,0,0,34146295,9,'Logitech USB Optical Mouse'
+7,6,455,747,0,0,0,34146303,9,'Logitech USB Optical Mouse'
+7,6,448,750,0,0,0,34146311,9,'Logitech USB Optical Mouse'
+7,6,445,751,0,0,0,34146319,9,'Logitech USB Optical Mouse'
+7,6,442,751,0,0,0,34146327,9,'Logitech USB Optical Mouse'
+7,6,439,753,0,0,0,34146335,9,'Logitech USB Optical Mouse'
+7,6,437,754,0,0,0,34146343,9,'Logitech USB Optical Mouse'
+7,6,436,754,0,0,0,34146351,9,'Logitech USB Optical Mouse'
+7,6,435,754,0,0,0,34146359,9,'Logitech USB Optical Mouse'
+7,6,432,754,0,0,0,34146367,9,'Logitech USB Optical Mouse'
+7,6,430,754,0,0,0,34146375,9,'Logitech USB Optical Mouse'
+7,6,427,754,0,0,0,34146383,9,'Logitech USB Optical Mouse'
+7,6,422,755,0,0,0,34146391,9,'Logitech USB Optical Mouse'
+7,6,419,756,0,0,0,34146399,9,'Logitech USB Optical Mouse'
+7,6,414,756,0,0,0,34146407,9,'Logitech USB Optical Mouse'
+7,6,406,756,0,0,0,34146415,9,'Logitech USB Optical Mouse'
+7,6,397,756,0,0,0,34146423,9,'Logitech USB Optical Mouse'
+7,6,389,756,0,0,0,34146431,9,'Logitech USB Optical Mouse'
+7,6,383,756,0,0,0,34146439,9,'Logitech USB Optical Mouse'
+7,6,376,756,0,0,0,34146447,9,'Logitech USB Optical Mouse'
+7,6,372,756,0,0,0,34146455,9,'Logitech USB Optical Mouse'
+7,6,366,756,0,0,0,34146463,9,'Logitech USB Optical Mouse'
+7,6,364,756,0,0,0,34146471,9,'Logitech USB Optical Mouse'
+7,6,363,756,0,0,0,34146479,9,'Logitech USB Optical Mouse'
+7,6,361,756,0,0,0,34146511,9,'Logitech USB Optical Mouse'
+7,6,360,756,0,0,0,34146519,9,'Logitech USB Optical Mouse'
+7,6,359,756,0,0,0,34146527,9,'Logitech USB Optical Mouse'
+7,6,358,756,0,0,0,34146535,9,'Logitech USB Optical Mouse'
+7,6,356,755,0,0,0,34146543,9,'Logitech USB Optical Mouse'
+7,6,353,752,0,0,0,34146551,9,'Logitech USB Optical Mouse'
+7,6,349,751,0,0,0,34146559,9,'Logitech USB Optical Mouse'
+7,6,348,750,0,0,0,34146567,9,'Logitech USB Optical Mouse'
+7,6,345,748,0,0,0,34146575,9,'Logitech USB Optical Mouse'
+7,6,344,748,0,0,0,34146599,9,'Logitech USB Optical Mouse'
+7,6,343,747,0,0,0,34146623,9,'Logitech USB Optical Mouse'
+7,6,340,746,0,0,0,34146631,9,'Logitech USB Optical Mouse'
+7,6,339,745,0,0,0,34146639,9,'Logitech USB Optical Mouse'
+7,6,337,743,0,0,0,34146671,9,'Logitech USB Optical Mouse'
+7,6,335,743,0,0,0,34146679,9,'Logitech USB Optical Mouse'
+7,6,334,742,0,0,0,34146687,9,'Logitech USB Optical Mouse'
+7,6,332,740,0,0,0,34146695,9,'Logitech USB Optical Mouse'
+7,6,330,738,0,0,0,34146703,9,'Logitech USB Optical Mouse'
+7,6,325,735,0,0,0,34146711,9,'Logitech USB Optical Mouse'
+7,6,319,731,0,0,0,34146719,9,'Logitech USB Optical Mouse'
+7,6,316,729,0,0,0,34146727,9,'Logitech USB Optical Mouse'
+7,6,313,726,0,0,0,34146735,9,'Logitech USB Optical Mouse'
+7,6,312,725,0,0,0,34147055,9,'Logitech USB Optical Mouse'
+7,6,310,724,0,0,0,34147063,9,'Logitech USB Optical Mouse'
+7,6,309,722,0,0,0,34147071,9,'Logitech USB Optical Mouse'
+7,6,307,719,0,0,0,34147079,9,'Logitech USB Optical Mouse'
+7,6,307,718,0,0,0,34147167,9,'Logitech USB Optical Mouse'
+7,6,306,717,0,0,0,34147175,9,'Logitech USB Optical Mouse'
+7,6,306,716,0,0,0,34147183,9,'Logitech USB Optical Mouse'
+7,6,305,713,0,0,0,34147191,9,'Logitech USB Optical Mouse'
+7,6,305,712,0,0,0,34147199,9,'Logitech USB Optical Mouse'
+7,6,305,711,0,0,0,34147279,9,'Logitech USB Optical Mouse'
+7,6,305,710,0,0,0,34147303,9,'Logitech USB Optical Mouse'
+7,6,304,708,0,0,0,34147431,9,'Logitech USB Optical Mouse'
+7,6,304,708,0,0,0,34147439,9,'Logitech USB Optical Mouse'
+7,6,304,706,0,0,0,34147447,9,'Logitech USB Optical Mouse'
+7,6,304,704,0,0,0,34147463,9,'Logitech USB Optical Mouse'
+7,6,304,703,0,0,0,34147479,9,'Logitech USB Optical Mouse'
+7,6,304,702,0,0,0,34147735,9,'Logitech USB Optical Mouse'
+7,4,0,0,3,0,0,34147943,9,Logitech USB Optical Mouse
+6,4,0,0,3,0,0,34147943,2,Virtual core pointer
+7,5,0,0,3,0,0,34148127,9,Logitech USB Optical Mouse
+6,5,0,0,3,0,0,34148127,2,Virtual core pointer
+7,2,0,0,0,116,0,34149095,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,116,0,34149095,3,Virtual core keyboard
+7,3,0,0,0,116,0,34149199,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,116,0,34149199,3,Virtual core keyboard
+7,2,0,0,0,116,0,34149551,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,116,0,34149551,3,Virtual core keyboard
+7,3,0,0,0,116,0,34149655,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,116,0,34149655,3,Virtual core keyboard
+7,2,0,0,0,36,0,34150871,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,36,0,34150871,3,Virtual core keyboard
+0,21,0,0,0,0,0,34150887
+NEW-WINDOW:451,254:58720370,58720370,37912545,0,0,0:26x60+879+458:0,0:Exporting graph "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false"
+0,21,0,0,0,0,0,34150887
+0,21,0,0,0,0,0,34150887
+0,21,0,0,0,0,0,34150887
+7,3,0,0,0,36,0,34150951,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,36,0,34150951,3,Virtual core keyboard
+7,2,0,0,0,28,0,34152063,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,28,0,34152063,3,Virtual core keyboard
+7,3,0,0,0,28,0,34152135,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,28,0,34152135,3,Virtual core keyboard
+7,2,0,0,0,26,0,34152287,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,26,0,34152287,3,Virtual core keyboard
+7,3,0,0,0,26,0,34152383,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,26,0,34152383,3,Virtual core keyboard
+7,2,0,0,0,39,0,34152535,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,39,0,34152535,3,Virtual core keyboard
+7,3,0,0,0,39,0,34152639,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,39,0,34152639,3,Virtual core keyboard
+7,2,0,0,0,28,0,34152847,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,28,0,34152847,3,Virtual core keyboard
+7,3,0,0,0,28,0,34152919,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,28,0,34152919,3,Virtual core keyboard
+7,2,0,0,0,17,0,34153183,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,17,0,34153183,3,Virtual core keyboard
+7,3,0,0,0,17,0,34153271,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,17,0,34153271,3,Virtual core keyboard
+7,2,0,0,0,42,0,34153767,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,42,0,34153767,3,Virtual core keyboard
+7,2,0,0,0,30,0,34153847,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,30,0,34153847,3,Virtual core keyboard
+7,3,0,0,0,42,0,34153871,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,42,0,34153871,3,Virtual core keyboard
+7,2,0,0,0,31,0,34153927,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,31,0,34153927,3,Virtual core keyboard
+7,3,0,0,0,30,0,34153959,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,30,0,34153959,3,Virtual core keyboard
+7,3,0,0,0,31,0,34154055,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,31,0,34154055,3,Virtual core keyboard
+7,2,0,0,0,62,0,34154423,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,62,0,34154423,3,Virtual core keyboard
+7,2,0,0,0,59,0,34154599,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,59,0,34154599,3,Virtual core keyboard
+7,3,0,0,0,59,0,34154671,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,59,0,34154671,3,Virtual core keyboard
+7,3,0,0,0,62,0,34154695,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,62,0,34154695,3,Virtual core keyboard
+7,2,0,0,0,28,0,34154911,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,28,0,34154911,3,Virtual core keyboard
+7,3,0,0,0,28,0,34155015,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,28,0,34155015,3,Virtual core keyboard
+7,2,0,0,0,46,0,34155103,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,46,0,34155103,3,Virtual core keyboard
+7,3,0,0,0,46,0,34155247,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,46,0,34155247,3,Virtual core keyboard
+7,2,0,0,0,33,0,34155335,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,33,0,34155335,3,Virtual core keyboard
+7,3,0,0,0,33,0,34155439,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,33,0,34155439,3,Virtual core keyboard
+7,2,0,0,0,36,0,34155895,10,Dell Dell QuietKey Keyboard
+6,2,0,0,0,36,0,34155895,3,Virtual core keyboard
+0,21,0,0,0,0,0,34155900
+NEW-WINDOW:451,217:58720370,58720370,662,451,217,0:451x217+879+458:0,0:Exporting graph "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false"
+0,21,0,0,0,0,0,34155900
+0,21,0,0,0,0,0,34155900
+0,21,0,0,0,0,0,34155900
+0,21,0,0,0,0,0,34155900
+0,21,0,0,0,0,0,34155909
+NEW-WINDOW:640,459:58720376,58720376,37914398,0,0,0:26x60+500+48:0,0:
+0,21,0,0,0,0,0,34155909
+0,21,0,0,0,0,0,34155909
+0,21,0,0,0,0,0,34155909
+7,3,0,0,0,36,0,34155978,10,Dell Dell QuietKey Keyboard
+6,3,0,0,0,36,0,34155978,3,Virtual core keyboard
+0,21,0,0,0,0,0,34156039
+NEW-WINDOW:-1261359148,32616:58720376,58720376,662,640,422,0:30020672x0+1+0:30060944,30060944:
+0,21,0,0,0,0,0,34156039
+0,21,0,0,0,0,0,34156039
+0,21,0,0,0,0,0,34156039
+0,21,0,0,0,0,0,34156039

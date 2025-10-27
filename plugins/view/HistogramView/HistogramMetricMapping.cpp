@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,6 +17,7 @@
  *
  */
 
+#include <tulip/GraphImpl.h>
 #include <tulip/GlQuantitativeAxis.h>
 #include <tulip/GlLines.h>
 #include <tulip/GlLine.h>
@@ -29,8 +30,6 @@
 #include <tulip/Perspective.h>
 
 #include <QApplication>
-#include <QToolTip>
-#include <QMainWindow>
 #include <QMenu>
 #include <QMouseEvent>
 
@@ -49,12 +48,6 @@ std::string getStringFromNumber(T number, unsigned int precision = 5) {
 }
 
 namespace tlp {
-
-struct CoordXOrdering : public binary_function<Coord, Coord, bool> {
-  bool operator()(Coord c1, Coord c2) {
-    return c1.getX() < c2.getX();
-  }
-};
 
 Coord *computeStraightLineIntersection(const Coord line1[2], const Coord line2[2]) {
 
@@ -172,7 +165,8 @@ void GlEditableCurve::init() {
 }
 
 void GlEditableCurve::draw(float lod, Camera *camera) {
-  std::sort(curvePoints.begin(), curvePoints.end(), CoordXOrdering());
+  std::sort(curvePoints.begin(), curvePoints.end(),
+            [](const Coord &c1, const Coord &c2) { return c1.getX() < c2.getX(); });
   camera->initGl();
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -460,7 +454,7 @@ void GlSizeScale::translate(const Coord &move) {
 }
 
 GlGlyphScale::GlGlyphScale(const Coord &baseCoord, const float length, Orientation orientation)
-    : glyphGraph(newGraph()),
+    : glyphGraph(GraphImpl::newGraph()),
       glyphGraphInputData(new GlGraphInputData(glyphGraph, &glyphGraphRenderingParameters)),
       baseCoord(baseCoord), length(length), orientation(orientation), size(0) {
   glyphGraphLayout = glyphGraph->getProperty<LayoutProperty>("viewLayout");
@@ -568,7 +562,7 @@ HistogramMetricMapping::HistogramMetricMapping()
       glSizeScale(nullptr), glGlyphScale(nullptr), colorScaleConfigDialog(nullptr),
       sizeScaleConfigDialog(nullptr), glyphScaleConfigDialog(nullptr), lastXAxisLength(0),
       histoXAxis(nullptr), mappinqPolyQuad(nullptr), scaleAxisOffset(0),
-      glyphMappingGraph(newGraph()),
+      glyphMappingGraph(GraphImpl::newGraph()),
       glyphMappingGraphInputData(
           new GlGraphInputData(glyphMappingGraph, &glyphMapppingGraphRenderingParameters)),
       mappingType(VIEWCOLOR_MAPPING), popupMenu(nullptr), colorMappingMenu(nullptr),
@@ -578,7 +572,7 @@ HistogramMetricMapping::HistogramMetricMapping()
 HistogramMetricMapping::HistogramMetricMapping(const HistogramMetricMapping &histoMetricMapping)
     : curve(nullptr), curveDragStarted(false), selectedAnchor(nullptr), colorScale(nullptr),
       glColorScale(nullptr), glSizeScale(nullptr), glGlyphScale(nullptr), histoXAxis(nullptr),
-      mappinqPolyQuad(nullptr), scaleAxisOffset(0), glyphMappingGraph(newGraph()),
+      mappinqPolyQuad(nullptr), scaleAxisOffset(0), glyphMappingGraph(GraphImpl::newGraph()),
       glyphMappingGraphInputData(
           new GlGraphInputData(glyphMappingGraph, &glyphMapppingGraphRenderingParameters)),
       popupMenu(nullptr), colorMappingMenu(nullptr), viewColorMappingAction(nullptr),
@@ -786,15 +780,15 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
   initInteractor();
 
   if (e->type() == QEvent::MouseMove) {
-    int x = glWidget->width() - me->x();
-    int y = me->y();
+    int x = glWidget->width() - me->pos().x();
+    int y = me->pos().y();
     Coord screenCoords(x, y, 0);
     Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
         glWidget->screenToViewport(screenCoords)));
 
     if (!curveDragStarted) {
       Coord *anchor = curve->getCurveAnchorAtPointIfAny(
-          glWidget->screenToViewport(Coord(me->x(), glWidget->height() - me->y(), 0)),
+          glWidget->screenToViewport(Coord(me->pos().x(), glWidget->height() - me->pos().y(), 0)),
           &glWidget->getScene()->getLayer("Main")->getCamera());
       bool pointerColorScale = pointerUnderScale(sceneCoords);
 
@@ -807,7 +801,7 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
       if (selectedAnchor != nullptr) {
         glWidget->setCursor(QCursor(Qt::OpenHandCursor));
       } else if (pointerColorScale) {
-        glWidget->setCursor(QCursor(Qt::WhatsThisCursor));
+        glWidget->setCursor(QCursor(qtWhatsThisCursor));
       } else {
         glWidget->setCursor(QCursor(Qt::ArrowCursor));
       }
@@ -829,8 +823,8 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
       delete selectedAnchor;
       selectedAnchor = nullptr;
     } else {
-      int x = glWidget->width() - me->x();
-      int y = me->y();
+      int x = glWidget->width() - me->pos().x();
+      int y = me->pos().y();
       Coord screenCoords(x, y, 0);
       Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
           glWidget->screenToViewport(screenCoords)));

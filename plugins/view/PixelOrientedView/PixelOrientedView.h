@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -100,8 +100,8 @@ public:
   Graph *getPixelOrientedGraph() {
     return pixelOrientedGraph;
   }
-  QList<QWidget *> configurationWidgets() const override;
-  void interactorsInstalled(const QList<tlp::Interactor *> &) override;
+  std::list<QWidget *> configurationWidgets() const override;
+  void interactorsInstalled(const std::list<tlp::Interactor *> &) override;
 
   void toggleInteractors(const bool activate);
 

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -44,7 +44,7 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseMove) {
 
     if (!dragStarted) {
-      selectedAxis = parallelView->getAxisUnderPointer(me->x(), me->y());
+      selectedAxis = parallelView->getAxisUnderPointer(me->pos().x(), me->pos().y());
       vector<ParallelAxis *> allAxis(parallelView->getAllAxis());
 
       if (selectedAxis == allAxis[0] && allAxis.size() > 1) {
@@ -70,8 +70,8 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
 
       parallelView->refresh();
     } else if (selectedAxis != nullptr) {
-      x = glWidget->width() - me->x();
-      y = me->y();
+      x = glWidget->width() - me->pos().x();
+      y = me->pos().y();
       Coord screenCoords(x, y, 0.0f);
       Coord sceneCoords(glWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(
           glWidget->screenToViewport(screenCoords)));

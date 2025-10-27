@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -36,18 +36,18 @@
 #include <tulip/Perspective.h>
 #include <tulip/ViewGraphPropertiesSelectionWidget.h>
 #include <tulip/WorkspacePanel.h>
+#include <tulip/NeedConfigurationMsgBox.h>
 
 #include "PixelOrientedInteractors.h"
 #include "PixelOrientedView.h"
 #include "PixelOrientedViewQuickAccessBar.h"
 
-#include <QApplication>
 #include <QAbstractButton>
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>
 #include <QMessageBox>
-#include <QMainWindow>
 #include <QProgressDialog>
+#include <QPushButton>
 #include <QTimer>
 
 using namespace std;
@@ -56,7 +56,6 @@ using namespace pocore;
 static void setGraphView(tlp::GlGraphComposite *glGraph, bool displayNodes) {
   tlp::GlGraphRenderingParameters param = glGraph->getRenderingParameters();
   param.setAntialiasing(true);
-  param.setViewNodeLabel(true);
   param.setFontsType(2);
   param.setSelectedNodesStencil(1);
   param.setNodesStencil(0xFFFF);
@@ -101,8 +100,8 @@ PixelOrientedView::~PixelOrientedView() {
   delete graphComposite;
 }
 
-QList<QWidget *> PixelOrientedView::configurationWidgets() const {
-  return QList<QWidget *>() << propertiesSelectionWidget << optionsWidget;
+std::list<QWidget *> PixelOrientedView::configurationWidgets() const {
+  return std::list<QWidget *>{propertiesSelectionWidget, optionsWidget};
 }
 
 void PixelOrientedView::initGlWidget() {
@@ -157,24 +156,21 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
     optionsWidget = new PixelOrientedOptionsWidget();
     layoutFunctionsMap["Spiral"] = spiralLayout;
 
-    // build QMessageBox indicating the lack of selected properties
+    // create box indicating the lack of selected properties
     QGraphicsRectItem *qgrItem = new QGraphicsRectItem(0, 0, 1, 1);
     qgrItem->setBrush(Qt::transparent);
     qgrItem->setPen(QPen(Qt::transparent));
     graphicsView()->scene()->addItem(qgrItem);
 
-    QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning, "",
-                                          "<b><font size=\"+1\">"
-                                          "No graph properties selected.</font></b><br/><br/>"
-                                          "Open the <b>Properties</b> configuration tab<br/>"
-                                          "to proceed.",
-                                          QMessageBox::Ok);
-    msgBox->setModal(false);
-    auto okButton = msgBox->button(QMessageBox::Ok);
+    QPushButton *okButton;
+    QWidget *msgBox =
+        new_NeedConfigurationMsgBox("<b><font size=\"+1\">"
+                                    "No graph properties selected.</font></b><br/><br/>"
+                                    "Open the <b>Properties</b> configuration tab<br/>"
+                                    "to proceed.",
+                                    &okButton);
     connect(okButton, SIGNAL(released()), this, SLOT(showPropertiesSelectionWidget()));
-    // set a specific name before applying style sheet
-    msgBox->setObjectName("needConfigurationMessageBox");
-    Perspective::setStyleSheet(msgBox);
+    connect(okButton, SIGNAL(released()), msgBox, SLOT(hide()));
     noPropertyMsgBox = graphicsView()->scene()->addWidget(msgBox);
     noPropertyMsgBox->setParentItem(qgrItem);
   }
@@ -266,7 +262,7 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
   registerTriggers();
 
   string detailOverviewName;
-  dataSet.getDeprecated("detail overview name", "detail overview  name", detailOverviewName);
+  dataSet.get("detail overview name", detailOverviewName);
   if (!detailOverviewName.empty()) {
     switchFromSmallMultiplesToDetailView(overviewsMap[detailOverviewName]);
   }
@@ -444,7 +440,6 @@ void PixelOrientedView::generatePixelOverview(PixelOrientedOverview *pixelOvervi
 
 void PixelOrientedView::propertiesSelected(bool flag) {
   noPropertyMsgBox->setVisible(!flag);
-  toggleInteractors(flag);
   if (quickAccessBarVisible())
     _quickAccessBar->setEnabled(flag);
   setOverviewVisible(flag);
@@ -676,11 +671,8 @@ void PixelOrientedView::switchFromSmallMultiplesToDetailView(PixelOrientedOvervi
     propertiesSelectionWidget->setEnabled(false);
   }
 
-  if (tlp::inGuiTestingMode())
-    // sometimes we must wait a bit to ensure an effective centerView
-    QTimer::singleShot(200, this, SLOT(centerView()));
-  else
-    centerView();
+  // sometimes we must wait a bit to ensure an effective centerView
+  QTimer::singleShot(200, this, SLOT(centerView()));
 }
 
 void PixelOrientedView::switchFromDetailViewToSmallMultiples() {
@@ -711,7 +703,7 @@ BoundingBox PixelOrientedView::getSmallMultiplesViewBoundingBox() {
   return glBBSV.getBoundingBox();
 }
 
-void PixelOrientedView::interactorsInstalled(const QList<tlp::Interactor *> &) {
+void PixelOrientedView::interactorsInstalled(const std::list<tlp::Interactor *> &) {
   toggleInteractors(detailOverview != nullptr);
 }
 

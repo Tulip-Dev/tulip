@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -19,7 +19,6 @@
 
 #include <QMouseEvent>
 
-#include <tulip/Graph.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlTools.h>
 #include <tulip/DrawingTools.h>
@@ -29,14 +28,12 @@
 #include <tulip/Camera.h>
 #include <tulip/MouseBoxZoomer.h>
 
-#include <tulip/OpenGlIncludes.h>
-
 using namespace std;
 using namespace tlp;
 
-MouseBoxZoomer::MouseBoxZoomer(Qt::MouseButton button, Qt::KeyboardModifier modifier)
-    : mButton(button), kModifier(modifier), x(0), y(0), w(0), h(0), started(false), graph(nullptr) {
-}
+MouseBoxZoomer::MouseBoxZoomer(Qt::MouseButton button, Qt::KeyboardModifier modifier, bool update)
+    : mButton(button), kModifier(modifier), x(0), y(0), w(0), h(0), started(false),
+      updateViewport(update), graph(nullptr) {}
 MouseBoxZoomer::~MouseBoxZoomer() {}
 //=====================================================================
 bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
@@ -49,8 +46,8 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
     if (qMouseEv->buttons() == mButton &&
         (kModifier == Qt::NoModifier || qMouseEv->modifiers() & kModifier)) {
       if (!started) {
-        x = qMouseEv->x();
-        y = glw->height() - qMouseEv->y();
+        x = qMouseEv->pos().x();
+        y = glw->height() - qMouseEv->pos().y();
         w = 0;
         h = 0;
         started = true;
@@ -65,7 +62,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
       return true;
     }
 
-    if (qMouseEv->buttons() == Qt::MidButton) {
+    if (qMouseEv->buttons() == Qt::MiddleButton) {
       started = false;
       glw->redraw();
       return true;
@@ -85,11 +82,11 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
       }
 
       if (started) {
-        if ((qMouseEv->x() > 0) && (qMouseEv->x() < glw->width()))
-          w = qMouseEv->x() - x;
+        if ((qMouseEv->pos().x() > 0) && (qMouseEv->pos().x() < glw->width()))
+          w = qMouseEv->pos().x() - x;
 
-        if ((qMouseEv->y() > 0) && (qMouseEv->y() < glw->height()))
-          h = y - (glw->height() - qMouseEv->y());
+        if ((qMouseEv->pos().y() > 0) && (qMouseEv->pos().y() < glw->height()))
+          h = y - (glw->height() - qMouseEv->pos().y());
 
         glw->redraw();
         return true;
@@ -98,10 +95,12 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if (e->type() == QEvent::MouseButtonDblClick) {
-    GlBoundingBoxSceneVisitor bbVisitor(inputData);
-    glw->getScene()->getLayer("Main")->acceptVisitor(&bbVisitor);
-    QtGlSceneZoomAndPanAnimator zoomAnPan(glw, bbVisitor.getBoundingBox());
-    zoomAnPan.animateZoomAndPan();
+    if (updateViewport) {
+      GlBoundingBoxSceneVisitor bbVisitor(inputData);
+      glw->getScene()->getLayer("Main")->acceptVisitor(&bbVisitor);
+      QtGlSceneZoomAndPanAnimator zoomAnPan(glw, bbVisitor.getBoundingBox());
+      zoomAnPan.animateZoomAndPan();
+    }
     return true;
   }
 
@@ -119,7 +118,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
       if (started) {
         started = false;
 
-        if (!(w == 0 && h == 0)) {
+        if (!(w == 0 && h == 0) && updateViewport) {
           int width = glw->width();
           int height = glw->height();
 
@@ -170,7 +169,7 @@ bool MouseBoxZoomer::draw(GlMainWidget *glw) {
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
 
-  float col[4] = {0.8f, 0.4f, 0.4f, 0.2f};
+  float col[4] = {0.7f, 0.7f, 0.7f, 0.2f};
   setColor(col);
   glBegin(GL_QUADS);
   glVertex2f(x, y);

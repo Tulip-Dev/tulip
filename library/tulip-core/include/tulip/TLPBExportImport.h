@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -79,18 +79,8 @@ public:
                     "(compressed)</p><p>Exports a graph in a file using the Tulip binary format.",
                     "1.2", "File")
 
-  std::string fileExtension() const override {
-    return "tlpb";
-  }
-
-  std::list<std::string> gzipFileExtensions() const override {
-    std::list<std::string> ext;
-    ext.push_back("tlpb.gz");
-    ext.push_back("tlpbz");
-    return ext;
-  }
-
-  TLPBExport(const tlp::PluginContext *context) : ExportModule(context) {}
+  TLPBExport(const tlp::PluginContext *context)
+      : ExportModule(context, {"tlpb", "tlpb.gz", "tlpbz"}) {}
   ~TLPBExport() override {}
 
   bool exportGraph(std::ostream &) override;
@@ -99,13 +89,13 @@ public:
     return ":/tulip/gui/icons/tlpb32x32.png";
   }
 
-  inline tlp::node getNode(tlp::node n) {
-    assert(graph->isElement(n));
+  // ensure the export of reindexed nodes with consecutive ids
+  inline tlp::node exportedNode(tlp::node n) {
     return tlp::node(graph->nodePos(n));
   }
 
-  inline tlp::edge getEdge(tlp::edge e) {
-    assert(graph->isElement(e));
+  // ensure the export of reindexed edges with consecutive ids
+  inline tlp::edge exportedEdge(tlp::edge e) {
     return tlp::edge(graph->edgePos(e));
   }
 
@@ -120,35 +110,23 @@ public:
  * \brief This plugin reads a Tulip graph using a binary format
  *
  */
-class TLPBImport : public tlp::ImportModule {
+class TLPBImport : public tlp::ImportFileModule {
 public:
   PLUGININFORMATION("TLPB Import", "David Auber, Patrick Mary", "13/07/2012",
-                    "<p>Supported extensions: tlpb, tlpb.gz (compressed), tlpbz "
+                    "<p>File extensions: tlpb, tlpbz (compressed), tlpb.gz "
                     "(compressed)</p><p>Imports a graph recorded in a file using the Tulip binary "
                     "format.</p>",
                     "1.2", "File")
 
-  TLPBImport(tlp::PluginContext *context);
+  TLPBImport(tlp::PluginContext *context)
+      : ImportFileModule(context, {"tlpb", "tlpb.gz", "tlpbz"}) {}
   ~TLPBImport() override {}
 
   std::string icon() const override {
     return ":/tulip/gui/icons/tlpb32x32.png";
   }
 
-  std::list<std::string> fileExtensions() const override {
-    std::list<std::string> l;
-    l.push_back("tlpb");
-    return l;
-  }
-
-  std::list<std::string> gzipFileExtensions() const override {
-    std::list<std::string> ext;
-    ext.push_back("tlpb.gz");
-    ext.push_back("tlpbz");
-    return ext;
-  }
-
-  bool importGraph() override;
+  bool importFile() override;
 };
 
 /*@}*/

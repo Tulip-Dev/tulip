@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -38,8 +38,15 @@ class PluginProgress;
  * @brief The ExportModule class
  */
 class ExportModule : public tlp::Plugin {
+
+  /**
+   * @brief The supported file extensions
+   **/
+  std::list<std::string> extensions;
+
 public:
-  ExportModule(const tlp::PluginContext *context) {
+  ExportModule(const tlp::PluginContext *context, std::list<std::string> exts = {})
+      : extensions(exts) {
     if (context != nullptr) {
       const tlp::AlgorithmContext *algoritmContext =
           static_cast<const tlp::AlgorithmContext *>(context);
@@ -60,37 +67,13 @@ public:
   }
 
   /**
-   * @brief Gets the extension of the file format this export plugin saves to.
-   * e.g. a GML export would return 'gml'.
-   *
-   * @return :string the extension that this export module saves to.
-   **/
-  virtual std::string fileExtension() const = 0;
-
-  /**
-   * @brief Gets a list of the extensions file format when compressed with gzip this export plugin
-   *saves to.
-   *
-   * @since Tulip 5.0
-   *
-   * @return :string the extension that this export module saves to.
-   **/
-  virtual std::list<std::string> gzipFileExtensions() const {
-    return std::list<std::string>();
-  }
-
-  /**
-   * @brief Gets a list of all extensions file format (normal and gzipped) this export plugin saves
-   * to.
-   *
-   * @since Tulip 5.0
+   * @brief Gets the list of the extensions file formats supported.
+   * The ones after the first are supposed to be gzip compressed
    *
    * @return the list of file extensions this export plugin saves to.
    */
-  std::list<std::string> allFileExtensions() const {
-    std::list<std::string> ext(gzipFileExtensions());
-    ext.push_back(fileExtension());
-    return ext;
+  std::list<std::string> fileExtensions() const {
+    return extensions;
   }
 
   /**

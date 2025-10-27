@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -28,6 +28,7 @@
 #include "SOMViewInteractor.h"
 #include "SOMPropertiesWidget.h"
 
+#include <tulip/GraphImpl.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/NumericProperty.h>
 #include <tulip/ColorProperty.h>
@@ -40,8 +41,9 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/Perspective.h>
 #include <tulip/WorkspacePanel.h>
+#include <tulip/NeedConfigurationMsgBox.h>
 
-#include <QAbstractButton>
+#include <QPushButton>
 #include <QMenu>
 #include <QTimer>
 #include <QToolTip>
@@ -120,13 +122,11 @@ void SOMView::construct(QWidget *) {
   mapWidget->installEventFilter(this);
 
   initGlMainViews();
-  mapWidget->installEventFilter(this);
 
   isDetailedMode = false;
 
   // Interactors update
   previewWidget->installEventFilter(&navigator);
-  previewWidget->installEventFilter(this);
 
   // Init var
   graphLayoutProperty = nullptr;
@@ -140,24 +140,20 @@ void SOMView::construct(QWidget *) {
   // Init the map to nullptr
   som = nullptr;
 
-  // build QMessageBox indicating the lack of selected properties
+  // create box indicating the lack of selected properties
   QGraphicsRectItem *qgrItem = new QGraphicsRectItem(0, 0, 1, 1);
   qgrItem->setBrush(Qt::transparent);
   qgrItem->setPen(QPen(Qt::transparent));
   graphicsView()->scene()->addItem(qgrItem);
 
-  QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning, "",
-                                        "<b><font size=\"+1\">"
-                                        "No graph properties selected.</b></font><br/><br/>"
-                                        "Open the <b>Properties</b> configuration tab<br/>"
-                                        "to proceed.",
-                                        QMessageBox::Ok);
-  msgBox->setModal(false);
-  auto okButton = msgBox->button(QMessageBox::Ok);
+  QPushButton *okButton;
+  QWidget *msgBox = new_NeedConfigurationMsgBox("<b><font size=\"+1\">"
+                                                "No graph properties selected.</font></b><br/><br/>"
+                                                "Open the <b>Properties</b> configuration tab<br/>"
+                                                "to proceed.",
+                                                &okButton);
   connect(okButton, SIGNAL(released()), this, SLOT(showPropertiesSelectionWidget()));
-  // set a specific name before applying style sheet
-  msgBox->setObjectName("needConfigurationMessageBox");
-  Perspective::setStyleSheet(msgBox);
+  connect(okButton, SIGNAL(released()), msgBox, SLOT(hide()));
   noPropertyMsgBox = graphicsView()->scene()->addWidget(msgBox);
   noPropertyMsgBox->setParentItem(qgrItem);
 }
@@ -180,7 +176,7 @@ void SOMView::initGlMainViews() {
   }
 
   // No graph to print
-  GlGraphComposite *graphComposite = new GlGraphComposite(tlp::newGraph());
+  GlGraphComposite *graphComposite = new GlGraphComposite(GraphImpl::newGraph());
   mainLayer->addGlEntity(graphComposite, "graph");
   // activate hover
 
@@ -191,7 +187,7 @@ void SOMView::initGlMainViews() {
     mapWidget->getScene()->addExistingLayer(mainLayer);
   }
 
-  graphComposite = new GlGraphComposite(tlp::newGraph());
+  graphComposite = new GlGraphComposite(GraphImpl::newGraph());
   mainLayer->addGlEntity(graphComposite, "graph");
 
   GlGraphRenderingParameters *renderingParameters = graphComposite->getRenderingParametersPointer();
@@ -241,7 +237,7 @@ void SOMView::setState(const DataSet &dataSet) {
     construct(nullptr);
 
   if (isDetailedMode) {
-    properties->configurationWidgets()[0]->parentWidget()->parentWidget()->setVisible(true);
+    properties->configurationWidgets().front()->parentWidget()->parentWidget()->setVisible(true);
     isDetailedMode = false;
   }
 
@@ -813,9 +809,7 @@ vector<SOMPreviewComposite *> SOMView::getPreviews() {
 
 void SOMView::getPreviewsAtViewportCoord(int x, int y, std::vector<SOMPreviewComposite *> &result) {
   vector<SelectedEntity> selectedEntities;
-  previewWidget->getScene()->selectEntities(RenderingSimpleEntities, x, y, 0, 0, nullptr,
-                                            selectedEntities);
-
+  previewWidget->pickGlEntities(x, y, selectedEntities);
   for (auto itEntities = selectedEntities.begin(); itEntities != selectedEntities.end();
        ++itEntities) {
     for (auto itSOM = propertyToPreviews.begin(); itSOM != propertyToPreviews.end(); ++itSOM) {
@@ -845,15 +839,14 @@ void SOMView::computeColor(SOMMap *som, tlp::NumericProperty *property, tlp::Col
 
 bool SOMView::eventFilter(QObject *obj, QEvent *event) {
 
-  if (obj == previewWidget) {
-    if (event->type() == QMouseEvent::MouseButtonDblClick) {
+  if (event->type() == QMouseEvent::MouseButtonDblClick) {
+    if (obj == previewWidget) {
       QMouseEvent *me = static_cast<QMouseEvent *>(event);
 
       if (me->button() == Qt::LeftButton) {
         vector<SOMPreviewComposite *> properties;
-        Coord screenCoords(me->x(), me->y(), 0.0f);
-        Coord &&viewportCoords = getGlMainWidget()->screenToViewport(screenCoords);
-        getPreviewsAtViewportCoord(viewportCoords.x(), viewportCoords.y(), properties);
+
+        getPreviewsAtViewportCoord(me->pos().x(), me->pos().y(), properties);
 
         if (!properties.empty()) {
           addPropertyToSelection(properties.front()->getPropertyName());
@@ -861,24 +854,7 @@ bool SOMView::eventFilter(QObject *obj, QEvent *event) {
 
         return true;
       }
-    }
-
-    if (event->type() == QMouseEvent::ToolTip) {
-      QHelpEvent *he = static_cast<QHelpEvent *>(event);
-      vector<SOMPreviewComposite *> properties;
-      Coord screenCoords(he->x(), he->y(), 0.0f);
-      Coord &&viewportCoords = getGlMainWidget()->screenToViewport(screenCoords);
-      getPreviewsAtViewportCoord(viewportCoords.x(), viewportCoords.y(), properties);
-
-      if (!properties.empty()) {
-        QToolTip::showText(he->globalPos(),
-                           QString::fromStdString(properties.front()->getPropertyName()));
-      }
-
-      return true;
-    }
-  } else if (obj == mapWidget) {
-    if (event->type() == QMouseEvent::MouseButtonDblClick) {
+    } else if (obj == mapWidget) {
       switchToPreviewMode();
       return true;
     }
@@ -1068,7 +1044,7 @@ void SOMView::selectAllNodesInMask() {
   }
 }
 
-QList<QWidget *> SOMView::configurationWidgets() const {
+std::list<QWidget *> SOMView::configurationWidgets() const {
   return properties->configurationWidgets();
 }
 
@@ -1112,13 +1088,13 @@ void SOMView::switchToDetailedMode(SOMPreviewComposite *preview) {
   assert(preview);
   internalSwitchToDetailedMode(preview, properties->useAnimation());
   // hide configuration widgets
-  properties->configurationWidgets()[0]->parentWidget()->parentWidget()->setVisible(false);
+  properties->configurationWidgets().front()->parentWidget()->parentWidget()->setVisible(false);
 }
 
 void SOMView::switchToPreviewMode() {
   internalSwitchToPreviewMode(properties->useAnimation());
   // show configuration widgets
-  properties->configurationWidgets()[0]->parentWidget()->parentWidget()->setVisible(true);
+  properties->configurationWidgets().front()->parentWidget()->parentWidget()->setVisible(true);
 }
 
 void SOMView::copyToGlMainWidget(GlMainWidget *widget) {
@@ -1172,7 +1148,7 @@ void SOMView::internalSwitchToPreviewMode(bool animation) {
   toggleInteractors(false);
 }
 
-void SOMView::interactorsInstalled(const QList<tlp::Interactor *> &) {
+void SOMView::interactorsInstalled(const std::list<tlp::Interactor *> &) {
   toggleInteractors(isDetailedMode);
 }
 

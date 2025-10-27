@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -788,15 +788,7 @@ BmdLink<node> *PlanarityTestImpl::searchRBC(int dir, BmdLink<node> *it, node n,
     return it;
 
   BmdLink<node> *prev = it;
-  BmdLink<node> *aux1 = it->prev();
-  BmdLink<node> *aux2 = it->succ();
-
-  if (dir == 1) {
-    // leda_swap(aux1, aux2);
-    BmdLink<node> *tmp = aux1;
-    aux1 = aux2;
-    aux2 = tmp;
-  }
+  BmdLink<node> *aux1 = (dir == 1) ? it->succ() : it->prev();
 
   it = aux1;
   node u = it->getData();

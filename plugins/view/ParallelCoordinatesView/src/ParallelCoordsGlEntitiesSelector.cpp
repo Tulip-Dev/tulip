@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -39,8 +39,8 @@ bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
     if (qMouseEv->buttons() == Qt::LeftButton) {
 
       if (!started) {
-        x = qMouseEv->x();
-        y = qMouseEv->y();
+        x = qMouseEv->pos().x();
+        y = qMouseEv->pos().y();
         w = 0;
         h = 0;
         started = true;
@@ -56,11 +56,11 @@ bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
     QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
 
     if (qMouseEv->buttons() & Qt::LeftButton && started) {
-      if ((qMouseEv->x() > 0) && (qMouseEv->x() < glMainWidget->width()))
-        w = qMouseEv->x() - x;
+      if ((qMouseEv->pos().x() > 0) && (qMouseEv->pos().x() < glMainWidget->width()))
+        w = qMouseEv->pos().x() - x;
 
-      if ((qMouseEv->y() > 0) && (qMouseEv->y() < glMainWidget->height()))
-        h = qMouseEv->y() - y;
+      if ((qMouseEv->pos().y() > 0) && (qMouseEv->pos().y() < glMainWidget->height()))
+        h = qMouseEv->pos().y() - y;
 
       parallelView->refresh();
       return true;

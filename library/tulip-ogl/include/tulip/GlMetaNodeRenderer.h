@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -23,7 +23,7 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/Observable.h>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 namespace tlp {
 
@@ -59,7 +59,7 @@ protected:
 
 private:
   GlGraphInputData *_inputData;
-  std::unordered_map<Graph *, GlScene *> _metaGraphToSceneMap;
+  tlp_hash_map<Graph *, GlScene *> _metaGraphToSceneMap;
 };
 } // namespace tlp
 

@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -81,7 +81,7 @@ class TLP_QT_SCOPE GlSimpleEntityItemModel : public QAbstractItemModel {
   Q_ENUMS(SimpleEntityRole)
 
 public:
-  enum SimpleEntityRole { SimpleEntityRole = Qt::UserRole + 1 };
+  enum class SimpleEntityRole { SimpleEntityRole = Qt::UserRole + 1 };
 
   GlSimpleEntityItemModel(GlSimpleEntityItemEditor *itemEditor, QObject *parent = nullptr);
   ~GlSimpleEntityItemModel() override;

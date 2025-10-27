@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -63,40 +63,15 @@ This abstract class describes an export plugin.
   
   virtual ~ExportModule();
 
-  virtual std::string fileExtension() const = 0;
+  std::list<std::string> fileExtensions() const;
 %Docstring
-tlp.ExportModule.fileExtension()
+tlp.ExportModule.fileExtensions()
 
-.. versionadded:: 5.0
+.. versionadded:: 6.0
 
-This method returns the extension of the file format this export plugin saves to.
+This method returns a list of the extensions file format supported. The ones after the first are supposed to be gzip compressed.
 Derived class can implement it in order for the plugin to be automatically called
 by the :func:`tlp.saveGraph` function.
-
-:rtype: string
-%End
-
-  virtual std::list<std::string> gzipFileExtensions() const;
-%Docstring
-tlp.ExportModule.gzipFileExtensions()
-
-.. versionadded:: 5.0
-
-This method returns a list of the extensions file format when compressed with gzip
-this export plugin saves to.
-Derived class can implement it in order for the plugin to be automatically called
-by the :func:`tlp.saveGraph` function.
-
-:rtype: list of string
-%End
-
-  std::list<std::string> allFileExtensions() const;
-%Docstring
-tlp.ExportModule.allFileExtensions()
-
-.. versionadded:: 5.0
-
-This method returns a list of all extensions file format (normal and gzipped) this export plugin saves to.
 
 :rtype: list of string
 %End
@@ -118,12 +93,12 @@ you have to use the following syntax::
   os << self.graph.numberOfNodes() << "\n"
   os << self.graph.numberOfEdges() << "\n"
 
-A boolean must also be returned
+A Boolean must also be returned
 to indicate if the export was successful.
 
 :param os: an output file stream
 :type os: std.ostream 
-:rtype: boolean
+:rtype: Boolean
 %End 
 
   tlp::Graph *graph;

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,6 +21,8 @@
 #include "ConvolutionClustering.h"
 
 #include <QPainter>
+#include <tulip/TlpQtTools.h>
+#include <tulip/Perspective.h>
 
 using namespace std;
 
@@ -117,10 +119,23 @@ ConvolutionClusteringSetup::ConvolutionClusteringSetup(ConvolutionClustering *co
                                                        QWidget *parent)
     : QDialog(parent), _ui(new Ui::ConvolutionClusteringSetupData), convolPlugin(convolPlugin),
       useLogarithmicScale(false) {
+  Perspective::setStyleSheet(this);
   _ui->setupUi(this);
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(this);
+
+  connect(_ui->widthSlider, SIGNAL(valueChanged(int)), this, SLOT(update()));
+  connect(_ui->okButton, SIGNAL(pressed()), this, SLOT(accept()));
+  connect(_ui->cancelButton, SIGNAL(pressed()), this, SLOT(reject()));
+  connect(_ui->discretizationSlider, SIGNAL(valueChanged(int)), this, SLOT(update()));
+  connect(_ui->discretizationSlider, SIGNAL(valueChanged(int)), _ui->LCDNumber1_3,
+          SLOT(display(int)));
+  connect(_ui->CheckBox1, SIGNAL(toggled(bool)), this, SLOT(setlog(bool)));
+  connect(_ui->widthSlider, SIGNAL(valueChanged(int)), _ui->LCDNumber1, SLOT(display(int)));
+
   histogramWidget = new HistogramWidget(this, _ui->Frame3);
   QGridLayout *flayout = new QGridLayout(_ui->Frame3);
-  flayout->setMargin(1);
+  flayout->setContentsMargins(1, 1, 1, 1);
   flayout->addWidget(histogramWidget, 0, 0);
 
   int a, b, c;

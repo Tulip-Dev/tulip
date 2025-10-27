@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,8 +18,6 @@
  */
 #include <tulip/BoundingBox.h>
 #include <tulip/Node.h>
-#include <tulip/Size.h>
-#include <tulip/Coord.h>
 #include <tulip/Glyph.h>
 #include <tulip/GlRect.h>
 

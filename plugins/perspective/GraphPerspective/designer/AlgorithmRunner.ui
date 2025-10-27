@@ -20,7 +20,16 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -72,8 +81,18 @@
       <number>1</number>
      </property>
      <widget class="QScrollArea" name="algorithmList">
-  <property name="styleSheet">
-   <string notr="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+        <string notr="true">
+ExpandableGroupBox:disabled {
+/* fix needed for MacOSX dark mode */
+color: #A0A0A0;
+}
 ExpandableGroupBox[ expanded = &quot;true&quot; ] {
 margin-top: 1.5ex;
 }
@@ -112,12 +131,6 @@ ExpandableGroupBox[root = &quot;false&quot; ][expanded = &quot;true&quot; ] {
 margin-left: 1ex;
 }
 </string>
-  </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
       </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
@@ -135,7 +148,16 @@ margin-left: 1ex;
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -185,15 +207,15 @@ spacing: 24px;
  </widget>
  <customwidgets>
   <customwidget>
+   <class>ClearableLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">tulip/ClearableLineEdit.h</header>
+  </customwidget>
+  <customwidget>
    <class>HeaderFrame</class>
    <extends>QWidget</extends>
    <header>HeaderFrame.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>ClearableLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">tulip/ClearableLineEdit.h</header>
   </customwidget>
   <customwidget>
    <class>FavoriteBox</class>

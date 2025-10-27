@@ -26,7 +26,7 @@
    <string>Tulip preferences</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+   <iconset>
     <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -63,7 +63,7 @@
          <item>
           <widget class="QCheckBox" name="displayDefaultViews">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When creating a new graph, importing or loading a graph file, a &lt;span style=&quot; font-weight:600;&quot;&gt;Node Link diagram&lt;/span&gt; and a &lt;span style=&quot; font-weight:600;&quot;&gt;Spreadsheet&lt;/span&gt; views will be automatically created.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When creating a new graph, importing or loading a graph file, a &lt;span style=&quot; font-weight:600;&quot;&gt;Node Link diagram&lt;/span&gt; and a &lt;span style=&quot; font-weight:600;&quot;&gt;Spreadsheet&lt;/span&gt; views will be automatically created on the corresponding graph.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>Display Node Link diagram and Spreadsheet views at create/import/load time</string>
@@ -119,7 +119,7 @@
          <item>
           <widget class="QCheckBox" name="resultPropertyStoredCheck">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;body&gt;&lt;p&gt;The contents of the result property of an algorithm (viewMetric for example) will be stored in a new property automatically named using the values of the parameters of the algorithm.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;body&gt;&lt;p&gt;The contents of the result property of an algorithm (viewMetric for example) will be copied in a new property automatically named using the values of the algorithm parameters.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>Store computed result property of an algorithm in a dedicated property</string>
@@ -129,7 +129,7 @@
          <item>
           <widget class="QCheckBox" name="usetlpbformat">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Tulip binary graph file format (tlpb) instead of the tlp plain text file format. The use of the tlpb format makes loading/saving of Tulip project file much faster but you will lose compatibility with older version of Tulip.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Tulip binary graph file format (tlpb) instead of the tlp plain text file format. The use of the tlpb format makes loading/saving of Tulip project file much faster.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>Use Tulip binary graph file format when saving a Tulip project</string>
@@ -141,11 +141,10 @@
            <item>
             <widget class="QCheckBox" name="randomSeedCheck">
              <property name="toolTip">
-              <string>&lt;html&gt;&lt;body&gt;&lt;p&gt;When checked, each random sequence will be initialized with the given value.
-If not, a new random seed will be set to initialize each new random sequence.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;body&gt;&lt;p&gt;When checked, each random sequence will be initialized with the given value (useful to ensure reproductible behavior).&lt;br/&gt;If not, a new seed will be randomly choosen to initialize each new random sequence.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
-              <string>Give seed for random sequence</string>
+              <string>Give the same seed to any random sequence</string>
              </property>
             </widget>
            </item>
@@ -246,6 +245,12 @@ If not, a new random seed will be set to initialize each new random sequence.&lt
          </item>
          <item>
           <widget class="QComboBox" name="displayModeCombo">
+           <property name="minimumSize">
+            <size>
+             <width>55</width>
+             <height>0</height>
+            </size>
+           </property>
            <item>
             <property name="text">
              <string>Light</string>
@@ -320,31 +325,11 @@ font: 12px;
            <attribute name="horizontalHeaderDefaultSectionSize">
             <number>200</number>
            </attribute>
-           <row>
-            <property name="text">
-             <string>New Row</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>New Row</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>New Row</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>New Row</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>New Row</string>
-            </property>
-           </row>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
            <column>
             <property name="text">
              <string>Drawing defaults</string>
@@ -432,7 +417,7 @@ font: 12px;
          <item>
           <widget class="QCheckBox" name="applyDrawingDefaultsCheck">
            <property name="toolTip">
-            <string>&lt;p&gt;If checked, when clicking &quot;OK&quot;, &lt;br/&gt;the drawing defaults changes will be applied to the graphs currenty loaded.&lt;/p&gt;</string>
+            <string>&lt;p&gt;If checked, when clicking &quot;OK&quot;, &lt;br/&gt;the drawing defaults changes will be applied to the graphs currently loaded.&lt;/p&gt;</string>
            </property>
            <property name="text">
             <string>Apply drawing defaults changes to loaded graphs</string>
@@ -454,6 +439,18 @@ font: 12px;
          </item>
          <item>
           <widget class="QPushButton" name="resetAllDrawingDefaultsButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string>&lt;p&gt;Reset all drawing defaults to their Tulip predefined values.&lt;br/&gt;You can also reset row specific default values in using a contextual menu displayed by a left click on the title of the corresponding row.&lt;/p&gt;</string>
            </property>
@@ -610,6 +607,9 @@ font: 12px;
               <property name="enabled">
                <bool>false</bool>
               </property>
+              <property name="placeholderText">
+               <string>name</string>
+              </property>
              </widget>
             </item>
             <item>
@@ -620,20 +620,10 @@ font: 12px;
               <property name="echoMode">
                <enum>QLineEdit::Password</enum>
               </property>
+              <property name="placeholderText">
+               <string>password</string>
+              </property>
              </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
             </item>
            </layout>
           </widget>

@@ -1,4 +1,4 @@
-# This file is part of Tulip (http://tulip.labri.fr)
+# This file is part of Tulip (https://tulip.labri.fr)
 #
 # Authors: David Auber and the Tulip development Team
 # from LaBRI, University of Bordeaux
@@ -77,11 +77,11 @@ class H3LayoutHelper(tlp.Algorithm):
 
 pluginDoc = """
 Enables to easily configure a H3 layout visualisation for a connected
-quasi-hierarchical graph. As this is a 3d layout, some rendering setup
+quasi-hierarchical graph. As this is a 3D layout, some rendering setup
 has to be done after the algorithm execution in order to get an aesthetic
 rendering of it in Tulip. That plugin takes care of calling the H3 layout
 algorithm, setting node shapes as sphere, setting edge extremity shapes to
-cone and set appropriate rendering parameters for 3d layout visualization.
+cone and set appropriate rendering parameters for 3D layout visualization.
 """
 
 # The line below does the magic to register the plugin into the plugin database

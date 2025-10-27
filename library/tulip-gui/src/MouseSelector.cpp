@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -19,14 +19,10 @@
 
 #include <QMouseEvent>
 
-#include <tulip/Graph.h>
-#include <tulip/BooleanProperty.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlTools.h>
 #include <tulip/MouseSelector.h>
 #include <tulip/GlGraphComposite.h>
-
-#include <tulip/OpenGlIncludes.h>
 
 using namespace std;
 using namespace tlp;
@@ -47,8 +43,8 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
     if (qMouseEv->buttons() == mButton &&
         (kModifier == Qt::NoModifier || qMouseEv->modifiers() & kModifier)) {
       if (!started) {
-        x = qMouseEv->x();
-        y = qMouseEv->y();
+        x = qMouseEv->pos().x();
+        y = qMouseEv->pos().y();
         w = 0;
         h = 0;
         started = true;
@@ -65,7 +61,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
       return true;
     }
 
-    if (qMouseEv->buttons() == Qt::MidButton) {
+    if (qMouseEv->buttons() == Qt::MiddleButton) {
       started = false;
       glMainWidget->redraw();
       return true;
@@ -82,8 +78,8 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
     }
 
     if (started) {
-      int clampedX = qMouseEv->x();
-      int clampedY = qMouseEv->y();
+      int clampedX = qMouseEv->pos().x();
+      int clampedY = qMouseEv->pos().y();
 
       if (clampedX < 0)
         clampedX = 0;
@@ -283,13 +279,13 @@ bool MouseSelector::draw(GlMainWidget *glMainWidget) {
       Qt::ControlModifier
 #endif
   ) {
-    col[0] = 1.;
+    col[0] = 0.8;
     col[1] = 0.8f;
-    col[2] = 1.;
+    col[2] = 0.4f;
   } else if (mousePressModifier == Qt::ShiftModifier) {
     col[0] = 1.;
-    col[1] = .7f;
-    col[2] = .7f;
+    col[1] = 1.;
+    col[2] = 0.7;
   } else {
     col[0] = 0.8f;
     col[1] = 0.8f;

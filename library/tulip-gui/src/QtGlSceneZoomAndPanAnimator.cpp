@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -53,6 +53,6 @@ void QtGlSceneZoomAndPanAnimator::animateZoomAndPan() {
 
 void QtGlSceneZoomAndPanAnimator::zoomAndPanAnimStepSlot(int animationStep) {
   zoomAndPanAnimationStep(animationStep);
-  glWidget->draw();
+  glWidget->draw(false);
 }
 } // namespace tlp

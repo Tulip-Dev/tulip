@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,7 +18,6 @@
  */
 
 #include "MouseLassoNodesSelector.h"
-#include "../../utils/StandardInteractorPriority.h"
 #include "../../utils/PluginNames.h"
 
 #include <QMouseEvent>
@@ -30,6 +29,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlNode.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/StandardInteractorPriority.h>
 
 using namespace std;
 using namespace tlp;
@@ -59,7 +59,7 @@ void MouseLassoNodesSelectorInteractor::construct() {
 PLUGIN(MouseLassoNodesSelectorInteractor)
 
 MouseLassoNodesSelectorInteractorComponent::MouseLassoNodesSelectorInteractorComponent()
-    : drawInteractor(false), camera(nullptr), graph(nullptr), viewSelection(nullptr),
+    : camera(nullptr), graph(nullptr), viewSelection(nullptr), drawInteractor(false),
       dragStarted(false) {}
 
 MouseLassoNodesSelectorInteractorComponent::~MouseLassoNodesSelectorInteractorComponent() {}
@@ -221,7 +221,7 @@ bool MouseLassoNodesSelectorInteractorComponent::eventFilter(QObject *obj, QEven
   graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   viewSelection = graph->getProperty<BooleanProperty>("viewSelection");
 
-  currentPointerScreenCoord = Coord(me->x(), glWidget->height() - me->y());
+  currentPointerScreenCoord = Coord(me->pos().x(), glWidget->height() - me->pos().y());
 
   if (me->type() == QEvent::MouseMove) {
     if (dragStarted) {
@@ -245,7 +245,7 @@ bool MouseLassoNodesSelectorInteractorComponent::eventFilter(QObject *obj, QEven
       } else {
         Observable::holdObservers();
         SelectedEntity selectedEntity;
-        bool result = glWidget->pickNodesEdges(me->x(), me->y(), selectedEntity);
+        bool result = glWidget->pickNodesEdges(me->pos().x(), me->pos().y(), selectedEntity);
 
         if (result && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
           bool sel = viewSelection->getNodeValue(node(selectedEntity.getComplexEntityId()));
@@ -263,7 +263,13 @@ bool MouseLassoNodesSelectorInteractorComponent::eventFilter(QObject *obj, QEven
     if (me->button() == Qt::LeftButton && polygon.size() > 10) {
       Observable::holdObservers();
 
-      if (me->modifiers() != Qt::ControlModifier) {
+      if (me->modifiers() !=
+#if defined(__APPLE__)
+          Qt::AltModifier
+#else
+          Qt::ControlModifier
+#endif
+      ) {
         viewSelection->setAllNodeValue(false);
         viewSelection->setAllEdgeValue(false);
       }
@@ -278,7 +284,7 @@ bool MouseLassoNodesSelectorInteractorComponent::eventFilter(QObject *obj, QEven
   return false;
 }
 
-bool MouseLassoNodesSelectorInteractorComponent::draw(GlMainWidget *glWidget) {
+bool MouseLassoNodesSelectorInteractorComponent::draw(GlMainWidget *) {
 
   if (!drawInteractor) {
     return false;
@@ -288,21 +294,12 @@ bool MouseLassoNodesSelectorInteractorComponent::draw(GlMainWidget *glWidget) {
 
     Camera camera2D(camera->getScene(), false);
 
-    Color backgroundColor = glWidget->getScene()->getBackgroundColor();
-    Color foregroundColor;
-    int bgV = backgroundColor.getV();
-
-    if (bgV < 128) {
-      foregroundColor = Color(255, 255, 255);
-    } else {
-      foregroundColor = Color(0, 0, 0);
-    }
-
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     camera2D.initGl();
-    GlComplexPolygon complexPolygon(polygon, Color(0, 255, 0, 100), Color(0, 255, 0));
+    GlComplexPolygon complexPolygon(polygon, Color(232, 232, 150, 125), Color(150, 150, 150));
+    complexPolygon.setOutlineStippled(true);
     complexPolygon.draw(0, nullptr);
   }
 

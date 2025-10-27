@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -31,7 +31,7 @@ namespace tlp {
  * \brief This class represents the 3D bounding box of an object.
  * It is mostly used to determine whether or not two object are in a state of collision.
  *
- * It is defined by two 3d points, the first one (A) being the lowest point, the second (B) being
+ * It is defined by two 3D points, the first one (A) being the lowest point, the second (B) being
  the highest.
  * As a bounding box is a mathematical entity describing the lowest and highest points, whether
  these points are in the top-left corner or

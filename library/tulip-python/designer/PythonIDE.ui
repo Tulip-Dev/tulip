@@ -2,26 +2,6 @@
 <ui version="4.0">
  <class>PythonIDE</class>
  <widget class="QFrame" name="PythonIDE">
-  <property name="styleSheet">
-   <string notr="true">
-QToolButton {
-border-image:none;
-border-top: 1px;
-border-bottom: 1px;
-border-left: 0px;
-border-right: 0px;
-font: bold 10px;
-}
-
-QToolButton:hover {
-border: 1px solid #A0A0A0;
-}
-
-QToolButton:pressed {
-background-color: #A0A0A0;
-}
-   </string>
-  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -45,11 +25,41 @@ background-color: #A0A0A0;
   <property name="autoFillBackground">
    <bool>false</bool>
   </property>
+  <property name="styleSheet">
+   <string notr="true">
+QToolButton {
+border-image:none;
+border-top: 1px;
+border-bottom: 1px;
+border-left: 0px;
+border-right: 0px;
+font: bold 10px;
+}
+
+QToolButton:hover {
+border-radius: 4;
+border: 1px solid #A0A0A0;
+}
+
+QToolButton:pressed {
+background-color: #A0A0A0;
+}
+   </string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -61,17 +71,17 @@ background-color: #A0A0A0;
       </sizepolicy>
      </property>
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
-     <widget class="PythonTabWidget" name="tabWidget">
-      <property name="styleSheet">
-       <string notr="true">QFrame { border-top: none; }</string>
-      </property>
+     <widget class="QTabWidget" name="tabWidget">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { border-top: none; }</string>
       </property>
       <property name="currentIndex">
        <number>0</number>
@@ -84,7 +94,16 @@ background-color: #A0A0A0;
         <property name="spacing">
          <number>0</number>
         </property>
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -102,16 +121,25 @@ background-color: #A0A0A0;
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
+           <enum>QFrame::Shape::StyledPanel</enum>
           </property>
           <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
+           <enum>QFrame::Shadow::Raised</enum>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <property name="spacing">
             <number>3</number>
            </property>
-           <property name="margin">
+           <property name="leftMargin">
+            <number>3</number>
+           </property>
+           <property name="topMargin">
+            <number>3</number>
+           </property>
+           <property name="rightMargin">
+            <number>3</number>
+           </property>
+           <property name="bottomMargin">
             <number>3</number>
            </property>
            <item>
@@ -132,23 +160,23 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>New main script</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;New script (Ctrl + N)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
-              <string>New</string>
+              <string>&amp;New</string>
              </property>
              <property name="icon">
-              <iconset>
+              <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
                <normaloff>:/tulip/gui/icons/64/document-add.png</normaloff>:/tulip/gui/icons/64/document-add.png</iconset>
              </property>
              <property name="iconSize">
               <size>
-               <width>20</width>
-               <height>20</height>
+               <width>16</width>
+               <height>16</height>
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
@@ -170,23 +198,23 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Load main script from file</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Open a Python script (Ctrl + O)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
-              <string>Load</string>
+              <string>&amp;Open</string>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>:/tulip/gui/icons/64/document-import.png</normaloff>:/tulip/gui/icons/64/document-import.png</iconset>
+              <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
+               <normaloff>:/tulip/gui/icons/16/document-open.png</normaloff>:/tulip/gui/icons/16/document-open.png</iconset>
              </property>
              <property name="iconSize">
               <size>
-               <width>20</width>
-               <height>20</height>
+               <width>16</width>
+               <height>16</height>
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
@@ -208,23 +236,23 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Save the current script</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save the current script (Ctrl + S)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
-              <string>Save</string>
+              <string>&amp;Save</string>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
+              <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
+               <normaloff>:/tulip/gui/icons/16/document-save.png</normaloff>:/tulip/gui/icons/16/document-save.png</iconset>
              </property>
              <property name="iconSize">
               <size>
-               <width>20</width>
-               <height>20</height>
+               <width>16</width>
+               <height>16</height>
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
@@ -246,30 +274,30 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Save the current script in an interactively chosen file</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save the current script with a new name (Ctrl + Shift + S)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>Save as</string>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>:/tulip/gui/icons/64/document-saveas.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
+              <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
+               <normaloff>:/tulip/gui/icons/16/document-save-as.png</normaloff>:/tulip/gui/icons/16/document-save-as.png</iconset>
              </property>
              <property name="iconSize">
               <size>
-               <width>20</width>
-               <height>20</height>
+               <width>16</width>
+               <height>16</height>
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
            <item>
             <widget class="Line" name="line">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
             </widget>
            </item>
@@ -295,7 +323,7 @@ background-color: #A0A0A0;
               </sizepolicy>
              </property>
              <property name="toolTip">
-              <string>When processing the selected script, the current graph will be bound to The Python global variable named &quot;graph&quot;</string>
+              <string>When processing the current script, the current graph will be bound to The Python global variable named &quot;graph&quot;</string>
              </property>
             </widget>
            </item>
@@ -344,7 +372,16 @@ background-color: #A0A0A0;
         <property name="spacing">
          <number>0</number>
         </property>
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -362,16 +399,25 @@ background-color: #A0A0A0;
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
+           <enum>QFrame::Shape::StyledPanel</enum>
           </property>
           <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
+           <enum>QFrame::Shadow::Raised</enum>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <property name="spacing">
             <number>6</number>
            </property>
-           <property name="margin">
+           <property name="leftMargin">
+            <number>3</number>
+           </property>
+           <property name="topMargin">
+            <number>3</number>
+           </property>
+           <property name="rightMargin">
+            <number>3</number>
+           </property>
+           <property name="bottomMargin">
             <number>3</number>
            </property>
            <item>
@@ -389,23 +435,23 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Create new Tulip Python plugin</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;New plugin (Ctrl + N)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
-              <string>New</string>
+              <string>&amp;New</string>
              </property>
              <property name="icon">
-              <iconset>
+              <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
                <normaloff>:/tulip/gui/icons/64/document-add.png</normaloff>:/tulip/gui/icons/64/document-add.png</iconset>
              </property>
              <property name="iconSize">
               <size>
-               <width>20</width>
-               <height>20</height>
+               <width>16</width>
+               <height>16</height>
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
@@ -424,23 +470,23 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Load Tulip Python plugin from file</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Open plugin file (Ctrl + O)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
-              <string>Load</string>
+              <string>&amp;Open</string>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>:/tulip/gui/icons/64/document-import.png</normaloff>:/tulip/gui/icons/64/document-import.png</iconset>
+              <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
+               <normaloff>:/tulip/gui/icons/16/document-open.png</normaloff>:/tulip/gui/icons/16/document-open.png</iconset>
              </property>
              <property name="iconSize">
               <size>
-               <width>20</width>
-               <height>20</height>
+               <width>16</width>
+               <height>16</height>
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
@@ -459,30 +505,65 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Save Tulip Python plugin to file/project</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save the current plugin (Ctrl + S)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
-              <string>Save</string>
+              <string>&amp;Save</string>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
+              <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
+               <normaloff>:/tulip/gui/icons/16/document-save.png</normaloff>:/tulip/gui/icons/16/document-save.png</iconset>
              </property>
              <property name="iconSize">
               <size>
-               <width>20</width>
-               <height>20</height>
+               <width>16</width>
+               <height>16</height>
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="saveAsPluginButton">
+             <property name="minimumSize">
+              <size>
+               <width>40</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>40</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save the current plugin with a new name (Ctrl + Shift + S)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="text">
+              <string>Save as</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
+               <normaloff>:/tulip/gui/icons/16/document-save-as.png</normaloff>:/tulip/gui/icons/16/document-save-as.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="toolButtonStyle">
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
            <item>
             <spacer name="horizontalSpacer">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -534,7 +615,16 @@ background-color: #A0A0A0;
         <property name="spacing">
          <number>0</number>
         </property>
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -552,53 +642,27 @@ background-color: #A0A0A0;
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
+           <enum>QFrame::Shape::StyledPanel</enum>
           </property>
           <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
+           <enum>QFrame::Shadow::Raised</enum>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_4">
            <property name="spacing">
             <number>6</number>
            </property>
-           <property name="margin">
+           <property name="leftMargin">
             <number>3</number>
            </property>
-           <item>
-            <widget class="QToolButton" name="newStringModuleButton">
-             <property name="minimumSize">
-              <size>
-               <width>40</width>
-               <height>40</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>40</width>
-               <height>40</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string>New string module</string>
-             </property>
-             <property name="text">
-              <string>New</string>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/tulip/gui/icons/64/document-plus.png</normaloff>:/tulip/gui/icons/64/document-plus.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
-             </property>
-            </widget>
-           </item>
+           <property name="topMargin">
+            <number>3</number>
+           </property>
+           <property name="rightMargin">
+            <number>3</number>
+           </property>
+           <property name="bottomMargin">
+            <number>3</number>
+           </property>
            <item>
             <widget class="QToolButton" name="newModuleButton">
              <property name="minimumSize">
@@ -614,23 +678,23 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>New file module</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;New module (Ctrl + N)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>New</string>
              </property>
              <property name="icon">
-              <iconset>
+              <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
                <normaloff>:/tulip/gui/icons/64/document-add.png</normaloff>:/tulip/gui/icons/64/document-add.png</iconset>
              </property>
              <property name="iconSize">
               <size>
-               <width>20</width>
-               <height>20</height>
+               <width>16</width>
+               <height>16</height>
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
@@ -649,14 +713,14 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Import module from file</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Open module file (Ctrl + O)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
-              <string>Load</string>
+              <string>Open</string>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>:/tulip/gui/icons/64/document-import.png</normaloff>:/tulip/gui/icons/64/document-import.png</iconset>
+              <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
+               <normaloff>:/tulip/gui/icons/16/document-open.png</normaloff>:/tulip/gui/icons/16/document-open.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -665,7 +729,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
@@ -684,14 +748,14 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Save module to file/project</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save the current module (Ctrl + S)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>Save</string>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
+              <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
+               <normaloff>:/tulip/gui/icons/16/document-save.png</normaloff>:/tulip/gui/icons/16/document-save.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -700,14 +764,49 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="saveAsModuleButton">
+             <property name="minimumSize">
+              <size>
+               <width>40</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>40</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save the current module with a new name (Ctrl + Shift + S)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="text">
+              <string>Save as</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
+               <normaloff>:/tulip/gui/icons/16/document-save-as.png</normaloff>:/tulip/gui/icons/16/document-save-as.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="toolButtonStyle">
+              <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
              </property>
             </widget>
            </item>
            <item>
             <spacer name="horizontalSpacer_2">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -757,7 +856,16 @@ background-color: #A0A0A0;
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -773,14 +881,20 @@ background-color: #A0A0A0;
            <property name="spacing">
             <number>0</number>
            </property>
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
             <widget class="QTextBrowser" name="consoleWidget">
-             <property name="styleSheet">
-              <string notr="true">QTextBrowser { border-top: none; }</string>
-             </property>
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
                <horstretch>0</horstretch>
@@ -792,6 +906,9 @@ background-color: #A0A0A0;
                <width>0</width>
                <height>50</height>
               </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QTextBrowser { border-top: none; }</string>
              </property>
              <property name="openLinks">
               <bool>false</bool>
@@ -839,7 +956,16 @@ background-color: #A0A0A0;
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -857,10 +983,10 @@ background-color: #A0A0A0;
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
+          <enum>QFrame::Shape::StyledPanel</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
+          <enum>QFrame::Shadow::Raised</enum>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_8">
           <property name="leftMargin">
@@ -893,7 +1019,7 @@ background-color: #A0A0A0;
              <string>...</string>
             </property>
             <property name="icon">
-             <iconset>
+             <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
               <normaloff>:/tulip/gui/icons/22/start.png</normaloff>:/tulip/gui/icons/22/start.png</iconset>
             </property>
             <property name="iconSize">
@@ -922,7 +1048,7 @@ background-color: #A0A0A0;
              <string>...</string>
             </property>
             <property name="icon">
-             <iconset>
+             <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
               <normaloff>:/tulip/gui/icons/22/pause.png</normaloff>:/tulip/gui/icons/22/pause.png</iconset>
             </property>
             <property name="iconSize">
@@ -951,7 +1077,7 @@ background-color: #A0A0A0;
              <string>...</string>
             </property>
             <property name="icon">
-             <iconset>
+             <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
               <normaloff>:/tulip/gui/icons/22/stop.png</normaloff>:/tulip/gui/icons/22/stop.png</iconset>
             </property>
             <property name="iconSize">
@@ -965,7 +1091,7 @@ background-color: #A0A0A0;
           <item>
            <spacer name="horizontalSpacer_5">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -1003,7 +1129,7 @@ background-color: #A0A0A0;
           <item>
            <spacer name="horizontalSpacer_4">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -1034,7 +1160,7 @@ cannot be undone but performance will be better
           <item>
            <widget class="Line" name="line_2">
             <property name="orientation">
-             <enum>Qt::Vertical</enum>
+             <enum>Qt::Orientation::Vertical</enum>
             </property>
            </widget>
           </item>
@@ -1049,15 +1175,12 @@ cannot be undone but performance will be better
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="decreaseFontSizeButton_2">
+           <widget class="QToolButton" name="decreaseFontSizeButton_script">
             <property name="maximumSize">
              <size>
               <width>19</width>
               <height>19</height>
              </size>
-            </property>
-            <property name="toolTip">
-             <string>Decrease the size of the font of the python code editors</string>
             </property>
             <property name="text">
              <string> - </string>
@@ -1065,15 +1188,12 @@ cannot be undone but performance will be better
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="increaseFontSizeButton_2">
+           <widget class="QToolButton" name="increaseFontSizeButton_script">
             <property name="maximumSize">
              <size>
               <width>19</width>
               <height>19</height>
              </size>
-            </property>
-            <property name="toolTip">
-             <string>Increase the size of the font of the python code editors</string>
             </property>
             <property name="text">
              <string> + </string>
@@ -1090,7 +1210,16 @@ cannot be undone but performance will be better
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -1108,10 +1237,10 @@ cannot be undone but performance will be better
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
+          <enum>QFrame::Shape::StyledPanel</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
+          <enum>QFrame::Shadow::Raised</enum>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <property name="leftMargin">
@@ -1164,7 +1293,7 @@ cannot be undone but performance will be better
              <string/>
             </property>
             <property name="alignment">
-             <set>Qt::AlignCenter</set>
+             <set>Qt::AlignmentFlag::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -1176,7 +1305,7 @@ cannot be undone but performance will be better
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="decreaseFontSizeButton">
+           <widget class="QToolButton" name="decreaseFontSizeButton_plugin">
             <property name="maximumSize">
              <size>
               <width>19</width>
@@ -1195,7 +1324,7 @@ cannot be undone but performance will be better
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="increaseFontSizeButton">
+           <widget class="QToolButton" name="increaseFontSizeButton_plugin">
             <property name="maximumSize">
              <size>
               <width>19</width>
@@ -1232,7 +1361,7 @@ cannot be undone but performance will be better
        <item>
         <spacer name="horizontalSpacer_3">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -1250,7 +1379,7 @@ cannot be undone but performance will be better
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="decreaseFontSizeButton_3">
+        <widget class="QToolButton" name="decreaseFontSizeButton_module">
          <property name="maximumSize">
           <size>
            <width>19</width>
@@ -1263,7 +1392,7 @@ cannot be undone but performance will be better
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="increaseFontSizeButton_3">
+        <widget class="QToolButton" name="increaseFontSizeButton_module">
          <property name="maximumSize">
           <size>
            <width>19</width>
@@ -1289,18 +1418,14 @@ cannot be undone but performance will be better
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>PythonTabWidget</class>
-   <extends>QTabWidget</extends>
-   <header location="global">tulip/PythonTabWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>tlp::PythonEditorsTabWidget</class>
    <extends>QTabWidget</extends>
    <header location="global">tulip/PythonEditorsTabWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../tulip-gui/resources/TulipGUIResource.qrc"/>
+ </resources>
  <connections/>
 </ui>

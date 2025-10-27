@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,13 +21,8 @@
 
 #include <QMouseEvent>
 
-#include <tulip/Graph.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/ColorProperty.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlGraphComposite.h>
-#include <tulip/GlMainView.h>
-#include <tulip/Camera.h>
 
 using namespace tlp;
 using namespace std;
@@ -42,7 +37,7 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
       glMainWidget = static_cast<GlMainWidget *>(widget);
 
     if (e->type() == QEvent::MouseMove) {
-      if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) &&
+      if (glMainWidget->pickNodesEdges(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity) &&
           selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         glMainWidget->setCursor(Qt::ForbiddenCursor);
       } else {
@@ -54,7 +49,8 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
     if (e->type() == _eventType) {
       if (qMouseEv->button() == Qt::LeftButton) {
-        if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) &&
+        if (glMainWidget->pickNodesEdges(qMouseEv->pos().x(), qMouseEv->pos().y(),
+                                         selectedEntity) &&
             selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
           return true;
         }
@@ -68,7 +64,7 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
         Observable::holdObservers();
         node newNode;
         newNode = _graph->addNode();
-        Coord point(glMainWidget->width() - qMouseEv->x(), qMouseEv->y(), 0);
+        Coord point(glMainWidget->width() - qMouseEv->pos().x(), qMouseEv->pos().y(), 0);
         point = glMainWidget->getScene()->getGraphCamera().viewportTo3DWorld(
             glMainWidget->screenToViewport(point));
 

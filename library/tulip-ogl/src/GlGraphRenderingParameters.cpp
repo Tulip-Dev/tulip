@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -16,10 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/LayoutProperty.h>
-#include <tulip/Vector.h>
 #include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/TlpTools.h>
 #include <tulip/NumericProperty.h>
 
 using namespace tlp;

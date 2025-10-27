@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -96,7 +96,7 @@ GEMLayout::GEMLayout(const tlp::PluginContext *context)
   addInParameter<LayoutProperty>("initial layout", paramHelp[2], "", false);
   addInParameter<BooleanProperty>("unmovable nodes", paramHelp[3], "", false);
   addInParameter<unsigned int>("max iterations", paramHelp[4], "0");
-  addDependency("Connected Component Packing", "1.0");
+  addDependency("Connected Components Packing", "1.1");
 }
 //=========================================================
 GEMLayout::~GEMLayout() {}
@@ -149,7 +149,7 @@ Coord GEMLayout::computeForces(unsigned int v, float shake, float gravity, bool 
   double maxEdgeLength;
 
   if (_useLength)
-    maxEdgeLength = std::max(2.0, metric->getEdgeDoubleMin());
+    maxEdgeLength = std::max(2.0, metric->getEdgeDoubleMin(graph));
   else
     maxEdgeLength = EDGELENGTH;
 
@@ -326,7 +326,7 @@ void GEMLayout::arrange() {
   double maxEdgeLength;
 
   if (_useLength)
-    maxEdgeLength = std::max(2.0, metric->getEdgeDoubleMin());
+    maxEdgeLength = std::max(2.0, metric->getEdgeDoubleMin(graph));
   else
     maxEdgeLength = EDGELENGTH;
 
@@ -377,8 +377,8 @@ bool GEMLayout::run() {
     // call connected component packing
     LayoutProperty tmpLayout(graph);
     DataSet ds;
-    ds.set("coordinates", result);
-    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout, err, &ds,
+    ds.set("initial layout", result);
+    graph->applyPropertyAlgorithm("Connected Components Packing", &tmpLayout, err, &ds,
                                   pluginProgress);
     *result = tmpLayout;
     return true;

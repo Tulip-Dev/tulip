@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -19,10 +19,9 @@
 #include <cmath>
 #include <cfloat>
 #include <forward_list>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <tulip/LayoutProperty.h>
-#include <tulip/Coord.h>
 
 using namespace std;
 using namespace tlp;
@@ -92,7 +91,7 @@ tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(const Grap
 template <>
 void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(
     tlp::edge e, const tlp::LineType::RealType &newValue) {
-  std::unordered_map<unsigned int, std::pair<tlp::Coord, tlp::Coord>>::const_iterator it =
+  tlp_hash_map<unsigned int, std::pair<tlp::Coord, tlp::Coord>>::const_iterator it =
       minMaxNode.begin();
 
   const std::vector<Coord> &oldV = this->getEdgeValue(e);
@@ -854,7 +853,7 @@ void LayoutProperty::treatEvent(const Event &evt) {
   if (graphEvent) {
     switch (graphEvent->getType()) {
     case GraphEvent::TLP_ADD_NODE:
-    case GraphEvent::TLP_DEL_NODE:
+    case GraphEvent::TLP_BEFORE_DEL_NODE:
       LayoutMinMaxProperty::treatEvent(evt);
       break;
 

@@ -71,39 +71,6 @@
        <number>9</number>
       </property>
       <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="toolTip">
-         <string notr="true">the path of the file where the plugin source code will be saved</string>
-        </property>
-        <property name="text">
-         <string>File</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QLineEdit" name="pluginFileName">
-          <property name="toolTip">
-           <string>Enter the path of the file where the plugin source code will be saved
-</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="browseButton">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="../../../plugins/perspective/GraphPerspective/resources/GraphPerspective.qrc">
-            <normaloff>:/tulip/graphperspective/icons/16/document-open.png</normaloff>:/tulip/graphperspective/icons/16/document-open.png</iconset>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="1" column="0">
        <widget class="QLabel" name="label_3">
         <property name="toolTip">
          <string notr="true">The type of plugin to create</string>
@@ -113,7 +80,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="0" column="1">
        <widget class="QComboBox" name="pluginType">
         <property name="toolTip">
          <string notr="true">Choose the type of plugin to create</string>
@@ -160,7 +127,7 @@
         </item>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="toolTip">
          <string>&lt;html&gt;&lt;body&gt;The name of the Python plugin class&lt;ul&gt;
@@ -174,7 +141,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="1" column="1">
        <widget class="QLineEdit" name="pluginClassName">
         <property name="toolTip">
          <string notr="true">&lt;html&gt;&lt;body&gt;Enter the name of the Python plugin class&lt;ul&gt;
@@ -185,7 +152,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item row="2" column="0">
        <widget class="QLabel" name="label_4">
         <property name="toolTip">
          <string notr="true">The name of the plugin as it will be displayed in the GUI</string>
@@ -195,7 +162,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item row="2" column="1">
        <widget class="QLineEdit" name="pluginName">
         <property name="toolTip">
          <string notr="true">Enter the displayed name of the plugin</string>
@@ -347,7 +314,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../../plugins/perspective/GraphPerspective/resources/GraphPerspective.qrc"/>
+  <include location="../../tulip-gui/resources/TulipGUIResource.qrc"/>
  </resources>
  <connections>
   <connection>

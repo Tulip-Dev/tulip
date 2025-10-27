@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,7 +18,6 @@
  */
 #include <fstream>
 #include <tulip/TLPBExportImport.h>
-#include <tulip/TlpTools.h>
 #include <tulip/GraphAbstract.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
@@ -61,35 +60,20 @@ bool errorTrap(void *buf = nullptr) {
   return false;
 }
 
-//================================================================================
-TLPBImport::TLPBImport(tlp::PluginContext *context) : ImportModule(context) {
-  addInParameter<std::string>("file::filename", "The pathname of the TLPB file to import.", "");
-}
-//================================================================================
-bool TLPBImport::importGraph() {
-  std::string filename;
+bool TLPBImport::importFile() {
   std::istream *is = nullptr;
+  bool gzip(false);
 
-  if (dataSet->exists("file::filename")) {
-    dataSet->get<std::string>("file::filename", filename);
-
-    bool gzip(false);
-    std::list<std::string> &&gexts = gzipFileExtensions();
-
-    for (const std::string &ext : gexts) {
-      if (filename.rfind(ext) == (filename.length() - ext.length())) {
-        is = tlp::getIgzstream(filename);
-        gzip = true;
-        break;
-      }
+  for (auto ext = ++extensions.begin(); ext != extensions.end(); ++ext) {
+    if (filename.rfind(*ext) == (filename.length() - (*ext).length())) {
+      is = tlp::getIgzstream(filename);
+      gzip = true;
+      break;
     }
-
-    if (!gzip)
-      is = tlp::getInputFileStream(filename, std::ifstream::in | std::ifstream::binary);
-  } else {
-    pluginProgress->setError("No file to open: 'file::filename' parameter is missing");
-    return false;
   }
+
+  if (!gzip)
+    is = tlp::getInputFileStream(filename, std::ifstream::in | std::ifstream::binary);
 
   // check for open stream failure
   if (is->fail()) {
@@ -188,8 +172,8 @@ bool TLPBImport::importGraph() {
             return (delete is, errorTrap());
 
           // loop to add nodes
-          for (unsigned int i = 0; i < rangesToRead; ++i) {
-            std::pair<node, node> &range = vRanges[i];
+          for (unsigned int j = 0; j < rangesToRead; ++j) {
+            std::pair<node, node> &range = vRanges[j];
             RangeIterator<node> itr(range.first, range.second);
             sg->addNodes(&itr);
           }
@@ -219,8 +203,8 @@ bool TLPBImport::importGraph() {
             return (delete is, errorTrap());
 
           // loop to add edges
-          for (unsigned int i = 0; i < rangesToRead; ++i) {
-            std::pair<edge, edge> &range = vRanges[i];
+          for (unsigned int j = 0; j < rangesToRead; ++j) {
+            std::pair<edge, edge> &range = vRanges[j];
             RangeIterator<edge> itr(range.first, range.second);
             sg->addEdges(&itr);
           }
@@ -345,13 +329,30 @@ bool TLPBImport::importGraph() {
 
         static_cast<StringProperty *>(prop)->setAllEdgeValue(value);
       } else {
-        // read and set property node default value
-        if (!prop->readNodeDefaultValue(*is))
-          return (delete is, errorTrap());
-
-        // read and set property edge default value
-        if (!prop->readEdgeDefaultValue(*is))
-          return (delete is, errorTrap());
+        // read and set property default values
+        if (prop->getName() == "viewIcon") {
+          // ensure ascendant compatibility for viewIcon default value
+          // "fas-circle-question" instead of "fa-question-circle"
+          // since Tulip 5.7
+          std::string defVal;
+          // read and set property node default value
+          if (StringType::readb(*is, defVal)) {
+            if (defVal == "fa-question-circle")
+              defVal = "fas-circle-question";
+            prop->setAllNodeStringValue(defVal);
+          } else
+            return (delete is, errorTrap());
+          // read and set property edge default value
+          if (StringType::readb(*is, defVal)) {
+            if (defVal == "fa-question-circle")
+              defVal = "fas-circle-question";
+            prop->setAllEdgeStringValue(defVal);
+          } else
+            return (delete is, errorTrap());
+        } else {
+          if (!prop->readNodeDefaultValue(*is) || !prop->readEdgeDefaultValue(*is))
+            return (delete is, errorTrap());
+        }
       }
 
       // nodes / edges values
@@ -406,7 +407,7 @@ bool TLPBImport::importGraph() {
             vs.rdbuf()->pubsetbuf(reinterpret_cast<char *>(vBuf),
                                   valuesToRead * (sizeof(unsigned int) + size));
 
-            for (unsigned int i = 0; i < valuesToRead; ++i) {
+            for (unsigned int j = 0; j < valuesToRead; ++j) {
               node n;
 
               // read node id
@@ -427,7 +428,7 @@ bool TLPBImport::importGraph() {
         } else {
           // we cannot predict the size of property values
           // so the loop is simpler but with more disk reads
-          for (unsigned int i = 0; i < numValues; ++i) {
+          for (unsigned int j = 0; j < numValues; ++j) {
             node n;
 
             // read node id
@@ -492,7 +493,7 @@ bool TLPBImport::importGraph() {
             // set read buffer of stringstream to vBuf
             vs.rdbuf()->pubsetbuf(vBuf, valuesToRead * (sizeof(unsigned int) + size));
 
-            for (unsigned int i = 0; i < valuesToRead; ++i) {
+            for (unsigned int j = 0; j < valuesToRead; ++j) {
               edge e;
 
               // read edge id
@@ -532,7 +533,7 @@ bool TLPBImport::importGraph() {
         } else {
           // we cannot predict the size of property values
           // so the loop is simpler but with more disk reads
-          for (unsigned int i = 0; i < numValues; ++i) {
+          for (unsigned int j = 0; j < numValues; ++j) {
             edge e;
 
             // read edge id

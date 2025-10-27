@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,7 +21,7 @@
 #ifndef Tulip_QLQUADTREELODCALCULATOR_H
 #define Tulip_QLQUADTREELODCALCULATOR_H
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <vector>
 
 #include <tulip/GlCPULODCalculator.h>
@@ -39,7 +39,7 @@ class Graph;
 class GlLayer;
 
 /**
- * Class use to compute bounding boxs of a vector of GlEntity
+ * Class used to compute bounding box of a vector of GlEntity
  */
 class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator, private Observable {
 
@@ -127,7 +127,7 @@ protected:
   const unsigned int eBBOffset;
 
   std::vector<Camera *> cameras;
-  std::unordered_map<GlLayer *, Camera> layerToCamera;
+  tlp_hash_map<GlLayer *, Camera> layerToCamera;
   Camera *currentCamera;
   Graph *currentGraph;
   PropertyInterface *layoutProperty;

@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -25,41 +25,40 @@
 using namespace tlp;
 
 std::string TulipIconicFont::getTTFLocation(const std::string &iconName) {
-  return (iconName.find("fa-") == 0) ? TulipFontAwesome::getTTFLocation(iconName)
-                                     : TulipMaterialDesignIcons::getTTFLocation();
+  return (iconName[0] == 'f') ? TulipFontAwesome::getTTFLocation(iconName)
+                              : TulipMaterialDesignIcons::getTTFLocation();
 }
 
 std::string TulipIconicFont::getWOFF2Location(const std::string &iconName) {
   assert(isIconSupported(iconName));
-  return (iconName.find("fa-") == 0) ? TulipFontAwesome::getWOFF2Location(iconName)
-                                     : TulipMaterialDesignIcons::getWOFF2Location();
+  return (iconName[0] == 'f') ? TulipFontAwesome::getWOFF2Location(iconName)
+                              : TulipMaterialDesignIcons::getWOFF2Location();
 }
 
 bool TulipIconicFont::isIconSupported(const std::string &iconName) {
-  return (iconName.find("fa-") == 0) ? TulipFontAwesome::isIconSupported(iconName)
-                                     : TulipMaterialDesignIcons::isIconSupported(iconName);
+  return (iconName[0] == 'f') ? TulipFontAwesome::isIconSupported(iconName)
+                              : TulipMaterialDesignIcons::isIconSupported(iconName);
 }
 
 unsigned int TulipIconicFont::getIconCodePoint(const std::string &iconName) {
   assert(isIconSupported(iconName));
-  return (iconName.find("fa-") == 0) ? TulipFontAwesome::getIconCodePoint(iconName)
-                                     : TulipMaterialDesignIcons::getIconCodePoint(iconName);
+  return (iconName[0] == 'f') ? TulipFontAwesome::getIconCodePoint(iconName)
+                              : TulipMaterialDesignIcons::getIconCodePoint(iconName);
 }
 
 std::string TulipIconicFont::getIconFamily(const std::string &iconName) {
   assert(isIconSupported(iconName));
-  return (iconName.find("fa-") == 0) ? TulipFontAwesome::getIconFamily(iconName)
-                                     : TulipMaterialDesignIcons::getIconFamily(iconName);
+  return (iconName[0] == 'f') ? TulipFontAwesome::getIconFamily(iconName)
+                              : TulipMaterialDesignIcons::getIconFamily(iconName);
 }
 
 std::string TulipIconicFont::getIconStyle(const std::string &iconName) {
   assert(isIconSupported(iconName));
-  return (iconName.find("fa-") == 0) ? TulipFontAwesome::getIconStyle(iconName)
-                                     : TulipMaterialDesignIcons::getIconStyle(iconName);
+  return (iconName[0] == 'f') ? TulipFontAwesome::getIconStyle(iconName)
+                              : TulipMaterialDesignIcons::getIconStyle(iconName);
 }
 
 std::string TulipIconicFont::getIconUtf8String(const std::string &iconName) {
-  assert(isIconSupported(iconName));
-  return (iconName.find("fa-") == 0) ? TulipFontAwesome::getIconUtf8String(iconName)
-                                     : TulipMaterialDesignIcons::getIconUtf8String(iconName);
+  return (iconName[0] == 'f') ? TulipFontAwesome::getIconUtf8String(iconName)
+                              : TulipMaterialDesignIcons::getIconUtf8String(iconName);
 }

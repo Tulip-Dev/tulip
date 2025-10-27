@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -26,7 +26,6 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/Observable.h>
-//#include <tulip/Node.h>
 #include <tulip/Edge.h>
 #include <tulip/TlpTools.h>
 
@@ -203,13 +202,6 @@ public:
   virtual std::string getNodeStringValue(const node n) const = 0;
 
   /**
-   * @brief Gets a string representation of the edge value.
-   * @param e The edge to get the value of.
-   * @return A string representation of the edge value.
-   */
-  virtual std::string getEdgeStringValue(const edge e) const = 0;
-
-  /**
    * @brief Sets a new value on the node, represented by the string parameter.
    * @param n The node on which to set the new value.
    * @param value A string representing the value to set on the node.
@@ -219,6 +211,69 @@ public:
   virtual bool setNodeStringValue(const node n, const std::string &value) = 0;
 
   /**
+   * @brief inner class used to overload the operator[] to set a node string value
+   **/
+  class nodeStringValueRef {
+  protected:
+    PropertyInterface *_prop;
+    node _n;
+
+  public:
+    constexpr nodeStringValueRef(PropertyInterface *prop, node n) : _prop(prop), _n(n) {}
+
+    std::string getStringValue() const {
+      return _prop->getNodeStringValue(_n);
+    }
+
+    /**
+     * @brief overloading of operator= to assign a node string value
+     * which allows to write: prop[n] = strval
+     **/
+    nodeStringValueRef &operator=(std::string val) noexcept {
+      _prop->setNodeStringValue(_n, val);
+      return *this;
+    }
+
+    /**
+     * @brief overloading of operator= to assign a node string value
+     * which allows to write: prop1[n] = prop2[m]
+     **/
+    nodeStringValueRef &operator=(const nodeStringValueRef &ref) noexcept {
+      _prop->setNodeStringValue(_n, ref.getStringValue());
+      return *this;
+    }
+
+    /**
+     * @brief overloading of operator==
+     * which allows to write: prop1[n] == prop2[m]
+     **/
+    bool operator==(std::string str) noexcept {
+      return _prop->getNodeStringValue(_n) == str;
+    }
+
+    /**
+     * @brief overloading of std::string conversion operator
+     **/
+    operator std::string() {
+      return getStringValue();
+    }
+  };
+
+  /**
+   * @brief overloading of operator[] to set a node string value
+   **/
+  constexpr nodeStringValueRef operator[](node n) {
+    return nodeStringValueRef(this, n);
+  }
+
+  /**
+   * @brief Gets a string representation of the edge value.
+   * @param e The edge to get the value of.
+   * @return A string representation of the edge value.
+   */
+  virtual std::string getEdgeStringValue(const edge e) const = 0;
+
+  /**
    * @brief Sets a new value on the edge, represented by the string parameter.
    * @param e The edge on which to set value on.
    * @param value A string representing the value to set on the edge.
@@ -226,6 +281,69 @@ public:
    * value is not set.
    */
   virtual bool setEdgeStringValue(const edge e, const std::string &value) = 0;
+
+  /**
+   * @brief inner class used to overload the operator[] to set an edge string value
+   **/
+  class edgeStringValueRef {
+  protected:
+    PropertyInterface *_prop;
+    edge _e;
+
+  public:
+    constexpr edgeStringValueRef(PropertyInterface *prop, edge e) : _prop(prop), _e(e) {}
+
+    std::string getStringValue() const {
+      return _prop->getEdgeStringValue(_e);
+    }
+
+    /**
+     * @brief overloading of operator= to assign a edge string value
+     * which allows to write: prop[e] = strval
+     **/
+    edgeStringValueRef &operator=(std::string val) noexcept {
+      _prop->setEdgeStringValue(_e, val);
+      return *this;
+    }
+
+    /**
+     * @brief overloading of operator= to assign a edge string value
+     * which allows to write: prop1[e1] = prop2[e2]
+     **/
+    edgeStringValueRef &operator=(const edgeStringValueRef &ref) noexcept {
+      _prop->setEdgeStringValue(_e, ref.getStringValue());
+      return *this;
+    }
+
+    /**
+     * @brief overloading of operator==
+     * which allows to write: prop1[e1] == prop2[e2]
+     **/
+    bool operator==(std::string str) noexcept {
+      return _prop->getEdgeStringValue(_e) == str;
+    }
+
+    /**
+     * @brief overloading of std::string conversion operator
+     **/
+    operator std::string() {
+      return getStringValue();
+    }
+  };
+
+  /**
+   * @brief overloading of operator[] to set a edge string value value
+   **/
+  constexpr edgeStringValueRef operator[](edge e) {
+    return edgeStringValueRef(this, e);
+  }
+
+  /**
+   * @brief overloading of operator[] to get the edge string value
+   **/
+  std::string operator[](edge e) const {
+    return getEdgeStringValue(e);
+  }
 
   /**
    * @brief Gets a string representation of the node default value.
@@ -618,7 +736,7 @@ public:
    * @param vect An output vector containing the string elements
    * @param openChar an optional character opening the list of elements. Default value is '('; when
    * set to '\0' it indicates that there is no opening character.
-   * @param sepChar an optional character separing the elements of the list. Default value is ','.
+   * @param sepChar an optional character separating the elements of the list. Default value is ','.
    * @param closeChar an optional character closing the list of elements. Default value is ')'; when
    * set to '\0' it indicates that there is no opening character.
    * @return Whether the string was a correct representation for this property's type.
@@ -652,7 +770,7 @@ public:
    * @param value A string listing the elements of the vector to set on the node.
    * @param openChar an optional character opening the list of elements. Default value is '('; when
    * set to '\0' it indicates that there is no opening character.
-   * @param sepChar an optional character separing the elements of the list. Default value is ','.
+   * @param sepChar an optional character separating the elements of the list. Default value is ','.
    * @param closeChar an optional character closing the list of elements. Default value is ')'; when
    * set to '\0' it indicates that there is no opening character.
    * @return Whether the string was a correct representation for this property's type. If not, the
@@ -668,7 +786,7 @@ public:
    * @param value A string listing the elements of the vector to set on the edge.
    * @param openChar an optional character opening the list of elements. Default value is '('; when
    * set to '\0' it indicates that there is no opening character.
-   * @param sepChar an optional character separing the elements of the list. Default value is ','.
+   * @param sepChar an optional character separating the elements of the list. Default value is ','.
    * @param closeChar an optional character closing the list of elements. Default value is ')'; when
    * set to '\0' it indicates that there is no opening character.
    * @return Whether the string was a correct representation for this property's type. If not, the

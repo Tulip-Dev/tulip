@@ -160,15 +160,11 @@ class TestExportModulePlugin : public tlp::ExportModule {
 public:
   PLUGININFORMATION("Test Export Module Plugin", "Tulip-dev", "2019", "", "1.0", "")
 
-  TestExportModulePlugin(tlp::PluginContext *context) : tlp::ExportModule(context) {}
+  TestExportModulePlugin(tlp::PluginContext *context) : tlp::ExportModule(context, {"graph"}) {}
 
   bool exportGraph(std::ostream &os) override {
     os << graph;
     return true;
-  }
-
-  std::string fileExtension() const override {
-    return "graph";
   }
 };
 

@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -30,8 +30,6 @@
 #include <QPixmap>
 #include <QImage>
 #include <QGraphicsView>
-#include <iostream>
-#include <stdint.h>
 %End
 
 namespace tlp {
@@ -47,7 +45,7 @@ class View  : tlp::Plugin /Abstract/ {
    } else if (dynamic_cast<tlp::GlMainView*>(sipCpp)) {
         sipType = sipFindType("tlp::GlMainView");
    } else {
-        sipType = NULL;
+        sipType = nullptr;
    }
 %End
 
@@ -69,9 +67,6 @@ public:
 // =========================================================================================================================
 
    View();
-
-// =========================================================================================================================
-
    virtual ~View();
 
 // =========================================================================================================================
@@ -85,10 +80,16 @@ Sets the parameters for the view.
 :param dataSet: the view parameters
 :type dataSet: :class:`tulip.tlp.DataSet`
 %End
+%MethodCode
+  bool viewOk = isViewOpened(sipCpp, sipIsErr);
+  if(viewOk)
+    sipCpp->setState(*a0);
+%End
+
 
 // =========================================================================================================================
 
-    void setGraph(tlp::Graph *graph);
+void setGraph(tlp::Graph *graph);
 %Docstring
 tlpgui.View.setGraph(graph)
 
@@ -99,16 +100,14 @@ Sets the graph for the view. The current parameters will be kept.
 %End
 
 %MethodCode
-    tvm.graphModel()->addGraph(a0);
-    if (!tvm.tlpWorkspace()) {
-      a0->addListener(&tvm);
-    }
+  bool viewOk = isViewOpened(sipCpp, sipIsErr);
+  if(viewOk)
     sipCpp->setGraph(a0);
 %End
 
 // =========================================================================================================================
 
-    virtual tlp::DataSet state() const = 0;
+virtual tlp::DataSet state() const = 0;
 %Docstring
 tlpgui.View.state()
 
@@ -116,10 +115,16 @@ Returns the current parameters of the view.
 
 :rtype: :class:`tulip.tlp.DataSet`
 %End
+%MethodCode
+bool viewOk = isViewOpened(sipCpp, sipIsErr);
+if(viewOk) {
+  sipRes = new tlp::DataSet(sipCpp->state());
+}
+%End
 
 // =========================================================================================================================
 
-    tlp::Graph *graph() const;
+tlp::Graph *graph() const;
 %Docstring
 tlpgui.View.graph()
 
@@ -127,71 +132,111 @@ Returns the graph currently attached to the view.
 
 :rtype: :class:`tulip.tlp.Graph`
 %End
-
-	virtual void draw() = 0;
+%MethodCode
+bool viewOk = isViewOpened(sipCpp, sipIsErr);
+if(viewOk)
+  sipRes = sipCpp->graph();
+%End
+// =========================================================================================================================
+virtual void draw() = 0;
 %Docstring
 tlpgui.View.draw()
 
 Draws/Updates the view.
 %End
-
 %MethodCode
-    sipCpp->draw();
-    QApplication::processEvents();
+bool viewOk = isViewOpened(sipCpp, sipIsErr);
+if(viewOk)
+  sipCpp->draw();
 %End
 
 // =========================================================================================================================
-
-    void setVisible(const bool visible);
+void setVisible(const bool visible=true) /Deprecated/;
 %Docstring
-tlpgui.View.setVisible(visible)
+tlpgui.View.setVisible(visible=True)
 
-Hides / Shows the view window. That method only has an effect when working through the classical Python interpreter.
+  .. deprecated:: 6.0.0
+    Use :func:`tlpgui.View.show` instead. To close a view use :func:`tlpgui.closeView`.
 
-:param visible: the state of the view window visibility
-:type visible: boolean
+  Shows the view.
+
+  :param visible: this parameter does nothing.
+  :type visible: Boolean
 
 %End
 
 %MethodCode
-    tvm.setViewVisible(sipCpp, a0);
+  tlp::Workspace *w = tlpWorkspace(sipIsErr);
+  if(w)
+    w->addPanel(sipCpp);
+%End
+
+// =========================================================================================================================
+void show();
+%Docstring
+tlpgui.View.show()
+
+.. versionadded:: 6.0.0
+
+Shows the view.
+
+%End
+
+%MethodCode
+  tlp::Workspace *w = tlpWorkspace(sipIsErr);
+  if(w) {
+    auto a = createdView.find(sipCpp);
+    if (a!=createdView.end()) {
+      w->addPanel(sipCpp);
+    }
+    else {
+      sipIsErr = 1;
+      PyErr_SetString(PyExc_Exception, "This view does not exist or was created from the GUI.");
+    }
+  }
+
 %End
 
 // =========================================================================================================================
 
-    void resize(int width, int height);
+void resize(int width, int height) /Deprecated/;
 %Docstring
 tlpgui.View.resize(width, height)
 
-Resizes the view windows. That method only has an effect when working through the
-classical Python interpreter.
+.. deprecated:: 6.0.0
 
-:param width: the new width of the view window
+This function does nothing.
+
+:param width: width
 :type width: integer
-:param height: the new height of the view window
+:param height: height
 :type height: integer
 %End
 
 %MethodCode
-    tvm.resizeView(sipCpp, a0, a1);
+  sipIsErr = 1;
+  PyErr_SetString(PyExc_Exception, "This function is deprecated and does nothing since Tulip 6.0.0");
 %End
 
 // =========================================================================================================================
 
-    void setPos(int x, int y);
+void setPos(int x, int y)  /Deprecated/;
 %Docstring
 tlpgui.View.setPos(x, y)
 
-Set the position on screen of the view windows. That method only has an effect when working through the classical Python interpreter.
+.. deprecated:: 6.0.0
 
-:param x: the new x position of the view window
+This function does nothing.
+
+:param x: x
 :type x: integer
-:param y: the new y position of the view window
+:param y: y
 :type y: integer
 %End
 
 %MethodCode
-    tvm.setViewPos(sipCpp, a0, a1);
+  sipIsErr = 1;
+  PyErr_SetString(PyExc_Exception, "This function is deprecated and does nothing since Tulip 6.0.0");
 %End
 
 // =========================================================================================================================
@@ -214,8 +259,12 @@ Returns :const:`True` if the operation succeeded.
 %End
 
 %MethodCode
+
+bool viewOk = isViewOpened(sipCpp, sipIsErr);
+if(viewOk) {
     QPixmap snapshot = sipCpp->snapshot(QSize(a1, a2));
     sipRes = snapshot.toImage().save(a0->c_str());
+}
 %End
 
 // =========================================================================================================================
@@ -230,17 +279,14 @@ Returns the interactors currently installed on the view.
 %End
 
 %MethodCode
-    std::list<tlp::Interactor*> ret;
-    QList<tlp::Interactor*> interactors = sipCpp->interactors();
-    for (int i = 0 ; i < interactors.count() ; ++i) {
-        ret.push_back(interactors.at(i));
-    }
-    sipRes = new std::list<tlp::Interactor*>(ret);
+  bool viewOk = isViewOpened(sipCpp, sipIsErr);
+  if(viewOk)
+    sipRes = new std::list<tlp::Interactor*>(sipCpp->interactors());
 %End
 
 // =========================================================================================================================
 
-    tlp::Interactor* currentInteractor() const;
+tlp::Interactor* currentInteractor() const;
 %Docstring
 tlpgui.Interactor.currentInteractor()
 
@@ -248,19 +294,20 @@ Returns the current active interactor of the view.
 
 :rtype: :class:`tlpgui.Interactor`
 %End
-
+%MethodCode
+bool viewOk = isViewOpened(sipCpp, sipIsErr);
+if(viewOk)
+  sipRes = sipCpp->currentInteractor();
+%End
 
 // =========================================================================================================================
 
-    std::list<tlp::Observable*> triggers() const;
+std::list<tlp::Observable*> triggers() const;
 %MethodCode
-    std::list<tlp::Observable*> ret;
-    QSet<tlp::Observable*> obs = sipCpp->triggers();
-    QSet<tlp::Observable *>::const_iterator i = obs.constBegin();
-    for ( ; i != obs.constEnd() ; ++i) {
-        ret.push_back(*i);
-    }
-    sipRes = new std::list<tlp::Observable*>(ret);
+bool viewOk = isViewOpened(sipCpp, sipIsErr);
+if(viewOk) {
+    sipRes = new std::list<tlp::Observable*>(sipCpp->triggers());
+  }
 %End
 
 // =========================================================================================================================
@@ -277,17 +324,13 @@ Installs a new set of interactors on the view.
 
 
 %MethodCode
-    QList<tlp::Interactor*> param;
-    std::list<tlp::Interactor*>::const_iterator it = a0->begin();
-    for (; it != a0->end() ; ++it) {
-        param.append(*it);
-    }
-    sipCpp->setInteractors(param);
+bool viewOk = isViewOpened(sipCpp, sipIsErr);
+if(viewOk)
+    sipCpp->setInteractors(*a0);
 %End
 
 // =========================================================================================================================
-
-    void setCurrentInteractor(tlp::Interactor* currentInteractor);
+void setCurrentInteractor(tlp::Interactor* currentInteractor);
 %Docstring
 tlpgui.View.setCurrentInteractor(interactor)
 
@@ -295,6 +338,11 @@ Set the current active interactor on the view.
 
 :param interactor: the interactor to set active
 :type interactor: :class:`tlpgui.Interactor`
+%End
+%MethodCode
+  bool viewOk = isViewOpened(sipCpp, sipIsErr);
+  if(viewOk)
+    sipCpp->setCurrentInteractor(a0);
 %End
 
 };

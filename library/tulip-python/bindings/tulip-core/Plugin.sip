@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -144,7 +144,7 @@ class PluginFactory {
 public:
 
   virtual tlp::Plugin* createPluginObject(tlp::PluginContext* context) = 0 /Factory/;
-
+  virtual ~PluginFactory();
   void registerFactory();
 %MethodCode
   tlp::PluginFactory::registerFactory(sipCpp);

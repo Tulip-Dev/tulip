@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -23,7 +23,6 @@
 #pragma warning(disable : 4355)
 #endif
 
-#include <iostream>
 #include <sstream>
 #include <map>
 #include <set>
@@ -31,7 +30,6 @@
 #include <tulip/Observable.h>
 #include <tulip/ConversionIterator.h>
 #include <tulip/FilterIterator.h>
-#include <tulip/ParallelTools.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TulipException.h>
 #include <tulip/vectorgraph.h>
@@ -243,7 +241,8 @@ Observable::~Observable() {
       // _n cannot be deleted only if it is observed
       // then its deletion is delayed until the observers are unhold
       noDelay = true;
-      for (auto e : ObservationGraph::_oGraph.star(_n)) {
+      for (const auto &adj : ObservationGraph::_oGraph.adj(_n)) {
+        auto e = adj.link();
         if (_n == ObservationGraph::_oGraph.target(e) && _oType[e] & OBSERVER) {
           noDelay = false;
           break;
@@ -440,8 +439,9 @@ void Observable::sendEvent(const Event &message) {
   vector<pair<Observable *, node>> observerTonotify;
   vector<pair<Observable *, node>> listenerTonotify;
   bool delayedEventAdded = false;
-  for (auto e : ObservationGraph::_oGraph.star(_n)) {
-    node &&src = ObservationGraph::_oGraph.source(e);
+  for (const auto &adj : ObservationGraph::_oGraph.adj(_n)) {
+    auto e = adj.link();
+    node src = ObservationGraph::_oGraph.source(e);
 
     if (_n != src && _oAlive[src]) {
       Observable *obs = _oPointer[src];
@@ -625,7 +625,8 @@ unsigned int Observable::countListeners() const {
     return 0;
 
   unsigned int count = 0;
-  for (auto e : ObservationGraph::_oGraph.star(_n)) {
+  for (const auto &adj : ObservationGraph::_oGraph.adj(_n)) {
+    auto e = adj.link();
     if (_n == ObservationGraph::_oGraph.target(e) && (_oType[e] & LISTENER))
       ++count;
   }
@@ -637,7 +638,8 @@ unsigned int Observable::countObservers() const {
     return 0;
 
   unsigned int count = 0;
-  for (auto e : ObservationGraph::_oGraph.star(_n)) {
+  for (const auto &adj : ObservationGraph::_oGraph.adj(_n)) {
+    auto e = adj.link();
     if (_n == ObservationGraph::_oGraph.target(e) && (_oType[e] & OBSERVER))
       ++count;
   }

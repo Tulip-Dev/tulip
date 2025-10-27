@@ -1,16 +1,6 @@
-IF(PYTHONLIBS_FOUND)
-IF(SIP_OK)
-
-IF(WIN32)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDLL_TULIP_PYTHON")
-ENDIF(WIN32)
-
-INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${OPENGL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(BEFORE ${TulipCoreBuildInclude})
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipPythonInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
-
 QTX_SET_INCLUDES_AND_DEFINITIONS()
+
+SET(LibTulipPythonName "tulip-python")
 
 SET(${LibTulipPythonName}_LIB_SRCS
     ConsoleUtilsModule.cpp
@@ -22,7 +12,6 @@ SET(${LibTulipPythonName}_LIB_SRCS
     TulipUtilsModule.cpp
     APIDataBase.cpp
     AutoCompletionDataBase.cpp
-    PythonTabWidget.cpp
     ConsoleHandlers.h
     PythonEditorsTabWidget.cpp
     PythonCppTypesConverter.cpp
@@ -35,6 +24,7 @@ SET(${LibTulipPythonName}_UI
     ../designer/FindReplaceDialog.ui
     ../designer/PythonPluginCreationDialog.ui
     ../designer/PythonIDE.ui
+    ../designer/PythonIDEWarningDialog.ui
     ../designer/PythonPanel.ui
 )
 
@@ -52,17 +42,16 @@ SET(${LibTulipPythonName}_MOC
 QTX_WRAP_UI(${LibTulipPythonName}_UI_SRCS ${${LibTulipPythonName}_UI})
 QTX_WRAP_CPP(${LibTulipPythonName}_MOC_SRCS ${${LibTulipPythonName}_MOC})
 
-ADD_LIBRARY(${LibTulipPythonName} SHARED ${${LibTulipPythonName}_LIB_SRCS} ${${LibTulipPythonName}_MOC_SRCS} ${${LibTulipPythonName}_UI_SRCS})
+ADD_LIBRARY(${LibTulipPythonName}-${Tulip_VERSION} SHARED ${${LibTulipPythonName}_LIB_SRCS} ${${LibTulipPythonName}_MOC_SRCS} ${${LibTulipPythonName}_UI_SRCS})
+TARGET_INCLUDE_DIRECTORIES(${LibTulipPythonName}-${Tulip_VERSION}
+    PUBLIC ${Python_INCLUDE_DIRS} ${SIP_H_DIR}
+    PUBLIC ${TulipCoreBuildInclude}
+    PUBLIC ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipPythonInclude}
+    ${CMAKE_CURRENT_BINARY_DIR}
+)
+IF(WIN32)
+  TARGET_COMPILE_DEFINITIONS(${LibTulipPythonName}-${Tulip_VERSION} PUBLIC "DLL_TULIP_PYTHON")
+ENDIF(WIN32)
+TARGET_LINK_LIBRARIES(${LibTulipPythonName}-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipGUIName} ${QT_LIBRARIES} ${Python_LIBRARIES})
 
-TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${LibTulipCoreName})
-TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${LibTulipGUIName})
-TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${QT_LIBRARIES})
-TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${PYTHON_LIBRARY})
-
-INSTALL(TARGETS ${LibTulipPythonName}
-  RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_python
-  LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python
-  ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python)
-
-ENDIF(SIP_OK)
-ENDIF(PYTHONLIBS_FOUND)
+TULIP_INSTALL_PLUGIN(${LibTulipPythonName}-${Tulip_VERSION} ${TulipPluginsInstallDir})

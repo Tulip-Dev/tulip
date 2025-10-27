@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,7 +20,6 @@
 #ifndef TULIP_CONNECTEDTEST_H
 #define TULIP_CONNECTEDTEST_H
 
-#include <set>
 #include <vector>
 
 #include <tulip/tulipconf.h>

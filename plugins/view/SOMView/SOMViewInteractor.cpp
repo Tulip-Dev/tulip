@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,10 +21,10 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseSelector.h>
 #include <tulip/MouseShowElementInfo.h>
+#include <tulip/StandardInteractorPriority.h>
 #include "EditColorScaleInteractor.h"
 #include "ThresholdInteractor.h"
 
-#include "../../utils/StandardInteractorPriority.h"
 #include "../../utils/PluginNames.h"
 
 using namespace std;
@@ -44,7 +44,7 @@ bool SOMViewInteractor::isCompatible(const std::string &viewName) const {
 }
 
 SOMViewNavigation::SOMViewNavigation(PluginContext *)
-    : SOMViewInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate",
+    : SOMViewInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view",
                         StandardInteractorPriority::Navigation) {}
 
 void SOMViewNavigation::construct() {
@@ -63,10 +63,23 @@ void SOMViewSelection::construct() {
 }
 
 SOMViewProperties::SOMViewProperties(PluginContext *)
-    : SOMViewInteractor(":/tulip/gui/icons/i_select.png", "Properties",
+    : SOMViewInteractor(":/tulip/gui/icons/i_select.png", "Display node or edge properties",
                         StandardInteractorPriority::GetInformation) {}
 
 void SOMViewProperties::construct() {
+  setConfigurationWidgetText(
+      QString("<h3>Display node or edge properties</h3>") +
+      "When the mouse cursor looks like <img src=\":/tulip/gui/icons/i_information.png\">, "
+      "indicating it is on top of a graph element (node or edge), "
+      "<b>Mouse left</b> click to display a panel showing the element properties.<br/>"
+      "As the panel is displayed, <b>Mouse left</b> click in a property row to edit the "
+      "corresponding value.<br/><br/>"
+#if defined(__APPLE__)
+      "<b>Mouse wheel</b> down/up can be used to zoom/unzoom the view."
+#else
+      "<b>Mouse wheel</b> up/down can be used to zoom/unzoom the view."
+#endif
+  );
   push_back(new MouseShowElementInfo());
   push_back(new MousePanNZoomNavigator());
   push_back(new EditColorScaleInteractor());

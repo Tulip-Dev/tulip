@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -37,13 +37,14 @@
 class LinLogAlgorithm : public tlp::LayoutAlgorithm {
 
 public:
-  PLUGININFORMATION("LinLog", "B. Renoust", "11/02/13",
-                    "Implements the LinLog layout algorithm, an energy model layout algorithm, "
-                    "first published as:<br/>"
-                    "<b>Energy Models for Graph Clustering</b>, Andreas Noack., "
-                    "Journal of Graph Algorithms and Applications 11(2):453-480, 2007, "
-                    "doi: <a href=\"https://dx.doi.org/10.7155/jgaa.00154\">10.7155/jgaa.00154</a>",
-                    "1.0", "Force Directed")
+  PLUGININFORMATION(
+      "LinLog", "B. Renoust", "11/02/13",
+      "Implements the LinLog layout algorithm, an energy model layout algorithm, "
+      "first published as:<br/>"
+      "<b>Energy Models for Graph Clustering</b>,<br/>Andreas Noack., "
+      "Journal of Graph Algorithms and Applications 11(2):453-480, 2007, "
+      "<br/>doi: <a href=\"https://dx.doi.org/10.7155/jgaa.00154\">10.7155/jgaa.00154</a>",
+      "1.0", "Force Directed")
 
   LinLogAlgorithm(const tlp::PluginContext *context);
 

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,7 +20,6 @@
 
 #include <QVBoxLayout>
 #include <QLabel>
-#include <QHeaderView>
 
 #include <tulip/CSVGraphImport.h>
 #include <tulip/CSVParserConfigurationWidget.h>
@@ -29,12 +28,14 @@
 #include <tulip/CSVGraphMappingConfigurationWidget.h>
 #include <tulip/SimplePluginProgressWidget.h>
 #include <tulip/CSVParser.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace tlp;
 
 CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage(QWidget *parent)
     : QWizardPage(parent), parserConfigurationWidget(new CSVParserConfigurationWidget(this)),
-      previewTableWidget(new CSVTableWidget(this)), previewLineNumber(6) {
+      previewTableWidget(new CSVTableWidget(this)), previewLineNumber(6), columnCount(0),
+      validColumnCount(true) {
 
   QVBoxLayout *vbLayout = new QVBoxLayout();
   vbLayout->setContentsMargins(0, 0, 0, 0);
@@ -58,8 +59,66 @@ CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage(QWidget *
   parserConfigurationWidget->initWithLastOpenedFile();
 }
 
+bool CSVParsingConfigurationQWizardPage::begin() {
+  columnCount = 0;
+  validColumnCount = true;
+  return true;
+}
+
+bool CSVParsingConfigurationQWizardPage::line(unsigned int row,
+                                              const std::vector<CSVToken> &lineTokens) {
+  if (!columnCount)
+    columnCount = lineTokens.size();
+  else if (lineTokens.size() != columnCount) {
+    validColumnCount = false;
+    if (QMessageBox::warning(
+            this, "Invalid number of row fields",
+            QString(
+                "row #%1: the number of fields (%2) is different than the number of columns (%3)")
+                .arg(row + 1)
+                .arg(lineTokens.size())
+                .arg(columnCount),
+            QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok) == QMessageBox::Cancel)
+      return false;
+  }
+  return true;
+}
+
+bool CSVParsingConfigurationQWizardPage::end(unsigned int, unsigned int) {
+  return true;
+}
+
 bool CSVParsingConfigurationQWizardPage::isComplete() const {
   return parserConfigurationWidget->isValid();
+}
+
+bool CSVParsingConfigurationQWizardPage::validatePage() {
+  // Fill the preview widget
+  int firstLine = parserConfigurationWidget->getFirstLineIndex();
+  CSVParser *parser = parserConfigurationWidget->buildParser(firstLine);
+
+  if (parser != nullptr) {
+    previewTableWidget->setEnabled(true);
+    SimplePluginProgressDialog progress(this);
+    progress.showPreview(false);
+    progress.setWindowTitle(tr("Parsing file"));
+    if (!parser->parse(this, &progress) && validColumnCount) {
+      QMessageBox::critical(this, QString("CSV Parser failure"),
+                            QString(progress.getError().c_str()));
+      parserConfigurationWidget->clearFile();
+      previewTableWidget->setEnabled(false);
+    } else {
+      unsigned int nbCommentsLines = previewTableWidget->getNbCommentsLines();
+
+      if (nbCommentsLines)
+        parserConfigurationWidget->setNbIgnoredLines(nbCommentsLines);
+    }
+  } else {
+    previewTableWidget->setEnabled(false);
+  }
+
+  delete parser;
+  return validColumnCount;
 }
 
 void CSVParsingConfigurationQWizardPage::parserChanged() {
@@ -93,10 +152,6 @@ void CSVParsingConfigurationQWizardPage::parserChanged() {
   delete parser;
   emit completeChanged();
 }
-
-// CSVToGraphDataMapping* CSVGraphMappingConfigurationQWizardPage::buildMappingObject()const {
-//  return graphMappingConfigurationWidget->buildMappingObject();
-//}
 
 CSVToGraphDataMapping *CSVGraphMappingConfigurationQWizardPage::buildMappingObject() const {
   return graphMappingConfigurationWidget->buildMappingObject();
@@ -164,6 +219,8 @@ CSVImportWizard::CSVImportWizard(QWidget *parent) : QWizard(parent), ui(new Ui::
   // ensure there is a Cancel button (may be hidden on Mac)
   setOptions(options() & ~QWizard::NoCancelButton);
   ui->setupUi(this);
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(this);
 }
 
 CSVImportWizard::~CSVImportWizard() {

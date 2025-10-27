@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -16,17 +16,13 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <string>
-#include <tulip/PropertyTypes.h>
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/GraphProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/Color.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/Size.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
 #include <tulip/TlpTools.h>
@@ -199,7 +195,7 @@ DataTypeSerializerContainer DataSet::serializerContainer;
 void DataSet::registerDataTypeSerializer(const std::string &typeName, DataTypeSerializer *dts) {
 
 #ifndef NDEBUG
-  std::unordered_map<std::string, DataTypeSerializer *>::iterator it =
+  tlp_hash_map<std::string, DataTypeSerializer *>::iterator it =
       serializerContainer.tnTodts.find(typeName);
 
   if (it != serializerContainer.tnTodts.end())
@@ -219,14 +215,12 @@ void DataSet::registerDataTypeSerializer(const std::string &typeName, DataTypeSe
 
 // data write
 void DataSet::writeData(std::ostream &os, const std::string &prop, const DataType *dt) const {
-  std::unordered_map<std::string, DataTypeSerializer *>::iterator it =
+  tlp_hash_map<std::string, DataTypeSerializer *>::iterator it =
       serializerContainer.tnTodts.find(dt->getTypeName());
 
   if (it == serializerContainer.tnTodts.end()) {
-#ifndef EMSCRIPTEN
     tlp::warning() << "Write error: No data serializer found for type "
                    << demangleClassName(dt->getTypeName().c_str()).c_str() << std::endl;
-#endif
     return;
   }
 

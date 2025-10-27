@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,12 +18,13 @@
  */
 
 #include <tulip/Ordering.h>
+#ifndef NDEBUG
 #include <tulip/BiconnectedTest.h>
+#endif
 #include <tulip/PlanarConMap.h>
 
 #include <cassert>
-#include <cstdlib>
-
+#
 using namespace std;
 using namespace tlp;
 
@@ -483,18 +484,17 @@ void Ordering::minMarkedf() {
  * that can be induce (in the graph) on face f starting
  * at point n and in counter-clockwise
  */
-node Ordering::getLastOfQ(Face f, node pred, node n, edge e) {
+node Ordering::getLastOfQ(Face f, node pred, node /*n*/, edge e) {
   vector<node> q;
   edge e_tmp = e;
   node tmp = pred;
-  node tmp2 = n;
   bool done = false;
   e_tmp = Gp->succCycleEdge(e_tmp, tmp);
 
   while (!Gp->containEdge(f, e_tmp))
     e_tmp = Gp->succCycleEdge(e_tmp, tmp);
 
-  tmp2 = Gp->opposite(e_tmp, tmp);
+  node tmp2 = Gp->opposite(e_tmp, tmp);
   q.push_back(tmp);
 
   while (!done) {
@@ -522,18 +522,17 @@ node Ordering::getLastOfQ(Face f, node pred, node n, edge e) {
  * that can be induce (in the graph) on face f starting
  * at point n and in clockwise
  */
-node Ordering::getLastOfP(Face f, node pred, node n, edge e) {
+node Ordering::getLastOfP(Face f, node pred, node /*n*/, edge e) {
   vector<node> p;
   edge e_tmp = e;
   node tmp = pred;
-  node tmp2 = n;
   bool done = false;
   e_tmp = Gp->predCycleEdge(e_tmp, tmp);
 
   while (!Gp->containEdge(f, e_tmp))
     e_tmp = Gp->predCycleEdge(e_tmp, tmp);
 
-  tmp2 = Gp->opposite(e_tmp, tmp);
+  node tmp2 = Gp->opposite(e_tmp, tmp);
   p.push_back(tmp);
 
   while (!done) {
@@ -591,8 +590,8 @@ void Ordering::augment(Face f, node pred, node n, node pred_last, node last, int
   vector<Face> newFaces;
   Face newFace;
   node no_selectable;
-  node tmp, tmp2, l_tmp, l_tmp2;
-  edge e_tmp, e_ltmp;
+  node tmp, tmp2;
+  edge e_tmp;
   bool was_last_face = (f == Gp->getFaceContaining(v1[0], v1[1]));
 
   n_pred = pred;
@@ -1485,8 +1484,8 @@ void Ordering::init_v1(const vector<node> &fn) {
   }
 
   if (cpt2 == l)
-    for (int i = l / 2; i > 0; --i)
-      v1.push_back(fn[i]);
+    for (int j = l / 2; j > 0; --j)
+      v1.push_back(fn[j]);
   else {
     cpt2 = 1;
     v1.push_back(fn[i]);

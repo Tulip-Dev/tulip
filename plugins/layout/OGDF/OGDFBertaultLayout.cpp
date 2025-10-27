@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -28,11 +28,11 @@ static const char *paramHelp[] = {
     // impred
     "Sets impred option.",
 
-    // iterno
-    "The number of iterations. If <=0, the number of iterations will be set as 10 times the number "
+    // number of iterations
+    "The number of iterations. If &lt;= 0, the number of iterations will be set as 10 times the number "
     "of nodes.",
 
-    // reqlength
+    // edge length
     "The required edge length."};
 
 class OGDFBertaultLayout : public OGDFLayoutPluginBase {
@@ -45,8 +45,8 @@ public:
   OGDFBertaultLayout(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::BertaultLayout() : nullptr) {
     addInParameter<bool>("impred", paramHelp[0], "false", false);
-    addInParameter<int>("iterno", paramHelp[1], "20", false);
-    addInParameter<double>("reqlength", paramHelp[2], "0.0", false);
+    addInParameter<int>("number of iterations", paramHelp[1], "20", false);
+    addInParameter<double>("edge length", paramHelp[2], "0.0", false);
   }
   ~OGDFBertaultLayout() override {}
 
@@ -61,10 +61,10 @@ public:
       if (dataSet->get("impred", bval))
         bertault->setImpred(bval);
 
-      if (dataSet->get("iterno", ival))
+      if (dataSet->get("number of iterations", ival))
         bertault->iterno(ival);
 
-      if (dataSet->get("reqlength", val))
+      if (dataSet->get("edge length", val))
         bertault->reqlength(val);
     }
   }

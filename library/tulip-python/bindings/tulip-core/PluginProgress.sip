@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,10 +22,17 @@
 // | inspired from bindings by the Booggie project development team          |
 // | (https://sourceforge.net/projects/booggie/)                             |
 // +-------------------------------------------------------------------------+
+%ModuleHeaderCode
+#include <tulip/PluginProgress.h>
+%End
 
 namespace tlp {
 
-enum ProgressState{TLP_CONTINUE, TLP_CANCEL , TLP_STOP };
+enum ProgressState /BaseType=IntEnum/ {
+                                      TLP_CONTINUE=ProgressState::TLP_CONTINUE,
+                                      TLP_CANCEL=ProgressState::TLP_CANCEL,
+                                      TLP_STOP=ProgressState::TLP_STOP
+                                      };
 
 class PluginProgress /Abstract/ {
 %TypeHeaderCode
@@ -58,7 +65,7 @@ Use this method to notify the progression of the process.
 :type step: integer
 :param maxStep: the total number of steps
 :type maxStep: integer
-:rtype: a value indicating whether the progress has been stopped (:const:`tlp.TLP_STOP`), cancelled (:const:`tlp.TLP_CANCEL`), or will continue (:const:`tlp.TLP_CONTINUE`).
+:rtype: a value indicating whether the progress has been stopped (:const:`tlp.ProgressState.TLP_STOP`), cancelled (:const:`tlp.ProgressState.TLP_CANCEL`), or will continue (:const:`tlp.ProgressState.TLP_CONTINUE`).
 %End
 
 

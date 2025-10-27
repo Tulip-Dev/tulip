@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <unordered_map>
 
 #include <tulip/ConnectedTestListener.h>
 #include <tulip/Graph.h>
@@ -30,34 +29,39 @@ void ConnectedTestListener::treatEvent(const Event &evt) {
   if (gEvt) {
     Graph *graph = gEvt->getGraph();
 
+    auto it = resultsBuffer.find(graph);
     switch (gEvt->getType()) {
     case GraphEvent::TLP_ADD_NODE:
       resultsBuffer[graph] = false;
       break;
 
-    case GraphEvent::TLP_DEL_NODE:
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
+    case GraphEvent::TLP_AFTER_DEL_NODE:
+      if (it != resultsBuffer.end()) {
+        graph->removeListener(this);
+        resultsBuffer.erase(it);
+      }
       break;
 
     case GraphEvent::TLP_ADD_EDGE:
 
-      if (resultsBuffer.find(graph) != resultsBuffer.end())
-        if (resultsBuffer[graph])
+      if (it != resultsBuffer.end()) {
+        if (it->second)
           return;
 
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
+        graph->removeListener(this);
+        resultsBuffer.erase(it);
+      }
       break;
 
-    case GraphEvent::TLP_DEL_EDGE:
+    case GraphEvent::TLP_AFTER_DEL_EDGE:
 
-      if (resultsBuffer.find(graph) != resultsBuffer.end())
-        if (!resultsBuffer[graph])
+      if (it != resultsBuffer.end()) {
+        if (!it->second)
           return;
 
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
+        graph->removeListener(this);
+        resultsBuffer.erase(it);
+      }
       break;
 
     default:

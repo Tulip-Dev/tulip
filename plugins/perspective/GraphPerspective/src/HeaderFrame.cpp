@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -31,8 +31,7 @@ HeaderFrame::HeaderFrame(QWidget *parent)
     : QWidget(parent), _ui(new Ui::HeaderFrameData), _expanded(true) {
   _ui->setupUi(this);
   switchToLabel(_ui);
-  connect(_ui->menusCombo, SIGNAL(currentIndexChanged(QString)), this,
-          SIGNAL(menuChanged(QString)));
+  connect(_ui->menusCombo, SIGNAL(currentTextChanged(QString)), this, SIGNAL(menuChanged(QString)));
   connect(_ui->expandButton, SIGNAL(toggled(bool)), this, SLOT(setExpanded(bool)));
 }
 

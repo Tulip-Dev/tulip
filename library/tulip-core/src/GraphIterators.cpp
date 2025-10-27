@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,14 +17,11 @@
  *
  */
 #include <cassert>
-#include <iostream>
 
 #include <tulip/Graph.h>
-#include <tulip/GraphImpl.h>
 #include <tulip/GraphView.h>
 #include <tulip/GraphIterators.h>
 #include <tulip/Observable.h>
-#include <tulip/StoredType.h>
 
 namespace tlp {
 
@@ -56,7 +53,7 @@ struct TLP_SCOPE EdgeIteratorObserver : public Observable {
 void NodeIteratorObserver::treatEvent(const Event &evt) {
   switch (static_cast<const GraphEvent *>(&evt)->getType()) {
   case GraphEvent::TLP_ADD_NODE:
-  case GraphEvent::TLP_DEL_NODE:
+  case GraphEvent::TLP_AFTER_DEL_NODE:
 
     if (itn->hasNext())
       tlp::warning() << "Warning: node added or deleted while iterating!!!" << std::endl;
@@ -69,7 +66,7 @@ void NodeIteratorObserver::treatEvent(const Event &evt) {
 void EdgeIteratorObserver::treatEvent(const Event &evt) {
   switch (static_cast<const GraphEvent *>(&evt)->getType()) {
   case GraphEvent::TLP_ADD_EDGE:
-  case GraphEvent::TLP_DEL_EDGE:
+  case GraphEvent::TLP_AFTER_DEL_EDGE:
 
     if (ite->hasNext())
       tlp::warning() << "Warning: edge added or deleted while iterating!!!" << std::endl;

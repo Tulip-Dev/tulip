@@ -1,4 +1,4 @@
-# This file is part of Tulip (http://tulip.labri.fr)
+# This file is part of Tulip (https://tulip.labri.fr)
 #
 # Authors: David Auber and the Tulip development Team
 # from LaBRI, University of Bordeaux
@@ -47,7 +47,7 @@ alpha of the graph element color.<br/>
 For the logarithmic case, input numeric properties values are first
 mapped in the [1, +inf[ range. Then the log of each mapped value is
 computed and used to compute the associated alpha value of the graph
-element color trough a linear interpolation between 0 and the log of
+element color through a linear interpolation between 0 and the log of
 the mapped maximum value of graph elements.<br/>
 If uniform, this is the same except for the interpolation: the values
 are sorted, numbered, and a linear interpolation is used on those numbers
@@ -58,7 +58,10 @@ are sorted, numbered, and a linear interpolation is used on those numbers
 class AlphaMapping(tlp.ColorAlgorithm):
 
     def __init__(self, context):
-        tlp.ColorAlgorithm.__init__(self, context)
+        # set second parameter of the constructor below to true because
+        # result needs to be an inout parameter
+        # in order to preserve the original values of non targeted elements
+        tlp.ColorAlgorithm.__init__(self, context, True)
 
         self.addNumericPropertyParameter(
             'metric',
@@ -154,4 +157,4 @@ according to the values stored in a numeric property of a graph.
 # The line below does the magic to register the plugin into the plugin database
 # and updates the GUI to make it accessible through the menus.
 tulipplugins.registerPlugin('AlphaMapping', 'Alpha Mapping', 'Antoine Lambert',
-                            '20/04/2017', pluginDoc, '1.2')
+                            '20/04/2017', pluginDoc, '1.3')

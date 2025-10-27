@@ -8,10 +8,6 @@
         <file>icons/16/cpp.png</file>
         <file>icons/16/cut.png</file>
         <file>icons/16/document-new.png</file>
-        <file>icons/16/document-open.png</file>
-        <file>icons/16/document-open-recent.png</file>
-        <file>icons/16/document-save.png</file>
-        <file>icons/16/document-save-as.png</file>
         <file>icons/16/empty-file.png</file>
         <file>icons/16/edit-redo.png</file>
         <file>icons/16/edit-undo.png</file>
@@ -45,18 +41,13 @@
         <file>icons/32/import_pajek.png</file>
         <file>icons/32/import_ucinet.png</file>
         <file>icons/32/spreadsheet.png</file>
-        <file>icons/32/system-software-install.png</file>
         <file>icons/32/redo.png</file>
         <file>icons/32/undo.png</file>
         <file>icons/32/view-open.png</file>
         <file>icons/48/desktop.png</file>
         <file>icons/48/document-import.png</file>
         <file>icons/48/search.png</file>
-        <file>ui/panel_button.png</file>
-        <file>ui/panel_button_checked.png</file>
-        <file>ui/panel_button_checked_hover.png</file>
-        <file>ui/panel_button_hover.png</file>
-        <file>ui/panel_button_pressed.png</file>
         <file>icons/32/desktop.png</file>
+        <file>icons/64/run_algorithm.png</file>
     </qresource>
 </RCC>

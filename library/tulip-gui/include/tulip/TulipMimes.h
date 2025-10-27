@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -68,7 +68,7 @@ class TLP_QT_SCOPE AlgorithmMimeType : public QMimeData {
 
 public:
   AlgorithmMimeType(QString algorithmName, const tlp::DataSet &data);
-  void run(tlp::Graph *) const;
+  void run(tlp::Graph *, tlp::WorkspacePanel *) const;
 
   QString algorithm() const {
     return _algorithm;
@@ -80,7 +80,7 @@ public:
   QStringList formats() const override;
 
 signals:
-  void mimeRun(tlp::Graph *) const;
+  void mimeRun(tlp::Graph *, tlp::WorkspacePanel *) const;
 };
 
 class TLP_QT_SCOPE PanelMimeType : public QMimeData {

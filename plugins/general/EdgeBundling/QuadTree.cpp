@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -99,21 +99,6 @@ void QuadTreeBundle::recQuad(const node a, const node b, const node c, const nod
 
   const Coord &cA = layout->getNodeValue(a);
   const Coord &cC = layout->getNodeValue(c);
-
-  //  if (input.size() == 0) { // && (cA - cC).norm() < (minSize/splitRatio)) {
-  //    //node n = graph->addNode();
-  //    //      resultNode.push_back(n);
-  //    //layout->setNodeValue(n, (cA + cC) / 2.0);
-  //    return;
-  //  }
-  //
-  //  if (input.size() == 1) { // && (cA - cC).norm() < (minSize/(splitRatio * 2.)) ) {
-  //    graph->addEdge(input[0], a);
-  //    graph->addEdge(input[0], b);
-  //    graph->addEdge(input[0], c);
-  //    graph->addEdge(input[0], d);
-  //    return;
-  //  }
 
   if ((input.empty()) && (cA - cC).norm() < (minSize / splitRatio)) {
     node n = graph->addNode();

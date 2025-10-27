@@ -107,7 +107,7 @@ Property Type
 * color: This type enables to store the color of elements. The color is defined with a sequence of four integer from 0 to 255. *(red,green,blue,alpha)*
 * string: This enables to store text on elements.
 * metric: This enables to store real on elements.
-* bool: This type enables to store boolean on elements.
+* bool: This type enables to store Boolean on elements.
 * int: This type enables to store integers on elements.
 
         

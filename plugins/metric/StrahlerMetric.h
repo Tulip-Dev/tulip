@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -61,20 +61,24 @@ public:
       "Strahler", "David Auber", "06/04/2000",
       "Computes the Strahler numbers."
       "This is an implementation of the Strahler numbers computation, first published as:<br/>"
-      "<b>Hypsomic analysis of erosional topography</b>, A.N. Strahler, Bulletin Geological "
+      "<b>Hypsomic analysis of erosional topography</b>,<br/>A.N. Strahler, Bulletin Geological "
       "Society of America 63,pages 1117-1142 (1952).<br/>"
       "Extended to graphs in:<br/><b>Using Strahler numbers for real time visual exploration of "
-      "huge graphs</b>, D. Auber, ICCVG, International Conference on Computer Vision and Graphics, "
+      "huge graphs</b>,<br/>D. Auber, ICCVG, International Conference on Computer Vision and Graphics, "
       "pages 56-69 (2002)",
       "1.1", "Graph")
   StrahlerMetric(const tlp::PluginContext *context);
   bool run() override;
 
 private:
-  Strahler topSortStrahler(tlp::node n, int &curPref, std::unordered_map<tlp::node, int> &tofree,
-                           std::unordered_map<tlp::node, int> &prefix,
-                           std::unordered_map<tlp::node, bool> &visited,
-                           std::unordered_map<tlp::node, bool> &finished,
+  struct SortInfos {
+    int toFree, prefix;
+    bool visited, finished;
+    SortInfos() : toFree(0), prefix(0), visited(false), finished(false) {}
+  };
+
+  Strahler topSortStrahler(tlp::node n, SortInfos &nInfos, int &curPref,
+                           std::unordered_map<tlp::node, SortInfos> &sortInfos,
                            std::unordered_map<tlp::node, Strahler> &cachedValues);
   bool allNodes;
 };

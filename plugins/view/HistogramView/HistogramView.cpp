@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,6 +17,7 @@
  *
  */
 
+#include <tulip/GraphImpl.h>
 #include <tulip/GlQuantitativeAxis.h>
 #include <tulip/Interactor.h>
 #include <tulip/GlMainWidget.h>
@@ -29,13 +30,14 @@
 #include <tulip/TulipViewSettings.h>
 #include <tulip/ViewGraphPropertiesSelectionWidget.h>
 #include <tulip/WorkspacePanel.h>
+#include <tulip/NeedConfigurationMsgBox.h>
 
 #include <QHelpEvent>
 #include <QApplication>
 #include <QToolTip>
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>
-#include <QAbstractButton>
+#include <QPushButton>
 #include <QMessageBox>
 
 #include "HistogramView.h"
@@ -87,8 +89,8 @@ HistogramView::~HistogramView() {
   }
 }
 
-QList<QWidget *> HistogramView::configurationWidgets() const {
-  return QList<QWidget *>() << propertiesSelectionWidget << histoOptionsWidget;
+std::list<QWidget *> HistogramView::configurationWidgets() const {
+  return std::list<QWidget *>{propertiesSelectionWidget, histoOptionsWidget};
 }
 
 void HistogramView::initGlWidget() {
@@ -102,7 +104,7 @@ void HistogramView::initGlWidget() {
   cleanupGlScene();
 
   if (emptyGlGraphComposite == nullptr) {
-    emptyGraph = newGraph();
+    emptyGraph = GraphImpl::newGraph();
     emptyGlGraphComposite = new GlGraphComposite(emptyGraph);
   }
 
@@ -171,24 +173,21 @@ void HistogramView::setState(const DataSet &dataSet) {
     propertiesSelectionWidget->setWidgetEnabled(true);
     histoOptionsWidget->setWidgetEnabled(false);
 
-    // build QMessageBox indicating the lack of selected properties
+    // create box indicating the lack of selected properties
     QGraphicsRectItem *qgrItem = new QGraphicsRectItem(0, 0, 1, 1);
     qgrItem->setBrush(Qt::transparent);
     qgrItem->setPen(QPen(Qt::transparent));
     graphicsView()->scene()->addItem(qgrItem);
 
-    QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning, "",
-                                          "<b><font size=\"+1\">"
-                                          "No graph properties selected.</font></b><br/><br/>"
-                                          "Open the <b>Properties</b> configuration tab<br/>"
-                                          "to proceed.",
-                                          QMessageBox::Ok);
-    msgBox->setModal(false);
-    auto okButton = msgBox->button(QMessageBox::Ok);
+    QPushButton *okButton;
+    QWidget *msgBox =
+        new_NeedConfigurationMsgBox("<b><font size=\"+1\">"
+                                    "No graph properties selected.</font></b><br/><br/>"
+                                    "Open the <b>Properties</b> configuration tab<br/>"
+                                    "to proceed.",
+                                    &okButton);
     connect(okButton, SIGNAL(released()), this, SLOT(showPropertiesSelectionWidget()));
-    // set a specific name before applying style sheet
-    msgBox->setObjectName("needConfigurationMessageBox");
-    Perspective::setStyleSheet(msgBox);
+    connect(okButton, SIGNAL(released()), msgBox, SLOT(hide()));
     noPropertyMsgBox = graphicsView()->scene()->addWidget(msgBox);
     noPropertyMsgBox->setParentItem(qgrItem);
   }
@@ -214,7 +213,7 @@ void HistogramView::setState(const DataSet &dataSet) {
     delete edgeAsNodeGraph;
 
     if (_histoGraph) {
-      edgeAsNodeGraph = tlp::newGraph();
+      edgeAsNodeGraph = GraphImpl::newGraph();
       edgeToNode.clear();
       nodeToEdge.clear();
       for (auto e : _histoGraph->edges()) {
@@ -252,7 +251,7 @@ void HistogramView::setState(const DataSet &dataSet) {
     histoOptionsWidget->setBackgroundColor(backgroundColor);
   }
 
-  unordered_map<string, DataSet> histogramParametersMap;
+  tlp_hash_map<string, DataSet> histogramParametersMap;
   DataSet histogramParameters;
   int i = 0;
   stringstream ss;
@@ -440,8 +439,8 @@ bool HistogramView::eventFilter(QObject *object, QEvent *event) {
       !detailedHistogram->uniformQuantificationHistogram()) {
     GlMainWidget *glw = getGlMainWidget();
     QHelpEvent *he = static_cast<QHelpEvent *>(event);
-    int x = glw->width() - he->x();
-    int y = he->y();
+    int x = glw->width() - he->pos().x();
+    int y = he->pos().y();
     Coord screenCoords(x, y, 0);
     Coord sceneCoords(glw->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(
         glw->screenToViewport(screenCoords)));
@@ -500,7 +499,6 @@ void HistogramView::viewConfigurationChanged() {
 
 void HistogramView::propertiesSelected(bool flag) {
   noPropertyMsgBox->setVisible(!flag);
-  toggleInteractors(flag);
   if (quickAccessBarVisible())
     _quickAccessBar->setEnabled(flag);
   setOverviewVisible(flag);
@@ -573,10 +571,6 @@ void HistogramView::graphChanged(Graph *g) {
   }
   setState(ds);
   drawOverview();
-  if (currentInteractor())
-    // force interactor refresh
-    // needed by statistics interactor
-    currentInteractor()->install(graphicsView());
 }
 
 void HistogramView::buildHistograms() {
@@ -900,7 +894,7 @@ void HistogramView::registerTriggers() {
   }
 }
 
-void HistogramView::interactorsInstalled(const QList<tlp::Interactor *> &) {
+void HistogramView::interactorsInstalled(const std::list<tlp::Interactor *> &) {
   toggleInteractors(detailedHistogram != nullptr);
 }
 
@@ -921,10 +915,10 @@ void HistogramView::treatEvent(const Event &message) {
       if (graphEvent->getType() == GraphEvent::TLP_ADD_EDGE)
         addEdge(graphEvent->getGraph(), graphEvent->getEdge());
 
-      if (graphEvent->getType() == GraphEvent::TLP_DEL_NODE)
+      if (graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_NODE)
         delNode(graphEvent->getGraph(), graphEvent->getNode());
 
-      if (graphEvent->getType() == GraphEvent::TLP_DEL_EDGE)
+      if (graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_EDGE)
         delEdge(graphEvent->getGraph(), graphEvent->getEdge());
     }
   }

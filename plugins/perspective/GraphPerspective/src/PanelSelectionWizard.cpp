@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,11 +18,12 @@
  */
 #include "PanelSelectionWizard.h"
 #include "ui_PanelSelectionWizard.h"
+#include "../../../utils/PluginNames.h"
 
 #include <QAbstractButton>
+#include <QMessageBox>
 #include <QMouseEvent>
 
-#include <tulip/PluginManager.h>
 #include <tulip/View.h>
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/GraphHierarchiesModel.h>
@@ -79,6 +80,12 @@ tlp::View *PanelSelectionWizard::panel() const {
 }
 
 void PanelSelectionWizard::createView() {
+  if (QStringToTlpString(_currentItem) == ViewName::GeographicViewName && !checkInternetAccess()) {
+    QMessageBox::warning(
+        nullptr, QString("No internet access"),
+        QString("There seems to be no internet access.<br/>Check your network configuration."));
+    return;
+  }
   _view = PluginLister::getPluginObject<View>(QStringToTlpString(_currentItem));
   _view->setupUi();
   _view->setGraph(graph());

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -34,13 +34,7 @@ class HistogramView;
 class GlAxis;
 class GlQuantitativeAxis;
 
-class KernelFunction : public std::unary_function<double, double> {
-
-public:
-  virtual ~KernelFunction() {}
-
-  virtual double operator()(double val) = 0;
-};
+typedef double(KernelFunction)(double);
 
 class HistogramStatistics : public GLInteractorComponent {
 

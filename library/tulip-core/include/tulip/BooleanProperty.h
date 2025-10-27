@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -30,12 +30,13 @@ class PropertyContext;
 
 /**
  * @ingroup Graph
- * @brief A graph property that maps a boolean value to graph elements.
+ * @brief A graph property that maps a Boolean value to graph elements.
  */
 class TLP_SCOPE BooleanProperty : public AbstractProperty<tlp::BooleanType, tlp::BooleanType> {
 public:
   BooleanProperty(Graph *g, const std::string &n = "")
       : AbstractProperty<BooleanType, BooleanType>(g, n) {}
+  using AbstractProperty<tlp::BooleanType, tlp::BooleanType>::operator=;
   // PropertyInterface inherited methods
   PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
@@ -68,6 +69,7 @@ class TLP_SCOPE BooleanVectorProperty
 public:
   BooleanVectorProperty(Graph *g, const std::string &n = "")
       : AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>(g, n) {}
+  using AbstractVectorProperty<tlp::BooleanVectorType, tlp::BooleanType>::operator=;
   // PropertyInterface inherited methods
   PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;

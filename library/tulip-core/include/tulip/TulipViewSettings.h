@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -31,13 +31,14 @@
 
 namespace tlp {
 
-class TLP_SCOPE NodeShape {
+class TLP_SCOPE TulipShape {
 
 public:
-  enum NodeShapes {
+  enum Values : int {
+    None = -1,
+    Arrow = 50,
     Billboard = 7,
     BottomShadowedSphere = 21,
-    ChristmasTree = 28,
     Circle = 14,
     Cone = 3,
     Cross = 8,
@@ -59,46 +60,120 @@ public:
     Triangle = 11,
     Window = 17,
     Star = 19,
-    FontAwesomeIcon = 20,
     Icon = 20
   };
+};
+
+class TLP_SCOPE NodeShape {
+
+public:
+  enum NodeShapes {
+    Billboard = TulipShape::Billboard,
+    BottomShadowedSphere = TulipShape::BottomShadowedSphere,
+    Circle = TulipShape::Circle,
+    Cone = TulipShape::Cone,
+    Cross = TulipShape::Cross,
+    Cube = TulipShape::Cube,
+    CubeOutlined = TulipShape::CubeOutlined,
+    CubeOutlinedTransparent = TulipShape::CubeOutlinedTransparent,
+    Cylinder = TulipShape::Cylinder,
+    Diamond = TulipShape::Diamond,
+    GlowSphere = TulipShape::GlowSphere,
+    HalfCylinder = TulipShape::HalfCylinder,
+    Hexagon = TulipShape::Hexagon,
+    LeftBottomShadowedSphere = TulipShape::LeftBottomShadowedSphere,
+    Pentagon = TulipShape::Pentagon,
+    RightBottomShadowedSphere = TulipShape::RightBottomShadowedSphere,
+    Ring = TulipShape::Ring,
+    RoundedBox = TulipShape::RoundedBox,
+    Sphere = TulipShape::Sphere,
+    Square = TulipShape::Square,
+    Triangle = TulipShape::Triangle,
+    Window = TulipShape::Window,
+    Star = TulipShape::Star,
+    Icon = TulipShape::Icon
+  };
+
+  static bool checkValue(int v) {
+    return v > -1 && v < 24;
+  }
 };
 
 class TLP_SCOPE EdgeShape {
 
 public:
   enum EdgeShapes { Polyline = 0, BezierCurve = 4, CatmullRomCurve = 8, CubicBSplineCurve = 16 };
+
+  inline bool static checkValue(int v) {
+    switch (v) {
+    case Polyline:
+    case BezierCurve:
+    case CatmullRomCurve:
+    case CubicBSplineCurve:
+      return true;
+    default:
+      return false;
+    }
+  }
 };
 
 class TLP_SCOPE EdgeExtremityShape {
 
 public:
   enum EdgeExtremityShapes {
-    None = -1,
-    Arrow = 50,
-    Circle = 14,
-    Cone = 3,
-    Cross = 8,
-    Cube = 0,
-    CubeOutlinedTransparent = 9,
-    Cylinder = 6,
-    Diamond = 5,
-    GlowSphere = 16,
-    Hexagon = 13,
-    Pentagon = 12,
-    Ring = 15,
-    Sphere = 2,
-    Square = 4,
-    Star = 19,
-    FontAwesomeIcon = 20,
-    Icon = 20
+    None = TulipShape::None,
+    Arrow = TulipShape::Arrow,
+    Circle = TulipShape::Circle,
+    Cone = TulipShape::Cone,
+    Cross = TulipShape::Cross,
+    Cube = TulipShape::Cube,
+    CubeOutlinedTransparent = TulipShape::CubeOutlinedTransparent,
+    Cylinder = TulipShape::Cylinder,
+    Diamond = TulipShape::Diamond,
+    GlowSphere = TulipShape::GlowSphere,
+    Hexagon = TulipShape::Hexagon,
+    Pentagon = TulipShape::Pentagon,
+    Ring = TulipShape::Ring,
+    Sphere = TulipShape::Sphere,
+    Square = TulipShape::Square,
+    Star = TulipShape::Star,
+    Icon = TulipShape::Icon
   };
+
+  inline bool static checkValue(int v) {
+    switch (v) {
+    case TulipShape::None:
+    case TulipShape::Arrow:
+    case TulipShape::Circle:
+    case TulipShape::Cone:
+    case TulipShape::Cross:
+    case TulipShape::Cube:
+    case TulipShape::CubeOutlinedTransparent:
+    case TulipShape::Cylinder:
+    case TulipShape::Diamond:
+    case TulipShape::GlowSphere:
+    case TulipShape::Hexagon:
+    case TulipShape::Pentagon:
+    case TulipShape::Ring:
+    case TulipShape::Sphere:
+    case TulipShape::Square:
+    case TulipShape::Star:
+    case TulipShape::Icon:
+      return true;
+    default:
+      return false;
+    }
+  }
 };
 
 class TLP_SCOPE LabelPosition {
 
 public:
-  enum LabelPositions { Center = 0, Top, Bottom, Left, Right };
+  enum LabelPositions { Center = 0, Top = 1, Bottom = 2, Left = 3, Right = 4 };
+
+  inline static bool checkValue(int v) {
+    return v > -1 && v < 4;
+  }
 };
 
 ///@cond DOXYGEN_HIDDEN

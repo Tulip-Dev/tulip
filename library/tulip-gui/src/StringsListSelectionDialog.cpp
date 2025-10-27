@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -69,14 +69,11 @@ StringsListSelectionDialog::StringsListSelectionDialog(
 }
 
 StringsListSelectionDialog::~StringsListSelectionDialog() {
-  if (ui)
-    delete ui;
+  delete ui;
 }
 
 std::vector<std::string> StringsListSelectionDialog::getSelectedStringsList() const {
-  if (ui)
-    return ui->stringsListSelectionWidget->getSelectedStringsList();
-  return std::vector<std::string>();
+  return ui->stringsListSelectionWidget->getSelectedStringsList();
 }
 
 void StringsListSelectionDialog::setUnselectedStringsListLabel(const std::string &label) {

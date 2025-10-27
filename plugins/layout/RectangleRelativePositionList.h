@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -24,7 +24,7 @@
 #include <tulip/Rectangle.h>
 
 /**
- *This structure enables the stocking of the datas corresponding to the search
+ *This structure enables the storage of the data corresponding to the search
  *of the optimal position of the rectangle designated by the field
  *rectangleIterator.
  */
@@ -64,8 +64,8 @@ public:
       float x, float y, std::list<RectangleRelativePosition>::iterator itRectangleRelativePosition);
 
   /**
-   *Modify the co-ordinates of the Rectangles pointed by the fields
-   *RectangleIterator of the elements of the list. These new co-ordinates are
+   *Modify the coordinates of the Rectangles pointed by the fields
+   *RectangleIterator of the elements of the list. These new coordinates are
    *calculated from the values of the fields rectangleLeftAbscissa and
    *rectangleLowOrdinate.
    */

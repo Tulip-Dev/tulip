@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -16,13 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <GL/glew.h>
-
-#include <algorithm>
-#include <cstdlib>
-#include <climits>
-#include <cstdio>
-
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlTools.h>
@@ -783,7 +776,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int w, in
     glDisable(GL_BLEND);
     glDisable(GL_STENCIL_TEST);
 
-    unordered_map<unsigned int, SelectedEntity> idToEntity;
+    tlp_hash_map<unsigned int, SelectedEntity> idToEntity;
 
     if (type & RenderingSimpleEntities) {
       unsigned int id = 1;

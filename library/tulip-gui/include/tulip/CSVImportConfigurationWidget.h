@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -59,11 +59,11 @@ public:
   /**
    * @brief Change the type of the property. Use the PropertyClass::propertyTypename static var.
    **/
-  void setPropertyType(const std::string &propertyType);
+  void setPropertyType(const std::string &propertyType, bool defValue = false);
 
   QString getPropertyName() const;
 
-  void setPropertyName(const QString &name);
+  void setPropertyName(const QString &name, bool defValue = false);
 
   void toggleUsed();
 
@@ -75,11 +75,13 @@ private:
   Ui_CSVPropertyDialog *ui;
   bool nameEditable;
   unsigned int propertyNumber;
+  void addException(const std::string &value, CSVColumn::Action action);
 
 private slots:
   void showPropertyCreationDialog();
   void typeCBChanged(const QString &index);
   void addException();
+
   void delCurrentException();
 
 signals:
@@ -134,7 +136,7 @@ class TLP_QT_SCOPE CSVTableWidget : public QTableWidget, public CSVContentHandle
 public:
   CSVTableWidget(QWidget *parent = nullptr);
   bool begin() override;
-  bool line(unsigned int row, const std::vector<std::string> &lineTokens) override;
+  bool line(unsigned int row, const std::vector<CSVToken> &lineTokens) override;
   bool end(unsigned int rowNumber, unsigned int columnNumber) override;
   /**
    * @brief Limit the line number of the preview. Need to parse the file again to take this limit
@@ -176,7 +178,7 @@ public:
   CSVImportConfigurationWidget(QWidget *parent = nullptr);
   ~CSVImportConfigurationWidget() override;
   bool begin() override;
-  bool line(unsigned int row, const std::vector<std::string> &lineTokens) override;
+  bool line(unsigned int row, const std::vector<CSVToken> &lineTokens) override;
   bool end(unsigned int rowNumber, unsigned int columnNumber) override;
   void setFirstLineIndex(int firstLine);
 
@@ -252,7 +254,7 @@ protected:
                                     QWidget *parent);
 
   /**
-   * @brief Compute the name of the column. Return the first token fo the column if the first lline
+   * @brief Compute the name of the column. Return the first token for the column if the first line
    *is used as header r Column_x xhere x is the column index.
    **/
   QString generateColumnName(unsigned int col) const;
@@ -290,7 +292,7 @@ private:
   const std::string &combinePropertyDataType(const std::string &previousType,
                                              const std::string &newType) const;
   /**
-   * @brief Try to guess the type of the data. Can recognize int, double, boolean or string. If the
+   * @brief Try to guess the type of the data. Can recognize int, double, Boolean or string. If the
    *type is other return string.
    * @return The property typename of the type
    **/

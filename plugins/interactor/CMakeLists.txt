@@ -8,43 +8,38 @@ ADD_SUBDIRECTORY(PathFinder)
 INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${OPENGL_INCLUDE_DIR})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(InteractorNavigation-${TulipVersion} SHARED InteractorNavigation.cpp)
-TARGET_LINK_LIBRARIES(InteractorNavigation-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
+ADD_LIBRARY(InteractorGetInformation-${Tulip_VERSION} SHARED InteractorGetInformation.cpp)
+TARGET_LINK_LIBRARIES(InteractorGetInformation-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(InteractorGetInformation-${TulipVersion} SHARED InteractorGetInformation.cpp)
-TARGET_LINK_LIBRARIES(InteractorGetInformation-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
+ADD_LIBRARY(InteractorSelection-${Tulip_VERSION} SHARED InteractorSelection.cpp)
+TARGET_LINK_LIBRARIES(InteractorSelection-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(InteractorSelection-${TulipVersion} SHARED InteractorSelection.cpp)
-TARGET_LINK_LIBRARIES(InteractorSelection-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
+ADD_LIBRARY(InteractorSelectionModifier-${Tulip_VERSION} SHARED InteractorSelectionModifier.cpp)
+TARGET_LINK_LIBRARIES(InteractorSelectionModifier-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(InteractorSelectionModifier-${TulipVersion} SHARED InteractorSelectionModifier.cpp)
-TARGET_LINK_LIBRARIES(InteractorSelectionModifier-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
+ADD_LIBRARY(InteractorRectangleZoom-${Tulip_VERSION} SHARED InteractorRectangleZoom.cpp)
+TARGET_LINK_LIBRARIES(InteractorRectangleZoom-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(InteractorRectangleZoom-${TulipVersion} SHARED InteractorRectangleZoom.cpp)
-TARGET_LINK_LIBRARIES(InteractorRectangleZoom-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
+ADD_LIBRARY(InteractorAddNodeEdge-${Tulip_VERSION} SHARED InteractorAddEdge.cpp)
+TARGET_LINK_LIBRARIES(InteractorAddNodeEdge-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(InteractorAddNodeEdge-${TulipVersion} SHARED InteractorAddEdge.cpp)
-TARGET_LINK_LIBRARIES(InteractorAddNodeEdge-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
+ADD_LIBRARY(InteractorEditEdgeBends-${Tulip_VERSION} SHARED InteractorEditEdgeBends.cpp)
+TARGET_LINK_LIBRARIES(InteractorEditEdgeBends-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(InteractorEditEdgeBends-${TulipVersion} SHARED InteractorEditEdgeBends.cpp)
-TARGET_LINK_LIBRARIES(InteractorEditEdgeBends-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
+ADD_LIBRARY(InteractorDeleteElement-${Tulip_VERSION} SHARED InteractorDeleteElement.cpp)
+TARGET_LINK_LIBRARIES(InteractorDeleteElement-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(InteractorDeleteElement-${TulipVersion} SHARED InteractorDeleteElement.cpp)
-TARGET_LINK_LIBRARIES(InteractorDeleteElement-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
-
-##----------------------------------------------------------------------------------------------------------------------------
-TULIP_INSTALL_PLUGIN(InteractorNavigation-${TulipVersion} ${TulipInteractorPluginsInstallDir})
-TULIP_INSTALL_PLUGIN(InteractorGetInformation-${TulipVersion} ${TulipInteractorPluginsInstallDir})
-TULIP_INSTALL_PLUGIN(InteractorSelection-${TulipVersion} ${TulipInteractorPluginsInstallDir})
-TULIP_INSTALL_PLUGIN(InteractorSelectionModifier-${TulipVersion} ${TulipInteractorPluginsInstallDir})
-TULIP_INSTALL_PLUGIN(InteractorRectangleZoom-${TulipVersion} ${TulipInteractorPluginsInstallDir})
-TULIP_INSTALL_PLUGIN(InteractorAddNodeEdge-${TulipVersion} ${TulipInteractorPluginsInstallDir})
-TULIP_INSTALL_PLUGIN(InteractorEditEdgeBends-${TulipVersion} ${TulipInteractorPluginsInstallDir})
-TULIP_INSTALL_PLUGIN(InteractorDeleteElement-${TulipVersion} ${TulipInteractorPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(InteractorGetInformation-${Tulip_VERSION} ${TulipInteractorPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(InteractorSelection-${Tulip_VERSION} ${TulipInteractorPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(InteractorSelectionModifier-${Tulip_VERSION} ${TulipInteractorPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(InteractorRectangleZoom-${Tulip_VERSION} ${TulipInteractorPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(InteractorAddNodeEdge-${Tulip_VERSION} ${TulipInteractorPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(InteractorEditEdgeBends-${Tulip_VERSION} ${TulipInteractorPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(InteractorDeleteElement-${Tulip_VERSION} ${TulipInteractorPluginsInstallDir})

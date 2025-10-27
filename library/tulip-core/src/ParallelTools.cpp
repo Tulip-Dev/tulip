@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -103,7 +103,7 @@ static OpenMPDefaultOptions openMpDefaultOptions;
 #else
 
 #include <condition_variable>
-#include <unordered_map>
+#include <tulip/tlphash.h>
 #include <tulip/IdManager.h>
 
 #endif
@@ -158,7 +158,7 @@ static IdContainer<uint> tNumManager;
 // a mutex to ensure serialisation when allocating the thread number
 static std::mutex tNumMtx;
 // the global map used to register the thread number
-static std::unordered_map<std::thread::id, uint> tNumMap;
+static tlp_hash_map<std::thread::id, uint> tNumMap;
 
 void ThreadManager::allocateThreadNumber() {
   // exclusive access to tNumManager

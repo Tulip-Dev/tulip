@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -32,8 +32,8 @@ using namespace tlp;
 
 //==============================================================================
 static const char *paramHelp[] = {
-    // oriented
-    "If true, the graph is considered oriented.",
+    // directed
+    "If true, the graph is considered directed.",
 
     // recursive
     "If true, the algorithm is applied along the entire hierarchy of subgraphs.",
@@ -106,12 +106,12 @@ public:
   PLUGININFORMATION("Quotient Clustering", "David Auber", "13/06/2001",
                     "Computes a quotient subgraph (meta-nodes pointing on subgraphs) using an "
                     "already existing subgraphs hierarchy.",
-                    "1.5", "Clustering")
+                    "1.6", "Clustering")
   //================================================================================
   QuotientClustering(PluginContext *context) : Algorithm(context) {
-    addDependency("FM^3 (OGDF)", "1.2");
-    addDependency("Fast Overlap Removal", "1.3");
-    addInParameter<bool>("oriented", paramHelp[0], "true");
+    addDependency("FM^3 (OGDF)", "1.4");
+    addDependency("Fast Overlap Removal", "1.4");
+    addInParameter<bool>("directed", paramHelp[0], "true");
     addInParameter<StringCollection>("node function", paramHelp[2], AGGREGATION_FUNCTIONS, true,
                                      "none <br> average <br> sum <br> max <br> min");
     addInParameter<StringCollection>("edge function", paramHelp[3], AGGREGATION_FUNCTIONS, true,
@@ -135,7 +135,7 @@ public:
 
   //===============================================================================
   bool run() override {
-    bool oriented = true, edgeCardinality = true, clustersLayout = false;
+    bool directed = true, edgeCardinality = true, clustersLayout = false;
     bool recursive = false, quotientLayout = true, useSubGraphName = false;
     StringProperty *metaLabel = nullptr;
     StringCollection nodeFunctions(AGGREGATION_FUNCTIONS);
@@ -144,7 +144,7 @@ public:
     edgeFunctions.setCurrent(0);
 
     if (dataSet != nullptr) {
-      dataSet->get("oriented", oriented);
+      dataSet->get("directed", directed);
       dataSet->get("node function", nodeFunctions);
       dataSet->get("edge function", edgeFunctions);
       dataSet->get("edge cardinality", edgeCardinality);
@@ -165,7 +165,7 @@ public:
         SizeProperty *viewSize = cluster->getProperty<SizeProperty>("viewSize");
         Size minSize = viewSize->getMin(cluster);
         Size maxSize = viewSize->getMax(cluster);
-        layoutParams.set("Unit edge length", std::max(maxSize[0], maxSize[1]) * 5.0);
+        layoutParams.set("unit edge length", std::max(maxSize[0], maxSize[1]) * 5.0);
         cluster->applyPropertyAlgorithm(layoutName,
                                         cluster->getLocalProperty<LayoutProperty>("viewLayout"),
                                         errMsg, &layoutParams);
@@ -193,7 +193,7 @@ public:
     }
     quotientGraph->setName(name);
 
-    if (!oriented) {
+    if (!directed) {
       opProp = new IntegerProperty(quotientGraph);
       opProp->setAllEdgeValue(edge().id);
     }
@@ -207,12 +207,12 @@ public:
 
     // set specific meta value calculators
     // for most properties
-    DoubleProperty::PredefinedMetaValueCalculator nodeFn =
-        static_cast<DoubleProperty::PredefinedMetaValueCalculator>(nodeFunctions.getCurrent());
-    DoubleProperty::PredefinedMetaValueCalculator edgeFn =
-        static_cast<DoubleProperty::PredefinedMetaValueCalculator>(edgeFunctions.getCurrent());
+    DoubleProperty::StandardMetaValueCalculator nodeFn =
+        static_cast<DoubleProperty::StandardMetaValueCalculator>(nodeFunctions.getCurrent());
+    DoubleProperty::StandardMetaValueCalculator edgeFn =
+        static_cast<DoubleProperty::StandardMetaValueCalculator>(edgeFunctions.getCurrent());
     QuotientLabelCalculator viewLabelCalc(metaLabel, useSubGraphName);
-    std::unordered_map<PropertyInterface *, PropertyInterface::MetaValueCalculator *> prevCalcs;
+    tlp_hash_map<PropertyInterface *, PropertyInterface::MetaValueCalculator *> prevCalcs;
     for (const string &pName : quotientGraph->getProperties()) {
       PropertyInterface *prop = quotientGraph->getProperty(pName);
 
@@ -233,7 +233,7 @@ public:
     // compute meta nodes, edges and associated meta values
     Iterator<Graph *> *itS = graph->getSubGraphs();
     vector<node> mNodes;
-    graph->createMetaNodes(itS, quotientGraph, mNodes);
+    graph->createMetaNodes(itS, quotientGraph, mNodes, directed);
     delete itS;
 
     IntegerProperty *viewShape = graph->getProperty<IntegerProperty>("viewShape");
@@ -243,8 +243,8 @@ public:
     }
 
     // restore previous calculators
-    std::unordered_map<PropertyInterface *, PropertyInterface::MetaValueCalculator *>::iterator
-        itC = prevCalcs.begin();
+    tlp_hash_map<PropertyInterface *, PropertyInterface::MetaValueCalculator *>::iterator itC =
+        prevCalcs.begin();
 
     while (itC != prevCalcs.end()) {
       if (dynamic_cast<DoubleProperty *>((*itC).first)) {
@@ -258,7 +258,7 @@ public:
     GraphProperty *metaInfo = graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph");
 
     // orientation
-    if (!oriented) {
+    if (!directed) {
       // for each edge
       // store opposite edge in opProp
       for (auto mE : quotientGraph->edges()) {
@@ -339,7 +339,7 @@ public:
           }
 
           // insert one of the opposite meta edges in edgesToDel
-          // and insert its undelying edges in the set of the remaining one
+          // and insert its underlying edges in the set of the remaining one
           edge meToKeep(mE.id), meToDel(op.id);
 
           if (opOK)
@@ -371,7 +371,7 @@ public:
       SizeProperty *viewSize = quotientGraph->getProperty<SizeProperty>("viewSize");
       Size minSize = viewSize->getMin(quotientGraph);
       Size maxSize = viewSize->getMax(quotientGraph);
-      layoutParams.set("Unit edge length", std::max(maxSize[0], maxSize[1]) * 2.0);
+      layoutParams.set("unit edge length", std::max(maxSize[0], maxSize[1]) * 2.0);
       quotientGraph->applyPropertyAlgorithm(
           layoutName, quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg,
           &layoutParams);
@@ -386,7 +386,7 @@ public:
     // recursive call if needed
     if (recursive) {
       DataSet dSet;
-      dSet.set("oriented", oriented);
+      dSet.set("directed", directed);
       dSet.set("node function", nodeFunctions);
       dSet.set("edge function", edgeFunctions);
       dSet.set("edge cardinality", edgeCardinality);

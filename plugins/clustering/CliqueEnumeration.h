@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -70,10 +70,10 @@ public:
       "Maximal Cliques Enumeration", "Francois Queyroi", "24/10/2013",
       "Compute all maximal cliques (or maximal cliques whose size is above a given threshold)"
       " according to algorithm. published as:<br/>"
-      "<b>Listing All Maximal Cliques in Sparse Graphs in Near-optimal Time</b>, "
-      "In: Cheong O., Chwa KY., Park K. (eds) Algorithms and Computation. ISAAC 2010. Lecture "
+      "<b>Listing All Maximal Cliques in Sparse Graphs in Near-optimal Time</b>,<br/>"
+      "Cheong O., Chwa KY., Park K. (eds) Algorithms and Computation. ISAAC 2010. Lecture "
       "Notes in Computer Science, "
-      "vol 6506. Springer, Berlin, Heidelberg. doi: <a "
+      "vol 6506. Springer, Berlin, Heidelberg,<br/>doi: <a "
       "href=\"https://doi.org/10.1007/978-3-642-17517-6_36\">10.1007/978-3-642-17517-6_36</a>",
       "1.0", "Clustering")
 

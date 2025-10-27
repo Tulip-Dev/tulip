@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -113,7 +113,7 @@ void yyerror(char const *) {}
 extern char *yytext;
 // extern int yylen;
 
-typedef std::unordered_map<std::string, node> NodeMap;
+typedef tlp_hash_map<std::string, node> NodeMap;
 typedef std::vector<node> NodeA;
 typedef std::vector<edge> EdgeA;
 
@@ -2152,7 +2152,7 @@ yyoverflowlab:
 #endif
 
 yyreturn:
-#ifndef yyoverflow
+#ifdef yyoverflow // see line 1415 which is in a '#ifdef yyoverflow' block
 
   if (yyss != yyssa)
     YYSTACK_FREE(yyss);

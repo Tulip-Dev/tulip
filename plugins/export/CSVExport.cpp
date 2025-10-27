@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
@@ -24,6 +24,8 @@
 #include <tulip/StringProperty.h>
 #include <tulip/BooleanProperty.h>
 
+#include <regex>
+
 PLUGIN(CsvExport)
 
 using namespace tlp;
@@ -32,12 +34,11 @@ using namespace std;
 static const char *paramHelp[] = {
     // the type of element to export
     "This parameter enables to choose the type of graph elements to export",
-    // export selection
-    "This parameter indicates if only selected elements have to be exported",
-    // export selection property
-    "This parameters enables to choose the property used for the selection",
-    // export id of graph elements
-    "This parameter indicates if the id of graph elements has to be exported",
+    // selection
+    "This parameter indicates the property used to restrict export to selected nodes only.",
+    // export ids of graph nodes
+    "This parameter indicates if the internal ids of the nodes and/or "
+    " the ids of the nodes at the extremities of each edge have to be exported, according the type of elements to export.",
     // exported properties
     "This parameter indicates the properties to be exported. Default indicates only the user "
     "defined properties",
@@ -63,7 +64,7 @@ static const char *paramHelp[] = {
 
 #define EXPORT_SELECTION "export selection"
 
-#define EXPORT_ID "export id"
+#define EXPORT_ID "export nodes ids"
 
 #define EXPORTED_PROPERTIES "exported properties"
 
@@ -85,17 +86,16 @@ static const char *paramHelp[] = {
 #define DECIMAL_MARKS " . ; , "
 
 //================================================================================
-CsvExport::CsvExport(const PluginContext *context) : ExportModule(context) {
+CsvExport::CsvExport(const PluginContext *context) : ExportModule(context, {"csv"}) {
   addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES);
-  addInParameter<bool>(EXPORT_SELECTION, paramHelp[1], "false");
-  addInParameter<BooleanProperty>("export selection property", paramHelp[2], "viewSelection");
-  addInParameter<bool>(EXPORT_ID, paramHelp[3], "false");
-  addInParameter<PropertiesCollection>(EXPORTED_PROPERTIES, paramHelp[4],
+  addInParameter<BooleanProperty>("selection", paramHelp[1], "", false);
+  addInParameter<bool>(EXPORT_ID, paramHelp[2], "false");
+  addInParameter<PropertiesCollection>(EXPORTED_PROPERTIES, paramHelp[3],
                                        "the user defined properties");
-  addInParameter<StringCollection>(FIELD_SEPARATOR, paramHelp[5], FIELD_SEPARATORS);
-  addInParameter<string>(FIELD_SEPARATOR_CUSTOM, paramHelp[6], CUSTOM_MARK);
-  addInParameter<StringCollection>(STRING_DELIMITER, paramHelp[7], STRING_DELIMITERS);
-  addInParameter<StringCollection>(DECIMAL_MARK, paramHelp[8], DECIMAL_MARKS);
+  addInParameter<StringCollection>(FIELD_SEPARATOR, paramHelp[4], FIELD_SEPARATORS);
+  addInParameter<string>(FIELD_SEPARATOR_CUSTOM, paramHelp[5], CUSTOM_MARK);
+  addInParameter<StringCollection>(STRING_DELIMITER, paramHelp[6], STRING_DELIMITERS);
+  addInParameter<StringCollection>(DECIMAL_MARK, paramHelp[7], DECIMAL_MARKS);
 }
 
 //================================================================================
@@ -106,6 +106,13 @@ struct decimal_comma : std::numpunct<char> {
     return ',';
   }
 };
+
+void CsvExport::exportString(std::ostream &os, const std::string &s) {
+  // do not forget to escape quotes in data
+  std::string delim(1, stringDelimiter);
+  std::string delim2(2, stringDelimiter);
+  os << stringDelimiter << std::regex_replace(s, std::regex(delim), delim2) << stringDelimiter;
+}
 
 bool CsvExport::exportGraph(std::ostream &os) {
   // initialize parameters with default values
@@ -134,15 +141,22 @@ bool CsvExport::exportGraph(std::ostream &os) {
 
   // get chosen values of plugin parameters
   if (dataSet != nullptr) {
-    if (dataSet->getDeprecated(ELT_TYPE, "Type of elements", eltTypes))
+    if (dataSet->get(ELT_TYPE, eltTypes))
       eltType = eltTypes.getCurrent();
 
-    dataSet->getDeprecated(EXPORT_SELECTION, "Export selection", exportSelection);
-    dataSet->getDeprecated(EXPORT_ID, "Export id", exportId);
-    dataSet->getDeprecated(EXPORTED_PROPERTIES, "Exported properties", propsCollection);
-    dataSet->getDeprecated(FIELD_SEPARATOR_CUSTOM, "Custom separator", fieldSeparatorCustom);
+    // this parameter is no longer needed
+    // because the presence of the "selection" property is now sufficient
+    // to indicate if the export is restricted to the selection
+    // but it is there for compatibility reason
+    // and then force the use of "viewSelection"
+    // as default value of the former parameter "export selection property"
+    dataSet->get(EXPORT_SELECTION, exportSelection);
+    dataSet->get(EXPORT_ID, exportId);
 
-    if (dataSet->getDeprecated(FIELD_SEPARATOR, "Field separator", fieldSeparators)) {
+    dataSet->get(EXPORTED_PROPERTIES, propsCollection);
+    dataSet->get(FIELD_SEPARATOR_CUSTOM, fieldSeparatorCustom);
+
+    if (dataSet->get(FIELD_SEPARATOR, fieldSeparators)) {
       switch (fieldSeparators.getCurrent()) {
       case COMMA_SEPARATOR:
         fieldSeparator = ',';
@@ -165,10 +179,10 @@ bool CsvExport::exportGraph(std::ostream &os) {
       }
     }
 
-    if (dataSet->getDeprecated(STRING_DELIMITER, "String delimiter", stringDelimiters))
+    if (dataSet->get(STRING_DELIMITER, stringDelimiters))
       stringDelimiter = stringDelimiters.getCurrent() == DBL_QUOTE_DELIMITER ? '"' : '\'';
 
-    if (dataSet->getDeprecated(DECIMAL_MARK, "Decimal mark", decimalMarks))
+    if (dataSet->get(DECIMAL_MARK, decimalMarks))
       decimalMark = decimalMarks.getCurrent() ? ',' : '.';
   }
 
@@ -200,6 +214,15 @@ bool CsvExport::exportGraph(std::ostream &os) {
   vector<bool> propIsString;
   unsigned int nbProps = 0;
 
+  // do nothing if no properties selected and ids not exported
+  if (propsCollection.emptySelected() && !exportId) {
+    if (pluginProgress != nullptr)
+      pluginProgress->setError("Nothing to export. Export cancelled.");
+    else
+      tlp::warning() << "Nothing to export. Export cancelled." << std::endl;
+    return false;
+  }
+
   for (auto &propName : propsCollection.getSelected()) {
     auto prop = graph->getProperty(propName);
     ++nbProps;
@@ -216,11 +239,13 @@ bool CsvExport::exportGraph(std::ostream &os) {
   os << endl;
 
   // export nodes
-  BooleanProperty *prop = graph->getProperty<BooleanProperty>("viewSelection");
+  BooleanProperty *prop = nullptr;
 
-  if (exportSelection && dataSet != nullptr) {
-    dataSet->getDeprecated("export selection property", "Export selection property", prop);
-  }
+  if (exportSelection) {
+    prop = graph->getProperty<BooleanProperty>("viewSelection");
+    dataSet->get("export selection property", prop);
+  } else
+    dataSet->get("selection", prop);
 
   // get global locale
   std::locale prevLocale;
@@ -230,7 +255,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
     std::locale::global(std::locale(prevLocale, new decimal_comma));
 
   if (eltType != EDGE_TYPE) {
-    Iterator<node> *it = exportSelection ? prop->getNodesEqualTo(true, graph) : graph->getNodes();
+    Iterator<node> *it = prop ? prop->getNodesEqualTo(true, graph) : graph->getNodes();
 
     for (auto n : it) {
 
@@ -265,7 +290,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
 
   // export edges
   if (eltType != NODE_TYPE) {
-    Iterator<edge> *it = exportSelection ? prop->getEdgesEqualTo(true, graph) : graph->getEdges();
+    Iterator<edge> *it = prop ? prop->getEdgesEqualTo(true, graph) : graph->getEdges();
 
     for (auto e : it) {
 

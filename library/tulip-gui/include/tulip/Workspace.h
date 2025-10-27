@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -23,9 +23,9 @@
 
 #include <QWidget>
 #include <QMap>
-#include <QVector>
 
 #include <tulip/tulipconf.h>
+#include <tulip/Graph.h>
 
 class PlaceHolderWidget;
 
@@ -41,7 +41,6 @@ namespace tlp {
 class PluginProgress;
 class View;
 class WorkspacePanel;
-class Graph;
 class GraphHierarchiesModel;
 class TulipProject;
 
@@ -49,13 +48,13 @@ class TLP_QT_SCOPE Workspace : public QWidget {
   Q_OBJECT
 
   Ui::Workspace *_ui;
-  QList<WorkspacePanel *> _panels;
-  int _currentPanelIndex;
+  std::vector<WorkspacePanel *> _panels;
+  unsigned int _currentPanelIndex;
   QWidget *_oldWorkspaceMode;
   WorkspacePanel *_focusedPanel;
   bool _focusedPanelHighlighting;
 
-  QMap<QWidget *, QVector<PlaceHolderWidget *>> _modeToSlots;
+  QMap<QWidget *, std::vector<PlaceHolderWidget *>> _modeToSlots;
   QMap<QWidget *, QWidget *> _modeSwitches;
   GraphHierarchiesModel *_model;
   QAbstractButton *_exposeButton;
@@ -72,7 +71,7 @@ public:
   inline bool empty() const {
     return _panels.empty();
   }
-  QList<tlp::View *> panels() const;
+  std::vector<tlp::View *> panels() const;
 
 public slots:
   void delView(tlp::View *view);
@@ -118,6 +117,8 @@ public slots:
 
   void setGraphForFocusedPanel(tlp::Graph *);
 
+  void setFocusedPanel(WorkspacePanel *panel);
+
 signals:
   void panelFocused(tlp::View *);
   void focusedPanelSynchronized();
@@ -149,10 +150,8 @@ protected:
   bool eventFilter(QObject *, QEvent *) override;
 
   QWidget *currentModeWidget() const;
-  QVector<PlaceHolderWidget *> currentModeSlots() const;
+  std::vector<PlaceHolderWidget *> currentModeSlots() const;
   unsigned int currentSlotsCount() const;
-
-  void setFocusedPanel(WorkspacePanel *panel);
 };
 } // namespace tlp
 

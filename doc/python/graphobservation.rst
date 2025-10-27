@@ -28,13 +28,13 @@ to register an observer to a graph. The sample code below illustrates that obser
           if event.getType() == tlp.GraphEvent.TLP_ADD_NODE:
             print("The node", event.getNode(), "has been added to the graph", graph)
 
-          elif event.getType() == tlp.GraphEvent.TLP_DEL_NODE:
+          elif event.getType() == tlp.GraphEvent.TLP_AFTER_DEL_NODE:
             print("The node", event.getNode(), "has been deleted from the graph", graph)
 
           if event.getType() == tlp.GraphEvent.TLP_ADD_EDGE:
             print("The edge", event.getEdge(), "has been added to the graph", graph)
 
-          elif event.getType() == tlp.GraphEvent.TLP_DEL_EDGE:
+          elif event.getType() == tlp.GraphEvent.TLP_AFTER_DEL_EDGE:
             print("The edge", event.getEdge(), "has been deleted from the graph", graph)
 
           elif event.getType() == tlp.GraphEvent.TLP_REVERSE_EDGE:
@@ -200,21 +200,21 @@ to register an observer to a property. The sample code below illustrates that ob
       def treatEvent(self, event):
         if isinstance(event, tlp.PropertyEvent):
           prop = event.getProperty()
-          if event.getType() == tlp.PropertyEvent.TLP_BEFORE_SET_NODE_VALUE:
+          if event.getType() == tlp.PropertyEvent.PropertyEventType.TLP_BEFORE_SET_NODE_VALUE:
             print("Value for node", event.getNode(), "in property", prop, "is about to be modified. Current value is", prop[event.getNode()])
-          elif event.getType() == tlp.PropertyEvent.TLP_AFTER_SET_NODE_VALUE:
+          elif event.getType() == tlp.PropertyEvent.PropertyEventType.TLP_AFTER_SET_NODE_VALUE:
             print("Value for node", event.getNode(), "in property", prop, "has been modified. New value is", prop[event.getNode()])
-          elif event.getType() == tlp.PropertyEvent.TLP_BEFORE_SET_EDGE_VALUE:
+          elif event.getType() == tlp.PropertyEvent.PropertyEventType.TLP_BEFORE_SET_EDGE_VALUE:
             print("Value for edge", event.getEdge(), "in property", prop, "is about to be modified. Current value is", prop[event.getEdge()])
-          elif event.getType() == tlp.PropertyEvent.TLP_AFTER_SET_EDGE_VALUE:
+          elif event.getType() == tlp.PropertyEvent.PropertyEventType.TLP_AFTER_SET_EDGE_VALUE:
             print("Value for edge", event.getEdge(), "in property", prop, "has been modified. New value is", prop[event.getEdge()])
-          elif event.getType() == tlp.PropertyEvent.TLP_BEFORE_SET_ALL_NODE_VALUE:
+          elif event.getType() == tlp.PropertyEvent.PropertyEventType.TLP_BEFORE_SET_ALL_NODE_VALUE:
             print("Value for all nodes", "in property", prop, "is about to be modified.")
-          elif event.getType() == tlp.PropertyEvent.TLP_AFTER_SET_ALL_NODE_VALUE:
+          elif event.getType() == tlp.PropertyEvent.PropertyEventType.TLP_AFTER_SET_ALL_NODE_VALUE:
             print("Value for all nodes", "in property", prop, "has been modified.")
-          elif event.getType() == tlp.PropertyEvent.TLP_BEFORE_SET_ALL_EDGE_VALUE:
+          elif event.getType() == tlp.PropertyEvent.PropertyEventType.TLP_BEFORE_SET_ALL_EDGE_VALUE:
             print("Value for all edges", "in property", prop, "is about to be modified.")
-          elif event.getType() == tlp.PropertyEvent.TLP_AFTER_SET_ALL_EDGE_VALUE:
+          elif event.getType() == tlp.PropertyEvent.PropertyEventType.TLP_AFTER_SET_ALL_EDGE_VALUE:
             print("Value for all edges", "in property", prop, "has been modified.")
 
     graph = tlp.newGraph()

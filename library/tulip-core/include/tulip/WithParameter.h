@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -149,7 +149,7 @@ public:
  *
  * It is used by WithParameter to store parameters.
  * Each parameter is identified by a name, has a default value, a value, a help string, and a
- *boolean indicating whether it is mandatory or optional.
+ * Boolean indicating whether it is mandatory or optional.
  **/
 struct TLP_SCOPE ParameterDescriptionList {
 
@@ -189,6 +189,14 @@ struct TLP_SCOPE ParameterDescriptionList {
   }
 
   /**
+   * @brief remove an existing parameter from the list.
+   *
+   * @param parameterName The name of the parameter.
+   * @return void
+   **/
+  void remove(const std::string &parameterName);
+
+  /**
    * @brief Retrieves an Iterator on the parameters.
    *
    * @return An iterator over the parameters :Iterator<ParameterDescription>*
@@ -211,6 +219,14 @@ struct TLP_SCOPE ParameterDescriptionList {
    * @return void
    **/
   void setDefaultValue(const std::string &parameterName, const std::string &value);
+
+  /**
+   * @brief retrieves the direction of a parameter.
+   *
+   * @param parameterName The name of the parameter to retrieve the direction of.
+   * @return The direction of the parameter
+   **/
+  ParameterDirection getDirection(const std::string &parameterName) const;
 
   /**
    * @brief Sets the direction of a parameter.
@@ -367,6 +383,12 @@ protected:
    * @brief The internal structure storing the parameters.
    **/
   ParameterDescriptionList parameters;
+  /**
+   * @brief remove an existing parameter
+   **/
+  void removeParameter(const std::string &name) {
+    parameters.remove(name);
+  }
 };
 } // namespace tlp
 #endif

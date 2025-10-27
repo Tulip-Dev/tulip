@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -54,14 +54,14 @@ public:
   PLUGININFORMATION("Edge bundling", "David Auber/ Romain Bourqui / Antoine Lambert", "2010-...",
                     "Edges routing algorithm, implementing the intuitive Edge Bundling technique "
                     "published as:<br/>"
-                    "<b>Winding Roads: Routing edges into bundles</b><br>,"
+                    "<b>Winding Roads: Routing edges into bundles</b>,<br/>"
                     "Antoine Lambert, Romain Bourqui and David Auber, "
                     "Computer Graphics Forum special issue on 12th Eurographics/IEEE-VGTC "
                     "Symposium on Visualization, "
-                    "pages 853-862 (2010), doi: <a "
+                    "pages 853-862 (2010),<br/>doi: <a "
                     "href=\"https://doi.org/10.1111/j.1467-8659.2009.01700.x\">10.1111/"
                     "j.1467-8659.2009.01700.x</a>",
-                    "1.5", "")
+                    "1.6", "")
   bool run() override;
 
 private:

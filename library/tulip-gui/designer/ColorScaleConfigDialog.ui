@@ -14,7 +14,16 @@
    <string>Color Scale Configuration</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_7">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>3</number>
+   </property>
+   <property name="topMargin">
+    <number>3</number>
+   </property>
+   <property name="rightMargin">
+    <number>3</number>
+   </property>
+   <property name="bottomMargin">
     <number>3</number>
    </property>
    <item>
@@ -393,7 +402,7 @@ color scale</string>
           </layout>
          </item>
          <item>
-          <widget class="QLabel" name="label_6">
+          <widget class="QLabel" name="colorbrewerLabel">
            <property name="font">
             <font>
              <pointsize>8</pointsize>

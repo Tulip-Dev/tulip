@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -61,7 +61,7 @@ static void setGraphView(GlGraphComposite *glGraph, bool displayEdges) {
 
 int Histogram::overviewCpt(0);
 
-Histogram::Histogram(Graph *graph, Graph *edgeGraph, std::unordered_map<edge, node> &edgeMap,
+Histogram::Histogram(Graph *graph, Graph *edgeGraph, tlp_hash_map<edge, node> &edgeMap,
                      const std::string &propertyName, const ElementType &dataLocation,
                      const Coord &blCorner, unsigned int size, const Color &backgroundColor,
                      const Color &textColor)
@@ -262,10 +262,10 @@ void Histogram::computeHistogram() {
     uniformQuantificationAxisLabels.clear();
 
     for (unsigned int i = 0; i < nbHistogramBins; ++i) {
-      if (histogramBins[i].size() > 0) {
+      if (!histogramBins[i].empty()) {
         uniformQuantificationAxisLabels.push_back(getStringFromNumber(binMinMaxMap[i].first));
       } else {
-        if (histogramBins[i - 1].size() > 0) {
+        if (!histogramBins[i - 1].empty()) {
           uniformQuantificationAxisLabels.push_back(
               getStringFromNumber(binMinMaxMap[i - 1].second));
         } else {

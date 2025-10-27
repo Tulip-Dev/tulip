@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -35,6 +35,7 @@ SimpleStringsListSelectionWidget::SimpleStringsListSelectionWidget(
       maxSelectedStringsListSize(maxSelectedStringsListSize) {
 
   _ui->setupUi(this);
+  tlpFixCBRBs(this);
 
   if (maxSelectedStringsListSize != 0) {
     _ui->selectButton->setEnabled(false);
@@ -63,7 +64,7 @@ void SimpleStringsListSelectionWidget::setUnselectedStringsList(
     QList<QListWidgetItem *> items =
         _ui->listWidget->findItems(tlpStringToQString(unselectedStringsList[i]), Qt::MatchExactly);
 
-    if (items.size() > 0) {
+    if (!items.empty()) {
       items[0]->setFlags(items[0]->flags() | Qt::ItemIsUserCheckable);
       items[0]->setCheckState(Qt::Unchecked);
     } else {
@@ -86,7 +87,7 @@ void SimpleStringsListSelectionWidget::setSelectedStringsList(
     QList<QListWidgetItem *> items =
         _ui->listWidget->findItems(tlpStringToQString(selectedStringsList[i]), Qt::MatchExactly);
 
-    if (items.size() > 0) {
+    if (!items.empty()) {
       items[0]->setFlags(items[0]->flags() | Qt::ItemIsUserCheckable);
       items[0]->setCheckState(Qt::Checked);
     } else {

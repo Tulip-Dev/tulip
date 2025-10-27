@@ -1,4 +1,4 @@
-# This file is part of Tulip (http://tulip.labri.fr)
+# This file is part of Tulip (https://tulip.labri.fr)
 #
 # Authors: David Auber and the Tulip development Team
 # from LaBRI, University of Bordeaux
@@ -208,7 +208,7 @@ class TulipGraphMLHandler(xml.sax.ContentHandler):
 class GraphMLImport(tlp.ImportModule):
     def __init__(self, context):
         tlp.ImportModule.__init__(self, context)
-        self.addFileParameter('filename', True, 'The GraphML file to import')
+        self.addFileParameter('filename', True, 'The GraphML file (.graphml) to import')
 
     def fileExtensions(self):
         return ['graphml']
@@ -226,7 +226,7 @@ class GraphMLImport(tlp.ImportModule):
 
 
 pluginDoc = """
-<p>Supported extension: graphml</p><p>Imports a graph from a file in the
+<p>File extension: graphml</p><p>Imports a graph from a file in the
 GraphML format (<a href=\"http://graphml.graphdrawing.org/">http://graphml.graphdrawing.org</a>).
 GraphML is a comprehensive and easy-to-use file format for graphs.
 It consists of a language core to describe the structural properties

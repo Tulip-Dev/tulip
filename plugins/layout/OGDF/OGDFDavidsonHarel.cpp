@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -60,7 +60,7 @@ public:
                     "to find a layout of minimal energy.<br/>Due to this approach, the algorithm "
                     "can only handle graphs of rather limited size.<br/>It is based on the "
                     "following publication:<br/><b>Drawing Graphs Nicely Using Simulated "
-                    "Annealing</b>, Ron Davidson, David Harel,  ACM Transactions on Graphics "
+                    "Annealing</b>,<br/>Ron Davidson, David Harel,  ACM Transactions on Graphics "
                     "15(4), pp. 301-331, 1996.",
                     "1.4", "Force Directed")
   OGDFDavidsonHarel(const tlp::PluginContext *context)
@@ -79,7 +79,7 @@ public:
     if (dataSet != nullptr) {
       settings.setCurrent(0);
 
-      if (dataSet->getDeprecated("settings", "Settings", settings)) {
+      if (dataSet->get("settings", settings)) {
         switch (settings.getCurrent()) {
         case STANDARD_ELT:
           davidson->fixSettings(DavidsonHarelLayout::SettingsParameter::Standard);
@@ -94,7 +94,7 @@ public:
 
       speed.setCurrent(0);
 
-      if (dataSet->getDeprecated("speed", "Speed", speed)) {
+      if (dataSet->get("speed", speed)) {
         switch (speed.getCurrent()) {
         case FAST_ELT:
           davidson->setSpeed(DavidsonHarelLayout::SpeedParameter::Fast);
@@ -109,10 +109,10 @@ public:
 
       double val = 0;
 
-      if (dataSet->getDeprecated("edge length", "preferredEdgeLength", val))
+      if (dataSet->get("edge length", val))
         davidson->setPreferredEdgeLength(val);
 
-      if (dataSet->getDeprecated("edge length multiplier", "preferredEdgeLengthMultiplier", val))
+      if (dataSet->get("edge length multiplier", val))
         davidson->setPreferredEdgeLengthMultiplier(val);
     }
   }

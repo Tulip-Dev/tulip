@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -40,7 +40,7 @@ bool RectanglePackingLimitRectangles(vector<Rectangle<float>> &v, const char *qu
   /* we go over all the rectangles to place in an optimal way */
   for (numberNewRect = 1; numberNewRect <= numberOfPackedRectangles; ++numberNewRect) {
 
-    /* we calculate the co-ordinates of the new rectangle and those of the rectangles that the new
+    /* we calculate the coordinates of the new rectangle and those of the rectangles that the new
      * rectangle eventually displaces, that is to say the rectangles placed to its right or above it
      */
     rectPack.optimalPositionOfNewRectangle(itNewRect);
@@ -54,11 +54,11 @@ bool RectanglePackingLimitRectangles(vector<Rectangle<float>> &v, const char *qu
     }
   }
 
-  /* we definitively change the co-ordinates of the rectangles which have been placed in an optimal
+  /* we definitively change the coordinates of the rectangles which have been placed in an optimal
    * way */
   (rectPack.firstSequence)->allocateCoordinates();
 
-  /* we calculate the co-ordinates of the rectangles which have not been packed in an optimal way */
+  /* we calculate the coordinates of the rectangles which have not been packed in an optimal way */
   rectPack.defaultPositionRestOfRectangles(itNewRect, v.end());
 
   /* added to enable the synchronisation of the PluginProgress closing and the end of the
@@ -97,7 +97,7 @@ bool RectanglePackingLimitPositions(vector<Rectangle<float>> &v, const char *qua
     ++counter;
   }
 
-  /* we definitively change the co-ordinates of the rectangles which have been placed in an optimal
+  /* we definitively change the coordinates of the rectangles which have been placed in an optimal
    * way */
   (rectPack.firstSequence)->allocateCoordinates();
 

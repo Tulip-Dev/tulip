@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -51,10 +51,10 @@ public:
   PLUGININFORMATION(
       "Bubble Tree", "D.Auber/S.Grivet", "16/05/2003",
       "Implement the bubble tree drawing algorithm first published as:<br>"
-      "<b>Bubble Tree Drawing Algorithm</b>, "
+      "<b>Bubble Tree Drawing Algorithm</b>,<br/>"
       "S. Grivet, D. Auber, J-P Domenger and Guy Melancon, "
       "Computer Vision and Graphics. Computational Imaging and Vision, vol 32, 2006. Springer, "
-      "Dordrecht, "
+      "Dordrecht,<br/>"
       "doi: <a href=\"https://doi.org/10.1007/1-4020-4179-9_91\">10.1007/1-4020-4179-9_91</a>",
       "1.1", "Tree")
   BubbleTree(const tlp::PluginContext *context);

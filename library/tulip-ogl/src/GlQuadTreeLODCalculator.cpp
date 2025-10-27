@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -24,7 +24,6 @@
 #include <tulip/QuadTree.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/Camera.h>
-#include <tulip/GlEntity.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlNode.h>
@@ -567,8 +566,8 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
     switch (graphEvent->getType()) {
     case GraphEvent::TLP_ADD_NODE:
     case GraphEvent::TLP_ADD_EDGE:
-    case GraphEvent::TLP_DEL_NODE:
-    case GraphEvent::TLP_DEL_EDGE:
+    case GraphEvent::TLP_AFTER_DEL_NODE:
+    case GraphEvent::TLP_AFTER_DEL_EDGE:
       setHaveToCompute();
       break;
 

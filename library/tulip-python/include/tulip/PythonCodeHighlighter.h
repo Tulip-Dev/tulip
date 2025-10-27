@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,9 +20,9 @@
 #ifndef PYTHONCODEHIGHLIGHTER_H_
 #define PYTHONCODEHIGHLIGHTER_H_
 
-#include <QSyntaxHighlighter>
-
 #include <QHash>
+#include <QRegularExpression>
+#include <QSyntaxHighlighter>
 #include <QTextCharFormat>
 
 class QTextDocument;
@@ -30,7 +30,7 @@ class QTextDocument;
 class PythonCodeHighlighter : public QSyntaxHighlighter {
 
   struct HighlightingRule {
-    QRegExp pattern;
+    QRegularExpression pattern;
     QTextCharFormat format;
   };
 
@@ -56,8 +56,8 @@ public:
 protected:
   void highlightBlock(const QString &text) override;
 
-  bool highlightMultilineString(const QString &text, const QRegExp &delimiter, const int inState,
-                                const QTextCharFormat &style);
+  bool highlightMultilineString(const QString &text, const QRegularExpression &delimiter,
+                                const int inState, const QTextCharFormat &style);
 };
 
 #endif /* PYTHONCODEHIGHLIGHTER_H_ */

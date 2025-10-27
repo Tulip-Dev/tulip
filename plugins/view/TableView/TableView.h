@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -45,6 +45,7 @@ class TableView : public tlp::ViewWidget {
   bool filteringColumns;
   tlp::Graph *previousGraph;
   int minFontSize;
+  QString settingsButtonIconName;
 
 public:
   PLUGININFORMATION("Spreadsheet view", "Tulip Team", "04/17/2012", "Spreadsheet view for raw data",
@@ -58,12 +59,12 @@ public:
   tlp::DataSet state() const override;
   void setState(const tlp::DataSet &) override;
   void setupWidget() override;
-  QList<QWidget *> configurationWidgets() const override;
+  std::list<QWidget *> configurationWidgets() const override;
   bool getNodeOrEdgeAtViewportPos(int x, int y, tlp::node &n, tlp::edge &e) const override;
 
   // Qt bug workaround
   // see void WorkspacePanel::showEvent(QShowEvent *event);
-#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0)) || defined(__APPLE__)
+#if defined(__APPLE__)
   bool rebuildSceneOnShowEvent() override {
     return true;
   }

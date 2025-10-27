@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -36,8 +36,9 @@ public:
   PLUGININFORMATION(
       "Strength", "David Auber", "26/02/2003",
       "Computes the Strength metric as described in<br/><b>Software component capture "
-      "using graph clustering</b>, Y. Chiricota. F.Jourdan, an G.Melancon, IWPC "
-      "(2002).",
+      "using graph clustering</b>,<br/>Y. Chiricota. F.Jourdan, an G.Melancon, IWPC "
+      "(2002).<br>"
+      "doi: <a href=\"https://doi.org/10.1109/WPC.2003.1199205\">10.1109/WPC.2003.1199205</a>",
       "1.0", "Graph")
   StrengthMetric(const tlp::PluginContext *context);
   ~StrengthMetric() override;

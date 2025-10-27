@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -116,18 +116,6 @@ PixelOrientedOverview::~PixelOrientedOverview() {
   reset(true);
 }
 
-struct NodeCoordXOrdering : public binary_function<pair<node, Coord>, pair<node, Coord>, bool> {
-  bool operator()(pair<node, Coord> p1, pair<node, Coord> p2) {
-    return p1.second.getX() < p2.second.getX();
-  }
-};
-
-struct NodeCoordYOrdering : public binary_function<pair<node, Coord>, pair<node, Coord>, bool> {
-  bool operator()(pair<node, Coord> p1, pair<node, Coord> p2) {
-    return p1.second.getY() > p2.second.getY();
-  }
-};
-
 void PixelOrientedOverview::computePixelView() {
 
   reset(false);
@@ -190,6 +178,8 @@ void PixelOrientedOverview::computePixelView() {
   GLuint textureId = glOffscreenRenderer->getGLTexture(true);
   GlTextureManager::deleteTexture(textureName);
   GlTextureManager::registerExternalTexture(textureName, textureId);
+
+  glOffscreenRenderer->clearScene();
 
   if (findGlEntity(dimName) == nullptr) {
     addGlEntity(new Gl2DRect(blCornerPos.getY() + pixelOrientedMediator->getImageHeight(),

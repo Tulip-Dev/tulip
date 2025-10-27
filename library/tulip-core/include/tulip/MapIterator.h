@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -48,7 +48,7 @@ TLP_SCOPE edge nextFaceEdge(Graph *g, edge source, node target);
  * around nodes
  * @param sg the considered graph
  * @param source the node from witch one arrives on target
- * @param target the node the considered node (one will obtain an iterator on the neighboors of
+ * @param target the node the considered node (one will obtain an iterator on the neighbors of
  * that node)
  *
  * Since Tulip enables to order the edges around nodes, it is possible to traverse the nodes
@@ -82,7 +82,7 @@ private:
  * around nodes
  * @param sg the considered graph
  * @param source the edge from witch one arrives on target
- * @param target the node the considered node (one will obtain an iterator on the neighboors of
+ * @param target the node the considered node (one will obtain an iterator on the neighbors of
  * that node)
  *
  * Since Tulip enables to order the edges around nodes, it is possible to traverse the nodes

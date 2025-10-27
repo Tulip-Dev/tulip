@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -24,7 +24,7 @@
 #include <sstream>
 #include <algorithm>
 #include <iterator>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 PLUGIN(CliqueEnumeration)
 
@@ -34,7 +34,7 @@ using namespace std;
 //================================================================================
 CliqueEnumeration::CliqueEnumeration(tlp::PluginContext *context)
     : Algorithm(context), minsize(0), cliqueid(0) {
-  addInParameter<unsigned int>("minimum size", "Clique minimum size", "0");
+  addInParameter<unsigned int>("min size", "minimum size of a clique", "0");
   addOutParameter<unsigned int>("#cliques created", "Number of cliques (subgraphs) created");
 }
 
@@ -135,7 +135,7 @@ struct LessDegreeOrdering {
 void CliqueEnumeration::getDegenerateOrdering(vector<node> &ordering) {
   ordering.clear();
   tlp::Graph *sub = graph->addCloneSubGraph();
-  std::unordered_map<tlp::node, DegreeOrderingElem *> degrees;
+  tlp_hash_map<tlp::node, DegreeOrderingElem *> degrees;
   set<DegreeOrderingElem *, LessDegreeOrdering> sortednodes;
   for (auto n : sub->nodes()) {
     DegreeOrderingElem *elem = new DegreeOrderingElem(n, sub->deg(n));
@@ -164,7 +164,7 @@ void CliqueEnumeration::getDegenerateOrdering(vector<node> &ordering) {
 //================================================================================
 bool CliqueEnumeration::run() {
   if (dataSet != nullptr)
-    dataSet->get("minimum size", minsize);
+    dataSet->get("min size", minsize);
 
   vector<node> ordering;
   getDegenerateOrdering(ordering);

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,13 +18,9 @@
  */
 #include <tulip/Camera.h>
 
-#include <cmath>
-
 #include <tulip/GlTools.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlXMLTools.h>
-
-#include <tulip/OpenGlIncludes.h>
 
 using namespace std;
 

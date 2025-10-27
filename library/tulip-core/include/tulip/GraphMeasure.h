@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,8 +20,6 @@
 
 #ifndef _TLPGRAPHMEASEURE_H
 #define _TLPGRAPHMEASEURE_H
-
-#include <set>
 
 #include <tulip/Node.h>
 #include <tulip/StaticProperty.h>
@@ -50,11 +48,14 @@ TLP_SCOPE double averageClusteringCoefficient(const Graph *);
  * assign to each node its local clustering coefficient
  * that is the proportion of edges between the nodes within its neighbourhood
  * divided by the number of edges that could possibly exist between them.
- * This quantifies how close its neighbors are to being a clique.
- * see http://en.wikipedia.org/wiki/Clustering_coefficient for more details
+ * This quantifies how close the node and its neighbors are close to a clique.
+ * see http://en.wikipedia.org/wiki/Clustering_coefficient for more details or
+ * the paper: D. J. Watts and S. H. Strogatz.
+ * Collective dynamics of "small-world" networks.
+ * Nature 393, 440 (1998) doi: https://doi.org/10.1038/30918\">10.1038/30918.
  */
 TLP_SCOPE void clusteringCoefficient(const Graph *g, tlp::NodeStaticProperty<double> &result,
-                                     unsigned int maxDepth = 1);
+                                     _DEPRECATED unsigned int maxDepth = 1);
 /*
  * assign to each node of a graph its (in/ou/inout) degree.
  * The weighted degree of a node is the sum of weights of

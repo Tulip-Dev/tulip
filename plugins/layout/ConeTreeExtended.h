@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -19,7 +19,7 @@
 #ifndef _TREE3DLAYOUT_H
 #define _TREE3DLAYOUT_H
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <tulip/LayoutProperty.h>
 /** \addtogroup layout */
 
@@ -47,8 +47,8 @@ public:
   PLUGININFORMATION(
       "Cone Tree", "David Auber", "01/04/1999",
       "Implements an extension of the Cone tree layout algorithm first published as:<br/>"
-      "<b>Interacting with Huge Hierarchies: Beyond Cone Trees </b>, A. FJ. Carriere and R. "
-      "Kazman, InfoViz'95, IEEE Symposium on Information Visualization pages 74--78 (1995),"
+      "<b>Interacting with Huge Hierarchies: Beyond Cone Trees</b>,<br/>A. FJ. Carriere and R. "
+      "Kazman, InfoViz'95, IEEE Symposium on Information Visualization pages 74--78 (1995),<br/>"
       "doi: <a "
       "href=\"https://dx.doi.org/10.1109/INFVIS.1995.528689\">10.1109/INFVIS.1995.528689</a>",
       "1.0", "Tree")
@@ -57,10 +57,10 @@ public:
   bool run() override;
 
 private:
-  double treePlace3D(tlp::node n, std::unordered_map<tlp::node, double> *posRelX,
-                     std::unordered_map<tlp::node, double> *posRelY);
-  void calcLayout(tlp::node n, std::unordered_map<tlp::node, double> *px,
-                  std::unordered_map<tlp::node, double> *py, double x, double y, int level);
+  double treePlace3D(tlp::node n, tlp_hash_map<tlp::node, double> *posRelX,
+                     tlp_hash_map<tlp::node, double> *posRelY);
+  void calcLayout(tlp::node n, tlp_hash_map<tlp::node, double> *px,
+                  tlp_hash_map<tlp::node, double> *py, double x, double y, int level);
   void computeLayerSize(tlp::node n, unsigned int level);
   void computeYCoodinates(tlp::node root);
   tlp::Graph *tree;

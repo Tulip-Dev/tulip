@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,10 +20,10 @@
 #ifndef GEOGRAPHIC_VIEW_GRAPHICSVIEW_H
 #define GEOGRAPHIC_VIEW_GRAPHICSVIEW_H
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include "AddressSelectionDialog.h"
-#include "LeafletMaps.h"
+#include "GeoMapWidget.h"
 
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainWidget.h>
@@ -32,9 +32,10 @@
 
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>
-#include <QComboBox>
 
+class QComboBox;
 class QOpenGLFramebufferObject;
+class QGraphicsItemGroup;
 
 namespace tlp {
 
@@ -49,7 +50,12 @@ public:
                              QWidget *parent = nullptr);
   ~GeographicViewGraphicsView() override;
 
+  Graph *getGraph() {
+    return graph;
+  }
+
   void setGraph(Graph *graph);
+
   void createLayoutWithAddresses(const std::string &addressPropertyName = "",
                                  bool createLatAndLngProps = false,
                                  bool resetLatAndLngValues = true, bool automaticChoice = true);
@@ -76,8 +82,6 @@ public:
     scene()->update();
   }
 
-  void setMapTranslationBlocked(const bool mapTranslationBlocked);
-
   void centerView();
 
   void centerMapOnNode(const node n);
@@ -86,8 +90,8 @@ public:
     return glMainWidget;
   }
 
-  LeafletMaps *getLeafletMapsPage() const {
-    return leafletMaps;
+  GeoMapWidget *getGeoMapWidget() const {
+    return _geoMW;
   }
 
   LayoutProperty *getGeoLayout() const {
@@ -116,9 +120,7 @@ public:
 
   void switchMapType();
 
-  void loadDefaultMap();
-  void loadCsvFile(QString fileName);
-  void loadPolyFile(QString fileName);
+  void loadFile(const bool isCSV = false, const QString &fileName = "");
 
   QComboBox *getMapTypeComboBox() {
     return mapTypeComboBox;
@@ -130,68 +132,71 @@ public:
 
   void setGeoLayoutComputed();
 
+  bool centerVisible() {
+    return displayCenter;
+  }
+
+  bool scaleVisible() {
+    return displayScale;
+  }
+
 public slots:
 
   void mapToPolygon();
   void zoomIn();
   void zoomOut();
   void currentZoomChanged();
-#ifdef QT_HAS_WEBENGINE
-  void queueMapRefresh();
-#endif
   void refreshMap();
   void showGeolocationWidget();
+  void openUrlInBrowser(const QString &url);
+  void showCenter(bool);
+  void showScale(bool);
 
 protected:
   void cleanup();
   void resizeEvent(QResizeEvent *event) override;
-#ifdef QT_HAS_WEBENGINE
-  int tId;
-  void timerEvent(QTimerEvent *event) override;
-#endif
   void updateMapTexture();
+  void recomputeScale();
+  void resizeAttributionLabel();
 
 private:
   GeographicView *_geoView;
   Graph *graph;
-  LeafletMaps *leafletMaps;
-  std::unordered_map<node, std::pair<double, double>> nodeLatLng;
-  std::unordered_map<edge, std::vector<std::pair<double, double>>> edgeBendsLatLng;
+  GeoMapWidget *_geoMW;
+  tlp_hash_map<node, std::pair<double, double>> nodeLatLng;
+  tlp_hash_map<edge, std::vector<std::pair<double, double>>> edgeBendsLatLng;
   Camera globeCameraBackup;
   Camera mapCameraBackup;
 
-  LayoutProperty *geoLayout;
+  DoubleProperty *latProp, *lngProp;
+  LayoutProperty *geoLayout, *geoLayoutBackup;
   SizeProperty *geoViewSize;
   IntegerProperty *geoViewShape;
-  LayoutProperty *geoLayoutBackup;
-
-  bool mapTranslationBlocked;
 
   bool geocodingActive;
-  bool cancelGeocoding;
+  bool abortGeocoding;
 
   GlMainWidget *glMainWidget;
   GlMainWidgetGraphicsItem *glWidgetItem;
+  QGraphicsRectItem *_placeholderItem;
   QComboBox *mapTypeComboBox;
   QPushButton *zoomOutButton;
   QPushButton *zoomInButton;
+  QLabel *attributionLabel;
 
   GlComposite *polygonEntity;
   GlSimpleEntity *planisphereEntity;
 
   AddressSelectionDialog *addressSelectionDialog;
-  QGraphicsProxyWidget *noLayoutMsgBox;
+  QWidget *noLayoutMsgBox;
 
-  bool firstGlobeSwitch;
-
-  QGraphicsRectItem *_placeholderItem;
-
-  bool geoLayoutComputed;
+  bool firstGlobeSwitch, geoLayoutComputed, displayScale, displayCenter;
+  int scaleWidth; // width of the displayed scale
+  QGraphicsItemGroup *scale, *center;
 
   QOpenGLFramebufferObject *renderFbo;
   GlLayer *backgroundLayer;
   std::string mapTextureId;
-  DoubleProperty *latProp, *lngProp;
 };
 } // namespace tlp
 

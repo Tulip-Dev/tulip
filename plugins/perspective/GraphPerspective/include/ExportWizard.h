@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -36,7 +36,6 @@ class ExportWizard : public QWizard {
 
   Ui::ExportWizard *_ui;
   tlp::Graph *_graph;
-  QModelIndex const *_index;
 
 public:
   explicit ExportWizard(tlp::Graph *g, const QString &exportFile, QWidget *parent = nullptr);

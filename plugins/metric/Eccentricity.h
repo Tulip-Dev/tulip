@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -64,7 +64,7 @@ public:
                     "<b>Closeness Centrality</b> is the mean of shortest-paths lengths from a node "
                     "to others. The normalized values are computed using the reciprocal of the sum "
                     "of these distances.",
-                    "2.1", "Graph")
+                    "2.2", "Graph")
   EccentricityMetric(const tlp::PluginContext *context);
   ~EccentricityMetric() override;
   bool run() override;

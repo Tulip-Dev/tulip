@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -57,41 +57,40 @@ public:
 
   tlp::Mat4f& inverse();
 
-  tlp::Mat4f operator+(const tlp::Mat4f &mat) const;
+  tlp::Mat4f __add__(const tlp::Mat4f &mat) const;
 
-  tlp::Mat4f & operator+=(const tlp::Mat4f &mat);
+  tlp::Mat4f & __iadd__(const tlp::Mat4f &mat);
 
-  tlp::Mat4f operator-(const tlp::Mat4f &mat) const;
+  tlp::Mat4f __sub__(const tlp::Mat4f &mat) const;
 
-  tlp::Mat4f & operator-=(const tlp::Mat4f &mat);
+  tlp::Mat4f & __isub__(const tlp::Mat4f &mat);
 
-  bool operator==(const tlp::Mat4f &) const;
+  bool __eq__(const tlp::Mat4f &) const;
+  bool __ne__(const tlp::Mat4f &) const;
 
-  bool operator!=(const tlp::Mat4f &) const;
+  tlp::Mat4f & __imul__(const tlp::Mat4f &mat);
 
-  tlp::Mat4f & operator*=(const tlp::Mat4f &mat);
+  tlp::Mat4f & __imul__(const float obj);
 
-  tlp::Mat4f & operator*=(const float obj);
+  tlp::Mat4f __mul__(const tlp::Mat4f &mat) const;
 
-  tlp::Mat4f operator*(const tlp::Mat4f &mat) const;
+  tlp::Vec4f __mul__(const tlp::Vec4f &v) const;
 
-  tlp::Vec4f operator*(const tlp::Vec4f &v) const;
+  tlp::Mat4f __mul__(const float obj) const;
 
-  tlp::Mat4f operator*(const float obj) const;
+  tlp::Mat4f & __itruediv__(const tlp::Mat4f &mat);
 
-  tlp::Mat4f & operator/=(const tlp::Mat4f &mat);
+  tlp::Mat4f & __itruediv__(const float obj);
 
-  tlp::Mat4f & operator/=(const float obj);
+  tlp::Mat4f __truediv__(const tlp::Mat4f &mat) const;
 
-  tlp::Mat4f operator/(const tlp::Mat4f &mat) const;
-
-  tlp::Mat4f operator/(const float obj) const;
+  tlp::Mat4f __truediv__(const float obj) const;
 
   tlp::Mat4f cofactor() const;
 
   tlp::Vec4f powerIteration(const unsigned int nIterations) const;
 
-  tlp::Vec4f& operator[](const unsigned int i)  /NoCopy/;
+  tlp::Vec4f& __getitem__(const unsigned int i)  /NoCopy/;
 %MethodCode
   if (a0 < 4) {
     sipRes = &(*sipCpp)[a0];

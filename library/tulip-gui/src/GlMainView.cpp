@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,13 +18,11 @@
  */
 #include <tulip/GlMainView.h>
 
-#include <QApplication>
 #include <QGraphicsProxyWidget>
 #include <QGraphicsView>
 #include <QAction>
 #include <QMenu>
 #include <QPushButton>
-#include <QTimer>
 
 #include <tulip/GlMainWidgetGraphicsItem.h>
 #include <tulip/GlMainWidget.h>
@@ -37,6 +35,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/Gl2DRect.h>
 #include <tulip/ViewActionsManager.h>
+#include <tulip/TulipFontIconEngine.h>
 
 using namespace tlp;
 
@@ -177,17 +176,18 @@ void GlMainView::glMainViewDrawn(bool graphChanged) {
     drawOverview(graphChanged);
 }
 
-QList<QWidget *> GlMainView::configurationWidgets() const {
-  return QList<QWidget *>() << _sceneConfigurationWidget << _sceneLayersConfigurationWidget;
+std::list<QWidget *> GlMainView::configurationWidgets() const {
+  return std::list<QWidget *>{_sceneConfigurationWidget, _sceneLayersConfigurationWidget};
 }
 
 void GlMainView::updateShowOverviewButton() {
   if (_showOvButton == nullptr) {
     QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget();
     _showOvButton = new QPushButton();
-    _showOvButton->setMaximumSize(10, 10);
+    _showOvButton->setMaximumSize(11, 11);
     _showOvButton->setCheckable(true);
-    _showOvButton->setStyleSheet("QPushButton {font-family: Arial; font-size: 13px; border:none};");
+    _showOvButton->setStyleSheet(
+        "QPushButton {background: lightgray; font-size: 13px; border:none};");
     proxy->setWidget(_showOvButton);
     addToScene(proxy);
     proxy->setZValue(10);
@@ -202,7 +202,7 @@ void GlMainView::updateShowOverviewButton() {
     _showOvButton->blockSignals(true);
 
     if (_overviewItem && _overviewItem->isVisible()) {
-      _showOvButton->setText("x");
+      _showOvButton->setIcon(TulipFontIconEngine::icon("mdi-close-thick"));
       _showOvButton->setChecked(true);
       _showOvButton->setToolTip("Hide overview display");
       _showOvButton->move(
@@ -210,7 +210,7 @@ void GlMainView::updateShowOverviewButton() {
           rect.height() - _overviewItem->getHeight() -
               ((_quickAccessBar != nullptr) ? _quickAccessBarItem->size().height() : 0));
     } else {
-      _showOvButton->setText("<");
+      _showOvButton->setIcon(TulipFontIconEngine::icon("mdi-arrow-collapse-left"));
       _showOvButton->setChecked(false);
       _showOvButton->setToolTip("Show overview display");
       _showOvButton->move(
@@ -243,10 +243,10 @@ void GlMainView::updateShowQuickAccessBarButton() {
     if (_showQabButton == nullptr) {
       QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget();
       _showQabButton = new QPushButton();
-      _showQabButton->setMaximumSize(10, 10);
+      _showQabButton->setMaximumSize(11, 11);
       _showQabButton->setCheckable(true);
       _showQabButton->setStyleSheet(
-          "QPushButton {font-family: Arial; font-size: 13px; border:none};");
+          "QPushButton {background: lightgray; font-size: 13px; border:none};");
       proxy->setWidget(_showQabButton);
       addToScene(proxy);
       proxy->setZValue(10);
@@ -258,12 +258,12 @@ void GlMainView::updateShowQuickAccessBarButton() {
     _showQabButton->blockSignals(true);
 
     if (quickAccessBarVisible()) {
-      _showQabButton->setText("x");
+      _showQabButton->setIcon(TulipFontIconEngine::icon("mdi-close-thick"));
       _showQabButton->setChecked(true);
       _showQabButton->setToolTip("Hide quick access bar");
       _showQabButton->move(0, rect.height() - _quickAccessBarItem->size().height() - 4);
     } else {
-      _showQabButton->setText("^");
+      _showQabButton->setIcon(TulipFontIconEngine::icon("mdi-arrow-collapse-up"));
       _showQabButton->setChecked(false);
       _showQabButton->setToolTip("Show quick access bar");
       _showQabButton->move(0, rect.height() - _showQabButton->height());
@@ -409,20 +409,20 @@ bool GlMainView::eventFilter(QObject *obj, QEvent *event) {
     QResizeEvent *resizeEvent = static_cast<QResizeEvent *>(event);
     graphicsView()->viewport()->setFixedSize(resizeEvent->size());
     // same for the configuration widgets
-    QList<QWidget *> list = configurationWidgets();
+    std::list<QWidget *> lcw = configurationWidgets();
 
     sceneRectChanged(QRectF(QPoint(0, 0), graphicsView()->size()));
 
-    if (!list.isEmpty() &&
-        list.first()->parentWidget()) { // test if the current view has a configuration widget
-      QWidget *pqw = list.first()->parentWidget()->parentWidget();
+    if (!lcw.empty() &&
+        lcw.front()->parentWidget()) { // test if the current view has a configuration widget
+      QWidget *pqw = lcw.front()->parentWidget()->parentWidget();
       QSize sSize = pqw->size();
       sSize.setHeight(resizeEvent->size().height() - 50);
       pqw->resize(sSize);
       sSize.setHeight(resizeEvent->size().height() - 60);
-      sSize = list.first()->size();
+      sSize = lcw.front()->size();
 
-      for (auto c : list) { // resize each configuration widget
+      for (auto c : lcw) { // resize each configuration widget
         c->resize(sSize);
       }
     }
@@ -442,17 +442,6 @@ bool GlMainView::getNodeOrEdgeAtViewportPos(GlMainWidget *glw, int x, int y, nod
     else
       e = type.getEdge();
     return true;
-  }
-  return false;
-}
-
-bool GlMainView::pickNodeEdge(const int x, const int y, node &n, edge &e, bool pickNode,
-                              bool pickEdge) {
-  n = node();
-  e = edge();
-  if (getNodeOrEdgeAtViewportPos(getGlMainWidget(), x, y, n, e)) {
-    if ((pickNode && n.isValid()) || (pickEdge && e.isValid()))
-      return true;
   }
   return false;
 }

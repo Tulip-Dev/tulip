@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -35,6 +35,8 @@ DoubleStringsListRelationDialog::DoubleStringsListRelationDialog(
     : QDialog(parent), _ui(new Ui::DoubleStringsListRelationDialogData),
       lastNonInterpolateValues(secondValues) {
   _ui->setupUi(this);
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(this);
 
   for (auto &val : firstValues) {
     _ui->firstListWidget->addItem(val.c_str());

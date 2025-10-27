@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -43,9 +43,13 @@ public:
   PLUGININFORMATION(
       "To labels", "Ludwig Fiolka", "2012/03/16",
       "Use a string representation of the values of a given property as the labels of nodes and/or edges.",
-      "1.1", "")
+      "1.2", "")
   ToLabels(const tlp::PluginContext *context)
-      : StringAlgorithm(context), onNodes(true), onEdges(true) {
+      // set second parameter of the constructor below to true because
+      // result needs to be an inout parameter
+      // in order to preserve the original values of non targeted elements
+      // i.e if "nodes" == true and "edges==false", the values of edges must be preserved
+      : StringAlgorithm(context, true), onNodes(true), onEdges(true) {
     addInParameter<PropertyInterface *>("property", paramHelp[0], "viewMetric", true);
     addInParameter<BooleanProperty>("selection", paramHelp[1], "", false);
     addInParameter<bool>("nodes", paramHelp[2], "true");
@@ -69,14 +73,17 @@ public:
     BooleanProperty *selection = nullptr;
 
     if (dataSet != nullptr) {
-      dataSet->getDeprecated("property", "input", input);
+      dataSet->get("property", input);
       dataSet->get("selection", selection);
+    } else {
+      input = graph->getProperty("viewMetric");
+      selection = graph->getProperty<BooleanProperty>("viewSelection");
     }
 
     pluginProgress->showPreview(false);
 
     if (onNodes) {
-      pluginProgress->setComment("Copying nodes values");
+      pluginProgress->setComment("Copying values of nodes");
       int step = 0, max_step = graph->numberOfNodes();
       for (auto n : selection ? selection->getNonDefaultValuatedNodes() : graph->getNodes()) {
         if ((++step % 100) == 0)
@@ -87,7 +94,7 @@ public:
     }
 
     if (onEdges) {
-      pluginProgress->setComment("Copying edges values");
+      pluginProgress->setComment("Copying values of edges");
       int step = 0, max_step = graph->numberOfEdges();
       for (auto e : selection ? selection->getNonDefaultValuatedEdges() : graph->getEdges()) {
         if ((++step % 100) == 0)

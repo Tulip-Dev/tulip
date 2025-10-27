@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -57,7 +57,7 @@ class ColorScale {
       }
       return 1;
     } else if (PyList_Check(sipPy)) {
-        for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+        for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
           PyObject *item = PyList_GET_ITEM(sipPy, i);
           if (!sipCanConvertToType(item, sipFindType("tlp::Color"), SIP_NOT_NONE)) {
             printErrorMessage("Error : when defining a Tulip color scale through a list, it must only contain instances of the tlp.Color type.");
@@ -84,7 +84,7 @@ class ColorScale {
     (*sipCppPtr)->setColorMap(colorMap);
   } else if (PyList_Check(sipPy)) {
     std::vector<tlp::Color> colors;
-    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+    for (Py_ssize_t i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
       const sipTypeDef *sipType  = sipFindType("tlp::Color");
       PyObject *item = PyList_GET_ITEM(sipPy, i);
       tlp::Color *color = static_cast<tlp::Color*>(sipConvertToType(item, sipType, NULL, SIP_NOT_NONE, &state, &err));
@@ -186,7 +186,7 @@ associates regular stop points to them.
 :param colors: The colors to use in the color scale.
 :type colors: list of :class:`tlp.Color`
 :param gradient: If set to :const:`True`, the color scale is a gradient
-:type gradient: boolean
+:type gradient: Boolean
 %End
 
 //==========================================================================================
@@ -224,7 +224,7 @@ tlp.ColorScale.isGradient()
 
 Returns :const:`True` if the color scale is a gradient.
 
-:rtype: boolean 
+:rtype: Boolean
 %End  
   
 //==========================================================================================
@@ -236,7 +236,7 @@ tlp.ColorScale.setGradient(gradient)
 Specify whether the color scale must be considered as a gradient.
 
 :param gradient: the flag value
-:type gradient: boolean
+:type gradient: Boolean
 %End
 
 //==========================================================================================
@@ -260,7 +260,7 @@ tlp.ColorScale.hasRegularStops()
 
 Returns :const:`True` if the color scale has regular stop points, meaning the distance between each consecutive stop is constant.
 
-:rtype: boolean
+:rtype: Boolean
 %End
 
 //==========================================================================================
@@ -273,7 +273,7 @@ tlp.ColorScale.colorScaleInitialized()
 
 Returns :const;`True` if the color scale is initialized, i.e. the underlying color map is not empty.
 
-:rtype: boolean
+:rtype: Boolean
 %End
 
 //==========================================================================================
@@ -309,8 +309,8 @@ Sets the transparency of all the colors in the underlying map.
 
 //==========================================================================================
 
-  bool operator==(const tlp::ColorScale &) const;
-
+    bool __eq__(const tlp::ColorScale &) const;
+    bool __ne__(const tlp::ColorScale &) const;
   std::string __repr__() const;
 %MethodCode
   std::ostringstream oss;

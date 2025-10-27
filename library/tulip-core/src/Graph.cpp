@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,14 +18,12 @@
  */
 
 #include <iomanip>
-#include <fstream>
+#include <mutex>
 #include <sstream>
 #include <stack>
-#include <unordered_map>
 #include <unordered_set>
 
 #include <tulip/StlIterator.h>
-#include <tulip/TlpTools.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphImpl.h>
 #include <tulip/BooleanProperty.h>
@@ -89,184 +87,34 @@ ostream &operator<<(ostream &os, const Graph *graph) {
   return os;
 }
 
-static void setViewPropertiesDefaults(Graph *g) {
+//=========================================================
+static std::set<ImportGraphObserver *> importGraphObservers;
+static std::mutex importGraphObserversMtx;
 
-  const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize",
-                    metrics = "viewMetric", fonts = "viewFont",
-                    fontAwesomeIcon = "viewFontAwesomeIcon", fontSizes = "viewFontSize",
-                    borderWidth = "viewBorderWidth", borderColor = "viewBorderColor",
-                    tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape",
-                    icon = "viewIcon", labelColor = "viewLabelColor",
-                    labelBorderColor = "viewLabelBorderColor",
-                    labelBorderWidth = "viewLabelBorderWidth", labelPosition = "viewLabelPosition",
-                    label = "viewLabel", layout = "viewLayout", rotation = "viewRotation",
-                    srcAnchorSize = "viewSrcAnchorSize", selection = "viewSelection",
-                    texture = "viewTexture", tgtAnchorSize = "viewTgtAnchorSize";
+ImportGraphObserver::ImportGraphObserver() {
+  importGraphObserversMtx.lock();
+  importGraphObservers.insert(this);
+  importGraphObserversMtx.unlock();
+}
 
-  if (!g->existProperty(shapes)) {
-    g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipViewSettings::defaultShape(NODE));
-    g->getProperty<IntegerProperty>(shapes)->setAllEdgeValue(TulipViewSettings::defaultShape(EDGE));
-  }
-
-  if (!g->existProperty(colors)) {
-    g->getProperty<ColorProperty>(colors)->setAllNodeValue(TulipViewSettings::defaultColor(NODE));
-    g->getProperty<ColorProperty>(colors)->setAllEdgeValue(TulipViewSettings::defaultColor(EDGE));
-  }
-
-  if (!g->existProperty(sizes)) {
-    g->getProperty<SizeProperty>(sizes)->setAllNodeValue(TulipViewSettings::defaultSize(NODE));
-    g->getProperty<SizeProperty>(sizes)->setAllEdgeValue(TulipViewSettings::defaultSize(EDGE));
-  }
-
-  if (!g->existProperty(metrics)) {
-    g->getProperty<DoubleProperty>(metrics)->setAllNodeValue(0);
-    g->getProperty<DoubleProperty>(metrics)->setAllEdgeValue(0);
-  }
-
-  if (!g->existProperty(fonts)) {
-    g->getProperty<StringProperty>(fonts)->setAllNodeValue(TulipViewSettings::defaultFontFile());
-    g->getProperty<StringProperty>(fonts)->setAllEdgeValue(TulipViewSettings::defaultFontFile());
-  }
-
-  if (!g->existProperty(fontSizes)) {
-    g->getProperty<IntegerProperty>(fontSizes)->setAllNodeValue(
-        TulipViewSettings::defaultFontSize());
-    g->getProperty<IntegerProperty>(fontSizes)->setAllEdgeValue(
-        TulipViewSettings::defaultFontSize());
-  }
-
-  if (!g->existProperty(borderWidth)) {
-    g->getProperty<DoubleProperty>(borderWidth)
-        ->setAllNodeValue(TulipViewSettings::defaultBorderWidth(NODE));
-    g->getProperty<DoubleProperty>(borderWidth)
-        ->setAllEdgeValue(TulipViewSettings::defaultBorderWidth(EDGE));
-  }
-
-  if (!g->existProperty(borderColor)) {
-    g->getProperty<ColorProperty>(borderColor)
-        ->setAllNodeValue(TulipViewSettings::defaultBorderColor(NODE));
-    g->getProperty<ColorProperty>(borderColor)
-        ->setAllEdgeValue(TulipViewSettings::defaultBorderColor(EDGE));
-  }
-
-  if (!g->existProperty(tgtShape)) {
-    g->getProperty<IntegerProperty>(tgtShape)->setAllEdgeValue(
-        TulipViewSettings::defaultEdgeExtremityTgtShape());
-  }
-
-  if (!g->existProperty(srcShape)) {
-    g->getProperty<IntegerProperty>(srcShape)->setAllEdgeValue(
-        TulipViewSettings::defaultEdgeExtremitySrcShape());
-  }
-
-  if (!g->existProperty(labelColor)) {
-    g->getProperty<ColorProperty>(labelColor)
-        ->setAllNodeValue(TulipViewSettings::defaultLabelColor());
-    g->getProperty<ColorProperty>(labelColor)
-        ->setAllEdgeValue(TulipViewSettings::defaultLabelColor());
-  }
-
-  if (!g->existProperty(labelBorderColor)) {
-    g->getProperty<ColorProperty>(labelBorderColor)
-        ->setAllNodeValue(TulipViewSettings::defaultLabelBorderColor());
-    g->getProperty<ColorProperty>(labelBorderColor)
-        ->setAllEdgeValue(TulipViewSettings::defaultLabelBorderColor());
-  }
-
-  if (!g->existProperty(labelBorderWidth)) {
-    g->getProperty<DoubleProperty>(labelBorderWidth)
-        ->setAllNodeValue(TulipViewSettings::defaultLabelBorderWidth());
-    g->getProperty<DoubleProperty>(labelBorderWidth)
-        ->setAllEdgeValue(TulipViewSettings::defaultLabelBorderWidth());
-  }
-
-  if (!g->existProperty(labelPosition)) {
-    g->getProperty<IntegerProperty>(labelPosition)
-        ->setAllNodeValue(TulipViewSettings::defaultLabelPosition());
-    g->getProperty<IntegerProperty>(labelPosition)
-        ->setAllEdgeValue(TulipViewSettings::defaultLabelPosition());
-  }
-
-  if (!g->existProperty(layout)) {
-    g->getProperty<LayoutProperty>(layout)->setAllNodeValue(Coord(0, 0, 0));
-    g->getProperty<LayoutProperty>(layout)->setAllEdgeValue(std::vector<Coord>());
-  }
-
-  if (!g->existProperty(rotation)) {
-    g->getProperty<DoubleProperty>(rotation)->setAllNodeValue(0);
-    g->getProperty<DoubleProperty>(rotation)->setAllEdgeValue(0);
-  }
-
-  if (!g->existProperty(srcAnchorSize)) {
-    g->getProperty<SizeProperty>(srcAnchorSize)
-        ->setAllEdgeValue(TulipViewSettings::defaultEdgeExtremitySrcSize());
-  }
-
-  if (!g->existProperty(tgtAnchorSize)) {
-    g->getProperty<SizeProperty>(tgtAnchorSize)
-        ->setAllEdgeValue(TulipViewSettings::defaultEdgeExtremityTgtSize());
-  }
-
-  if (!g->existProperty(texture)) {
-    g->getProperty<StringProperty>(texture)->setAllNodeValue("");
-    g->getProperty<StringProperty>(texture)->setAllEdgeValue("");
-  }
-
-  if (!g->existProperty(label)) {
-    g->getProperty<StringProperty>(label)->setAllNodeValue("");
-    g->getProperty<StringProperty>(label)->setAllEdgeValue("");
-  }
-
-  if (!g->existProperty(selection)) {
-    g->getProperty<BooleanProperty>(selection)->setAllNodeValue(false);
-    g->getProperty<BooleanProperty>(selection)->setAllEdgeValue(false);
-  }
-
-  if (!g->existProperty(icon)) {
-    g->getProperty<StringProperty>(icon)->setAllNodeValue("fa-question-circle");
-    g->getProperty<StringProperty>(icon)->setAllEdgeValue("fa-question-circle");
-  }
-
-  // for backward compatibility with Tulip < 5.0
-  if (g->existLocalProperty(fontAwesomeIcon)) {
-    StringProperty *faiProp = g->getProperty<StringProperty>(fontAwesomeIcon);
-    StringProperty *iProp = g->getProperty<StringProperty>(icon);
-
-    // transform old font awesome icon names to new ones and store them in the viewIcon
-    // property only if the content of that property is default valuated
-    if (iProp->hasNonDefaultValuatedNodes()) {
-      iProp->setAllNodeValue("fa-" + faiProp->getNodeDefaultValue());
-      for (auto n : faiProp->getNonDefaultValuatedNodes()) {
-        const string &faIconName = faiProp->getNodeValue(n);
-
-        if (!faIconName.empty()) {
-          iProp->setNodeValue(n, "fa-" + faIconName);
-        }
-      }
-      iProp->setAllEdgeValue("fa-" + faiProp->getEdgeDefaultValue());
-      for (auto e : faiProp->getNonDefaultValuatedEdges()) {
-        const string &faIconName = faiProp->getEdgeValue(e);
-
-        if (!faIconName.empty()) {
-          iProp->setEdgeValue(e, "fa-" + faIconName);
-        }
-      }
-    }
-
-    // finally delete the old property
-    // to avoid any further overwriting of the "viewIcon" property
-    // when re-executing this piece of code after
-    // a further save/load step of this graph.
-    g->delLocalProperty(fontAwesomeIcon);
-  }
+ImportGraphObserver::~ImportGraphObserver() {
+  importGraphObserversMtx.lock();
+  importGraphObservers.erase(this);
+  importGraphObserversMtx.unlock();
 }
 
 //=========================================================
 Graph *tlp::newGraph() {
-  Graph *g = new GraphImpl();
-  setViewPropertiesDefaults(g);
+  auto g = GraphImpl::newGraph();
+
+  importGraphObserversMtx.lock();
+  for (auto ngo : importGraphObservers)
+    ngo->graphImported(g);
+  importGraphObserversMtx.unlock();
+
   return g;
 }
+
 //=========================================================
 Graph *tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
   DataSet dataSet;
@@ -279,13 +127,6 @@ Graph *tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
         static_cast<const ImportModule &>(PluginLister::pluginInformation(pluginName));
     list<string> extensions(importPlugin.fileExtensions());
 
-    for (const string &ext : extensions)
-      if (filename.rfind(ext) == (filename.size() - ext.size())) {
-        importPluginName = importPlugin.name();
-        break;
-      }
-
-    extensions = importPlugin.gzipFileExtensions();
     for (const string &ext : extensions)
       if (filename.rfind(ext) == (filename.size() - ext.size())) {
         importPluginName = importPlugin.name();
@@ -308,27 +149,18 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
 
   for (const string &pluginName : exportPlugins) {
     ExportModule *exportPlugin = PluginLister::getPluginObject<ExportModule>(pluginName);
-    string ext(exportPlugin->fileExtension());
+    list<string> extensions(exportPlugin->fileExtensions());
 
-    if (filename.rfind(ext) != string::npos &&
-        filename.rfind(ext) == (filename.length() - ext.length())) {
-      exportPluginName = exportPlugin->name();
-      delete exportPlugin;
-      break;
-    } else {
-      list<string> extensions(exportPlugin->gzipFileExtensions());
-
-      for (const string &zext : exportPlugin->gzipFileExtensions()) {
-        if (filename.rfind(zext) == filename.length() - zext.length()) {
-          exportPluginName = exportPlugin->name();
-          gzip = true;
-          break;
-        }
-      }
-      delete exportPlugin;
-      if (gzip)
+    for (const string &ext : extensions) {
+      if (filename.rfind(ext) == filename.length() - ext.length()) {
+        exportPluginName = exportPlugin->name();
+        gzip = ext != extensions.front();
         break;
+      }
     }
+    delete exportPlugin;
+    if (!exportPluginName.empty())
+      break;
   }
 
   if (exportPluginName.empty()) {
@@ -387,20 +219,18 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgr
   bool newGraphP = false;
 
   if (graph == nullptr) {
-    graph = tlp::newGraph();
+    graph = GraphImpl::newGraph();
     newGraphP = true;
   }
 
-  PluginProgress *tmpProgress;
   bool deletePluginProgress = false;
 
   if (progress == nullptr) {
-    tmpProgress = new SimplePluginProgress();
+    progress = new SimplePluginProgress();
     deletePluginProgress = true;
-  } else
-    tmpProgress = progress;
+  }
 
-  AlgorithmContext context(graph, &dataSet, tmpProgress);
+  AlgorithmContext context(graph, &dataSet, progress);
   ImportModule *importModule = PluginLister::getPluginObject<ImportModule>(format, &context);
   assert(importModule != nullptr);
 
@@ -413,20 +243,17 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgr
       delete graph;
 
     graph = nullptr;
-    if (!tmpProgress->getError().empty())
-      tlp::error() << tmpProgress->getError() << std::endl;
-  } else {
-    std::string filename;
-
-    if (dataSet.get("file::filename", filename)) {
-      graph->setAttribute("file", filename);
-    }
-
-    setViewPropertiesDefaults(graph);
+    if (!progress->getError().empty())
+      tlp::error() << progress->getError() << std::endl;
+  } else if (newGraphP) {
+    importGraphObserversMtx.lock();
+    for (auto ngo : importGraphObservers)
+      ngo->graphImported(graph);
+    importGraphObserversMtx.unlock();
   }
 
   if (deletePluginProgress)
-    delete tmpProgress;
+    delete progress;
 
   delete importModule;
   dataSet = *context.dataSet;
@@ -841,9 +668,14 @@ void Graph::notifyAddNode(const node n) {
     sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_NODE, n));
 }
 
-void Graph::notifyDelNode(const node n) {
+void Graph::notifyBeforeDelNode(const node n) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_DEL_NODE, n));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_NODE, n));
+}
+
+void Graph::notifyAfterDelNode(const node n) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_NODE, n));
 }
 
 void Graph::notifyAddEdge(const edge e) {
@@ -851,9 +683,14 @@ void Graph::notifyAddEdge(const edge e) {
     sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_EDGE, e));
 }
 
-void Graph::notifyDelEdge(const edge e) {
+void Graph::notifyBeforeDelEdge(const edge e) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_DEL_EDGE, e));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_EDGE, e));
+}
+
+void Graph::notifyAfterDelEdge(const edge e) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_EDGE, e));
 }
 
 void Graph::notifyReverseEdge(const edge e) {
@@ -1227,7 +1064,8 @@ Graph *Graph::inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph,
   return inducedSubGraph(nodes, parentSubGraph, name);
 }
 //====================================================================================
-node Graph::createMetaNode(const std::vector<node> &nodes, bool multiEdges, bool delAllEdge) {
+node Graph::createMetaNode(const std::vector<node> &nodes, bool multiEdges, bool delAllEdge,
+                           bool allGrouped) {
   if (getRoot() == this) {
     tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
     tlp::warning() << "\t Error: Could not group a set of nodes in the root graph" << std::endl;
@@ -1255,13 +1093,13 @@ node Graph::createMetaNode(const std::vector<node> &nodes, bool multiEdges, bool
   stringstream st;
   st << "grp_" << setfill('0') << setw(5) << subGraph->getId();
   subGraph->setAttribute("name", st.str());
-  return createMetaNode(subGraph, multiEdges, delAllEdge);
+  return createMetaNode(subGraph, multiEdges, delAllEdge, allGrouped);
 }
 //====================================================================================
 #define NEED_TODEL 2
 #define NO_NEED_TODEL 0
 #define CHECK_TODEL 1
-node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
+node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll, bool allGrouped) {
   if (getRoot() == this) {
     tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
     tlp::warning() << "\t Error: Could not create a meta node in the root graph" << std::endl;
@@ -1291,9 +1129,12 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 
   // create new meta edges from nodes to metanode
   Graph *super = getSuperGraph();
-  std::unordered_map<node, std::unordered_set<node>> edges;
-  std::unordered_map<node, edge> metaEdges;
-  std::unordered_map<edge, set<edge>> subEdges;
+  tlp_hash_map<node, bool> hasEdges;
+  tlp_hash_map<node, edge> metaEdges;
+  tlp_hash_map<edge, set<edge>> subEdges;
+  // needed for the !multiEdges and !allGrouped case
+  tlp_hash_map<node, bool> hasInvEdges;
+  tlp_hash_map<node, edge> metaInvEdges;
 
   for (auto n : subGraph->nodes()) {
     for (auto e : getSuperGraph()->getInOutEdges(n)) {
@@ -1303,7 +1144,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
       unsigned int toDelete = isElement(src);
 
       if (toDelete && subGraph->isElement(tgt)) {
-        if (multiEdges || edges[src].empty()) {
+        if (multiEdges || !hasEdges[src]) {
           // add new meta edge
           edge metaEdge = addEdge(src, metaNode);
 
@@ -1323,7 +1164,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
           // e is a sub-edge of an already created meta edge
           subEdges[metaEdges[src]].insert(e);
 
-        edges[src].insert(tgt);
+        hasEdges[src] = true;
 
         if (((metaInfo->getNodeValue(src) != nullptr) ||
              (metaInfo->getNodeValue(tgt) != nullptr)) &&
@@ -1334,7 +1175,16 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
       }
 
       if (isElement(tgt) && subGraph->isElement(src)) {
-        if (multiEdges || edges[tgt].empty()) {
+        tlp_hash_map<node, bool> *hasLinks;
+        tlp_hash_map<node, edge> *metaLinks;
+        if (multiEdges || allGrouped) {
+          hasLinks = &hasEdges;
+          metaLinks = &metaEdges;
+        } else {
+          hasLinks = &hasInvEdges;
+          metaLinks = &metaInvEdges;
+        }
+        if (multiEdges || !(*hasLinks)[tgt]) {
           // add new meta edge
           edge metaEdge = addEdge(metaNode, tgt);
 
@@ -1346,15 +1196,15 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 
           if (!multiEdges)
             // record metaEdge
-            metaEdges[tgt] = metaEdge;
+            (*metaLinks)[tgt] = metaEdge;
 
           if (!super->isElement(metaEdge))
             super->addEdge(metaEdge);
         } else if (!multiEdges)
           // e is a sub-edge of an already created meta edge
-          subEdges[metaEdges[tgt]].insert(e);
+          subEdges[(*metaLinks)[tgt]].insert(e);
 
-        edges[tgt].insert(src);
+        (*hasLinks)[tgt] = true;
 
         if (toDelete == CHECK_TODEL)
           toDelete = ((metaInfo->getNodeValue(src) != nullptr) ||
@@ -1471,7 +1321,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
       if (!super->isElement(metaEdge))
         continue;
       Color metaColor = graphColors->getEdgeValue(metaEdge);
-      std::unordered_map<node, std::unordered_map<node, set<edge>>> newMetaEdges;
+      tlp_hash_map<node, tlp_hash_map<node, set<edge>>> newMetaEdges;
 
       for (auto e : getEdgeMetaInfo(metaEdge)) {
         auto eEnds = super->ends(e);
@@ -1546,7 +1396,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
     buildMapping(root->getInOutNodes(metaNode), mappingC, metaInfo, node());
     buildMapping(metaGraph->getNodes(), mappingN, metaInfo, node());
 
-    std::unordered_map<node, Color> metaEdgeToColor;
+    tlp_hash_map<node, Color> metaEdgeToColor;
 
     for (auto metaEdge : super->getInOutEdges(metaNode)) {
       metaEdgeToColor[opposite(metaEdge, metaNode)] = graphColors->getEdgeValue(metaEdge);
@@ -1554,7 +1404,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
 
     // Remove the metagraph from the hierarchy and remove the metanode
     root->delNode(metaNode, true);
-    std::unordered_map<node, std::unordered_set<node>> edges;
+    tlp_hash_map<node, std::unordered_set<node>> edges;
     //=================================
     for (auto e : root->edges()) {
 
@@ -1609,26 +1459,13 @@ struct MetaEdge {
   edge mE;
 };
 
-namespace std {
-template <>
-struct less<MetaEdge> {
-  bool operator()(const MetaEdge &c, const MetaEdge &d) const {
-    /*if (c.source<d.source) return true;
-    if (c.source>d.source) return false;
-    if (c.target<d.target) return true;
-    if (c.target>d.target) return false;
-    return false;*/
-    return (c.source < d.source) || ((c.source == d.source) && (c.target < d.target));
-  }
-};
-} // namespace std
-
-void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector<node> &metaNodes) {
+void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector<node> &metaNodes,
+                            bool inoutGrouped) {
   GraphProperty *metaInfo = static_cast<GraphAbstract *>(getRoot())->getMetaGraphProperty();
-  unordered_map<edge, set<edge>> eMapping;
+  tlp_hash_map<edge, set<edge>> eMapping;
   Observable::holdObservers();
   {
-    unordered_map<node, set<node>> nMapping;
+    tlp_hash_map<node, set<node>> nMapping;
 
     while (itS->hasNext()) {
       Graph *its = itS->next();
@@ -1651,7 +1488,21 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
     }
 
     {
-      set<MetaEdge> myQuotientGraph;
+      // define a contextual comparator
+      // to manage comparison according inoutGrouped value
+      // inoutGrouped = true implies 2 meta-edges
+      // corresponding to in/out direction of underlying edges
+      auto cmp = [inoutGrouped](const MetaEdge &m1, const MetaEdge &m2) {
+        if (!inoutGrouped) {
+          if (m1.source == m2.target)
+            return m1.target < m2.source;
+          if (m1.target == m2.source)
+            return m1.source < m2.target;
+        }
+        return (m1.source < m2.source) || ((m1.source == m2.source) && (m1.target < m2.target));
+      };
+
+      set<MetaEdge, decltype(cmp)> myQuotientGraph(cmp);
 
       // for each existing edge in the current graph
       // add a meta edge for the corresponding couple

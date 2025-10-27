@@ -152,15 +152,12 @@ The point here is to make sense of the following raw data, using some of the Tul
 Generating a *Geographic view*
 ------------------------------
 
-* Now that our workspace is set up, it is time to generate the *Geographic view*. The simplest way is to double click on the graph name in the *Graphs* panel on the left, or else we can also click on the |icon_add_panel| icon. Select *Geographic view*, click on *OK*, and the RoadMap view should appear. Also, the following warning message should pop up:
+* Now that our workspace is set up, it is time to generate the *Geographic view*. The simplest way is to double click on the graph name in the *Graphs* panel on the left, or else we can also click on the |icon_add_panel| icon. Select *Geographic view*, click on *OK*, and the view should appear. Also, the following warning message should pop up:
 
 
 .. image:: _images/tutorial02_02b.png
 	:align: center
 
-
-
-.. note:: Because of the nature of the visualization we are aiming for, we suggest switching to the Hybrid view.
 
 
 * In order to place the nodes, click on the *Geolocation* tab on the right-hand side of the view. Despite the fact that the data includes the latitude and longitude of US cities, the longitude values are not directly usable because they must be negative but they are not, and for that reason, we will use the city names instead. Fortunately, they will be sufficient for Google Maps to place the nodes. The *geolocation method* will therefore be **By address** and the string property will be **City**:
@@ -530,7 +527,7 @@ In this section, we will go through how we can apply an algorithm such as the on
 
 The reason why we use the **Python IDE** in this particular case is because there is a limit to what the pre-existing algorithms allow us to do. On the other hand, using some simple Python code, we can apply any original algorithm a particular situation might require.
 
-.. note:: For more information on how to use the Python IDE or Python REPL, please consult the `Tulip Python Documentation <http://tulip.labri.fr/Documentation/current/tulip-python/html/index.html>`_.
+.. note:: For more information on how to use the Python IDE or Python REPL, please consult the `Tulip Python Documentation <https://tulip.labri.fr/Documentation/current/tulip-python/html/index.html>`_.
 
 The first step is to open the *Python IDE* window in clicking on the |icon_ide| **Python** button located in the left side of the Tulip GUI.
 

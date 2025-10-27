@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -79,7 +79,7 @@ void BasicLayoutTest::testConeTreeExtended() {
 }
 //==========================================================
 void BasicLayoutTest::testConnectedComponentPacking() {
-  bool result = computeProperty<LayoutProperty>("Connected Component Packing");
+  bool result = computeProperty<LayoutProperty>("Connected Components Packing");
   CPPUNIT_ASSERT(result);
 }
 //==========================================================

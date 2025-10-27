@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,7 +22,7 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup clustering */
@@ -45,9 +45,10 @@ public:
       "Implements a single-linkage clustering. The similarity measure used here is "
       "the Strength Metric computed on edges. The best threshold is found using MQ "
       "Quality Measure. See:<br/>"
-      "<b>Software component capture using graph clustering</b>, "
+      "<b>Software component capture using graph clustering</b>,<br/>"
       "Y. Chiricota, F.Jourdan, and G. Melancon, "
-      "IWPC '03: Proceedings of the 11th IEEE International Workshop on Program Comprehension",
+      "IWPC '03: Proceedings of the 11th IEEE International Workshop on Program Comprehension<br>"
+      "doi: <a href=\"https://doi.org/10.1109/WPC.2003.1199205\">10.1109/WPC.2003.1199205</a>",
       "2.0", "Clustering")
   StrengthClustering(tlp::PluginContext *context);
   ~StrengthClustering() override;

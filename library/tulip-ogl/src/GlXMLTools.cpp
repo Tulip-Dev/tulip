@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,8 +18,6 @@
  */
 #include <tulip/GlXMLTools.h>
 
-#include <string>
-
 #include <tulip/Gl2DRect.h>
 #include <tulip/GlComposite.h>
 #include <tulip/GlBox.h>
@@ -27,8 +25,6 @@
 #include <tulip/GlGrid.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlLine.h>
-#include <tulip/GlPolygon.h>
-#include <tulip/GlRect.h>
 #include <tulip/GlSphere.h>
 #include <tulip/GlCurve.h>
 #include <tulip/GlComplexPolygon.h>

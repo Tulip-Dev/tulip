@@ -637,9 +637,9 @@ NEW-WINDOW:-2350416,22079:62915128,62915128,701,762,391,0:-1149069504x32766+7009
 7,6,1063,215,0,0,0,134841856,9,'VirtualBox mouse integration'
 7,6,1064,215,0,0,0,134841864,9,'VirtualBox mouse integration'
 7,6,1065,215,0,0,0,134841872,9,'VirtualBox mouse integration'
-7,6,1066,214,0,0,0,134841880,9,'VirtualBox mouse integration'
-7,6,1067,213,0,0,0,134841896,9,'VirtualBox mouse integration'
-7,6,1068,212,0,0,0,134841928,9,'VirtualBox mouse integration'
+7,6,1056,214,0,0,0,134841880,9,'VirtualBox mouse integration'
+7,6,1057,213,0,0,0,134841896,9,'VirtualBox mouse integration'
+7,6,1058,212,0,0,0,134841928,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,134842220,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,134842220,2,Virtual core pointer
 7,5,0,0,1,0,0,134842356,12,ImExPS/2 Generic Explorer Mouse

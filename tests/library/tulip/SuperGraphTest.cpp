@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -32,7 +32,6 @@ void SuperGraphTest::setUp() {
 #ifndef NDEBUG
   // choose the seed to ease the debugging
   tlp::setSeedOfRandomSequence(1);
-  tlp::initRandomSequence();
 #endif
   graph = tlp::newGraph();
 }

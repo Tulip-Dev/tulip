@@ -371,6 +371,10 @@ img.align-center, .figure.align-center, object.align-center {
   margin-right: auto;
 }
 
+.with-border {
+ border: 1px solid black
+}
+
 .align-left {
     text-align: left;
 }

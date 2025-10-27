@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -19,12 +19,6 @@
 
 #include "tulip/CSVGraphMappingConfigurationWidget.h"
 #include "ui_CSVGraphMappingConfigurationWidget.h"
-
-#include <QComboBox>
-#include <QFormLayout>
-#include <QLabel>
-#include <QPushButton>
-#include <QLineEdit>
 
 #include <tulip/CSVGraphImport.h>
 #include <tulip/PropertyCreationDialog.h>

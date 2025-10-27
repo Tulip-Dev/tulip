@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -25,7 +25,6 @@ using namespace std;
 static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs,
                            bool connectNodeToCellBorder, bool originalClone) {
   vector<tlp::Coord> sites;
-  tlp::node n;
   tlp::VoronoiDiagram voronoiDiag;
 
   tlp::LayoutProperty *layout = graph->getProperty<tlp::LayoutProperty>("viewLayout");

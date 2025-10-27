@@ -42,7 +42,7 @@ A graph with nodes and edges is now displayed. You can manipulate the camera wit
 
 * To reset the view, just right-click anywhere in the workspace and select *Center view* (**Ctrl+Shift+C**).
 
-**A few precisions towards the Mac users:** Tulip is multi-platform, however, significant changes can be spotted from one OS to another. In addition to the different fonts and window systems, the key combinations can also slightly vary. Most of the time in the mouse key combinations, the use of the **Ctrl** key is replaced by **Alt** and in the keyboard shortcuts it is replaced by **⌘**.
+**A few precisions towards Mac users:** Tulip is multi-platform, however, significant changes can be spotted from one OS to another. In addition to the different fonts and window systems, the key combinations can also slightly vary. Most of the time in the mouse key combinations, the use of the **Ctrl** key is replaced by **⌥ (alt)** key and in the keyboard shortcuts it is replaced by **⌘** key.
 
 
 .. _first_create:

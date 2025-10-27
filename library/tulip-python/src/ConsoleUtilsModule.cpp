@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -24,8 +24,6 @@
 
 #include "tulip/PythonIncludes.h"
 #include "tulip/PythonInterpreter.h"
-
-#include <QStringList>
 
 using namespace tlp;
 
@@ -127,16 +125,14 @@ static PyObject *consoleutils_ConsoleOutput_flush(PyObject *self, PyObject *) {
   Py_RETURN_NONE;
 }
 
-// T_BOOL is not defined for older versions of Python (2.5 for instance)
-// define it as T_INT in that case
-#ifndef T_BOOL
-#define T_BOOL T_INT
+#if PY_MINOR_VERSION < 12
+#define Py_T_BOOL T_BOOL
 #endif
 
 static PyMemberDef consoleutils_ConsoleOutput_members[] = {
-    {const_cast<char *>("stderrflag"), T_BOOL, offsetof(consoleutils_ConsoleOutput, stderrflag), 0,
-     const_cast<char *>("flag for stderr")},
-    {const_cast<char *>("writeToConsole"), T_BOOL,
+    {const_cast<char *>("stderrflag"), Py_T_BOOL, offsetof(consoleutils_ConsoleOutput, stderrflag),
+     0, const_cast<char *>("flag for stderr")},
+    {const_cast<char *>("writeToConsole"), Py_T_BOOL,
      offsetof(consoleutils_ConsoleOutput, writeToConsole), 0,
      const_cast<char *>("flag for enabling/disabling console output")},
     {NULL, 0, 0, 0, NULL} /* Sentinel */
@@ -199,17 +195,20 @@ static PyTypeObject consoleutils_ConsoleOutputType = {
     0,
     0,
     0,
+    0,
     0
-#if PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 8
-    ,
-    0
-#if PY_MINOR_VERSION < 9
+#if PY_MINOR_VERSION >= 12
     ,
     0
 #endif
-#elif PY_MAJOR_VERSION > 3
-#error Python major version PY_MAJOR_VERSION not supported
+#if PY_MINOR_VERSION >= 13
+    ,
+    0
 #endif
+#if PY_MINOR_VERSION > 14
+#error Python version PY_MAJOR_VERSION.PY_MINOR_VERSION not supported
+#endif
+
 };
 
 typedef struct {
@@ -231,21 +230,21 @@ static int consoleutils_ConsoleInput_init(consoleutils_ConsoleInput *, PyObject 
 /* This redirects stdin from the calling script. */
 static PyObject *consoleutils_ConsoleInput_readline(PyObject *, PyObject *) {
   QString line = PythonInterpreter::getInstance()->readLineFromConsole();
-  return PyUnicode_FromString(line.toLatin1().data());
+  return PyUnicode_FromString(line.toUtf8().data());
 }
 
 static PyMemberDef consoleutils_ConsoleInput_members[] = {
-    {NULL, 0, 0, 0, NULL} /* Sentinel */
+    {nullptr, 0, 0, 0, nullptr} /* Sentinel */
 };
 
 static PyMethodDef consoleutils_ConsoleInput_methods[] = {
     {"readline", static_cast<PyCFunction>(consoleutils_ConsoleInput_readline), METH_VARARGS,
      "read an input line from the console"},
-    {NULL, NULL, 0, NULL} /* Sentinel */
+    {nullptr, nullptr, 0, nullptr} /* Sentinel */
 };
 
 static PyTypeObject consoleutils_ConsoleInputType = {
-    PyVarObject_HEAD_INIT(NULL, 0) "consoleutils.ConsoleInput",      /*tp_name*/
+    PyVarObject_HEAD_INIT(nullptr, 0) "consoleutils.ConsoleInput",   /*tp_name*/
     sizeof(consoleutils_ConsoleInput),                               /*tp_basicsize*/
     0,                                                               /*tp_itemsize*/
     reinterpret_cast<destructor>(consoleutils_ConsoleInput_dealloc), /*tp_dealloc*/
@@ -291,32 +290,29 @@ static PyTypeObject consoleutils_ConsoleInputType = {
     0,
     0,
     0,
+    0,
     0
-#if PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 8
-    ,
-    0
-#if PY_MINOR_VERSION < 9
+#if PY_MINOR_VERSION >= 12
     ,
     0
 #endif
-#elif PY_MAJOR_VERSION > 3
-#error Python major version PY_MAJOR_VERSION not supported
+#if PY_MINOR_VERSION >= 13
+    ,
+    0
 #endif
 };
 
-#if PY_MAJOR_VERSION >= 3
 static struct PyModuleDef consoleutilsModuleDef = {
     PyModuleDef_HEAD_INIT,
     "consoleutils", /* m_name */
     "",             /* m_doc */
     -1,             /* m_size */
-    NULL,           /* m_methods */
-    NULL,           /* m_reload */
-    NULL,           /* m_traverse */
-    NULL,           /* m_clear */
-    NULL,           /* m_free */
+    nullptr,        /* m_methods */
+    nullptr,        /* m_reload */
+    nullptr,        /* m_traverse */
+    nullptr,        /* m_clear */
+    nullptr,        /* m_free */
 };
-#endif
 
 // This is called via the PyImport_AppendInittab mechanism called
 // during interpreter initialization, to make the built-in consoleutils

@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -26,6 +26,16 @@
 #include <tulip/tulipconf.h>
 
 namespace tlp {
+
+struct CSVToken {
+  // column extracted value
+  std::string value;
+  // indicate if value was surrounded by text delimiters
+  bool considerAsString;
+
+  CSVToken(std::string val = "", bool flag = false) : value(val), considerAsString(flag) {}
+};
+
 /**
  * @brief Interface to inherit to get and treat data from csv files with CSVParser object.
  */
@@ -40,9 +50,9 @@ public:
   /**
    * Function called for each line in the file.
    * @param row The number of the row.
-   * @param lineTokens The tokens.
+   * @param lineTokens The tokens in the row
    */
-  virtual bool line(unsigned int row, const std::vector<std::string> &lineTokens) = 0;
+  virtual bool line(unsigned int row, const std::vector<CSVToken> &lineTokens) = 0;
 
   /**
    * Function called at the end of the parsing.

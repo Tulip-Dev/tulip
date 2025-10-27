@@ -99,8 +99,8 @@ bool OrthoTree::run() {
   nodeSpacing = 4;
 
   if (dataSet != nullptr) {
-    dataSet->getDeprecated("layer spacing", "Layer spacing", layerSpacing);
-    dataSet->getDeprecated("node spacing", "Node spacing", nodeSpacing);
+    dataSet->get("layer spacing", layerSpacing);
+    dataSet->get("node spacing", nodeSpacing);
   }
 
   NodeStaticProperty<double> verticalSize(graph, 0);

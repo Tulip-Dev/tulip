@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,17 +20,11 @@
 #include <array>
 
 #include <tulip/GlGraphHighDetailsRenderer.h>
-#include <tulip/GraphProperty.h>
-#include <tulip/NumericProperty.h>
-#include <tulip/GlTools.h>
-#include <tulip/GlScene.h>
 #include <tulip/GlVertexArrayManager.h>
-#include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/OcclusionTest.h>
 #include <tulip/GlEdge.h>
 #include <tulip/GlNode.h>
 #include <tulip/Camera.h>
-#include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGlyphRenderer.h>
 #include <tulip/OpenGlConfigManager.h>
@@ -508,7 +502,7 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
 void GlGraphHighDetailsRenderer::selectEntities(Camera *camera, RenderingEntitiesFlag type, int x,
                                                 int y, int w, int h,
                                                 vector<SelectedEntity> &selectedEntities) {
-  unordered_map<unsigned int, SelectedEntity> idToEntity;
+  tlp_hash_map<unsigned int, SelectedEntity> idToEntity;
   unsigned int id = 1;
 
   unsigned int size =
@@ -537,7 +531,7 @@ void GlGraphHighDetailsRenderer::selectEntities(Camera *camera, RenderingEntitie
 //===================================================================
 void GlGraphHighDetailsRenderer::initSelectionRendering(
     RenderingEntitiesFlag type, int x, int y, int w, int h,
-    unordered_map<unsigned int, SelectedEntity> &idMap, unsigned int &currentId) {
+    tlp_hash_map<unsigned int, SelectedEntity> &idMap, unsigned int &currentId) {
   selectionType = type;
   selectionIdMap = &idMap;
   selectionCurrentId = &currentId;

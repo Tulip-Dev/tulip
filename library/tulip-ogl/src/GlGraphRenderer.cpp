@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,14 +17,6 @@
  *
  */
 #include <tulip/GlGraphRenderer.h>
-#include <tulip/GraphProperty.h>
-#include <tulip/GlTools.h>
-#include <tulip/GlScene.h>
-#include <tulip/GlVertexArrayManager.h>
-#include <tulip/GlSceneVisitor.h>
-#include <tulip/GlNode.h>
-#include <tulip/GlEdge.h>
-#include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GraphParallelTools.h>
 

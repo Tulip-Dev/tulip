@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,6 +21,7 @@
 #include "AlgorithmRunnerItem.h"
 #include "ExpandableGroupBox.h"
 
+#include <QActionGroup>
 #include <QDropEvent>
 #include <QPainter>
 #include <QToolButton>
@@ -85,7 +86,8 @@ void AlgorithmRunner::buildTreeUi(QWidget *w, PluginModel<tlp::Algorithm> *model
 
 void AlgorithmRunner::insertItem(QWidget *w, const QString &name) {
 
-  const Plugin &plugin = PluginLister::pluginInformation(QStringToTlpString(name));
+  auto sName = QStringToTlpString(name);
+  const Plugin &plugin = PluginLister::pluginInformation(sName);
   QString category = plugin.category().c_str();
   QString group = plugin.group().c_str();
 

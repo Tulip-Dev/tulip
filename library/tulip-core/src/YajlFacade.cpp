@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,18 +20,21 @@
 #include <tulip/YajlFacade.h>
 #include <tulip/TlpTools.h>
 
-extern "C" {
 #include <yajl/yajl_parse.h>
 #include <yajl/yajl_gen.h>
-}
-#include <cstdlib>
-#include <cstring>
+#include <yajl/yajl_version.h>
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
 YajlParseFacade::YajlParseFacade(tlp::PluginProgress *progress)
     : _progress(progress), _parsingSucceeded(true) {}
+
+std::string YajlParseFacade::yajlVersion() {
+  return std::to_string(YAJL_MAJOR) + "." + std::to_string(YAJL_MINOR) + "." +
+         std::to_string(YAJL_MICRO);
+}
 
 static int parse_null(void *ctx) {
   YajlParseFacade *facade = static_cast<YajlParseFacade *>(ctx);

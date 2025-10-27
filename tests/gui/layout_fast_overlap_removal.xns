@@ -243,6 +243,10 @@ NEW-WINDOW:461,197:60817448,60817448,18991996,0,0,0:0x0+879+458:0,0:Import
 6,2,0,0,0,116,0,7467203,3,Virtual core keyboard
 7,3,0,0,0,116,0,7467266,13,Dell KB216 Wired Keyboard
 6,3,0,0,0,116,0,7467266,3,Virtual core keyboard
+7,2,0,0,0,116,0,7467282,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,116,0,7467293,3,Virtual core keyboard
+7,3,0,0,0,116,0,7468266,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,116,0,7468266,3,Virtual core keyboard
 7,2,0,0,0,36,0,7469075,13,Dell KB216 Wired Keyboard
 6,2,0,0,0,36,0,7469075,3,Virtual core keyboard
 0,21,0,0,0,0,0,7469095
@@ -643,8 +647,8 @@ NEW-WINDOW:1117,102:60817540,60817540,60817642,0,0,0:0x0+960+432:0,0:
 7,6,844,636,0,0,0,7477221,15,'PixArt Dell MS116 USB Optical Mouse'
 7,6,844,637,0,0,0,7477437,15,'PixArt Dell MS116 USB Optical Mouse'
 7,6,844,640,0,0,0,7477445,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,845,641,0,0,0,7477477,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,846,643,0,0,0,7477493,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,845,635,0,0,0,7477477,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,846,635,0,0,0,7477493,15,'PixArt Dell MS116 USB Optical Mouse'
 7,4,0,0,3,0,0,7478125,15,PixArt Dell MS116 USB Optical Mouse
 6,4,0,0,3,0,0,7478125,2,Virtual core pointer
 7,5,0,0,3,0,0,7478301,15,PixArt Dell MS116 USB Optical Mouse

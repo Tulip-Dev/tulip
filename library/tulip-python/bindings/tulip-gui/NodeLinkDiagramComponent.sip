@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -32,6 +32,8 @@ class NodeLinkDiagramComponent : tlp::GlMainView  /NoDefaultCtors/ {
 %TypeHeaderCode
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/GlComplexPolygon.h>
+#include <tulip/GlCompositeHierarchyManager.h>
 %End
 
 %Docstring
@@ -80,7 +82,7 @@ Returns a copy of the current rendering parameters for the node link diagram vie
 
 // =======================================================================================
 
-    void setRenderingParameters(const tlp::GlGraphRenderingParameters &parameters);
+void setRenderingParameters(const tlp::GlGraphRenderingParameters &parameters);
 %Docstring
 tlpgui.NodeLinkDiagramComponent.setRenderingParameters(parameters)
 
@@ -93,15 +95,43 @@ Sets the rendering parameters for the node link diagram view.
 %MethodCode
     sipCpp->getGlMainWidget()->getScene()->getGlGraphComposite()->setRenderingParameters(*a0);
     sipCpp->draw();
-    QApplication::processEvents();
 %End
 
 // =======================================================================================
 
-protected :
 
-    void setQuickAccessBarVisible(bool);
+void displayConvexHulls(const bool visible=true, const bool withTextures=false);
 %Docstring
+
+    .. versionadded:: 6.0
+
+    tlpgui.NodeLinkDiagramComponent.displayConvexHulls(visible=True, withTextures=False)
+
+    Display or hide subgraphs convex hulls
+%End
+%MethodCode
+  auto h = sipCpp->getGlMainWidget()->getScene()->getLayer("Main")->findGlEntity("Hulls");
+
+  h->setVisible(a0);
+
+tlp::GlComplexPolygon *pl = dynamic_cast<tlp::GlComplexPolygon *>(h);
+  if (pl)
+    pl->setTextureActivation(a1);
+  else {
+    tlp::GlConvexGraphHullsComposite *composite = dynamic_cast<tlp::GlConvexGraphHullsComposite *>(h);
+    if (composite)
+      composite->setHullsTextureActivation(a1);
+sipCpp->draw();
+}
+%End
+
+// =======================================================================================
+
+void setQuickAccessBarVisible(bool);
+%Docstring
+
+.. versionadded:: 6.0
+
 tlpgui.NodeLinkDiagramComponent.setQuickAccessBarVisible(state)
 
 Sets the visibility state of the quick access bar.
@@ -112,8 +142,10 @@ Sets the visibility state of the quick access bar.
 
 // =======================================================================================
 
-    bool quickAccessBarVisible() const;
+bool quickAccessBarVisible() const;
 %Docstring
+  .. versionadded:: 6.0
+
 tlpgui.NodeLinkDiagramComponent.quickAccessBarVisible()
 
 Returns the visibility state of the quick access bar.
@@ -121,6 +153,32 @@ Returns the visibility state of the quick access bar.
 :rtype: boolean
 %End
 
+// =======================================================================================
+
+void setOverviewVisible(bool display);
+%Docstring
+
+  .. versionadded:: 6.0
+
+  tlpgui.NodeLinkDiagramComponent.setOverviewVisible(state)
+
+  Sets the visibility state of the overview display.
+
+  :param state: the visibility state of the overview display
+  :type state: boolean
+%End
+
+bool overviewVisible() const;
+%Docstring
+
+  .. versionadded:: 6.0
+
+  tlpgui.NodeLinkDiagramComponent.overviewVisible()
+
+  Returns the visibility state of the overview display.
+
+  :rtype: boolean
+%End
 
 };
 

@@ -222,6 +222,8 @@ The purpose of each labeled component is explained below:
 
 8. The preview area : this area displays a preview of the file interpreted with the current settings.
 
+9. If checked, a check box allows the user to ensure that all delimited text fields will be considered as string values regardless of their content.
+
 
 You can click on "Next" to access to the following panel.
 

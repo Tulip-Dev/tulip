@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -64,11 +64,10 @@ static void setGraphView(GlGraphComposite *glGraph, bool displayEdges, bool node
   glGraph->setRenderingParameters(param);
 }
 
-ScatterPlot2D::ScatterPlot2D(Graph *graph, Graph *edgeGraph,
-                             std::unordered_map<node, edge> &nodeMap, const string &xDim,
-                             const string &yDim, const ElementType &dataLocation, Coord blCorner,
-                             unsigned int size, const Color &backgroundColor,
-                             const Color &foregroundColor)
+ScatterPlot2D::ScatterPlot2D(Graph *graph, Graph *edgeGraph, tlp_hash_map<node, edge> &nodeMap,
+                             const string &xDim, const string &yDim,
+                             const ElementType &dataLocation, Coord blCorner, unsigned int size,
+                             const Color &backgroundColor, const Color &foregroundColor)
     : xDim(xDim), yDim(yDim), blCorner(blCorner), size(size), graph(graph),
       scatterLayout(new LayoutProperty(graph)), scatterEdgeLayout(new LayoutProperty(graph)),
       xAxis(nullptr), yAxis(nullptr), overviewGen(false), backgroundColor(backgroundColor),

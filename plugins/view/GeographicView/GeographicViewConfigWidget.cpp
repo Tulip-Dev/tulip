@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,7 +22,6 @@
 #include "GeographicView.h"
 
 #include <QFileDialog>
-#include <QMainWindow>
 #include <QMessageBox>
 
 #include <tulip/Perspective.h>
@@ -60,10 +59,15 @@ void GeographicViewConfigWidget::openCsvHelp() {
 }
 
 void GeographicViewConfigWidget::openPolyHelp() {
-  QMessageBox::about(Perspective::instance()->mainWindow()->centralWidget(), "Map poly files",
-                     ".poly files format are an open street map "
-                     "format.\nYou can download .poly file on "
-                     ":\nhttp://downloads.cloudmade.com/");
+  QMessageBox msgB(
+      QMessageBox::NoIcon, "Map poly files",
+      ".poly files format are an open street map "
+      "format.\nYou can download .poly files from :<br/>"
+      "<a href=\"https://github.com/jameschevalier/cities\" style=\"color:" HTML_LINK_COLOR
+      ";\">https://github.com/jameschevalier/cities</a>",
+      QMessageBox::Ok, Perspective::instance()->mainWindow()->centralWidget());
+  msgB.setTextFormat(Qt::RichText);
+  msgB.exec();
 }
 
 void GeographicViewConfigWidget::openTileServerUrlHelp() {

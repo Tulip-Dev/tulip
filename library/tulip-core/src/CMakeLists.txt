@@ -28,6 +28,7 @@ GraphStorage.cpp
 GraphTools.cpp
 GraphUpdatesRecorder.cpp
 GraphView.cpp
+ImportModule.cpp
 IdManager.cpp
 IntegerProperty.cpp
 LayoutProperty.cpp
@@ -77,31 +78,10 @@ TLPBExport.cpp
 TLPBImport.cpp
 )
 
-IF(EMSCRIPTEN)
-SET(tulip_LIB_SRCS ${tulip_LIB_SRCS}
-                    ../../../plugins/layout/DatasetTools.cpp
-                    ../../../plugins/layout/OrientableCoord.cpp
-                    ../../../plugins/layout/OrientableLayout.cpp
-                    ../../../plugins/layout/OrientableSize.cpp
-                    ../../../plugins/layout/OrientableSizeProxy.cpp
-                    ../../../plugins/layout/Orientation.cpp)
-ENDIF(EMSCRIPTEN)
-
-IF(HAVE_REENTRANT_QHULL)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_REENTRANT_QHULL")
-ENDIF(HAVE_REENTRANT_QHULL)
-INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${PROJECT_SOURCE_DIR} ${ZLIB_INCLUDE_DIR} ${YajlInclude} ${QhullInclude} ${GZStreamInclude} ${UTF8CppInclude})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${PROJECT_SOURCE_DIR} ${ZLIB_INCLUDE_DIR} ${Yajl_INCLUDE_DIRS} ${Qhull_INCLUDE_DIRS} ${GZStreamInclude} ${UTF8CppInclude})
 
 ADD_LIBRARY(${LibTulipCoreName} SHARED ${tulip_LIB_SRCS})
-TARGET_LINK_LIBRARIES(${LibTulipCoreName} ${GZStreamLibrary} ${YajlLibrary} ${QhullLibrary} ${CMAKE_DL_LIBS})
-IF(WIN32)
-  IF(MSVC)
-    TARGET_LINK_LIBRARIES(${LibTulipCoreName} Dbghelp)
-    IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles")
-      SET_TARGET_PROPERTIES(${LibTulipCoreName} PROPERTIES LINK_FLAGS " /NODEFAULTLIB:LIBCMT.lib ")
-    ENDIF()
-  ENDIF()
-ENDIF(WIN32)
+TARGET_LINK_LIBRARIES(${LibTulipCoreName} ${GZStreamLibrary} PkgConfig::Yajl ${Qhull_LINK_LIBRARIES} ${CMAKE_DL_LIBS})
 
 INSTALL(TARGETS ${LibTulipCoreName}
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_core

@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -23,7 +23,7 @@
 
 #include <tulip/OpenGlIncludes.h>
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
@@ -116,20 +116,20 @@ protected:
 
   void initShader(const std::string &shaderProgramName, const std::string &curveSpecificShaderCode);
 
-  static std::unordered_map<unsigned int, GLfloat *> curveVertexBuffersData;
-  static std::unordered_map<unsigned int, std::vector<GLushort *>> curveVertexBuffersIndices;
-  static std::unordered_map<unsigned int, GLuint *> curveVertexBuffersObject;
-  static std::unordered_map<std::string, GlShaderProgram *> curvesShadersMap;
-  static std::unordered_map<std::string, GlShaderProgram *> curvesBillboardShadersMap;
+  static tlp_hash_map<unsigned int, GLfloat *> curveVertexBuffersData;
+  static tlp_hash_map<unsigned int, std::vector<GLushort *>> curveVertexBuffersIndices;
+  static tlp_hash_map<unsigned int, GLuint *> curveVertexBuffersObject;
+  static tlp_hash_map<std::string, GlShaderProgram *> curvesShadersMap;
+  static tlp_hash_map<std::string, GlShaderProgram *> curvesBillboardShadersMap;
   static GlShader *curveVertexShaderNormalMain;
   static GlShader *curveVertexShaderBillboardMain;
   static GlShader *fisheyeDistortionVertexShader;
   static GlShader *curveFragmentShader;
   static bool canUseGeometryShader;
-  static std::unordered_map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *>>
+  static tlp_hash_map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *>>
       curvesGeometryShadersMap;
   static GlShader *curveVertexGeometryShaderNormalMain;
-  static std::unordered_map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *>>
+  static tlp_hash_map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *>>
       curvesBillboardGeometryShadersMap;
 
   std::string shaderProgramName;

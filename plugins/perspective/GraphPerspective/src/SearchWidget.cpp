@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -29,13 +29,14 @@
 #include <tulip/TulipMimes.h>
 #include <tulip/StringProperty.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/TulipSettings.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/Perspective.h>
 
 #include <QDebug>
 #include <QStandardItemModel>
 #include <QDragEnterEvent>
-#include <QRegExp>
+#include <QRegularExpression>
 
 using namespace tlp;
 using namespace std;
@@ -101,14 +102,12 @@ public:
   bool compare(node n) override {
     QString a(_a->getNodeStringValue(n).c_str());
     QString b(_b->getNodeStringValue(n).c_str());
-    QRegExp regexp(b);
-    return regexp.exactMatch(a);
+    return QRegularExpression(b).match(a).hasMatch();
   }
   bool compare(edge e) override {
     QString a(_a->getEdgeStringValue(e).c_str());
     QString b(_b->getEdgeStringValue(e).c_str());
-    QRegExp regexp(b);
-    return regexp.exactMatch(a);
+    return QRegularExpression(b).match(a).hasMatch();
   }
 };
 
@@ -117,14 +116,12 @@ public:
   bool compare(node n) override {
     QString a(_a->getNodeStringValue(n).c_str());
     QString b(_b->getNodeStringValue(n).c_str());
-    QRegExp regexp(b, Qt::CaseInsensitive);
-    return regexp.exactMatch(a);
+    return QRegularExpression(b, QRegularExpression::CaseInsensitiveOption).match(a).hasMatch();
   }
   bool compare(edge e) override {
     QString a(_a->getEdgeStringValue(e).c_str());
     QString b(_b->getEdgeStringValue(e).c_str());
-    QRegExp regexp(b, Qt::CaseInsensitive);
-    return regexp.exactMatch(a);
+    return QRegularExpression(b, QRegularExpression::CaseInsensitiveOption).match(a).hasMatch();
   }
 };
 
@@ -134,15 +131,13 @@ public:
     QString a(_a->getNodeStringValue(n).c_str());
     QString b(_b->getNodeStringValue(n).c_str());
     convertLikeFilter(b);
-    QRegExp regexp(b);
-    return regexp.exactMatch(a);
+    return QRegularExpression(b).match(a).hasMatch();
   }
   bool compare(edge e) override {
     QString a(_a->getEdgeStringValue(e).c_str());
     QString b(_b->getEdgeStringValue(e).c_str());
     convertLikeFilter(b);
-    QRegExp regexp(b);
-    return regexp.exactMatch(a);
+    return QRegularExpression(b).match(a).hasMatch();
   }
 };
 
@@ -152,15 +147,13 @@ public:
     QString a(_a->getNodeStringValue(n).c_str());
     QString b(_b->getNodeStringValue(n).c_str());
     convertLikeFilter(b);
-    QRegExp regexp(b, Qt::CaseInsensitive);
-    return regexp.exactMatch(a);
+    return QRegularExpression(b, QRegularExpression::CaseInsensitiveOption).match(a).hasMatch();
   }
   bool compare(edge e) override {
     QString a(_a->getEdgeStringValue(e).c_str());
     QString b(_b->getEdgeStringValue(e).c_str());
     convertLikeFilter(b);
-    QRegExp regexp(b, Qt::CaseInsensitive);
-    return regexp.exactMatch(a);
+    return QRegularExpression(b, QRegularExpression::CaseInsensitiveOption).match(a).hasMatch();
   }
 };
 
@@ -200,7 +193,7 @@ class ConstStringProperty : public StringProperty {
 
 public:
   ConstStringProperty(Graph *g) : StringProperty(g) {}
-
+  using StringProperty::operator=;
   void setConstValue(const std::string &val) {
     _val = val;
   }
@@ -219,6 +212,7 @@ class ConstDoubleProperty : public DoubleProperty {
 
 public:
   ConstDoubleProperty(Graph *g) : DoubleProperty(g) {}
+  using DoubleProperty::operator=;
 
   void setConstValue(double val) {
     _val = val;
@@ -236,6 +230,15 @@ public:
 SearchWidget::SearchWidget(QWidget *parent)
     : QFrame(parent), _ui(new Ui::SearchWidget), _graph(nullptr) {
   _ui->setupUi(this);
+#ifdef __APPLE__
+  _ui->operatorCombo->setMinimumContentsLength(20);
+  _ui->searchTermACombo->setMinimumContentsLength(21);
+  _ui->searchTermBCombo->setMinimumContentsLength(21);
+  _ui->selectionModeCombo->setMinimumContentsLength(30);
+#endif
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(this);
+
   _ui->tableWidget->hide();
   _ui->tableWidget->setItemDelegate(new TulipItemDelegate(_ui->tableWidget));
 
@@ -263,6 +266,7 @@ SearchWidget::SearchWidget(QWidget *parent)
   connect(_ui->graphCombo, SIGNAL(currentItemChanged()), this, SLOT(graphIndexChanged()));
   connect(_ui->selectionModeCombo, SIGNAL(currentIndexChanged(int)), this,
           SLOT(selectionModeChanged(int)));
+  setAcceptDrops(true);
 }
 
 SearchWidget::~SearchWidget() {
@@ -592,8 +596,17 @@ void SearchWidget::dragEnterEvent(QDragEnterEvent *dragEv) {
   const GraphMimeType *mimeType = dynamic_cast<const GraphMimeType *>(dragEv->mimeData());
 
   if (mimeType != nullptr) {
+    QColor color = palette().color(QPalette::Highlight);
+    setStyleSheet(QString("#SearchWidget {background: %0;}").arg(color.name()));
     dragEv->accept();
   }
+}
+
+void SearchWidget::dragLeaveEvent(QDragLeaveEvent *) {
+  if (TulipSettings::isDisplayInDarkMode())
+    setStyleSheet("#SearchWidget {background: #323232;}");
+  else
+    setStyleSheet("#SearchWidget {background: white;}");
 }
 
 void SearchWidget::dropEvent(QDropEvent *dropEv) {
@@ -601,6 +614,10 @@ void SearchWidget::dropEvent(QDropEvent *dropEv) {
 
   if (mimeType != nullptr) {
     currentGraphChanged(mimeType->graph());
+    if (TulipSettings::isDisplayInDarkMode())
+      setStyleSheet("#SearchWidget {background: #323232;}");
+    else
+      setStyleSheet("#SearchWidget {background: white;}");
     dropEv->accept();
   }
 }

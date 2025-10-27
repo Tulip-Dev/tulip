@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -170,11 +170,11 @@ static void computeCoefficients(double t, unsigned int nbControlPoints) {
       sCoeffs[t] = sCoeff;
     } else {
       vector<double> &tCoeff = tCoeffs[t];
-      vector<double> &sCoeff = sCoeffs[t];
 
       if (tCoeff.size() < nbControlPoints) {
         size_t oldSize = tCoeff.size();
 
+        vector<double> &sCoeff = sCoeffs[t];
         for (size_t i = oldSize; i < nbControlPoints; ++i) {
           tCoeff.push_back(pow(t, double(i)));
           sCoeff.push_back(pow(s, double(i)));

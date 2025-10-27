@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -43,7 +43,6 @@ public slots:
   void showGraphDefaultsContextMenu(const QPoint &);
 
 private slots:
-  void usetlpbformat(int state);
   void resetToTulipDefaults(int row = -1, int updateMode = 0);
 };
 

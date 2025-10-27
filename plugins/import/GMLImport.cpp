@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,7 +18,7 @@
  */
 
 #include <fstream>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <tulip/TulipPluginHeaders.h>
 
@@ -53,7 +53,7 @@ void edgeAttributeError() {
 //=================================================================================
 struct GMLGraphBuilder : public GMLTrue {
   Graph *_graph;
-  unordered_map<int, node> nodeIndex;
+  tlp_hash_map<int, node> nodeIndex;
   ~GMLGraphBuilder() override {}
   GMLGraphBuilder(Graph *graph) : _graph(graph) {}
   bool addNode(int id) {
@@ -133,25 +133,25 @@ struct GMLGraphBuilder : public GMLTrue {
   }
 
   /**
-   * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
+   * Set the values of the property 2nd param on the edge 1st param, to the value 3rd param.
    */
   bool setEdgeValue(edge, const string &, string) {
     return true;
   }
   /**
-   * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
+   * Set the values of the property 2nd param on the edge 1st param, to the value 3rd param.
    */
   bool setEdgeValue(edge, const string &, int) {
     return true;
   }
   /**
-   * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
+   * Set the values of the property 2nd param on the edge 1st param, to the value 3rd param.
    */
   bool setEdgeValue(edge, const string &, bool) {
     return true;
   }
   /**
-   * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
+   * Set the values of the property 2nd param on the edge 1st param, to the value 3rd param.
    */
   bool setEdgeValue(edge, const string &, double) {
     return true;
@@ -532,10 +532,6 @@ bool GMLGraphBuilder::addStruct(const string &structName, GMLBuilder *&newBuilde
 }
 //=================================================================================
 
-static const char *paramHelp[] = {
-    // filename
-    "The pathname of the GML file to import."};
-
 /** \addtogroup import */
 
 /// Import plugin for GML format.
@@ -544,30 +540,19 @@ static const char *paramHelp[] = {
  * This format is the file format used by Graphlet.
  * See www.infosun.fmi.uni-passau.de/Graphlet/GML/ for details.
  */
-class GMLImport : public ImportModule {
+class GMLImport : public ImportFileModule {
 public:
-  PLUGININFORMATION("GML", "Auber", "04/07/2001",
-                    "<p>Supported extension: gml</p><p>Imports a new graph from a file (.gml) in "
-                    "the GML input format (used by Graphlet).<p/>See "
-                    "<a "
-                    "href=\"http://www.infosun.fim.uni-passau.de/Graphlet/GML/gml-tr.html\">http://"
-                    "www.infosun.fmi.uni-passau.de/Graphlet/GML/gml-tr.html</a> for details.</p>",
-                    "1.1", "File")
-  std::list<std::string> fileExtensions() const override {
-    std::list<std::string> l;
-    l.push_back("gml");
-    return l;
-  }
-  GMLImport(PluginContext *context) : ImportModule(context) {
-    addInParameter<string>("file::filename", paramHelp[0], "");
-  }
+  PLUGININFORMATION(
+      "GML", "Auber", "04/07/2001",
+      "<p>File extension: gml</p><p>Imports a new graph from a file (.gml) in "
+      "GML format (used by Graphlet).<br/>See:<br/>"
+      "<a href=\"https://github.com/GunterMueller/UNI_PASSAU_FMI_Graph_Drawing\">https://github.com/GunterMueller/UNI_PASSAU_FMI_Graph_Drawing</a><br/>"
+      "(formerly www.infosun.fim.uni-passau.de/Graphlet/GML/) for details.</p>",
+      "1.1", "File")
+  GMLImport(PluginContext *context) : ImportFileModule(context, {"gml"}) {}
   ~GMLImport() override {}
-  bool importGraph() override {
-    string filename;
 
-    if (!dataSet->get<string>("file::filename", filename))
-      return false;
-
+  bool importFile() override {
     bool result = false;
     istream *is = tlp::getInputFileStream(filename);
     // check for open stream failure

@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,6 +22,7 @@
 
 #include <QColor>
 #include <QDebug>
+#include <QCursor>
 
 #include <tulip/Color.h>
 #include <tulip/tulipconf.h>
@@ -89,7 +90,7 @@ TLP_QT_SCOPE std::string propertyTypeLabelToPropertyType(const QString &typeName
 /**
  * @brief Gets the name of the package to retrieve for this version of tulip.
  * The package name uses the Tulip release, platform (windows, unix, ...), architecture (x86,
- *x86_64), and compiler used (GCC, Clang, MSVC) to determine which package this version can use.
+ *x86_64), and compiler used (GCC, Clang) to determine which package this version can use.
  *
  * @param pluginName The name of the plugin for which we want the package name.
  **/
@@ -106,12 +107,10 @@ TLP_QT_SCOPE QString localPluginsPath();
  This method performs basic operations when starting a software using Tulip:
  @list
  @li It initializes the tulip library
- @li it checks plugins to be discarded and uninstalls them
  @li It loads plugins from the application path
  @endlist
  */
-extern TLP_QT_SCOPE void initTulipSoftware(PluginLoader *loader = nullptr,
-                                           bool removeDiscardedPlugins = false);
+extern TLP_QT_SCOPE void initTulipSoftware(PluginLoader *loader = nullptr);
 
 /**
  * @brief redirect tlp::debug() to qDebug()
@@ -152,6 +151,20 @@ TLP_QT_SCOPE QString getRegisteredTextureFile(QString name);
  */
 TLP_QT_SCOPE void clearRegisteredTextureFiles();
 
+/**
+ * @brief check for possible internet access waiting for time ms
+ */
+TLP_QT_SCOPE bool checkInternetAccess(unsigned int time = 1000);
+
+#define qtWhatsThisCursor Qt::PointingHandCursor
+
+#ifdef _LINUX
+// fix display of QCheckBox and QRadioButton in dark mode
+void tlpFixCBRBs(QWidget *parent);
+#else
+#define tlpFixCBRBs(arg)
+#endif
+
 } // namespace tlp
 
 // QDebug extension
@@ -159,13 +172,6 @@ inline QDebug operator<<(QDebug dbg, const std::string &s) {
   dbg.nospace() << s.c_str();
   return dbg.space();
 }
-
-// Qt 5.15 warning fix
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
-#define QT_ENDL endl
-#else
-#define QT_ENDL Qt::endl
-#endif
 
 // useful macros needed for menu actions building
 #ifdef __APPLE__
@@ -178,5 +184,8 @@ inline QDebug operator<<(QDebug dbg, const std::string &s) {
 #define SET_TIPS_WITH_CTRL_SHORTCUT(a, tt, sc)                                                     \
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(a, tt, sc);                                                       \
   a->setStatusTip(a->toolTip())
+
+// the color to display html links
+#define HTML_LINK_COLOR "#0d71f1"
 
 #endif

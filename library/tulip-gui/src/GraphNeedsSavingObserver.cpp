@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -43,7 +43,7 @@ void GraphNeedsSavingObserver::saved() {
   removeObservers();
   addObserver();
 
-  if (_mainWindow)
+  if (_mainWindow && !_mainWindow->windowTitle().isEmpty())
     _mainWindow->setWindowModified(false);
 }
 
@@ -56,7 +56,7 @@ void GraphNeedsSavingObserver::forceToSave() {
   // No need to listen to the graph anymore
   removeObservers();
 
-  if (_mainWindow)
+  if (_mainWindow && !_mainWindow->windowTitle().isEmpty())
     _mainWindow->setWindowModified(true);
 
   emit(savingNeeded());

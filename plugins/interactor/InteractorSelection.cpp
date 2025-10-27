@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,8 +21,8 @@
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/MouseSelector.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/StandardInteractorPriority.h>
 
-#include "../utils/StandardInteractorPriority.h"
 #include "../utils/PluginNames.h"
 
 using namespace tlp;
@@ -54,11 +54,11 @@ public:
         "left</b> up indicates the opposite corner,<br/>all graph elements instersecting the "
         "rectangle are selected<br/><br/>" +
 #if !defined(__APPLE__)
-        "Add to selection: <ul><li><b>Ctrl + Mouse left</b> click on an element</li></ul>" +
+        "Add to selection: <ul><li><b>Ctrl + Mouse left</b> down, drag and up</li></ul>" +
 #else
-        "Add/Remove from selection: <ul><li><b>Alt + Mouse left</b> click</li></ul>" +
+        "Add to selection: <ul><li><b>⌥ + Mouse left</b> down, drag and up</li></ul>" +
 #endif
-        "Remove from selection: <ul><li><b>Shift + Mouse</b> click</li></ul>" +
+        "Remove from selection: <ul><li><b>Shift + Mouse left</b> down, drag and up</li></ul>" +
         "<u>Navigation in the graph</u><br/><br/>" +
         "Translation: <ul><li><b>Arrow</b> keys</li></ul>" +
 #if !defined(__APPLE__)

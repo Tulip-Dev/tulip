@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -19,7 +19,7 @@
 
 #include <stack>
 #include <queue>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/StaticProperty.h>
 #include <tulip/MutableContainer.h>
@@ -97,28 +97,29 @@ public:
   PLUGININFORMATION(
       "Betweenness Centrality", "David Auber", "03/01/2005",
       "Computes the betweeness centrality as described for:<ul>"
-      "<li>nodes in <b>A Faster Algorithm for Betweenness Centrality</b>, U. Brandes, Journal of "
-      "Mathematical Sociology volume 25, pages 163-177 (2001), doi: <a "
+      "<li>nodes in <b>A Faster Algorithm for Betweenness Centrality</b>,<br/>U. Brandes, Journal of "
+      "Mathematical Sociology volume 25, pages 163-177 (2001),<br/>doi: <a "
       "href=\"https://doi.org/10.1080/0022250X.2001.9990249\">10.1080/0022250X.2001.9990249</a></"
       "li>"
-      "<li>edges in <b>Finding and evaluating community structure in networks</b>, M. E. J. Newman "
-      "and M. Girvan, Physics Reviews E, volume 69 (2004), doi: <a "
+      "<li>edges in <b>Finding and evaluating community structure in networks</b>,<br/>M. E. J. Newman "
+      "and M. Girvan, Physics Reviews E, volume 69 (2004),<br/>doi: <a "
       "href=\"https://doi.org/10.1103/PhysRevE.69.026113\">10.1103/PhysRevE.69.026113</a>.</li></"
       "ul>"
       "The average path length is also computed.",
       "1.4", "Graph")
-  BetweennessCentrality(const PluginContext *context) : DoubleAlgorithm(context) {
+  BetweennessCentrality(const PluginContext *context)
+      // set second parameter of the constructor below to true because
+      // result needs to be an inout parameter
+      // in order to preserve the original values of non targeted elements
+      // i.e if "target" = "nodes", the values of edges must be preserved
+      // and if "target" = "edges", the values of nodes must be preserved
+      : DoubleAlgorithm(context, true) {
     addInParameter<bool>("directed", paramHelp[0], "false");
     addInParameter<bool>("norm", paramHelp[1], "false", false);
     addInParameter<NumericProperty *>("weight", paramHelp[2], "", false);
     addOutParameter<double>("average path length", paramHelp[3], "");
     addInParameter<StringCollection>(TARGET_TYPE, paramHelp[4], TARGET_TYPES, true,
                                      "both <br> nodes <br> edges");
-    // result needs to be an inout parameter
-    // in order to preserve the original values of non targeted elements
-    // i.e if "target" = "nodes", the values of edges must be preserved
-    // and if "target" = "edges", the values of nodes must be preserved
-    parameters.setDirection("result", INOUT_PARAM);
   }
 
   bool run() override {
@@ -154,9 +155,9 @@ public:
     if (graph->numberOfNodes() <= 2)
       return true;
 
-    // Edges weights should be positive
-    if (weight && weight->getEdgeDoubleMin() <= 0) {
-      pluginProgress->setError("Edges weights should be positive.");
+    // Edges weights have to be positive
+    if (weight && weight->getEdgeDoubleMin(graph) <= 0) {
+      pluginProgress->setError("Edges weights have to be strictly positive.");
       return false;
     }
 
@@ -172,7 +173,7 @@ public:
         break;
 
       stack<node> S;
-      unordered_map<node, list<node>> P;
+      tlp_hash_map<node, list<node>> P;
       MutableContainer<int> sigma;
 
       if (weight)
@@ -240,7 +241,7 @@ public:
   }
 
 private:
-  void computeBFS(node s, bool directed, stack<node> &S, unordered_map<node, list<node>> &P,
+  void computeBFS(node s, bool directed, stack<node> &S, tlp_hash_map<node, list<node>> &P,
                   MutableContainer<int> &sigma) {
     sigma.setAll(0);
     sigma.set(s.id, 1);
@@ -274,7 +275,7 @@ private:
   }
 
   void computeDijkstra(node s, bool directed, NumericProperty *weight, stack<node> &S,
-                       unordered_map<node, list<node>> &P, MutableContainer<int> &sigma) {
+                       tlp_hash_map<node, list<node>> &P, MutableContainer<int> &sigma) {
     EdgeStaticProperty<double> eWeights(graph);
     eWeights.copyFromNumericProperty(weight);
     NodeStaticProperty<double> nodeDistance(graph);

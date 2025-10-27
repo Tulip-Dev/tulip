@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -24,7 +24,7 @@ using namespace tlp;
 using namespace std;
 
 static const char *paramHelp[] = {
-    // minimum grid distance
+    // min grid distance
     "The minimum grid distance.",
 
     // transpose
@@ -39,7 +39,7 @@ public:
       "1.0", "Hierarchical")
   OGDFDominance(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::DominanceLayout() : nullptr) {
-    addInParameter<int>("minimum grid distance", paramHelp[0], "1");
+    addInParameter<int>("min grid distance", paramHelp[0], "1");
     addInParameter<bool>("transpose", paramHelp[1], "false");
   }
   ~OGDFDominance() override {}
@@ -59,7 +59,7 @@ public:
     if (dataSet != nullptr) {
       int ival = 0;
 
-      if (dataSet->get("minimum grid distance", ival))
+      if (dataSet->get("min grid distance", ival))
         dominance->setMinGridDistance(ival);
     }
   }

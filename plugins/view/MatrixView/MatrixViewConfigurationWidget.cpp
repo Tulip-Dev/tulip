@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,17 +21,18 @@
 #include "ui_MatrixViewConfigurationWidget.h"
 
 #include <tulip/Graph.h>
-#include <tulip/Perspective.h>
 #include <tulip/ColorButton.h>
 #include <tulip/TlpQtTools.h>
-
-#include <QMainWindow>
 
 using namespace std;
 namespace tlp {
 MatrixViewConfigurationWidget::MatrixViewConfigurationWidget(QWidget *parent)
     : QWidget(parent), _ui(new Ui::MatrixViewConfigurationWidget()), _modifyingMetricList(false) {
   _ui->setupUi(this);
+#ifdef __APPLE__
+  _ui->gridDisplayCombo->setMinimumContentsLength(25);
+#endif
+
   connect(_ui->orderingMetricCombo, SIGNAL(currentIndexChanged(int)), this,
           SLOT(orderingMetricComboIndexChanged(int)));
   connect(_ui->backgroundColorBtn, SIGNAL(colorChanged(QColor)), this,

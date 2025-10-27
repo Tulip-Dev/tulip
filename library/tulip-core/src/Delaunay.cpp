@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,13 +17,12 @@
  *
  */
 
-#include <iostream>
 #include <algorithm>
+#include <tulip/tuliphash.h>
+#include <map>
 
 #include <tulip/Delaunay.h>
 #include <tulip/Matrix.h>
-#include <tulip/Graph.h>
-#include <tulip/LayoutProperty.h>
 #include <tulip/BoundingBox.h>
 #include <tulip/DrawingTools.h>
 
@@ -32,19 +31,18 @@
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
 
-extern "C" {
-#ifdef HAVE_REENTRANT_QHULL
-#include <qhull_ra.h>
-#else
-#include <qhull_a.h>
-#endif
-}
+#include <libqhull_r/libqhull_r.h>
 
 using namespace std;
 using namespace tlp;
 
 typedef Matrix<long double, 3> Mat3ld;
 typedef Vector<long double, 3> Vec3ld;
+
+std::string QhullFacade::QhullVersion() {
+  string s(qh_version);
+  return s.substr(0, s.find(' '));
+}
 
 static bool runQHull(int dim, vector<double> &points,
                      vector<pair<unsigned int, unsigned int>> &edges,
@@ -59,29 +57,20 @@ static bool runQHull(int dim, vector<double> &points,
   // build qhull command
   string qhullCommand = string("qhull d ") + qhullOptions;
 
-// initialize qhull
-#ifdef HAVE_REENTRANT_QHULL
+  // initialize qhull
   qhT qh_qh;
   qhT *qh = &qh_qh;
   QHULL_LIB_CHECK
   qh_zero(qh, stderr);
   int qhullKo = qh_new_qhull(qh, dim, points.size() / dim, &points[0], false,
                              const_cast<char *>(qhullCommand.c_str()), nullptr, stderr);
-#else
-  int qhullKo = qh_new_qhull(dim, points.size() / dim, &points[0], false,
-                             const_cast<char *>(qhullCommand.c_str()), nullptr, stderr);
-#endif
 
   if (!qhullKo) {
 
     set<pair<unsigned int, unsigned int>> placedEdges;
 
-// call qhull delaunay triangulation
-#ifdef HAVE_REENTRANT_QHULL
+    // call qhull delaunay triangulation
     qh_triangulate(qh);
-#else
-    qh_triangulate();
-#endif
 
     facetT *facet = nullptr;
     vertexT *vertex = nullptr, **vertexp;
@@ -94,8 +83,6 @@ static bool runQHull(int dim, vector<double> &points,
         int pointId0 = 0, pointId1 = 0, pointId2 = 0, pointId3 = -1;
         int i = 0;
         FOREACHvertex_(facet->vertices) {
-#ifdef HAVE_REENTRANT_QHULL
-
           if (i == 0) {
             pointId0 = qh_pointid(qh, vertex->point);
           } else if (i == 1) {
@@ -106,19 +93,6 @@ static bool runQHull(int dim, vector<double> &points,
             pointId3 = qh_pointid(qh, vertex->point);
           }
 
-#else
-
-          if (i == 0) {
-            pointId0 = qh_pointid(vertex->point);
-          } else if (i == 1) {
-            pointId1 = qh_pointid(vertex->point);
-          } else if (i == 2) {
-            pointId2 = qh_pointid(vertex->point);
-          } else {
-            pointId3 = qh_pointid(vertex->point);
-          }
-
-#endif
           ++i;
         }
 
@@ -182,13 +156,8 @@ static bool runQHull(int dim, vector<double> &points,
 
   // free memory allocated by qhull
   int curlong, totlong;
-#ifdef HAVE_REENTRANT_QHULL
   qh_freeqhull(qh, !qh_ALL);
   qh_memfreeshort(qh, &curlong, &totlong);
-#else
-  qh_freeqhull(!qh_ALL);
-  qh_memfreeshort(&curlong, &totlong);
-#endif
 
   return !qhullKo;
 }
@@ -514,7 +483,7 @@ bool tlp::voronoiDiagram(vector<Coord> &sites, VoronoiDiagram &voronoiDiagram) {
   // now compute the dual voronoi diagram
   if (ret) {
     // Iterate over each delaunay simplex
-    std::unordered_map<Face, unsigned int> faceToCircumCenter;
+    tlp_hash_map<Face, unsigned int> faceToCircumCenter;
     map<Coord, unsigned int> circumCenterToIdx;
     tlp::Coord A(0), B(0), C(0), D(0);
 
@@ -589,7 +558,7 @@ bool tlp::voronoiDiagram(vector<Coord> &sites, VoronoiDiagram &voronoiDiagram) {
         face4 = Face(simplices[i][0], simplices[i][1], simplices[i][3]);
       }
 
-      std::unordered_map<Face, unsigned int>::const_iterator it = faceToCircumCenter.find(face1);
+      tlp_hash_map<Face, unsigned int>::const_iterator it = faceToCircumCenter.find(face1);
 
       if (it != faceToCircumCenter.end()) {
         VoronoiDiagram::Edge edge = make_pair(circumCenterIdx, faceToCircumCenter[face1]);

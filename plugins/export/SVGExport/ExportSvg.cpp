@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -55,7 +55,6 @@ QString tlpAlphaColor2Opacity(const Color &color) {
 ExportSvg::ExportSvg(PluginProgress *pp, ostream &os, const bool autoformatting)
     : ExportInterface(pp, os), _res(&_out), _gloweffectAdded(false) {
   _res.setAutoFormatting(autoformatting);
-  _res.setCodec("UTF-8");
 }
 
 bool ExportSvg::writeHeader(const BoundingBox &bb) {
@@ -537,9 +536,6 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
     if (borderwidth > 0)
       addBorder(bordercolor, borderwidth);
   } break;
-
-  case NodeShape::ChristmasTree:
-    iconName = "fa-tree";
 
   case NodeShape::Icon: {
     addWebFontFromIconName(iconName);

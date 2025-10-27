@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,49 +22,47 @@
 #include <QColorDialog>
 #include <QStylePainter>
 
-#include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/Perspective.h>
 
 using namespace tlp;
 
-ChooseColorButton::ChooseColorButton(QWidget *parent) : QPushButton(parent), _color(Qt::black) {
+ColorButton::ColorButton(QWidget *parent) : QPushButton(parent), _color(Qt::black) {
   connect(this, SIGNAL(clicked()), this, SLOT(chooseColor()));
   setFocusPolicy(Qt::WheelFocus);
 }
 
-QColor ChooseColorButton::color() const {
+QColor ColorButton::color() const {
   return _color;
 }
 
-QString ChooseColorButton::text() const {
+QString ColorButton::text() const {
   return _text;
 }
 
-void ChooseColorButton::setDialogTitle(const QString &title) {
+void ColorButton::setDialogTitle(const QString &title) {
   _dialogTitle = title;
 }
 
-tlp::Color ChooseColorButton::tulipColor() const {
+tlp::Color ColorButton::tulipColor() const {
   return QColorToColor(_color);
 }
 
-void ChooseColorButton::setText(const QString &text) {
+void ColorButton::setText(const QString &text) {
   _text = text;
 }
 
-void ChooseColorButton::setColor(const QColor &c) {
+void ColorButton::setColor(const QColor &c) {
   _color = c;
   update();
   emit colorChanged(_color);
   emit tulipColorChanged(QColorToColor(_color));
 }
 
-void ChooseColorButton::setTulipColor(const tlp::Color &c) {
+void ColorButton::setTulipColor(const tlp::Color &c) {
   setColor(colorToQColor(c));
 }
 
-void ChooseColorButton::chooseColor() {
+void ColorButton::chooseColor() {
   QColor c =
       QColorDialog::getColor(_color, QApplication::activeWindow(),
                              _dialogTitle.isEmpty() ? QString("Choose a color") : _dialogTitle,

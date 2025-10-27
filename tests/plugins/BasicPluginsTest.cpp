@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -217,10 +217,10 @@ void BasicPluginsTest::testImportFileSystem() {
 //==========================================================
 void BasicPluginsTest::testImportAdjacencyMatrix() {
   DataSet ds;
-  ds.set("file::name", string("data/toto.txt"));
+  ds.set("file::filename", string("data/toto.txt"));
   Graph *g = importGraph("Adjacency Matrix", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == nullptr);
-  ds.set("file::name", string("data/adj_mat.txt"));
+  ds.set("file::filename", string("data/adj_mat.txt"));
   g = importGraph("Adjacency Matrix", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
@@ -325,7 +325,7 @@ void BasicPluginsTest::testInducedSubGraphSelection() {
   CPPUNIT_ASSERT(result);
   // check with old name
   tlp::debug() << "Testing deprecated 'Induced Sub-Graph'..." << std::endl;
-  result = computeProperty<BooleanProperty>("Induced Sub-Graph");
+  result = computeProperty<BooleanProperty>("Induced SubGraph");
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -353,7 +353,7 @@ void BasicPluginsTest::testReachableSubGraphSelection() {
   CPPUNIT_ASSERT(result);
   // check with old name
   tlp::debug() << "Testing deprecated 'Reachable Sub-Graph'..." << std::endl;
-  result = computeProperty<BooleanProperty>("Reachable Sub-Graph");
+  result = computeProperty<BooleanProperty>("Reachable SubGraph");
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -389,7 +389,7 @@ void BasicPluginsTest::testMetricSizeMapping() {
   CPPUNIT_ASSERT(result);
 
   SizeProperty size(graph);
-  ds.set("property", &metric);
+  ds.set("metric", &metric);
   result = graph->applyPropertyAlgorithm("Size Mapping", &size, errorMsg, &ds, nullptr);
   CPPUNIT_ASSERT(result);
 }

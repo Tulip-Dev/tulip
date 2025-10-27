@@ -263,8 +263,8 @@ error-range                   0-0
 7,6,291,147,0,0,0,2451109,9,'USB Optical Mouse'
 7,6,291,146,0,0,0,2451117,9,'USB Optical Mouse'
 7,6,291,145,0,0,0,2451133,9,'USB Optical Mouse'
-7,6,291,144,0,0,0,2451165,9,'USB Optical Mouse'
-7,6,291,143,0,0,0,2451197,9,'USB Optical Mouse'
+7,6,291,135,0,0,0,2451165,9,'USB Optical Mouse'
+7,6,291,135,0,0,0,2451197,9,'USB Optical Mouse'
 7,4,0,0,1,0,0,2451477,9,USB Optical Mouse
 6,4,0,0,1,0,0,2451477,2,Virtual core pointer
 7,5,0,0,1,0,0,2451653,9,USB Optical Mouse

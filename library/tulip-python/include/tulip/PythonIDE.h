@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -26,8 +26,12 @@
 #include <QUrl>
 
 #include <tulip/tulipconf.h>
+#include <tulip/PythonIDEInterface.h>
+#include <tulip/PythonCodeEditor.h>
 
 class QTabWidget;
+class QComboBox;
+class QLineEdit;
 
 namespace Ui {
 class PythonIDE;
@@ -45,18 +49,15 @@ class PythonInterpreter;
 class PythonEditorsTabWidget;
 class DataSet;
 
-class TLP_PYTHON_SCOPE PythonIDE : public QFrame {
+class TLP_PYTHON_SCOPE PythonIDE : public PythonIDEInterface {
 
   Q_OBJECT
   Ui::PythonIDE *_ui;
   tlp::PythonInterpreter *_pythonInterpreter;
   PythonPanel *_pythonPanel;
   bool _dontTreatFocusIn;
-  tlp::TulipProject *_project;
   tlp::GraphHierarchiesModel *_graphsModel;
   bool _scriptStopped;
-  bool _saveFilesToProject;
-  bool _notifyProjectModified;
 
   QMap<QString, QString> _editedPluginsClassName;
   QMap<QString, QString> _editedPluginsType;
@@ -65,52 +66,57 @@ class TLP_PYTHON_SCOPE PythonIDE : public QFrame {
   QWidget *_scriptEditorsWidget, *_scriptControlWidget;
   QWidget *_pluginEditorsWidget, *_pluginControlWidget;
   QWidget *_moduleEditorsWidget, *_moduleControlWidget;
+  QFrame *_pipFrame;
+  QLineEdit *_pipPackage;
+  QComboBox *_pipCombo;
 
   bool loadPythonPlugin(const QString &fileName, bool clear = true);
   bool loadPythonPluginFromSrcCode(const QString &moduleName, const QString &pluginSrcCode,
                                    bool clear = true);
-  void savePythonPlugin(int tabIdx);
+  bool savePythonPlugin(int tabIdx, bool saveAs = false);
   bool indicateErrors() const;
   void clearErrorIndicators() const;
   bool loadModule(const QString &fileName);
-  void saveModule(int tabIdx);
+  bool saveModule(int tabIdx, bool saveAs = false);
 
   bool reloadAllModules() const;
-  void createTulipProjectPythonPaths();
-  void writeScriptsFilesList(int deleted = -1);
-  void writePluginsFilesList(int deleted = -1);
-  void writeModulesFilesList(int deleted = -1);
-  QString readProjectFile(const QString &filePath);
-  void writeScriptFileToProject(int idx, const QString &scriptFileName,
-                                const QString &scriptContent);
-  void writeFileToProject(const QString &projectFile, const QString &fileContent);
-  void deleteFilesFromProjectIfRemoved(const QString &projectDir,
-                                       const QStringList &existingFilenames);
+  QString readProjectFile(tlp::TulipProject *project, const QString &filePath);
 
 public:
-  explicit PythonIDE(QWidget *parent = nullptr);
+  explicit PythonIDE();
   ~PythonIDE() override;
 
-  static bool projectNeedsPythonIDE(tlp::TulipProject *project);
-  void setProject(tlp::TulipProject *project);
-  void savePythonFilesAndWriteToProject(bool notifyProjectModified = false);
+  bool projectNeedsPythonIDE(tlp::TulipProject *project) override;
+  bool hasUnsavedFiles() override;
+  void readProject(tlp::TulipProject *project) override;
   void setGraphsModel(tlp::GraphHierarchiesModel *model);
-  void clearPythonCodeEditors();
+  void clearPythonCodeEditors() override;
 
   void setScriptEditorsVisible(bool visible);
   void setPluginEditorsVisible(bool visible);
   void setModuleEditorsVisible(bool visible);
-  bool isCurrentScriptExecuting();
+  bool isCurrentScriptExecuting() override;
+  void deleteStaticResources() override {
+    PythonCodeEditor::deleteStaticResources();
+  }
+
+  // the Builder class used to instantiate PythonIDE
+  class Builder : public PythonIDEInterface::Builder {
+  public:
+    PythonIDEInterface *newIDE(GraphHierarchiesModel *model) override;
+    void loadPlugins() override;
+  };
 
 public slots:
-  void executeCurrentScript();
-  void stopCurrentScript();
-  void pauseCurrentScript();
+  void executeCurrentScript() override;
+  void stopCurrentScript() override;
+  void pauseCurrentScript() override;
 
 protected:
   void dragEnterEvent(QDragEnterEvent *) override;
   void dropEvent(QDropEvent *) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
+  void executePipCommand(int command, const QString &packageName);
 
 private:
   int addMainScriptEditor(const QString &fileName = "");
@@ -118,7 +124,6 @@ private:
   int addPluginEditor(const QString &fileName = "");
 
   bool loadScript(const QString &fileName, bool clear = true);
-  void saveScript(int tabIdx, bool clear = true, bool showFileDialog = false, bool saveAs = false);
 
   tlp::PythonCodeEditor *getCurrentMainScriptEditor() const;
   tlp::PythonCodeEditor *getMainScriptEditor(int idx) const;
@@ -129,6 +134,7 @@ private:
 
   bool closeEditorTabRequested(PythonEditorsTabWidget *tabWidget, int idx);
   bool loadModuleFromSrcCode(const QString &moduleName, const QString &moduleSrcCode);
+  bool checkUnsavedFiles(PythonEditorsTabWidget *editorsTabWidget, bool updateTabText = false);
 
   void loadScriptsAndModulesFromPythonScriptViewDataSet(const DataSet &dataSet);
 
@@ -138,32 +144,31 @@ private slots:
   void currentTabChanged(int index);
   void loadPythonPlugin();
   void savePythonPlugin();
-  void saveAllPlugins();
+  void saveAsPythonPlugin();
   void registerPythonPlugin(bool clear = true);
   void removePythonPlugin();
-  void newFileModule();
-  void newStringModule();
+  void newModule();
   void loadModule();
   void saveModule();
-  void saveAllModules();
+  void saveAsModule();
   void scrollToEditorLine(const QUrl &);
   void increaseFontSize();
   void decreaseFontSize();
-  void scriptSaved(int);
-  void pluginSaved(int);
-  void moduleSaved(int);
   void graphComboBoxIndexChanged();
+  void fileEdited();
 
   void newScript();
   void loadScript();
-  void saveScript();
+  bool saveScript(int tabIdx, bool clear = true, bool saveAs = false);
+
+  void saveMainScript();
   void saveAsScript();
-  void saveAllScripts();
   void currentScriptPaused();
 
   void closeModuleTabRequested(int index);
   void closeScriptTabRequested(int index);
   void closePluginTabRequested(int index);
+  void pipCommandChanged(int index);
 
   tlp::Graph *getSelectedGraph() const;
 };

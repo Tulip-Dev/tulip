@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,8 +22,7 @@
 
 #include <tulip/GLInteractor.h>
 #include <tulip/Coord.h>
-
-#include "../../utils/StandardInteractorPriority.h"
+#include <tulip/StandardInteractorPriority.h>
 
 namespace tlp {
 
@@ -78,7 +77,7 @@ public:
 
   void uninstall() override;
 
-  QWidget *configurationWidget() const override;
+  QWidget *configurationOptionsWidget() const override;
 
   unsigned int priority() const override {
     return StandardInteractorPriority::FishEye;

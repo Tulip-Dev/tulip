@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,12 +22,11 @@
 #include <cstring>
 #include <ctime>
 #include <string>
-#include <sstream>
+#include <iostream>
 #include <clocale>
 #include <cerrno>
 #include <random>
 #include <chrono>
-#include <fstream>
 
 #ifndef _WIN32
 #include <sys/stat.h>
@@ -65,9 +64,7 @@
 using namespace std;
 using namespace tlp;
 
-#ifndef __EMSCRIPTEN__
 static const char *TULIP_PLUGINS_PATH_VARIABLE = "TLP_PLUGINS_PATH";
-#endif
 
 // the relative path (a string), from the install dir
 // of the directory where the tulip libraries are installed
@@ -99,7 +96,6 @@ const char tlp::PATH_DELIMITER = ';';
 const char tlp::PATH_DELIMITER = ':';
 #endif
 
-#ifndef __EMSCRIPTEN__
 // A function that retrieves the Tulip libraries directory based on
 // the path of the loaded shared library libtulip-core-X.Y.[dll, so, dylib]
 extern "C" {
@@ -316,16 +312,6 @@ std::string tlp::demangleClassName(const char *className, bool hideTlp) {
 #error define symbols demangling function
 #endif
 
-#else // __EMSCRIPTEN__
-
-void initTulipLib(const char *) {}
-
-std::string tlp::demangleClassName(const char *className, bool) {
-  return std::string(className);
-}
-
-#endif // __EMSCRIPTEN__
-
 //=========================================================
 std::istream *tlp::getIgzstream(const std::string &name, int open_mode) {
 #if defined(WIN32) && ZLIB_VERNUM >= 0x1270
@@ -351,14 +337,12 @@ std::ostream *tlp::getOgzstream(const std::string &name, int open_mode) {
 //=========================================================
 
 static unsigned int randomSeed = UINT_MAX;
-// uniformly-distributed integer random number generator that produces non-deterministic random
-// numbers
-static std::random_device rd;
 // Mersenne Twister pseudo-random generator of 32-bit numbers
 static std::mt19937 mt;
 
 void tlp::setSeedOfRandomSequence(unsigned int seed) {
   randomSeed = seed;
+  tlp::initRandomSequence();
 }
 
 unsigned int tlp::getSeedOfRandomSequence() {
@@ -366,15 +350,8 @@ unsigned int tlp::getSeedOfRandomSequence() {
 }
 
 void tlp::initRandomSequence() {
-  // init seed from random sequence with std::random_device
   if (randomSeed == UINT_MAX) {
-#ifndef __MINGW32__
-    mt.seed(rd());
-#else
-    // std::random_device implementation is deterministic in MinGW so initialize seed with current
-    // time (microsecond precision)
-    mt.seed(uint(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
-#endif
+    mt.seed(std::chrono::high_resolution_clock::now().time_since_epoch().count());
   } else {
     mt.seed(randomSeed);
   }

@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -23,12 +23,12 @@
 
 #include <string>
 #include <set>
-#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
 #include <tulip/Graph.h>
 #include <tulip/MutableContainer.h>
+#include <tulip/tuliphash.h>
 
 namespace std {
 template <>
@@ -58,29 +58,29 @@ class GraphUpdatesRecorder : public Observable {
   const bool oldIdsStateRecorded;
 
   // one 'set' of added nodes per graph
-  std::unordered_map<Graph *, std::unordered_set<node>> graphAddedNodes;
+  tlp_hash_map<Graph *, std::unordered_set<node>> graphAddedNodes;
   // the whole 'set' of added nodes
   std::unordered_set<node> addedNodes;
   // one 'set' of deleted nodes per graph
-  std::unordered_map<Graph *, std::unordered_set<node>> graphDeletedNodes;
+  tlp_hash_map<Graph *, std::unordered_set<node>> graphDeletedNodes;
   // one 'set' of added edges per graph
   std::map<Graph *, std::unordered_set<edge>> graphAddedEdges;
   // ends of all added edges
-  std::unordered_map<edge, std::pair<node, node>> addedEdgesEnds;
+  tlp_hash_map<edge, std::pair<node, node>> addedEdgesEnds;
   // one 'set' of deleted edges per graph
   std::map<Graph *, std::unordered_set<edge>> graphDeletedEdges;
   // ends of all deleted edges
-  std::unordered_map<edge, std::pair<node, node>> deletedEdgesEnds;
+  tlp_hash_map<edge, std::pair<node, node>> deletedEdgesEnds;
   // one set of reverted edges
   std::unordered_set<edge> revertedEdges;
   // source + target per updated edge
-  std::unordered_map<edge, std::pair<node, node>> oldEdgesEnds;
+  tlp_hash_map<edge, std::pair<node, node>> oldEdgesEnds;
   // source + target per updated edge
-  std::unordered_map<edge, std::pair<node, node>> newEdgesEnds;
+  tlp_hash_map<edge, std::pair<node, node>> newEdgesEnds;
   // one 'set' for old edge containers
-  std::unordered_map<node, std::vector<edge>> oldContainers;
+  tlp_hash_map<node, std::vector<edge>> oldContainers;
   // one 'set' for new edge containers
-  std::unordered_map<node, std::vector<edge>> newContainers;
+  tlp_hash_map<node, std::vector<edge>> newContainers;
 
   // copy of nodes/edges id manager state at start time
   const GraphStorageIdsMemento *oldIdsState;
@@ -93,30 +93,30 @@ class GraphUpdatesRecorder : public Observable {
   std::list<std::pair<Graph *, Graph *>> deletedSubGraphs;
 
   // one set of added properties per graph
-  std::unordered_map<Graph *, std::set<PropertyInterface *>> addedProperties;
+  tlp_hash_map<Graph *, std::set<PropertyInterface *>> addedProperties;
   // one set of deleted properties per graph
-  std::unordered_map<Graph *, std::set<PropertyInterface *>> deletedProperties;
+  tlp_hash_map<Graph *, std::set<PropertyInterface *>> deletedProperties;
   // one set of old attribute values per graph
-  std::unordered_map<Graph *, DataSet> oldAttributeValues;
+  tlp_hash_map<Graph *, DataSet> oldAttributeValues;
   // one set of new attribute values per graph
-  std::unordered_map<Graph *, DataSet> newAttributeValues;
+  tlp_hash_map<Graph *, DataSet> newAttributeValues;
 
   // one set of updated addNodes per property
-  std::unordered_map<PropertyInterface *, std::set<node>> updatedPropsAddedNodes;
+  tlp_hash_map<PropertyInterface *, std::set<node>> updatedPropsAddedNodes;
 
   // one set of updated addEdges per property
-  std::unordered_map<PropertyInterface *, std::set<edge>> updatedPropsAddedEdges;
+  tlp_hash_map<PropertyInterface *, std::set<edge>> updatedPropsAddedEdges;
 
   // the old default node value for each updated property
-  std::unordered_map<PropertyInterface *, DataMem *> oldNodeDefaultValues;
+  tlp_hash_map<PropertyInterface *, DataMem *> oldNodeDefaultValues;
   // the new default node value for each updated property
-  std::unordered_map<PropertyInterface *, DataMem *> newNodeDefaultValues;
+  tlp_hash_map<PropertyInterface *, DataMem *> newNodeDefaultValues;
   // the old default edge value for each updated property
-  std::unordered_map<PropertyInterface *, DataMem *> oldEdgeDefaultValues;
+  tlp_hash_map<PropertyInterface *, DataMem *> oldEdgeDefaultValues;
   // the new default edge value for each updated property
-  std::unordered_map<PropertyInterface *, DataMem *> newEdgeDefaultValues;
+  tlp_hash_map<PropertyInterface *, DataMem *> newEdgeDefaultValues;
   // the old name for each renamed property
-  std::unordered_map<PropertyInterface *, std::string> renamedProperties;
+  tlp_hash_map<PropertyInterface *, std::string> renamedProperties;
 
   struct RecordedValues {
     PropertyInterface *values;
@@ -129,26 +129,25 @@ class GraphUpdatesRecorder : public Observable {
   };
 
   // the old nodes/edges values for each updated property
-  std::unordered_map<PropertyInterface *, RecordedValues> oldValues;
+  tlp_hash_map<PropertyInterface *, RecordedValues> oldValues;
   // the new node value for each updated property
-  std::unordered_map<PropertyInterface *, RecordedValues> newValues;
+  tlp_hash_map<PropertyInterface *, RecordedValues> newValues;
 
   // real deletion of deleted objects (properties, sub graphs)
   // during the recording of updates these objects are removed from graph
   // structures but not really 'deleted'
   void deleteDeletedObjects();
   // deletion of recorded values
-  void deleteValues(std::unordered_map<PropertyInterface *, RecordedValues> &values);
+  void deleteValues(tlp_hash_map<PropertyInterface *, RecordedValues> &values);
   // deletion of DataMem default values
-  void deleteDefaultValues(std::unordered_map<PropertyInterface *, DataMem *> &values);
+  void deleteDefaultValues(tlp_hash_map<PropertyInterface *, DataMem *> &values);
   // record of a node's edges container before/after modification
-  void recordEdgeContainer(std::unordered_map<node, std::vector<edge>> &, GraphImpl *, node,
+  void recordEdgeContainer(tlp_hash_map<node, std::vector<edge>> &, GraphImpl *, node,
                            edge e = edge(), bool loop = false);
-  void recordEdgeContainer(std::unordered_map<node, std::vector<edge>> &, GraphImpl *, node,
+  void recordEdgeContainer(tlp_hash_map<node, std::vector<edge>> &, GraphImpl *, node,
                            const std::vector<edge> &, unsigned int);
   // remove an edge from a node's edges container
-  void removeFromEdgeContainer(std::unordered_map<node, std::vector<edge>> &containers, edge e,
-                               node n);
+  void removeFromEdgeContainer(tlp_hash_map<node, std::vector<edge>> &containers, edge e, node n);
 
   void removeGraphData(Graph *);
 

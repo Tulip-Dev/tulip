@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -28,7 +28,6 @@
 #include <QToolButton>
 #include <QSortFilterProxyModel>
 #include <QMessageBox>
-#include <QMainWindow>
 
 #include <tulip/Perspective.h>
 #include <tulip/BooleanProperty.h>
@@ -56,8 +55,10 @@ int CustomTreeView::sizeHintForColumn(int col) const {
 
   while (index.isValid()) {
     if (viewport()->rect().contains(visualRect(index))) {
-      hint = qMax(hint, visualRect(index).x() +
-                            itemDelegate(index)->sizeHint(viewOptions(), index).width());
+      QStyleOptionViewItem option;
+      initViewItemOption(&option);
+      auto w = itemDelegateForIndex(index)->sizeHint(option, index).width();
+      hint = qMax(hint, visualRect(index).x() + w);
     }
 
     index = indexBelow(index);
@@ -146,6 +147,10 @@ void GraphHierarchiesEditor::setModel(tlp::GraphHierarchiesModel *model) {
           SLOT(currentChanged(const QModelIndex &, const QModelIndex &)));
   connect(model, SIGNAL(currentGraphChanged(tlp::Graph *)), this,
           SLOT(currentGraphChanged(tlp::Graph *)));
+}
+
+Graph *GraphHierarchiesEditor::currentGraph() {
+  return _model->currentGraph();
 }
 
 GraphHierarchiesEditor::~GraphHierarchiesEditor() {
@@ -278,6 +283,7 @@ void GraphHierarchiesEditor::currentGraphChanged(Graph *graph) {
       selection->addObserver(this);
     _currentSelection = selection;
   }
+  GraphPerspective::typedInstance<GraphPerspective>()->resetTitle();
   updateSelectionInfos();
 }
 

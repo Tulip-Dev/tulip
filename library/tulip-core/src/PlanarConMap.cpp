@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,11 +21,12 @@
 
 #include <tulip/ConnectedTest.h>
 #include <tulip/PlanarityTest.h>
+#ifndef NDEBUG
 #include <tulip/SimpleTest.h>
+#endif
 #include <tulip/MutableContainer.h>
 #include <tulip/MapIterator.h>
 #include <tulip/FaceIterator.h>
-#include <tulip/Face.h>
 #include <tulip/PlanarConMap.h>
 #include <tulip/TreeTest.h>
 
@@ -217,7 +218,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   // initialize the list of faces adjacent to all nodes of the new face
   for (unsigned int id : isInNewFace.findAll(true)) {
     node n_tmp(id);
-    vector<Face> v_faces;
+    v_faces.clear();
 
     for (const Face &f : getFacesAdj(n_tmp))
       v_faces.push_back(f);
@@ -311,7 +312,7 @@ void PlanarConMap::delEdgeMap(edge e, Face f) {
 
     for (unsigned int i = 0; nb_added < nb_edges - 1; i = (i + 1) % nb_edges) {
       edge e_tmp = facesEdges[f2][i];
-      auto eEnds = ends(e_tmp);
+      eEnds = ends(e_tmp);
       isInF2.set(eEnds.first.id, true);
       isInF2.set(eEnds.second.id, true);
 
@@ -570,7 +571,6 @@ void PlanarConMap::computeFaces() {
           faces.push_back(lf);
           edge e1 = e;
           node n_tmp, n;
-          int i = 0;
 
           if (sens.get(e1.id))
             n = target(e1);
@@ -608,7 +608,6 @@ void PlanarConMap::computeFaces() {
             if (source(e1) == n)
               sens.set(e1.id, true);
 
-            ++i;
           } while ((e1 != e) || (n_tmp != n));
 
           facesEdges.emplace(lf, edges);

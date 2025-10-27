@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -36,7 +36,7 @@ class TLP_QT_SCOPE TreeViewComboBox : public QComboBox {
 public:
   explicit TreeViewComboBox(QWidget *parent = nullptr);
 
-  void setModel(QAbstractItemModel *model);
+  void setModel(QAbstractItemModel *model) override;
 
   void showPopup() override;
   void hidePopup() override;

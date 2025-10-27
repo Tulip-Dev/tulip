@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,8 +20,6 @@
 #include <tulip/GlSceneZoomAndPan.h>
 #include <tulip/GlScene.h>
 #include <tulip/Camera.h>
-
-#include <algorithm>
 
 using namespace std;
 

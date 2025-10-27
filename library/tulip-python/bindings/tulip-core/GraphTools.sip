@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -115,8 +115,13 @@ containing the nodes of the graph in the order they have been visited.
 
 //========================================================================================
 
-enum ShortestPathType { OnePath = 0, OneDirectedPath = 1 , OneReversedPath = 2,
-			AllPaths = 3, AllDirectedPaths = 4, AllReversedPaths = 5 };
+enum ShortestPathType /BaseType=IntEnum/ {
+OnePath = ShortestPathType::OnePath,
+OneDirectedPath = ShortestPathType::OneDirectedPath ,
+OneReversedPath = ShortestPathType::OneReversedPath,
+AllPaths = ShortestPathType::AllPaths,
+AllDirectedPaths = ShortestPathType::AllDirectedPaths,
+AllReversedPaths = ShortestPathType::AllReversedPaths };
 
 bool selectShortestPaths(const tlp::Graph *graph, tlp::node src, tlp::node tgt, tlp::ShortestPathType pathType,
                          const tlp::DoubleProperty *weights, tlp::BooleanProperty* selection);
@@ -130,7 +135,7 @@ Returns :const:`True` if a path exists between the src and tgt nodes.
 
 One usage would be::
 
-  tlp.selectShortestPaths(graph, tlp.node(1), tlp.node(2), tlp.AllPaths,
+  tlp.selectShortestPaths(graph, tlp.node(1), tlp.node(2), tlp.ShortestPathType.AllPaths,
                           graph['viewMetric'], graph['viewSelection'])
 
 Then the existing shortest paths will correspond to the edges (and connected nodes)
@@ -144,8 +149,8 @@ of graph for which ``graph['viewSelection']`` value is equal to :const:`True`.
 :type tgt: :class:`tlp.node`
 :param pathType: The type of path to consider (:const:`Reversed` is the same than
   :const:`Directed` from target node to source node)
-:type pathType: :const:`tlp.OnePath`, :const:`tlp.OneDirectedPath`, :const:`tlp.OneReversedPath`,
-  :const:`tlp.AllPaths`, :const:`tlp.AllDirectedPaths`, :const:`tlp.AllReversedPaths`
+:type pathType: :const:`tlp.ShortestPathType.OnePath`, :const:`tlp.ShortestPathType.OneDirectedPath`, :const:`tlp.ShortestPathType.OneReversedPath`,
+  :const:`tlp.ShortestPathType.AllPaths`, :const:`tlp.ShortestPathType.AllDirectedPaths`, :const:`tlp.ShortestPathType.AllReversedPaths`
 :param weights: A graph property giving the edges weight if weighted paths
   have to be considered. Can be set to null to select unweighted paths.
 :type weights: :class:`tlp.DoubleProperty`

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -36,11 +36,9 @@ bool DagLevelMetric::run() {
 }
 //======================================================
 bool DagLevelMetric::check(std::string &erreurMsg) {
-  if (AcyclicTest::isAcyclic(graph)) {
-    erreurMsg = "";
-    return true;
-  } else {
-    erreurMsg = "The graph must be a acylic.";
+  if (!AcyclicTest::isAcyclic(graph)) {
+    erreurMsg = "The graph must be acylic.";
     return false;
   }
+  return true;
 }

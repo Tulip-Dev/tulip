@@ -27,7 +27,6 @@ SET(tulip-ogl_LIB_SRCS
   GlGraphComposite.cpp
   GlGraphRenderer.cpp
   GlGraphHighDetailsRenderer.cpp
-  GlGraphLowDetailsRenderer.cpp
   GlGraphInputData.cpp
   GlGraphRenderingParameters.cpp
   GlGraphStaticData.cpp
@@ -72,18 +71,23 @@ SET(tulip-ogl_LIB_SRCS
 )
 
 INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${PROJECT_SOURCE_DIR} ${FTGLInclude} ${FREETYPE_INCLUDE_DIRS} ${UTF8CppInclude})
-INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${Tess2Include})
+INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS} ${Tess2Include})
 IF(TULIP_BUILD_GL_TEX_LOADER)
-  INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR} ${PNG_INCLUDE_DIR})
+  INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIRS} ${PNG_INCLUDE_DIRS})
 ENDIF(TULIP_BUILD_GL_TEX_LOADER)
 
 ADD_LIBRARY (${LibTulipOGLName} SHARED ${tulip-ogl_LIB_SRCS})
-TARGET_LINK_LIBRARIES(${LibTulipOGLName} ${FTGLLibrary} ${GLEW_LIBRARY}
-                      ${LibTulipCoreName} ${OPENGL_gl_LIBRARY}
-                      ${FREETYPE_LIBRARY})
+
 IF(TULIP_BUILD_GL_TEX_LOADER)
-  TARGET_LINK_LIBRARIES(${LibTulipOGLName} ${JPEG_LIBRARY} ${PNG_LIBRARY})
+  SET(JPEG_AND_PNG_LIBRARIES ${JPEG_LIBRARIES} ${PNG_LIBRARIES})
 ENDIF(TULIP_BUILD_GL_TEX_LOADER)
+
+TARGET_LINK_LIBRARIES(${LibTulipOGLName} PUBLIC ${FTGLLibrary}
+                      ${LibTulipCoreName}
+                      ${FREETYPE_LIBRARIES}
+                      ${JPEG_AND_PNG_LIBRARIES}
+                      INTERFACE GLEW::GLEW OpenGL::GL
+                  )
 
 INSTALL(TARGETS ${LibTulipOGLName}
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_ogl

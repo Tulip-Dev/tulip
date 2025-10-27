@@ -10,7 +10,6 @@ SET(SRCS
   CSVParserConfigurationWidget.cpp
   CSVParser.cpp
   DoubleStringsListSelectionWidget.cpp
-  DownloadManager.cpp
   DragHandle.cpp
   GlCompositeHierarchyManager.cpp
   GlMainView.cpp
@@ -30,10 +29,9 @@ SET(SRCS
   NodeLinkDiagramComponentInteractor.cpp
   ShapeDialog.cpp
   Perspective.cpp
-  PluginManager.cpp
   PropertyCreationDialog.cpp
   QtGlSceneZoomAndPanAnimator.cpp
-  QuaZIPFacade.cpp
+  ZIPFacade.cpp
   RenamePropertyDialog.cpp
   SimplePluginProgressWidget.cpp
   SimpleStringsListSelectionWidget.cpp
@@ -59,6 +57,7 @@ SET(SRCS
   GLInteractor.cpp
   WorkspacePanel.cpp
   Interactor.cpp
+  InteractorViewExplorer.cpp
   ProcessingAnimationItem.cpp
   Workspace.cpp
   PlaceHolderWidget.cpp
@@ -97,26 +96,22 @@ SET(SRCS
   ViewActionsManager.cpp
   ViewGraphPropertiesSelectionWidget.cpp
   ViewToolTipAndUrlManager.cpp
-  PythonVersionChecker.cpp
+  PythonIDEInterface.cpp
 )
 
 QTX_SET_INCLUDES_AND_DEFINITIONS()
 
-ADD_DEFINITIONS(-DQT_DLL)
-ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
+ADD_COMPILE_DEFINITIONS(QT_DLL)
+ADD_COMPILE_DEFINITIONS(QT_THREAD_SUPPORT)
 
-IF(TULIP_BUILD_PYTHON_COMPONENTS)
-  SET(PYTHON_PART_SRCS PythonVersionChecker.cpp)
-  ADD_DEFINITIONS("-DTULIP_BUILD_PYTHON_COMPONENTS")
-  SET(TLPGUI_PYTHON_COMPILE_DEFINITIONS TLP_PYTHON="${PYTHON_VERSION}" SIP_VERSION="${SIP_VERSION_STR}")
-  IF(MSYS2_PYTHON)
-    SET(TLPGUI_PYTHON_COMPILE_DEFINITIONS ${TLPGUI_PYTHON_COMPILE_DEFINITIONS} MSYS2_PYTHON=1 PYTHON_HOME_PATH="${PYTHON_HOME_PATH}/../")
-  ENDIF(MSYS2_PYTHON)
-  SET_SOURCE_FILES_PROPERTIES(PythonVersionChecker.cpp
+SET(TLPGUI_PYTHON_COMPILE_DEFINITIONS PYTHON_VERSION="${PYTHON_VERSION}" PYTHON_FULL_VERSION="${PYTHON_VERSION}.${Python_VERSION_PATCH}")
+
+INCLUDE_DIRECTORIES(${SIP_H_DIR} ${Python_INCLUDE_DIRS})
+IF(MSYS2_PYTHON)
+  SET(TLPGUI_PYTHON_COMPILE_DEFINITIONS ${TLPGUI_PYTHON_COMPILE_DEFINITIONS} MSYS2_PYTHON=1 PYTHON_HOME_PATH="${PYTHON_HOME_PATH}/../")
+ENDIF(MSYS2_PYTHON)
+SET_SOURCE_FILES_PROPERTIES(PythonIDEInterface.cpp
                               PROPERTIES COMPILE_DEFINITIONS "${TLPGUI_PYTHON_COMPILE_DEFINITIONS}")
-  SET_SOURCE_FILES_PROPERTIES(AboutTulipPage.cpp
-                              PROPERTIES COMPILE_DEFINITIONS "${TLPGUI_PYTHON_COMPILE_DEFINITIONS}")
-ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 
 QTX_WRAP_UI(UI_HEADERS
   ../designer/AboutTulipPage.ui
@@ -166,7 +161,6 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/CSVImportWizard.h
   ../include/tulip/CSVParserConfigurationWidget.h
   ../include/tulip/DoubleStringsListSelectionWidget.h
-  ../include/tulip/DownloadManager.h
   ../include/tulip/DragHandle.h
   ../include/tulip/GLInteractor.h
   ../include/tulip/GlMainView.h
@@ -221,9 +215,11 @@ QTX_WRAP_CPP(MOC_SRCS
 
 QTX_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
 
-INCLUDE_DIRECTORIES(${TulipGUIBuildInclude} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} ${ZLIB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${QuazipInclude} ${OGDFInclude} ${OGDFBuildInclude})
+
 ADD_LIBRARY(${LibTulipGUIName} SHARED ${SRCS} ${MOC_SRCS} ${RCC_SRCS} ${UI_HEADERS})
-TARGET_LINK_LIBRARIES(${LibTulipGUIName} ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOGLName} ${QuazipLibrary})
+TARGET_INCLUDE_DIRECTORIES(${LibTulipGUIName} PUBLIC ${TulipGUIBuildInclude} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} ${ZLIB_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS} ${OGDFInclude} ${OGDFBuildInclude}
+                                                INTERFACE libzip::zip)
+TARGET_LINK_LIBRARIES(${LibTulipGUIName} ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOGLName} libzip::zip)
 
 INSTALL(TARGETS ${LibTulipGUIName}
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_gui

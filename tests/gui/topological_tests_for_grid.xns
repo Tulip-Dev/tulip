@@ -683,8 +683,8 @@ NEW-WINDOW:1845892192,22050:58720784,58720784,701,640,383,0:-1114077168x32765+-6
 7,6,927,208,0,0,0,1928033,9,'VirtualBox mouse integration'
 7,6,925,208,0,0,0,1928049,9,'VirtualBox mouse integration'
 7,6,924,208,0,0,0,1928057,9,'VirtualBox mouse integration'
-7,6,923,208,0,0,0,1928065,9,'VirtualBox mouse integration'
-7,6,922,207,0,0,0,1928145,9,'VirtualBox mouse integration'
+7,6,923,201,0,0,0,1928065,9,'VirtualBox mouse integration'
+7,6,922,201,0,0,0,1928145,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,1928317,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,1928317,2,Virtual core pointer
 7,5,0,0,1,0,0,1928442,12,ImExPS/2 Generic Explorer Mouse
@@ -1582,8 +1582,8 @@ NEW-WINDOW:640,383:58721049,58721049,701,640,383,0:640x383+500+117:0,0:Tulip tes
 7,6,912,212,0,0,0,1957796,9,'VirtualBox mouse integration'
 7,6,911,211,0,0,0,1957852,9,'VirtualBox mouse integration'
 7,6,911,209,0,0,0,1957876,9,'VirtualBox mouse integration'
-7,6,910,207,0,0,0,1957924,9,'VirtualBox mouse integration'
-7,6,909,206,0,0,0,1957964,9,'VirtualBox mouse integration'
+7,6,910,201,0,0,0,1957924,9,'VirtualBox mouse integration'
+7,6,909,201,0,0,0,1957964,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,1958192,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,1958192,2,Virtual core pointer
 7,5,0,0,1,0,0,1958319,12,ImExPS/2 Generic Explorer Mouse
@@ -1980,8 +1980,8 @@ NEW-WINDOW:1845976656,22050:58721160,58721160,701,640,383,0:-1114077168x32765+-6
 7,6,913,209,0,0,0,1971429,9,'VirtualBox mouse integration'
 7,6,913,208,0,0,0,1971453,9,'VirtualBox mouse integration'
 7,6,913,207,0,0,0,1971461,9,'VirtualBox mouse integration'
-7,6,913,206,0,0,0,1971469,9,'VirtualBox mouse integration'
-7,6,913,205,0,0,0,1971477,9,'VirtualBox mouse integration'
+7,6,913,201,0,0,0,1971469,9,'VirtualBox mouse integration'
+7,6,913,201,0,0,0,1971477,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,1971769,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,1971769,2,Virtual core pointer
 7,5,0,0,1,0,0,1971902,12,ImExPS/2 Generic Explorer Mouse
@@ -2385,8 +2385,8 @@ NEW-WINDOW:640,383:58721276,58721276,701,640,383,0:640x383+500+117:0,0:Tulip tes
 7,6,906,200,0,0,0,1986559,9,'VirtualBox mouse integration'
 7,6,906,201,0,0,0,1986566,9,'VirtualBox mouse integration'
 7,6,905,202,0,0,0,1986575,9,'VirtualBox mouse integration'
-7,6,905,203,0,0,0,1986583,9,'VirtualBox mouse integration'
-7,6,905,205,0,0,0,1986607,9,'VirtualBox mouse integration'
+7,6,905,201,0,0,0,1986583,9,'VirtualBox mouse integration'
+7,6,905,201,0,0,0,1986607,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,1986786,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,1986786,2,Virtual core pointer
 7,5,0,0,1,0,0,1986952,12,ImExPS/2 Generic Explorer Mouse
@@ -2823,8 +2823,8 @@ NEW-WINDOW:1845977808,22050:58721396,58721396,701,640,383,0:-1114077168x32765+-6
 7,6,906,209,0,0,0,1999271,9,'VirtualBox mouse integration'
 7,6,906,208,0,0,0,1999287,9,'VirtualBox mouse integration'
 7,6,906,207,0,0,0,1999311,9,'VirtualBox mouse integration'
-7,6,906,205,0,0,0,1999327,9,'VirtualBox mouse integration'
-7,6,906,204,0,0,0,1999335,9,'VirtualBox mouse integration'
+7,6,906,201,0,0,0,1999327,9,'VirtualBox mouse integration'
+7,6,906,201,0,0,0,1999335,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,1999578,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,1999578,2,Virtual core pointer
 7,5,0,0,1,0,0,1999728,12,ImExPS/2 Generic Explorer Mouse
@@ -3239,8 +3239,8 @@ NEW-WINDOW:1845977872,22050:58721521,58721521,701,640,383,0:-1114077168x32765+-6
 7,6,899,210,0,0,0,2012760,9,'VirtualBox mouse integration'
 7,6,899,208,0,0,0,2012767,9,'VirtualBox mouse integration'
 7,6,900,207,0,0,0,2012792,9,'VirtualBox mouse integration'
-7,6,900,206,0,0,0,2012799,9,'VirtualBox mouse integration'
-7,6,901,205,0,0,0,2012848,9,'VirtualBox mouse integration'
+7,6,900,201,0,0,0,2012799,9,'VirtualBox mouse integration'
+7,6,901,201,0,0,0,2012848,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,2013436,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,2013436,2,Virtual core pointer
 7,5,0,0,1,0,0,2013569,12,ImExPS/2 Generic Explorer Mouse
@@ -3399,8 +3399,8 @@ NEW-WINDOW:705,380:58721570,58721570,701,705,380,0:705x380+370+123:0,0:Create ne
 7,6,416,477,0,0,0,2018820,9,'VirtualBox mouse integration'
 7,6,415,477,0,0,0,2018828,9,'VirtualBox mouse integration'
 7,6,412,478,0,0,0,2018844,9,'VirtualBox mouse integration'
-7,6,411,478,0,0,0,2018859,9,'VirtualBox mouse integration'
-7,6,410,478,0,0,0,2018900,9,'VirtualBox mouse integration'
+7,6,411,470,0,0,0,2018859,9,'VirtualBox mouse integration'
+7,6,410,470,0,0,0,2018900,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,2019079,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,2019079,2,Virtual core pointer
 7,5,0,0,1,0,0,2019237,12,ImExPS/2 Generic Explorer Mouse
@@ -3663,8 +3663,8 @@ NEW-WINDOW:640,383:58721645,58721645,701,640,383,0:640x383+500+117:0,0:Tulip tes
 7,6,898,215,0,0,0,2025696,9,'VirtualBox mouse integration'
 7,6,898,214,0,0,0,2025712,9,'VirtualBox mouse integration'
 7,6,898,213,0,0,0,2025720,9,'VirtualBox mouse integration'
-7,6,898,211,0,0,0,2025744,9,'VirtualBox mouse integration'
-7,6,898,210,0,0,0,2025784,9,'VirtualBox mouse integration'
+7,6,898,201,0,0,0,2025744,9,'VirtualBox mouse integration'
+7,6,898,201,0,0,0,2025784,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,2026220,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,2026220,2,Virtual core pointer
 7,5,0,0,1,0,0,2026369,12,ImExPS/2 Generic Explorer Mouse
@@ -3784,8 +3784,8 @@ NEW-WINDOW:705,380:58721684,58721684,701,705,380,0:705x380+370+123:0,0:Create ne
 7,6,402,502,0,0,0,2032204,9,'VirtualBox mouse integration'
 7,6,398,504,0,0,0,2032220,9,'VirtualBox mouse integration'
 7,6,397,504,0,0,0,2032316,9,'VirtualBox mouse integration'
-7,6,396,504,0,0,0,2032324,9,'VirtualBox mouse integration'
-7,6,394,505,0,0,0,2032356,9,'VirtualBox mouse integration'
+7,6,396,500,0,0,0,2032324,9,'VirtualBox mouse integration'
+7,6,394,500,0,0,0,2032356,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,2032680,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,2032680,2,Virtual core pointer
 7,5,0,0,1,0,0,2032814,12,ImExPS/2 Generic Explorer Mouse
@@ -4034,8 +4034,8 @@ NEW-WINDOW:1845977840,22050:58721757,58721757,701,640,383,0:-1114077168x32765+-6
 7,6,907,208,0,0,0,2039849,9,'VirtualBox mouse integration'
 7,6,907,207,0,0,0,2039857,9,'VirtualBox mouse integration'
 7,6,908,206,0,0,0,2039865,9,'VirtualBox mouse integration'
-7,6,908,205,0,0,0,2039873,9,'VirtualBox mouse integration'
-7,6,909,203,0,0,0,2039913,9,'VirtualBox mouse integration'
+7,6,908,201,0,0,0,2039873,9,'VirtualBox mouse integration'
+7,6,909,201,0,0,0,2039913,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,2040324,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,2040324,2,Virtual core pointer
 7,5,0,0,1,0,0,2040458,12,ImExPS/2 Generic Explorer Mouse
@@ -4191,8 +4191,8 @@ NEW-WINDOW:705,380:58721796,58721796,701,705,380,0:705x380+370+123:0,0:Create ne
 7,6,399,531,0,0,0,2045797,9,'VirtualBox mouse integration'
 7,6,397,533,0,0,0,2045829,9,'VirtualBox mouse integration'
 7,6,396,534,0,0,0,2045877,9,'VirtualBox mouse integration'
-7,6,395,535,0,0,0,2045917,9,'VirtualBox mouse integration'
-7,6,393,538,0,0,0,2046037,9,'VirtualBox mouse integration'
+7,6,395,530,0,0,0,2045917,9,'VirtualBox mouse integration'
+7,6,393,530,0,0,0,2046037,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,2046297,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,2046297,2,Virtual core pointer
 7,5,0,0,1,0,0,2046454,12,ImExPS/2 Generic Explorer Mouse
@@ -4516,8 +4516,8 @@ NEW-WINDOW:640,383:58721872,58721872,701,640,383,0:640x383+500+117:0,0:Tulip tes
 7,6,897,206,0,0,0,2055019,9,'VirtualBox mouse integration'
 7,6,898,205,0,0,0,2055027,9,'VirtualBox mouse integration'
 7,6,899,204,0,0,0,2055043,9,'VirtualBox mouse integration'
-7,6,900,203,0,0,0,2055211,9,'VirtualBox mouse integration'
-7,6,902,203,0,0,0,2055219,9,'VirtualBox mouse integration'
+7,6,900,201,0,0,0,2055211,9,'VirtualBox mouse integration'
+7,6,902,201,0,0,0,2055219,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,2055599,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,2055599,2,Virtual core pointer
 7,5,0,0,1,0,0,2055708,12,ImExPS/2 Generic Explorer Mouse

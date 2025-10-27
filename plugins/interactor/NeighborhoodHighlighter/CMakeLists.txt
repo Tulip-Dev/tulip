@@ -21,7 +21,9 @@ QTX_ADD_RESOURCES(LIB_RCC_SRCS
 NeighborhoodHighlighterResource.qrc
 )
 
-ADD_LIBRARY(NeighborhoodHighlighter-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
-TARGET_LINK_LIBRARIES(NeighborhoodHighlighter-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${OPENGL_gl_LIBRARY})
+ADD_LIBRARY(NeighborhoodHighlighter-${Tulip_VERSION} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
+TARGET_LINK_LIBRARIES(NeighborhoodHighlighter-${Tulip_VERSION}
+    PUBLIC ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName}
+    INTERFACE OpenGL::GL)
 
-TULIP_INSTALL_PLUGIN(NeighborhoodHighlighter-${TulipVersion} ${TulipInteractorPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(NeighborhoodHighlighter-${Tulip_VERSION} ${TulipInteractorPluginsInstallDir})

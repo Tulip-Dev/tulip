@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -24,7 +24,6 @@
 
 #include <cstring>
 #include <sstream>
-#include <set>
 #include <vector>
 
 #ifdef _WIN32
@@ -42,7 +41,6 @@ using namespace tlp;
 std::string PluginLibraryLoader::_message, PluginLibraryLoader::_pluginPath,
     PluginLibraryLoader::_currentPluginLibrary;
 
-#ifndef EMSCRIPTEN
 void PluginLibraryLoader::loadPlugins(PluginLoader *loader, const std::string &folder) {
   std::vector<std::string> paths;
   std::stringstream ss(TulipPluginsPath);
@@ -136,9 +134,9 @@ bool PluginLibraryLoader::loadPluginLibrary(const std::string &filename, PluginL
                     nullptr);                       // no inserts
 
       if (!msg) {
-        char scode[128];
-        sprintf(scode, "%s: unable to load(error %d)", filename.c_str(), int(dwErrCode));
-        loader->aborted(filename, std::string(scode));
+        std::string scode(filename);
+        scode += ": unable to load(error " + int(dwErrCode) + ')';
+        loader->aborted(filename, scode);
       } else {
         loader->aborted(filename, filename + ": " + msg);
         LocalFree(msg);
@@ -469,4 +467,3 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive,
 #endif
   return true;
 }
-#endif // EMSCRIPTEN

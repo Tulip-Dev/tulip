@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,7 +17,6 @@
  *
  */
 
-#include <vector>
 #include <tulip/Graph.h>
 #include <tulip/GraphTools.h>
 #include <tulip/SimpleTest.h>
@@ -34,7 +33,7 @@ public:
   /**
    * @brief Stored results for graphs. When a graph is updated, its entry is removed from the map.
    **/
-  std::unordered_map<const Graph *, bool> resultsBuffer;
+  tlp_hash_map<const Graph *, bool> resultsBuffer;
 
   inline void deleteResult(Graph *graph) {
     resultsBuffer.erase(graph);
@@ -57,7 +56,7 @@ void SimpleTestListener::treatEvent(const Event &evt) {
 
       break;
 
-    case GraphEvent::TLP_DEL_EDGE:
+    case GraphEvent::TLP_AFTER_DEL_EDGE:
 
       if (!resultsBuffer[graph])
         deleteResult(graph);

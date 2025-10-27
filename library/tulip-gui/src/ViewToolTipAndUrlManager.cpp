@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,20 +17,15 @@
  *
  */
 #include <tulip/ViewToolTipAndUrlManager.h>
-#include <QActionGroup>
 #include <QGraphicsView>
-#include <QHelpEvent>
 #include <QToolTip>
-#include <QString>
 #include <QKeyEvent>
 #include <QUrl>
 #include <QDesktopServices>
 #include <QBuffer>
 #include <QImage>
 
-#include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/Graph.h>
 #include <tulip/GraphModel.h>
 #include <tulip/StringProperty.h>
 #include "ui_ManageGraphEltTooltipDialog.h"
@@ -144,6 +139,11 @@ void ViewToolTipAndUrlManager::manageToolTips() {
   QDialog ttDialog(_view->graphicsView()->viewport());
   Ui::ManageGraphEltTooltipDialog ui;
   ui.setupUi(&ttDialog);
+#ifdef __APPLE__
+  ui.imgPropCB->setMinimumContentsLength(21);
+  ui.urlPropCB->setMinimumContentsLength(21);
+#endif
+
   // configure ui
   bool tooltips = false;
   graph->getAttribute(TOOLTIPS_ENABLED, tooltips);
@@ -240,7 +240,7 @@ bool ViewToolTipAndUrlManager::eventFilter(QObject *, QEvent *event) {
     node tmpNode;
     edge tmpEdge;
     std::string img;
-    if (_view->getNodeOrEdgeAtViewportPos(he->x(), he->y(), tmpNode, tmpEdge)) {
+    if (_view->getNodeOrEdgeAtViewportPos(he->pos().x(), he->pos().y(), tmpNode, tmpEdge)) {
       QString ttip;
 
       if (tmpNode.isValid()) {

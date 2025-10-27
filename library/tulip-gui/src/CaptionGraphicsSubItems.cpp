@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,11 +18,9 @@
  */
 #include "tulip/CaptionGraphicsSubItems.h"
 
-#include <QGraphicsProxyWidget>
+#include <QFont>
+#include <QBrush>
 #include <QGraphicsSceneMouseEvent>
-
-#include <tulip/DoubleProperty.h>
-#include <tulip/ColorProperty.h>
 
 using namespace std;
 

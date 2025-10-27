@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -61,12 +61,13 @@ static const char *paramHelp[] = {
 class OGDFFruchtermanReingold : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Fruchterman Reingold (OGDF)", "Stephan Hachul", "15/11/2007",
-                    "Implements the Fruchterman and Reingold layout algorithm, first published "
-                    "as:<br/><b>Graph Drawing by Force-Directed Placement</b>, Fruchterman, Thomas "
-                    "M. J., Reingold, Edward M., Software – Practice & Experience (Wiley) Volume "
-                    "21, Issue 11, pages 1129–1164, (1991)",
-                    "1.2", "Force Directed")
+  PLUGININFORMATION(
+      "Fruchterman Reingold (OGDF)", "Stephan Hachul", "15/11/2007",
+      "Implements the Fruchterman and Reingold layout algorithm, first published "
+      "as:<br/><b>Graph Drawing by Force-Directed Placement</b>,<br/>Fruchterman, Thomas "
+      "M. J., Reingold, Edward M., Software – Practice & Experience (Wiley) Volume "
+      "21, Issue 11, pages 1129–1164, (1991)",
+      "1.2", "Force Directed")
 
   OGDFFruchtermanReingold(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::SpringEmbedderFRExact() : nullptr) {
@@ -81,8 +82,6 @@ public:
     addInParameter<double>("page ratio", paramHelp[7], "1.0");
     addInParameter<bool>("check convergence", paramHelp[8], "true");
     addInParameter<double>("convergence tolerance", paramHelp[9], "0.01");
-    // old name
-    declareDeprecatedName("Frutcherman Reingold (OGDF)");
   }
 
   ~OGDFFruchtermanReingold() override {}
@@ -102,13 +101,13 @@ public:
       if (dataSet->get("noise", bval))
         sefr->noise(bval);
 
-      if (dataSet->getDeprecated("connected components spacing", "minDistCC", dval))
+      if (dataSet->get("connected components spacing", dval))
         sefr->minDistCC(dval);
 
-      if (dataSet->getDeprecated("page ratio", "pageRatio", dval))
+      if (dataSet->get("page ratio", dval))
         sefr->pageRatio(dval);
 
-      if (dataSet->getDeprecated("cooling function", "Cooling function", sc)) {
+      if (dataSet->get("cooling function", sc)) {
         if (sc.getCurrent() == FACTOR) {
           sefr->coolingFunction(SpringEmbedderFRExact::CoolingFunction::Factor);
         } else {

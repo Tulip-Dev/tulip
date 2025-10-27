@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,7 +17,7 @@
  *
  */
 #include "BasicMetricTest.h"
-#include <tulip/Graph.h>
+
 #include <tulip/DoubleProperty.h>
 
 using namespace std;
@@ -27,9 +27,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION(BasicMetricTest);
 
 template <typename PropType>
 bool BasicMetricTest::computeProperty(const std::string &algorithm, const std::string &graphType,
-                                      PropType *prop) {
+                                      PropType *prop, DataSet ds) {
 
-  DataSet ds;
   tlp::Graph *g = tlp::importGraph(graphType, ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 
@@ -57,6 +56,14 @@ void BasicMetricTest::tearDown() {
 
 void BasicMetricTest::testArityMetric() {
   bool result = computeProperty<DoubleProperty>("Degree");
+  CPPUNIT_ASSERT(result);
+}
+//==========================================================
+void BasicMetricTest::testNeighborhood() {
+  DataSet ds;
+  ds.set("directed", true);
+  bool result =
+      computeProperty<DoubleProperty>("Unique Neighbors", "Complete General Graph", nullptr, ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================

@@ -204,7 +204,7 @@ The methods of the *TypeName* Algorithm class, will be redefined in your plug-in
 Adding parameters to an algorithm
 ---------------------------------
 
-Your algorithm may need some parameters, for example a boolean or a property name, that must be filled in by the user just before being launched. In this section, we will look at the methods and techniques to do so.
+Your algorithm may need some parameters, for example a Boolean or a property name, that must be filled in by the user just before being launched. In this section, we will look at the methods and techniques to do so.
 
 The class PropertyAlgorithm provides the following methods to declare a parameter::
 
@@ -226,7 +226,7 @@ The class PropertyAlgorithm provides the following methods to declare a paramete
                          const std::string &defaultValue = std::string(),
                          bool isMandatory = true);
 
-The new parameters added to the plug-in are, by default, IN parameters. The OUT parameters are defined depending of the *PropertyAlgorithm* used. INOUT parameters gives the developer the abilities to extract additionnal information.
+The new parameters added to the plug-in are, by default, IN parameters. The OUT parameters are defined depending of the *PropertyAlgorithm* used. INOUT parameters gives the developer the abilities to extract additional information.
 
 This methods have to be called in the constructor of your class. Following is a description of its fields:
 

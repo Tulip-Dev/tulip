@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,12 +21,13 @@
 #ifndef TEST_LISTENER
 #define TEST_LISTENER
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
-#include <tulip/Graph.h>
 #include <tulip/Observable.h>
 
 namespace tlp {
+
+class Graph;
 
 class ConnectedTestListener : public Observable {
 public:
@@ -36,7 +37,7 @@ public:
   /**
    * @brief Stored results for graphs. When a graph is updated, its entry is removed from the map.
    **/
-  std::unordered_map<const Graph *, bool> resultsBuffer;
+  tlp_hash_map<const Graph *, bool> resultsBuffer;
 };
 
 } // namespace tlp

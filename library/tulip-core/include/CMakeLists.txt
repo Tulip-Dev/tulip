@@ -50,7 +50,6 @@ INSTALL(FILES
   tulip/PluginLoader.h
   tulip/PluginLoaderTxt.h
   tulip/PluginProgress.h
-  tulip/TemplateAlgorithm.h
   tulip/PropertyAlgorithm.h
   tulip/PropertiesCollection.h
   tulip/PropertyInterface.h
@@ -76,6 +75,7 @@ INSTALL(FILES
   tulip/TulipPluginHeaders.h
   tulip/TulipViewSettings.h
   tulip/UniqueIterator.h
+  tulip/unordered_dense.h
   tulip/Vector.h
   tulip/WithDependency.h
   tulip/WithParameter.h

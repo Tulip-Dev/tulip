@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -36,7 +36,7 @@ tlp.convexHull2D(points)
 
 .. versionadded:: 4.2
 
-Computes the 2D convex hull of a list of points (the z-coordinate is not taken into acccount)
+Computes the 2D convex hull of a list of points (the z-coordinate is not taken into account)
 using the Qhull_ library.
 Returns a list of indexes in the list of points defining the hull polygon in counterclockwise order.
 

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/PropertyTypes.h>
 #include "tulip/TulipMetaTypes.h"
 #include "tulip/TlpQtTools.h"
 
@@ -143,8 +142,6 @@ tlp::DataType *TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   if (type.compare(typeid(TYPE).name()) == 0)                                                      \
     return typedVariant<TYPE>(dm);
 
-#include <QDebug>
-
 QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string &paramName) {
   std::string type = dm->getTypeName();
 
@@ -180,11 +177,8 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string
 
     if (dm)
       result = *(static_cast<tlp::BooleanVectorType::RealType *>(dm->value));
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-    return QVariant::fromValue<QVector<bool>>(QVector<bool>::fromStdVector(result));
-#else
+
     return QVariant::fromValue<QVector<bool>>(QVector<bool>(result.begin(), result.end()));
-#endif
   }
 
   CHECK_DATATYPE(tlp::PointType::RealType);

@@ -44,7 +44,7 @@ copyright = u'@CurrentYear@, Tulip Team'
 # The short X.Y version.
 version = '@TulipMMVersion@'
 # The full version, including alpha/beta/rc tags.
-release = '@TulipVersion@'
+release = '@Tulip_VERSION@'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -121,4 +121,4 @@ epub_publisher = u'Tulip Team'
 epub_copyright = u'@CurrentYear@, Tulip Team'
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'http://docs.python.org/': None}
+intersphinx_mapping = {"python": ("https://docs.python.org/dev", None)}

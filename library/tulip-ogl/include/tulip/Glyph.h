@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -104,8 +104,8 @@ protected:
    * called by public method getAnchor to actually compute the anchor point
    * vector is coordinate of the point to anchor to, relative to nodecenter
    * glyph size is (1,1,1)
-   * this is the method to redefine for each glyph where the default 'getAnchor' method
-   * is inapropriated
+   * method to redefine for each class of glyph when the default 'getAnchor'
+   * method is inappropriate
    * Returned value is a vector to be applied to 'nodeCenter' in the public method
    */
   virtual Coord getAnchor(const Coord &vector) const;

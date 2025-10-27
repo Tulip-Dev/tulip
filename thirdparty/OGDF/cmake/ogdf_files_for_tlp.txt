@@ -60,6 +60,7 @@ src/ogdf/energybased/multilevel_mixer/MultilevelGraph.cpp
 src/ogdf/energybased/NodeRespecterLayout.cpp
 src/ogdf/energybased/PivotMDS.cpp
 src/ogdf/energybased/SpringEmbedderFRExact.cpp
+src/ogdf/energybased/SpringEmbedderGridVariant.cpp
 src/ogdf/energybased/SpringEmbedderKK.cpp
 src/ogdf/energybased/StressMinimization.cpp
 src/ogdf/external/Minisat.cpp
@@ -73,6 +74,8 @@ src/ogdf/fileformats/GEXF.cpp
 src/ogdf/fileformats/GexfParser.cpp
 src/ogdf/fileformats/GML.cpp
 src/ogdf/fileformats/GmlParser.cpp
+src/ogdf/fileformats/TsplibXmlParser.cpp
+src/ogdf/fileformats/TikzWriter.cpp
 src/ogdf/fileformats/GraphIO.cpp
 src/ogdf/fileformats/GraphIO_dl.cpp
 src/ogdf/fileformats/GraphIO_dot.cpp

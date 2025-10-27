@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -165,7 +165,7 @@ void SizeProperty::resetMinMax() {
 }
 //=================================================================================
 void SizeProperty::setNodeValue(const node n, tlp::StoredType<Size>::ReturnedConstValue v) {
-  std::unordered_map<unsigned int, bool>::const_iterator it = minMaxOk.begin();
+  tlp_hash_map<unsigned int, bool>::const_iterator it = minMaxOk.begin();
 
   if (it != minMaxOk.end()) {
     const Size &oldV = getNodeValue(n);

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -181,21 +181,6 @@ void CrashHandling::installCrashHandler() {
   SetUnhandledExceptionFilter(exception_filter);
 }
 
-#elif defined(_MSC_VER)
-
-static LONG WINAPI exception_filter(LPEXCEPTION_POINTERS info) {
-  StackWalkerMSVC sw;
-  sw.setExtraSymbolsSearchPaths(SYMBOLS_SEARCH_PATHS);
-  sw.setContext(info->ContextRecord);
-
-  dumpStackTrace(sw);
-
-  return 1;
-}
-
-void CrashHandling::installCrashHandler() {
-  SetUnhandledExceptionFilter(exception_filter);
-}
 #endif
 
 #ifdef __GNUC__

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,7 +17,6 @@
  *
  */
 #include <stack>
-#include <unordered_map>
 
 #include <tulip/BiconnectedTest.h>
 #include <tulip/ConnectedTest.h>

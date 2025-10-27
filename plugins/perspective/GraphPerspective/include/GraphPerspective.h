@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -32,22 +32,18 @@ class GraphHierarchiesEditor;
 class GraphPerspectiveLogger;
 
 namespace tlp {
-class GraphHierarchiesModel;
-class View;
 class BooleanProperty;
 class ColorScaleConfigDialog;
+class Graph;
+class GraphHierarchiesModel;
+class PythonIDEInterface;
+class View;
+class WorkspacePanel;
 } // namespace tlp
 
 namespace Ui {
 class GraphPerspectiveMainWindowData;
 }
-
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-class PythonPanel;
-namespace tlp {
-class PythonIDE;
-}
-#endif
 
 class GraphPerspective : public tlp::Perspective, tlp::Observable {
   Q_OBJECT
@@ -64,13 +60,11 @@ class GraphPerspective : public tlp::Perspective, tlp::Observable {
   void showStartPanels(tlp::Graph *);
   void applyDefaultLayout(tlp::Graph *);
 
-  void buildPythonIDE();
-
 public:
   GraphPerspectiveLogger *_logger;
 
   PLUGININFORMATION("Tulip", "Tulip Team", "2011/07/11",
-                    "Analyze several graphs/subgraphs hierarchies\n(designed to import/explore "
+                    "Analyze several graph/subgraph hierarchies\n(designed to import/explore "
                     "data from various graph or csv file formats)",
                     "1.0", "")
   std::string icon() const override {
@@ -81,10 +75,13 @@ public:
   ~GraphPerspective() override;
   void start(tlp::PluginProgress *) override;
   tlp::GraphHierarchiesModel *model() const;
+  tlp::Graph *currentGraph() override;
   void copy(tlp::Graph *, bool deleteAfter = false);
   tlp::Graph *createSubGraph(tlp::Graph *);
   QAction *createPanelAction();
   QAction *exportAction();
+
+  void setFocusedPanel(tlp::WorkspacePanel *);
 
   void treatEvent(const tlp::Event &) override;
 
@@ -93,7 +90,7 @@ public:
   bool terminated() override;
 
 public slots:
-  void importGraph();
+  void importGraph(const std::string &module = "", const std::string &file = "");
   void exportGraph(tlp::Graph *g = nullptr);
   void saveGraphHierarchyInTlpFile(tlp::Graph *g = nullptr);
   void createPanel(tlp::Graph *g = nullptr);
@@ -131,6 +128,7 @@ public slots:
   void showAboutTulipPage();
 
 protected slots:
+  void buildPythonIDE();
   void currentGraphChanged(tlp::Graph *graph);
   void refreshDockExpandControls();
   void panelFocused(tlp::View *);
@@ -151,7 +149,8 @@ protected slots:
   void cut();
   void paste();
   void copy();
-  void group();
+  void groupUniqueEdge();
+  void groupDistinctEdges();
   void createSubGraph();
   void cloneSubGraph();
   void addEmptySubGraph();
@@ -169,7 +168,6 @@ protected slots:
   void panelsEmpty();
   void showHideMenuBar();
   void updateLogIconsAndCounters();
-  void initPythonIDE();
   void displayStatusMessage(const QString &s) override;
   void clearStatusMessage() override;
 
@@ -177,13 +175,11 @@ protected:
   bool eventFilter(QObject *, QEvent *) override;
   void importGraph(const std::string &module, tlp::DataSet &data);
   void destroyWorkspace();
+  void group(bool);
 
   QDialog *_searchDialog;
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  PythonPanel *_pythonPanel;
-  tlp::PythonIDE *_pythonIDE;
+  tlp::PythonIDEInterface *_pythonIDE;
   QDialog *_pythonIDEDialog;
-#endif
 };
 
 #endif // GRAPHPERSPECTIVE_H

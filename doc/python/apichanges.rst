@@ -3,6 +3,60 @@
 Release notes and API changes
 =============================
 
+Tulip-Python 6.0.0
+------------------
+Code breaking changes in the tulip module
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Due to the upgrade of the SIP build tool, C++ enums are now bind to Python enums. This change breaks code compatibility with Tulip 5.X.
+The changes are:
+
+    * tlp.GraphEvent.TLP_* becomes tlp.GraphEvent.GraphEventType.TLP_*
+
+See :class:`tlp.GraphEvent` for more details.
+
+    * tlp.DIRECTED becomes tlp.EDGE_TYPE.DIRECTED
+    * tlp.INV_DIRECTED becomes tlp.EDGE_TYPE.INV_DIRECTED,
+    * tlp.UNDIRECTED becomes tlp.EDGE_TYPE.UNDIRECTED;
+
+See :func:`tlp.maxDistance`, :func:`tlp.maxDistanceWeighted` and, :func:`tlp.reachableNodes` for more details.
+
+    * tlp.Event.* becomes tlp.Event.EventType.*
+
+See :class:`tlp.Event` for more details.
+
+    * tlp.OnePath becomes tlp.ShortestPathType.OnePath
+    * tlp.OneDirectedPath becomes tlp.ShortestPathType.OneDirectedPath
+    * and so on for the other values.
+
+See :func:`tlp.selectShortestPaths` for more details.
+
+    * tlp.TLP_CONTINUE becomes tlp.ProgressState.TLP_CONTINUE
+    * tlp.TLP_CANCEL becomes tlp.ProgressState.TLP_CANCEL
+    * tlp.TLP_STOP becomes tlp.ProgressState.TLP_STOP
+
+See :meth:`tlp.PluginProgress.progress` for more details.
+
+    * PropertyEvent::TLP_* becomes PropertyEvent::PropertyEventType::TLP_*
+
+See :class:`tlp.PropertyEvent` for more details.
+
+    * TLP.NO_CALC becomes tlp.DoubleProperty.StandardMetaValueCalculator.NO_CALC
+    * TLP.AVG_CALC becomes tlp.DoubleProperty.StandardMetaValueCalculator.AVG_CALC
+    * and so on for the other values.
+
+See :meth:`tlp.DoubleProperty.setMetaValueCalculator` for more details.
+
+Updates of the tulipgui module
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This module has been simplified. It is now only usable from the Tulip GUI as a sort of remote controller.
+Thus, some methods have evolved.
+
+    * :func:`tulipgui.tlpgui.View.setVisible` is deprecated. It can only shows a view. Use :func:`tulipgui.tlpgui.View.show` instead. To close and destroy a view use :func:`tulipgui.tlpgui.closeView`.
+    * :func:`tulipgui.tlpgui.View.resize` is deprecated and does nothing.
+    * :func:`tulipgui.tlpgui.View.setPos` is deprecated and does nothing.
+
 Tulip-Python 5.3.1
 ------------------
 
@@ -177,7 +231,7 @@ The following bugs have been corrected since the 4.10 release:
   * fix a regression in the :ref:`string collection plugin parameter improvement <deprecatedStringCollection>`
     when writing Tulip Python plugins
 
-  * fix possible crashs that could occur when a :class:`tlp.Graph` instance owned by Python and not C++
+  * fix possible crashes that could occur when a :class:`tlp.Graph` instance owned by Python and not C++
     (for instance when using :func:`tlp.newGraph()`) is garbage collected
 
   * on windows platform when using the Python IDE from the main Tulip GUI:
@@ -293,7 +347,7 @@ the following script can now be used::
 
   # creates a regular color scale going from blue to yellow to red
   colorScale = [tlp.Color.Blue, tlp.Color.Yellow, tlp.Color.Red]
-  # a dictionnary can also be used (allow to define non regular scales)
+  # a dictionary can also be used (allow to define non regular scales)
   # colorMap = {0: tlp.Color.Blue, 0.5: tlp.Color.Yellow, 1.0: tlp.Color.Red}
 
   # sets the parameters for the 'Color Mapping' color algorithm
@@ -415,7 +469,7 @@ To retrieve the path of the file selected by the user, the following instruction
 Sice this approach is not really intuitive so Tulip 4.9 introduces a more user_friendly mechanism to work
 with file / directory parameters : two new methods have been added in order to easily declare file / directory parameters
 (:meth:`tlp.WithParameter.addFileParameter`, :meth:`tlp.WithParameter.addDirectoryParameter`)
-and it is no more needed to explicitely write the "file::" prefix.
+and it is no more needed to explicitly write the "file::" prefix.
 
 So the recommended way to declare a file parameter in the plugin constructor is now the one below::
 
@@ -464,7 +518,7 @@ For instance, the sample code below sets multiple graph view properties values f
     return minSize + random.random() * (maxSize - minSize)
 
   for n in graph.getNodes():
-    values = {'viewShape': tlp.NodeShape.FontAwesomeIcon,
+    values = {'viewShape': tlp.NodeShape.NodeShapes.FontAwesomeIcon,
               'viewColor' : getRandomColor(),
               'viewSize' : getRandomSize(tlp.Size(0.1), tlp.Size(1)),
               'viewIcon' : getRandomFontAwesomeIcon()}

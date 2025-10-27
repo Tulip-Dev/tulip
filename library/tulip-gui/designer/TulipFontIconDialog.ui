@@ -41,7 +41,7 @@
      <item>
       <widget class="QLineEdit" name="iconNameFilterLineEdit">
        <property name="toolTip">
-        <string>Enter a regular expressionto filter the icon names</string>
+        <string>Enter a regular expression to filter the icon names</string>
        </property>
       </widget>
      </item>

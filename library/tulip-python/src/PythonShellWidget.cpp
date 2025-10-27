@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -19,7 +19,6 @@
 
 #include "tulip/PythonInterpreter.h"
 
-#include <QRegExp>
 #include <QKeyEvent>
 
 #include <tulip/TlpTools.h>
@@ -30,8 +29,6 @@
 #include "tulip/ParenMatcherHighlighter.h"
 
 using namespace tlp;
-
-static QRegExp linesepRegExp = QRegExp("\r\n|\n|\r");
 
 static QString ps1 = ">>> ";
 static QString ps2 = "... ";
@@ -135,7 +132,7 @@ void PythonShellWidget::keyPressEvent(QKeyEvent *e) {
       setSelection(lines() - 1, 0, lines() - 1, lineLength(lines() - 1));
       removeSelectedText();
 
-      if (_currentHistoryPos < int(_history.size() - 1) && _history.size() > 0) {
+      if (_currentHistoryPos < int(_history.size() - 1) && !_history.empty()) {
         ++_currentHistoryPos;
         insert(_currentPs + _history[_currentHistoryPos]);
       } else {

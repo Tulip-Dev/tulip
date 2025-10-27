@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -59,6 +59,11 @@ GeolocalisationConfigWidget::GeolocalisationConfigWidget(QWidget *parent)
   connect(_ui->genLayoutButton, SIGNAL(clicked()), this, SIGNAL(computeGeoLayout()));
   connect(_ui->createLatLngPropsCB, SIGNAL(clicked(bool)), _ui->resetLatLngValuesCB,
           SLOT(setEnabled(bool)));
+  // relook Nominatim html link
+  auto txt = _ui->addressLocLabel->text();
+  auto pos = txt.indexOf(" href=");
+  txt.insert(pos, " style=\"color:" HTML_LINK_COLOR "\"");
+  _ui->addressLocLabel->setText(txt);
 }
 
 GeolocalisationConfigWidget::~GeolocalisationConfigWidget() {

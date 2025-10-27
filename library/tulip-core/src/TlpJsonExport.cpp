@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,13 +22,9 @@
 #endif
 
 #include <algorithm>
-#include <sstream>
 
 #include <tulip/ExportModule.h>
 #include <tulip/Graph.h>
-#include <tulip/DataSet.h>
-#include <tulip/MutableContainer.h>
-#include <tulip/TlpTools.h>
 #include <tulip/YajlFacade.h>
 #include <tulip/JsonTokens.h>
 #include <tulip/GraphProperty.h>
@@ -62,10 +58,6 @@ public:
                     "JSON format.</p>",
                     "1.0", "File")
 
-  std::string fileExtension() const override {
-    return "json";
-  }
-
   std::string icon() const override {
     return ":/tulip/gui/icons/json32x32.png";
   }
@@ -75,7 +67,7 @@ public:
    *
    * @param context The context this export algorithm will be initialized with.
    **/
-  TlpJsonExport(tlp::PluginContext *context) : ExportModule(context) {
+  TlpJsonExport(tlp::PluginContext *context) : ExportModule(context, {"json"}) {
     addInParameter<bool>("Beautify JSON string",
                          "If true, generate a JSON string with indentation and line breaks.",
                          "false");
@@ -143,9 +135,6 @@ public:
    * @return void
    **/
   void saveGraph_V4(Graph *g) {
-    node n;
-    edge e;
-
     _writer.writeString(GraphIDToken);
 
     if (g->getSuperGraph() == g) {

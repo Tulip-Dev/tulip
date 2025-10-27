@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -23,6 +23,38 @@
 // | (https://sourceforge.net/projects/booggie/)                             |
 // +-------------------------------------------------------------------------+
 
+
+//===========================================================================================
+enum StandardMetaValueCalculator /BaseType=UIntEnum/ {
+  NO_CALC = StandardMetaValueCalculator::NO_CALC,
+  AVG_CALC = StandardMetaValueCalculator::AVG_CALC,
+  SUM_CALC = StandardMetaValueCalculator::SUM_CALC,
+  MAX_CALC = StandardMetaValueCalculator::MAX_CALC,
+  MIN_CALC = StandardMetaValueCalculator::MIN_CALC
+};
+
+void setMetaValueCalculator(tlp::DoubleProperty::StandardMetaValueCalculator nodeCalc = tlp::DoubleProperty::StandardMetaValueCalculator::AVG_CALC,
+                            tlp::DoubleProperty::StandardMetaValueCalculator edgeCalc = tlp::DoubleProperty::StandardMetaValueCalculator::AVG_CALC);
+
+%Docstring
+tlp.DoubleProperty.setMetaValueCalculator(nodeCalc = tlp.DoubleProperty.StandardMetaValueCalculator.AVG_CALC, edgeCalc = tlp.DoubleProperty.StandardMetaValueCalculator.AVG_CALC)
+
+Sets the predefined calculator for meta-nodes and meta-edges. It is used to compute the value of a double property for each meta-node
+and meta-edge based on the aggregated nodes and edges. The available calculators are:
+
+  * tlp.DoubleProperty.StandardMetaValueCalculator.NO_CALC: do nothing
+  * tlp.DoubleProperty.StandardMetaValueCalculator.AVG_CALC: computes the average value of the grouped elements
+  * tlp.DoubleProperty.StandardMetaValueCalculator.SUM_CALC: computes the sum of the grouped elements
+  * tlp.DoubleProperty.StandardMetaValueCalculator.MAX_CALC: computes the maximum value of the grouped elements
+  * tlp.DoubleProperty.StandardMetaValueCalculator.MIN_CALC: computes the minimum value of the grouped elements
+
+:param nodeCalc: a predefined calculator value used for nodes
+:type nodeCalc: tlp.DoubleProperty.StandardMetaValueCalculator
+:param edgeCalc: a predefined calculator value used for edges
+:type edgeCalc: tlp.DoubleProperty.StandardMetaValueCalculator
+%End
+
+//===========================================================================================
   double getNodeMin(const tlp::Graph *subgraph=0);
 %Docstring
 tlp.DoubleProperty.getNodeMin(subgraph=None)

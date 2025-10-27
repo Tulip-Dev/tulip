@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -272,7 +272,7 @@ public:
         addNode(graph, gEvt->getNode());
         break;
 
-      case GraphEvent::TLP_DEL_NODE:
+      case GraphEvent::TLP_BEFORE_DEL_NODE:
         delNode(graph, gEvt->getNode());
         break;
 
@@ -284,7 +284,7 @@ public:
         addEdges(graph, gEvt->getEdges());
         break;
 
-      case GraphEvent::TLP_DEL_EDGE:
+      case GraphEvent::TLP_BEFORE_DEL_EDGE:
         delEdge(graph, gEvt->getEdge());
         break;
 

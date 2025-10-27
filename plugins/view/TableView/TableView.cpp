@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -27,7 +27,7 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/StringProperty.h>
 #include <tulip/TulipMetaTypes.h>
-#include <tulip/Perspective.h>
+#include <tulip/TulipSettings.h>
 #include <tulip/CopyPropertyDialog.h>
 #include <tulip/PropertyCreationDialog.h>
 #include <tulip/Perspective.h>
@@ -35,7 +35,6 @@
 #include <QResizeEvent>
 #include <QGraphicsView>
 #include <QMenu>
-#include <QMainWindow>
 #include <QGraphicsItem>
 #include <QGraphicsProxyWidget>
 
@@ -43,7 +42,9 @@ using namespace tlp;
 
 TableView::TableView(tlp::PluginContext *)
     : ViewWidget(), _ui(new Ui::TableViewWidget), propertiesEditor(nullptr), _model(nullptr),
-      isNewGraph(false), filteringColumns(false), previousGraph(nullptr), minFontSize(-1) {}
+      isNewGraph(false), filteringColumns(false), previousGraph(nullptr), minFontSize(-1) {
+  addDependency("To labels", "1.1");
+}
 
 TableView::~TableView() {
   delete _ui;
@@ -139,6 +140,9 @@ void TableView::showHideTableSettings() {
     _ui->tableSettingsFrame->hide();
   else
     _ui->tableSettingsFrame->show();
+
+  QString iconName = settingsButtonIconName.arg(expand ? QString("open") : QString("close"));
+  _ui->tableSettingsButton->setIcon(QIcon(iconName));
 }
 
 void TableView::setupWidget() {
@@ -148,13 +152,21 @@ void TableView::setupWidget() {
   QWidget *centralWidget = new QWidget();
   Perspective::setStyleSheet(centralWidget);
   _ui->setupUi(centralWidget);
+#ifdef __APPLE__
+  _ui->eltTypeCombo->setMinimumContentsLength(7);
+  _ui->valueMatchCombo->setMinimumContentsLength(9);
+  _ui->columnMatchCombo->setMinimumContentsLength(9);
+  _ui->filteringPropertyCombo->setMinimumContentsLength(14)
+#endif
+      // fix display of QCheckBox and QRadioButton children
+      tlpFixCBRBs(centralWidget);
+
   activateTooltipAndUrlManager(_ui->table->viewport());
   // no need to display standard View context menu
   setShowContextMenu(false);
   setCentralWidget(centralWidget);
 
-  propertiesEditor =
-      new PropertiesEditor(static_cast<QGraphicsProxyWidget *>(centralItem())->widget());
+  propertiesEditor = new PropertiesEditor();
 
   connect(propertiesEditor, SIGNAL(propertyVisibilityChanged(tlp::PropertyInterface *, bool)), this,
           SLOT(setPropertyVisible(tlp::PropertyInterface *, bool)));
@@ -171,25 +183,14 @@ void TableView::setupWidget() {
   minFontSize = _ui->table->font().pointSize();
   connect(_ui->filterEdit, SIGNAL(returnPressed()), this, SLOT(filterChanged()));
   connect(_ui->filtercase, SIGNAL(stateChanged(int)), this, SLOT(filterChanged()));
-
-  _ui->eltTypeCombo->addItem("Nodes");
-  _ui->eltTypeCombo->addItem("Edges");
-  _ui->eltTypeCombo->setCurrentIndex(0);
   connect(_ui->eltTypeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(readSettings()));
   connect(_ui->filteringPropertyCombo, SIGNAL(currentIndexChanged(int)), this,
           SLOT(readSettings()));
-  _ui->valueMatchCombo->addItem("matching");
-  _ui->valueMatchCombo->addItem("like");
-  _ui->valueMatchCombo->setCurrentIndex(0);
   connect(_ui->valueMatchCombo, SIGNAL(currentIndexChanged(int)), this,
           SLOT(clearValueMatchFilter()));
-  _ui->columnMatchCombo->addItem("matching");
-  _ui->columnMatchCombo->addItem("like");
-  _ui->columnMatchCombo->setCurrentIndex(0);
   connect(_ui->columnMatchCombo, SIGNAL(currentIndexChanged(int)), this,
           SLOT(clearColumnMatchFilter()));
-  // use a push button instead of a combobox (see matchPropertyCombo)
-  // waiting for a fix for combobox in QGraphicsItem
+  // use a push button to ensure just-in-time display of properties
   connect(_ui->matchPropertyButton, SIGNAL(pressed()), this, SLOT(setMatchProperty()));
   // columns/properties filtering
   filteringColumns = false;
@@ -198,10 +199,17 @@ void TableView::setupWidget() {
   connect(propertiesEditor->getPropertiesFilterEdit(), SIGNAL(textChanged(QString)), this,
           SLOT(setPropertiesFilter(QString)));
   connect(_ui->tableSettingsButton, SIGNAL(clicked()), this, SLOT(showHideTableSettings()));
+  if (TulipSettings::isDisplayInDarkMode()) {
+    settingsButtonIconName = QString(":/tulip/gui/icons/16/%1-settings-white.png");
+    _ui->tableSettingsButton->setIcon(QIcon(":/tulip/gui/icons/16/close-settings-white.png"));
+  } else {
+    settingsButtonIconName = QString(":/tulip/gui/icons/16/%1-settings-black.png");
+    _ui->tableSettingsButton->setIcon(QIcon(":/tulip/gui/icons/16/close-settings-black.png"));
+  }
 }
 
-QList<QWidget *> TableView::configurationWidgets() const {
-  return QList<QWidget *>() << propertiesEditor;
+std::list<QWidget *> TableView::configurationWidgets() const {
+  return std::list<QWidget *>{propertiesEditor};
 }
 
 void TableView::graphChanged(tlp::Graph *g) {
@@ -435,8 +443,8 @@ void TableView::setColumnsFilter() {
     return;
 
   filteringColumns = true;
-  propertiesEditor->getPropertiesMatchButton()->setText(
-      _ui->columnMatchCombo->currentIndex() ? "like" : "matching");
+  propertiesEditor->setPropertiesMatchOp(_ui->columnMatchCombo->currentIndex() ? "like"
+                                                                               : "matching");
   propertiesEditor->getPropertiesFilterEdit()->setText(_ui->columnsFilterEdit->text());
   filteringColumns = false;
 }
@@ -447,7 +455,7 @@ void TableView::setPropertiesFilter(const QString &text) {
 
   filteringColumns = true;
   _ui->columnMatchCombo->setCurrentIndex(
-      propertiesEditor->getPropertiesMatchButton()->text() == "matching" ? 0 : 1);
+      propertiesEditor->getPropertiesMatchOp() == "matching" ? 0 : 1);
   _ui->columnsFilterEdit->setText(text);
   filteringColumns = false;
 }
@@ -522,8 +530,9 @@ void TableView::filterChanged() {
   }
 
   sortModel->setProperties(props);
-  sortModel->setFilterRegExp(
-      QRegExp(filter, _ui->filtercase->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive));
+  sortModel->setFilterRegularExpression(filter);
+  sortModel->setFilterCaseSensitivity(_ui->filtercase->isChecked() ? Qt::CaseSensitive
+                                                                   : Qt::CaseInsensitive);
 }
 
 void TableView::mapToGraphSelection() {

@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -318,7 +318,7 @@ public:
    * or destroying the shader program
    *
    * \param shaderType the type of the shader object to add (must be Vertex or Fragment)
-   * \param shaderSrcFilename the aboslute path to the file containing the shader object source code
+   * \param shaderSrcFilename the absolute path to the file containing the shader object source code
    */
   void addShaderFromSourceFile(const ShaderType shaderType, const std::string &shaderSrcFilename);
 

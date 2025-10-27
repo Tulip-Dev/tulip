@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -26,7 +26,6 @@
 #include <QComboBox>
 #include <QPainter>
 #include <QDoubleSpinBox>
-#include <QMainWindow>
 
 #include <tulip/DataSet.h>
 #include <tulip/VectorEditor.h>
@@ -106,7 +105,7 @@ QVariant LineEditEditorCreator<T>::editorData(QWidget *editor, tlp::Graph *) {
   typename T::RealType val;
 
   if (T::fromString(val, strVal))
-    result.setValue<typename T::RealType>(val);
+    result.setValue(val);
 
   return result;
 }
@@ -135,7 +134,7 @@ QVariant MultiLinesEditEditorCreator<T>::editorData(QWidget *editor, tlp::Graph 
   typename T::RealType val;
 
   if (T::fromString(val, strVal))
-    result.setValue<typename T::RealType>(val);
+    result.setValue(val);
 
   return result;
 }

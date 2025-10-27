@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -28,7 +28,7 @@
 #include <tulip/OpenGlIncludes.h>
 
 #include <set>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <string>
 
 namespace tlp {
@@ -64,7 +64,7 @@ public:
  */
 class TLP_GL_SCOPE GlTextureManager {
 
-  typedef std::unordered_map<std::string, GlTexture> TextureMap;
+  typedef tlp_hash_map<std::string, GlTexture> TextureMap;
 
 public:
   /**
@@ -73,7 +73,7 @@ public:
   static GlTexture getTextureInfo(const std::string &);
 
   /**
-   * Check if a texture fo the given name exists in the current context
+   * Check if a texture for the given name exists in the current context
    */
   static bool existsTexture(const std::string &filename);
   /**

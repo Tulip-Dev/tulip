@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,7 +21,7 @@
 #define SOMMAP_H_
 
 #include <tulip/GraphDecorator.h>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include "DynamicVector.h"
 
 /**
@@ -128,7 +128,7 @@ protected:
   unsigned int width;
   unsigned int height;
 
-  std::unordered_map<tlp::node, DynamicVector<double>> nodeToNodeVec;
+  tlp_hash_map<tlp::node, DynamicVector<double>> nodeToNodeVec;
 
   SOMMapConnectivity connectivity;
   bool oppositeConnected;

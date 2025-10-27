@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,7 +20,7 @@
 #define GRIP_H
 
 #include <tulip/LayoutProperty.h>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include "MISFiltering.h"
 
 /*@{*/
@@ -49,9 +49,9 @@ public:
   PLUGININFORMATION(
       "GRIP", "Romain Bourqui", "01/11/2010",
       "Implements a force directed graph drawing algorithm first published as:<br/>"
-      "<b>GRIP: Graph dRawing with Intelligent Placement</b>, P. Gajer and S.G. "
+      "<b>GRIP: Graph dRawing with Intelligent Placement</b>,<br/>P. Gajer and S.G. "
       "Kobourov, Graph Drawing (GD) 2000, Lecture Notes in Computer Science, "
-      "vol 1984. Springer, Berlin, Heidelberg. doi: <a "
+      "vol 1984. Springer, Berlin, Heidelberg,<br/>doi: <a "
       "href=\"https://doi.org/10.1007/3-540-44541-2_21\">10.1007/3-540-44541-2_21</a>",
       "1.1", "Force Directed")
 
@@ -83,13 +83,13 @@ private:
   MISFiltering *misf;
   float edgeLength;
   int level;
-  std::unordered_map<tlp::node, std::vector<unsigned int>> neighbors_dist;
-  std::unordered_map<tlp::node, std::vector<tlp::node>> neighbors;
-  std::unordered_map<unsigned int, unsigned int> levelToNbNeighbors;
-  std::unordered_map<tlp::node, tlp::Coord> disp;
-  std::unordered_map<tlp::node, tlp::Coord> oldDisp;
-  std::unordered_map<tlp::node, double> heat;
-  std::unordered_map<tlp::node, double> oldCos;
+  tlp_hash_map<tlp::node, std::vector<unsigned int>> neighbors_dist;
+  tlp_hash_map<tlp::node, std::vector<tlp::node>> neighbors;
+  tlp_hash_map<unsigned int, unsigned int> levelToNbNeighbors;
+  tlp_hash_map<tlp::node, tlp::Coord> disp;
+  tlp_hash_map<tlp::node, tlp::Coord> oldDisp;
+  tlp_hash_map<tlp::node, double> heat;
+  tlp_hash_map<tlp::node, double> oldCos;
 
   tlp::Graph *currentGraph;
   int _dim;

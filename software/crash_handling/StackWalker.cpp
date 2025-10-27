@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -48,19 +48,20 @@ int backtrace(void **buffer, int size) {
 
 char *getStackFrameDetails(void *address) {
   Dl_info dli;
-  char tmp[1024];
+  std::stringstream tmp;
 
   if (dladdr(address, &dli)) {
     int64_t function_offset =
         reinterpret_cast<int64_t>(address) - reinterpret_cast<int64_t>(dli.dli_saddr);
-    sprintf(tmp, "%s(%s+%p)[%p]", dli.dli_fname, dli.dli_sname,
-            reinterpret_cast<void *>(function_offset), address);
-  } else {
-    sprintf(tmp, "%s(%s+%s)[%p]", "???", "???", "???", address);
-  }
+    tmp << dli.dli_fname << '(' << dli.dli_sname << '+' << reinterpret_cast<void *>(function_offset)
+        << ")[" << address << ']';
+  } else
+    tmp << "???"
+        << "(???+???"
+        << ")[" << address << ']';
 
-  char *ret = new char[strlen(tmp) + 1];
-  strcpy(ret, tmp);
+  char *ret = new char[tmp.gcount() + 1];
+  strcpy(ret, tmp.str().c_str());
   return ret;
 }
 
@@ -282,7 +283,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
         int64_t exOffset = getOffsetInExecutable(array[i]);
         std::ostringstream oss;
         oss << "atos -o " << dsoName;
-#ifdef X86_64
+#ifdef defined(__x86_64__)
         oss << " -arch x86_64 ";
 #else
         oss << " -arch arm64 ";
@@ -352,17 +353,10 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
   STACKFRAME frame;
   memset(&frame, 0, sizeof(frame));
 
-#ifndef X86_64
-  DWORD machine = IMAGE_FILE_MACHINE_I386;
-  frame.AddrPC.Offset = context->Eip;
-  frame.AddrStack.Offset = context->Esp;
-  frame.AddrFrame.Offset = context->Ebp;
-#else
   DWORD machine = IMAGE_FILE_MACHINE_AMD64;
   frame.AddrPC.Offset = context->Rip;
   frame.AddrStack.Offset = context->Rsp;
   frame.AddrFrame.Offset = context->Rbp;
-#endif
 
   frame.AddrPC.Mode = AddrModeFlat;
   frame.AddrStack.Mode = AddrModeFlat;
@@ -385,11 +379,7 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
     symbol->SizeOfStruct = (sizeof *symbol) + 255;
     symbol->MaxNameLength = 254;
 
-#ifndef X86_64
-    DWORD module_base = SymGetModuleBase(process, frame.AddrPC.Offset);
-#else
     DWORD64 module_base = SymGetModuleBase(process, frame.AddrPC.Offset);
-#endif
 
     int64_t symbolOffset = frame.AddrPC.Offset - module_base - 0x1000 - 1;
 
@@ -410,12 +400,7 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
 #endif
 
     const char *func = nullptr;
-
-#ifndef X86_64
-    DWORD dummy = 0;
-#else
     DWORD64 dummy = 0;
-#endif
 
     if (SymGetSymFromAddr(process, frame.AddrPC.Offset, &dummy, symbol)) {
       func = symbol->Name;
@@ -459,112 +444,6 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
   }
 
   SymCleanup(process);
-}
-
-#elif defined(_MSC_VER)
-
-#include <dbghelp.h>
-
-StackWalkerMSVC::StackWalkerMSVC() : context(nullptr) {}
-
-StackWalkerMSVC::~StackWalkerMSVC() {}
-
-void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
-
-  BOOL result;
-  HANDLE process = GetCurrentProcess();
-  HANDLE thread = GetCurrentThread();
-
-  SymSetOptions(SYMOPT_DEFERRED_LOADS | SYMOPT_LOAD_LINES | SYMOPT_UNDNAME);
-
-  if (!SymInitialize(process, nullptr, TRUE)) {
-    std::cerr << "Failed to init symbol context" << std::endl;
-    return;
-  }
-
-  const int bufferSize = 2048;
-  char searchPaths[bufferSize];
-
-  if (!extraSymbolsSearchPaths.empty() && SymGetSearchPath(process, searchPaths, bufferSize)) {
-    std::string searchPathsStr(searchPaths);
-    searchPathsStr = extraSymbolsSearchPaths + ";" + searchPathsStr;
-    SymSetSearchPath(process, searchPathsStr.c_str());
-  }
-
-  STACKFRAME stack;
-  ULONG frame;
-  IMAGEHLP_SYMBOL *symbol =
-      reinterpret_cast<IMAGEHLP_SYMBOL *>(malloc(sizeof(IMAGEHLP_SYMBOL) + 2048 * sizeof(TCHAR)));
-#ifdef X86_64
-  DWORD64 displacement = 0;
-#else
-  DWORD displacement = 0;
-#endif
-
-  DWORD displacement2 = 0;
-
-  memset(&stack, 0, sizeof(STACKFRAME));
-
-  symbol->SizeOfStruct = sizeof(IMAGEHLP_SYMBOL);
-  symbol->MaxNameLength = 2048;
-
-#ifndef X86_64
-  DWORD machine = IMAGE_FILE_MACHINE_I386;
-  stack.AddrPC.Offset = context->Eip;
-  stack.AddrStack.Offset = context->Esp;
-  stack.AddrFrame.Offset = context->Ebp;
-#else
-  DWORD machine = IMAGE_FILE_MACHINE_AMD64;
-  stack.AddrPC.Offset = context->Rip;
-  stack.AddrStack.Offset = context->Rsp;
-  stack.AddrFrame.Offset = context->Rbp;
-#endif
-
-  stack.AddrPC.Mode = AddrModeFlat;
-  stack.AddrStack.Mode = AddrModeFlat;
-  stack.AddrFrame.Mode = AddrModeFlat;
-
-  for (frame = 0;; frame++) {
-    result = StackWalk(machine, process, thread, &stack, context, nullptr, SymFunctionTableAccess,
-                       SymGetModuleBase, nullptr);
-
-    if (!result) {
-      break;
-    }
-
-    IMAGEHLP_MODULE image_module;
-    IMAGEHLP_LINE image_line;
-
-    image_module.SizeOfStruct = sizeof(IMAGEHLP_MODULE);
-    image_line.SizeOfStruct = sizeof(IMAGEHLP_LINE);
-
-    std::string module_name = "";
-    std::string symbol_name = "";
-    std::string file_name = "";
-    int line = 0;
-
-#ifndef X86_64
-    DWORD module_base = SymGetModuleBase(process, stack.AddrPC.Offset);
-#else
-    DWORD64 module_base = SymGetModuleBase(process, stack.AddrPC.Offset);
-#endif
-
-    if (SymGetModuleInfo(process, stack.AddrPC.Offset, &image_module)) {
-      module_name = image_module.ImageName;
-    }
-
-    if (SymGetSymFromAddr(process, stack.AddrPC.Offset, &displacement, symbol)) {
-      symbol_name = symbol->Name;
-    }
-
-    if (SymGetLineFromAddr(process, stack.AddrPC.Offset - 1, &displacement2, &image_line)) {
-      file_name = image_line.FileName;
-      line = image_line.LineNumber;
-    }
-
-    printFrameInfo(os, frame, stack.AddrPC.Offset, module_name, symbol_name,
-                   stack.AddrPC.Offset - module_base, file_name, line);
-  }
 }
 
 #endif

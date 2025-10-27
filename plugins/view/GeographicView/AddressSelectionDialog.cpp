@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -16,16 +16,21 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <QPushButton>
 
 #include "AddressSelectionDialog.h"
 #include "ui_AddressSelectionDialog.h"
+#include <tulip/TlpQtTools.h>
 
 namespace tlp {
 
 AddressSelectionDialog::AddressSelectionDialog(QWidget *parent)
     : QDialog(parent), _ui(new Ui::AddressSelectionDialogData) {
   _ui->setupUi(this);
-  connect(_ui->okButton, SIGNAL(clicked()), this, SLOT(accept()));
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(this);
+
+  _ui->buttonBox->button(QDialogButtonBox::Abort)->setToolTip("abort the Geolocation process");
 }
 
 AddressSelectionDialog::~AddressSelectionDialog() {
@@ -33,7 +38,7 @@ AddressSelectionDialog::~AddressSelectionDialog() {
 }
 
 void AddressSelectionDialog::setBaseAddress(const QString &address) {
-  _ui->addressLabel->setText(address);
+  _ui->addressLabel->setText(QString("<b>%1</b>").arg(address));
 }
 
 void AddressSelectionDialog::addResultToList(const QString &result) {
@@ -42,7 +47,7 @@ void AddressSelectionDialog::addResultToList(const QString &result) {
 
 void AddressSelectionDialog::clearList() {
   _ui->resultsList->clear();
-  _ui->rememberChoiceCB->setChecked(false);
+  _ui->rememberChoiceCB->setChecked(true);
 }
 
 bool AddressSelectionDialog::rememberAddressChoice() const {

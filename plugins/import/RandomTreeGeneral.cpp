@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,14 +22,14 @@ using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-    // minimum size
-    "Minimal number of nodes in the tree.",
+    // min size
+    "Minimum number of nodes in the tree.",
 
-    // maximum size
-    "Maximal number of nodes in the tree.",
+    // max size
+    "Maximum number of nodes in the tree.",
 
-    // maximal degree
-    "Maximal degree of the nodes.",
+    // max degree
+    "Maximum degree of the nodes.",
 
     // tree layout
     "If true, the generated tree is drawn with the 'Tree Leaf' layout algorithm."};
@@ -63,6 +63,8 @@ class RandomTreeGeneral : public ImportModule {
       n1 = graph->addNode();
       graph->addEdge(n, n1);
       result = result && buildNode(n1, sizeM, arityMax);
+      if (graph->numberOfNodes() >= sizeM)
+        return true;
     }
 
     return result;
@@ -72,9 +74,9 @@ public:
   PLUGININFORMATION("Random General Tree", "Auber", "16/02/2001",
                     "Imports a new randomly generated tree.", "1.1", "Graph")
   RandomTreeGeneral(tlp::PluginContext *context) : ImportModule(context) {
-    addInParameter<unsigned>("minimum size", paramHelp[0], "10");
-    addInParameter<unsigned>("maximum size", paramHelp[1], "100");
-    addInParameter<unsigned>("maximal node degree", paramHelp[2], "5");
+    addInParameter<unsigned>("min size", paramHelp[0], "10");
+    addInParameter<unsigned>("max size", paramHelp[1], "100");
+    addInParameter<unsigned>("max degree", paramHelp[2], "5");
     addInParameter<bool>("tree layout", paramHelp[3], "false");
     addDependency("Tree Leaf", "1.1");
   }
@@ -89,36 +91,29 @@ public:
     bool needLayout = false;
 
     if (dataSet != nullptr) {
-      if (!dataSet->getDeprecated("minimum size", "Minimum size", sizeMin))
-        dataSet->get("minsize", sizeMin); // keep old parameter name for backward compatibility
-
-      if (!dataSet->getDeprecated("maximum size", "Maximum size", sizeMax))
-        dataSet->get("maxsize", sizeMax); // keep old parameter name for backward compatibility
-
-      if (!dataSet->getDeprecated("maximal node degree", "Maximal node's degree", arityMax))
-        dataSet->get("maxdegree", arityMax); // keep old parameter name for backward compatibility
-
+      dataSet->get("min size", sizeMin);
+      dataSet->get("max size", sizeMax);
+      dataSet->get("max degree", arityMax);
       dataSet->get("tree layout", needLayout);
     }
 
     if (arityMax < 1) {
       if (pluginProgress)
-        pluginProgress->setError(
-            "Error: maximum node's degree must be a strictly positive integer");
+        pluginProgress->setError("Error: \"max degree\" must be a strictly positive integer");
 
       return false;
     }
 
     if (sizeMax < 1) {
       if (pluginProgress)
-        pluginProgress->setError("Error: maximum size must be a strictly positive integer");
+        pluginProgress->setError("Error: \"max size\" must be a strictly positive integer");
 
       return false;
     }
 
     if (sizeMax < sizeMin) {
       if (pluginProgress)
-        pluginProgress->setError("Error: maximum size must be greater than minimum size");
+        pluginProgress->setError("Error: \"max size\" must be greater than \"min size\"");
 
       return false;
     }

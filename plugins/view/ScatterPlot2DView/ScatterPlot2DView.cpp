@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,6 +17,7 @@
  *
  */
 
+#include <tulip/GraphImpl.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlGraphComposite.h>
@@ -29,14 +30,13 @@
 #include <tulip/Perspective.h>
 #include <tulip/ViewGraphPropertiesSelectionWidget.h>
 #include <tulip/WorkspacePanel.h>
+#include <tulip/NeedConfigurationMsgBox.h>
 
-#include <QApplication>
-#include <QAbstractButton>
-#include <QMainWindow>
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>
 #include <QMessageBox>
 #include <QProgressDialog>
+#include <QPushButton>
 
 #include "ScatterPlot2DView.h"
 #include "ScatterPlot2DOptionsWidget.h"
@@ -52,22 +52,6 @@ const float OFFSET_BETWEEN_PREVIEWS = 16;
 namespace tlp {
 
 PLUGIN(ScatterPlot2DView)
-
-class map_pair_string_key_contains
-    : public unary_function<pair<pair<string, string>, ScatterPlot2D *>, bool> {
-
-public:
-  map_pair_string_key_contains(const string &pairValueToFind) : pairValueToFind(pairValueToFind) {}
-
-  bool operator()(const pair<pair<string, string>, ScatterPlot2D *> &elem) const {
-    string pairStringKeyFirst = elem.first.first;
-    string pairStringKeySecond = elem.first.second;
-    return (pairStringKeyFirst == pairValueToFind) || (pairStringKeySecond == pairValueToFind);
-  }
-
-private:
-  string pairValueToFind;
-};
 
 const string propertiesTypes[] = {"double", "int"};
 const unsigned int nbPropertiesTypes = sizeof(propertiesTypes) / sizeof(string);
@@ -104,7 +88,7 @@ void ScatterPlot2DView::initGlWidget() {
   cleanupGlScene();
 
   if (emptyGraph == nullptr) {
-    emptyGraph = newGraph();
+    emptyGraph = GraphImpl::newGraph();
     glGraphComposite = new GlGraphComposite(emptyGraph);
   }
 
@@ -146,8 +130,8 @@ void ScatterPlot2DView::cleanupGlScene() {
   }
 }
 
-QList<QWidget *> ScatterPlot2DView::configurationWidgets() const {
-  return QList<QWidget *>() << propertiesSelectionWidget << optionsWidget;
+std::list<QWidget *> ScatterPlot2DView::configurationWidgets() const {
+  return std::list<QWidget *>{propertiesSelectionWidget, optionsWidget};
 }
 
 void ScatterPlot2DView::graphicsViewResized(int w, int h) {
@@ -166,25 +150,21 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     setOverviewVisible(true);
     needQuickAccessBar = true;
 
-    // build QMessageBox indicating the lack of selected properties
+    // create box indicating the lack of selected properties
     QGraphicsRectItem *qgrItem = new QGraphicsRectItem(0, 0, 1, 1);
     qgrItem->setBrush(Qt::transparent);
     qgrItem->setPen(QPen(Qt::transparent));
     graphicsView()->scene()->addItem(qgrItem);
 
-    QMessageBox *msgBox =
-        new QMessageBox(QMessageBox::Warning, "",
-                        "<b><font size=\"+1\">"
-                        "Select at least two graph properties.</font></b><br/><br/>"
-                        "Open the <b>Properties</b> configuration tab<br/>"
-                        "to proceed.",
-                        QMessageBox::Ok);
-    msgBox->setModal(false);
-    auto okButton = msgBox->button(QMessageBox::Ok);
+    QPushButton *okButton;
+    QWidget *msgBox =
+        new_NeedConfigurationMsgBox("<b><font size=\"+1\">"
+                                    "Select at least two graph properties.</font></b><br/><br/>"
+                                    "Open the <b>Properties</b> configuration tab<br/>"
+                                    "to proceed.",
+                                    &okButton);
     connect(okButton, SIGNAL(released()), this, SLOT(showPropertiesSelectionWidget()));
-    // set a specific name before applying style sheet
-    msgBox->setObjectName("needConfigurationMessageBox");
-    Perspective::setStyleSheet(msgBox);
+    connect(okButton, SIGNAL(released()), msgBox, SLOT(hide()));
     noPropertyMsgBox = graphicsView()->scene()->addWidget(msgBox);
     noPropertyMsgBox->setParentItem(qgrItem);
   }
@@ -215,7 +195,7 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     delete edgeAsNodeGraph;
 
     if (scatterPlotGraph) {
-      edgeAsNodeGraph = tlp::newGraph();
+      edgeAsNodeGraph = GraphImpl::newGraph();
       ColorProperty *edgeAsNodeGraphColor =
           edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
       ColorProperty *graphColor = scatterPlotGraph->getProperty<ColorProperty>("viewColor");
@@ -590,10 +570,6 @@ void ScatterPlot2DView::buildScatterPlotsMatrix() {
 
         matrixComposite->addGlEntity(scatterOverview,
                                      selectedGraphProperties[i] + "_" + selectedGraphProperties[j]);
-
-        // add some feedback
-        /*if ((i + 1) * (j + 1) % 10 == 0)
-          QApplication::processEvents();*/
       }
     }
   }
@@ -731,9 +707,15 @@ void ScatterPlot2DView::destroyOverviewsIfNeeded() {
         detailedScatterPlotPropertyName = make_pair("", "");
       }
 
+      auto current_prop = selectedGraphProperties[i];
+      auto contains_current_prop =
+          [current_prop](const pair<pair<string, string>, ScatterPlot2D *> &map_pair) {
+            return ((map_pair.first.first == current_prop) ||
+                    (map_pair.first.second == current_prop));
+          };
       map<pair<string, string>, ScatterPlot2D *>::iterator overviewToDestroyIt;
-      overviewToDestroyIt = find_if(scatterPlotsMap.begin(), scatterPlotsMap.end(),
-                                    map_pair_string_key_contains(selectedGraphProperties[i]));
+      overviewToDestroyIt =
+          find_if(scatterPlotsMap.begin(), scatterPlotsMap.end(), contains_current_prop);
 
       while (overviewToDestroyIt != scatterPlotsMap.end()) {
         if (overviewToDestroyIt->second == detailedScatterPlot) {
@@ -749,8 +731,8 @@ void ScatterPlot2DView::destroyOverviewsIfNeeded() {
         delete overviewToDestroyIt->second;
         scatterPlotsGenMap.erase(overviewToDestroyIt->first);
         scatterPlotsMap.erase(overviewToDestroyIt);
-        overviewToDestroyIt = find_if(scatterPlotsMap.begin(), scatterPlotsMap.end(),
-                                      map_pair_string_key_contains(selectedGraphProperties[i]));
+        overviewToDestroyIt =
+            find_if(scatterPlotsMap.begin(), scatterPlotsMap.end(), contains_current_prop);
       }
     }
   }
@@ -933,7 +915,7 @@ void ScatterPlot2DView::switchFromDetailViewToMatrixView() {
   // select the navigator interactor
   // allowing to choose one of the detailed views
   if (!interactors().empty())
-    setCurrentInteractor(interactors()[0]);
+    setCurrentInteractor(interactors().front());
   getGlMainWidget()->draw();
 }
 
@@ -992,7 +974,7 @@ std::vector<ScatterPlot2D *> ScatterPlot2DView::getSelectedScatterPlots() const 
   return ret;
 }
 
-void ScatterPlot2DView::interactorsInstalled(const QList<tlp::Interactor *> &) {
+void ScatterPlot2DView::interactorsInstalled(const std::list<tlp::Interactor *> &) {
   toggleInteractors(detailedScatterPlot != nullptr);
 }
 
@@ -1016,10 +998,10 @@ void ScatterPlot2DView::treatEvent(const Event &message) {
     if (graphEvent->getType() == GraphEvent::TLP_ADD_EDGE)
       addEdge(graphEvent->getGraph(), graphEvent->getEdge());
 
-    if (graphEvent->getType() == GraphEvent::TLP_DEL_NODE)
+    if (graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_NODE)
       delNode(graphEvent->getGraph(), graphEvent->getNode());
 
-    if (graphEvent->getType() == GraphEvent::TLP_DEL_EDGE)
+    if (graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_EDGE)
       delEdge(graphEvent->getGraph(), graphEvent->getEdge());
   }
 

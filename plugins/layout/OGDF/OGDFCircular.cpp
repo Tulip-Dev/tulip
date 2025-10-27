@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -44,8 +44,8 @@ class OGDFCircular : public OGDFLayoutPluginBase {
 public:
   PLUGININFORMATION(
       "Circular (OGDF)", "Carsten Gutwenger", "13/11/2007",
-      "Implements a circular layout based on the following publication:"
-      "Ugur Dogrusöz, Brendan Madden, Patrick Madden: Circular Layout in the Graph Layout Toolkit."
+      "Implements a circular layout based on the following publication:<br/>"
+      "<b>Circular Layout in the Graph Layout Toolkit</b>,<br/>Ugur Dogrusöz, Brendan Madden, Patrick Madden, "
       "Proc. Graph Drawing 1996, LNCS 1190, pp. 92-100, 1997.",
       "1.5", "Basic")
   OGDFCircular(const tlp::PluginContext *context)
@@ -64,19 +64,19 @@ public:
     if (dataSet != nullptr) {
       double val = 0;
 
-      if (dataSet->getDeprecated("nodes spacing", "minDistCircle", val))
+      if (dataSet->get("nodes spacing", val))
         circular->minDistCircle(val);
 
-      if (dataSet->getDeprecated("levels spacing", "minDistLevel", val))
+      if (dataSet->get("levels spacing", val))
         circular->minDistLevel(val);
 
-      if (dataSet->getDeprecated("circles spacing", "minDistSibling", val))
+      if (dataSet->get("circles spacing", val))
         circular->minDistSibling(val);
 
-      if (dataSet->getDeprecated("connected components spacing", "minDistCC", val))
+      if (dataSet->get("connected components spacing", val))
         circular->minDistCC(val);
 
-      if (dataSet->getDeprecated("page ratio", "pageRatio", val))
+      if (dataSet->get("page ratio", val))
         circular->pageRatio(val);
     }
   }

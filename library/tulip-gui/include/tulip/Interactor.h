@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -23,13 +23,12 @@
 #include <tulip/Plugin.h>
 #include <tulip/PluginLister.h>
 
-#include <QObject>
+#include <QAction>
 #include <QCursor>
 #include <QMap>
 
 #include <string>
 
-class QAction;
 class QLabel;
 
 namespace tlp {
@@ -64,7 +63,6 @@ class TLP_QT_SCOPE Interactor : public QObject, public Plugin {
   Q_OBJECT
   Q_PROPERTY(unsigned int priority READ priority)
   Q_PROPERTY(QAction *action READ action)
-  Q_PROPERTY(tlp::View *view READ view WRITE setView)
   Q_PROPERTY(QCursor cursor READ cursor)
 
 public:
@@ -83,20 +81,23 @@ public:
   virtual bool isCompatible(const std::string &viewName) const = 0;
 
   /**
-    @deprecated Use QWidget *configurationDocWidget() and/or QWidget *configurationOptionsWidget()
-    instead
-    @return the configuration widget used to set up the interactor.
+    @return The interactor documentation.
+    @warning This method MUST ALWAYS return the same pointer. Doing otherwise may lead to memory
+    leaks.
+    @note The interactor document has to be instantiated from the construct method.
+    @note It is up to the interactor developer to delete the returned pointer.
+    */
+  virtual QLabel *configurationDocWidget() const {
+    return nullptr;
+  }
+
+  /**
+    @return the configuration options widget used to set up the interactor.
     @warning This method MUST ALWAYS return the same pointer. Doing otherwise may lead to memory
     leaks.
     @note The configuration widget has to be instantiated from the construct method.
     @note It is up to the interactor developer to delete the configuration widget
     */
-  virtual QWidget *configurationWidget() const {
-    return nullptr;
-  }
-  virtual QLabel *configurationDocWidget() const {
-    return nullptr;
-  }
   virtual QWidget *configurationOptionsWidget() const {
     return nullptr;
   }
@@ -194,202 +195,14 @@ protected:
  * @brief The InteractorLister class lists compatible interactors for a given tlp::View
  */
 class TLP_QT_SCOPE InteractorLister {
-  static QMap<std::string, QList<std::string>> _compatibilityMap;
+  static QMap<std::string, std::list<std::string>> _compatibilityMap;
 
 public:
   static void initInteractorsDependencies();
-  static QList<std::string> compatibleInteractors(const std::string &viewName);
+  static std::list<std::string> compatibleInteractors(const std::string &viewName);
 };
 ///@endcond
 
-/**
- * @ingroup Plugins
- * @def
- * INTERACTORPLUGINVIEWEXTENSION(CLASS_NAME,STRING_CLASS_NAME,BASE_INTERACTOR_STRING_NAME,VIEW_STRING_NAME,AUTHOR,DATE,DESCRIPTION,VERSION)
- *
- * @brief Copy an existing Tulip interactor and sets it compatible with a given View.
- *
- * This macro is used when you're making your own View and want to use an existing interactor with
- * it. Interactors are declared to be compatible with a list of View. This macro extends the
- * compatibility of an existing interactor by subclassing it.
- *
- * @note: This macro used the same interactor priority as the base interactor. To define your own
- * priority, see INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY
- *
- * @param CLASS_NAME The name of the interactor class to generate.
- * @param STRING_CLASS_NAME The name of the interactor plugin to generate (see tlp::Plugin::name())
- * @param BASE_INTERACTOR_STRING_NAME The name of the interactor to extend
- * @param VIEW_STRING_NAME The name of the View to set the interactor compatible with
- * @param AUTHOR see tlp::Plugin::author()
- * @param DATE see tlp::Plugin::date()
- * @param DESCRIPTION see tlp::Plugin::info()
- * @param VERSION see tlp::Plugin::version()
- */
-#define INTERACTORPLUGINVIEWEXTENSION(CLASS_NAME, STRING_CLASS_NAME, BASE_INTERACTOR_STRING_NAME,  \
-                                      VIEW_STRING_NAME, AUTHOR, DATE, DESCRIPTION, VERSION)        \
-  class CLASS_NAME : public tlp::Interactor {                                                      \
-    mutable tlp::Interactor *_component;                                                           \
-                                                                                                   \
-  public:                                                                                          \
-    std::string name() const {                                                                     \
-      return std::string(STRING_CLASS_NAME);                                                       \
-    }                                                                                              \
-    std::string author() const {                                                                   \
-      return std::string(AUTHOR);                                                                  \
-    }                                                                                              \
-    std::string date() const {                                                                     \
-      return std::string(DATE);                                                                    \
-    }                                                                                              \
-    std::string info() const {                                                                     \
-      return std::string(DESCRIPTION);                                                             \
-    }                                                                                              \
-    std::string release() const {                                                                  \
-      return std::string(VERSION);                                                                 \
-    }                                                                                              \
-    std::string tulipRelease() const {                                                             \
-      return std::string(TULIP_VERSION);                                                           \
-    }                                                                                              \
-    std::string group() const {                                                                    \
-      return getComponent()->group();                                                              \
-    }                                                                                              \
-    CLASS_NAME(const PluginContext *) : _component(nullptr) {}                                     \
-    bool isCompatible(const std::string &viewName) const {                                         \
-      return viewName == VIEW_STRING_NAME;                                                         \
-    }                                                                                              \
-    QWidget *configurationWidget() const {                                                         \
-      return getComponent()->configurationWidget();                                                \
-    }                                                                                              \
-    QLabel *configurationDocWidget() const {                                                       \
-      return getComponent()->configurationDocWidget();                                             \
-    }                                                                                              \
-    QWidget *configurationActionsWidget() const {                                                  \
-      return getComponent()->configurationOptionsWidget();                                         \
-    }                                                                                              \
-    unsigned int priority() const {                                                                \
-      return getComponent()->priority();                                                           \
-    }                                                                                              \
-    QAction *action() const {                                                                      \
-      return getComponent()->action();                                                             \
-    }                                                                                              \
-    tlp::View *view() const {                                                                      \
-      return getComponent()->view();                                                               \
-    }                                                                                              \
-    QCursor cursor() const {                                                                       \
-      return getComponent()->cursor();                                                             \
-    }                                                                                              \
-    void construct() {                                                                             \
-      getComponent()->construct();                                                                 \
-    }                                                                                              \
-    void setView(tlp::View *v) {                                                                   \
-      getComponent()->setView(v);                                                                  \
-    }                                                                                              \
-    void install(QObject *target) {                                                                \
-      getComponent()->install(target);                                                             \
-    }                                                                                              \
-    void uninstall() {                                                                             \
-      getComponent()->uninstall();                                                                 \
-    }                                                                                              \
-    void undoIsDone() {                                                                            \
-      getComponent()->undoIsDone();                                                                \
-    }                                                                                              \
-    tlp::Interactor *getComponent() const {                                                        \
-      if (!_component) {                                                                           \
-        _component =                                                                               \
-            tlp::PluginLister::getPluginObject<Interactor>(BASE_INTERACTOR_STRING_NAME, nullptr);  \
-        assert(_component != nullptr);                                                             \
-      }                                                                                            \
-      return _component;                                                                           \
-    }                                                                                              \
-  };                                                                                               \
-  PLUGIN(CLASS_NAME)
-
-/**
- * @ingroup Plugins
- * @def
- * INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(CLASS_NAME,STRING_CLASS_NAME,BASE_INTERACTOR_STRING_NAME,VIEW_STRING_NAME,AUTHOR,DATE,DESCRIPTION,VERSION,PRIORITY)
- * @brief Similar to INTERACTORPLUGINVIEWEXTENSION but allows to define the generated interactor's
- * priority.
- * @see tlp::Interactor::priority()
- * @see INTERACTORPLUGINVIEWEXTENSION
- */
-#define INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(CLASS_NAME, STRING_CLASS_NAME,                   \
-                                                  BASE_INTERACTOR_STRING_NAME, VIEW_STRING_NAME,   \
-                                                  AUTHOR, DATE, DESCRIPTION, VERSION, PRIORITY)    \
-  class CLASS_NAME : public tlp::Interactor {                                                      \
-    mutable tlp::Interactor *_component;                                                           \
-                                                                                                   \
-  public:                                                                                          \
-    std::string name() const {                                                                     \
-      return std::string(STRING_CLASS_NAME);                                                       \
-    }                                                                                              \
-    std::string author() const {                                                                   \
-      return std::string(AUTHOR);                                                                  \
-    }                                                                                              \
-    std::string date() const {                                                                     \
-      return std::string(DATE);                                                                    \
-    }                                                                                              \
-    std::string info() const {                                                                     \
-      return std::string(DESCRIPTION);                                                             \
-    }                                                                                              \
-    std::string release() const {                                                                  \
-      return std::string(VERSION);                                                                 \
-    }                                                                                              \
-    std::string tulipRelease() const {                                                             \
-      return std::string(TULIP_VERSION);                                                           \
-    }                                                                                              \
-    std::string group() const {                                                                    \
-      return getComponent()->group();                                                              \
-    }                                                                                              \
-    CLASS_NAME(const PluginContext *) : _component(nullptr) {}                                     \
-    bool isCompatible(const std::string &viewName) const {                                         \
-      return viewName == VIEW_STRING_NAME;                                                         \
-    }                                                                                              \
-    QWidget *configurationWidget() const {                                                         \
-      return getComponent()->configurationWidget();                                                \
-    }                                                                                              \
-    QLabel *configurationDocWidget() const {                                                       \
-      return getComponent()->configurationDocWidget();                                             \
-    }                                                                                              \
-    QWidget *configurationActionsWidget() const {                                                  \
-      return getComponent()->configurationOptionsWidget();                                         \
-    }                                                                                              \
-    unsigned int priority() const {                                                                \
-      return PRIORITY;                                                                             \
-    }                                                                                              \
-    QAction *action() const {                                                                      \
-      return getComponent()->action();                                                             \
-    }                                                                                              \
-    tlp::View *view() const {                                                                      \
-      return getComponent()->view();                                                               \
-    }                                                                                              \
-    QCursor cursor() const {                                                                       \
-      return getComponent()->cursor();                                                             \
-    }                                                                                              \
-    void construct() {                                                                             \
-      getComponent()->construct();                                                                 \
-    }                                                                                              \
-    void setView(tlp::View *v) {                                                                   \
-      getComponent()->setView(v);                                                                  \
-    }                                                                                              \
-    void install(QObject *target) {                                                                \
-      getComponent()->install(target);                                                             \
-    }                                                                                              \
-    void uninstall() {                                                                             \
-      getComponent()->uninstall();                                                                 \
-    }                                                                                              \
-    void undoIsDone() {                                                                            \
-      getComponent()->undoIsDone();                                                                \
-    }                                                                                              \
-    tlp::Interactor *getComponent() const {                                                        \
-      if (!_component) {                                                                           \
-        _component =                                                                               \
-            tlp::PluginLister::getPluginObject<Interactor>(BASE_INTERACTOR_STRING_NAME, nullptr);  \
-        assert(_component != nullptr);                                                             \
-      }                                                                                            \
-      return _component;                                                                           \
-    }                                                                                              \
-  };                                                                                               \
-  PLUGIN(CLASS_NAME)
 } // namespace tlp
 
 #endif

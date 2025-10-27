@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -30,7 +30,10 @@
 
 namespace tlp {
 
-  enum EDGE_TYPE {DIRECTED = 0, INV_DIRECTED = 1, UNDIRECTED = 2};
+  enum EDGE_TYPE /BaseType=IntEnum/ {
+                                         DIRECTED = Edge_Type::DIRECTED,
+                                         INV_DIRECTED = Edge_Type::INV_DIRECTED,
+                                         UNDIRECTED = Edge_Type::UNDIRECTED};
 
 //===========================================================================================
 
@@ -78,13 +81,13 @@ This quantifies how close its neighbors are to being a clique.
 :type graph: :class:`tlp.Graph`
 :param result: a graph property in which the results will be stored
 :type result: :class:`tlp.DoubleProperty`
-:param maxDepth: the maximum distance between each node and its neighbours.
+:param maxDepth: Deprecated. This parameter is not used anymore.
 :type maxDepth: integer
 %End 
 
 %MethodCode
   tlp::NodeStaticProperty<double> result(a0);
-  tlp::clusteringCoefficient(a0, result, a2);
+  tlp::clusteringCoefficient(a0, result);
   result.copyToProperty(a1);
 %End
  
@@ -154,7 +157,7 @@ Computes the distances from a node to all the other nodes of a graph and return 
 :param result: a graph property in which the results will be stored
 :type result: :class:`tlp.IntegerProperty`
 :param direction: specify if the graph must be directed or not
-:type direction: tlp.DIRECTED, tlp.INV_DIRECTED, tlp.UNDIRECTED
+:type direction: tlp.EDGE_TYPE.DIRECTED, tlp.EDGE_TYPE.INV_DIRECTED, tlp.EDGE_TYPE.UNDIRECTED
 :rtype: integer
 :throws: an exception if the node does not belong to the graph
 %End
@@ -186,7 +189,7 @@ Computes the distances from a node to all the other nodes of a weighted graph an
 :param result: a graph property in which edges lengths are stored
 :type result: :class:`tlp.DoubleProperty`
 :param direction: specify if the graph must be directed or not
-:type direction: tlp.DIRECTED, tlp.INV_DIRECTED, tlp.UNDIRECTED
+:type direction: tlp.EDGE_TYPE.DIRECTED, tlp.EDGE_TYPE.INV_DIRECTED, tlp.EDGE_TYPE.UNDIRECTED
 :rtype: double
 :throws: an exception if the node does not belong to the graph
 %End
@@ -218,17 +221,17 @@ at distance less or equal to a maximum one.
 :param maxDistance: the maximum distance to reach nodes
 :type maxDistance: integer
 :param direction: specify if the graph must be directed or not
-:type direction: tlp.DIRECTED, tlp.INV_DIRECTED, tlp.UNDIRECTED  
+:type direction: tlp.EDGE_TYPE.DIRECTED, tlp.EDGE_TYPE.INV_DIRECTED, tlp.EDGE_TYPE.UNDIRECTED
 :rtype: set of :class:`tlp.node`
 :throws: an exception if the node does not belong to the graph
 %End 
 
 %MethodCode
   if (a0->isElement(*a1)) {
-    std::unordered_map<tlp::node, bool> hResult;
+    tlp_hash_map<tlp::node, bool> hResult;
     markReachableNodes(a0, *a1, hResult, a3, a4);
-    std::unordered_map<tlp::node, bool>::const_iterator itr = hResult.begin();
-    std::unordered_map<tlp::node, bool>::const_iterator ite = hResult.end();
+    tlp_hash_map<tlp::node, bool>::const_iterator itr = hResult.begin();
+    tlp_hash_map<tlp::node, bool>::const_iterator ite = hResult.end();
     while (itr != ite) {
       a2->insert(itr->first);
       ++itr;

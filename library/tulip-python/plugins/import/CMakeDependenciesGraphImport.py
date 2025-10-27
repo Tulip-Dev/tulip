@@ -1,4 +1,4 @@
-# This file is part of Tulip (http://tulip.labri.fr)
+# This file is part of Tulip (https://tulip.labri.fr)
 #
 # Authors: David Auber and the Tulip development Team
 # from LaBRI, University of Bordeaux
@@ -42,7 +42,7 @@ def executeCommand(command, cwd, stderrfile, pluginProgress):
     # execute the process
     p = subprocess.Popen(command, cwd=cwd, shell=True, stdout=subprocess.PIPE,
                          stderr=open(stderrfile, 'wb'))
-    # add some execution feedback trough the plugin progress
+    # add some execution feedback through the plugin progress
     while True:
         line = p.stdout.readline().decode('utf-8')
         line = line.replace('\r\n', '').replace('\n', '')
@@ -135,7 +135,7 @@ class CMakeDependenciesGraphImport(tlp.ImportModule):
                 shutil.rmtree(tmpdir)
                 return False
 
-        # import the dot file in Tulip trough the graphviz import plugin
+        # import the dot file in Tulip through the graphviz import plugin
         dotImportParams = tlp.getDefaultPluginParameters('graphviz',
                                                          self.graph)
         dotImportParams['filename'] = cmakeProjectDotFilePath

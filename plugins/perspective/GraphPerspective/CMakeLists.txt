@@ -1,6 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${OPENGL_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
-
-QTXWEB_SET_INCLUDES_AND_DEFINITIONS()
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipPythonInclude} ${OPENGL_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 SET(LIB_SRCS
 src/AlgorithmRunner.cpp
@@ -12,8 +10,8 @@ src/GraphHierarchiesEditor.cpp
 src/GraphPerspective.cpp
 src/HeaderFrame.cpp
 src/ImportWizard.cpp
-src/OutputPanelButton.cpp
 src/PanelSelectionWizard.cpp
+src/PluginDocDialog.cpp
 src/PreferencesDialog.cpp
 src/SearchWidget.cpp
 )
@@ -34,12 +32,9 @@ designer/ExportWizard.ui
 designer/PanelSelectionWizard.ui
 designer/PreferencesDialog.ui
 designer/SearchWidget.ui
+designer/PluginDocDialog.ui
 )
 
-IF(TULIP_BUILD_PYTHON_COMPONENTS)
-  ADD_DEFINITIONS("-DTULIP_BUILD_PYTHON_COMPONENTS")
-ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
-  
 QTX_WRAP_CPP(MOC_SRCS
 include/AlgorithmRunner.h
 include/AlgorithmRunnerItem.h
@@ -50,25 +45,14 @@ include/GraphPerspective.h
 include/GraphPerspectiveLogger.h
 include/HeaderFrame.h
 include/ImportWizard.h
-include/OutputPanelButton.h
 include/PanelSelectionWizard.h
 include/PreferencesDialog.h
 include/SearchWidget.h
 )
 
-IF(TULIP_BUILD_PYTHON_COMPONENTS)
+ADD_LIBRARY(GraphPerspective-${Tulip_VERSION} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI_SRCS} ${MOC_SRCS})
 
-INCLUDE_DIRECTORIES(${TulipPythonInclude})
+TARGET_LINK_LIBRARIES(GraphPerspective-${Tulip_VERSION} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
+TARGET_LINK_LIBRARIES(GraphPerspective-${Tulip_VERSION} ${QT_LIBRARIES})
 
-ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
-
-ADD_LIBRARY(GraphPerspective-${TulipVersion} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI_SRCS} ${MOC_SRCS})
-
-TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
-TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${QT_LIBRARIES})
-IF(TULIP_BUILD_PYTHON_COMPONENTS)
-TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${LibTulipPythonName})
-ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
-
-TULIP_INSTALL_PLUGIN(GraphPerspective-${TulipVersion} ${TulipPerspectivePluginsInstallDir})
-
+TULIP_INSTALL_PLUGIN(GraphPerspective-${Tulip_VERSION} ${TulipPerspectivePluginsInstallDir})

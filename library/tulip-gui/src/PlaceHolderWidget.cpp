@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,14 +18,11 @@
  */
 #include "tulip/PlaceHolderWidget.h"
 
-#include <QCloseEvent>
 #include <QVBoxLayout>
-#include <QWidget>
-#include <QDebug>
 
 PlaceHolderWidget::PlaceHolderWidget(QWidget *parent) : QWidget(parent), _widget(nullptr) {
   setLayout(new QVBoxLayout);
-  layout()->setMargin(0);
+  layout()->setContentsMargins(0, 0, 0, 0);
   layout()->setSpacing(0);
 }
 

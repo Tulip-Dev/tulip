@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -83,7 +83,7 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
       if (property == nullptr) {
         graphViewNodes.erase(graphViewNodes.begin() + nbNodes + 1, graphViewNodes.end());
       } else {
-        unordered_map<double, vector<node>> nodesTokeep;
+        tlp_hash_map<double, vector<node>> nodesTokeep;
         nodesAtDist[currentDist].clear();
 
         for (auto n : graphViewNodes) {

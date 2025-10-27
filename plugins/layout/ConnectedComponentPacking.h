@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -27,7 +27,7 @@ public:
                     "Implements a layout packing of the connected components of a graph. It builds "
                     "a layout of the graph connected components so that they do not overlap and "
                     "minimizes the lost space (packing).",
-                    "1.0", "Misc")
+                    "1.1", "Misc")
   ConnectedComponentPacking(const tlp::PluginContext *context);
   bool run() override;
 };

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <QRegularExpression>
 
 #include "tulip/ParenMatcherHighlighter.h"
 
@@ -35,67 +36,46 @@ void ParenInfoTextBlockData::sortParenInfo() {
   std::sort(_parenInfo.begin(), _parenInfo.end());
 }
 
-ParenMatcherHighlighter::ParenMatcherHighlighter(QTextDocument *parent)
-    : QSyntaxHighlighter(parent) {
-  _leftParensToMatch.append('(');
-  _leftParensToMatch.append('[');
-  _leftParensToMatch.append('{');
-  _rightParensToMatch.append(')');
-  _rightParensToMatch.append(']');
-  _rightParensToMatch.append('}');
-}
-
 void ParenMatcherHighlighter::highlightBlock(const QString &text) {
   ParenInfoTextBlockData *data = new ParenInfoTextBlockData;
 
   QString modifiedText = text;
-  QRegExp dblQuotesRegexp("\"[^\"]*\"");
-  QRegExp simpleQuotesRegexp("'[^']*'");
+  QRegularExpression dblQuotesRegexp("\"[^\"]*\"");
+  QRegularExpression simpleQuotesRegexp("'[^']*'");
+  QRegularExpressionMatch match;
+  auto ml = modifiedText.length();
+  int pos = modifiedText.indexOf(dblQuotesRegexp, 0, &match);
 
-  int pos = dblQuotesRegexp.indexIn(modifiedText);
-
-  while (pos != -1) {
-    for (int i = pos; i < pos + dblQuotesRegexp.matchedLength(); ++i) {
+  while (pos != -1 && pos < ml) {
+    auto l = std::min(pos + match.capturedLength(), ml);
+    for (int i = pos; i < l; ++i) {
       modifiedText[i] = ' ';
     }
 
-    pos = dblQuotesRegexp.indexIn(modifiedText, pos + dblQuotesRegexp.matchedLength());
+    pos = modifiedText.indexOf(dblQuotesRegexp, pos + match.capturedLength());
   }
 
-  pos = simpleQuotesRegexp.indexIn(modifiedText);
-
-  while (pos != -1) {
-    for (int i = pos; i < pos + simpleQuotesRegexp.matchedLength(); ++i) {
+  pos = modifiedText.indexOf(simpleQuotesRegexp, 0, &match);
+  while (pos != -1 && pos < modifiedText.length()) {
+    auto l = std::min(pos + match.capturedLength(), ml);
+    for (int i = pos; i < l; ++i) {
       modifiedText[i] = ' ';
     }
 
-    pos = simpleQuotesRegexp.indexIn(modifiedText, pos + simpleQuotesRegexp.matchedLength());
+    pos = modifiedText.indexOf(simpleQuotesRegexp, pos + match.capturedLength());
   }
 
-  for (int i = 0; i < _leftParensToMatch.size(); ++i) {
-    int leftPos = modifiedText.indexOf(_leftParensToMatch.at(i));
+  for (char paren : {'(', '[', '{', ')', ']', '}'}) {
+    pos = modifiedText.indexOf(paren);
 
-    while (leftPos != -1) {
+    while (pos != -1) {
       ParenInfo info;
-      info.character = _leftParensToMatch.at(i);
-      info.position = currentBlock().position() + leftPos;
+      info.character = paren;
+      info.position = currentBlock().position() + pos;
       data->insert(info);
-      leftPos = modifiedText.indexOf(_leftParensToMatch.at(i), leftPos + 1);
+      pos = modifiedText.indexOf(paren, pos + 1);
     }
   }
-
-  for (int i = 0; i < _rightParensToMatch.size(); ++i) {
-    int rightPos = modifiedText.indexOf(_rightParensToMatch.at(i));
-
-    while (rightPos != -1) {
-      ParenInfo info;
-      info.character = _rightParensToMatch.at(i);
-      info.position = currentBlock().position() + rightPos;
-      data->insert(info);
-      rightPos = modifiedText.indexOf(_rightParensToMatch.at(i), rightPos + 1);
-    }
-  }
-
   data->sortParenInfo();
   setCurrentBlockUserData(data);
 }

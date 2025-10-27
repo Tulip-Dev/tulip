@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
@@ -74,10 +74,10 @@ struct WangRong : public ImportModule {
 
     // check arguments
     if (m > n) {
-      pluginProgress->setError("The m parameter cannot be greater than the number of nodes.");
+      pluginProgress->setError("\"m\" cannot be greater than \"nodes\"");
       return false;
     } else if (m0 > n) {
-      pluginProgress->setError("The m0 parameter cannot be greater than the number of nodes.");
+      pluginProgress->setError("\"m0\" cannot be greater than \"nodes\"");
       return false;
     }
 
@@ -119,7 +119,7 @@ struct WangRong : public ImportModule {
       }
 
       /*
-       * Preferencial attachment
+       * Preferential attachment
        */
       double k_sum = 2 * graph->numberOfEdges();
 

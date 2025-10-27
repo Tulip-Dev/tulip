@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -256,21 +256,22 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
 
   if (e->type() == QEvent::MouseMove) {
     QMouseEvent *me = static_cast<QMouseEvent *>(e);
-    int x = glWidget->width() - me->x();
-    int y = me->y();
+    int x = glWidget->width() - me->pos().x();
+    int y = me->pos().y();
     Coord screenCoords(x, y, 0.0f);
     Coord sceneCoords(glWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(
         glWidget->screenToViewport(screenCoords)));
 
     if (!axisSliderDragStarted && !slidersRangeDragStarted) {
-      selectedAxis = parallelView->getAxisUnderPointer(me->x(), me->y());
+      selectedAxis = parallelView->getAxisUnderPointer(me->pos().x(), me->pos().y());
 
       if (selectedAxis != nullptr) {
         if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
           rotateVector(sceneCoords, -(selectedAxis->getRotationAngle()), Z_ROT);
         }
 
-        selectedSlider = getSliderUnderPointer(glWidget, selectedAxis, me->x(), me->y());
+        selectedSlider =
+            getSliderUnderPointer(glWidget, selectedAxis, me->pos().x(), me->pos().y());
         pointerBetweenSliders =
             (sceneCoords.getY() <
              axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getY()) &&
@@ -370,8 +371,8 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
       slidersRangeDragStarted = true;
       slidersRangeLength = axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getY() -
                            axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getY();
-      yClick = me->y();
-      xClick = me->x();
+      yClick = me->pos().y();
+      xClick = me->pos().x();
       return true;
     }
   } else if (e->type() == QEvent::MouseButtonRelease) {

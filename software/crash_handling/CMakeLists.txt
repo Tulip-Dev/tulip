@@ -2,51 +2,47 @@ SET(LIB_SRCS
     CrashHandling.cpp
     StackWalker.cpp)
 
-IF(NOT MSVC AND NOT BSD)
+IF(LINUX OR MINGW)
 
-  IF(LINUX OR MINGW)
+  FIND_PACKAGE(Bfd)
+  IF(BFD_FOUND)
+    SET(LIB_SRCS ${LIB_SRCS} BfdWrapper.cpp)
+  ELSE(BFD_FOUND)
+    MESSAGE(WARNING "Install GNU binutils development package to get a detailed stack trace when Tulip crashes.")
+  ENDIF(BFD_FOUND)
 
-    IF(MINGW)
+  FIND_PACKAGE(Iberty)
 
-      # ensure correct bfd header file is selected with MSYS2
-      SET(CMAKE_INCLUDE_PATH ${MINGW_INCLUDE_PATH}/binutils ${CMAKE_INCLUDE_PATH})
-      # ensure correct binutils libraries are selected with MSYS2
-      SET(CMAKE_LIBRARY_PATH ${MINGW_LIB_PATH}/binutils ${CMAKE_LIBRARY_PATH})
-      # ensure correct iberty header file is selected with MSYS2
-      SET(CMAKE_INCLUDE_PATH ${MINGW_INCLUDE_PATH}/libiberty ${CMAKE_INCLUDE_PATH})
+  #libsframe from binutils is required. It is only given as a static lib for MINGW or anaconda under linux so we need to search for it
+  FIND_LIBRARY(SFRAME_LIBRARY sframe REQUIRED)
+  MARK_AS_ADVANCED(SFRAME_LIBRARY)
 
-    ENDIF(MINGW)
+  IF(MINGW)
+    # Check if libintl is present in the MinGW build environment
+    FIND_PACKAGE(Intl)
+    # the switch from binutils 2.39 to 2.40 added the two dependencies below
+    # for libbfd.a which is needed by crashandling static library
+    FIND_PACKAGE(Zstd)
 
-    FIND_PACKAGE(Bfd)
-    FIND_PACKAGE(Iberty)
+  ENDIF(MINGW)
 
-    IF(BFD_FOUND)
-
-      SET(LIB_SRCS ${LIB_SRCS} BfdWrapper.cpp)
-      ADD_DEFINITIONS(-DHAVE_BFD)
-      # workaround for latest versions of GNU binutils
-      ADD_DEFINITIONS(-DPACKAGE -DPACKAGE_VERSION)
-      INCLUDE_DIRECTORIES(BEFORE ${BFD_INCLUDE_DIR})
-
-    ELSE(BFD_FOUND)
-
-      MESSAGE("Install GNU binutils development package to get a detailed stack trace when Tulip crashes.")
-
-    ENDIF(BFD_FOUND)
-
-  ENDIF(LINUX OR MINGW)
-
-ENDIF(NOT MSVC AND NOT BSD)
-	
-INCLUDE_DIRECTORIES(BEFORE ${TulipCoreBuildInclude} ${TulipCoreInclude})
+ENDIF(LINUX OR MINGW)
 
 IF(UNIX)
-
   SET(LIB_SRCS ${LIB_SRCS} UnixSignalInterposer.cpp)
-
 ENDIF(UNIX)
 
 ADD_LIBRARY(crash_handling STATIC ${LIB_SRCS})
+
+IF(BFD_FOUND)
+  target_COMPILE_DEFINITIONS(crash_handling PUBLIC HAVE_BFD)
+  # workaround for latest versions of GNU binutils
+  target_COMPILE_DEFINITIONS(crash_handling PUBLIC PACKAGE)
+  target_COMPILE_DEFINITIONS(crash_handling PUBLIC PACKAGE_VERSION)
+  target_include_directories(crash_handling BEFORE PUBLIC ${BFD_INCLUDE_DIR})
+ENDIF(BFD_FOUND)
+
+target_INCLUDE_DIRECTORIES(crash_handling BEFORE PUBLIC ${TulipCoreBuildInclude} ${TulipCoreInclude})
 
 TARGET_LINK_LIBRARIES(crash_handling ${CMAKE_DL_LIBS})
 
@@ -55,11 +51,15 @@ IF(BFD_FOUND)
   TARGET_LINK_LIBRARIES(crash_handling ${BFD_LIBRARY})
 
   # some build environments requires the need to link against the intl library
-  IF(INTL_LIBRARY)
+  IF(Intl_FOUND)
+    TARGET_LINK_LIBRARIES(crash_handling ${Intl_LIBRARIES})
+  ENDIF(Intl_FOUND)
 
-    TARGET_LINK_LIBRARIES(crash_handling ${INTL_LIBRARY})
-
-  ENDIF(INTL_LIBRARY)
+  # sframe, zlib and zstd libraries may be needed
+  # since the switch from binutils 2.39 to 2.40
+  IF(SFRAME_LIBRARY)
+    TARGET_LINK_LIBRARIES(crash_handling ${SFRAME_LIBRARY} z zstd)
+  ENDIF(SFRAME_LIBRARY)
 
 ENDIF(BFD_FOUND)
 
@@ -70,11 +70,5 @@ IF(IBERTY_LIBRARY)
 ENDIF(IBERTY_LIBRARY)
 
 IF(MINGW)
-
   TARGET_LINK_LIBRARIES(crash_handling imagehlp)
-
-ELSEIF(MSVC)
-
-  TARGET_LINK_LIBRARIES(crash_handling dbghelp)
-
 ENDIF(MINGW)

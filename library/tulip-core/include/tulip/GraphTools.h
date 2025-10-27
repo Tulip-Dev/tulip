@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -26,7 +26,7 @@
 #include <set>
 #include <stack>
 #include <vector>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <tulip/tulipconf.h>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
@@ -92,7 +92,7 @@ TLP_SCOPE node graphCenterHeuristic(Graph *graph, PluginProgress *pluginProgress
 TLP_SCOPE node makeSimpleSource(Graph *graph);
 
 TLP_SCOPE void makeProperDag(Graph *graph, std::list<node> &addedNodes,
-                             std::unordered_map<edge, edge> &replacedEdges,
+                             tlp_hash_map<edge, edge> &replacedEdges,
                              IntegerProperty *edgeLength = nullptr);
 
 /**
@@ -206,7 +206,7 @@ enum ShortestPathType {
  * @param graph The graph to compute on.
  * @param src The source node of the paths
  * @param tgt The target node of the paths
- * @param pathType The type of path to consider (chosen among tlp::ShortestPathType enumation
+ * @param pathType The type of path to consider (chosen among tlp::ShortestPathType enumeration
  * values)
  * @param weights A Double property giving the edges weight if weighted paths have to be considered.
  * Can be set to null to select unweighted paths.
@@ -227,13 +227,13 @@ TLP_SCOPE bool selectShortestPaths(const Graph *const graph, node src, node tgt,
  * and INV_DIRECTED use reverse directed graph (ie. all edges are reversed)
  */
 TLP_SCOPE void markReachableNodes(const Graph *graph, const node startNode,
-                                  std::unordered_map<node, bool> &reachables,
-                                  unsigned int maxDistance, EDGE_TYPE direction = UNDIRECTED);
+                                  tlp_hash_map<node, bool> &reachables, unsigned int maxDistance,
+                                  EDGE_TYPE direction = UNDIRECTED);
 
 TLP_SCOPE void computeDijkstra(const Graph *const graph, node src,
                                const EdgeStaticProperty<double> &weights,
                                NodeStaticProperty<double> &nodeDistance, EDGE_TYPE direction,
-                               std::unordered_map<node, std::list<node>> &ancestors,
+                               tlp_hash_map<node, std::list<node>> &ancestors,
                                std::stack<node> *queueNodes = nullptr,
                                MutableContainer<int> *numberOfPaths = nullptr);
 } // namespace tlp

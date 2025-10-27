@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,7 +20,6 @@
 #include <cstring>
 #include <GL/glew.h>
 #include <tulip/Vector.h>
-#include <tulip/TlpTools.h>
 #include <tulip/Curves.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlShaderProgram.h>

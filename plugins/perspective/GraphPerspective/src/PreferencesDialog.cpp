@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -23,6 +23,7 @@
 
 #include <tulip/Perspective.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/TulipMetaTypes.h>
@@ -34,6 +35,12 @@ using namespace tlp;
 PreferencesDialog::PreferencesDialog(QWidget *parent)
     : QDialog(parent), _ui(new Ui::PreferencesDialog) {
   _ui->setupUi(this);
+  tlpFixCBRBs(this);
+#ifdef __APPLE__
+  _ui->displayModeCombo->setMinimumContentsLength(6);
+  _ui->proxyType->setMinimumContentsLength(18);
+  resize(width(), 455);
+#endif
   _ui->graphDefaultsTable->setItemDelegate(new tlp::TulipItemDelegate(_ui->graphDefaultsTable));
   connect(_ui->graphDefaultsTable, SIGNAL(cellChanged(int, int)), this,
           SLOT(cellChanged(int, int)));
@@ -54,20 +61,11 @@ PreferencesDialog::PreferencesDialog(QWidget *parent)
   }
 
   _ui->graphDefaultsTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+  _ui->graphDefaultsTable->verticalHeader()->hide();
 }
 
 PreferencesDialog::~PreferencesDialog() {
   delete _ui;
-}
-
-void PreferencesDialog::usetlpbformat(int state) {
-  if (state == Qt::Checked) {
-    QMessageBox::warning(this, "Use tlpb file format",
-                         "Be careful: using the tlpb file format "
-                         "means faster Tulip project loading/saving "
-                         "but you will lose compatibility with "
-                         "previous versions of Tulip (<4.10).");
-  }
 }
 
 template <typename PROP, typename TYPE>
@@ -323,11 +321,7 @@ void PreferencesDialog::readSettings() {
   _ui->colorMappingCheck->setChecked(TulipSettings::isAutomaticMapMetric());
   _ui->logCombo->setCurrentIndex(TulipSettings::logPluginCall());
   _ui->displayModeCombo->setCurrentIndex(TulipSettings::isDisplayInDarkMode() ? 1 : 0);
-
-  if (TulipSettings::isUseTlpbFileFormat()) {
-    _ui->usetlpbformat->setChecked(true);
-  } else
-    connect(_ui->usetlpbformat, SIGNAL(stateChanged(int)), this, SLOT(usetlpbformat(int)));
+  _ui->usetlpbformat->setChecked(TulipSettings::isUseTlpbFileFormat());
 
   // initialize seed according to settings
   unsigned int seed;

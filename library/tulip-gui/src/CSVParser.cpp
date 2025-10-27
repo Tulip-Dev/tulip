@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,7 +20,6 @@
 #include <QTextCodec>
 
 #include <tulip/CSVParser.h>
-#include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/PluginProgress.h>
 
@@ -36,11 +35,11 @@ const string defaultRejectedChars = " \r\n";
 const string spaceChars = " \t";
 CSVSimpleParser::CSVSimpleParser(const string &fileName, const QString &separator,
                                  const bool mergesep, char textDelimiter, char decimalMark,
-                                 const string &fileEncoding, unsigned int firstLine,
-                                 unsigned int lastLine)
+                                 bool considerAsString, const string &fileEncoding,
+                                 unsigned int firstLine, unsigned int lastLine)
     : _fileName(fileName), _separator(separator), _textDelimiter(textDelimiter),
       _decimalMark(decimalMark), _fileEncoding(fileEncoding), _firstLine(firstLine),
-      _lastLine(lastLine), _mergesep(mergesep) {}
+      _lastLine(lastLine), _mergesep(mergesep), _considerAsString(considerAsString) {}
 
 CSVSimpleParser::~CSVSimpleParser() {}
 
@@ -74,7 +73,7 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
     // reset position
     csvFile->seekg(0, std::ios_base::beg);
     string line;
-    vector<string> tokens;
+    vector<CSVToken> tokens;
 
     unsigned int displayProgressEachLineNumber = 200;
 
@@ -124,7 +123,7 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
         unsigned int column = 0;
 
         for (column = 0; column < tokens.size(); ++column) {
-          tokens[column] = treatToken(tokens[column], row, column);
+          tokens[column].value = treatToken(tokens[column].value, row, column);
         }
 
         result = handler->line(row, tokens);
@@ -163,76 +162,114 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
   }
 }
 
-bool CSVSimpleParser::multiplatformgetline(istream &is, string &str) {
-  // nothing new to read.
-  if (is.eof())
-    return false;
+static bool isEol(istream &is, char c) {
+  // Carriage return on Windows and mac
+  if (c == '\r') {
+    // gobble possible consecutive '\r'
+    while (is.get(c) && c == '\r') {
+    }
+    // Check if the next character is \n and remove it.
+    if (c != '\n')
+      is.unget();
+    return true;
+  }
+  return (c == '\n');
+}
 
+bool CSVSimpleParser::checkForContiguousTdlm(std::istream &is, std::string &str, char sep,
+                                             bool tdlm) {
+  char c;
+  // check for contiguous text delimiters
+  while (is.get(c) && c == _textDelimiter) {
+    tdlm = !tdlm;
+    str.push_back(c);
+  }
+  // check for end of delimited text field
+  if (c && !tdlm && (c != sep) && !isEol(is, c)) {
+    // not the end of the field
+    // add a text delimiter to ensure
+    // tokenization consistency
+    str.push_back(_textDelimiter);
+    tdlm = true;
+  }
+  if (c)
+    is.unget();
+  return tdlm;
+}
+
+bool CSVSimpleParser::multiplatformgetline(istream &is, string &str) {
   str.clear();
   str.reserve(2048);
   char c;
+  // indicates if in delimited text string
   bool tdlm = false;
+  // indicates if in a field
+  bool infld = false;
+  char sep = QStringToTlpString(_separator)[0];
 
   while (is.get(c)) {
     if (c == _textDelimiter) {
-      tdlm = !tdlm;
       str.push_back(c);
+      if (!infld) {
+        // text delimiter at the beginning of a field
+        infld = true;
+        tdlm = checkForContiguousTdlm(is, str, sep, true);
+      } else if (tdlm) {
+        tdlm = false;
+        tdlm = checkForContiguousTdlm(is, str, sep, false);
+      }
       continue;
     }
 
-    // Carriage return Windows and mac
-    if (c == '\r') {
-      // Check if the next character is \n and remove it.
-      if (is.get(c) && c != '\n') {
-        is.unget();
-        c = '\r';
-      }
-
-      if (!tdlm)
-        break;
-    } else if (c == '\n' && !tdlm) {
+    if (isEol(is, c) && !tdlm) // don't change clauses ordering
       break;
-    }
 
-    // Push the character
+    if (c == sep)
+      infld = tdlm;
+    // finally add the current char
     str.push_back(c);
   }
 
   // End of line reading.
-  return true;
+  return !str.empty();
 }
 
-void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const QString &delimiters,
-                               const bool mergedelim, char textDelim, unsigned int) {
-  // Skip delimiters at beginning.
+void CSVSimpleParser::tokenize(const string &str, vector<CSVToken> &tokens,
+                               const QString &separator, const bool mergeSep, char textDelim,
+                               unsigned int) {
+  // Skip separator at beginning.
   string::size_type lastPos = 0;
   string::size_type pos = 0;
   bool quit = false;
 
-  auto delim = QStringToTlpString(delimiters);
+  auto sep = QStringToTlpString(separator);
 
   while (!quit) {
+    bool considerAsString = false;
     // Don't search tokens in chars surrounded by text delimiters.
     assert(pos != string::npos);
     assert(pos < str.size());
 
-    while (pos < str.length() && ((str[pos] != delim[0]) || (str.find(delim, pos) != pos))) {
+    while (pos < str.size() && ((str[pos] != sep[0]) || (str.find(sep, pos) != pos))) {
       if (str[pos] == textDelim) {
+        considerAsString = _considerAsString;
         do {
-          pos += 1;
-          // go the the next text delimiter .
-          pos = str.find_first_of(textDelim, pos);
+          // get the next text delimiter .
+          auto tdPos = str.find_first_of(textDelim, ++pos);
+          if (tdPos == string::npos)
+            break;
+          pos = tdPos;
         }
         // continue until a single textDelim
-        while (pos != string::npos && str[++pos] == textDelim);
+        while (str[++pos] == textDelim);
       } else
         pos += 1;
     }
 
-    // if merge delimiter, skip the next char if it is a delimiter
-    if (mergedelim) {
-      while ((pos < str.length() - delim.size()) && (str.substr(pos + 1, delim.length()) == delim))
-        pos += delim.length();
+    // if merge separators, skip the next char if it is a separator
+    if (mergeSep) {
+      while ((pos < str.length() - sep.size()) && (str.substr(pos + 1, sep.length()) == sep))
+        pos += sep.length();
     }
 
     // Extracting tokens.
@@ -241,7 +278,7 @@ void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const 
     size_t nbExtractedChars = pos - lastPos;
 
     try {
-      tokens.push_back(str.substr(lastPos, nbExtractedChars));
+      tokens.emplace_back(str.substr(lastPos, nbExtractedChars), considerAsString);
     } catch (...) {
       // An error occur quit the line parsing.
       break;
@@ -249,7 +286,7 @@ void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const 
 
     // Go to the begin of the next token.
     if (pos + 1 < str.size()) {
-      // Skip the delimiter.
+      // Skip the field separator
       ++pos;
       assert(pos > lastPos);
       // Store the begin position of the next token
@@ -257,6 +294,10 @@ void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const 
     } else {
       // End of line found quit
       quit = true;
+      // add an empty token if line ends
+      // with the field separator
+      if (str.find(sep, pos) == pos)
+        tokens.emplace_back("", false);
     }
   }
 }
@@ -293,11 +334,11 @@ string CSVSimpleParser::treatToken(const string &token, int, int) {
       beginPos = currentToken.find_first_of(spaceChars, beginPos + 1);
     }
   }
-  if (currentToken == "\"\"")
+  if (currentToken == std::string(2, _textDelimiter))
     return std::string();
 
-  // Treat string to remove special characters from its beginning and its end.
-  // and non needed "
+  // Treat string to remove special characters from its beginning and its end,
+  // and unneeded text delimiters
   return removeQuotesIfAny(currentToken);
 }
 
@@ -310,19 +351,18 @@ string CSVSimpleParser::removeQuotesIfAny(string &s) {
   if (pos != string::npos && pos < s.size() - 1)
     s.erase(pos + 1);
 
-  if (s[0] == _textDelimiter) {
+  // delimited text token
+  if (s[0] == _textDelimiter && s[s.size() - 1] == _textDelimiter) {
     s.erase(0, 1);
-    // treat " in " delimited string
-    if (_textDelimiter == '"') {
-      pos = 0;
-      while ((pos = s.find("\"\"", pos)) != std::string::npos) {
-        // replace double " by "
-        s.replace(pos, 2, "\"");
-        pos += 1;
-      }
+    s.erase(s.size() - 1, 1);
+    std::string delim(1, _textDelimiter);
+    std::string delim2(2, _textDelimiter);
+    pos = 0;
+    // replace double delimiter occurence by one
+    while ((pos = s.find(delim2, pos)) != std::string::npos) {
+      s.replace(pos, 2, delim);
+      pos += 1;
     }
-    if (s[s.size() - 1] == _textDelimiter)
-      s.erase(s.size() - 1, 1);
   }
   return s;
 }
@@ -343,7 +383,7 @@ bool CSVInvertMatrixParser::begin() {
   return true;
 }
 
-bool CSVInvertMatrixParser::line(unsigned int, const std::vector<std::string> &lineTokens) {
+bool CSVInvertMatrixParser::line(unsigned int, const std::vector<CSVToken> &lineTokens) {
   maxLineSize = max(maxLineSize, uint(lineTokens.size()));
   columns.push_back(lineTokens);
   return true;
@@ -353,13 +393,13 @@ bool CSVInvertMatrixParser::end(unsigned int, unsigned int) {
   if (!handler->begin())
     return false;
 
-  vector<string> tokens(columns.size());
+  vector<CSVToken> tokens(columns.size());
 
   // Fill the line with
   for (unsigned int line = 0; line < maxLineSize; ++line) {
     for (unsigned int i = 0; i < columns.size(); ++i) {
       // Check if the column is large enough
-      tokens[i] = columns[i].size() > line ? columns[i][line] : string();
+      tokens[i] = columns[i].size() > line ? columns[i][line] : CSVToken();
     }
 
     if (!handler->line(line, tokens))

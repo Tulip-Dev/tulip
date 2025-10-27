@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -125,6 +125,12 @@ public:
    */
   bool pickNodesEdges(const int x, const int y, SelectedEntity &selectedEntity,
                       tlp::GlLayer *layer = nullptr, bool pickNodes = true, bool pickEdges = true);
+
+  // devicePixelRatio() must be redefined because the inherited
+  // method returns 1 when the widget is no attached to a window
+  qreal devicePixelRatio() const {
+    return wdpr->devicePixelRatio();
+  }
 
   /**
    * @brief convert a screen measure into a viewport measure
@@ -280,9 +286,9 @@ private:
   tlp::GlScene scene;
   QRegion _visibleArea;
   View *view;
+  QWidget *wdpr;
   int widthStored;
   int heightStored;
-  bool frameBufferStored;
   QOpenGLFramebufferObject *glFrameBuf, *glFrameBuf2;
   static bool inRendering;
   bool keepPointOfViewOnSubgraphChanging;

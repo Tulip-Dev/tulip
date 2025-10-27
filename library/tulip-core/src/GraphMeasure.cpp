@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,9 +18,8 @@
  */
 #include <deque>
 #include <stack>
-#include <climits>
 
-#include <unordered_map>
+#include <unordered_set>
 #include <tulip/GraphMeasure.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphParallelTools.h>
@@ -125,14 +124,14 @@ double tlp::averagePathLength(const Graph *graph) {
 //================================================================
 double tlp::averageClusteringCoefficient(const Graph *graph) {
   tlp::NodeStaticProperty<double> clusters(graph);
-  tlp::clusteringCoefficient(graph, clusters, UINT_MAX);
-  unsigned int nbNodes = graph->numberOfNodes();
+  tlp::clusteringCoefficient(graph, clusters);
+
   double sum = 0;
+  for (auto v : clusters) {
+    sum += v;
+  }
 
-  for (unsigned int i = 0; i < nbNodes; ++i)
-    sum += clusters[i];
-
-  return sum / nbNodes;
+  return sum / graph->numberOfNodes();
 }
 //================================================================
 unsigned int tlp::maxDegree(const Graph *graph) {
@@ -150,37 +149,29 @@ unsigned int tlp::minDegree(const Graph *graph) {
 }
 //=================================================
 void tlp::clusteringCoefficient(const Graph *graph, tlp::NodeStaticProperty<double> &clusters,
-                                unsigned int maxDepth) {
+                                unsigned int) {
 
   TLP_MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
-    std::unordered_map<node, bool> reachables;
-    markReachableNodes(graph, n, reachables, maxDepth);
-    double nbEdge = 0; // e(N_v)*2$
-
-    std::unordered_map<node, bool>::const_iterator itr = reachables.begin();
-    std::unordered_map<node, bool>::const_iterator ite = reachables.end();
-
-    while (itr != ite) {
-      node itn = itr->first;
-
-      for (auto e : graph->getInOutEdges(itn)) {
-        auto eEnds = graph->ends(e);
-
-        if ((reachables.find(eEnds.first) != ite) && (reachables.find(eEnds.second) != ite)) {
-          ++nbEdge;
-        }
-      }
-
-      ++itr;
+    vector<node> reachables;
+    for (node nei : graph->getInOutNodes(n)) {
+      reachables.push_back(nei);
     }
 
-    double nNode = reachables.size(); //$|N_v|$
+    unsigned nbEdgesN(0);
+    if(!reachables.empty()) {
+      auto itr = reachables.end();
+      for (auto i = reachables.begin(); i != itr - 1; ++i) {
+        for (auto j = i + 1; j != itr; ++j) {
+          if (graph->hasEdge(*i, *j, false)) {
+            ++nbEdgesN;
+          }
+        }
+      }
+    }
 
-    if (reachables.size() > 1) {
-      //$e(N_v)/(\frac{k*(k-1)}{2}}$
-      clusters[i] = nbEdge / (nNode * (nNode - 1));
-    } else
-      clusters[i] = 0;
+    double nbEdge(graph->deg(n) + nbEdgesN);
+    double nNode = reachables.size() + 1;
+    clusters[i] = (nNode==1)?0:nbEdge / ((nNode * (nNode - 1)) / 2);
   });
 }
 //==================================================

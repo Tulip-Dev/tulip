@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -172,12 +172,14 @@ void GraphView::setEndsInternal(const edge e, node src, node tgt, const node new
       for (Graph *sg : subGraphs()) {
         static_cast<GraphView *>(sg)->setEndsInternal(e, src, tgt, newSrc, newTgt);
       }
-      notifyDelEdge(e);
+      notifyBeforeDelEdge(e);
 
       _edges.remove(e);
       propertyContainer->erase(e);
       _nodeData.get(src.id)->outDegreeAdd(-1);
       _nodeData.get(tgt.id)->inDegreeAdd(-1);
+
+      notifyAfterDelEdge(e);
     }
   }
 }
@@ -204,7 +206,8 @@ void GraphView::restoreNode(node n) {
   notifyAddNode(n);
 }
 //----------------------------------------------------------------
-void GraphView::addNodesInternal(unsigned int nbAdded, const std::vector<node> *nodes) {
+void GraphView::addNodesInternal(unsigned int nbAdded, const std::vector<node> *nodes,
+                                 bool addNodeData) {
   _nodes.reserve(_nodes.size() + nbAdded);
 
   std::vector<node>::const_iterator it;
@@ -221,7 +224,8 @@ void GraphView::addNodesInternal(unsigned int nbAdded, const std::vector<node> *
   for (; it != ite; ++it) {
     node n(*it);
     assert(getRootImpl()->isElement(n));
-    _nodeData.set(n.id, new SGraphNodeData());
+    if (addNodeData)
+      _nodeData.set(n.id, new SGraphNodeData());
     _nodes.add(n);
   }
 
@@ -250,6 +254,8 @@ void GraphView::addNodes(Iterator<node> *addedNodes) {
     node n = addedNodes->next();
 
     if (!isElement(n)) {
+      // update _nodeData to ensure isElement(n) == true
+      _nodeData.set(n.id, new SGraphNodeData());
       nodes.push_back(n);
 
       if (!superIsRoot && !super->isElement(n))
@@ -263,7 +269,7 @@ void GraphView::addNodes(Iterator<node> *addedNodes) {
   }
 
   if (!nodes.empty())
-    addNodesInternal(nodes.size(), &nodes);
+    addNodesInternal(nodes.size(), &nodes, false);
 }
 //----------------------------------------------------------------
 edge GraphView::addEdgeInternal(edge e) {
@@ -375,10 +381,13 @@ void GraphView::addEdges(Iterator<edge> *addedEdges) {
 //----------------------------------------------------------------
 void GraphView::removeNode(const node n) {
   assert(isElement(n));
-  notifyDelNode(n);
+  notifyBeforeDelNode(n);
+
   _nodeData.set(n.id, nullptr);
   _nodes.remove(n);
   propertyContainer->erase(n);
+
+  notifyAfterDelNode(n);
 }
 //----------------------------------------------------------------
 void GraphView::removeNode(const node n, const std::vector<edge> &ee) {
@@ -425,7 +434,7 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
 //----------------------------------------------------------------
 void GraphView::removeEdge(const edge e) {
   assert(isElement(e));
-  notifyDelEdge(e);
+  notifyBeforeDelEdge(e);
 
   _edges.remove(e);
   propertyContainer->erase(e);
@@ -434,6 +443,8 @@ void GraphView::removeEdge(const edge e) {
   node tgt = eEnds.second;
   _nodeData.get(src.id)->outDegreeAdd(-1);
   _nodeData.get(tgt.id)->inDegreeAdd(-1);
+
+  notifyAfterDelEdge(e);
 }
 //----------------------------------------------------------------
 void GraphView::removeEdges(const std::vector<edge> &ee) {

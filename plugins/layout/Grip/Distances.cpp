@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -25,7 +25,7 @@ using namespace std;
 
 unsigned int getDist(Graph *g, node n1, node n2) {
   vector<node> nextNodes;
-  std::unordered_map<node, unsigned int> nodeDepth;
+  tlp_hash_map<node, unsigned int> nodeDepth;
   MutableContainer<bool> alreadyTreated;
   bool found = false;
   alreadyTreated.setAll(false);

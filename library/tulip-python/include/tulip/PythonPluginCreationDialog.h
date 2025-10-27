@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -38,7 +38,6 @@ class TLP_PYTHON_SCOPE PythonPluginCreationDialog : public QDialog {
 public:
   PythonPluginCreationDialog(QWidget *parent = nullptr);
   ~PythonPluginCreationDialog() override;
-  QString getPluginFileName() const;
 
   QString getPluginType() const;
 
@@ -61,8 +60,6 @@ public:
 protected slots:
 
   void accept() override;
-
-  void selectPluginSourceFile();
 };
 } // namespace tlp
 

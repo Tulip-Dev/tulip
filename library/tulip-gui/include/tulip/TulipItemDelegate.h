@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,9 +22,10 @@
 #define TULIPITEMDELEGATE_H
 
 #include <QStyledItemDelegate>
+class QComboBox;
 
-#include <tulip/TulipItemEditorCreators.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/TulipItemEditorCreators.h>
 
 namespace tlp {
 
@@ -39,7 +40,7 @@ class TLP_QT_SCOPE TulipItemDelegate : public QStyledItemDelegate {
 public:
   static QVariant showEditorDialog(tlp::ElementType, tlp::PropertyInterface *, tlp::Graph *,
                                    TulipItemDelegate *, QWidget *dialogParent = nullptr,
-                                   unsigned int id = UINT_MAX);
+                                   unsigned int id = UINT_MAX, QString title = "");
 
   explicit TulipItemDelegate(QObject *parent = nullptr);
   ~TulipItemDelegate() override;

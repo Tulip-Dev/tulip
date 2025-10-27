@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -54,7 +54,7 @@ void TestAlgorithmTest::testSimple() {
   std::vector<edge> multi;
   std::vector<edge> loops;
   // build a simple graph
-  node n1, n2, n3, n4;
+  node n1, n2, n3;
   edge e1, e2, e3;
   n1 = graph->addNode();
   n2 = graph->addNode();
@@ -76,7 +76,7 @@ void TestAlgorithmTest::testSimple() {
   CPPUNIT_ASSERT(!SimpleTest::isSimple(graph));
   CPPUNIT_ASSERT(!SimpleTest::simpleTest(graph, &multi, &loops));
   CPPUNIT_ASSERT(multi.size() == 1);
-  CPPUNIT_ASSERT(loops.size() == 0);
+  CPPUNIT_ASSERT(loops.empty());
   CPPUNIT_ASSERT(multi[0] == e || multi[0] == e3);
 
   // directed tests

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -23,7 +23,7 @@
 #include <tulip/GlMainView.h>
 
 #include <vector>
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include "../../utils/PluginNames.h"
 #include "Histogram.h"
@@ -54,8 +54,8 @@ class QuickAccessBarImpl;
  * to nodes (or edges).
  *
  * This view also allows to map visual properties (colors, sizes, glyphs, ..) of the graph elements
- * with respect to a graph metric in a visual way. These operations can be done with the "Metric
- mapping"
+ * with respect to a graph metric in a visual way. These operations can be performed with the
+ "Metric mapping"
  * interactor. Many interactors are also bundled with the view to perform elements selection,
  statistical analysis, ...
  *
@@ -73,7 +73,7 @@ public:
                     "displayed for values associated to nodes (or edges).</p>"
                     "<p>This view also allows to map visual properties (colors, sizes, glyphs, ..) "
                     "of the graph elements with respect to a graph metric in a visual way. These "
-                    "operations can be done with the \"Metric mapping\" interactor. Many "
+                    "operations can be performed with the \"Metric mapping\" interactor. Many "
                     "interactors are also bundled with the view to perform elements selection, "
                     "statistical analysis, ...</p>",
                     "1.1", "View")
@@ -93,7 +93,7 @@ public:
     return _histoGraph;
   }
   bool eventFilter(QObject *object, QEvent *event) override;
-  QList<QWidget *> configurationWidgets() const override;
+  std::list<QWidget *> configurationWidgets() const override;
 
   std::vector<Histogram *> getHistograms() const;
   bool smallMultiplesViewSet() const {
@@ -145,7 +145,7 @@ public slots:
 protected slots:
 
 private:
-  void interactorsInstalled(const QList<tlp::Interactor *> &) override;
+  void interactorsInstalled(const std::list<tlp::Interactor *> &) override;
   void registerTriggers();
   void initGlWidget();
   void buildHistograms();
@@ -205,8 +205,8 @@ private:
   bool needUpdateHistogram;
 
   Graph *edgeAsNodeGraph;
-  std::unordered_map<edge, node> edgeToNode;
-  std::unordered_map<node, edge> nodeToEdge;
+  tlp_hash_map<edge, node> edgeToNode;
+  tlp_hash_map<node, edge> nodeToEdge;
 };
 } // namespace tlp
 

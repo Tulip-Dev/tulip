@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -63,7 +63,7 @@ public:
     
 protected:
   
-  BooleanAlgorithm (const tlp::PluginContext*);
+  BooleanAlgorithm (const tlp::PluginContext*, bool = false);
   
 };
 
@@ -93,7 +93,7 @@ public:
   
 protected:
   
-  ColorAlgorithm (const tlp::PluginContext*);
+  ColorAlgorithm (const tlp::PluginContext*, bool = false);
   
 };
 
@@ -122,7 +122,7 @@ public:
   
 protected:
   
-  DoubleAlgorithm (const tlp::PluginContext*);
+  DoubleAlgorithm (const tlp::PluginContext*, bool = false);
   
 };
 
@@ -151,7 +151,7 @@ public:
   
 protected:
   
-  IntegerAlgorithm (const tlp::PluginContext*);
+  IntegerAlgorithm (const tlp::PluginContext*, bool = false);
 };
 
 class LayoutAlgorithm : tlp::PropertyAlgorithm {
@@ -179,7 +179,7 @@ public:
   
 protected:
   
-  LayoutAlgorithm (const tlp::PluginContext*);
+  LayoutAlgorithm (const tlp::PluginContext*, bool = false);
     
 };
 
@@ -208,7 +208,7 @@ public:
   
 protected:
   
-  SizeAlgorithm (const tlp::PluginContext*);
+  SizeAlgorithm (const tlp::PluginContext*, bool = false);
 
 };
 
@@ -237,7 +237,7 @@ public:
   
 protected:
   
-  StringAlgorithm (const tlp::PluginContext*);
+  StringAlgorithm (const tlp::PluginContext*, bool = false);
 };
 
 };

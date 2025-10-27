@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -27,19 +27,17 @@ PLUGIN(InducedSubGraphSelection)
 
 //=================================================================================
 static const char *paramHelp[] = {
-    // Nodes
-    "Set of nodes from which the induced subgraph is computed.",
+    // selection
+    "This property indicates the selected nodes from which the induced subgraph is computed.",
     // Use edges
     "If true, source and target nodes of selected edges will also be added in the input set of "
     "nodes."};
 //=================================================================================
 InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PluginContext *context)
     : BooleanAlgorithm(context) {
-  addInParameter<BooleanProperty>("nodes", paramHelp[0], "viewSelection");
+  addInParameter<BooleanProperty>("selection", paramHelp[0], "viewSelection");
   addInParameter<bool>("use edges", paramHelp[1], "false");
   addOutParameter<unsigned int>("#edges selected", "The number of newly selected edges");
-  // old name
-  declareDeprecatedName("Induced Sub-Graph");
 }
 //=================================================================================
 bool InducedSubGraphSelection::run() {
@@ -47,8 +45,8 @@ bool InducedSubGraphSelection::run() {
   bool useEdges = false;
 
   if (dataSet != nullptr) {
-    dataSet->getDeprecated("nodes", "Nodes", entrySelection);
-    dataSet->getDeprecated("use edges", "Use edges", useEdges);
+    dataSet->get("selection", entrySelection);
+    dataSet->get("use edges", useEdges);
   }
 
   if (entrySelection == nullptr)

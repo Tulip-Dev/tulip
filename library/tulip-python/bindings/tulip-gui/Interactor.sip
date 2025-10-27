@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -32,7 +32,7 @@ tlpgui.createInteractor(interactorName)
 .. versionadded:: 4.4
 
 Creates a Tulip interactor. An interactor enables to add user
-interaction (usually trough the use of mouse and keyboards) to a Tulip view.
+interaction (usually through the use of mouse and keyboards) to a Tulip view.
 Use function :func:`tlpgui.getInteractorsCompatibleWithView` to get the names
 of the interactors compatible with a particular view.
 Use method :meth:`tlpgui.View.setInteractors` to modify the default interactors
@@ -71,8 +71,7 @@ Returns a list of interactors names compatible with a specific view.
 
 %MethodCode
     if (tlp::PluginLister::pluginExists<tlp::View>(*a0)) {
-        QList<std::string> ret = tlp::InteractorLister::compatibleInteractors(*a0);
-        sipRes = new std::list<std::string>(ret.toStdList());
+        sipRes = new std::list<std::string>(tlp::InteractorLister::compatibleInteractors(*a0));
     } else {
         sipIsErr = 1;
         std::ostringstream oss;
@@ -111,7 +110,7 @@ Returns if the interactor is compatible with a specific view.
 
 %MethodCode
     if (tlp::PluginLister::pluginExists<tlp::View>(*a0)) {
-        QList<std::string> ret = tlp::InteractorLister::compatibleInteractors(*a0);
+        std::list<std::string> ret = tlp::InteractorLister::compatibleInteractors(*a0);
         sipRes = sipCpp->isCompatible(*a0);
     } else {
         sipIsErr = 1;

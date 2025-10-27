@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,14 +17,8 @@
  *
  */
 
-#include <QString>
-#include <QStringList>
-#include <QListView>
 #include <QPushButton>
 #include <QMessageBox>
-#include <QInputDialog>
-#include <QLabel>
-#include <QTabWidget>
 
 #include "ui_CopyPropertyDialog.h"
 
@@ -46,6 +40,10 @@ using namespace tlp;
 CopyPropertyDialog::CopyPropertyDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::CopyPropertyDialogData()), _graph(nullptr), _source(nullptr) {
   ui->setupUi(this);
+#ifdef __APPLE__
+  ui->localPropertiesComboBox->setMinimumContentsLength(21);
+  ui->inheritedPropertiesComboBox->setMinimumContentsLength(21);
+#endif
 
   ui->buttonBox->button(QDialogButtonBox::Ok)->setText("&Copy");
 

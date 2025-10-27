@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,10 +20,7 @@
 #include <tulip/InteractorConfigWidget.h>
 #include "ui_InteractorConfigWidget.h"
 
-#include <QScrollArea>
 #include <QLabel>
-#include <QHideEvent>
-#include <QShowEvent>
 
 #include <tulip/TlpQtTools.h>
 #include <tulip/Interactor.h>
@@ -51,31 +48,22 @@ bool InteractorConfigWidget::setWidgets(Interactor *interactor) {
   _ui->interactorConfigWidgetDoc->takeWidget();
   _ui->interactorConfigWidgetOptions->takeWidget();
 
-  QWidget *oldConfig(interactor->configurationWidget());
-  // if old config is present and is only a QLabel => Documentation tab, else Options tab
-  QWidget *DocWidget = nullptr;
-  QWidget *OptionsWidget = nullptr;
-  if (oldConfig != nullptr) {
-    if (dynamic_cast<QLabel *>(oldConfig) != nullptr)
-      DocWidget = oldConfig;
-    else
-      OptionsWidget = oldConfig;
-  } else {
-    DocWidget = interactor->configurationDocWidget();
-    OptionsWidget = interactor->configurationOptionsWidget();
-  }
+  QWidget *optionsWidget(interactor->configurationOptionsWidget());
+  QLabel *docWidget(interactor->configurationDocWidget());
 
-  if ((DocWidget == nullptr) && (OptionsWidget == nullptr)) {
+  if ((docWidget == nullptr) && (optionsWidget == nullptr)) {
     _interactor = nullptr;
     hide();
     return false;
   } else {
     setWindowTitle(tlpStringToQString(interactor->info()));
 
-    if (DocWidget != nullptr) {
-      _ui->interactorConfigWidgetDoc->setWidget(DocWidget);
+    if (docWidget != nullptr) {
+      _ui->interactorConfigWidgetDoc->setWidget(docWidget);
+      // fix display of QCheckBox and QRadioButton children
+      tlpFixCBRBs(docWidget);
       _ui->tabWidget->setTabEnabled(0, true); // in case it was previously set to false
-      if (OptionsWidget != nullptr) {
+      if (optionsWidget != nullptr) {
         auto idx = lastIndex.find(interactor->info());
         if (idx != lastIndex.end())
           // restore current tab index
@@ -89,8 +77,10 @@ bool InteractorConfigWidget::setWidgets(Interactor *interactor) {
       _ui->tabWidget->setCurrentIndex(1);
     }
 
-    if (OptionsWidget != nullptr) {
-      _ui->interactorConfigWidgetOptions->setWidget(OptionsWidget);
+    if (optionsWidget != nullptr) {
+      _ui->interactorConfigWidgetOptions->setWidget(optionsWidget);
+      // fix display of QCheckBox and QRadioButton children
+      tlpFixCBRBs(optionsWidget);
       _ui->tabWidget->setTabEnabled(1, true); // in case it was previously set to false
     } else
       _ui->tabWidget->setTabEnabled(1, false);

@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -26,8 +26,8 @@
 #include <cassert>
 #include <climits>
 #include <cstring>
-#include <unordered_map>
 #include <tulip/tulipconf.h>
+#include <tulip/tuliphash.h>
 #include <tulip/StoredType.h>
 #include <tulip/DataSet.h>
 #include <tulip/Iterator.h>
@@ -110,7 +110,7 @@ public:
   }
 
   /**
-   * invert the boolean value set to i (do nothing for non boolean value)
+   * invert the Boolean value set to i (do nothing for non Boolean value)
    */
   void invertBooleanValue(const unsigned int i);
 
@@ -127,7 +127,7 @@ private:
 
 private:
   std::deque<typename StoredType<TYPE>::Value> *vData;
-  std::unordered_map<unsigned int, typename StoredType<TYPE>::Value> *hData;
+  tlp_hash_map<unsigned int, typename StoredType<TYPE>::Value> *hData;
   unsigned int minIndex, maxIndex;
   typename StoredType<TYPE>::Value defaultValue;
   enum State { VECT = 0, HASH = 1 };
@@ -191,7 +191,7 @@ template <typename TYPE>
 class IteratorHash : public IteratorValue {
 public:
   IteratorHash(const TYPE &value, bool equal,
-               std::unordered_map<unsigned int, typename StoredType<TYPE>::Value> *hData)
+               tlp_hash_map<unsigned int, typename StoredType<TYPE>::Value> *hData)
       : _value(value), _equal(equal), hData(hData) {
     it = (*hData).begin();
 
@@ -224,8 +224,8 @@ public:
 private:
   const TYPE _value;
   bool _equal;
-  std::unordered_map<unsigned int, typename StoredType<TYPE>::Value> *hData;
-  typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it;
+  tlp_hash_map<unsigned int, typename StoredType<TYPE>::Value> *hData;
+  typename tlp_hash_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it;
 };
 ///@endcond
 } // namespace tlp

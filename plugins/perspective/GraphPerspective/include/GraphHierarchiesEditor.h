@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -68,6 +68,7 @@ class GraphHierarchiesEditor : public QWidget, tlp::Observable {
 public:
   explicit GraphHierarchiesEditor(QWidget *parent = nullptr);
   ~GraphHierarchiesEditor() override;
+  tlp::Graph *currentGraph();
   void setModel(tlp::GraphHierarchiesModel *model);
   bool synchronized() const;
   void treatEvents(const std::vector<tlp::Event> &) override;

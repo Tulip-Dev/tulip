@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -33,8 +33,7 @@ class DepthMetric : public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATION("Depth", "David Auber", "15/02/2001",
                     "For each node n on an acyclic graph,"
-                    "it computes the maximum path length between n and the other node."
-                    "<br><b>The graph must be acyclic</b>.",
+                    "it computes the maximum path length between n and the other nodes.",
                     "1.2", "Hierarchical")
   DepthMetric(const tlp::PluginContext *context);
   bool run() override;

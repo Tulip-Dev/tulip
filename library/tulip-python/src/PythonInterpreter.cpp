@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -39,7 +39,9 @@
 
 #include <tulip/TulipRelease.h>
 #include <tulip/TlpTools.h>
-#include <tulip/PythonVersionChecker.h>
+#ifdef __MINGW32__
+#include <tulip/PythonIDEInterface.h>
+#endif
 #include <tulip/TlpQtTools.h>
 
 #include <cstdio>
@@ -47,6 +49,7 @@
 #include <dlfcn.h>
 #else
 #include <windows.h>
+#include <QProcess>
 #endif
 
 using namespace tlp;
@@ -92,10 +95,7 @@ def printObjectClass(obj):
 )";
 
 static QString convertPythonUnicodeObjectToQString(PyObject *pyUnicodeObj) {
-  PyObject *utf8Str = PyUnicode_AsUTF8String(pyUnicodeObj);
-  QString ret = QString::fromUtf8(PyBytes_AsString(utf8Str));
-  decrefPyObject(utf8Str);
-  return ret;
+  return QString(PyUnicode_AsUTF8(pyUnicodeObj));
 }
 
 static bool scriptPaused = false;
@@ -207,14 +207,17 @@ PythonInterpreter::PythonInterpreter()
   }
 
   if (!_wasInit) {
+    PyConfig config;
+    PyStatus status;
+    PyConfig_InitPythonConfig(&config);
+    config.install_signal_handlers = 0;
 
-    int argc = 1;
-    static const std::wstring argv0 = L"tulip";
-    wchar_t *argv[1];
-    argv[0] = const_cast<wchar_t *>(argv0.c_str());
-
-    Py_OptimizeFlag = 1;
-    Py_NoSiteFlag = 1;
+    status = PyConfig_SetString(&config, &config.program_name, L"tulip");
+    if (PyStatus_Exception(status)) {
+      Py_ExitStatusException(status);
+    }
+    config.site_import = 0;
+    config.optimization_level = 1;
 
 // Fix for GDB debugging on windows when compiling with MinGW.
 // GDB contains an embedded Python interpreter that messes up Python Home value.
@@ -222,11 +225,10 @@ PythonInterpreter::PythonInterpreter()
 // it crashes at startup when running it through GDB.
 // So reset correct one to be able to debug it.
 #ifdef __MINGW32__
-    QString pythonHome = PythonVersionChecker::getPythonHome();
-
+    QString pythonHome = PythonIDEInterface::getPythonHome();
     if (!pythonHome.isEmpty()) {
       static std::wstring pythonHomeWString = pythonHome.toStdWString();
-      Py_SetPythonHome(const_cast<wchar_t *>(pythonHomeWString.c_str()));
+      config.home = const_cast<wchar_t *>(pythonHomeWString.c_str());
     }
 #endif
 
@@ -234,13 +236,24 @@ PythonInterpreter::PythonInterpreter()
     PyImport_AppendInittab("consoleutils", initconsoleutils);
     PyImport_AppendInittab("tuliputils", inittuliputils);
 
-    Py_InitializeEx(0);
-
-    PySys_SetArgv(argc, argv);
-
-#if PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION < 9
-    PyEval_InitThreads();
+    status = Py_InitializeFromConfig(&config);
+    if (PyStatus_Exception(status)) {
+      Py_ExitStatusException(status);
+    }
+#ifdef WIN32
+    // crash on windows 10, but not on windows 11
+    // so check for windows 10.
+    // According to https://ss64.com/nt/ver.html
+    // the "Major version.build" of windows 10 versions
+    // always begins with 10.0.1
+    QProcess proc;
+    proc.start("cmd.exe", {"/C", "ver"});
+    proc.waitForFinished();
+    QString version(proc.readAllStandardOutput());
+    if (version.indexOf("windows") > 0 && version.indexOf("10.0.1") == -1)
 #endif
+      PyConfig_Clear(&config);
+
     mainThreadState = PyEval_SaveThread();
   }
 
@@ -271,28 +284,7 @@ PythonInterpreter::PythonInterpreter()
     libPythonName += QString(".so.1.0");
 #endif
 
-    if (!dlopen(QStringToTlpString(libPythonName).c_str(), RTLD_LAZY | RTLD_GLOBAL)) {
-
-      // for Python 3.2
-      libPythonName = QString("libpython") + _pythonVersion + QString("mu");
-#ifdef __APPLE__
-      libPythonName += QString(".dylib");
-#else
-      libPythonName += QString(".so.1.0");
-#endif
-
-      if (!dlopen(QStringToTlpString(libPythonName).c_str(), RTLD_LAZY | RTLD_GLOBAL)) {
-        // for Python 3.3
-        libPythonName = QString("libpython") + _pythonVersion + QString("m");
-#ifdef __APPLE__
-        libPythonName += QString(".dylib");
-#else
-        libPythonName += QString(".so.1.0");
-#endif
-        dlopen(QStringToTlpString(libPythonName).c_str(), RTLD_LAZY | RTLD_GLOBAL);
-      }
-    }
-
+    dlopen(QStringToTlpString(libPythonName).c_str(), RTLD_LAZY | RTLD_GLOBAL);
 #endif
 
 #if !defined(_MSC_VER)
@@ -314,10 +306,10 @@ PythonInterpreter::PythonInterpreter()
       // otherwise Py_InitializeEx can crash if Py_NoSiteFlag is not set
       // and if the site module is not present on the host system
       // Disable output while trying to import the module to not confuse the user
-      runString("import site");
-      runString("site.main()");
-      runString("from tulip import tlp");
-      runString("from tulipgui import tlpgui");
+      runString("import site;"
+                "site.main();"
+                "from tulip import tlp;"
+                "from tulipgui import tlpgui\n");
 
       // When importing the tulip module, Tulip Python plugins and
       // startup scripts will be possibly loaded and other Python modules can be loaded as a side
@@ -359,14 +351,13 @@ PythonInterpreter::~PythonInterpreter() {
     consoleOuputString = "";
     runString(
         "sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; sys.stdin = sys.__stdin__\n");
-    PyEval_ReleaseLock();
     PyEval_RestoreThread(mainThreadState);
 
     holdGIL();
     // avoid display of invalid read/use of uninitialised value
     // when debugging with valgrind
     if (!TulipProgramExiting)
-      Py_Finalize();
+      Py_FinalizeEx();
   }
 
   delete consoleOuputEmitter;
@@ -544,12 +535,12 @@ void PythonInterpreter::addModuleSearchPath(const QString &path, const bool befo
   if (_currentImportPaths.find(path) == _currentImportPaths.end()) {
     QString pythonCode;
     QTextStream oss(&pythonCode);
-    oss << "import sys" << QT_ENDL;
+    oss << "import sys" << Qt::endl;
 
     if (beforeOtherPaths) {
-      oss << "sys.path.insert(0, \"" << path << "\")" << QT_ENDL;
+      oss << "sys.path.insert(0, \"" << path << "\")" << Qt::endl;
     } else {
-      oss << "sys.path.append(\"" << path << "\")" << QT_ENDL;
+      oss << "sys.path.append(\"" << path << "\")" << Qt::endl;
     }
 
     runString(pythonCode);
@@ -672,20 +663,18 @@ void PythonInterpreter::stopCurrentScript() {
 void PythonInterpreter::deleteModule(const QString &moduleName) {
   QString pythonCode;
   QTextStream oss(&pythonCode);
-  oss << "import sys" << QT_ENDL;
-  oss << "if \"" << moduleName << "\" in sys.modules:" << QT_ENDL;
-  oss << "  del sys.modules[\"" << moduleName << "\"]" << QT_ENDL;
+  oss << "import sys" << Qt::endl;
+  oss << "if \"" << moduleName << "\" in sys.modules:" << Qt::endl;
+  oss << "  del sys.modules[\"" << moduleName << "\"]" << Qt::endl;
   runString(pythonCode);
 }
 
 bool PythonInterpreter::reloadModule(const QString &moduleName) {
   QString pythonCode;
   QTextStream oss(&pythonCode);
-  oss << "import sys" << QT_ENDL;
-  oss << "if sys.version_info[0] == 3:" << QT_ENDL;
-  oss << "  from imp import reload" << QT_ENDL;
-  oss << "import " << moduleName << QT_ENDL;
-  oss << "reload(" << moduleName << ")" << QT_ENDL;
+  oss << "from importlib import reload" << Qt::endl;
+  oss << "mod = __import__(\"" << moduleName << "\")" << Qt::endl;
+  oss << "reload(mod)" << Qt::endl;
   return runString(pythonCode);
 }
 
@@ -792,6 +781,20 @@ QString PythonInterpreter::getVariableType(const QString &varName) {
   setErrorOutputEnabled(false);
   consoleOuputString = "";
   bool ok = runString(QString("printObjectClass(") + varName + ")");
+  setOutputEnabled(true);
+  setErrorOutputEnabled(true);
+
+  if (ok)
+    return consoleOuputString.mid(0, consoleOuputString.size() - 1);
+  else
+    return "";
+}
+
+QString PythonInterpreter::getSysVariable(const QString &varName) {
+  setOutputEnabled(false);
+  setErrorOutputEnabled(false);
+  consoleOuputString = "";
+  bool ok = runString(QString("import sys; print(sys.") + varName + ')');
   setOutputEnabled(true);
   setErrorOutputEnabled(true);
 
@@ -953,10 +956,6 @@ void PythonInterpreter::setErrorOutputEnabled(const bool enableOutput) {
 
 bool PythonInterpreter::errorOutputEnabled() const {
   return _errorOutputEnabled;
-}
-
-double PythonInterpreter::getPythonVersion() const {
-  return atof(QStringToTlpString(_pythonVersion).c_str());
 }
 
 QString PythonInterpreter::getPythonFullVersionStr() const {

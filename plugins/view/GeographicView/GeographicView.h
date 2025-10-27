@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -34,7 +34,6 @@
 
 #include "GeographicViewConfigWidget.h"
 #include "GeolocalisationConfigWidget.h"
-#include "LeafletMaps.h"
 #include "GeographicViewGraphicsView.h"
 
 #include "../../utils/PluginNames.h"
@@ -90,12 +89,12 @@ public:
     return geoViewGraphicsView;
   }
 
-  QList<QWidget *> configurationWidgets() const override;
+  std::list<QWidget *> configurationWidgets() const override;
 
   QGraphicsItem *centralItem() const override;
 
-  LeafletMaps *getLeafletMap() {
-    return geoViewGraphicsView->getLeafletMapsPage();
+  inline GeoMapWidget *getGeoMapWidget() const {
+    return geoViewGraphicsView->getGeoMapWidget();
   }
 
   void registerTriggers();
@@ -108,6 +107,10 @@ public:
   void centerView(bool) override {
     // call the Qt slot declared below
     centerView();
+  }
+
+  bool centeredWhenAddedToWorkspace() override {
+    return false;
   }
 
   GeographicViewGraphicsView *getGeographicViewGraphicsView() const {
@@ -125,7 +128,7 @@ public:
 
 public slots:
 
-  void computeGeoLayout();
+  void computeGeoLayout(bool centerView = false);
 
   void draw() override;
 
@@ -146,14 +149,9 @@ public slots:
   void centerView();
   void centerOnNode();
 
-  void mapTypeChanged(QString mapTypeName);
+  void mapTypeChanged(int);
 
-  void zoomIn();
-  void zoomOut();
-  void currentZoomChanged();
-
-  static const std::vector<LeafletMaps::MapLayer> &getMapLayers();
-  static MapType getMapType(const QString &name);
+  static const std::vector<MapLayer> &getMapLayers();
   static const char *getViewName(MapType mapType);
 
 protected slots:
@@ -163,6 +161,7 @@ protected slots:
   void initMap();
 
 private:
+  void switchMapType(MapType type);
   void updatePoly(bool force = false);
 
   void loadStoredPolyInformation(const DataSet &dataset);

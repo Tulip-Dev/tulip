@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,11 +20,13 @@
 #include <QMouseEvent>
 #include <QMessageBox>
 #include <QDrag>
-#include <QtCore/QTime>
+#include <QTime>
+#include <QPainter>
 
 #include "GraphPerspective.h"
 #include "AlgorithmRunnerItem.h"
 #include "ui_AlgorithmRunnerItem.h"
+#include "PluginDocDialog.h"
 
 #include <tulip/GraphTest.h>
 #include <tulip/TulipMimes.h>
@@ -43,6 +45,7 @@
 #include <tulip/ColorScalesManager.h>
 #include <tulip/StableIterator.h>
 #include <tulip/PluginLister.h>
+#include <tulip/Workspace.h>
 
 using namespace tlp;
 
@@ -52,8 +55,6 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, bool darkBackground
   setProperty("algorithRunnerItem", true);
   _ui->setupUi(this);
   connect(_ui->favoriteCheck, SIGNAL(toggled(bool)), this, SIGNAL(favorized(bool)));
-  const Plugin &plugin = PluginLister::pluginInformation(QStringToTlpString(pluginName));
-  ;
   // a & char in a button text have to be doubled
   // to ensure it is not indicating a shortcut key
   QString name = pluginName;
@@ -69,22 +70,30 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, bool darkBackground
   _ui->playButton->setStyleSheet("text-align: left");
   QString tooltip(QString("<b>%1</b> <small>(%2 plugin)</small>")
                       .arg(pluginName)
-                      .arg(plugin.programmingLanguage().c_str()));
+                      .arg(PluginLister::pluginInformation(QStringToTlpString(pluginName))
+                               .programmingLanguage()
+                               .c_str()));
   // initialize parameters only if needed
   _ui->parameters->setVisible(false);
   // set foreground colors according to contents background color
   if (darkBackground) {
     _ui->parameters->setStyleSheet("QHeaderView::section { color: white }");
-    _ui->playButton->setStyleSheet("QPushButton { color: white; text-align: left; } ");
+    _ui->settingsButton->setIcon(QIcon(":/tulip/gui/icons/16/open-settings-white.png"));
+    settingsButtonIconName = QString(":/tulip/gui/icons/16/%1-settings-white.png");
+  } else {
+    _ui->settingsButton->setIcon(QIcon(":/tulip/gui/icons/16/open-settings-black.png"));
+    settingsButtonIconName = QString(":/tulip/gui/icons/16/%1-settings-black.png");
   }
 
-  if (!plugin.getParameters().empty()) {
-    _ui->parameters->setItemDelegate(new TulipItemDelegate(_ui->parameters));
-  } else {
+  if (PluginLister::pluginInformation(QStringToTlpString(pluginName)).getParameters().empty()) {
     _ui->settingsButton->setVisible(false);
   }
+#if defined(__APPLE__)
+  _ui->settingsButton->setToolTip(
+      "Mouse click: show/hide algorithm settings,\nCtrl + Mouse click: display plugin documentation");
+#endif
 
-  std::string &&info = plugin.info();
+  std::string &&info = PluginLister::pluginInformation(QStringToTlpString(pluginName)).info();
 
   // show info in tooltip only if it contains more than one word
   if (info.find(' ') != std::string::npos)
@@ -140,7 +149,7 @@ tlp::Graph *AlgorithmRunnerItem::graph() const {
 }
 
 template <typename PROP>
-void asLocal(QVariant var, DataSet &data, Graph *g) {
+void asLocal(QVariant var, DataSet &data, Graph *g, bool inout) {
   if (var.userType() == qMetaTypeId<PROP *>()) {
     PROP *prop = var.value<PROP *>();
     if (!prop) {
@@ -148,34 +157,39 @@ void asLocal(QVariant var, DataSet &data, Graph *g) {
       return;
     }
     const std::string &propName = prop->getName();
-    bool hasProp = g->existLocalProperty(propName);
     PROP *local = g->getLocalProperty<PROP>(propName);
 
-    if (!hasProp) {
-      // copy default property values to ensure
-      // the inheritance of user defined property settings
-      local->setAllNodeValue(prop->getNodeDefaultValue());
-      local->setAllEdgeValue(prop->getEdgeDefaultValue());
+    if (local != prop) {
+      // copy all existing values if "result" is an inout parameter
+      if (inout)
+        *local = *prop;
+      else {
+        // copy only default property values to ensure
+        // the inheritance of user defined property settings
+        local->setAllNodeValue(prop->getNodeDefaultValue());
+        local->setAllEdgeValue(prop->getEdgeDefaultValue());
+      }
     }
 
     data.set("result", local);
   }
 }
 
-static void copyToLocal(DataSet &data, Graph *g) {
+static void initResultAsLocal(DataSet &data, Graph *g, ParameterDescriptionList &paramList) {
   if (!data.exists("result"))
     return;
 
   DataType *d = data.getData("result");
   QVariant var = TulipMetaTypes::dataTypeToQvariant(d, "");
   delete d;
-  asLocal<DoubleProperty>(var, data, g);
-  asLocal<IntegerProperty>(var, data, g);
-  asLocal<LayoutProperty>(var, data, g);
-  asLocal<SizeProperty>(var, data, g);
-  asLocal<ColorProperty>(var, data, g);
-  asLocal<BooleanProperty>(var, data, g);
-  asLocal<StringProperty>(var, data, g);
+  bool inout = paramList.getDirection("result") == INOUT_PARAM;
+  asLocal<DoubleProperty>(var, data, g, inout);
+  asLocal<IntegerProperty>(var, data, g, inout);
+  asLocal<LayoutProperty>(var, data, g, inout);
+  asLocal<SizeProperty>(var, data, g, inout);
+  asLocal<ColorProperty>(var, data, g, inout);
+  asLocal<BooleanProperty>(var, data, g, inout);
+  asLocal<StringProperty>(var, data, g, inout);
 }
 
 // simple structure to hold an output property parameter
@@ -252,7 +266,7 @@ public:
 
 #define TN(T) typeid(T).name()
 
-void AlgorithmRunnerItem::run(Graph *g) {
+void AlgorithmRunnerItem::run(Graph *g, WorkspacePanel *wsp) {
   initModel();
 
   if (g == nullptr)
@@ -295,7 +309,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
   g->push();
 
   if (_storeResultAsLocal)
-    copyToLocal(dataSet, g);
+    initResultAsLocal(dataSet, g, paramList);
 
   std::vector<std::string> outNonPropertyParams;
   // use temporary output properties
@@ -399,25 +413,34 @@ void AlgorithmRunnerItem::run(Graph *g) {
     progress->setPreviewHandler(nullptr);
 
   if (!result) {
-    if (progress->state() == TLP_CANCEL && errorMessage.empty()) {
+    progress->setComment("Cancelling graph changes...");
+    g->pop();
+    bool cancelled = progress->state() == TLP_CANCEL && errorMessage.empty();
+    delete progress;
+    progress = nullptr;
+    if (cancelled) {
       errorMessage = "Cancelled by user";
       tlp::warning() << QStringToTlpString(name()) << ": " << errorMessage;
       QMessageBox::warning(parentWidget(), name(), errorMessage.c_str());
     } else {
-      tlp::error() << QStringToTlpString(name()) << ": " << errorMessage;
-      QMessageBox::critical(parentWidget(), name(), errorMessage.c_str());
+      std::string stdName = QStringToTlpString(name());
+      if (PluginLister::pluginExists<GraphTest>(stdName)) {
+        std::string str = "\"" + stdName + "\" test failed" + " on:\n" + g->getName() + ".";
+        tlp::warning() << str << std::endl;
+        QMessageBox::warning(parentWidget(), "Tulip test result", tlp::tlpStringToQString(str));
+      } else {
+        tlp::error() << QStringToTlpString(name()) << ": " << errorMessage;
+        QMessageBox::critical(parentWidget(), name(), errorMessage.c_str());
+      }
     }
-    progress->setComment("Cancelling graph changes...");
-    g->pop();
-  } else {
+  }
+
+  if (result) {
     if (progress->state() == TLP_STOP) {
       errorMessage = "Stopped by user";
       tlp::warning() << QStringToTlpString(name()) << ": " << errorMessage;
       QMessageBox::warning(parentWidget(), name(), errorMessage.c_str());
     }
-  }
-
-  if (result) {
     progress->setComment("Applying graph changes...");
     // copy or cleanup out properties
     for (auto &opp : outPropertyParams) {
@@ -446,8 +469,19 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
       qDebug() << log.str().c_str();
     }
+    if (wsp) {
+      // the current algorith as been "dropped" in wsp,
+      // so set wsp as the current WorkspacePanel to ease further actions
+      // on the corresponding graph (ex: undo)
+      dynamic_cast<GraphPerspective *>(Perspective::instance())->setFocusedPanel(wsp);
+    }
   }
 
+  if ((PluginLister::pluginInformation(algorithm).group() == "Topological Test") && result) {
+    // Topological test non longer need to display progress dialog
+    delete progress;
+    progress = nullptr;
+  }
   afterRun(g, dataSet);
 
   if ((result || (PluginLister::pluginInformation(algorithm).group() == "Topological Test")) &&
@@ -499,8 +533,7 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
   }
 
   QDrag *drag = new QDrag(this);
-  const Plugin &p = PluginLister::pluginInformation(QStringToTlpString(_pluginName).c_str());
-  QPixmap icon(QPixmap(p.icon().c_str()).scaled(64, 64));
+  QPixmap icon(QPixmap(":/tulip/graphperspective/icons/64/run_algorithm.png"));
   QFont f;
   f.setBold(true);
   QFontMetrics metrics(f);
@@ -524,7 +557,8 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
   initModel();
   AlgorithmMimeType *mimeData = new AlgorithmMimeType(
       name(), static_cast<ParameterListModel *>(_ui->parameters->model())->parametersValues());
-  connect(mimeData, SIGNAL(mimeRun(tlp::Graph *)), this, SLOT(run(tlp::Graph *)));
+  connect(mimeData, SIGNAL(mimeRun(tlp::Graph *, tlp::WorkspacePanel *)), this,
+          SLOT(run(tlp::Graph *, tlp::WorkspacePanel *)));
   drag->setMimeData(mimeData);
   drag->exec(Qt::CopyAction | Qt::MoveAction);
 }
@@ -533,8 +567,13 @@ bool AlgorithmRunnerItem::eventFilter(QObject *, QEvent *ev) {
   if (ev->type() == QEvent::MouseButtonRelease) {
     QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(ev);
     if (qMouseEv->button() == Qt::RightButton) {
-      QMessageBox::information(parentWidget(), this->name().append(" documentation"),
-                               _ui->playButton->toolTip());
+      // generate plugin + parameters doc
+      QString help = _ui->playButton->toolTip();
+      if (help.isEmpty())
+        help = _pluginName;
+      initModel();
+      ParameterListModel *model = static_cast<ParameterListModel *>(_ui->parameters->model());
+      PluginDocDialog::showDoc(parentWidget(), _pluginName, help, model);
       return true;
     }
   }
@@ -605,15 +644,11 @@ void AlgorithmRunnerItem::afterRun(Graph *g, const tlp::DataSet &dataSet) {
   } else if (PluginLister::pluginExists<GraphTest>(stdName)) {
     bool result = true;
     dataSet.get<bool>("result", result);
-    std::string str = "\"" + stdName + "\" test " + (result ? "succeeded" : "failed") + " on:\n" +
-                      g->getName() + ".";
 
     if (result) {
+      std::string str = "\"" + stdName + "\" test succeeded" + " on:\n" + g->getName() + ".";
       tlp::debug() << str << std::endl;
       QMessageBox::information(parentWidget(), "Tulip test result", tlp::tlpStringToQString(str));
-    } else {
-      tlp::warning() << str << std::endl;
-      QMessageBox::warning(parentWidget(), "Tulip test result", tlp::tlpStringToQString(str));
     }
   }
 }
@@ -640,9 +675,9 @@ void AlgorithmRunnerItem::initModel() {
   if (_ui->parameters->model() != nullptr)
     return;
 
-  ParameterListModel *model =
-      new ParameterListModel(PluginLister::getPluginParameters(QStringToTlpString(_pluginName)),
-                             _graph, _ui->parameters, true);
+  ParameterListModel *model = ParameterListModel::configureTableView(
+      _ui->parameters, PluginLister::getPluginParameters(QStringToTlpString(_pluginName)), _graph,
+      _ui->parameters, true);
 
   if (_pluginName == "Color Mapping") {
     colorMappingModel = model;
@@ -651,7 +686,6 @@ void AlgorithmRunnerItem::initModel() {
     model->setParametersValues(data);
   }
 
-  _ui->parameters->setModel(model);
   int h = 10;
 
   for (int i = 0; i < model->rowCount(); ++i)
@@ -667,4 +701,13 @@ void AlgorithmRunnerItem::initModel() {
     }
     model->setParametersValues(dataSet);
   }
+}
+
+void AlgorithmRunnerItem::updateSettings(bool checked) {
+  QString iconName = settingsButtonIconName.arg(checked ? QString("close") : QString("open"));
+  _ui->settingsButton->setIcon(QIcon(iconName));
+
+  _ui->parameters->setVisible(checked);
+  if (checked)
+    initModel();
 }

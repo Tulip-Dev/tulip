@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -23,12 +23,15 @@
 #include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/SceneLayersModel.h>
+#include <tulip/TulipSettings.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace tlp;
 
 SceneLayersConfigWidget::SceneLayersConfigWidget(QWidget *parent)
     : QWidget(parent), _ui(new Ui::SceneLayersConfigWidget), _glMainWidget(nullptr) {
   _ui->setupUi(this);
+  tlpFixCBRBs(this);
 }
 
 SceneLayersConfigWidget::~SceneLayersConfigWidget() {
@@ -38,7 +41,13 @@ SceneLayersConfigWidget::~SceneLayersConfigWidget() {
 void SceneLayersConfigWidget::setGlMainWidget(GlMainWidget *glMainWidget) {
   _glMainWidget = glMainWidget;
   SceneLayersModel *model = new SceneLayersModel(_glMainWidget->getScene(), _ui->treeView);
+#ifdef _LINUX
+  if (TulipSettings::isDisplayInDarkMode())
+    // change background to ensure visibility of QCheckBox indicator border
+    _ui->treeView->setStyleSheet("QTreeView { background: #606060; }");
+#endif
   _ui->treeView->setModel(model);
+  _ui->treeView->setAlternatingRowColors(true);
   connect(model, SIGNAL(drawNeeded(tlp::GlScene *)), this, SIGNAL(drawNeeded()));
   connect(_ui->treeView, SIGNAL(collapsed(const QModelIndex &)), this, SLOT(resizeFirstColumn()));
   connect(_ui->treeView, SIGNAL(expanded(const QModelIndex &)), this, SLOT(resizeFirstColumn()));

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,6 +21,7 @@
 #include <ogdf/basic/Math.h>
 
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
+#include <tulip/StringCollection.h>
 
 using namespace tlp;
 using namespace ogdf;
@@ -43,10 +44,10 @@ static const char *paramHelp[] = {
     // number of iterations
     "The maximum number of iterations >=0.",
 
-    // Minimal Temperature
-    "The minimal temperature >= 0",
+    // min temperature
+    "The minimum temperature >= 0",
 
-    // Initial Temperature
+    // initial temperature
     "Sets the initial temperature > minimal temperature.",
 
     // Temperature Decrease
@@ -58,20 +59,20 @@ static const char *paramHelp[] = {
     // Oscillation Angle
     "Sets oscillation angle in [0...Pi].",
 
-    // Desired Minimal Edge Length
-    "Sets minimal edge length > 0.",
+    // min edge length
+    "Sets minimum edge length > 0.",
 
     // Init Dummies Per Edge
     "Sets init dummies per edge >= 0.",
 
-    // Maximal Dummies Per Edge
+    // max dummies per edge
     "Sets dummies per edge > init dummies per edge.",
 
-    // Dummy Insertion Threshold
+    // dummy insertion threshold
     "Sets dummy insertion threshold >= 1.",
 
-    // Maximum Disturbance
-    "Sets max disturbance >= 0.",
+    // max disturbance
+    "Sets maximum disturbance >= 0.",
 
     // Repulsion Distance
     "Sets repulsion distance >= 0. By default, it is the double of minimal edge length",
@@ -105,8 +106,8 @@ public:
       "according to forces acting upon them,"
       "filtering out unnecessary dummy nodes, and then replacing the remaining dummy nodes by edge "
       "bends."
-      "The algorithm is documented in and was developed for the bachelor thesis: Max Ilsen: "
-      "Energy-Based Layout Algorithms for Graphs with Large Nodes. University of Osnabrueck, 2017",
+      "The algorithm is documented in and was developed for the bachelor thesis:<br/>"
+      "<b>Energy-Based Layout Algorithms for Graphs with Large Nodes</b>,<br/>Max Ilsen, University of Osnabrueck, 2017",
       "1.1", "Force Directed")
   OGDFNodeRespecter(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::NodeRespecterLayout() : nullptr) {
@@ -115,17 +116,17 @@ public:
                                      postProcessingValuesDescription);
     addInParameter<double>("bends normalization angle", paramHelp[2], to_string(Math::pi), false);
     addInParameter<int>("number of iterations", paramHelp[3], "30000", false);
-    addInParameter<double>("minimal temperature", paramHelp[4], "1.0", false);
+    addInParameter<double>("min temperature", paramHelp[4], "1.0", false);
     addInParameter<double>("initial temperature", paramHelp[5], "10.0", false);
     addInParameter<double>("temperature decrease", paramHelp[6], "0.0", false);
     addInParameter<double>("gravitation", paramHelp[7], "0.0625", false);
     addInParameter<double>("oscillation angle", paramHelp[8], to_string(Math::pi_2), false);
-    addInParameter<double>("minimal edge length", paramHelp[9],
+    addInParameter<double>("min edge length", paramHelp[9],
                            to_string(LayoutStandards::defaultNodeSeparation()), false);
     addInParameter<int>("init dummies per edge", paramHelp[10], "1", false);
-    addInParameter<int>("maximal dummies per pdge", paramHelp[11], "3", false);
+    addInParameter<int>("max dummies per edge", paramHelp[11], "3", false);
     addInParameter<double>("dummy insertion threshold", paramHelp[12], "5", false);
-    addInParameter<double>("maximum disturbance", paramHelp[13], "0", false);
+    addInParameter<double>("max disturbance", paramHelp[13], "0", false);
     addInParameter<double>("repulsion distance", paramHelp[14],
                            to_string(2 * LayoutStandards::defaultNodeSeparation()), false);
     addInParameter<double>("connected components spacing", paramHelp[15],
@@ -144,7 +145,7 @@ public:
       if (dataSet->get("random initial placement", bval))
         npl->setRandomInitialPlacement(bval);
 
-      if (dataSet->getDeprecated("post processing", "Post Processing", stringCollection)) {
+      if (dataSet->get("post processing", stringCollection)) {
         switch (stringCollection.getCurrent()) {
         case POSTPROCESSINGNONE:
           npl->setPostProcessing(NodeRespecterLayout::PostProcessingMode::None);
@@ -157,49 +158,49 @@ public:
         }
       }
 
-      if (dataSet->getDeprecated("bends normalization angle", "Bends Normalization Angle", dval))
+      if (dataSet->get("bends normalization angle", dval))
         npl->setBendNormalizationAngle(dval);
 
       if (dataSet->get("number of iterations", ival))
         npl->setNumberOfIterations(ival);
 
-      if (dataSet->getDeprecated("minimal temperature", "Minimal Temperature", dval))
+      if (dataSet->get("min temperature", dval))
         npl->setMinimalTemperature(dval);
 
-      if (dataSet->getDeprecated("initial temperature", "Initial Temperature", dval))
+      if (dataSet->get("initial temperature", dval))
         npl->setInitialTemperature(dval);
 
-      if (dataSet->getDeprecated("temperature decrease", "Temperature Decrease", dval))
+      if (dataSet->get("temperature decrease", dval))
         npl->setTemperatureDecreaseOffset(dval);
 
-      if (dataSet->getDeprecated("gravitation", "Gravitation", dval))
+      if (dataSet->get("gravitation", dval))
         npl->setGravitation(dval);
 
-      if (dataSet->getDeprecated("oscillation Angle", "Oscillation Angle", dval))
+      if (dataSet->get("oscillation angle", dval))
         npl->setOscillationAngle(dval);
 
-      if (dataSet->getDeprecated("minimal edge length", "Desired Minimal Edge Length", dval))
+      if (dataSet->get("min edge length", dval))
         npl->setDesiredMinEdgeLength(dval);
 
-      if (dataSet->getDeprecated("init dummies per edge", "Init Dummies Per Edge", ival))
+      if (dataSet->get("init dummies per edge", ival))
         npl->setInitDummiesPerEdge(ival);
 
-      if (dataSet->getDeprecated("maximal dummies per edge", "Maximal Dummies Per Edge", ival))
+      if (dataSet->get("max dummies per edge", ival))
         npl->setMaxDummiesPerEdge(ival);
 
-      if (dataSet->getDeprecated("dummy insertion threshold", "Dummy Insertion Threshold", dval))
+      if (dataSet->get("dummy insertion threshold", dval))
         npl->setDummyInsertionThreshold(dval);
 
-      if (dataSet->getDeprecated("maximum disturbance", "Maximum Disturbance", dval))
+      if (dataSet->get("max disturbance", dval))
         npl->setMaxDisturbance(dval);
 
-      if (dataSet->getDeprecated("repulsion distance", "Repulsion Distance", dval))
+      if (dataSet->get("repulsion distance", dval))
         npl->setRepulsionDistance(dval);
 
-      if (dataSet->getDeprecated("connected components spacing", "Min Distance CC", dval))
+      if (dataSet->get("connected components spacing", dval))
         npl->setMinDistCC(dval);
 
-      if (dataSet->getDeprecated("page ratio", "Page Ratio", dval))
+      if (dataSet->get("page ratio", dval))
         npl->setPageRatio(dval);
     }
   }

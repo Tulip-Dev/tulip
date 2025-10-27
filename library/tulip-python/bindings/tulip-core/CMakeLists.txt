@@ -1,16 +1,5 @@
 ADD_CORE_FILES(.)
 
-IF(WIN32)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDLL_TULIP_PYTHON")
-ENDIF(WIN32)
-
-# Visual Studio has a limit for string constants length
-# so we define the sip feature NO_LIMIT_DOC in Module.sip
-# to avoid the compiler error (fatal error C1091)
-IF(MSVC)
-  SET(SIP_FLAGS -x NO_LIMIT_DOC)
-ENDIF()
-
 SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/AcyclicTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/AbstractProperty.sip.in
@@ -22,7 +11,6 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Color.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/ConnectedTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/ConvexHull.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Coord.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/DataSet.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Delaunay.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/DoublePropertySpecific.sip
@@ -40,7 +28,7 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/LayoutPropertySpecific.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/MapIterator.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Matrix.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/tulip.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Node.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/NumericProperty.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Observable.sip
@@ -65,40 +53,61 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Vector.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/WithDependency.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/WithParameter.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/../stl/stl.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/../stl/std_vector.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/../stl/std_string.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/../stl/std_set.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/../stl/std_pair.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/../stl/std_ostream.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/../stl/std_map.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/../stl/std_list.sip
+
     CACHE INTERNAL ""
 )
 
 SET(TULIP_PYTHON_BINDINGS_SRC
-    sip_tulippart0.cpp
-    sip_tulippart1.cpp
-    sip_tulippart2.cpp
-    sip_tulippart3.cpp
-    sip_tulippart4.cpp
-    sip_tulippart5.cpp
-    sip_tulippart6.cpp
-    sip_tulippart7.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart0.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart1.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart2.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart3.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart4.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart5.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart6.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart7.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart8.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart9.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart10.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/build/_tulip/sip_tulippart11.cpp
 )
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/pyproject.toml.in ${CMAKE_CURRENT_BINARY_DIR}/pyproject.toml @ONLY)
+
 ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_PYTHON_BINDINGS_SRC}
-                   COMMAND ${CMAKE_COMMAND} -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR} -DBINARY_DIR=${CMAKE_CURRENT_BINARY_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/generatePropertiesBindings.cmake
-                   COMMAND ${SIP_EXE} -n ${SIP_MODULE} -y ${CMAKE_CURRENT_BINARY_DIR}/tulip.pyi -o -I ${CMAKE_CURRENT_BINARY_DIR} -I ${CMAKE_CURRENT_SOURCE_DIR} -c ${CMAKE_CURRENT_BINARY_DIR} -j8 ${SIP_FLAGS} ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
-                   COMMENT "Generating Python Bindings for libtulip"
-                   DEPENDS ${TULIP_SIP_FILES} ${STL_SIP_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/../../include/tulip/PythonCppTypesConverter.h VERBATIM)
-           
-DISABLE_COMPILER_WARNINGS()
+    COMMAND ${CMAKE_COMMAND} -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR} -DBINARY_DIR=${CMAKE_CURRENT_BINARY_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/generatePropertiesBindings.cmake
+    COMMAND ${SIP_BUILD} --verbose --protected-is-public --concatenate 12 --api-dir=${CMAKE_CURRENT_BINARY_DIR}
+    COMMENT "Generating Python Bindings and API file for libtulip"
+    DEPENDS ${TULIP_SIP_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/../../include/tulip/PythonCppTypesConverter.h VERBATIM)
 
-# Force to use SIP and headers located in thirdparty
-# instead of those installed in the system
-INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
-INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipPythonInclude})
- 
+TULIP_DISABLE_COMPILER_WARNINGS_PYTHON()
+
 SET(TULIP_PYTHON_BINDINGS_SRC
-    ${TULIP_PYTHON_BINDINGS_SRC}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/PythonCppTypesConverter.cpp)
+     ${TULIP_PYTHON_BINDINGS_SRC}
+     ${CMAKE_CURRENT_SOURCE_DIR}/../../src/PythonCppTypesConverter.cpp)
 
-ADD_LIBRARY(${LibTulipCorePythonBindingsName} SHARED ${TULIP_PYTHON_BINDINGS_SRC})
+Python_add_library(${LibTulipCorePythonBindingsName} MODULE WITH_SOABI ${TULIP_PYTHON_BINDINGS_SRC})
+IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+  ADD_DEPENDENCIES(wheel ${LibTulipCorePythonBindingsName})
+ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 
+IF(WIN32)
+  TARGET_COMPILE_DEFINITIONS(${LibTulipCorePythonBindingsName} PUBLIC "DLL_TULIP_PYTHON")
+ENDIF(WIN32)
+TARGET_COMPILE_DEFINITIONS(${LibTulipCorePythonBindingsName} PUBLIC "protected=public")
+TARGET_COMPILE_DEFINITIONS(${LibTulipCorePythonBindingsName} PUBLIC "SIP_PROTECTED_IS_PUBLIC")
+TARGET_COMPILE_DEFINITIONS(${LibTulipCorePythonBindingsName} PUBLIC "DYNAMIC_ANNOTATIONS_ENABLED=1")
+TARGET_INCLUDE_DIRECTORIES(${LibTulipCorePythonBindingsName}
+    PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/build/ ${Python_INCLUDE_DIRS}
+    PUBLIC ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipPythonInclude})
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${TULIP_PYTHON_NATIVE_FOLDER})
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TULIP_PYTHON_NATIVE_FOLDER})
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE ${TULIP_PYTHON_NATIVE_FOLDER})
@@ -106,47 +115,16 @@ SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES RUNTIME_OUTPU
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${TULIP_PYTHON_NATIVE_FOLDER})
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${TULIP_PYTHON_NATIVE_FOLDER})
 
-# Ensure bindings build output folder exists
-ADD_CUSTOM_TARGET(create-tulip-python-native-folder ALL
-                  COMMAND ${CMAKE_COMMAND} -E make_directory ${TULIP_PYTHON_NATIVE_FOLDER})
-ADD_DEPENDENCIES(${LibTulipCorePythonBindingsName} create-tulip-python-native-folder)
-
-ADD_CUSTOM_TARGET(copyTulipInitPy ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py ${TULIP_PYTHON_FOLDER}/__init__.py)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/__init__.py.in ${TULIP_PYTHON_FOLDER}/__init__.py @ONLY)
 
 IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
-  ADD_DEPENDENCIES(wheel copyTulipInitPy)
-
-  CONFIGURE_FILE(packaging/setup.cfg.in ${TULIP_PYTHON_FOLDER}/../setup.cfg)
-  CONFIGURE_FILE(packaging/setup.py.in ${TULIP_PYTHON_FOLDER}/../setup.py)
-  IF(TULIP_GENERATE_TESTPYPI_WHEEL)
-    SET(TULIP_PYTHON_WHEEL_VERSION ${TULIP_PYTHON_TEST_WHEEL_VERSION})
-    CONFIGURE_FILE(packaging/setup.py.in ${TULIP_PYTHON_FOLDER}/../setuptest.py)
-  ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
-
-  ADD_CUSTOM_TARGET(copyTulipPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/MANIFEST.in ${TULIP_PYTHON_FOLDER}/../MANIFEST.in
-                    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/README.rst ${TULIP_PYTHON_FOLDER}/../README.rst
-                    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/copyTulipCoreDllDependencies.cmake ${TULIP_PYTHON_FOLDER}/../copyTulipCoreDllDependencies.cmake
-                    DEPENDS ${TULIP_PYTHON_FOLDER}/../setup.py ${TULIP_PYTHON_FOLDER}/../setup.cfg)
-  ADD_DEPENDENCIES(wheel copyTulipPythonPackagingFiles)
-  IF(TULIP_GENERATE_TESTPYPI_WHEEL)
-    ADD_DEPENDENCIES(wheel copyTulipPythonPackagingFiles)
-  ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
+  CONFIGURE_FILE(packaging/pyproject.toml.in ${TULIP_PYTHON_FOLDER}/../pyproject.toml)
+  FILE(COPY packaging/setup.py DESTINATION ${TULIP_PYTHON_FOLDER}/../)
+  FILE(COPY packaging/README.rst DESTINATION ${TULIP_PYTHON_FOLDER}/../)
 ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
-
-IF(NOT SYSTEM_SIP)
-  ADD_DEPENDENCIES(${LibTulipCorePythonBindingsName} ${SIP_LIB})
-ENDIF(NOT SYSTEM_SIP)
 
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName}
                       PROPERTIES OUTPUT_NAME tulip PREFIX "_")
-
-IF(WIN32)
-  SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName}
-                        PROPERTIES SUFFIX ".pyd")
-ELSE(WIN32)
-  SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName}
-                        PROPERTIES SUFFIX ".so")
-ENDIF(WIN32)
 
 # On MacOS, add the paths of dependencies dylibs in install rpaths of the _tulip.so binary
 # That way, the tulip module can be imported in a classical Python shell without having to
@@ -162,29 +140,21 @@ ELSEIF(LINUX AND NOT TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES INSTALL_RPATH "${CURRENT_INSTALL_RPATHS}:$ORIGIN/${TulipLibsInstallRelPath}")
 ENDIF(APPLE AND NOT TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 
-TARGET_LINK_LIBRARIES(${LibTulipCorePythonBindingsName} ${LibTulipCoreName})
+TARGET_LINK_LIBRARIES(${LibTulipCorePythonBindingsName} PUBLIC ${LibTulipCoreName})
 # When building Python wheel for MacOS, don't link the C extension module with the Python library
 # and use dynamic lookup for retrieving its symbols.
 # That way, we can produce a C extension module that can be imported through the Python interpreter
 # provided by Apple with the System and the one provided by Python.org
 IF(APPLE AND TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
-ELSE(APPLE AND TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
-  IF(NOT LINUX OR NOT TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
-    TARGET_LINK_LIBRARIES(${LibTulipCorePythonBindingsName} ${PYTHON_LIBRARY})
-  ENDIF(NOT LINUX OR NOT TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 ENDIF(APPLE AND TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 
-TULIP_INSTALL_PYTHON_FILES(tulip ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py)
+TULIP_INSTALL_PYTHON_FILES(tulip ${TULIP_PYTHON_FOLDER}/__init__.py)
 TULIP_INSTALL_PYTHON_FILES(tulip/native ${LibTulipCorePythonBindingsName})
 
+
 IF(NOT TULIP_BUILD_CORE_ONLY)
-  ADD_CUSTOM_COMMAND(TARGET ${LibTulipCorePythonBindingsName}
-                     POST_BUILD
-                     COMMAND ${SIP_EXE} -n ${SIP_MODULE} -I ${CMAKE_CURRENT_BINARY_DIR} -I ${CMAKE_CURRENT_SOURCE_DIR} -a ${CMAKE_CURRENT_BINARY_DIR}/tulip.api ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
-                     COMMENT "Generating API file for Tulip Python bindings"
-                     VERBATIM)
-  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
+  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/build/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
 ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 
-SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "tulip.api;sipAPI_tulip.h;tulip_module;BooleanProperty.sip;ColorProperty.sip;DoubleProperty.sip;IntegerProperty.sip;LayoutProperty.sip;SizeProperty.sip;StringProperty.sip")
+SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_CLEAN_FILES "build;tulip_module;BooleanProperty.sip;ColorProperty.sip;DoubleProperty.sip;IntegerProperty.sip;LayoutProperty.sip;SizeProperty.sip;StringProperty.sip")

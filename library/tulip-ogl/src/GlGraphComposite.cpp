@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -19,11 +19,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GraphProperty.h>
 #include <tulip/GlXMLTools.h>
-#include <tulip/GlTools.h>
-#include <tulip/GlScene.h>
-#include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
-#include <tulip/OcclusionTest.h>
 #include <tulip/GlGraphHighDetailsRenderer.h>
 
 using namespace std;
@@ -100,12 +96,30 @@ const GlGraphRenderingParameters &GlGraphComposite::getRenderingParameters() {
 }
 //===================================================================
 void GlGraphComposite::setRenderingParameters(const GlGraphRenderingParameters &parameter) {
-  if (parameters.isElementOrdered() != parameter.isElementOrdered()) {
-    parameters = parameter;
-    graphRenderer->setGraphModified(true);
-  } else {
-    parameters = parameter;
+  if (parameters.getDisplayFilteringProperty() != parameter.getDisplayFilteringProperty()) {
+    auto filterProp = parameters.getDisplayFilteringProperty();
+    if (filterProp)
+      filterProp->removeListener(this);
+    filterProp = parameter.getDisplayFilteringProperty();
+    // we must listen to filterProp deletion
+    // to prevent any free memory access (see treatEvent below)
+    if (filterProp)
+      filterProp->addListener(this);
   }
+  if (parameters.getElementOrderingProperty() != parameter.getElementOrderingProperty()) {
+    auto orderProp = parameters.getElementOrderingProperty();
+    if (orderProp)
+      orderProp->removeListener(this);
+    orderProp = parameter.getElementOrderingProperty();
+    // we must listen to orderProp deletion
+    // to prevent any free memory access (see treatEvent below)
+    if (orderProp)
+      orderProp->addListener(this);
+  }
+  if (parameters.isElementOrdered() != parameter.isElementOrdered())
+    graphRenderer->setGraphModified(true);
+
+  parameters = parameter;
 }
 //===================================================================
 GlGraphRenderingParameters *GlGraphComposite::getRenderingParametersPointer() {
@@ -129,13 +143,13 @@ void GlGraphComposite::treatEvent(const Event &evt) {
     switch (graphEvent->getType()) {
 
     case GraphEvent::TLP_ADD_NODE:
-    case GraphEvent::TLP_DEL_NODE:
+    case GraphEvent::TLP_AFTER_DEL_NODE:
       nodesModified = true;
       graphRenderer->setGraphModified(true);
       break;
 
     case GraphEvent::TLP_ADD_EDGE:
-    case GraphEvent::TLP_DEL_EDGE:
+    case GraphEvent::TLP_AFTER_DEL_EDGE:
     case GraphEvent::TLP_REVERSE_EDGE:
     case GraphEvent::TLP_AFTER_SET_ENDS:
       graphRenderer->setGraphModified(true);
@@ -149,6 +163,22 @@ void GlGraphComposite::treatEvent(const Event &evt) {
 
     if (g && inputData.getGraph() == g) {
       inputData.graph = nullptr;
+    } else {
+      PropertyInterface *prop = dynamic_cast<PropertyInterface *>(evt.sender());
+
+      if (prop) {
+        if (prop == parameters.getDisplayFilteringProperty()) {
+          parameters.setDisplayFilteringProperty(nullptr);
+          tlp::warning()
+              << "Warning: displayFilteringProperty has been deleted, reset it to null to prevent free memory access"
+              << std::endl;
+        } else if (prop == parameters.getElementOrderingProperty()) {
+          parameters.setElementOrderingProperty(nullptr);
+          tlp::warning()
+              << "Warning: elementOrderingProperty has been deleted, reset it to null to prevent free memory access"
+              << std::endl;
+        }
+      }
     }
   } else {
     const PropertyEvent *propertyEvent = dynamic_cast<const PropertyEvent *>(&evt);

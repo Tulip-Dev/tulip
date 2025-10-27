@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -38,10 +38,8 @@
 #include <fstream>
 namespace tlp {
 typedef tlp::Iterator<std::string> IteratorString;
-typedef tlp::Graph* GraphPointer;
-typedef tlp::Iterator<tlp::GraphPointer> IteratorGraph;
-typedef tlp::PropertyInterface* PropertyPointer;
-typedef tlp::Iterator<tlp::PropertyPointer> IteratorProperty;
+typedef tlp::Iterator<tlp::Graph*> IteratorGraph;
+typedef tlp::Iterator<tlp::PropertyInterface*> IteratorProperty;
 }
 typedef std::pair<tlp::node, tlp::node> pairNodeNode;
 
@@ -257,12 +255,10 @@ typedef std::pair<tlp::node, tlp::node> pairNodeNode;
 
 namespace tlp {
 typedef tlp::Iterator<std::string> IteratorString;
-typedef tlp::Graph* GraphPointer;
-typedef tlp::Iterator<tlp::GraphPointer> IteratorGraph;
-typedef tlp::PropertyInterface* PropertyPointer;
-typedef tlp::Iterator<tlp::PropertyPointer> IteratorProperty;
+typedef tlp::Iterator<tlp::Graph*> IteratorGraph;
+typedef tlp::Iterator<tlp::PropertyInterface*> IteratorProperty;
 
-enum ElementType {NODE=0, EDGE};
+enum ElementType /BaseType=IntEnum/ {NODE=Graph::ElementType::NODE, EDGE=Graph::ElementType::EDGE};
 
 class Graph : tlp::Observable /Abstract/ {
 %TypeHeaderCode
@@ -402,7 +398,7 @@ Creates and returns a new named subgraph of this graph.
 
   tlp::Graph* addCloneSubGraph(const std::string& name = "unnamed", bool addSibling = false, bool addSiblingProperties = false);
 %Docstring
-tlp.Graph.addCloneSubGraph(name="unnamed", addSibling=False, addSiblinProperties=False)
+tlp.Graph.addCloneSubGraph(name="unnamed", addSibling=False, addSiblingProperties=False)
 
 .. versionadded:: 4.5
 
@@ -3950,9 +3946,9 @@ Remove last pushed state if no updates have been recorded.
 
 //===========================================================================================
 
-  tlp::node createMetaNode(const std::vector<tlp::node> &nodes, bool multiEdges = true, bool delAllEdge = true);
+  tlp::node createMetaNode(const std::vector<tlp::node> &nodes, bool multiEdges = true, bool delAllEdge = true, bool allGrouped = true);
 %Docstring
-tlp.Graph.createMetaNode(nodes, multiEdges=True, delAllEdge=True)
+tlp.Graph.createMetaNode(nodes, multiEdges=True, delAllEdge=True, allGrouped=True)
 
 .. versionadded:: 5.0
 
@@ -3966,6 +3962,8 @@ edges from the metanode to the other nodes.
 :type multiEdges: boolean
 :param delAllEdge: indicates if the underlying edges will be removed from the entire hierarchy
 :type delAllEdge: boolean
+:param allGrouped: In the no multi edges case, indicates if the underlying edges will be grouped in a unique meta edge or in one for the in edges and one for the out edges
+:type allGrouped: boolean
 :rtype: :class:`tlp.node`
 :throws: an exception if one of the provided nodes does not belong to the graph.
 
@@ -3982,15 +3980,15 @@ edges from the metanode to the other nodes.
    }
  }
  if (sipIsErr != -1) {
-   sipRes = new tlp::node(sipCpp->createMetaNode(*a0, a1, a2));
+   sipRes = new tlp::node(sipCpp->createMetaNode(*a0, a1, a2, a3));
  }
 %End
 
 //===========================================================================================
 
-  tlp::node createMetaNode(tlp::Graph* subgraph, bool multiEdges = true, bool delAllEdge = true);
+  tlp::node createMetaNode(tlp::Graph* subgraph, bool multiEdges = true, bool delAllEdge = true, bool allGrouped = true);
 %Docstring
-tlp.Graph.createMetaNode(subgraph, multiEdges=True, delAllEdge=True)
+tlp.Graph.createMetaNode(subgraph, multiEdges=True, delAllEdge=True, allGrouped=True)
 
 Closes a subgraph into a metanode and returns it. Edges from nodes
 in the subgraph to nodes outside the subgraph are replaced with
@@ -4009,8 +4007,10 @@ point to an empty subgraph.
 :type multiEdges: boolean
 :param delAllEdge: indicates if the underlying edges will be removed from the entire hierarchy
 :type delAllEdge: boolean
+:param allGrouped: In the no multi edges case, indicates if the underlying edges will be grouped in a unique meta edge or in one for the in edges and one for the out edges
+:type allGrouped: boolean
 :rtype: :class:`tlp.node`
-:throws: an exception if the provided subgraph is a descandent of the graph in the graph hierarchy or if one of the element in the subgraph does not belong to the graph.
+:throws: an exception if the provided subgraph is a descendant of the graph in the graph hierarchy or if one of the element in the subgraph does not belong to the graph.
 
 .. warning:: This method will fail when called on the root graph.
 
@@ -4041,7 +4041,7 @@ point to an empty subgraph.
       }
     }
     if (sipIsErr != -1) {
-      sipRes = new tlp::node(sipCpp->createMetaNode(a0, a1, a2));
+      sipRes = new tlp::node(sipCpp->createMetaNode(a0, a1, a2, a3));
     }
   }
 %End
@@ -4361,18 +4361,14 @@ while the values must be typed according to those of the available Tulip propert
 
   std::string __repr__() const;
 %MethodCode
-  std::string graphName;
-  sipCpp->getAttribute("name", graphName);
-  std::ostringstream oss;
-  oss << "<graph \"" << graphName << "\" (id " << sipCpp->getId() << ") >";
-  sipRes = new std::string(oss.str());
+  sipRes = new std::string("<graph \"" + sipCpp->getName() + "\" (id " + std::to_string(sipCpp->getId()) + ") >");
 %End
 
 //===========================================================================================
 
-  long __hash__() const;
+  Py_hash_t __hash__() const;
 %MethodCode
-  return static_cast<long>(sipCpp->getId());
+  return static_cast<Py_hash_t>(sipCpp->getId());
 %End
 
 };
@@ -4419,7 +4415,7 @@ tlp::Graph *loadGraph(const std::string &filename) /TransferBack/;
 %Docstring
 tlp.loadGraph(fileName)
 
-Loads a graph serialized in a file trough one the available Tulip import plugins based on its extension.
+Loads a graph serialized in a file through one the available Tulip import plugins based on its extension.
 
 Since Tulip 4.8, the selection of the import plugin is based on the provided filename extension.
 The import will fail if the selected import plugin is not loaded.
@@ -4453,7 +4449,7 @@ TLP JSON (.json), GML (.gml), CSV (.csv), SVG (.svg, .svgz)
 Before Tulip 4.8 and as a fallback, this function uses the "TLP Export" export plugin
 (always loaded as it is linked into the tulip-core library).
 
-Returns whether the export was successfull or not.
+Returns whether the export was successful or not.
 
 :param graph: the graph to export
 :type graph: :class:`tlp.Graph`
@@ -4470,7 +4466,7 @@ tlp.saveGraph(graph)
 
 .. versionadded:: 4.5
 
-Saves a graph to the same file from which it has been loaded (if the ouput format is supported).
+Saves a graph to the same file from which it has been loaded (if the output format is supported).
 Returns :const:`True` if the graph has been successfully saved.
 
 :param graph: the graph to export
@@ -4673,7 +4669,7 @@ void removeFromGraph(tlp::Graph *inGraph, tlp::BooleanProperty *inSelection = 0)
 tlp.removeFromGraph(inGraph, inSelection=None)
 
 Removes the selected part of a graph (properties values, nodes and edges).
-If no selection is done, the whole graph is reseted to default value.
+If no selection is done, the whole graph is reset to default value.
 
 :param inGraph: the graph on which to remove elements
 :type inGraph: :class:`tlp.Graph`

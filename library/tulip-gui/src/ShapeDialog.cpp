@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -16,18 +16,30 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <QBuffer>
+#include <QHelpEvent>
+#include <QToolTip>
+
+#include <tulip/GlyphRenderer.h>
+#include <tulip/GlyphManager.h>
+#include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/PluginLister.h>
 #include <tulip/ShapeDialog.h>
+#include <tulip/TlpQtTools.h>
 
 #include "ui_ShapeDialog.h"
 
 using namespace tlp;
 
-ShapeDialog::ShapeDialog(std::list<std::pair<QString, QPixmap>> &&nodeShapes, QWidget *parent)
-    : QDialog(parent), _ui(new Ui::ShapeDialog), shapes(std::move(nodeShapes)) {
+ShapeDialog::ShapeDialog(bool forNodes, QWidget *parent)
+    : QDialog(parent), _forNodes(forNodes), _ui(new Ui::ShapeDialog) {
 
   _ui->setupUi(this);
+  _ui->shapeListWidget->installEventFilter(this);
 
   updateShapeList();
+  if (!_forNodes)
+    setWindowTitle("Select an edge extremity shape");
 }
 
 ShapeDialog::~ShapeDialog() {
@@ -36,15 +48,22 @@ ShapeDialog::~ShapeDialog() {
 
 void ShapeDialog::updateShapeList() {
   _ui->shapeListWidget->clear();
-
-  for (std::list<std::pair<QString, QPixmap>>::const_iterator it = shapes.begin();
-       it != shapes.end(); ++it) {
-    _ui->shapeListWidget->addItem(new QListWidgetItem(it->second, it->first));
+  if (_forNodes) {
+    for (const auto &glyphName : PluginLister::availablePlugins<Glyph>()) {
+      QString name = tlpStringToQString(glyphName);
+      _ui->shapeListWidget->addItem(new QListWidgetItem(GlyphRenderer::render(name), name));
+    }
+  } else {
+    _ui->shapeListWidget->addItem(new QListWidgetItem(QPixmap(), "NONE"));
+    for (const auto &glyphName : PluginLister::availablePlugins<EdgeExtremityGlyph>()) {
+      QString name = tlpStringToQString(glyphName);
+      _ui->shapeListWidget->addItem(
+          new QListWidgetItem(EdgeExtremityGlyphRenderer::render(name), name));
+    }
   }
 
-  if (_ui->shapeListWidget->count() > 0) {
+  if (_ui->shapeListWidget->count() > 0)
     _ui->shapeListWidget->setCurrentRow(0);
-  }
 }
 
 QString ShapeDialog::getSelectedShapeName() const {
@@ -76,4 +95,26 @@ void ShapeDialog::showEvent(QShowEvent *ev) {
   if (parentWidget())
     move(parentWidget()->window()->frameGeometry().topLeft() +
          parentWidget()->window()->rect().center() - rect().center());
+}
+
+bool ShapeDialog::eventFilter(QObject *, QEvent *event) {
+  if (event->type() == QEvent::ToolTip) {
+    QHelpEvent *he = static_cast<QHelpEvent *>(event);
+    auto lwi = _ui->shapeListWidget->itemAt(he->pos().x(), he->pos().y());
+    if (lwi) {
+      // show a 48 pixel height icon
+      auto qimg = _forNodes ? GlyphRenderer::render(lwi->text(), 48)
+                            : EdgeExtremityGlyphRenderer::render(lwi->text(), 48);
+      QByteArray bytes;
+      QBuffer buf(&bytes);
+      qimg.save(&buf, "png", 100);
+      QString ttip;
+      ttip = QString("<center><img src='data:image/png;base64, %0'/></center><br/>")
+                 .arg(QString(bytes.toBase64()))
+                 .append(lwi->text());
+      QToolTip::showText(he->globalPos(), ttip);
+      return true;
+    }
+  }
+  return false;
 }

@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -75,30 +75,6 @@ tlp.ImportModule.fileExtensions()
 This method returns the extensions of file formats this plugin can import.
 Derived classes can implement it in order for the plugin to be automatically called
 by the :func:`tlp.loadGraph` function.
-
-:rtype: list of string
-%End
-
-  virtual std::list<std::string> gzipFileExtensions() const;
-%Docstring
-tlp.ImportModule.gzipFileExtensions()
-
-.. versionadded:: 5.0
-
-This method returns the extensions of gzipped file formats this plugin can import.
-Derived classes can implement it in order for the plugin to be automatically called
-by the :func:`tlp.loadGraph` function.
-
-:rtype: list of string
-%End
-
-  std::list<std::string> allFileExtensions() const;
-%Docstring
-tlp.ImportModule.allFileExtensions()
-
-.. versionadded:: 5.0
-
-This method returns all the extensions (normal and gzipped) of file formats this plugin can import.
 
 :rtype: list of string
 %End

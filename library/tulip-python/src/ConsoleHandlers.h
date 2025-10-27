@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,6 +21,7 @@
 #define CONSOLE_OUTPUT_HANDLER_H
 
 #include <QPlainTextEdit>
+#include <QRegularExpression>
 #include <QTextBrowser>
 #include <QTextBlock>
 #include <QApplication>
@@ -88,19 +89,20 @@ public slots:
     cursor.insertText(output + '\n', formt);
 
     if (textBrowser) {
-      QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*$");
-      QRegExp rx2("^.*File.*\"(.*)\".*line.*(\\d+).*in (.*)$");
+      QRegularExpression rx("^.*File.*\"(.*)\".*line.*(\\d+).*$");
+      QRegularExpression rx2("^.*File.*\"(.*)\".*line.*(\\d+).*in (.*)$");
       cursor = textBrowser->document()->find(rx, QTextCursor(textBrowser->document()->begin()));
 
       while (!cursor.isNull()) {
-        rx.indexIn(cursor.selectedText());
-        rx2.indexIn(cursor.selectedText());
-
-        if (rx.cap(1) != "<string>" && rx2.cap(3) != "tlpimporthook") {
+        QRegularExpressionMatch match, match2;
+        if ((cursor.selectedText().indexOf(rx, 0, &match) != -1) &&
+            (match.captured(1) != "<string>") &&
+            (cursor.selectedText().indexOf(rx2, 0, &match2) != -1) &&
+            (match2.captured(3) != "tlpimporthook")) {
           formt = cursor.charFormat();
           formt.setAnchor(true);
           formt.setUnderlineStyle(QTextCharFormat::SingleUnderline);
-          formt.setAnchorHref(QUrl::toPercentEncoding(rx.cap(1) + ":" + rx.cap(2)));
+          formt.setAnchorHref(QUrl::toPercentEncoding(match.captured(1) + ":" + match.captured(2)));
           cursor.setCharFormat(formt);
         }
 

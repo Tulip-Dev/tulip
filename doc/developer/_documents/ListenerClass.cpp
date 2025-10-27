@@ -26,7 +26,7 @@ void ListenerClass::treatEvent(const Event &evt) {
       cout << "Event : Node Created" << endl;
       break;
 
-    case GraphEvent::TLP_DEL_NODE:
+    case GraphEvent::TLP_BEFORE_DEL_NODE:
       cout << "Event : Node Deleted" << endl;
       break;
 
@@ -34,7 +34,7 @@ void ListenerClass::treatEvent(const Event &evt) {
       cout << "Event : Edge Created" << endl;
       break;
 
-    case GraphEvent::TLP_DEL_EDGE:
+    case GraphEvent::TLP_BEFORE_DEL_EDGE:
       cout << "Event : Edge Deleted" << endl;
       break;
 

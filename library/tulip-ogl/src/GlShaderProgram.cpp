@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,12 +20,10 @@
 #include <GL/glew.h>
 
 #include <iostream>
-#include <fstream>
 #include <algorithm>
 
 #include <tulip/GlShaderProgram.h>
 #include <tulip/OpenGlConfigManager.h>
-#include <tulip/TlpTools.h>
 
 using namespace std;
 

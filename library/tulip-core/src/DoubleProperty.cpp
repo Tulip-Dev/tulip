@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,7 +17,6 @@
  *
  */
 
-#include <climits>
 #include <tulip/DoubleProperty.h>
 #include <tulip/GraphTools.h>
 
@@ -209,9 +208,10 @@ class DoublePropertyPredefinedCalculator
   DoubleEdgePredefinedCalculator edgeCalc;
 
 public:
-  DoublePropertyPredefinedCalculator(
-      DoubleProperty::PredefinedMetaValueCalculator nCalc = DoubleProperty::AVG_CALC,
-      DoubleProperty::PredefinedMetaValueCalculator eCalc = DoubleProperty::AVG_CALC)
+  DoublePropertyPredefinedCalculator(DoubleProperty::StandardMetaValueCalculator nCalc =
+                                         DoubleProperty::StandardMetaValueCalculator::AVG_CALC,
+                                     DoubleProperty::StandardMetaValueCalculator eCalc =
+                                         DoubleProperty::StandardMetaValueCalculator::AVG_CALC)
       : AbstractProperty<tlp::DoubleType, tlp::DoubleType,
                          tlp::NumericProperty>::MetaValueCalculator(),
         nodeCalc(nodeCalculators[nCalc]), edgeCalc(edgeCalculators[eCalc]) {}
@@ -258,6 +258,9 @@ DoubleProperty::DoubleProperty(Graph *g, const std::string &n)
   } else {
     setMetaValueCalculator(&vWidthCalc);
   }
+  // force edge default value of viewLengthRatio
+  if (n == "viewLengthRatio")
+    setAllEdgeValue(1.);
 }
 
 //===============================================================
@@ -341,8 +344,8 @@ PropertyInterface *DoubleVectorProperty::clonePrototype(Graph *g, const std::str
   return p;
 }
 //=============================================================
-void DoubleProperty::setMetaValueCalculator(PredefinedMetaValueCalculator nodeCalc,
-                                            PredefinedMetaValueCalculator edgeCalc) {
+void DoubleProperty::setMetaValueCalculator(StandardMetaValueCalculator nodeCalc,
+                                            StandardMetaValueCalculator edgeCalc) {
   setMetaValueCalculator(new DoublePropertyPredefinedCalculator(nodeCalc, edgeCalc));
 }
 //=============================================================

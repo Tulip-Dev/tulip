@@ -1,5 +1,5 @@
-FTGL 2.1
-5 December 2004
+FTGL 2.3
+14 Oct 2018
 
 DESCRIPTION:
 
@@ -33,6 +33,15 @@ CONTACT:
 
 Please contact us if you have any suggestions, feature requests, or problems.
 
-Sam Hocevar <sam@zoy.org>
-Christopher Sean Morrison <learner@brlcad.org>
+ftgl is currently hosted at:
 
+https://github.com/frankheckenbach/ftgl
+
+Current maintainer:
+
+Frank Heckenbach <f.heckenbach@fh-soft.de>
+
+Original authors:
+
+Sam Hocevar <sam@hocevar.net>
+Christopher Sean Morrison <learner@brlcad.org>

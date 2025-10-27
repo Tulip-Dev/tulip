@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -59,9 +59,9 @@ public:
       "Louvain", "Patrick Mary", "09/06/15",
       "Nodes partitioning measure used for community detection."
       "This is an implementation of the Louvain clustering algorithm first published in:<br/>"
-      "<b>Fast unfolding of communities in large networks</b>, Blondel, V.D. and Guillaume, J.L. "
+      "<b>Fast unfolding of communities in large networks</b>,<br/>Blondel, V.D. and Guillaume, J.L. "
       "and Lambiotte, R. and Lefebvre, E., Journal of Statistical Mechanics: Theory and "
-      "Experiment, (2008), doi: <a "
+      "Experiment, (2008),<br/>doi: <a "
       "href=\"https://doi.org/10.1088/1742-5468/2008/10/P10008\">10.1088/1742-5468/2008/10/P10008</"
       "a>.",
       "2.1", "Clustering")
@@ -109,10 +109,11 @@ private:
   // of the current quotient graph
   void get_weighted_degree_and_selfloops(unsigned int n, double &wdg, double &nsl) {
     wdg = nsl = 0;
-    const std::vector<edge> &edges = quotient->star(node(n));
+    auto &adjs = quotient->adj(node(n));
 
-    for (unsigned int i = 0; i < edges.size(); ++i) {
-      edge e = edges[i];
+    for (unsigned int i = 0; i < adjs.size(); ++i) {
+      edge e = adjs[i].link();
+
       double weight = (*weights)[e];
       wdg += weight;
       // self loop must be counted only once
@@ -163,7 +164,8 @@ private:
     neigh_weight[neigh_pos[0]] = 0;
     neigh_last = 1;
 
-    for (auto e : quotient->star(node(n))) {
+    for (auto &adj : quotient->adj(node(n))) {
+      edge e = adj.link();
       auto ends = quotient->ends(e);
       unsigned int neigh = (ends.first == node(n)) ? ends.second : ends.first;
       unsigned int neigh_comm = n2c[neigh];
@@ -349,6 +351,7 @@ LouvainClustering::LouvainClustering(const tlp::PluginContext *context)
   addInParameter<double>("precision", paramHelp[1], "0.000001", false);
   addOutParameter<double>("modularity", "The computed modularity");
   addOutParameter<unsigned int>("#communities", "The number of communities found");
+  addOutParameter<unsigned int>("#passes", "The number of passes");
 }
 //========================================================================================
 bool LouvainClustering::run() {
@@ -396,7 +399,7 @@ bool LouvainClustering::run() {
 
   // init other vectors
   init_level();
-  int level = 0;
+  uint level = 0;
 
   while (one_level()) {
     ++level;
@@ -442,7 +445,9 @@ bool LouvainClustering::run() {
 
   if (dataSet != nullptr) {
     dataSet->set("modularity", new_mod);
-    dataSet->set("#communities", uint(maxVal + 1));
+    dataSet->set("#communities",
+                 uint(maxVal + 1)); //+1 => last iteration of the while loop on line 402
+    dataSet->set("#passes", level + 1);
   }
 
   return true;

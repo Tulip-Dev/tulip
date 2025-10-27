@@ -17,7 +17,16 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -25,11 +34,9 @@
      <property name="styleSheet">
       <string notr="true">QFrame[border = &quot;true&quot;] {
 border-image:none;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
-stop: 0 #838383,
-stop: 0.4 #707070,
-stop: 0.401 #636363,
-stop: 1 #4a4a4a);
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1,
+stop:0 rgb(75,75,75),
+stop:1 rgb(60,60,60));
 color: white;
 }
 Line {
@@ -78,27 +85,19 @@ background-color: #A9A9A9;
         <property name="styleSheet">
          <string notr="true">QFrame[header = &quot;true&quot;], QComboBox, QLabel, QToolButton, QPushButton, #interactorsFrame {
 border-image:none;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
-stop: 0 #838383,
-stop: 0.4 #707070,
-stop: 0.401 #636363,
-stop: 1 #4a4a4a);
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1,
+stop:0 rgb(75,75,75),
+stop:1 rgb(60,60,60));
 border: 0px;
 color: white;
 }
 QComboBox:hover, QToolButton:hover, QPushButton:hover {
-background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
-stop: 0 #8F8F8F,
-stop: 0.4 #7C7C7C,
-stop: 0.401 #6F6F6F,
-stop: 1 #565656);
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1,
+stop:0 rgb(155,155,155),
+stop:1 rgb(130,130,130));
 }
 QToolButton:pressed, QPushButton:pressed {
-background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
-stop: 0 #777777,
-stop: 0.4 #646464,
-stop: 0.401 #575757,
-stop: 1 #3e3e3e);
+background-color: #D0D0D0;
 }
 QComboBox,QLabel {
 height:20px;
@@ -121,7 +120,16 @@ border-bottom-right-radius: 1px;
          <property name="spacing">
           <number>4</number>
          </property>
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>

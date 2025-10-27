@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -47,7 +47,7 @@ between each pair of nodes), :const:`False` otherwise.
 
 :param graph: the graph on which to perform the connected test
 :type graph: :class:`tlp.Graph`
-:rtype: boolean
+:rtype: Boolean
 %End
 
 //=========================================================================================== 

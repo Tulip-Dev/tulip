@@ -49,7 +49,7 @@ A general algorithm must implement the :class:`tlp.Algorithm` interface as illus
       # You can perform some precondition checks here.
       # See comments in the run method to know how to access to the input graph.
 
-      # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
+      # Must return a tuple (Boolean, string). First member indicates if the algorithm can be applied
       # and the second one can be used to provide an error message
       return (True, "Ok")
 
@@ -63,7 +63,7 @@ A general algorithm must implement the :class:`tlp.Algorithm` interface as illus
       # The parameters provided by the user are stored in a dictionary
       # that can be accessed through the "dataSet" class attribute.
 
-      # The method must return a boolean indicating if the algorithm
+      # The method must return a Boolean indicating if the algorithm
       # has been successfully applied on the input graph.
       return True
 
@@ -91,7 +91,7 @@ A selection algorithm must implement the :class:`tlp.BooleanAlgorithm` interface
       # You can perform some precondition checks here.
       # See comments in the run method to know how to access to the input graph.
 
-      # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
+      # Must return a tuple (Boolean, string). First member indicates if the algorithm can be applied
       # and the second one can be used to provide an error message
       return (True, "Ok")
 
@@ -106,10 +106,10 @@ A selection algorithm must implement the :class:`tlp.BooleanAlgorithm` interface
       # that can be accessed through the "dataSet" class attribute.
 
       # The result of this selection algorithm must be stored in the
-      # boolean property accessible through the "result" class attribute
+      # Boolean property accessible through the "result" class attribute
       # (see documentation to know how to work with graph properties).
 
-      # The method must return a boolean indicating if the algorithm
+      # The method must return a Boolean indicating if the algorithm
       # has been successfully applied on the input graph.
       return True
 
@@ -137,7 +137,7 @@ A color algorithm must implement the :class:`tlp.ColorAlgorithm` interface as il
       # You can perform some precondition checks here.
       # See comments in the run method to know how to access to the input graph.
 
-      # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
+      # Must return a tuple (Boolean, string). First member indicates if the algorithm can be applied
       # and the second one can be used to provide an error message
       return (True, "Ok")
 
@@ -155,7 +155,7 @@ A color algorithm must implement the :class:`tlp.ColorAlgorithm` interface as il
       # color property accessible through the "result" class attribute
       # (see documentation to know how to work with graph properties).
 
-      # The method must return a boolean indicating if the algorithm
+      # The method must return a Boolean indicating if the algorithm
       # has been successfully applied on the input graph.
       return True
 
@@ -183,7 +183,7 @@ A measure algorithm must implement the :class:`tlp.DoubleAlgorithm` interface as
       # You can perform some precondition checks here.
       # See comments in the run method to know how to access to the input graph.
 
-      # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
+      # Must return a tuple (Boolean, string). First member indicates if the algorithm can be applied
       # and the second one can be used to provide an error message
       return (True, "Ok")
 
@@ -201,7 +201,7 @@ A measure algorithm must implement the :class:`tlp.DoubleAlgorithm` interface as
       # double property accessible through the "result" class attribute
       # (see documentation to know how to work with graph properties).
 
-      # The method must return a boolean indicating if the algorithm
+      # The method must return a Boolean indicating if the algorithm
       # has been successfully applied on the input graph.
       return True
 
@@ -229,7 +229,7 @@ An integer algorithm must implement the :class:`tlp.IntegerAlgorithm` interface 
       # You can perform some precondition checks here.
       # See comments in the run method to know how to access to the input graph.
 
-      # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
+      # Must return a tuple (Boolean, string). First member indicates if the algorithm can be applied
       # and the second one can be used to provide an error message
       return (True, "Ok")
 
@@ -247,7 +247,7 @@ An integer algorithm must implement the :class:`tlp.IntegerAlgorithm` interface 
       # integer property accessible through the "result" class attribute
       # (see documentation to know how to work with graph properties).
 
-      # The method must return a boolean indicating if the algorithm
+      # The method must return a Boolean indicating if the algorithm
       # has been successfully applied on the input graph.
       return True
 
@@ -275,7 +275,7 @@ A layout algorithm must implement the :class:`tlp.LayoutAlgorithm` interface as 
       # You can perform some precondition checks here.
       # See comments in the run method to know how to access to the input graph.
 
-      # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
+      # Must return a tuple (Boolean, string). First member indicates if the algorithm can be applied
       # and the second one can be used to provide an error message
       return (True, "Ok")
 
@@ -293,7 +293,7 @@ A layout algorithm must implement the :class:`tlp.LayoutAlgorithm` interface as 
       # layout property accessible through the "result" class attribute
       # (see documentation to know how to work with graph properties).
 
-      # The method must return a boolean indicating if the algorithm
+      # The method must return a Boolean indicating if the algorithm
       # has been successfully applied on the input graph.
       return True
 
@@ -321,7 +321,7 @@ A size algorithm must implement the :class:`tlp.SizeAlgorithm` interface as illu
       # You can perform some precondition checks here.
       # See comments in the run method to know how to access to the input graph.
 
-      # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
+      # Must return a tuple (Boolean, string). First member indicates if the algorithm can be applied
       # and the second one can be used to provide an error message
       return (True, "Ok")
 
@@ -339,7 +339,7 @@ A size algorithm must implement the :class:`tlp.SizeAlgorithm` interface as illu
       # size property accessible through the "result" class attribute
       # (see documentation to know how to work with graph properties).
 
-      # The method must return a boolean indicating if the algorithm
+      # The method must return a Boolean indicating if the algorithm
       # has been successfully applied on the input graph.
       return True
 
@@ -378,7 +378,7 @@ An export module must implement the :class:`tlp.ExportModule` interface as illus
       os << self.graph.numberOfNodes() << "\n"
       os << self.graph.numberOfEdges() << "\n"
 
-      # The method must return a boolean indicating if the
+      # The method must return a Boolean indicating if the
       # graph has been successfully exported.
       return True
 
@@ -409,7 +409,7 @@ An import module must implement the :class:`tlp.ImportModule` interface as illus
       # The parameters provided by the user are stored in a dictionary
       # that can be accessed through the "dataSet" class attribute
 
-      # The method must return a boolean indicating if the
+      # The method must return a Boolean indicating if the
       # graph has been successfully imported.
       return True
 

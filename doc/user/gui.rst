@@ -1,10 +1,10 @@
 .. _gui:
 
-*********************************************
-A Quick Presentation of the Tulip Perspective
-*********************************************
+************************************************
+A Quick Presentation of the Tulip User Interface
+************************************************
 
-Here are the components of Tulip Perspective's main window:
+Here are the components of Tulip main window:
 
 .. image:: _images/i_interface.png
     :width: 900
@@ -27,7 +27,6 @@ Here are the components of Tulip Perspective's main window:
 
 |l_blu| Workspace view
 
-From this point and even if it is no fully correct, we refer to the Tulip perspective by simply using the term Tulip. Differentiating one (Tulip perspective) from the other (Tulip agent) is quite simple as the perspective window proposes the visualization actions and the Tulip agent window only offers plugin management and choosing the project to open.
 
 
 .. _menu:
@@ -61,7 +60,6 @@ Toolbar
 .. |icon_csv| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/spreadsheet.png
 .. |icon_import| image:: ../../library/tulip-gui/resources/icons/64/document-import.png
     :width: 32
-.. |icon_plugin| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/system-software-install.png
 .. |icon_search| image:: ../../plugins/perspective/GraphPerspective/resources/icons/48/search.png
     :width: 32
 
@@ -84,8 +82,6 @@ When overviews are displayed, you can then double-click on a panel icon to open 
 * |icon_csv| **CSV**: opens the CSV data importing wizard (more information in :ref:`csv`).
 
 * |icon_import| **Import**: opens the graph importing wizard (learn more about it in :ref:`first_create`).
-
-* |icon_plugin| **Plugins**: only available on Mac and Windows platform, opens the plugins center of the Tulip agent (see in :ref:`plugin` for more information).
 
 
 .. _algo_window:
@@ -211,7 +207,7 @@ Search
 
 The tool **Search** can be used in parallel of any panel. It provides a way of selecting graph's elements according to specific criteria. 
 
-First start by selecting the graph and the elements targeted and by choosing the selection mode. The result (respecting the criteria or not) is stored in a boolean property, *viewSelection* by default. Then choose the values to compare and hit the button *Search* to launch the tool.
+First start by selecting the graph and the elements targeted and by choosing the selection mode. The result (respecting the criteria or not) is stored in a Boolean property, *viewSelection* by default. Then choose the values to compare and hit the button *Search* to launch the tool.
 
 If the *viewSelection* has been selected as the result property, the selected elements are automatically enhanced in any workspace views.
 

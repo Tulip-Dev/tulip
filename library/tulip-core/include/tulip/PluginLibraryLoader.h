@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -42,7 +42,6 @@ struct PluginLoader;
  **/
 class TLP_SCOPE PluginLibraryLoader {
 public:
-#ifndef EMSCRIPTEN
   /**
    * @brief Loads all the plugins in each directory contained in TulipPluginsPath.
    * This function will not look into subfolders of the specified folder.
@@ -99,7 +98,6 @@ public:
    * @return bool Whether the plugin was successfully loaded.
    **/
   static bool loadPluginLibrary(const std::string &filename, PluginLoader *loader = nullptr);
-#endif // EMSCRIPTEN
 
   /**
    * @brief Gets the name of the plug-in library being loaded.
@@ -113,11 +111,8 @@ public:
 
 private:
   PluginLibraryLoader() {}
-#ifndef EMSCRIPTEN
   static bool initPluginDir(PluginLoader *loader, bool recursive = false,
                             const std::string &userPluginsPath = "");
-#endif
-
   static std::string _message;
   static std::string _pluginPath;
   static std::string _currentPluginLibrary;

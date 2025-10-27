@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -56,6 +56,7 @@ public:
   std::string getEncoding() const;
   bool invertMatrix() const;
   bool getMergeSeparator() const;
+  bool getConsiderAsString() const;
   void initWithLastOpenedFile();
   int getFirstLineIndex() const;
   void setNbIgnoredLines(int);

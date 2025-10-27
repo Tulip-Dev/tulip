@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -321,7 +321,7 @@ static const char *paramHelp[] = {
 BubbleTree::BubbleTree(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addInParameter<bool>("complexity", paramHelp[0], "true");
-  addDependency("Connected Component Packing", "1.0");
+  addDependency("Connected Components Packing", "1.1");
   addDependency("Circular", "1.1");
 }
 
@@ -351,8 +351,8 @@ bool BubbleTree::run() {
     // call connected component packing
     LayoutProperty tmpLayout(graph);
     DataSet tmpdataSet;
-    tmpdataSet.set("coordinates", result);
-    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout, err, &tmpdataSet,
+    tmpdataSet.set("initial layout", result);
+    graph->applyPropertyAlgorithm("Connected Components Packing", &tmpLayout, err, &tmpdataSet,
                                   pluginProgress);
     *result = tmpLayout;
     return true;

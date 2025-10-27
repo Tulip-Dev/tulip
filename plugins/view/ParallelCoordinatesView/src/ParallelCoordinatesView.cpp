@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -26,13 +26,15 @@
 #include "ParallelCoordsDrawConfigWidget.h"
 #include "QuantitativeParallelAxis.h"
 
-#include <QAbstractButton>
+#include <QActionGroup>
 #include <QMenu>
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>
 #include <QMessageBox>
 #include <QKeyEvent>
+#include <QPushButton>
 
+#include <tulip/GraphImpl.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/Interactor.h>
@@ -40,6 +42,7 @@
 #include <tulip/Perspective.h>
 #include <tulip/ViewGraphPropertiesSelectionWidget.h>
 #include <tulip/WorkspacePanel.h>
+#include <tulip/NeedConfigurationMsgBox.h>
 
 using namespace std;
 
@@ -89,7 +92,7 @@ QuickAccessBar *ParallelCoordinatesView::getQuickAccessBarImpl() {
   return _bar;
 }
 
-void ParallelCoordinatesView::interactorsInstalled(const QList<tlp::Interactor *> &) {
+void ParallelCoordinatesView::interactorsInstalled(const std::list<tlp::Interactor *> &) {
   toggleInteractors(graphProxy && graphProxy->getNumberOfSelectedProperties());
 }
 
@@ -105,7 +108,7 @@ void ParallelCoordinatesView::initGlWidget() {
     scene->addExistingLayer(mainLayer);
   }
 
-  axisPointsGraph = tlp::newGraph();
+  axisPointsGraph = GraphImpl::newGraph();
   glGraphComposite = new GlGraphComposite(axisPointsGraph);
   mainLayer->addGlEntity(glGraphComposite, "graph");
   axisSelectionLayer = new GlLayer("Axis selection layer");
@@ -122,8 +125,8 @@ void ParallelCoordinatesView::initGlWidget() {
   getGlMainWidget()->setMouseTracking(true);
 }
 
-QList<QWidget *> ParallelCoordinatesView::configurationWidgets() const {
-  return QList<QWidget *>() << dataConfigWidget << drawConfigWidget;
+std::list<QWidget *> ParallelCoordinatesView::configurationWidgets() const {
+  return std::list<QWidget *>{dataConfigWidget, drawConfigWidget};
 }
 
 void ParallelCoordinatesView::graphicsViewResized(int w, int h) {
@@ -145,24 +148,21 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
 
     isConstruct = true;
 
-    // build QMessageBox indicating the lack of selected properties
+    // create box indicating the lack of selected properties
     QGraphicsRectItem *qgrItem = new QGraphicsRectItem(0, 0, 1, 1);
     qgrItem->setBrush(Qt::transparent);
     qgrItem->setPen(QPen(Qt::transparent));
     graphicsView()->scene()->addItem(qgrItem);
 
-    QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning, "",
-                                          "<b><font size=\"+1\">"
-                                          "No graph properties selected.</font></b><br/><br/>"
-                                          "Open the <b>Properties</b> configuration tab<br/>"
-                                          "to proceed.",
-                                          QMessageBox::Ok);
-    msgBox->setModal(false);
-    auto okButton = msgBox->button(QMessageBox::Ok);
+    QPushButton *okButton;
+    QWidget *msgBox =
+        new_NeedConfigurationMsgBox("<b><font size=\"+1\">"
+                                    "No graph properties selected.</font></b><br/><br/>"
+                                    "Open the <b>Properties</b> configuration tab<br/>"
+                                    "to proceed.",
+                                    &okButton);
     connect(okButton, SIGNAL(released()), this, SLOT(showPropertiesSelectionWidget()));
-    // set a specific name before applying style sheet
-    msgBox->setObjectName("needConfigurationMessageBox");
-    Perspective::setStyleSheet(msgBox);
+    connect(okButton, SIGNAL(released()), msgBox, SLOT(hide()));
     noPropertyMsgBox = graphicsView()->scene()->addWidget(msgBox);
     noPropertyMsgBox->setParentItem(qgrItem);
   }

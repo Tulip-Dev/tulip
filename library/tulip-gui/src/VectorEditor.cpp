@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -64,7 +64,7 @@ void VectorEditor::add() {
     // because the height of the line if very small with an empty string
     i->setData(Qt::DisplayRole, QVariant::fromValue(QString("edit this string")));
   } else
-    i->setData(Qt::DisplayRole, QVariant(_userType, static_cast<const void *>(nullptr)));
+    i->setData(Qt::DisplayRole, QVariant(_userType));
 
   // needed for color
   i->setSizeHint(QSize(i->sizeHint().width(), 15));

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -61,8 +61,8 @@ void ConeTreeExtended::computeYCoodinates(tlp::node root) {
   }
 }
 //===============================================================
-double ConeTreeExtended::treePlace3D(tlp::node n, std::unordered_map<tlp::node, double> *posRelX,
-                                     std::unordered_map<tlp::node, double> *posRelY) {
+double ConeTreeExtended::treePlace3D(tlp::node n, tlp_hash_map<tlp::node, double> *posRelX,
+                                     tlp_hash_map<tlp::node, double> *posRelY) {
   (*posRelX)[n] = 0;
   (*posRelY)[n] = 0;
 
@@ -144,8 +144,8 @@ double ConeTreeExtended::treePlace3D(tlp::node n, std::unordered_map<tlp::node, 
   return circleH.radius;
 }
 //===============================================================
-void ConeTreeExtended::calcLayout(tlp::node n, std::unordered_map<tlp::node, double> *px,
-                                  std::unordered_map<tlp::node, double> *py, double x, double y,
+void ConeTreeExtended::calcLayout(tlp::node n, tlp_hash_map<tlp::node, double> *px,
+                                  tlp_hash_map<tlp::node, double> *py, double x, double y,
                                   int level) {
   result->setNodeValue(
       n, Coord(float(x + (*px)[n]), -float(yCoordinates[level]), float(y + (*py)[n])));
@@ -226,8 +226,8 @@ bool ConeTreeExtended::run() {
 
   node root = tree->getSource();
   assert(root.isValid());
-  std::unordered_map<node, double> posX;
-  std::unordered_map<node, double> posY;
+  tlp_hash_map<node, double> posX;
+  tlp_hash_map<node, double> posY;
   treePlace3D(root, &posX, &posY);
   computeYCoodinates(root);
   calcLayout(root, &posX, &posY, 0, 0, 0);

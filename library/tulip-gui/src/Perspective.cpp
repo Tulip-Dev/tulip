@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,10 +20,7 @@
 #include <tulip/TulipProject.h>
 
 #include <QApplication>
-#include <QMainWindow>
 #include <QProcess>
-#include <QTcpSocket>
-#include <QHostAddress>
 #include <QAction>
 #include <QStatusBar>
 
@@ -41,8 +38,8 @@ void Perspective::setInstance(Perspective *p) {
 }
 
 Perspective::Perspective(const tlp::PluginContext *c)
-    : _agentSocket(nullptr), _maximised(false), _project(nullptr), _mainWindow(nullptr),
-      _externalFile(QString()), _parameters(QVariantMap()), _restartNeeded(false) {
+    : _maximised(false), _project(nullptr), _mainWindow(nullptr), _externalFile(QString()),
+      _parameters(QVariantMap()), _restartNeeded(false) {
   if (c != nullptr) {
     const PerspectiveContext *perspectiveContext = static_cast<const PerspectiveContext *>(c);
     _mainWindow = perspectiveContext->mainWindow;
@@ -50,22 +47,6 @@ Perspective::Perspective(const tlp::PluginContext *c)
     _externalFile = perspectiveContext->externalFile;
     _parameters = perspectiveContext->parameters;
     _perspectiveId = perspectiveContext->id;
-
-    if (perspectiveContext->tulipPort != 0) {
-      _agentSocket = new QTcpSocket(this);
-      _agentSocket->connectToHost(QHostAddress::LocalHost, perspectiveContext->tulipPort);
-
-      if (!_agentSocket->waitForConnected(2000)) {
-        _agentSocket->deleteLater();
-        _agentSocket = nullptr;
-      }
-
-      if (_project != nullptr) {
-        notifyProjectLocation(_project->absoluteRootPath());
-      }
-    } else {
-      qWarning("Perspective running in standalone mode");
-    }
   }
 }
 
@@ -113,66 +94,13 @@ bool Perspective::isReservedPropertyName(QString s) {
   return _reservedProperties.contains(s);
 }
 
-bool Perspective::checkSocketConnected() {
-  if (_agentSocket != nullptr) {
-    if (_agentSocket->state() != QAbstractSocket::UnconnectedState)
-      return true;
-    else {
-      _agentSocket->deleteLater();
-      _agentSocket = nullptr;
-      qWarning("Tulip launcher closed, now running in standalone mode");
-    }
-  }
-
-  return false;
-}
-
-void Perspective::sendAgentMessage(const QString &msg) {
-  if (checkSocketConnected()) {
-    _agentSocket->write(msg.toUtf8());
-    _agentSocket->flush();
-  }
-}
-
-void Perspective::showPluginsCenter() {
-  sendAgentMessage("SHOW_AGENT\tPLUGINS");
-}
-
-void Perspective::showProjectsPage() {
-  sendAgentMessage("SHOW_AGENT\tPROJECTS");
-}
-
-void Perspective::showAboutPage() {
-  sendAgentMessage("SHOW_AGENT\tABOUT");
-}
-
-void Perspective::showTrayMessage(const QString &s) {
-  sendAgentMessage("TRAY_MESSAGE\t" + s);
-}
-
-void Perspective::showErrorMessage(const QString &title, const QString &s) {
-  sendAgentMessage("ERROR_MESSAGE\t" + title + " " + s);
-}
-
 void Perspective::openProjectFile(const QString &path) {
-  if (checkSocketConnected()) {
-    sendAgentMessage("OPEN_PROJECT\t" + path);
-  } else { // on standalone mode, spawn a new standalone perspective
-    QProcess::startDetached(QApplication::applicationFilePath(), QStringList() << path);
-  }
+  QProcess::startDetached(QApplication::applicationFilePath(), QStringList() << path);
 }
 
 void Perspective::createPerspective(const QString &name) {
-  if (checkSocketConnected()) {
-    sendAgentMessage("CREATE_PERSPECTIVE\t" + name);
-  } else { // on standalone mode, spawn a new standalone perspective
-    QProcess::startDetached(QApplication::applicationFilePath(), QStringList()
-                                                                     << "--perspective=" + name);
-  }
-}
-
-void Perspective::notifyProjectLocation(const QString &path) {
-  sendAgentMessage("PROJECT_LOCATION\t" + QString::number(_perspectiveId) + " " + path);
+  QProcess::startDetached(QApplication::applicationFilePath(), QStringList()
+                                                                   << "--perspective=" + name);
 }
 
 void Perspective::redirectStatusTipOfMenu(QMenu *menu) {

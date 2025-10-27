@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -18,6 +18,7 @@
  */
 #include "ExportWizard.h"
 #include "ui_ExportWizard.h"
+#include "PluginDocDialog.h"
 
 #include <QAbstractButton>
 #include <QFileDialog>
@@ -57,13 +58,12 @@ ExportWizard::ExportWizard(Graph *g, const QString &exportFile, QWidget *parent)
   _ui->exportModules->setModel(model);
   _ui->exportModules->setRootIndex(model->index(0, 0));
   _ui->exportModules->expandAll();
-  connect(_ui->exportModules->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-          this, SLOT(algorithmSelected(QModelIndex)));
+  connect(_ui->exportModules->selectionModel(),
+          SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), this,
+          SLOT(algorithmSelected(const QModelIndex &)));
 
-  _ui->parameters->setItemDelegate(new TulipItemDelegate(_ui->parameters));
-  _ui->parameters->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-  connect(_ui->exportModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton),
-          SLOT(click()));
+  connect(_ui->exportModules, SIGNAL(doubleClicked(const QModelIndex &)),
+          button(QWizard::FinishButton), SLOT(click()));
 
   // display OK instead of Finish
   setButtonText(QWizard::FinishButton, "OK");
@@ -72,9 +72,8 @@ ExportWizard::ExportWizard(Graph *g, const QString &exportFile, QWidget *parent)
 
   // Help button is used to display export plugin doc
   // as soon as an import plugin is selected
-  auto helpButton = button(QWizard::HelpButton);
-  helpButton->setVisible(false);
-  connect(helpButton, SIGNAL(clicked(bool)), this, SLOT(helpButtonClicked()));
+  button(QWizard::HelpButton)->setVisible(false);
+  connect(this, SIGNAL(helpRequested()), this, SLOT(helpButtonClicked()));
 
   _ui->pathEdit->setText(exportFile);
 }
@@ -88,24 +87,21 @@ void ExportWizard::algorithmSelected(const QModelIndex &index) {
   QString alg(index.data().toString());
   string algs(tlp::QStringToTlpString(alg));
   _ui->parametersFrame->setVisible(!alg.isEmpty());
-  QAbstractItemModel *oldModel = _ui->parameters->model();
-  QAbstractItemModel *newModel = nullptr;
 
   if (PluginLister::pluginExists(algs)) {
-    _index = &index;
-    newModel = new ParameterListModel(PluginLister::getPluginParameters(algs), _graph);
     setButtonText(QWizard::HelpButton, QString("%1 documentation").arg(alg));
     button(QWizard::HelpButton)->setVisible(true);
+    QAbstractItemModel *oldModel = _ui->parameters->model();
+    ParameterListModel::configureTableView(_ui->parameters, PluginLister::getPluginParameters(algs),
+                                           _graph);
+    delete oldModel;
   } else
-    button(QWizard::HelpButton)->setVisible(true);
-
-  _ui->parameters->setModel(newModel);
+    button(QWizard::HelpButton)->setVisible(false);
 
   QString parametersText("<b>Parameters</b>");
   parametersText += "&nbsp;<font size=-2>[" + alg + "]</font>";
   _ui->parametersLabel->setText(parametersText);
 
-  delete oldModel;
   updateFinishButton();
 }
 
@@ -142,7 +138,7 @@ void ExportWizard::pathChanged(QString s) {
 
   for (std::list<std::string>::iterator itm = modules.begin(); itm != modules.end(); ++itm) {
     ExportModule *p = PluginLister::getPluginObject<ExportModule>(*itm);
-    std::list<std::string> extension = p->allFileExtensions();
+    std::list<std::string> extension = p->fileExtensions();
 
     for (list<string>::const_iterator extit = extension.begin(); extit != extension.end();
          ++extit) {
@@ -157,18 +153,17 @@ void ExportWizard::pathChanged(QString s) {
       break;
   }
 
-  if (selectedExport.isEmpty()) {
-    _ui->exportModules->clearSelection();
-    return;
-  }
-
   PluginModel<tlp::ExportModule> *model =
       static_cast<PluginModel<tlp::ExportModule> *>(_ui->exportModules->model());
   QModelIndexList results = model->match(_ui->exportModules->rootIndex(), Qt::DisplayRole,
                                          selectedExport, 1, Qt::MatchExactly | Qt::MatchRecursive);
 
-  if (results.empty())
+  if (results.empty()) {
+    _ui->exportModules->clearSelection();
+    _ui->parametersFrame->setVisible(false);
+    button(QWizard::HelpButton)->setVisible(false);
     return;
+  }
 
   _ui->exportModules->setCurrentIndex(results[0]);
 }
@@ -180,7 +175,7 @@ void ExportWizard::browseButtonClicked() {
 
   for (std::list<std::string>::const_iterator itm = modules.begin(); itm != modules.end(); ++itm) {
     ExportModule *p = PluginLister::getPluginObject<ExportModule>(*itm);
-    const std::list<std::string> extension = p->allFileExtensions();
+    const std::list<std::string> extension = p->fileExtensions();
     filter += tlpStringToQString(p->name()) + " (";
 
     for (list<string>::const_iterator it = extension.begin(); it != extension.end(); ++it) {
@@ -215,8 +210,10 @@ void ExportWizard::browseButtonClicked() {
 
 void ExportWizard::helpButtonClicked() {
   // display current import plugin documentation
-  QMessageBox::information(this, _index->data().toString().append(" documentation"),
-                           _index->data(Qt::ToolTipRole).toString());
+  ParameterListModel *model = static_cast<ParameterListModel *>(_ui->parameters->model());
+  auto index = _ui->exportModules->selectionModel()->currentIndex();
+  PluginDocDialog::showDoc(parentWidget(), index.data().toString(),
+                           index.data(Qt::ToolTipRole).toString(), model);
 }
 
 bool ExportWizard::validateCurrentPage() {
@@ -228,7 +225,7 @@ bool ExportWizard::validateCurrentPage() {
   std::list<std::string> extension;
 
   if (p != nullptr)
-    extension = p->allFileExtensions();
+    extension = p->fileExtensions();
 
   bool extok(false);
   QString ext;

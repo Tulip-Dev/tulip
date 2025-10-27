@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -41,9 +41,9 @@ public:
       "Tree Radial", "Patrick Mary", "14/05/2007",
       "Implements the radial tree layout algorithm first published as:<br/>"
       "<b>MoireGraphs: Radial Focus+Context "
-      "Visualization and Interaction for Graphs with Visual Nodes</b> T. J. "
-      "Jankun-Kelly, Kwan-Liu Ma. Proc. IEEE "
-      "Symposium on Information Visualization, INFOVIS pages 59--66 (2003)."
+      "Visualization and Interaction for Graphs with Visual Nodes</b>,<br/>"
+      " T. J. Jankun-Kelly, Kwan-Liu Ma. Proc. IEEE "
+      "Symposium on Information Visualization, INFOVIS pages 59--66 (2003),<br/>"
       "doi: <a href=\"https://doi.org/10.1109/INFVIS.2003.1249009\">10.1109/INFVIS.2003.1249009</a>",
       "1.0", "Tree")
   Graph *tree;

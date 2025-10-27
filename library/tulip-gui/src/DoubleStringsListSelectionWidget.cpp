@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -131,6 +131,10 @@ void DoubleStringsListSelectionWidget::qtWidgetsConnection() {
   connect(_ui->downButton, SIGNAL(clicked()), this, SLOT(pressButtonDown()));
   connect(_ui->selectButton, SIGNAL(clicked()), this, SLOT(pressButtonSelectAll()));
   connect(_ui->unselectButton, SIGNAL(clicked()), this, SLOT(pressButtonUnselectAll()));
+  connect(_ui->inputList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this,
+          SLOT(pressButtonAdd()));
+  connect(_ui->outputList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this,
+          SLOT(pressButtonRem()));
 }
 
 void DoubleStringsListSelectionWidget::pressButtonAdd() {

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,8 +17,6 @@
  *
  */
 
-#include <QApplication>
-#include <QMainWindow>
 #include <QProgressDialog>
 
 #include <tulip/BooleanProperty.h>
@@ -668,11 +666,11 @@ void ParallelCoordinatesDrawing::treatEvent(const tlp::Event &evt) {
     Graph *graph = gEvt->getGraph();
 
     switch (gEvt->getType()) {
-    case GraphEvent::TLP_DEL_NODE:
+    case GraphEvent::TLP_AFTER_DEL_NODE:
       delNode(graph, gEvt->getNode());
       break;
 
-    case GraphEvent::TLP_DEL_EDGE:
+    case GraphEvent::TLP_AFTER_DEL_EDGE:
       delEdge(graph, gEvt->getEdge());
       break;
 

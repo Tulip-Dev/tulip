@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -50,7 +50,7 @@ class PluginProgress;
   @endlist
 
   Alongside this information, one can store any kind of file into a Tulip project. Since a project
-  is meant to be associated to a specific perspective, the responisbility of those file
+  is meant to be associated to a specific perspective, the responsibility of those file
   is left to the perspective.
 
   A TulipProject DOES NOT automatically save to disk. One will have to call the write() method to
@@ -329,12 +329,11 @@ public:
   /**
     @brief Name of the perspective associated to the project.
 
-    When the user open a project from Tulip, this porperty is first read to identify find kind of
-    perspective plugin should be launched to
-    open the project
+    When the user open a project from Tulip, this property is first read to identify what kind of
+    perspective plugin should be launched to open the project
 
     @warning If the perspective name associated to the project is invalid or correspond to a missing
-    plugin, tulip may not be able to open the file.
+    plugin, Tulip may not be able to open the file.
     */
   Q_PROPERTY(QString perspective READ perspective WRITE setPerspective)
   /**
@@ -344,7 +343,7 @@ public:
 
   /**
     @brief The version of the Tulip project format with which the file was created.
-    Project from older format version will be always saved into the newest version available.
+    Project from older format version will be always saved into the latest version available.
     */
   QString version() const;
 

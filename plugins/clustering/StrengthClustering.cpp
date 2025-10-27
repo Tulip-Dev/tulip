@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -139,7 +139,7 @@ void StrengthClustering::computeNodePartition(double threshold, vector<unordered
 
   // Compute the node partition
   int index = 0;
-  unordered_map<double, int> resultIndex;
+  tlp_hash_map<double, int> resultIndex;
 
   for (auto n : tmpGraph->nodes()) {
     double val = connected.getNodeValue(n);

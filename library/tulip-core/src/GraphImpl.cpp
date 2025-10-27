@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -25,6 +25,15 @@
 #include <tulip/GraphView.h>
 #include <tulip/GraphIterators.h>
 #include <tulip/GraphUpdatesRecorder.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/GraphProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/TulipViewSettings.h>
 
 using namespace std;
 using namespace tlp;
@@ -42,6 +51,104 @@ static bool existEdgeE(Graph *g, const node n1, const node, edge e) {
   return false;
 }
 #endif
+//----------------------------------------------------------------
+// we define a subclass of IntegerProperty to add check functions to the setting
+// of the value of some view... properties which only admit enumerated values
+class TLP_SCOPE IntegerEnumeratedProperty : public IntegerProperty {
+  bool (*_checkNodeValue)(int);
+  bool (*_checkEdgeValue)(int);
+  void printValueError(tlp::StoredType<int>::ReturnedConstValue v, const std::string &eltType);
+
+public:
+  using IntegerProperty::operator=;
+  IntegerEnumeratedProperty(Graph *g, const std::string &n = "");
+  void setNodeValue(const node n, tlp::StoredType<int>::ReturnedConstValue v) override;
+  void setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v) override;
+  void setValueToGraphNodes(tlp::StoredType<int>::ReturnedConstValue v,
+                            const Graph *graph) override;
+  void setEdgeValue(const edge e, tlp::StoredType<int>::ReturnedConstValue v) override;
+  void setAllEdgeValue(tlp::StoredType<int>::ReturnedConstValue v) override;
+  void setValueToGraphEdges(tlp::StoredType<int>::ReturnedConstValue v,
+                            const Graph *graph) override;
+};
+//----------------------------------------------------------------
+bool rejectNonNullValue(int v) {
+  return !v;
+}
+//----------------------------------------------------------------
+IntegerEnumeratedProperty::IntegerEnumeratedProperty(Graph *g, const std::string &n)
+    : IntegerProperty(g, n), _checkNodeValue(nullptr), _checkEdgeValue(nullptr) {
+  if (name == "viewShape") {
+    _checkNodeValue = tlp::NodeShape::checkValue;
+    _checkEdgeValue = tlp::EdgeShape::checkValue;
+    return;
+  } else if (name == "viewLabelPosition") {
+    _checkNodeValue = tlp::LabelPosition::checkValue;
+    _checkEdgeValue = tlp::LabelPosition::checkValue;
+    return;
+  } else if (name == "viewSrcAnchorShape" || name == "viewTgtAnchorShape") {
+    _checkNodeValue = rejectNonNullValue;
+    _checkEdgeValue = tlp::EdgeExtremityShape::checkValue;
+  }
+}
+//----------------------------------------------------------------
+void IntegerEnumeratedProperty::printValueError(tlp::StoredType<int>::ReturnedConstValue v,
+                                                const std::string &eltType) {
+  tlp::error() << "Error: '" << v << "' is not a valid " << eltType << " value for property \""
+               << getName() << "\"\n";
+}
+//----------------------------------------------------------------
+void IntegerEnumeratedProperty::setNodeValue(const node n,
+                                             tlp::StoredType<int>::ReturnedConstValue v) {
+  if (_checkNodeValue && !_checkNodeValue(v)) {
+    printValueError(v, "node");
+    return;
+  }
+  IntegerProperty::setNodeValue(n, v);
+}
+//----------------------------------------------------------------
+void IntegerEnumeratedProperty::setEdgeValue(const edge e,
+                                             tlp::StoredType<int>::ReturnedConstValue v) {
+  if (_checkEdgeValue && !_checkEdgeValue(v)) {
+    printValueError(v, "edge");
+    return;
+  }
+  IntegerProperty::setEdgeValue(e, v);
+}
+//----------------------------------------------------------------
+void IntegerEnumeratedProperty::setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v) {
+  if (_checkNodeValue && !_checkNodeValue(v)) {
+    printValueError(v, "node");
+    return;
+  }
+  IntegerProperty::setAllNodeValue(v);
+}
+//----------------------------------------------------------------
+void IntegerEnumeratedProperty::setValueToGraphNodes(tlp::StoredType<int>::ReturnedConstValue v,
+                                                     const Graph *graph) {
+  if (_checkNodeValue && !_checkNodeValue(v)) {
+    printValueError(v, "node");
+    return;
+  }
+  IntegerProperty::setValueToGraphNodes(v, graph);
+}
+//----------------------------------------------------------------
+void IntegerEnumeratedProperty::setAllEdgeValue(tlp::StoredType<int>::ReturnedConstValue v) {
+  if (_checkEdgeValue && !_checkEdgeValue(v)) {
+    printValueError(v, "edge");
+    return;
+  }
+  IntegerProperty::setAllEdgeValue(v);
+}
+//----------------------------------------------------------------
+void IntegerEnumeratedProperty::setValueToGraphEdges(tlp::StoredType<int>::ReturnedConstValue v,
+                                                     const Graph *graph) {
+  if (_checkEdgeValue && !_checkEdgeValue(v)) {
+    printValueError(v, "edge");
+    return;
+  }
+  IntegerProperty::setValueToGraphEdges(v, graph);
+}
 //----------------------------------------------------------------
 GraphImpl::GraphImpl() : GraphAbstract(this) {
   // id 0 is for the root
@@ -70,6 +177,112 @@ GraphImpl::~GraphImpl() {
 void GraphImpl::clear() {
   GraphAbstract::clear();
   storage.clear();
+}
+//----------------------------------------------------------------
+Graph *GraphImpl::newGraph() {
+  Graph *g = new GraphImpl();
+
+  // set "view..'" properties defaults
+  {
+    auto prop = g->getProperty<ColorProperty>("viewColor");
+    prop->setAllNodeValue(TulipViewSettings::defaultColor(NODE));
+    prop->setAllEdgeValue(TulipViewSettings::defaultColor(EDGE));
+  }
+  {
+    auto prop = g->getProperty<ColorProperty>("viewBorderColor");
+    prop->setAllNodeValue(TulipViewSettings::defaultBorderColor(NODE));
+    prop->setAllEdgeValue(TulipViewSettings::defaultBorderColor(EDGE));
+  }
+  {
+    auto prop = g->getProperty<DoubleProperty>("viewBorderWidth");
+    prop->setAllNodeValue(TulipViewSettings::defaultBorderWidth(NODE));
+    prop->setAllEdgeValue(TulipViewSettings::defaultBorderWidth(EDGE));
+  }
+  {
+    auto prop = g->getProperty<StringProperty>("viewFont");
+    prop->setAllNodeValue(TulipViewSettings::defaultFontFile());
+    prop->setAllEdgeValue(TulipViewSettings::defaultFontFile());
+  }
+  {
+    auto prop = g->getProperty<IntegerProperty>("viewFontSize");
+    prop->setAllNodeValue(TulipViewSettings::defaultFontSize());
+    prop->setAllEdgeValue(TulipViewSettings::defaultFontSize());
+  }
+  {
+    auto prop = g->getProperty<StringProperty>("viewIcon");
+    prop->setAllNodeValue("fas-circle-question");
+    prop->setAllEdgeValue("fas-circle-question");
+  }
+  {
+    auto prop = g->getProperty<StringProperty>("viewLabel");
+    prop->setAllNodeValue("");
+    prop->setAllEdgeValue("");
+  }
+  {
+    auto prop = g->getProperty<ColorProperty>("viewLabelColor");
+    prop->setAllNodeValue(TulipViewSettings::defaultLabelColor());
+    prop->setAllEdgeValue(TulipViewSettings::defaultLabelColor());
+  }
+  {
+    auto prop = g->getProperty<ColorProperty>("viewLabelBorderColor");
+    prop->setAllNodeValue(TulipViewSettings::defaultLabelBorderColor());
+    prop->setAllEdgeValue(TulipViewSettings::defaultLabelBorderColor());
+  }
+  {
+    auto prop = g->getProperty<DoubleProperty>("viewLabelBorderWidth");
+    prop->setAllNodeValue(TulipViewSettings::defaultLabelBorderWidth());
+    prop->setAllEdgeValue(TulipViewSettings::defaultLabelBorderWidth());
+  }
+  {
+    auto prop = g->getProperty<IntegerEnumeratedProperty>("viewLabelPosition");
+    prop->setAllNodeValue(TulipViewSettings::defaultLabelPosition());
+    prop->setAllEdgeValue(TulipViewSettings::defaultLabelPosition());
+  }
+  {
+    auto prop = g->getProperty<LayoutProperty>("viewLayout");
+    prop->setAllNodeValue(Coord(0, 0, 0));
+    prop->setAllEdgeValue(std::vector<Coord>());
+  }
+  {
+    auto prop = g->getProperty<DoubleProperty>("viewMetric");
+    prop->setAllNodeValue(0);
+    prop->setAllEdgeValue(0);
+  }
+  {
+    auto prop = g->getProperty<DoubleProperty>("viewRotation");
+    prop->setAllNodeValue(0);
+    prop->setAllEdgeValue(0);
+  }
+  {
+    auto prop = g->getProperty<BooleanProperty>("viewSelection");
+    prop->setAllNodeValue(false);
+    prop->setAllEdgeValue(false);
+  }
+  {
+    auto prop = g->getProperty<IntegerEnumeratedProperty>("viewShape");
+    prop->setAllNodeValue(TulipViewSettings::defaultShape(NODE));
+    prop->setAllEdgeValue(TulipViewSettings::defaultShape(EDGE));
+  }
+  {
+    auto prop = g->getProperty<SizeProperty>("viewSize");
+    prop->setAllNodeValue(TulipViewSettings::defaultSize(NODE));
+    prop->setAllEdgeValue(TulipViewSettings::defaultSize(EDGE));
+  }
+  g->getProperty<IntegerEnumeratedProperty>("viewSrcAnchorShape")
+      ->setAllEdgeValue(TulipViewSettings::defaultEdgeExtremitySrcShape());
+  {
+    auto prop = g->getProperty<SizeProperty>("viewSrcAnchorSize");
+    prop->setAllEdgeValue(TulipViewSettings::defaultEdgeExtremitySrcSize());
+    prop->setAllEdgeValue(TulipViewSettings::defaultEdgeExtremityTgtSize());
+  }
+  {
+    auto prop = g->getProperty<StringProperty>("viewTexture");
+    prop->setAllNodeValue("");
+    prop->setAllEdgeValue("");
+  }
+  g->getProperty<IntegerEnumeratedProperty>("viewTgtAnchorShape")
+      ->setAllEdgeValue(TulipViewSettings::defaultEdgeExtremityTgtShape());
+  return g;
 }
 //----------------------------------------------------------------
 edge GraphImpl::existEdge(const node src, const node tgt, bool directed) const {
@@ -181,10 +394,13 @@ void GraphImpl::reserveEdges(unsigned int nb) {
 //----------------------------------------------------------------
 void GraphImpl::removeNode(const node n) {
   assert(isElement(n));
-  notifyDelNode(n);
+  notifyBeforeDelNode(n);
+
   // remove from storage and propertyContainer
   storage.removeFromNodes(n);
   propertyContainer->erase(n);
+
+  notifyAfterDelNode(n);
 }
 //----------------------------------------------------------------
 void GraphImpl::delNode(const node n, bool) {
@@ -222,12 +438,15 @@ void GraphImpl::delNode(const node n, bool) {
       removeEdge(e);
   }
 
-  notifyDelNode(n);
+  notifyBeforeDelNode(n);
+
   // delete n from storage
   storage.delNode(n);
 
   // remove from propertyContainer
   propertyContainer->erase(n);
+
+  notifyAfterDelNode(n);
 }
 //----------------------------------------------------------------
 void GraphImpl::delEdge(const edge e, bool) {
@@ -340,10 +559,13 @@ void GraphImpl::setEnds(const edge e, const node newSrc, const node newTgt) {
 //----------------------------------------------------------------
 void GraphImpl::removeEdge(const edge e) {
   assert(isElement(e));
-  notifyDelEdge(e);
+  notifyBeforeDelEdge(e);
+
   // remove from propertyContainer and storage
   storage.delEdge(e);
   propertyContainer->erase(e);
+
+  notifyAfterDelEdge(e);
 }
 //----------------------------------------------------------------
 bool GraphImpl::canPop() {

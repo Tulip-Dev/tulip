@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -32,7 +32,7 @@ namespace tlp {
  *
  * Enables to both create and manipulate a 2D Axis Aligned Rectangle
  *
- * Author : <a href="http://tulip.labri.fr>Tulip team</a>
+ * Author : <a href="https://tulip.labri.fr>Tulip team</a>
  */
 template <typename Obj, typename OTYPE = double>
 struct Rectangle : public Array<Vector<Obj, 2, OTYPE>, 2> {
@@ -125,7 +125,7 @@ struct Rectangle : public Array<Vector<Obj, 2, OTYPE>, 2> {
     return (*this)[0][0] <= (*this)[1][0] && (*this)[0][1] <= (*this)[1][1];
   }
   /**
-   * Return true if point is stricly inside the AARectangle
+   * Return true if point is strictly inside the AARectangle
    * \warning the rectangle must be valid (tested in debug mode)
    */
   bool isInside(const Vector<Obj, 2, OTYPE> &p) const {

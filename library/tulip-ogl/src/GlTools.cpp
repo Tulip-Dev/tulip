@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -41,14 +41,12 @@
 
 #include <tulip/Rectangle.h>
 #include <tulip/GlTools.h>
-#include <tulip/Matrix.h>
-#include <tulip/BoundingBox.h>
+
+#ifndef NDEBUG
 #include <tulip/TulipException.h>
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <climits>
-#include <unordered_map>
+#endif
+
+#include <tulip/tuliphash.h>
 
 using namespace std;
 namespace tlp {
@@ -137,7 +135,7 @@ void glTest(const string &message, int line, bool throwException) {
   unsigned int i = 1;
   GLenum error = glGetError();
 
-  stringstream errorStream;
+  string errorMsg;
   bool haveError = false, throwNeeded = false;
 
   while (error != GL_NO_ERROR) {
@@ -147,19 +145,19 @@ void glTest(const string &message, int line, bool throwException) {
       throwNeeded = true;
 
     if (i == 1) {
-      errorStream << "[OpenGL ERROR] " << message;
+      errorMsg += "[OpenGL ERROR] " + message;
       if (line > -1)
-        errorStream << ':' << line << endl;
+        errorMsg += ':' + std::to_string(line) + "\n";
     }
-    errorStream << "========> " << glGetErrorDescription(error) << endl;
+    errorMsg += "========> " + glGetErrorDescription(error) + "\n";
     error = glGetError();
     ++i;
   }
 
   if (haveError) {
     if (throwNeeded)
-      throw tlp::TulipException(errorStream.str());
-    tlp::warning() << errorStream.str();
+      throw tlp::TulipException(errorMsg);
+    tlp::warning() << errorMsg;
   }
 
 #else
@@ -295,7 +293,7 @@ GLfloat projectSize(const BoundingBox &bb, const MatrixGL &projectionMatrix,
   float width = fabs(x1 - x2);
   float size = pow(2. * width, 2);
 
-  // Test of visibily
+  // Test of visibility
   x2 += viewport[0];
   float y2 = (proj2[1] / proj2[3] * 0.5 + 0.5) * viewport[3] + viewport[1];
   Vector<float, 2> upleft;
@@ -495,6 +493,9 @@ void tesselateFontIcon(const std::string &fontFile, unsigned int iconCodePoint,
     return;
   }
 
+  // force glyph outline flags to fix misdrawing of several
+  // font awesome v6 icons (fas-circle-info, fas-circle-user...)
+  face->glyph->outline.flags |= ft_outline_even_odd_fill;
   FTVectoriser vectoriser(face->glyph);
 
   vectoriser.MakeMesh(1.0, 1, 0.0);
@@ -508,7 +509,7 @@ void tesselateFontIcon(const std::string &fontFile, unsigned int iconCodePoint,
   vector<unsigned short> indices;
   vector<unsigned short> outlineIndices;
 
-  unordered_map<Coord, unsigned int> vertexIdx;
+  tlp_hash_map<Coord, unsigned int> vertexIdx;
 
   unsigned int idx = 0;
 

@@ -215,6 +215,10 @@ NEW-WINDOW:451,254:62914587,62914587,34597843,0,0,0:36x74+879+458:0,0:Import
 6,2,0,0,0,116,0,67756768,3,Virtual core keyboard
 7,3,0,0,0,116,0,67756988,11,AT Translated Set 2 keyboard
 6,3,0,0,0,116,0,67756988,3,Virtual core keyboard
+7,2,0,0,0,116,0,67756995,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,67756996,3,Virtual core keyboard
+7,3,0,0,0,116,0,67757005,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,67757005,3,Virtual core keyboard
 7,6,364,708,0,0,0,67758076,9,'VirtualBox mouse integration'
 7,6,365,707,0,0,0,67758084,9,'VirtualBox mouse integration'
 7,6,371,706,0,0,0,67758092,9,'VirtualBox mouse integration'
@@ -673,8 +677,8 @@ NEW-WINDOW:1116,127:62914656,62914656,62914756,0,0,0:0x0+584+819:0,0:
 7,6,367,716,0,0,0,67781704,9,'VirtualBox mouse integration'
 7,6,365,715,0,0,0,67781712,9,'VirtualBox mouse integration'
 7,6,363,714,0,0,0,67781721,9,'VirtualBox mouse integration'
-7,6,362,713,0,0,0,67781728,9,'VirtualBox mouse integration'
-7,6,360,712,0,0,0,67781736,9,'VirtualBox mouse integration'
+7,6,362,705,0,0,0,67781728,9,'VirtualBox mouse integration'
+7,6,360,705,0,0,0,67781736,9,'VirtualBox mouse integration'
 7,4,0,0,3,0,0,67782555,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,3,0,0,67782555,2,Virtual core pointer
 7,5,0,0,3,0,0,67782725,12,ImExPS/2 Generic Explorer Mouse

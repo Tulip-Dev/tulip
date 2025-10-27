@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,12 +17,10 @@
  *
  */
 
-#include <QMimeData>
 #include <QDrag>
 #include <QMouseEvent>
 #include <QApplication>
 
-#include <tulip/Edge.h>
 #include <tulip/DragHandle.h>
 #include <tulip/TulipMimes.h>
 #include <tulip/WorkspacePanel.h>

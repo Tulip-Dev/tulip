@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,8 +21,8 @@
 #define PATHFINDER_H_
 
 #include <tulip/GLInteractor.h>
+#include <tulip/StandardInteractorPriority.h>
 
-#include "../../utils/StandardInteractorPriority.h"
 #include "PathFinding/PathAlgorithm.h"
 
 #define NO_METRIC "None"
@@ -63,7 +63,7 @@ public:
   unsigned int priority() const override {
     return tlp::StandardInteractorPriority::PathSelection;
   }
-  QWidget *configurationWidget() const override;
+  QWidget *configurationOptionsWidget() const override;
 
   /**
    * @return The name of the property used to get the weight values over the edges.

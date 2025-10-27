@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -25,7 +25,6 @@
 #include <tulip/GraphImpl.h>
 #include <tulip/ConcatIterator.h>
 #include <tulip/GraphTools.h>
-#include <tulip/TlpTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -249,8 +248,8 @@ Graph *GraphAbstract::getDescendantGraph(unsigned int sgId) const {
     if (sg)
       return sg;
 
-    for (auto sg : subgraphs) {
-      if ((sg = sg->getDescendantGraph(sgId)))
+    for (auto cur : subgraphs) {
+      if ((sg = cur->getDescendantGraph(sgId)))
         return sg;
     }
   }
@@ -264,8 +263,8 @@ Graph *GraphAbstract::getDescendantGraph(const string &name) const {
   if (sg)
     return sg;
 
-  for (auto sg : subgraphs) {
-    if ((sg = sg->getDescendantGraph(name)))
+  for (auto cur : subgraphs) {
+    if ((sg = cur->getDescendantGraph(name)))
       return sg;
   }
 
@@ -274,7 +273,7 @@ Graph *GraphAbstract::getDescendantGraph(const string &name) const {
 //=========================================================================
 node GraphAbstract::getOneNode() const {
   const std::vector<node> &vNodes = nodes();
-  return (vNodes.size() > 0) ? vNodes[0] : node();
+  return (!vNodes.empty()) ? vNodes[0] : node();
 }
 //=========================================================================
 node GraphAbstract::getRandomNode() const {
@@ -288,7 +287,7 @@ node GraphAbstract::getRandomNode() const {
 //=========================================================================
 edge GraphAbstract::getOneEdge() const {
   const std::vector<edge> &vEdges = edges();
-  return (vEdges.size() > 0) ? vEdges[0] : edge();
+  return (!vEdges.empty()) ? vEdges[0] : edge();
 }
 //=========================================================================
 edge GraphAbstract::getRandomEdge() const {

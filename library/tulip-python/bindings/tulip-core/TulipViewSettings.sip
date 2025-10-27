@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -29,108 +29,69 @@
 
 namespace tlp {
 
-class NodeShape /NoDefaultCtors/ {
-%TypeHeaderCode
-#include <tulip/TulipViewSettings.h>
-%End
-
-public:
-
-  enum NodeShapes {
-    Billboard=7,
-    ChristmasTree=28,
-    Circle=14,
-    Cone=3,
-    Cross=8,
-    Cube=0,
-    CubeOutlined=1,
-    CubeOutlinedTransparent=9,
-    Cylinder=6,
-    Diamond=5,
-    GlowSphere=16,
-    HalfCylinder=10,
-    Hexagon=13,
-    Pentagon=12,
-    Ring=15,
-    RoundedBox=18,
-    Sphere=2 ,
-    Square=4,
-    Triangle=11,
-    Window=17,
-    Star=19,
-    FontAwesomeIcon=20,
-    Icon=20
-  };
-  
+enum class NodeShape /BaseType=IntEnum/ {
+    Billboard = NodeShape::Billboard,
+    BottomShadowedSphere = NodeShape::BottomShadowedSphere,
+    Circle = NodeShape::Circle,
+    Cone = NodeShape::Cone,
+    Cross = NodeShape::Cross,
+    Cube = NodeShape::Cube,
+    CubeOutlined = NodeShape::CubeOutlined,
+    CubeOutlinedTransparent = NodeShape::CubeOutlinedTransparent,
+    Cylinder = NodeShape::Cylinder,
+    Diamond = NodeShape::Diamond,
+    GlowSphere = NodeShape::GlowSphere,
+    HalfCylinder = NodeShape::HalfCylinder,
+    Hexagon = NodeShape::Hexagon,
+    LeftBottomShadowedSphere = NodeShape::LeftBottomShadowedSphere,
+    Pentagon = NodeShape::Pentagon,
+    RightBottomShadowedSphere = NodeShape::RightBottomShadowedSphere,
+    Ring = NodeShape::Ring,
+    RoundedBox = NodeShape::RoundedBox,
+    Sphere = NodeShape::Sphere,
+    Square = NodeShape::Square,
+    Triangle = NodeShape::Triangle,
+    Window = NodeShape::Window,
+    Star = NodeShape::Star,
+    Icon = NodeShape::Icon
 };
 
-class EdgeShape /NoDefaultCtors/ {
-%TypeHeaderCode
-#include <tulip/TulipViewSettings.h>
-%End
-
-public:
-
-  enum EdgeShapes {
-    Polyline=0,
-    BezierCurve=4,
-    CatmullRomCurve=8,
-    CubicBSplineCurve=16
-  };
-  
+enum class EdgeShape /BaseType=IntEnum/ {
+    Polyline=EdgeShape::Polyline,
+    BezierCurve=EdgeShape::BezierCurve,
+    CatmullRomCurve=EdgeShape::CatmullRomCurve,
+    CubicBSplineCurve=EdgeShape::CubicBSplineCurve
 };
 
-class EdgeExtremityShape /NoDefaultCtors/ {
-%TypeHeaderCode
-#include <tulip/TulipViewSettings.h>
-%End
-
-public:
-
-  enum EdgeExtremityShapes {
-    None=-1,
-    Arrow=50,
-    Circle=14,
-    Cone=3,
-    Cross=8,
-    Cube=0,
-    CubeOutlinedTransparent=9,
-    Cylinder=6,
-    Diamond=5,
-    GlowSphere=16,
-    Hexagon=13,
-    Pentagon=12,
-    Ring=15,
-    Sphere=2 ,
-    Square=4,
-    Star=19,
-    FontAwesomeIcon=20,
-    Icon=20
-  };
-  
+enum class EdgeExtremityShape /BaseType=IntEnum/ {
+    None=EdgeExtremityShape::None,
+    Arrow=EdgeExtremityShape::Arrow,
+    Circle=EdgeExtremityShape::Circle,
+    Cone=EdgeExtremityShape::Cone,
+    Cross=EdgeExtremityShape::Cross,
+    Cube=EdgeExtremityShape::Cube,
+    CubeOutlinedTransparent=EdgeExtremityShape::CubeOutlinedTransparent,
+    Cylinder=EdgeExtremityShape::Cylinder,
+    Diamond=EdgeExtremityShape::Diamond,
+    GlowSphere=EdgeExtremityShape::GlowSphere,
+    Hexagon=EdgeExtremityShape::Hexagon,
+    Pentagon=EdgeExtremityShape::Pentagon,
+    Ring=EdgeExtremityShape::Ring,
+    Sphere=EdgeExtremityShape::Sphere,
+    Square=EdgeExtremityShape::Square,
+    Star=EdgeExtremityShape::Star,
+    Icon=EdgeExtremityShape::Icon
 };
 
-class LabelPosition /NoDefaultCtors/ {
-%TypeHeaderCode
-#include <tulip/TulipViewSettings.h>
-%End
-
-public:
-
-  enum LabelPositions {
-    Center=0,
-    Top,
-    Bottom,
-    Left,
-    Right
-  };
-  
+enum class LabelPosition /BaseType=IntEnum/ {
+    Center=LabelPosition::Center,
+    Top=LabelPosition::Top,
+    Bottom=LabelPosition::Bottom,
+    Left=LabelPosition::Left,
+    Right=LabelPosition::Right
 };
 
 class TulipViewSettings : tlp::Observable {
-%TypeHeaderCode
-#include <tulip/TulipViewSettings.h>
-%End
 
 public:
 
@@ -203,9 +164,6 @@ private:
 };
 
 class ViewSettingsEvent : public tlp::Event /NoDefaultCtors/ {
-%TypeHeaderCode
-#include <tulip/TulipViewSettings.h>
-%End
 
 %ConvertToSubClassCode
    if (dynamic_cast<tlp::ViewSettingsEvent*>(sipCpp)) {
@@ -217,11 +175,11 @@ class ViewSettingsEvent : public tlp::Event /NoDefaultCtors/ {
 
 public:
 
-  enum ViewSettingsEventType {
-    TLP_DEFAULT_COLOR_MODIFIED,
-    TLP_DEFAULT_SHAPE_MODIFIED,
-    TLP_DEFAULT_SIZE_MODIFIED,
-    TLP_DEFAULT_LABEL_COLOR_MODIFIED
+  enum ViewSettingsEventType /BaseType=IntEnum/ {
+    TLP_DEFAULT_COLOR_MODIFIED = tlp::ViewSettingsEvent::ViewSettingsEventType::TLP_DEFAULT_COLOR_MODIFIED,
+    TLP_DEFAULT_SHAPE_MODIFIED = tlp::ViewSettingsEvent::ViewSettingsEventType::TLP_DEFAULT_SHAPE_MODIFIED,
+    TLP_DEFAULT_SIZE_MODIFIED = tlp::ViewSettingsEvent::ViewSettingsEventType::TLP_DEFAULT_SIZE_MODIFIED,
+    TLP_DEFAULT_LABEL_COLOR_MODIFIED = tlp::ViewSettingsEvent::ViewSettingsEventType::TLP_DEFAULT_LABEL_COLOR_MODIFIED
   };
 
   ViewSettingsEventType getType() const;

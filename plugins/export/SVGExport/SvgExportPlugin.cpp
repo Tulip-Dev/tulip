@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -73,17 +73,7 @@ public:
     return ":/tulip/graphperspective/icons/32/export_svg.png";
   }
 
-  string fileExtension() const override {
-    return "svg";
-  }
-
-  list<string> gzipFileExtensions() const override {
-    list<string> ext;
-    ext.push_back("svgz");
-    return ext;
-  }
-
-  SvgExport(tlp::PluginContext *context) : tlp::ExportModule(context) {
+  SvgExport(tlp::PluginContext *context) : tlp::ExportModule(context, {"svg", "svgz"}) {
     addInParameter<bool>("edge color interpolation", paramHelp[0], "false");
     addInParameter<bool>("edge size interpolation", paramHelp[1], "true");
     addInParameter<bool>("edge extremities", paramHelp[2], "false");
@@ -100,8 +90,7 @@ public:
     bool autoformatting(true);
 
     if (dataSet != nullptr) {
-      dataSet->getDeprecated("makes SVG output human readable", "Makes SVG output human readable",
-                             autoformatting);
+      dataSet->get("makes SVG output human readable", autoformatting);
     }
 
     ExportSvg svg(pluginProgress, os, autoformatting); // We call our first concrete builder

@@ -40,7 +40,7 @@ please check if *CPLUS_INCLUDE_PATH* contains the appropriate pathes.
 Tulip plugins and event filters
 -------------------------------
 
-If you are willing to exploit the library at its fullest, you may want to use some of the plugins or libraries developped for Tulip. This operation is entirely feasible. Once you will have analyse the following tutorials, you will be able to combine them with the ones seen in :ref:`tulip_library_tutorial`. Just do not forget to include the lines initializing the librairies and the plugins.
+If you are willing to exploit the library at its fullest, you may want to use some of the plugins or libraries developped for Tulip. This operation is entirely feasible. Once you will have analyse the following tutorials, you will be able to combine them with the ones seen in :ref:`tulip_library_tutorial`. Just do not forget to include the lines initializing the libraries and the plugins.
 
 Event filters, such as the ones developped for Tulip, may also be included in the window. In the examples, we will integrate the *MouseNKeysNavigator* event filter, enabling the mouse and keyboard camera commands.
 

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -24,8 +24,7 @@
 #include <vector>
 #include <stack>
 #include <list>
-#include <unordered_map>
-#include <climits>
+#include <tulip/tuliphash.h>
 #include <functional>
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
@@ -46,7 +45,7 @@ public:
   //=========================================================
   bool searchPath(node n, BooleanProperty *result);
   //=============================================================
-  bool ancestors(std::unordered_map<node, std::list<node>> &result);
+  bool ancestors(tlp_hash_map<node, std::list<node>> &result);
 
 private:
   void internalSearchPaths(node n, BooleanProperty *result);

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -19,28 +19,19 @@
 #include "ui_GridOptionsWidget.h"
 
 #include <QGraphicsView>
-#include <QActionGroup>
-#include <QDialog>
 #include <QMenu>
-#include <QString>
 
 #include <tulip/GlMetaNodeRenderer.h>
 #include <tulip/GlGrid.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/ParameterListModel.h>
-#include <tulip/GlMainWidget.h>
 #include <tulip/GlGraphComposite.h>
-#include <tulip/GlGraphInputData.h>
 #include <tulip/Gl2DRect.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlOverviewGraphicsItem.h>
-#include <tulip/Interactor.h>
-#include <tulip/TulipMetaTypes.h>
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
 #include <tulip/GlCompositeHierarchyManager.h>
-#include <tulip/TlpTools.h>
-#include <tulip/TlpQtTools.h>
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/GraphModel.h>
 #include <tulip/NumericProperty.h>
@@ -354,13 +345,11 @@ void NodeLinkDiagramComponent::showGridControl() {
     gridParameters.add<bool>("X grid", "", "true", false);
     gridParameters.add<bool>("Y grid", "", "true", false);
     gridParameters.add<bool>("Z grid", "", "true", false);
-    ParameterListModel *model = new ParameterListModel(gridParameters, nullptr, this);
 
     grid_ui = new Ui::GridOptionsWidget;
     _gridOptions = new QDialog(graphicsView());
     grid_ui->setupUi(_gridOptions);
-    grid_ui->tableView->setModel(model);
-    grid_ui->tableView->setItemDelegate(new TulipItemDelegate(grid_ui->tableView));
+    ParameterListModel::configureTableView(grid_ui->tableView, gridParameters, nullptr, this);
   }
   if (_gridOptions->exec() == QDialog::Rejected)
     return;
@@ -403,7 +392,7 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
       action = selectMenu->addAction("predecessor nodes", this, SLOT(selectInNodes()));
       action->setToolTip(QString("Select the predecessors of node #") + sId);
       action = selectMenu->addAction("successor nodes", this, SLOT(selectOutNodes()));
-      action->setToolTip(QString("Select the sucessors of node #") + sId);
+      action->setToolTip(QString("Select the successors of node #") + sId);
       action = selectMenu->addAction("input edges", this, SLOT(selectInEdges()));
       action->setToolTip(QString("Select the input edges of node #") + sId);
       action = selectMenu->addAction("output edges", this, SLOT(selectOutEdges()));
@@ -433,7 +422,7 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
                          " to the current selection");
       action =
           addToSelectionMenu->addAction("successor nodes", this, SLOT(addOutNodesToSelection()));
-      action->setToolTip(QString("Add the sucessors of node #") + sId +
+      action->setToolTip(QString("Add the successors of node #") + sId +
                          " to the current selection");
       action = addToSelectionMenu->addAction("input edges", this, SLOT(addInEdgesToSelection()));
       action->setToolTip(QString("Add the input edges of node #") + sId +

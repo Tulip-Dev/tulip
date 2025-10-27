@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -21,6 +21,7 @@
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
 
 #include <tulip/StringCollection.h>
+#include <tulip/TreeTest.h>
 
 #define ORIENTATIONLIST "top to bottom;bottom to top;left to right;right to left"
 #define TOPTOBOTTOM 0
@@ -124,7 +125,7 @@ public:
       if (dataSet->get("orthogonal layout", bval))
         tree->orthogonalLayout(bval);
 
-      if (dataSet->getDeprecated("orientation", "Orientation", sc)) {
+      if (dataSet->get("orientation", sc)) {
         switch (sc.getCurrent()) {
         case TOPTOBOTTOM:
           // because of an ununderstanding fix
@@ -143,7 +144,7 @@ public:
         }
       }
 
-      if (dataSet->getDeprecated("root selection", "Root selection", sc)) {
+      if (dataSet->get("root selection", sc)) {
         switch (sc.getCurrent()) {
         case ROOTSOURCE:
           tree->rootSelection(TreeLayout::RootSelectionType::Source);

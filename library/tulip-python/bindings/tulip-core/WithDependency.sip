@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -52,7 +52,7 @@ Add a dependency on a boolean algorithm.
 
 :param name: the name of the algorithm
 :type name: string
-:param release: the version of the algortihm
+:param release: the version of the algorihm
 :type release: string
 %End
 

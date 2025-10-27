@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,7 +20,7 @@
 #ifndef SOMMAPELEMENT_H_
 #define SOMMAPELEMENT_H_
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <tulip/GlComposite.h>
 #include <tulip/Size.h>
@@ -68,7 +68,7 @@ protected:
 
   SOMMap *som;
 
-  std::unordered_map<node, GlSimpleEntity *> nodesMap;
+  tlp_hash_map<node, GlSimpleEntity *> nodesMap;
 
   Coord position;
   Size size;

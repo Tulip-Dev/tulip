@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,17 +20,17 @@
 #include "tulip/TulipProject.h"
 
 #include <QMetaProperty>
-#include <QDir>
+/*#include <QDir>
 #include <QCoreApplication>
-#include <QTextStream>
+#include <QTextStream>*/
 #include <QXmlStreamWriter>
-#include <QXmlStreamReader>
+//#include <QXmlStreamReader>
 
 #include <tulip/SimplePluginProgress.h>
-#include <tulip/QuaZIPFacade.h>
+#include <tulip/ZIPFacade.h>
 #include <tulip/TlpQtTools.h>
 
-#include <cstdlib>
+#include <fstream>
 
 #define DATA_DIR_NAME "data"
 #define INFO_FILE_NAME "project.xml"
@@ -64,36 +64,33 @@ bool TulipProject::openProjectFile(const QString &file, tlp::PluginProgress *pro
 
   QFileInfo fileInfo(file);
 
-  if (!fileInfo.exists()) {
-    progress->setError("File " + tlp::QStringToTlpString(file) + " not found");
-    return false;
-  }
-
-  if (fileInfo.isDir()) {
-    progress->setError(tlp::QStringToTlpString(file) + " is a directory, not a regular file");
-    return false;
-  }
-
   bool deleteProgress = false;
 
-  if (!progress) {
+  if (progress == nullptr) {
     progress = new tlp::SimplePluginProgress;
     deleteProgress = true;
   }
 
-  if (!QuaZIPFacade::unzip(rootDir(), file, progress)) {
-    progress->setError("Failed to unzip project.");
+  if (!QFileInfo::exists(file)) {
+    progress->setError("File " + tlp::QStringToTlpString(file) + " not found");
+  }
 
+  else if (fileInfo.isDir()) {
+    progress->setError(tlp::QStringToTlpString(file) + " is a directory, not a regular file");
+  }
+
+  else if (!ZIPFacade::unzip(rootDir(), file, progress)) {
+    progress->setError("Failed to unzip project.");
+  }
+
+  if (!progress->getError().empty()) {
+    tlp::error() << progress->getError() << std::endl;
     if (deleteProgress)
       delete progress;
-
     return false;
   }
 
   readMetaInfo();
-
-  if (deleteProgress)
-    delete progress;
 
   _projectFile = file;
   emit projectFileChanged(file);
@@ -105,6 +102,7 @@ TulipProject *TulipProject::openProject(const QString &file, tlp::PluginProgress
 
   if (project != nullptr) {
     if (!project->openProjectFile(file, progress)) {
+      delete project;
       return nullptr;
     }
   }
@@ -124,7 +122,7 @@ bool TulipProject::write(const QString &file, tlp::PluginProgress *progress) {
     return false;
   }
 
-  if (!QuaZIPFacade::zipDir(rootDir(), file)) {
+  if (!ZIPFacade::zipDir(rootDir(), file)) {
     progress->setError("Failed to zip project.");
     return false;
   }
@@ -136,12 +134,6 @@ bool TulipProject::write(const QString &file, tlp::PluginProgress *progress) {
   emit projectFileChanged(file);
   return true;
 }
-
-// TulipProject *TulipProject::restoreProject(const QString &path) {
-//  TulipProject *project = new TulipProject(path);
-//  project->_isValid = project->readMetaInfo();
-//  return project;
-//}
 
 // ==============================
 //      FILES MANIPULATION

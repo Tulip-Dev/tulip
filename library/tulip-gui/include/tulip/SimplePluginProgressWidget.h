@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -66,6 +66,7 @@ public:
   void showPreview(bool showPreview) override;
   void showStops(bool showButtons) override;
   void showText(bool show) override;
+  void showLogo(bool show);
 
   tlp::ProgressState state() const override;
 
@@ -106,6 +107,9 @@ public:
   void showPreview(bool showPreview) override;
   void showStops(bool showButtons) override;
   void showText(bool show) override;
+  void showLogo(bool show) {
+    _progress->showLogo(show);
+  }
 
   tlp::ProgressState state() const override;
 

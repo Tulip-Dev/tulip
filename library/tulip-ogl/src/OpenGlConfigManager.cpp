@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,9 +22,6 @@
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/ParallelTools.h>
 
-#include <iostream>
-#include <sstream>
-
 //====================================================
 
 using namespace std;
@@ -33,7 +30,7 @@ namespace tlp {
 
 bool OpenGlConfigManager::_glewIsInit = false;
 bool OpenGlConfigManager::_antialiased = true;
-std::unordered_map<std::string, bool> OpenGlConfigManager::_checkedExtensions;
+tlp_hash_map<std::string, bool> OpenGlConfigManager::_checkedExtensions;
 
 void OpenGlConfigManager::initExtensions() {
   if (!_glewIsInit) {
@@ -43,18 +40,18 @@ void OpenGlConfigManager::initExtensions() {
 }
 
 string OpenGlConfigManager::getOpenGLVersionString() {
-  return reinterpret_cast<const char *>(glGetString(GL_VERSION));
+  auto glstring = reinterpret_cast<const char *>(glGetString(GL_VERSION));
+  return glstring ? glstring : "??.??";
 }
 
 double OpenGlConfigManager::getOpenGLVersion() {
-  double ret = 0;
-  std::istringstream iss(getOpenGLVersionString()); //.substr(0,3));
-  iss >> ret;
-  return ret;
+  auto glstring = reinterpret_cast<const char *>(glGetString(GL_VERSION));
+  return glstring ? std::stod(glstring) : 0.0;
 }
 
 string OpenGlConfigManager::getOpenGLVendor() {
-  return string(reinterpret_cast<const char *>(glGetString(GL_VENDOR)));
+  auto glstring = reinterpret_cast<const char *>(glGetString(GL_VENDOR));
+  return glstring ? glstring : "unknown GL vendor";
 }
 
 bool OpenGlConfigManager::isExtensionSupported(const string &extensionName) {

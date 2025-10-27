@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -35,19 +35,20 @@ class ImportWizard : public QWizard {
   Q_OBJECT
 
   Ui::ImportWizard *_ui;
-  QModelIndex const *_index;
 
 public:
   explicit ImportWizard(QWidget *parent = nullptr);
   ~ImportWizard() override;
 
-  QString algorithm() const;
+  std::string module() const;
+  void initWithModuleFile(const std::string &module, const std::string &file);
   tlp::DataSet parameters() const;
 
 protected slots:
-  void algorithmSelected(const QModelIndex &index);
+  void moduleSelected(const QModelIndex &index);
   void helpButtonClicked();
   void updateFinishButton();
+  void setFilter(const QString &filter);
 };
 
 #endif // IMPORTWIZARD_H

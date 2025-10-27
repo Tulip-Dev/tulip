@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,40 +22,52 @@
 
 #include <QFile>
 #include <QFontDatabase>
+#include <QFontMetrics>
 #include <QPainter>
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
+#include <unordered_set>
 
 using namespace tlp;
 
-std::unordered_map<std::string, QFont> qFonts;
+tlp_hash_map<std::string, QFont> qFonts;
+std::unordered_set<std::string> unknownIcons;
 QFont nullFont;
 
 void TulipFontIconEngine::init(const std::string &iconName) {
   // get iconQString
   iconQString = QString(TulipIconicFont::getIconUtf8String(iconName).c_str());
-  // then get font
-  auto &&fontFile = TulipIconicFont::getTTFLocation(iconName);
-  if (qFonts.find(fontFile) == qFonts.end()) {
-    // load the font file
-    auto fontId = QFontDatabase::addApplicationFont(tlpStringToQString(fontFile));
-    if (fontId == -1) {
-      qDebug() << "Error when loading font file " << tlpStringToQString(fontFile);
-      font = nullFont;
-      return;
+  if (iconQString.isEmpty()) {
+    if (unknownIcons.find(iconName) == unknownIcons.end()) {
+      unknownIcons.insert(iconName);
+      tlp::warning() << "Warning: icon \"" << iconName.c_str() << "\" does not exist" << std::endl;
     }
+    // use fas-question instead
+    init("fas-question");
+  } else {
+    // then get font
+    auto &&fontFile = TulipIconicFont::getTTFLocation(iconName);
+    if (qFonts.find(fontFile) == qFonts.end()) {
+      // load the font file
+      auto fontId = QFontDatabase::addApplicationFont(tlpStringToQString(fontFile));
+      if (fontId == -1) {
+        tlp::warning() << "Error when loading font file " << fontFile << std::endl;
+        font = nullFont;
+        return;
+      }
 
-    QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
-    if (!fontFamilies.empty()) {
-      qFonts.emplace(fontFile, fontFamilies.at(0));
-    } else {
-      qDebug() << "No data found when loading file" << tlpStringToQString(fontFile);
-      font = nullFont;
-      return;
+      QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
+      if (!fontFamilies.empty()) {
+        qFonts.emplace(fontFile, fontFamilies.at(0));
+      } else {
+        tlp::warning() << "No data found when loading file " << fontFile << std::endl;
+        font = nullFont;
+        return;
+      }
     }
+    font = qFonts[fontFile];
+    font.setStyleName(tlpStringToQString(TulipIconicFont::getIconStyle(iconName)));
   }
-  font = qFonts[fontFile];
-  font.setStyleName(tlpStringToQString(TulipIconicFont::getIconStyle(iconName)));
 }
 
 TulipFontIconEngine::TulipFontIconEngine(const std::string &iconName, bool dm) : darkMode(dm) {
@@ -70,7 +82,7 @@ void TulipFontIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mod
                                 QIcon::State) {
   painter->save();
 
-  // set the correct color
+  // compute a convenient pen color
   QColor color(50, 50, 50);
 
   if ((mode == QIcon::Active) || (mode == QIcon::Selected))
@@ -82,21 +94,41 @@ void TulipFontIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mod
     color.setRgb(255 - color.red(), 255 - color.green(), 255 - color.blue());
   painter->setPen(color);
 
+  // ensure icon full display in the given rect
+  // so compute a sub rect with same h/w ratio as icon bounding rect
+  QFontMetrics fm(font);
+  auto br = fm.boundingRect(iconQString);
+  auto maxH = (br.height() * rect.width()) / br.width();
+  auto srect(rect);
+  if (srect.height() > maxH)
+    // reduce height
+    srect.setHeight(maxH);
   // add some 'padding' around the icon
-  font.setPixelSize(qRound(rect.height() * 0.9));
+  font.setPixelSize(qRound(srect.height() * 0.9));
+
   // set the font
   painter->setFont(font);
 
-  painter->drawText(rect, iconQString, QTextOption(Qt::AlignCenter | Qt::AlignVCenter));
+  painter->drawText(srect, iconQString, QTextOption(Qt::AlignCenter | Qt::AlignVCenter));
 
   painter->restore();
 }
 
 QPixmap TulipFontIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state) {
-  QPixmap pm(size);
+  // ensure icon full display, so compute an enlarged pixmap size
+  // with same h/w ratio as icon bounding rect
+  QFontMetrics fm(font);
+  auto br = fm.boundingRect(iconQString);
+  auto sz(size);
+  auto minW = (sz.height() * br.width()) / br.height();
+  if (sz.width() < minW)
+    // enlarge width
+    sz.setWidth(minW);
+
+  QPixmap pm(sz);
   pm.fill(Qt::transparent); // we need transparency
   QPainter painter(&pm);
-  paint(&painter, QRect(QPoint(0, 0), size), mode, state);
+  paint(&painter, QRect(QPoint(0, 0), sz), mode, state);
 
   return pm;
 }

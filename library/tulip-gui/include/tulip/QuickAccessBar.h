@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -95,6 +95,7 @@ public:
     SHOWLABELS = 0x4000,
     LABELSSCALED = 0x8000,
     NODESHAPE = 0x10000,
+    NODEICON = 0x800000,
     EDGESHAPE = 0x20000,
     NODESIZE = 0x40000,
     EDGESIZE = 0x80000,
@@ -122,20 +123,20 @@ protected:
   void addSeparator();
   void updateFontButtonStyle();
   void showHideCaption(CaptionItem::CaptionType captionType);
-  void setAllValues(unsigned int eltType, PropertyInterface *prop);
-  void setAllColorValues(unsigned int eltType, ColorProperty *prop, const Color &color);
+  void setAllValues(unsigned int eltType, PropertyInterface *prop, QString str = "");
 
 public slots:
   void reset() override;
 
   virtual void setBackgroundColor(const QColor &);
   virtual void setColorInterpolation(bool);
-  void setLabelColor(const QColor &);
-  void setNodeColor(const QColor &);
-  void setNodeBorderColor(const QColor &);
-  void setEdgeColor(const QColor &);
-  void setEdgeBorderColor(const QColor &);
+  void setLabelColor();
+  void setNodeColor();
+  void setNodeBorderColor();
+  void setEdgeColor();
+  void setEdgeBorderColor();
   void setNodeShape();
+  void setNodeIcon();
   void setEdgeShape();
   void setNodeSize();
   void setEdgeSize();

@@ -11,7 +11,7 @@ Before doing any of the tutorials please read the following warnings:
 	
 * you can find at the end of each tutorial, the integral source code that we used.
 	
-* If you want more details on a specific function or class please read the `Tulip API documentation <http://tulip.labri.fr/Documentation/4_4/doxygen/>`_. 
+* If you want more details on a specific function or class please read the `Tulip API documentation <https://tulip.labri.fr/Documentation/4_4/doxygen/>`_. 
 
 Tutorial compilation instructions
 =================================
@@ -24,12 +24,12 @@ The second needed element is the *tulip-config* file. If you have followed the s
 
   /usr/local/bin
 
-along with *tulip* and *tulip_perspective*.
+along with *tulip*.
 If you have, however, followed the customized installation procedures, the files should be in the directory
 
 .. code-block:: bash
 
-  [...]/Tulip-4.3/install-[debug,release]/bin/*
+  [...]/Tulip-x.y/install-[debug,release]/bin/*
 
 You can either add this folder address to the path or specify the whole address in the compilation command line.
 
@@ -252,7 +252,7 @@ To iterate all the nodes, we need to create an Iterator over the graph nodes wit
 
   Iterator<node> *itNodes = graph->getNodes();
 
-The documentation of the interface Iterator can be found `here <http://tulip.labri.fr/doxygen/tulip-lib/structtlp_1_1Iterator.html>`_.
+The documentation of the interface Iterator can be found `here <https://tulip.labri.fr/doxygen/tulip-lib/structtlp_1_1Iterator.html>`_.
 
 With the functions *template <class itType> bool tlp::Iterator<itType>::hasNext ( )* and *node next ( )*, we can iterate our graph nodes with a simple while ::
 

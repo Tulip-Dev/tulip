@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -123,15 +123,9 @@ int file_exist(const std::string &filename) {
 #ifdef __MINGW32__
 static DWORD GetModuleBase(DWORD dwAddress) {
   MEMORY_BASIC_INFORMATION Buffer;
-#ifndef IS_64BIT
-  return VirtualQuery(reinterpret_cast<LPCVOID>(dwAddress), &Buffer, sizeof(Buffer))
-             ? reinterpret_cast<DWORD>(Buffer.AllocationBase)
-             : 0;
-#else
   return VirtualQuery(reinterpret_cast<LPCVOID>(dwAddress), &Buffer, sizeof(Buffer))
              ? reinterpret_cast<DWORD64>(Buffer.AllocationBase)
              : 0;
-#endif
 }
 #else
 

@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -46,7 +46,7 @@ struct node {
   /**
    * @brief node creates an invalid node.
    */
-  node() : id(UINT_MAX) {}
+  constexpr node() : id(UINT_MAX) {}
 
   /**
    * @brief node Create a node of given identifier.
@@ -94,13 +94,6 @@ struct node {
   }
 };
 } // namespace tlp
-
-#ifdef _MSC_VER
-#include <vector>
-#include <tulip/tulipconf.h>
-// needed by MSVC to avoid multiple definitions
-struct TLP_SCOPE __tlp_vector_node : public std::vector<tlp::node> {};
-#endif
 
 ///@cond DOXYGEN_HIDDEN
 // these three functions allow to use tlp::node as a key in a hash-based data structure (e.g.

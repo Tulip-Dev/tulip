@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,13 +20,13 @@
 #ifndef MINMAXPROPERTY_H
 #define MINMAXPROPERTY_H
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 
 #include <tulip/Observable.h>
 #include <tulip/AbstractProperty.h>
 
 #define MINMAX_PAIR(TYPE) std::pair<typename TYPE::RealType, typename TYPE::RealType>
-#define MINMAX_MAP(TYPE) typename std::unordered_map<unsigned int, MINMAX_PAIR(TYPE)>
+#define MINMAX_MAP(TYPE) typename tlp_hash_map<unsigned int, MINMAX_PAIR(TYPE)>
 
 #define NODE_VALUE typename nodeType::RealType
 #define CONST_NODE_VALUE typename tlp::StoredType<typename nodeType::RealType>::ReturnedConstValue
@@ -62,6 +62,7 @@ public:
   MinMaxProperty(tlp::Graph *graph, const std::string &name, NODE_VALUE NodeMin, NODE_VALUE NodeMax,
                  EDGE_VALUE EdgeMin, EDGE_VALUE EdgeMax);
 
+  using tlp::AbstractProperty<nodeType, edgeType, propType>::operator=;
   void treatEvent(const tlp::Event &ev) override;
 
   /**

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -19,7 +19,7 @@
 #ifndef IMPROVEDWALKER_H
 #define IMPROVEDWALKER_H
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <vector>
 
 #include <tulip/LayoutProperty.h>
@@ -61,10 +61,10 @@ public:
       "11/11/04",
       "It is a linear implementation of the Walker's tree layout improved algorithm "
       "published as:<br/>"
-      "<b>Improving Walker’s Algorithm to Run in Linear Time.</b><br>"
+      "<b>Improving Walker’s Algorithm to Run in Linear Time</b>,<br/>"
       "Buchheim C., Jünger M., Leipert S. (2002), "
       "In: Goodrich M.T., Kobourov S.G. (eds) Graph Drawing (GD) 2002, "
-      "Lecture Notes in Computer Science, vol 2528. Springer, Berlin, Heidelberg. <a "
+      "Lecture Notes in Computer Science, vol 2528. Springer, Berlin, Heidelberg,<br/>doi: <a "
       "href=\"https://doi.org/10.1007/3-540-36151-0_32\">10.1007/3-540-36151-0_32</a>",
       "1.0", "Tree")
   ImprovedWalker(const tlp::PluginContext *context);
@@ -74,9 +74,9 @@ public:
 
 private:
   typedef std::vector<float> levelToFloatType;
-  typedef std::unordered_map<tlp::node, float> nodeToFloatType;
-  typedef std::unordered_map<tlp::node, int> nodeToIntegerPropertyType;
-  typedef std::unordered_map<tlp::node, tlp::node> nodeToNodeType;
+  typedef tlp_hash_map<tlp::node, float> nodeToFloatType;
+  typedef tlp_hash_map<tlp::node, int> nodeToIntegerPropertyType;
+  typedef tlp_hash_map<tlp::node, tlp::node> nodeToNodeType;
 
   tlp::Graph *tree;
 

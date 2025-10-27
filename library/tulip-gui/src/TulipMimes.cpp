@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -19,17 +19,13 @@
 
 #include "tulip/TulipMimes.h"
 
-#include <tulip/TulipMetaTypes.h>
-#include <tulip/Perspective.h>
-#include <tulip/TlpQtTools.h>
-
 using namespace tlp;
 
 AlgorithmMimeType::AlgorithmMimeType(QString algorithmName, const DataSet &data)
     : _algorithm(algorithmName), _params(data) {}
 
-void AlgorithmMimeType::run(Graph *g) const {
-  emit mimeRun(g);
+void AlgorithmMimeType::run(Graph *g, WorkspacePanel *wsp) const {
+  emit mimeRun(g, wsp);
 }
 
 QStringList GraphMimeType::formats() const {

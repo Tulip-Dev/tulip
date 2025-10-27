@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Tulip @Tulip_VERSION@
+Exec=@CMAKE_INSTALL_PREFIX@/bin/tulip %U
+MimeType=application/x-tulip-tlpx;application/x-tulip-tlp;application/x-tulip-tlpgz;application/x-tulip-tlpz;application/x-tulip-tlpb;application/x-tulip-tlpbgz;application/x-tulip-tlpbz
+Icon=tulip
+Terminal=false
+Type=Application
+Categories=Science
+Comment=@PROJECT_DESCRIPTION@

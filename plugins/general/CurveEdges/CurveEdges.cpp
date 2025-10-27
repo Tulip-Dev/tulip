@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -32,9 +32,6 @@
 //
 // Code was ported from Javascript to C++.
 
-#ifndef CURVEEDGES_H
-#define CURVEEDGES_H
-
 #include <tulip/Algorithm.h>
 #include <tulip/StringCollection.h>
 #include <tulip/LayoutProperty.h>
@@ -61,7 +58,7 @@ cubic diagonal cross;cubic vertical diagonal cross;cubic straight cross source;c
 #define CUBIC_STRAIGHTCROSS_TARGET 11
 
 static const char *paramHelp[] = {
-    // layout
+    // initial layout
     "The input layout of the graph.",
 
     // curve roundness
@@ -90,12 +87,12 @@ class CurveEdges : public tlp::Algorithm {
 
 public:
   PLUGININFORMATION("Curve edges", "Antoine Lambert", "16/01/2015",
-                    "Computes quadratic or cubic bezier paths for edges", "1.0", "")
+                    "Computes quadratic or cubic bezier paths for edges", "1.1", "")
 
   CurveEdges(tlp::PluginContext *context)
       : tlp::Algorithm(context), curveType(0), curveRoundness(0.5), layout(nullptr),
         bezierEdges(true) {
-    addInParameter<tlp::LayoutProperty>("layout", paramHelp[0], "viewLayout");
+    addInParameter<tlp::LayoutProperty>("initial layout", paramHelp[0], "viewLayout");
     addInParameter<float>("curve roundness", paramHelp[1], "0.5");
     addInParameter<tlp::StringCollection>("curve type", paramHelp[2], CURVE_TYPE_LIST, true,
                                           curveTypeValues);
@@ -303,12 +300,12 @@ public:
     if (dataSet) {
       tlp::StringCollection curveTypeSc;
 
-      if (dataSet->getDeprecated("curve type", "Curve Type", curveTypeSc)) {
+      if (dataSet->get("curve type", curveTypeSc)) {
         curveType = curveTypeSc.getCurrent();
       }
 
       dataSet->get("curve roundness", curveRoundness);
-      dataSet->get("layout", layout);
+      dataSet->get("initial layout", layout);
       dataSet->get("bezier edges", bezierEdges);
     }
 
@@ -340,5 +337,3 @@ private:
 };
 
 PLUGIN(CurveEdges)
-
-#endif // CURVEEDGES_H

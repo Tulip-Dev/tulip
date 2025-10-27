@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -24,6 +24,8 @@
 #include <tulip/ColorScale.h>
 
 #ifndef TULIP_BUILD_CORE_ONLY
+#include <QApplication>
+#include <tulip/Perspective.h>
 #include "DoubleStringsListRelationDialog.h"
 #endif
 
@@ -38,7 +40,7 @@ static const char *paramHelp[] = {
     "<li> <b>logarithmic</b>: graph elements values are first "
     "mapped in the [1, +inf[ range. "
     "Then the log of each mapped value is computed and used to compute the associated color of the "
-    "graph element trough a linear interpolation between 0 and the log of the mapped maximum value "
+    "graph element through a linear interpolation between 0 and the log of the mapped maximum value "
     "of graph elements.</li>"
     "<li><b>uniform</b>: this is the same as logarithmic except for the interpolation: the values "
     "are sorted, numbered, "
@@ -102,7 +104,12 @@ public:
       "Colorizes the nodes or edges of a graph according to the values of a given property.", "2.3",
       "")
   ColorMapping(const tlp::PluginContext *context)
-      : ColorAlgorithm(context), entryMetric(nullptr), eltTypes(ELT_TYPES),
+      // set second parameter of the constructor below to true because
+      // result needs to be an inout parameter
+      // in order to preserve the original values of non targeted elements
+      // i.e if "target" = "nodes", the values of edges must be preserved
+      // and if "target" = "edges", the values of nodes must be preserved
+      : ColorAlgorithm(context, true), entryMetric(nullptr), eltTypes(ELT_TYPES),
         maxInput(std::numeric_limits<double>::quiet_NaN()),
         minInput(std::numeric_limits<double>::quiet_NaN()), overrideMaxInput(false),
         overrideMinInput(false) {
@@ -112,16 +119,10 @@ public:
     addInParameter<StringCollection>(TARGET_TYPE, paramHelp[2], TARGET_TYPES, true,
                                      "nodes <br> edges");
     addInParameter<ColorScale>("color scale", paramHelp[3], "");
-    addInParameter<bool>("override minimum value", paramHelp[4], "false", false);
-    addInParameter<double>("minimum value", paramHelp[5], "", false);
-    addInParameter<bool>("override maximum value", paramHelp[6], "false", false);
-    addInParameter<double>("maximum value", paramHelp[7], "", false);
-
-    // result needs to be an inout parameter
-    // in order to preserve the original values of non targeted elements
-    // i.e if "target" = "nodes", the values of edges must be preserved
-    // and if "target" = "edges", the values of nodes must be preserved
-    parameters.setDirection("result", INOUT_PARAM);
+    addInParameter<bool>("override min value", paramHelp[4], "false", false);
+    addInParameter<double>("min value", paramHelp[5], "", false);
+    addInParameter<bool>("override max value", paramHelp[6], "false", false);
+    addInParameter<double>("max value", paramHelp[7], "", false);
   }
 
   //=========================================================
@@ -148,13 +149,13 @@ public:
     PropertyInterface *metric = nullptr;
 
     if (dataSet != nullptr) {
-      dataSet->getDeprecated("property", "input property", metric);
+      dataSet->get("property", metric);
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);
-      dataSet->get("override minimum value", overrideMinInput);
-      dataSet->get("minimum value", minInput);
-      dataSet->get("override maximum value", overrideMaxInput);
-      dataSet->get("maximum value", maxInput);
+      dataSet->get("override min value", overrideMinInput);
+      dataSet->get("min value", minInput);
+      dataSet->get("override max value", overrideMaxInput);
+      dataSet->get("max value", maxInput);
 
       /// Do not allow NaN input
       if (overrideMaxInput &&
@@ -296,13 +297,10 @@ public:
     PropertyInterface *metric = nullptr;
 
     if (dataSet != nullptr) {
-      dataSet->getDeprecated("property", "input property", metric);
+      dataSet->get("property", metric);
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);
-
-      if (!dataSet->get("color scale", colorScale))
-        dataSet->get("colorScale", colorScale);
-
+      dataSet->get("color scale", colorScale);
       dataSet->get("maximum value", maxInput);
       dataSet->get("minimum value", minInput);
     }
@@ -361,11 +359,19 @@ public:
                   });
       }
 
-      DoubleStringsListRelationDialog dialog(enumeratedValues, enumeratedColors);
+      DoubleStringsListRelationDialog dialog(enumeratedValues, enumeratedColors,
+                                             Perspective::instance()->mainWindow());
 
+      QWidget *progressWidget = dynamic_cast<QWidget *>(pluginProgress);
+      if (progressWidget)
+        progressWidget->hide();
       if (!dialog.exec()) {
         errorMsg += "Cancelled by user";
         return false;
+      }
+      if (progressWidget) {
+        progressWidget->show();
+        QApplication::processEvents();
       }
 
       dialog.getResult(enumeratedMappingResultVector);

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -17,15 +17,11 @@
  *
  */
 
-#include <cerrno>
-#include <sstream>
 #include <stack>
 
 #include <tulip/Graph.h>
 #include <tulip/GraphAbstract.h>
 #include <tulip/ImportModule.h>
-#include <tulip/PropertyInterface.h>
-#include <tulip/TlpTools.h>
 #include <tulip/JsonTokens.h>
 #include <tulip/YajlFacade.h>
 #include <tulip/GraphProperty.h>
@@ -498,31 +494,21 @@ protected:
   YajlParseFacade *_proxy;
 };
 
-class TlpJsonImport : public ImportModule, YajlProxy {
+class TlpJsonImport : public ImportFileModule, YajlProxy {
 public:
   PLUGININFORMATION("JSON Import", "Charles Huet", "18/05/2011",
                     "<p>Supported extensions: json</p><p>Imports a graph recorded in a file using "
                     "the Tulip JSON format.</p>",
                     "1.0", "File")
 
-  std::list<std::string> fileExtensions() const override {
-    std::list<std::string> l;
-    l.push_back("json");
-    return l;
-  }
-
-  TlpJsonImport(tlp::PluginContext *context) : ImportModule(context) {
-    addInParameter<std::string>("file::filename", "The pathname of the TLP JSON file to import.",
-                                "");
-  }
+  TlpJsonImport(tlp::PluginContext *context) : ImportFileModule(context, {"json"}) {}
 
   std::string icon() const override {
     return ":/tulip/gui/icons/json32x32.png";
   }
 
-  bool importGraph() override {
+  bool importFile() override {
     Observable::holdObservers();
-    std::string filename;
 
     if (_progress) {
       _progress->progress(0, 0);

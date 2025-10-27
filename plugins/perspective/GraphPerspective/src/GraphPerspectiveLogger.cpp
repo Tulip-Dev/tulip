@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -39,6 +39,9 @@ GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget *parent)
     : QDialog(parent), _logType(QtDebugMsg), _ui(new Ui::GraphPerspectiveLogger),
       _pythonOutput(false) {
   _ui->setupUi(this);
+  // fix display of QCheckBox and QRadioButton children
+  tlpFixCBRBs(this);
+
   _ui->listWidget->installEventFilter(this);
   _ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
   // ensure vertical scroll bar is displayed as soon as
@@ -70,10 +73,10 @@ GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget *parent)
   _ui->anchoredCB->setChecked(tlp::TulipSettings::loggerAnchored());
   connect(_ui->decreaseFontSizeButton, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
   connect(_ui->increaseFontSizeButton, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
-  auto shortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Minus), this);
+  auto shortCut = new QShortcut(QKeySequence::ZoomOut, this);
   connect(shortCut, SIGNAL(activated()), this, SLOT(decreaseFontSize()));
   SET_TIPS_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton, "decrease font size", "-");
-  shortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus), this);
+  shortCut = new QShortcut(QKeySequence::ZoomIn, this);
   connect(shortCut, SIGNAL(activated()), this, SLOT(increaseFontSize()));
   SET_TIPS_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton, "increase font size", "-");
 }
@@ -89,9 +92,7 @@ GraphPerspectiveLogger::LogType GraphPerspectiveLogger::getLastLogType() const {
 
   switch (_logType) {
   case QtDebugMsg:
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
   case QtInfoMsg:
-#endif
     return Info;
 
   case QtWarningMsg:
@@ -115,6 +116,19 @@ int GraphPerspectiveLogger::countByType(LogType logType) const {
 
 void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, const QString &msg,
                                  bool pyOutput) {
+#ifdef __APPLE__
+  // hide a strange message observed on Big Sur
+  // https://bugreports.qt.io/browse/QTBUG-98369
+  if (msg.indexOf("Populating font family aliases took") == 0)
+    return;
+#elif __unix__
+  // hide XCB error messages occuring sometimes
+  // when closing a dialog using the "close" (x) button
+  // https://bugreports.qt.io/browse/QTBUG-56893
+  if (msg.indexOf("QXcbConnection: XCB error") == 0)
+    return;
+#endif
+
   _logType = type;
   _pythonOutput = pyOutput;
 
@@ -184,8 +198,8 @@ void GraphPerspectiveLogger::showContextMenu(const QPoint &pos) {
   QMenu m;
   if (_ui->listWidget->count() > 0) {
     m.addAction("Clear", this, SLOT(clear()));
-    m.addAction("Copy selection", this, SLOT(copy()), QKeySequence::Copy);
-    m.addAction("Remove selection", this, SLOT(remove()), QKeySequence::Cut);
+    m.addAction("Copy selection", QKeySequence::Copy, this, SLOT(copy()));
+    m.addAction("Remove selection", QKeySequence::Cut, this, SLOT(remove()));
     m.addSeparator();
   }
   m.addAction("Close", this, SLOT(close()));

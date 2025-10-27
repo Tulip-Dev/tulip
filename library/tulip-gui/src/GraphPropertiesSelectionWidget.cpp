@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -19,8 +19,6 @@
 
 #include "tulip/GraphPropertiesSelectionWidget.h"
 #include "tulip/Graph.h"
-
-#include <algorithm>
 
 using namespace std;
 
@@ -70,7 +68,7 @@ void GraphPropertiesSelectionWidget::initWidget() {
 bool GraphPropertiesSelectionWidget::propertySelectable(const std::string &propertyName) {
   bool selectProperty = false;
 
-  if (propertiesTypes.size() > 0) {
+  if (!propertiesTypes.empty()) {
     string propertyType = graph->getProperty(propertyName)->getTypename();
 
     if (std::find(propertiesTypes.begin(), propertiesTypes.end(), propertyType) !=

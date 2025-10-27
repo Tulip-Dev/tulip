@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -203,7 +203,7 @@ struct SortExtremitiesEdgeIterator : public StableIterator<tlp::edge> {
  * @since Tulip 5.2
  * @param it the iterator to sort
  * @param comp functor or lambda function taking two parameters of type const T& and returning a
- *boolean:
+ * Boolean:
  * true if the first parameter is lesser or equal than the second one, false otherwise
  *
  **/
@@ -229,7 +229,7 @@ struct SortIterator : public tlp::StableIterator<T> {
  *
  * @param it a Tulip Iterator
  * @param compFunc functor or lambda function taking two parameters of type const T& and returning a
- *boolean:
+ * Boolean:
  * true if the first parameter is lesser or equal than the second one, false otherwise
  *
  * @return a SortIterator
@@ -250,7 +250,7 @@ inline SortIterator<T, CompareFunction> *sortIterator(Iterator<T> *it, CompareFu
  *
  * @param stlContainer any STL container
  * @param compFunc functor or lambda function taking two parameters of type const T& and returning a
- *boolean:
+ * Boolean:
  * true if the first parameter is lesser or equal than the second one, false otherwise
  *
  * @return a SortIterator

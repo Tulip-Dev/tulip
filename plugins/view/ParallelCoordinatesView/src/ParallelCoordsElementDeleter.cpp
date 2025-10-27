@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -35,7 +35,7 @@ bool ParallelCoordsElementDeleter::eventFilter(QObject *, QEvent *e) {
     if (me->buttons() == Qt::LeftButton) {
       ParallelCoordinatesView *parallelView = static_cast<ParallelCoordinatesView *>(view());
       Observable::holdObservers();
-      parallelView->deleteDataUnderPointer(me->x(), me->y());
+      parallelView->deleteDataUnderPointer(me->pos().x(), me->pos().y());
       Observable::unholdObservers();
       return true;
     }

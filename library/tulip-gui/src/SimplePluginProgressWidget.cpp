@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -24,8 +24,6 @@
 #include <QStyle>
 #include <QVBoxLayout>
 
-#include <iostream>
-
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
 
@@ -36,6 +34,8 @@ SimplePluginProgressWidget::SimplePluginProgressWidget(QWidget *parent, Qt::Wind
       _lastUpdate(QTime::currentTime()), _state(tlp::TLP_CONTINUE) {
 
   _ui->setupUi(this);
+  tlpFixCBRBs(this);
+  showLogo(false);
   _ui->cancelButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogCancelButton));
   _ui->stopButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaStop));
   connect(_ui->cancelButton, SIGNAL(clicked()), this, SLOT(cancelClicked()));
@@ -106,6 +106,10 @@ void SimplePluginProgressWidget::showStops(bool showButtons) {
 
 void SimplePluginProgressWidget::showText(bool show) {
   _ui->progressBar->setTextVisible(show);
+}
+
+void SimplePluginProgressWidget::showLogo(bool show) {
+  _ui->logoLabel->setVisible(show);
 }
 
 ProgressState SimplePluginProgressWidget::state() const {

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,12 +22,12 @@
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
 
-#include <unordered_map>
-#include "tulip/PythonIncludes.h"
-#include "tulip/PythonCppTypesConverter.h"
+#include <tulip/tuliphash.h>
+#include <tulip/PythonIncludes.h>
+#include <tulip/PythonCppTypesConverter.h>
 
-static std::unordered_map<std::string, std::string> &getTypenamesMap() {
-  static std::unordered_map<std::string, std::string> ret;
+static tlp_hash_map<std::string, std::string> &getTypenamesMap() {
+  static tlp_hash_map<std::string, std::string> ret;
   ret[tlp::demangleClassName(typeid(std::string).name())] = "std::string";
   ret[tlp::demangleClassName(typeid(tlp::Vec3f).name())] = "tlp::Vec3f";
   ret[tlp::demangleClassName(typeid(std::vector<int>).name())] = "std::vector<int>";
@@ -116,7 +116,7 @@ static std::unordered_map<std::string, std::string> &getTypenamesMap() {
   return ret;
 }
 
-static std::unordered_map<std::string, std::string> &cppTypenameToSipTypename = getTypenamesMap();
+static tlp_hash_map<std::string, std::string> &cppTypenameToSipTypename = getTypenamesMap();
 
 void *convertSipWrapperToCppType(PyObject *sipWrapper, const std::string &cppTypename,
                                  const bool transferTo) {
@@ -372,12 +372,6 @@ PyObject *getPyObjectFromDataType(const tlp::DataType *dataType, bool noCopy) {
     }                                                                                              \
   }
 
-#define CHECK_SIP_ENUM_CONVERSION(SIP_TYPE_STR)                                                    \
-  if (sipCanConvertToEnum(pyObj, sipFindType(SIP_TYPE_STR))) {                                     \
-    valSetter.setValue(int(PyLong_AsLong(pyObj)));                                                 \
-    return true;                                                                                   \
-  }
-
 #define CHECK_SIP_POINTER_TYPE_CONVERSION(CPP_TYPE, SIP_TYPE_STR)                                  \
   if (sipCanConvertToType(pyObj, sipFindType(SIP_TYPE_STR), 0)) {                                  \
     if (!dataType || dataType->getTypeName() == std::string(typeid(CPP_TYPE *).name())) {          \
@@ -529,11 +523,6 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
 
     return true;
   }
-
-  CHECK_SIP_ENUM_CONVERSION("tlp::NodeShape::NodeShapes")
-  CHECK_SIP_ENUM_CONVERSION("tlp::EdgeShape::EdgeShapes")
-  CHECK_SIP_ENUM_CONVERSION("tlp::EdgeExtremityShape::EdgeExtremityShapes")
-  CHECK_SIP_ENUM_CONVERSION("tlp::LabelPosition::LabelPositions")
 
   CHECK_SIP_TYPE_CONVERSION(std::string, "std::string")
   CHECK_SIP_TYPE_CONVERSION(tlp::node, "tlp::node")

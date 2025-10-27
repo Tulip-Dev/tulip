@@ -33,16 +33,11 @@
 # TULIP_PYTHON_LIBRARY: The path to the TulipPython module library.
 # TULIP_SHARE_DIR: Installation path for resources
 # TULIP_VERSION: Complete version string.
+# TULIP_MM_VERSION: Major and minor version string.
 # TULIP_MAJOR_VERSION: Major version digit.
 # TULIP_MINOR_VERSION: Minor version digit.
 # TULIP_PATCH_VERSION: Patch version digit.
 # TULIP_USE_FILE: Additional Tulip-related macro definitions
-
-# Define version separator (different for MSVC builds)
-SET(TulipVersionSeparator .)
-IF(${CMAKE_GENERATOR} MATCHES "Visual Studio" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles") #visual studio does not recognize these options
-   SET(TulipVersionSeparator _)
-ENDIF()
 
 # A macro to retrieve Tulip version from the TulipRelase.h file
 # This will output the following variables:
@@ -56,29 +51,35 @@ MACRO(RETRIEVE_VERSION)
   SET(TULIP_MAJOR_VERSION)
   SET(TULIP_MINOR_VERSION)
   SET(TULIP_PATCH_VERSION)
+  SET(TULIP_MM_VERSION)
 
   # Check for TulipRelease.h
   IF(TULIP_INCLUDE_DIR)
     FILE(STRINGS ${TULIP_INCLUDE_DIR}/tulip/TulipRelease.h
          TMPSTR
-         REGEX "[0-9]*\\${TulipVersionSeparator}[0-9]*\\${TulipVersionSeparator}[0-9][^\"]*"
+         REGEX "[0-9]*\\.[0-9]*\\.[0-9][^\"]*"
          NO_HEX_CONVERSION)
 
-    STRING(REGEX MATCH "[0-9]*\\${TulipVersionSeparator}[0-9]*\\${TulipVersionSeparator}[0-9][^\"]*"
+    STRING(REGEX MATCH "[0-9]*\\.[0-9]*\\.[0-9][^\"]*"
            TULIP_VERSION
            ${TMPSTR})
 
-    STRING(REGEX REPLACE "([0-9]*)\\${TulipVersionSeparator}([0-9]*)\\${TulipVersionSeparator}([0-9][^\"]*)"
+       STRING(REGEX REPLACE "([0-9]*\\.[0-9]*)\\.([0-9][^\"]*)"
+               "\\1"
+              TULIP_MM_VERSION
+              ${TULIP_VERSION})
+
+    STRING(REGEX REPLACE "([0-9]*)\\.([0-9]*)\\.([0-9][^\"]*)"
             "\\1"
            TULIP_MAJOR_VERSION
            ${TULIP_VERSION})
 
-    STRING(REGEX REPLACE "([0-9]*)\\${TulipVersionSeparator}([0-9]*)\\${TulipVersionSeparator}([0-9][^\"]*)"
+    STRING(REGEX REPLACE "([0-9]*)\\.([0-9]*)\\.([0-9][^\"]*)"
             "\\2"
            TULIP_MINOR_VERSION
            ${TULIP_VERSION})
 
-    STRING(REGEX REPLACE "([0-9]*)\\${TulipVersionSeparator}([0-9]*)\\${TulipVersionSeparator}([0-9][^\"]*)"
+    STRING(REGEX REPLACE "([0-9]*)\\.([0-9]*)\\.([0-9][^\"]*)"
             "\\3"
            TULIP_PATCH_VERSION
            ${TULIP_VERSION})
@@ -96,14 +97,6 @@ MACRO(CHECK_VERSION)
     ENDIF("${TULIP_VERSION}" VERSION_LESS "${TULIP_FIND_VERSION}")
   ENDIF(TULIP_FIND_VERSION AND NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/TULIPConfigVersion.cmake")
 ENDMACRO(CHECK_VERSION)
-
-# CMAKE_FIND_ROOT_PATH_MODE_* are set to ONLY in the CMake platform file for emscripten
-# which prevents FIND_* commands to work correctly, so reset them to BOTH
-IF(EMSCRIPTEN)
-SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
-SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
-SET(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE BOTH)
-ENDIF(EMSCRIPTEN)
 
 IF(NOT TULIP_INCLUDE_DIR)
   FIND_PATH(TULIP_INCLUDE_DIR tulip/TulipRelease.h PATHS ${TULIP_DIR}/include)
@@ -159,30 +152,19 @@ SET(TULIP_FOUND true)
 
 SET(TULIP_LIBRARIES_DIR ${TULIP_DIR}/${CMAKE_INSTALL_LIBDIR})
 
-FIND_LIBRARY(TULIP_CORE_LIBRARY "tulip-core-${TULIP_MAJOR_VERSION}${TulipVersionSeparator}${TULIP_MINOR_VERSION}"
+FIND_LIBRARY(TULIP_CORE_LIBRARY "tulip-core-${TULIP_MAJOR_VERSION}.${TULIP_MINOR_VERSION}"
              PATHS ${TULIP_LIBRARIES_DIR}
              NO_DEFAULT_PATH)
 
-# There is no dynamic linking with emscripten, add dependencies libraries in the TULIP_CORE_LIBRARY variable
-IF(EMSCRIPTEN)
-FIND_LIBRARY(GZSTREAM_TULIP_LIBRARY "gzstream-tulip-${TULIP_MAJOR_VERSION}${TulipVersionSeparator}${TULIP_MINOR_VERSION}"
-             PATHS ${TULIP_LIBRARIES_DIR}
-             NO_DEFAULT_PATH)
-FIND_LIBRARY(YAJL_TULIP_LIBRARY "yajl-tulip-${TULIP_MAJOR_VERSION}${TulipVersionSeparator}${TULIP_MINOR_VERSION}"
-             PATHS ${TULIP_LIBRARIES_DIR}
-             NO_DEFAULT_PATH)
-SET(TULIP_CORE_LIBRARY ${TULIP_CORE_LIBRARY} ${GZSTREAM_TULIP_LIBRARY} ${YAJL_TULIP_LIBRARY})
-ENDIF(EMSCRIPTEN)
-
-FIND_LIBRARY(TULIP_OGL_LIBRARY "tulip-ogl-${TULIP_MAJOR_VERSION}${TulipVersionSeparator}${TULIP_MINOR_VERSION}"
+FIND_LIBRARY(TULIP_OGL_LIBRARY "tulip-ogl-${TULIP_MAJOR_VERSION}.${TULIP_MINOR_VERSION}"
              PATHS ${TULIP_LIBRARIES_DIR}
              NO_DEFAULT_PATH)
 
-FIND_LIBRARY(TULIP_GUI_LIBRARY "tulip-gui-${TULIP_MAJOR_VERSION}${TulipVersionSeparator}${TULIP_MINOR_VERSION}"
+FIND_LIBRARY(TULIP_GUI_LIBRARY "tulip-gui-${TULIP_MAJOR_VERSION}.${TULIP_MINOR_VERSION}"
              PATHS ${TULIP_LIBRARIES_DIR}
              NO_DEFAULT_PATH)
 
-FIND_LIBRARY(TULIP_PYTHON_LIBRARY "tulip-python-${TULIP_MAJOR_VERSION}${TulipVersionSeparator}${TULIP_MINOR_VERSION}"
+FIND_LIBRARY(TULIP_PYTHON_LIBRARY "tulip-python-${TULIP_MAJOR_VERSION}.${TULIP_MINOR_VERSION}"
              PATHS ${TULIP_LIBRARIES_DIR}
              NO_DEFAULT_PATH)
 

@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -25,11 +25,11 @@
 #include <QGraphicsView>
 
 #include <tulip/tulipconf.h>
+#include <tulip/WorkspacePanel.h>
 
 class QAbstractAnimation;
 
 namespace tlp {
-class WorkspacePanel;
 
 class PreviewItem : public QGraphicsObject {
   Q_OBJECT
@@ -65,7 +65,7 @@ class TLP_QT_SCOPE WorkspaceExposeWidget : public QGraphicsView {
   Q_OBJECT
 
   QAbstractAnimation *_positionAnimation;
-  QList<PreviewItem *> _items;
+  std::vector<PreviewItem *> _items;
   PreviewItem *_selectedItem;
   QGraphicsRectItem *_placeholderItem;
   bool _switchToSingleMode;
@@ -82,13 +82,13 @@ public:
 
   explicit WorkspaceExposeWidget(QWidget *parent = nullptr);
   ~WorkspaceExposeWidget() override;
-  int currentPanelIndex() const;
-  QVector<WorkspacePanel *> panels() const;
+  unsigned int currentPanelIndex() const;
+  std::vector<WorkspacePanel *> panels() const;
 
   bool isSwitchToSingleMode() const;
 
 public slots:
-  void setData(const QVector<WorkspacePanel *> &panels, int currentPanelIndex);
+  void setData(const std::vector<WorkspacePanel *> &panels, unsigned int currentPanelIndex);
 
 signals:
   void exposeFinished();

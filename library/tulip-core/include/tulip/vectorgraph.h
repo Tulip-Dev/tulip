@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -36,6 +36,7 @@ namespace tlp {
 
 template <class itType>
 struct Iterator;
+
 //===========================================
 /**
  * @class VectorGraph
@@ -62,6 +63,23 @@ struct Iterator;
 class TLP_SCOPE VectorGraph {
 
 public:
+  // adjacency data
+  struct adjData {
+    bool _out : 1;        // true for out edge
+    unsigned int _e : 31; // edge id (no more than 2 billions edges)
+    node _n;              // opposite node
+    adjData(bool t = false, node n = node(0), edge e = edge(0)) : _out(t), _e(e.id), _n(n) {}
+    bool isOut() const {
+      return _out;
+    }
+    edge link() const {
+      return edge(_e);
+    }
+    node opposite() const {
+      return _n;
+    }
+  };
+
   //=======================================================
   VectorGraph();
   //=======================================================
@@ -80,7 +98,7 @@ public:
    * @remark o(min(deg(src), deg(tgt))
    * @todo test
    */
-  edge existEdge(const node src, const node tgt, const bool directed = true) const;
+  edge existEdge(node src, node tgt, bool directed = true) const;
   //=======================================================
   /**
    * @brief Return true if n belongs to the graph
@@ -236,7 +254,7 @@ public:
    */
   unsigned int deg(const node n) const {
     assert(isElement(n));
-    return _nData[n]._adjn.size();
+    return _nData[n]._adj.size();
   }
   //=======================================================
   /**
@@ -302,7 +320,7 @@ public:
    * @brief Delete a node and all its adjacent edges in the graph
    * @warning That operation modifies the array of nodes and the array of edges
    * and thus invalidates all iterators on it.
-   * @warning That operation modifies the array of neighboors of extrmities of edges, thus
+   * @warning That operation modifies the array of neighbors of extremities of edges, thus
    * it invalidates iterators on adjacency for the nodes at the extremities od the deleted
    * edges.
    * @warning Orders of edges in the extremities of the deleted edges are affected
@@ -312,7 +330,7 @@ public:
   //=======================================================
   /**
    * @brief Add a new edge between src and tgt and return it
-   * @warning That operation modifies the array of neighboors of extrmities of edges, thus
+   * @warning That operation modifies the array of neighbors of extremities of edges, thus
    * it invalidates iterators on adjacency for the nodes at the extremities od the deleted
    * edges.
    * @remark o(1)
@@ -333,7 +351,7 @@ public:
    * @brief Delete an edge in the graph
    * @warning: That operation modifies the array of edges
    * and thus invalidates all iterators on it.
-   * @warning That operation modifies the array of neighboors of extremities of the edge e, thus
+   * @warning That operation modifies the array of neighbors of extremities of the edge e, thus
    * it invalidates iterators on adjacency for the nodes at the extremities od the deleted
    * edge.
    * @warning Orders of edges in the extremities of the deleted edge are affected
@@ -345,7 +363,7 @@ public:
    * @brief Delete all adjacent edges (in/out) of a node
    * @warning: That operation modifies the array of edges
    * and thus invalidates all iterators on it.
-   * @warning That operation modifies the array of neighboors of extremities of the edge e, thus
+   * @warning That operation modifies the array of neighbors of extremities of the edge e, thus
    * it invalidates iterators on adjacency for the nodes at the extremities od the deleted
    * edge.
    * @warning Orders of edges in the extremities of the deleted edge are affected
@@ -396,14 +414,14 @@ public:
   node opposite(const edge e, const node n) const;
   //=======================================================
   /**
-   * @brief Reverse an edge e, source become target and target become soure
+   * @brief Reverse an edge e, source becomes target and target becomes source
    * @remark o(1)
    */
   void reverse(const edge e);
   //=======================================================
   /**
    * @brief change the source of an edge
-   * @warning That operation modifies the array of neighboors of extrmities of edges, thus
+   * @warning That operation modifies the array of neighbors of extremities of edges, thus
    * it invalidates iterators on adjacency for the nodes at the extremities of the modified
    * edges and nodes.
    * @remark o(1)
@@ -417,7 +435,7 @@ public:
   //=======================================================
   /**
    * @brief change the target of an edge
-   * @warning That operation modifies the array of neighboors of extrmities of edges, thus
+   * @warning That operation modifies the array of neighbors of extremities of edges, thus
    * it invalidates iterators on adjacency for the nodes at the extremities of the modified
    * edges and nodes.
    * @remark o(1)
@@ -440,7 +458,7 @@ public:
   //=======================================================
   /**
    * @brief Reconnect the edge e to have the new given extremities
-   * @warning That operation modifies the array of neighboors of extrmities of edges, thus
+   * @warning That operation modifies the array of neighbors of extremities of edges, thus
    * it invalidates iterators on adjacency for the nodes at the extremities of the modified
    * edges and nodes.
    * @remark o(1)
@@ -462,7 +480,7 @@ public:
   /**
    * @brief Sort all edges according to comparison functor given in parameter
    * if stable is true a stable sort algorithm is applied
-   * Comparison should be an instance of a class wihch implements operator():
+   * Comparison should be an instance of a class which implements operator():
    * @remark dependent of stl::sort and stl::stable_sort algorithm (should be o(E log (E)))
    * @code
    *  class Compare {
@@ -486,7 +504,7 @@ public:
   /**
    * @brief Sort all nodes according to comparison functor given in parameter
    * if stable is true a stable sort algorithm is applied
-   * Comparison should be an instance of a class wihch implements operator():
+   * Comparison should be an instance of a class which implements operator():
    * @code
    *  class Compare {
    *  //return true if a < b
@@ -610,25 +628,9 @@ public:
    * \see getInNodes
    * \see getOutNodes
    */
-  const std::vector<node> &adj(const node n) const {
+  const std::vector<adjData> &adj(const node n) {
     assert(isElement(n));
-    return _nData[n]._adjn;
-  }
-  //=======================================================
-  /**
-   * @brief Return a const reference on the vector of adjacent edges of n
-   *
-   * It is the fastest way to access to edge adjacency, Iterators are 25% slower.
-   * \warning code that use that function won't be compatible with Tulip Graph API
-   *
-   * @remark o(1)
-   * \see getInOutEdges
-   * \see getInEdges
-   * \see getOutEdges
-   */
-  const std::vector<edge> &star(const node n) const {
-    assert(isElement(n));
-    return _nData[n]._adje;
+    return _nData[n]._adj;
   }
   //=======================================================
   /**
@@ -677,35 +679,29 @@ public:
   void integrityTest();
 
 private:
-  struct _iNodes {
-    _iNodes() : _outdeg(0) {}
+  struct nodeData {
+    nodeData() : _outdeg(0) {}
 
     void clear() {
       _outdeg = 0;
-      _adjt.clear();
-      _adjn.clear();
-      _adje.clear();
+      _adj.clear();
     }
 
     void addEdge(bool t, node n, edge e) {
-      _adjt.push_back(t);
-      _adjn.push_back(n);
-      _adje.push_back(e);
+      _adj.emplace_back(t, n, e);
     }
 
-    unsigned int _outdeg;    /** out degree of nodes */
-    std::vector<bool> _adjt; /** orientation of the edge, used to separate in and out edges/nodes */
-    std::vector<node> _adjn; /** inout nodes*/
-    std::vector<edge> _adje; /** inout edges*/
+    unsigned int _outdeg;      // out degree
+    std::vector<adjData> _adj; // adjacencies
   };
 
-  struct _iEdges {
+  struct edgeData {
     std::pair<node, node> _ends;                    /** source and target of an edge */
     std::pair<unsigned int, unsigned int> _endsPos; /** edge pos in the ends adjacencies */
   };
 
-  std::vector<_iNodes> _nData; /** internal storage of nodes */
-  std::vector<_iEdges> _eData; /** internal storage of edges */
+  std::vector<nodeData> _nData; /** internal storage of nodes */
+  std::vector<edgeData> _eData; /** internal storage of edges */
 
   IdContainer<node> _nodes; /** vector of nodes element of the graph */
   IdContainer<edge> _edges; /** vector of edges element of the graph */

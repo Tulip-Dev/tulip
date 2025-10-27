@@ -40,7 +40,7 @@ private:
 
   tlp::Graph *tree;
   tlp::SizeProperty *nodeSize;
-  bool nAlgo;
+  bool nAlgo, computeCC;
 };
 
 PLUGIN(BubblePack)
@@ -267,7 +267,8 @@ static const char *paramHelp[] = {
 BubblePack::BubblePack(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
   addInParameter<bool>("complexity", paramHelp[0], "true");
   addInParameter<SizeProperty>("node size", paramHelp[1], "viewSize");
-  addDependency("Connected Component Packing", "1.0");
+  addDependency("Connected Components Packing", "1.0");
+  computeCC = true;
 }
 
 BubblePack::~BubblePack() {}
@@ -276,33 +277,38 @@ bool BubblePack::run() {
   if (pluginProgress)
     pluginProgress->showPreview(false);
 
-  if (!ConnectedTest::isConnected(graph)) {
-    // for each component draw
+  if (computeCC) {
     std::vector<std::vector<node>> components;
-    string err;
     ConnectedTest::computeConnectedComponents(graph, components);
 
-    for (unsigned int i = 0; i < components.size(); ++i) {
-      Graph *tmp = graph;
-      // apply "Bubble Pack" on the subgraph induced
-      // by the current connected component
-      graph = graph->inducedSubGraph(components[i]);
-      run();
-      tmp->delSubGraph(graph);
-      // restore current graph
-      graph = tmp;
-      if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
-        return pluginProgress->state() != TLP_CANCEL;
-    }
+    // check if graph is connected
+    auto sz = components.size();
+    if (sz > 1) {
+      for (unsigned int i = 0; i < sz; ++i) {
+        Graph *tmp = graph;
+        // apply "Bubble Pack" on the subgraph induced
+        // by the current connected component
+        graph = graph->inducedSubGraph(components[i]);
+        computeCC = false;
+        run();
+        computeCC = true;
+        tmp->delSubGraph(graph);
+        // restore current graph
+        graph = tmp;
+        if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
+          return pluginProgress->state() != TLP_CANCEL;
+      }
 
-    // call connected component packing
-    LayoutProperty tmpLayout(graph);
-    DataSet tmpdataSet;
-    tmpdataSet.set("coordinates", result);
-    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout, err, &tmpdataSet,
-                                  pluginProgress);
-    *result = tmpLayout;
-    return true;
+      // call connected component packing
+      string err;
+      LayoutProperty tmpLayout(graph);
+      DataSet tmpdataSet;
+      tmpdataSet.set("coordinates", result);
+      graph->applyPropertyAlgorithm("Connected Components Packing", &tmpLayout, err, &tmpdataSet,
+                                    pluginProgress);
+      *result = tmpLayout;
+      return true;
+    }
   }
 
   if (!((dataSet != nullptr) && dataSet->get("node size", nodeSize))) {

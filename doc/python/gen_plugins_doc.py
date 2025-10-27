@@ -1,11 +1,6 @@
 # automatically generates the file tulippluginsdocumentation.rst
 # by dynamically introspecting the Tulip plugins metadata
 
-from __future__ import print_function
-import sys
-if sys.version_info[0] == 2:
-    reload(sys) # noqa
-    sys.setdefaultencoding('utf8')
 from tulip import tlp # noqa
 import tulipgui # noqa
 import tabulate # noqa
@@ -18,14 +13,6 @@ def safeprint(s, file=None):
         print(s, file=file)
     except UnicodeEncodeError:
         print(s.encode('utf8'), file=file)
-
-
-def utf8len(s):
-    if sys.version_info >= (3,):
-        return len(s)
-    else:
-        return len(s.encode('utf8'))
-
 
 tulip_build_dir = os.environ['TULIP_BUILD_DIR']
 tlp.loadTulipPluginsFromDir('%s/plugins/clustering' % tulip_build_dir)
@@ -42,10 +29,7 @@ tlp.loadTulipPluginsFromDir('%s/plugins/test' % tulip_build_dir)
 tlp.loadTulipPluginsFromDir(os.environ['TULIP_PYTHON_PLUGINS_DIR'])
 tlp.loadTulipPluginsFromDir(os.environ['TULIPGUI_PYTHON_PLUGINS_DIR'])
 
-if sys.version_info >= (3,):
-    f = open('tulippluginsdocumentation.rst', 'w', encoding='utf-8')
-else:
-    f = open('tulippluginsdocumentation.rst', 'w')
+f = open('tulippluginsdocumentation.rst', 'w', encoding='utf-8')
 
 safeprint("""
 .. |br| raw:: html
@@ -102,7 +86,7 @@ safeprint('.. _tulippluginsdoc:\n', file=f)
 def writeSection(title, sectionChar):
     safeprint(title, file=f)
     underline = ''
-    for i in range(utf8len(title)):
+    for i in range(len(title)):
         underline += sectionChar
     safeprint(underline+'\n', file=f)
 
@@ -189,7 +173,7 @@ To learn how to call all these algorithms in Python, you can refer to the
 :ref:`Applying an algorithm on a graph <applyGraphAlgorithm>` section.
 The plugins documentation is ordered according to their type.
 
-.. warning:: If you use the Tulip Python bindings trough the classical Python
+.. warning:: If you use the Tulip Python bindings through the classical Python
              interpreter, some plugins (Color Mapping, Convolution Clustering,
              File System Directory, GEXF, SVG Export, Website) require the
              :mod:`tulipgui` module to be imported before they can be called
@@ -263,6 +247,21 @@ for cat in sorted(plugins.keys()):
         writeSection(p.name(), '^')
         writeSection('Description', '"')
         infos = formatSphinxDoc(p.info())
+        pos = infos.find('<a')
+        while pos != -1:
+            pos2 = infos.find('href="', pos + 2)
+            pos3 = infos.find('"', pos2 + 6)
+            url = infos[pos2 + 6: pos3]
+            pos2 = infos.find('>', pos3)
+            pos3 = infos.find('</a>', pos2)
+            txt = infos[pos2 + 1: pos3]
+            url = '`' + txt + ' <' + url + '>`_'
+            infos = infos[0 : pos] + url + infos[pos3 + 4:]
+            if pos + len(url) < len(infos):
+                pos = infos.find('<a', pos)
+            else:
+                break
+
         safeprint(infos+'\n', file=f)
 
         params = tlp.PluginLister.getPluginParameters(p.name())
@@ -271,35 +270,35 @@ for cat in sorted(plugins.keys()):
         nbInParams = 0
         for param in params.getParameters():
             paramHelpHtml = param.getHelp()
-            pattern = '<p class="help">'
+            pattern = 'class="description">'
             pos = paramHelpHtml.find(pattern)
             paramHelp = ''
             if pos != -1:
-                pos2 = paramHelpHtml.rfind('</p>')
+                pos2 = paramHelpHtml.find('</', pos)
                 paramHelp = paramHelpHtml[pos+len(pattern):pos2]
                 paramHelp = formatSphinxDoc(paramHelp)
-            pattern = '<b>type</b><td class="b">'
+            pattern = 'class="type">'
             pos = paramHelpHtml.find(pattern)
             paramType = ''
             if pos != -1:
-                pos2 = paramHelpHtml.find('</td>', pos)
+                pos2 = paramHelpHtml.find('</', pos)
                 paramType = paramHelpHtml[pos+len(pattern):pos2].replace(
                     ' (double precision)', '')
             if param.getName() == 'result' and 'Property' in paramType:
                 continue
             paramDir = 'input / output'
-            if param.getDirection() == tlp.IN_PARAM:
+            if param.getDirection() == tlp.ParameterDirection.IN_PARAM:
                 paramDir = 'input'
                 nbInParams = nbInParams+1
-            elif param.getDirection() == tlp.OUT_PARAM:
+            elif param.getDirection() == tlp.ParameterDirection.OUT_PARAM:
                 paramDir = 'output'
             else:
                 nbInParams = nbInParams+1
-            pattern = '<b>values</b><td class="b">'
+            pattern = 'class="values">'
             pos = paramHelpHtml.find(pattern)
             paramValues = ''
             if pos != -1:
-                pos2 = paramHelpHtml.find('</td>', pos)
+                pos2 = paramHelpHtml.find('</', pos)
                 paramValues = paramHelpHtml[pos+len(pattern):pos2]
                 paramValues = formatSphinxDoc(paramValues)
             paramDefValue = param.getDefaultValue()
@@ -321,12 +320,6 @@ for cat in sorted(plugins.keys()):
             paramType = getTulipPythonType(
                 paramType.replace(' ', nonBreakingSpace))
             paramDir = paramDir.replace(' ', nonBreakingSpace)
-            if sys.version_info[0] == 2:
-                paramName = paramName.decode('utf-8')
-                paramType = paramType.decode('utf-8')
-                paramDefValue = paramDefValue.decode('utf-8')
-                paramDir = paramDir.decode('utf-8')
-                paramHelp = paramHelp.decode('utf-8').replace('\n', ' |br| ')
             paramsTable.append([paramName, paramType, paramDefValue, paramDir,
                                 paramHelp])
         if len(paramsTable) > 0:

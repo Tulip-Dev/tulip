@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,19 +20,13 @@
 #include <QMouseEvent>
 
 #include <tulip/MouseSelectionEditor.h>
-#include <tulip/Camera.h>
-#include <tulip/Graph.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/SizeProperty.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/TlpQtTools.h>
 
 #include <cmath>
-#include <climits>
+#include <cfloat>
 
 #define EPSILON 1.0
 #define EPSILON_SCREEN 50
@@ -183,8 +177,8 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     editCenter[2] = 0;
     editCenter[1] = glMainWidget->screenToViewport(H) - editCenter[1];
     // editCenter[0] = W - editCenter[0];
-    editPosition[0] = qMouseEv->x();
-    editPosition[1] = qMouseEv->y();
+    editPosition[0] = qMouseEv->pos().x();
+    editPosition[1] = qMouseEv->pos().y();
     editPosition[2] = 0;
     editLayoutCenter = _layoutCenter;
 
@@ -297,7 +291,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       break;
     }
 
-    case Qt::MidButton:
+    case Qt::MiddleButton:
       undoEdition();
       glMainWidget->setCursor(QCursor(Qt::ArrowCursor));
       break;
@@ -353,8 +347,8 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if (e->type() == QEvent::MouseMove && qMouseEv->buttons() & Qt::LeftButton && operation != NONE) {
-    int newX = qMouseEv->x();
-    int newY = qMouseEv->y();
+    int newX = qMouseEv->pos().x();
+    int newY = qMouseEv->pos().y();
 
     switch (operation) {
     case STRETCH_X:
@@ -380,7 +374,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     case ALIGN_VERTICALLY:
     case ALIGN_HORIZONTALLY:
     default:
-      qWarning() << "[Error] : " << __FUNCTION__ << " should not have been called" << QT_ENDL;
+      qWarning() << "[Error] : " << __FUNCTION__ << " should not have been called" << Qt::endl;
       break;
     }
   }

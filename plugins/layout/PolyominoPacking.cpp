@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -48,7 +48,7 @@ using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-    // coordinates
+    // initial layout
     "Input layout of nodes and edges.",
 
     // rotation
@@ -79,11 +79,10 @@ public:
   PLUGININFORMATION(
       "Connected Component Packing (Polyomino)", "Antoine Lambert", "05/05/11",
       "Implements the connected component packing algorithm published as:<br/>"
-      "<b>Disconnected Graph Layout and the Polyomino Packing Approach</b>, Freivalds Karlis, "
-      "Dogrusoz Ugur and Kikusts Paulis, "
+      "<b>Disconnected Graph Layout and the Polyomino Packing Approach</b>,<br/>Freivalds Karlis, Dogrusoz Ugur and Kikusts Paulis, "
       "9th International Symposium on Graph Drawing 2001,"
-      "LNCS Vol. 2265 (2002), pp 378-391, doi: <a "
-      "href=\"https://doi.org/10.1007/3-540-45848-4_30\">https://doi.org/10.1007/3-540-45848-4_30</"
+      "LNCS Vol. 2265 (2002), pp 378-391,<br/>doi: <a "
+      "href=\"https://doi.org/10.1007/3-540-45848-4_30\">10.1007/3-540-45848-4_30</"
       "a>",
       "1.0", "Misc")
   PolyominoPacking(const tlp::PluginContext *context);
@@ -108,27 +107,17 @@ private:
 
   int gridStepSize;
 
-  std::unordered_map<tlp::Vec2i, bool> pointsSet;
+  tlp_hash_map<tlp::Vec2i, bool> pointsSet;
 
   tlp::IntegerProperty *shape;
 };
 
 #define C 100
 
-class polyPerimOrdering : public binary_function<Polyomino, Polyomino, bool> {
-
-public:
-  polyPerimOrdering() {}
-
-  bool operator()(const Polyomino &ci1, const Polyomino &ci2) const {
-    return ci1.perim > ci2.perim;
-  }
-};
-
 PLUGIN(PolyominoPacking)
 
 PolyominoPacking::PolyominoPacking(const PluginContext *context) : LayoutAlgorithm(context) {
-  addInParameter<LayoutProperty>("coordinates", paramHelp[0], "viewLayout");
+  addInParameter<LayoutProperty>("initial layout", paramHelp[0], "viewLayout");
   addNodeSizePropertyParameter(this);
   addInParameter<DoubleProperty>("rotation", paramHelp[1], "viewRotation");
   addInParameter<unsigned int>("margin", paramHelp[2], "1");
@@ -146,7 +135,7 @@ bool PolyominoPacking::run() {
   bndIncrement = 1;
 
   if (dataSet != nullptr) {
-    dataSet->get("coordinates", layout);
+    dataSet->get("initial layout", layout);
     getNodeSizePropertyParameter(dataSet, size);
     dataSet->get("rotation", rotation);
     dataSet->get("margin", margin);
@@ -207,7 +196,8 @@ bool PolyominoPacking::run() {
       return pluginProgress->state() != TLP_CANCEL;
   }
 
-  std::sort(polyominos.begin(), polyominos.end(), polyPerimOrdering());
+  std::sort(polyominos.begin(), polyominos.end(),
+            [](const Polyomino &ci1, const Polyomino &ci2) { return ci1.perim > ci2.perim; });
 
   if (pluginProgress) {
     pluginProgress->setComment("Packing polyominos...");

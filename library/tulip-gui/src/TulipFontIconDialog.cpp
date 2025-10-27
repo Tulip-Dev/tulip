@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -19,15 +19,18 @@
 
 #include <tulip/TulipFontIconDialog.h>
 #include <tulip/TulipFontIconEngine.h>
+#include <tulip/TulipIconicFont.h>
 #include <tulip/TulipFontAwesome.h>
 #include <tulip/TulipMaterialDesignIcons.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
 
 #include <QBuffer>
-#include <QDesktopServices>
+#include <QClipboard>
+#include <QCursor>
 #include <QHelpEvent>
-#include <QRegExp>
+#include <QGuiApplication>
+#include <QRegularExpression>
 #include <QToolTip>
 #include <QUrl>
 
@@ -42,21 +45,17 @@ TulipFontIconDialog::TulipFontIconDialog(QWidget *parent)
   _ui->iconListWidget->installEventFilter(this);
   _ui->iconsCreditLabel->setText(
       QString("<p style=\" font-size:11px;\">Special credit for the design "
-              "of icons goes to:<br/><b>Font "
-              "Awesome </b><a "
-              "href=\"http://fontawesome.com\"><span "
-              "style=\"color:#0d47f1;\">fontawesome.com</span></a> "
-              "(v%1)<br/><b>Material Design Icons </b>"
-              "<a "
-              "href=\"https://materialdesignicons.com\"><span "
-              "style=\"color:#0d47f1;\">materialdesignicons.com</span></"
+              "of icons goes to:<br/><b>Font Awesome </b><a "
+              "href=\"https://fontawesome.com\" style=\"color:" HTML_LINK_COLOR
+              ";\">fontawesome.com</"
+              "a> (v%1)<br/><b>Material Design Icons </b><a "
+              "href=\"https://materialdesignicons.com\" style=\"color:" HTML_LINK_COLOR
+              ";\">materialdesignicons.com</"
               "a> (v%2)</p>")
           .arg(TulipFontAwesome::getVersion().c_str())
           .arg(TulipMaterialDesignIcons::getVersion().c_str()));
   connect(_ui->iconNameFilterLineEdit, SIGNAL(textChanged(const QString &)), this,
           SLOT(updateIconList()));
-  connect(_ui->iconsCreditLabel, SIGNAL(linkActivated(const QString &)), this,
-          SLOT(openUrlInBrowser(const QString &)));
 
   updateIconList();
 }
@@ -64,7 +63,7 @@ TulipFontIconDialog::TulipFontIconDialog(QWidget *parent)
 void TulipFontIconDialog::updateIconList() {
   _ui->iconListWidget->clear();
 
-  QRegExp regexp(_ui->iconNameFilterLineEdit->text());
+  QRegularExpression regexp(_ui->iconNameFilterLineEdit->text());
 
   std::vector<std::string> iconNames = TulipFontAwesome::getSupportedIcons();
   bool darkMode = TulipSettings::isDisplayInDarkMode();
@@ -72,7 +71,7 @@ void TulipFontIconDialog::updateIconList() {
   for (auto &it : iconNames) {
     QString iconName = tlpStringToQString(it);
 
-    if (regexp.indexIn(iconName) != -1) {
+    if (iconName.indexOf(regexp) != -1) {
       _ui->iconListWidget->addItem(
           new QListWidgetItem(TulipFontIconEngine::icon(it, darkMode), iconName));
     }
@@ -83,7 +82,7 @@ void TulipFontIconDialog::updateIconList() {
   for (auto &it : iconNames) {
     QString iconName = tlpStringToQString(it);
 
-    if (regexp.indexIn(iconName) != -1) {
+    if (iconName.indexOf(regexp) != -1) {
       _ui->iconListWidget->addItem(
           new QListWidgetItem(TulipFontIconEngine::icon(it, darkMode), iconName));
     }
@@ -100,11 +99,27 @@ QString TulipFontIconDialog::getSelectedIconName() const {
 
 void TulipFontIconDialog::setSelectedIconName(const QString &iconName) {
   QList<QListWidgetItem *> items = _ui->iconListWidget->findItems(iconName, Qt::MatchExactly);
-
   if (!items.isEmpty()) {
     _ui->iconListWidget->setCurrentItem(items.at(0));
-    _selectedIconName = iconName;
+  } else {
+    items = _ui->iconListWidget->findItems(
+        iconName.left(2).append('*').append(iconName.mid(iconName.indexOf('-') + 1)),
+        Qt::MatchWildcard);
+    // select the one with the shortest size
+    int minSize = 256;
+    int best = 0;
+    for (int i = 0; i < items.size(); ++i) {
+      int size = items.at(i)->text().size();
+      if (size < minSize) {
+        best = i;
+        minSize = size;
+      }
+    }
+    if (minSize < 256)
+      _ui->iconListWidget->setCurrentItem(items.at(best));
   }
+
+  _selectedIconName = iconName;
 }
 
 void TulipFontIconDialog::accept() {
@@ -118,21 +133,15 @@ void TulipFontIconDialog::accept() {
 void TulipFontIconDialog::showEvent(QShowEvent *ev) {
   QDialog::showEvent(ev);
 
-  _selectedIconName = _ui->iconListWidget->currentItem()->text();
-
   if (parentWidget())
     move(parentWidget()->window()->frameGeometry().topLeft() +
          parentWidget()->window()->rect().center() - rect().center());
 }
 
-void TulipFontIconDialog::openUrlInBrowser(const QString &url) {
-  QDesktopServices::openUrl(QUrl(url));
-}
-
 bool TulipFontIconDialog::eventFilter(QObject *, QEvent *event) {
   if (event->type() == QEvent::ToolTip) {
     QHelpEvent *he = static_cast<QHelpEvent *>(event);
-    auto lwi = _ui->iconListWidget->itemAt(he->x(), he->y());
+    auto lwi = _ui->iconListWidget->itemAt(he->pos().x(), he->pos().y());
     if (lwi) {
       // show a 48 pixel height icon
       auto qimg = lwi->icon().pixmap(48).toImage();
@@ -144,6 +153,22 @@ bool TulipFontIconDialog::eventFilter(QObject *, QEvent *event) {
                  .arg(QString(bytes.toBase64()))
                  .append(lwi->text());
       QToolTip::showText(he->globalPos(), ttip);
+      event->accept();
+      return true;
+    }
+  } else if (event->type() == QEvent::QEvent::KeyPress) {
+    QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+    auto lwi = _ui->iconListWidget->currentItem();
+    if (ke->matches(QKeySequence::Copy) && lwi) {
+      // copy the name of the currently selected icon to clipboard
+      QClipboard *clipboard = QGuiApplication::clipboard();
+      clipboard->setText(lwi->text());
+      event->accept();
+      // confirm copy with a message
+      QToolTip::showText(
+          QCursor::pos(),
+          QString("<font size=-1><pre><b>%0</b> copied</pre></font>").arg(lwi->text()), nullptr,
+          QRect(), 500);
       return true;
     }
   }

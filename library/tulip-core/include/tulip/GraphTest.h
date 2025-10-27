@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -37,7 +37,7 @@ public:
       dataSet->set("result", result);
     }
 
-    return true;
+    return result;
   }
 
   virtual bool test() = 0;

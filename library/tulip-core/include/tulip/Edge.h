@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -46,7 +46,7 @@ struct edge {
   /**
    * @brief edge creates an invalid edge.
    */
-  edge() : id(UINT_MAX) {}
+  constexpr edge() : id(UINT_MAX) {}
 
   /**
    * @brief edge Create an edge of given identifier.
@@ -94,13 +94,6 @@ struct edge {
   }
 };
 } // namespace tlp
-
-#ifdef _MSC_VER
-#include <vector>
-#include <tulip/tulipconf.h>
-// needed by MSVC to avoid multiple definitions
-struct TLP_SCOPE __tlp_vector_edge : public std::vector<tlp::edge> {};
-#endif
 
 ///@cond DOXYGEN_HIDDEN
 // these three functions allow to use tlp::edge as a key in a hash-based data structure (e.g.

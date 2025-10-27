@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -545,7 +545,13 @@ Returns the default list of values associated to the edges.
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodeValue(node)
 
-Returns the list of values associated to a particular node.
+Returns a copy of the list of values associated to a particular node.
+
+To add a new value k to the list associated to a node n for a property prop, one has to write::
+
+  l = prop.getNodeValue(n) # or prop[n]
+  l.append(k)
+  prop[n] = l    # or prop.setNodeValue(n, l)
 
 :param node: an existing node
 :type node: :class:`tlp.node`
@@ -567,7 +573,13 @@ Returns the list of values associated to a particular node.
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.getEdgeValue(edge)
 
-Returns the list of values associated to a particular edge.
+Returns a copy of the list of values associated to a particular edge.
+
+To add a new value k to the list associated to an edge e for a property prop, one has to write::
+
+  l = prop.getEdgeValue(e) # or prop[e]
+  l.append(k)
+  prop[e] = l #or prop.setEdgeValue(e, l)
 
 :param edge: an existing edge
 :type edge: :class:`tlp.edge`

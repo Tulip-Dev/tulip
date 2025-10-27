@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -19,7 +19,7 @@
 #ifndef MISFILTERING_H
 #define MISFILTERING_H
 
-#include <unordered_map>
+#include <tulip/tuliphash.h>
 #include <unordered_set>
 
 #include <tulip/TulipPluginHeaders.h>
@@ -45,7 +45,7 @@ private:
   tlp::MutableContainer<bool> removed;
   std::vector<unsigned int> v_dist;
 
-  std::unordered_map<unsigned int, std::unordered_set<tlp::node>> levelToNodes;
+  tlp_hash_map<unsigned int, std::unordered_set<tlp::node>> levelToNodes;
 
   void bfsDepth(tlp::node, unsigned int);
   void updateVectors();

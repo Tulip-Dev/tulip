@@ -59,6 +59,7 @@
 
     #ifndef __gl_h_
         #include <GL/gl.h>
+        #include <GL/glu.h>
     #endif
 
 #else
@@ -67,10 +68,12 @@
     #ifndef __gl_h_
         #ifdef SDL_main
             #include "SDL_opengl.h"
-        #elif __APPLE_CC__
+        #elif defined(__APPLE_CC__)
             #include <OpenGL/gl.h>
+            #include <OpenGL/glu.h>
         #else
             #include <GL/gl.h>
+            #include <GL/glu.h>
         #endif
 
     #endif

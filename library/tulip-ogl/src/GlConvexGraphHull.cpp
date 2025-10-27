@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -46,10 +46,10 @@ void GlConvexGraphHullsComposite::setHullsTextureActivation(bool flag) {
 int GlConvexGraphHull::bezierValue = 1;
 
 GlConvexGraphHull::GlConvexGraphHull(GlConvexGraphHullsComposite *parent, const std::string &name,
-                                     const tlp::Color &fcolor, const std::string &tex, Graph *graph,
-                                     LayoutProperty *layout, SizeProperty *size,
+                                     const tlp::Color &fcolor, const std::string &texName,
+                                     Graph *graph, LayoutProperty *layout, SizeProperty *size,
                                      DoubleProperty *rotation)
-    : _parent(parent), _name(name), _fcolor(fcolor), _tex(tex), _polygon(nullptr), graph(graph),
+    : _parent(parent), _name(name), _fcolor(fcolor), _tex(texName), _polygon(nullptr), graph(graph),
       _layout(layout), _size(size), _rotation(rotation) {
   assert(graph);
 
@@ -63,6 +63,7 @@ GlConvexGraphHull::~GlConvexGraphHull() {
 void GlConvexGraphHull::updateHull(LayoutProperty *layout, SizeProperty *size,
                                    DoubleProperty *rotation) {
   bool visible = !_polygon || _polygon->isVisible();
+  bool textured = _polygon && _polygon->textureActivation();
 
   if (_polygon) {
     _parent->deleteGlEntity(_polygon);
@@ -81,7 +82,7 @@ void GlConvexGraphHull::updateHull(LayoutProperty *layout, SizeProperty *size,
 
   if (graph->isEmpty() == false) {
     _polygon = new GlComplexPolygon(computeConvexHull(graph, _layout, _size, _rotation, nullptr),
-                                    _fcolor, GlConvexGraphHull::bezierValue, _tex, false);
+                                    _fcolor, GlConvexGraphHull::bezierValue, _tex, textured);
     _polygon->setVisible(visible);
     _parent->addGlEntity(_polygon, _name);
   }

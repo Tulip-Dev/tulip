@@ -2,7 +2,7 @@
  * FTGL - OpenGL font library
  *
  * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
- * Copyright (c) 2008 Sam Hocevar <sam@zoy.org>
+ * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -28,6 +28,7 @@
 
 #include "FTFace.h"
 #include "FTCharmap.h"
+
 
 FTCharmap::FTCharmap(FTFace* face)
 :   ftFace(*(face->Face())),
@@ -56,9 +57,7 @@ FTCharmap::FTCharmap(FTFace* face)
 
 FTCharmap::~FTCharmap()
 {
-     for (unsigned int i = 0 ; i < FTCharmap::MAX_UNICODE_PLANES ; ++i) {
-        charMaps[i].clear();
-     }
+    charMap.clear();
 }
 
 
@@ -75,9 +74,7 @@ bool FTCharmap::CharMap(FT_Encoding encoding)
     if(!err)
     {
         ftEncoding = encoding;
-        for (unsigned int i = 0 ; i < FTCharmap::MAX_UNICODE_PLANES ; ++i) {
-           charMaps[i].clear();
-        }
+        charMap.clear();
     }
 
     return !err;
@@ -86,9 +83,7 @@ bool FTCharmap::CharMap(FT_Encoding encoding)
 
 unsigned int FTCharmap::GlyphListIndex(const unsigned int characterCode)
 {
-    // First, compute the Unicode plane where the character is located
-  div_t pos = div((int) characterCode, (int) FTCharmap::UNICODE_PLANE_SIZE);
-    return charMaps[pos.quot].find(pos.rem);
+    return charMap.find(characterCode);
 }
 
 
@@ -106,8 +101,6 @@ unsigned int FTCharmap::FontIndex(const unsigned int characterCode)
 void FTCharmap::InsertIndex(const unsigned int characterCode,
                             const size_t containerIndex)
 {
-    // First, compute the Unicode plane where the character is located
-  div_t pos = div((int) characterCode, (int) FTCharmap::UNICODE_PLANE_SIZE);
-    charMaps[pos.quot].insert(pos.rem, static_cast<FTCharToGlyphIndexMap::GlyphIndex>(containerIndex));
+    charMap.insert(characterCode, static_cast<FTCharToGlyphIndexMap::GlyphIndex>(containerIndex));
 }
 

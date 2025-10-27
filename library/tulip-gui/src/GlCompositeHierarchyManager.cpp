@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -25,8 +25,6 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
-
-#include <sstream>
 
 using namespace std;
 
@@ -110,11 +108,9 @@ void GlCompositeHierarchyManager::buildComposite(Graph *current,
   }
   current->addListener(this);
 
-  stringstream naming;
-  naming << current->getName() << " [#" << current->getId() << ']';
-  GlConvexGraphHull *hull =
-      new GlConvexGraphHull(composite, naming.str(), getColor(), _fillTextures[_currentColor - 1],
-                            current, _layout, _size, _rotation);
+  std::string naming(current->getName() + " [#" + std::to_string(current->getId()) + ']');
+  GlConvexGraphHull *hull = new GlConvexGraphHull(composite, naming, getColor(), getTexture(),
+                                                  current, _layout, _size, _rotation);
   hull->setTextureZoom(0.02);
 
   _graphsComposites.emplace(
@@ -122,8 +118,8 @@ void GlCompositeHierarchyManager::buildComposite(Graph *current,
 
   if (!current->subGraphs().empty()) {
     GlConvexGraphHullsComposite *newComposite = new GlConvexGraphHullsComposite();
-    naming << " - " << _subCompositesSuffix;
-    composite->addGlEntity(newComposite, naming.str());
+    naming += " - " + _subCompositesSuffix;
+    composite->addGlEntity(newComposite, naming);
 
     for (Graph *sg : current->subGraphs()) {
       buildComposite(sg, newComposite);
@@ -139,12 +135,12 @@ void GlCompositeHierarchyManager::treatEvent(const Event &evt) {
 
     switch (gEvt->getType()) {
     case GraphEvent::TLP_ADD_NODE:
-
+    case GraphEvent::TLP_AFTER_DEL_NODE: {
       if (_graphsComposites[graph].second) {
         _graphsComposites[graph].second->updateHull();
       }
-
       break;
+    }
 
     case GraphEvent::TLP_AFTER_ADD_SUBGRAPH:
     case GraphEvent::TLP_AFTER_DEL_SUBGRAPH: {

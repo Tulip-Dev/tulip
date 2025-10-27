@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -31,7 +31,7 @@ public:
   /**
    * @brief Stored results for graphs. When a graph is updated, its entry is removed from the map.
    **/
-  std::unordered_map<const Graph *, bool> resultsBuffer;
+  tlp_hash_map<const Graph *, bool> resultsBuffer;
 };
 
 //=================================================================
@@ -41,17 +41,21 @@ void TriconnectedTestListener::treatEvent(const Event &evt) {
   if (gEvt) {
     Graph *graph = gEvt->getGraph();
 
+    auto it = resultsBuffer.find(graph);
+
     switch (gEvt->getType()) {
     case GraphEvent::TLP_ADD_EDGE:
 
-      if (resultsBuffer.find(graph) != resultsBuffer.end())
-        if (resultsBuffer[graph])
+      if (it != resultsBuffer.end())
+        if (it->second)
           return;
-
-    case GraphEvent::TLP_DEL_EDGE:
-    case GraphEvent::TLP_DEL_NODE:
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
+      [[fallthrough]];
+    case GraphEvent::TLP_AFTER_DEL_EDGE:
+    case GraphEvent::TLP_AFTER_DEL_NODE:
+      if (it != resultsBuffer.end()) {
+        graph->removeListener(this);
+        resultsBuffer.erase(it);
+      }
       break;
 
     case GraphEvent::TLP_ADD_NODE:

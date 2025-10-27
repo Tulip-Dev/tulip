@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -22,8 +22,11 @@
 #define GLYPHRENDERER_H
 
 #include <QPixmap>
+#include <QString>
 
 #include <tulip/tulipconf.h>
+
+#define GLYPH_PREVIEW_DIM 16
 
 namespace tlp {
 
@@ -35,7 +38,8 @@ public:
   /**
    * @brief Get the preview for the glyph with the given Id.
    */
-  static QPixmap render(int glyphId);
+  static QPixmap render(int glyphId, int dim = GLYPH_PREVIEW_DIM);
+  static QPixmap render(QString glyphName, int dim = GLYPH_PREVIEW_DIM);
 };
 
 /**
@@ -46,7 +50,8 @@ public:
   /**
    * @brief Get the preview for the edge extremity glyph with the given Id.
    */
-  static QPixmap render(int glyphId);
+  static QPixmap render(int glyphId, int dim = GLYPH_PREVIEW_DIM);
+  static QPixmap render(QString glyphName, int dim = GLYPH_PREVIEW_DIM);
 };
 } // namespace tlp
 #endif // GLYPHRENDERER_H

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -20,10 +20,8 @@
 #include <tulip/GlPolygon.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlQuad.h>
-#include <tulip/TlpTools.h>
 
 #include <vector>
-#include <sstream>
 
 using namespace std;
 
@@ -148,9 +146,7 @@ void GlProgressBar::progress_handler(int step, int max_step) {
       Coord(progressBarTLCorner.getX() + (progressBarMaxWidth / 2.),
             progressBarTLCorner.getY() - (progressBarHeight / 2.), 0),
       Size(((1. / 10.) * progressBarMaxWidth), ((8. / 10.) * progressBarHeight), 0), commentColor);
-  stringstream str;
-  str << currentPercent << " %";
-  percentLabel->setText(str.str());
+  percentLabel->setText(std::to_string(currentPercent).append(" %"));
 
   addGlEntity(progressBarQuad, PROGRESS_BAR_ID);
   addGlEntity(commentLabel, COMMENT_ID);

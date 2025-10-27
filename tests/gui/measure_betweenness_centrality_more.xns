@@ -485,7 +485,7 @@ error-range                   0-0
 7,6,412,362,0,0,0,1900035332,10,'Logitech USB Optical Mouse'
 7,6,414,363,0,0,0,1900035340,10,'Logitech USB Optical Mouse'
 7,6,416,363,0,0,0,1900035348,10,'Logitech USB Optical Mouse'
-7,6,418,364,0,0,0,1900035356,10,'Logitech USB Optical Mouse'
+7,6,418,374,0,0,0,1900035356,10,'Logitech USB Optical Mouse'
 7,4,0,0,1,0,0,1900035620,10,Logitech USB Optical Mouse
 6,4,0,0,1,0,0,1900035620,2,Virtual core pointer
 7,5,0,0,1,0,0,1900035772,10,Logitech USB Optical Mouse
@@ -630,7 +630,7 @@ NEW-WINDOW:640,448:56623692,56623692,27054455,0,0,0:0x0+500+71:0,0:Betweenness C
 7,6,409,371,0,0,0,1900042708,10,'Logitech USB Optical Mouse'
 7,6,409,370,0,0,0,1900042716,10,'Logitech USB Optical Mouse'
 7,6,410,369,0,0,0,1900042732,10,'Logitech USB Optical Mouse'
-7,6,410,368,0,0,0,1900042788,10,'Logitech USB Optical Mouse'
+7,6,410,378,0,0,0,1900042788,10,'Logitech USB Optical Mouse'
 7,4,0,0,1,0,0,1900043284,10,Logitech USB Optical Mouse
 6,4,0,0,1,0,0,1900043284,2,Virtual core pointer
 7,5,0,0,1,0,0,1900043436,10,Logitech USB Optical Mouse
