@@ -39,12 +39,6 @@
 # TULIP_PATCH_VERSION: Patch version digit.
 # TULIP_USE_FILE: Additional Tulip-related macro definitions
 
-# Define version separator (different for MSVC builds)
-SET(TulipVersionSeparator .)
-IF(${CMAKE_GENERATOR} MATCHES "Visual Studio" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles") #visual studio does not recognize these options
-   SET(TulipVersionSeparator _)
-ENDIF()
-
 # A macro to retrieve Tulip version from the TulipRelase.h file
 # This will output the following variables:
 # TULIP_VERSION: Complete version string.
@@ -63,29 +57,29 @@ MACRO(RETRIEVE_VERSION)
   IF(TULIP_INCLUDE_DIR)
     FILE(STRINGS ${TULIP_INCLUDE_DIR}/tulip/TulipRelease.h
          TMPSTR
-         REGEX "[0-9]*\\${TulipVersionSeparator}[0-9]*\\${TulipVersionSeparator}[0-9][^\"]*"
+         REGEX "[0-9]*\\.[0-9]*\\.[0-9][^\"]*"
          NO_HEX_CONVERSION)
 
-    STRING(REGEX MATCH "[0-9]*\\${TulipVersionSeparator}[0-9]*\\${TulipVersionSeparator}[0-9][^\"]*"
+    STRING(REGEX MATCH "[0-9]*\\.[0-9]*\\.[0-9][^\"]*"
            TULIP_VERSION
            ${TMPSTR})
 
-       STRING(REGEX REPLACE "([0-9]*\\${TulipVersionSeparator}[0-9]*)\\${TulipVersionSeparator}([0-9][^\"]*)"
+       STRING(REGEX REPLACE "([0-9]*\\.[0-9]*)\\.([0-9][^\"]*)"
                "\\1"
               TULIP_MM_VERSION
               ${TULIP_VERSION})
 
-    STRING(REGEX REPLACE "([0-9]*)\\${TulipVersionSeparator}([0-9]*)\\${TulipVersionSeparator}([0-9][^\"]*)"
+    STRING(REGEX REPLACE "([0-9]*)\\.([0-9]*)\\.([0-9][^\"]*)"
             "\\1"
            TULIP_MAJOR_VERSION
            ${TULIP_VERSION})
 
-    STRING(REGEX REPLACE "([0-9]*)\\${TulipVersionSeparator}([0-9]*)\\${TulipVersionSeparator}([0-9][^\"]*)"
+    STRING(REGEX REPLACE "([0-9]*)\\.([0-9]*)\\.([0-9][^\"]*)"
             "\\2"
            TULIP_MINOR_VERSION
            ${TULIP_VERSION})
 
-    STRING(REGEX REPLACE "([0-9]*)\\${TulipVersionSeparator}([0-9]*)\\${TulipVersionSeparator}([0-9][^\"]*)"
+    STRING(REGEX REPLACE "([0-9]*)\\.([0-9]*)\\.([0-9][^\"]*)"
             "\\3"
            TULIP_PATCH_VERSION
            ${TULIP_VERSION})
@@ -158,19 +152,19 @@ SET(TULIP_FOUND true)
 
 SET(TULIP_LIBRARIES_DIR ${TULIP_DIR}/${CMAKE_INSTALL_LIBDIR})
 
-FIND_LIBRARY(TULIP_CORE_LIBRARY "tulip-core-${TULIP_MAJOR_VERSION}${TulipVersionSeparator}${TULIP_MINOR_VERSION}"
+FIND_LIBRARY(TULIP_CORE_LIBRARY "tulip-core-${TULIP_MAJOR_VERSION}.${TULIP_MINOR_VERSION}"
              PATHS ${TULIP_LIBRARIES_DIR}
              NO_DEFAULT_PATH)
 
-FIND_LIBRARY(TULIP_OGL_LIBRARY "tulip-ogl-${TULIP_MAJOR_VERSION}${TulipVersionSeparator}${TULIP_MINOR_VERSION}"
+FIND_LIBRARY(TULIP_OGL_LIBRARY "tulip-ogl-${TULIP_MAJOR_VERSION}.${TULIP_MINOR_VERSION}"
              PATHS ${TULIP_LIBRARIES_DIR}
              NO_DEFAULT_PATH)
 
-FIND_LIBRARY(TULIP_GUI_LIBRARY "tulip-gui-${TULIP_MAJOR_VERSION}${TulipVersionSeparator}${TULIP_MINOR_VERSION}"
+FIND_LIBRARY(TULIP_GUI_LIBRARY "tulip-gui-${TULIP_MAJOR_VERSION}.${TULIP_MINOR_VERSION}"
              PATHS ${TULIP_LIBRARIES_DIR}
              NO_DEFAULT_PATH)
 
-FIND_LIBRARY(TULIP_PYTHON_LIBRARY "tulip-python-${TULIP_MAJOR_VERSION}${TulipVersionSeparator}${TULIP_MINOR_VERSION}"
+FIND_LIBRARY(TULIP_PYTHON_LIBRARY "tulip-python-${TULIP_MAJOR_VERSION}.${TULIP_MINOR_VERSION}"
              PATHS ${TULIP_LIBRARIES_DIR}
              NO_DEFAULT_PATH)
 

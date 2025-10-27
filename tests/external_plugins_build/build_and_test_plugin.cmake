@@ -12,14 +12,12 @@ SET(PLUGINS_BUILD_DIR "${CMAKE_SOURCE_DIR}/plugins_build")
 FILE(REMOVE_RECURSE ${TULIP_INSTALL_DIR})
 FILE(REMOVE_RECURSE ${PLUGINS_BUILD_DIR})
 
-IF(NOT MSVC)
-  # Ensure plugins loading test executable is built
-  EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND}
-                            --build ${TULIP_BIN_DIR}
-                            --config ${MSVC_CONFIGURATION}
-                            --target ${TEST_EXTERNAL_PLUGINS_LOAD}
-                  OUTPUT_QUIET)
-ENDIF(NOT MSVC)
+# Ensure plugins loading test executable is built
+EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND}
+                          --build ${TULIP_BIN_DIR}
+                          --config ${MSVC_CONFIGURATION}
+                          --target ${TEST_EXTERNAL_PLUGINS_LOAD}
+                OUTPUT_QUIET)
 
 # Adjust PATH for plugins loading test
 IF(WIN32)
@@ -79,37 +77,33 @@ ENDIF("${CMD_RESULT}" STREQUAL "0")
 # ================================================
 
 # Only for Unix based systems
-IF(NOT MSVC)
+# Generate Makefile
+CONFIGURE_FILE(${PLUGINS_SRC_DIR}/Makefile.in
+               ${PLUGINS_SRC_DIR_NAME}/Makefile @ONLY)
 
-  # Generate Makefile
-  CONFIGURE_FILE(${PLUGINS_SRC_DIR}/Makefile.in
-                 ${PLUGINS_SRC_DIR_NAME}/Makefile @ONLY)
+# Adjust Tulip install prefix in tulip-config file copied
+# in temporary Tulip installation directory
+FILE(READ ${TULIP_INSTALL_DIR}/bin/tulip-config TULIP_CONFIG)
+STRING(REPLACE "prefix=${CMAKE_INSTALL_PREFIX}" "prefix=${TULIP_INSTALL_DIR}" TULIP_CONFIG "${TULIP_CONFIG}")
+FILE(WRITE ${TULIP_INSTALL_DIR}/bin/tulip-config "${TULIP_CONFIG}")
 
-  # Adjust Tulip install prefix in tulip-config file copied
-  # in temporary Tulip installation directory
-  FILE(READ ${TULIP_INSTALL_DIR}/bin/tulip-config TULIP_CONFIG)
-  STRING(REPLACE "prefix=${CMAKE_INSTALL_PREFIX}" "prefix=${TULIP_INSTALL_DIR}" TULIP_CONFIG "${TULIP_CONFIG}")
-  FILE(WRITE ${TULIP_INSTALL_DIR}/bin/tulip-config "${TULIP_CONFIG}")
+# ensure a clean build
+EXECUTE_PROCESS(COMMAND make clean
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/plugins_src
+  RESULT_VARIABLE CMD_RESULT)
 
-  # ensure a clean build
-  EXECUTE_PROCESS(COMMAND make clean
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/plugins_src
-    RESULT_VARIABLE CMD_RESULT)
+IF("${CMD_RESULT}" STREQUAL "0")
+  EXECUTE_PROCESS(COMMAND make
+                  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/plugins_src
+                  RESULT_VARIABLE CMD_RESULT)
+ENDIF("${CMD_RESULT}" STREQUAL "0")
 
-  IF("${CMD_RESULT}" STREQUAL "0")
-    EXECUTE_PROCESS(COMMAND make
-                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/plugins_src
-                    RESULT_VARIABLE CMD_RESULT)
-  ENDIF("${CMD_RESULT}" STREQUAL "0")
-
-  IF("${CMD_RESULT}" STREQUAL "0")
-    EXECUTE_PROCESS(COMMAND ${TEST_PLUGINS_EXE} ${CMAKE_SOURCE_DIR}/plugins_src
-                    RESULT_VARIABLE CMD_RESULT)
-  ENDIF("${CMD_RESULT}" STREQUAL "0")
+IF("${CMD_RESULT}" STREQUAL "0")
+  EXECUTE_PROCESS(COMMAND ${TEST_PLUGINS_EXE} ${CMAKE_SOURCE_DIR}/plugins_src
+                  RESULT_VARIABLE CMD_RESULT)
+ENDIF("${CMD_RESULT}" STREQUAL "0")
 
 # Exit with error if something went wrong
 IF(NOT "${CMD_RESULT}" STREQUAL "0")
   MESSAGE(FATAL_ERROR "The test of build of external plugins (tulip-config + make) failed !")
 ENDIF(NOT "${CMD_RESULT}" STREQUAL "0")
-
-ENDIF(NOT MSVC)

@@ -48,6 +48,3 @@ If you are a **Linux** developer, all these dependencies can be installed with t
 If you are a **MacOS** developer, we recommend to use `MacPorts <https://www.macports.org/>`_ or `Homebrew <https://brew.sh/>`_ in order to easily install all these dependencies. Hints on how to build Tulip for these two environments can be found in the old continuous integration setup file `.travis.yml <https://github.com/Tulip-Dev/tulip/blob/master/travis.yml>`_. A dedicated script **macports_build.sh** in the **bundlers/macos** directory of Tulip source code is also available for **MacPorts** build.
 
 If you are a **Windows** developer, we recommend to use `MSYS2 <http://www.msys2.org/>`_ as it greatly facilitates the build of Tulip on that platform (notably by providing up to date compilers and precompiled dependencies). A dedicated batch file **msys2_build.bat** in the **bundlers/win** directory of Tulip source code is available for **MSYS2** build.
-
-Hints on how to build Tulip for **MSVC** can be found in `appveyor_msvc.bat <https://github.com/Tulip-Dev/tulip/blob/master/appveyor_msvc.bat>`_ used for continuous integration on `AppVeyor <https://www.appveyor.com/>`_ until 5.6.3 version.
-

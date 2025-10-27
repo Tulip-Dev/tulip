@@ -31,27 +31,6 @@ MACRO(TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY import_library dll_name)
       STRING(STRIP ${DLL_FILENAME} ${dll_name})
     ENDIF(DLLTOOL_ERROR)
   ENDIF(MINGW)
-  IF(MSVC)
-    # Get path of MSVC compiler
-    GET_FILENAME_COMPONENT(COMPILER_DIRECTORY ${CMAKE_CXX_COMPILER} DIRECTORY)
-    # Get root path of Visual Studio
-    IF(MSVC14)
-      GET_FILENAME_COMPONENT(VS_DIR [HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\\14.0\\Setup\\VS;ProductDir] REALPATH)
-    ELSEIF(MSVC12)
-      GET_FILENAME_COMPONENT(VS_DIR [HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\\12.0\\Setup\\VS;ProductDir] REALPATH)
-    ENDIF()
-    # Add temporarily some paths to the PATH environment variable in order to locate some dlls needed to run lib.exe command (mspdb*.dll)
-    SET(VS_IDE_DIR "${VS_DIR}/Common7/IDE")
-    SET(VS_VC_BIN_DIR "${VS_DIR}/VC/bin")
-    SET(PATH_BACKUP "$ENV{PATH}")
-    SET(ENV{PATH} "${VS_IDE_DIR};${VS_VC_BIN_DIR};$ENV{PATH}")
-    # Run the lib.exe command to list the content of the library file
-    EXECUTE_PROCESS(COMMAND ${COMPILER_DIRECTORY}/lib.exe /list ${import_library} OUTPUT_VARIABLE LIBRARY_CONTENTS)
-    # If the library is an import library, lib.exe outputs the associated dll name instead of the object files for a static library
-    STRING(REGEX MATCH "[^\r?\n]+\\.dll" ${dll_name} ${LIBRARY_CONTENTS})
-    # Restore original PATH environment variable value
-    SET(ENV{PATH} "${PATH_BACKUP}")
-  ENDIF(MSVC)
 ENDMACRO(TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY)
 ENDIF(WIN32)
 

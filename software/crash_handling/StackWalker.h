@@ -131,26 +131,6 @@ private:
 #endif
 };
 
-#elif defined(_MSC_VER)
-
-class StackWalkerMSVC : public StackWalker {
-public:
-  StackWalkerMSVC();
-  ~StackWalkerMSVC();
-
-  void printCallStack(std::ostream &os, unsigned int maxDepth = 50);
-  void setExtraSymbolsSearchPaths(const std::string &searchPaths) {
-    extraSymbolsSearchPaths = searchPaths;
-  }
-  void setContext(CONTEXT *context) {
-    this->context = context;
-  }
-
-private:
-  CONTEXT *context;
-  std::string extraSymbolsSearchPaths;
-};
-
 #endif
 
 #endif /* STACKWALKER_H_ */

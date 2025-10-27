@@ -1,7 +1,7 @@
 #OPTION(TULIP_USE_QT6 "Use Qt6 instead of Qt5" OFF)
 #IF(TULIP_USE_QT6)
   SET(QT Qt6)
-  SET(QT_MIN 6.4.2)
+  SET(QT_MIN 6.5)
   UNSET(Qt6OpenGLWidgets_DIR CACHE)
 #ELSE()
 #  SET(QT Qt5)
@@ -38,13 +38,7 @@ FIND_PACKAGE(${QT}Network ${QT_MIN} REQUIRED)
   SET(QT6_LIBRARIES ${Qt6Core5Compat_LIBRARIES} ${Qt6OpenGLWidgets_LIBRARIES})
 #ENDIF()
 
-SET(QT_FULL_VERSION ${${QT}Widgets_VERSION_STRING})
-# QtWidgets_VERSION_STRING has been deprecated in favor of Qt5Widgets_VERSION since
-# a few releases of Qt5 and seems to have been removed in some Linux distributions
-# (experienced on KDE Neon Developer edition with Qt 5.9)
-IF("${QT_FULL_VERSION}" STREQUAL "")
-  SET(QT_FULL_VERSION ${${QT}Widgets_VERSION})
-ENDIF("${QT_FULL_VERSION}" STREQUAL "")
+SET(QT_FULL_VERSION ${${QT}Widgets_VERSION})
 STRING(REGEX MATCH "[0-9]\\.[0-9]+" QT_VERSION "${QT_FULL_VERSION}")
 
 IF(NOT "${QT_VERSION}" STREQUAL "${LAST_FOUND_QT_VERSION}")

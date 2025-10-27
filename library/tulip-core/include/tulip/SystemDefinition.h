@@ -45,8 +45,6 @@
 #define OS_COMPILER "Clang"
 #elif defined(__GNUC__)
 #define OS_COMPILER "gcc"
-#elif defined(_MSC_VER)
-#define OS_COMPILER "MSVC"
 #endif
 
 #endif // SYSTEMDEFINITION_H

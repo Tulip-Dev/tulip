@@ -181,21 +181,6 @@ void CrashHandling::installCrashHandler() {
   SetUnhandledExceptionFilter(exception_filter);
 }
 
-#elif defined(_MSC_VER)
-
-static LONG WINAPI exception_filter(LPEXCEPTION_POINTERS info) {
-  StackWalkerMSVC sw;
-  sw.setExtraSymbolsSearchPaths(SYMBOLS_SEARCH_PATHS);
-  sw.setContext(info->ContextRecord);
-
-  dumpStackTrace(sw);
-
-  return 1;
-}
-
-void CrashHandling::installCrashHandler() {
-  SetUnhandledExceptionFilter(exception_filter);
-}
 #endif
 
 #ifdef __GNUC__

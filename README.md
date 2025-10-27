@@ -122,8 +122,6 @@ If you are a MacOS user, we recommend to use [MacPorts](https://www.macports.org
 If you are a Windows user, we recommend to use the UCRT version of [MSYS2](http://www.msys2.org/) as it greatly facilitates the build of Tulip on
 that platform (notably by providing up to date compilers and precompiled dependencies). A dedicated batch file [msys2_build.bat](bundlers/win/msys2_build.bat) is available for MSYS2 build.
 
-Hints on how to build Tulip for MSVC can be found in [appveyor_msvc.bat](appveyor_msvc.bat) currently used for continuous integration on [AppVeyor](https://www.appveyor.com/).
-
 ## References
 
  [Tulip web site](https://tulip.labri.fr) has a dedicated page for [Tulip bibliography](https://tulip.labri.fr/site/?q=tulip-biblio).
