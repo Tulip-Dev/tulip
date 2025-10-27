@@ -84,13 +84,15 @@ Tulip is a cross-platform framework and can be installed or compiled on many **L
 
 ### Precompiled binaries
 
-For each release, Tulip offers precompiled binaries for Linux (using [AppImage](https://github.com/AppImage/AppImageKit)), 
+Up to version 6.0.1, Tulip offers precompiled binaries for Linux (using [AppImage](https://github.com/AppImage/AppImageKit)), 
 MacOS (dmg bundles) or Windows ([NSIS](http://nsis.sourceforge.net/Main_Page) based installers).
 You can download those binaries from [SourceForge](https://sourceforge.net/projects/auber/files/tulip/).
 
+**We are not providing binaries anymore**
+
 ### Compiling from scratch
 
-Tulip can be easily compiled on every supported platforms. However, that process can take some times
+Tulip can be easily compiled on many supported platforms. However, that process can take some times
 depending on your system configuration.
 
 The following dependencies are required to build Tulip:
@@ -105,7 +107,7 @@ The following dependencies are required to build Tulip:
   * [GLEW](http://glew.sourceforge.net/) >= 1.4
   * [Python](https://www.python.org) >= 3.10
   * [Pip] (https://pypi.org/project/pip/)
-  * [SIP](https://github.com/Python-SIP/sip) >= 6.9.1 (to be installed via pip or on Debian/Ubuntu packages sipbuild and sip-tools)
+  * [SIP](https://github.com/Python-SIP/sip) >= 6.9.1 (to be installed via pip or on Debian/Ubuntu packages sipbuild)
   * [libzip](https://libzip.org)
   * [Qhull](http://www.qhull.org/)
   * [yajl](https://lloyd.github.io/yajl/) >= 2.0  
@@ -121,6 +123,8 @@ If you are a MacOS user, we recommend to use [MacPorts](https://www.macports.org
 
 If you are a Windows user, we recommend to use the UCRT version of [MSYS2](http://www.msys2.org/) as it greatly facilitates the build of Tulip on
 that platform (notably by providing up to date compilers and precompiled dependencies). A dedicated batch file [msys2_build.bat](bundlers/win/msys2_build.bat) is available for MSYS2 build.
+For windows, the use a Python distribution from the official site is recommended 
+(do not use the Python bundled with MSYS2). Sphinx must use the same Python distribution as the one used to compile Tulip (use pip to install it).
 
 ## References
 
