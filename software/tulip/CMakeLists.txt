@@ -15,7 +15,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../crash_handling)
 
 INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${OPENGL_INCLUDE_DIR} include/)
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt6Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
 IF(WIN32)
 
@@ -56,6 +56,9 @@ IF(WIN32)
     # copy required Qt plugins
     INSTALL(DIRECTORY ${QT_PLUGINS_DIR}/imageformats DESTINATION ${TulipBinInstallDir})
     INSTALL(DIRECTORY ${QT_PLUGINS_DIR}/platforms DESTINATION ${TulipBinInstallDir})
+    IF(EXISTS ${QT_PLUGINS_DIR}/tls)
+      INSTALL(DIRECTORY ${QT_PLUGINS_DIR}/tls DESTINATION ${TulipBinInstallDir})
+    ENDIF(EXISTS ${QT_PLUGINS_DIR}/tls)
     IF(EXISTS ${QT_PLUGINS_DIR}/styles)
       INSTALL(DIRECTORY ${QT_PLUGINS_DIR}/styles DESTINATION ${TulipBinInstallDir})
     ENDIF(EXISTS ${QT_PLUGINS_DIR}/styles)

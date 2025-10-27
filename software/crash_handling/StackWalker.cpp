@@ -283,7 +283,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
         int64_t exOffset = getOffsetInExecutable(array[i]);
         std::ostringstream oss;
         oss << "atos -o " << dsoName;
-#ifdef X86_64
+#ifdef defined(__x86_64__)
         oss << " -arch x86_64 ";
 #else
         oss << " -arch arm64 ";
@@ -353,17 +353,10 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
   STACKFRAME frame;
   memset(&frame, 0, sizeof(frame));
 
-#ifndef X86_64
-  DWORD machine = IMAGE_FILE_MACHINE_I386;
-  frame.AddrPC.Offset = context->Eip;
-  frame.AddrStack.Offset = context->Esp;
-  frame.AddrFrame.Offset = context->Ebp;
-#else
   DWORD machine = IMAGE_FILE_MACHINE_AMD64;
   frame.AddrPC.Offset = context->Rip;
   frame.AddrStack.Offset = context->Rsp;
   frame.AddrFrame.Offset = context->Rbp;
-#endif
 
   frame.AddrPC.Mode = AddrModeFlat;
   frame.AddrStack.Mode = AddrModeFlat;
@@ -386,11 +379,7 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
     symbol->SizeOfStruct = (sizeof *symbol) + 255;
     symbol->MaxNameLength = 254;
 
-#ifndef X86_64
-    DWORD module_base = SymGetModuleBase(process, frame.AddrPC.Offset);
-#else
     DWORD64 module_base = SymGetModuleBase(process, frame.AddrPC.Offset);
-#endif
 
     int64_t symbolOffset = frame.AddrPC.Offset - module_base - 0x1000 - 1;
 
@@ -411,12 +400,7 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
 #endif
 
     const char *func = nullptr;
-
-#ifndef X86_64
-    DWORD dummy = 0;
-#else
     DWORD64 dummy = 0;
-#endif
 
     if (SymGetSymFromAddr(process, frame.AddrPC.Offset, &dummy, symbol)) {
       func = symbol->Name;
