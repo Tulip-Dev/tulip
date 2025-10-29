@@ -17,7 +17,7 @@
  *
  */
 
-#include <QTextCodec>
+#include <QStringConverter>
 
 #include <tulip/CSVParser.h>
 #include <tulip/TlpQtTools.h>
@@ -43,8 +43,9 @@ CSVSimpleParser::CSVSimpleParser(const string &fileName, const QString &separato
 
 CSVSimpleParser::~CSVSimpleParser() {}
 
-string CSVSimpleParser::convertStringEncoding(const std::string &toConvert, QTextCodec *encoder) {
-  return QStringToTlpString(encoder->toUnicode(toConvert.c_str()));
+string CSVSimpleParser::convertStringEncoding(const std::string &toConvert, const string &encoder) {
+  auto toUtf16 = QStringDecoder(encoder.c_str());
+  return QStringToTlpString(toUtf16(toConvert.c_str()));
 }
 
 bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress,
@@ -77,15 +78,6 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
 
     unsigned int displayProgressEachLineNumber = 200;
 
-    QTextCodec *codec = QTextCodec::codecForName(_fileEncoding.c_str());
-
-    if (codec == nullptr) {
-      qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__
-                 << " Cannot found the conversion codec to convert from " << _fileEncoding
-                 << " string will be treated as utf8.";
-      codec = QTextCodec::codecForName("UTF-8");
-    }
-
     if (progress) {
       progress->progress(0, 100);
     }
@@ -116,7 +108,7 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
 
       if (!line.empty() && row >= _firstLine) {
         // Correct the encoding of the line.
-        line = convertStringEncoding(line, codec);
+        line = convertStringEncoding(line, _fileEncoding);
 
         tokens.clear();
         tokenize(line, tokens, _separator, _mergesep, _textDelimiter, 0);

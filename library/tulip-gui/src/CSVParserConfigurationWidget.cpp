@@ -20,7 +20,7 @@
 #include "tulip/CSVParserConfigurationWidget.h"
 #include "ui_CSVParserConfigurationWidget.h"
 
-#include <QTextCodec>
+#include <QStringConverter>
 #include <QFileDialog>
 #include <QMessageBox>
 
@@ -93,14 +93,8 @@ CSVParser *CSVParserConfigurationWidget::buildParser(unsigned int firstLine,
 }
 
 void CSVParserConfigurationWidget::fillEncodingComboBox() {
-  QList<QByteArray> codecs = QTextCodec::availableCodecs();
+  QStringList list = QStringConverter::availableCodecs();
   ui->encodingComboBox->clear();
-  QStringList list;
-
-  for (QList<QByteArray>::const_iterator it = codecs.constBegin(); it != codecs.constEnd(); ++it) {
-    list.push_back(QString(*it));
-  }
-
   list.sort();
   ui->encodingComboBox->addItems(list);
 }

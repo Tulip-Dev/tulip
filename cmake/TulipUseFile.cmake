@@ -48,9 +48,6 @@ MACRO(TULIP_SET_CACHE_VAR cache_var_name content concat force)
 ENDMACRO(TULIP_SET_CACHE_VAR cache_var_name content concat force)
 
 MACRO(TULIP_SET_COMPILER_OPTIONS)
-
-  STRING(COMPARE EQUAL "${CMAKE_SIZEOF_VOID_P}" "8" X64)
-
   # enable C++17 (required for Qt6 at least)
   SET(CMAKE_CXX_STANDARD 17)
   SET(CXX_STANDARD_REQUIRED ON)

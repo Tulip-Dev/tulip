@@ -29,8 +29,6 @@
 
 #include <QString>
 
-class QTextCodec;
-
 namespace tlp {
 
 class PluginProgress;
@@ -124,7 +122,7 @@ protected:
 private:
   void tokenize(const std::string &str, std::vector<CSVToken> &tokens, const QString &delimiters,
                 const bool mergedelim, char _textDelimiter, unsigned int numberOfCol);
-  std::string convertStringEncoding(const std::string &toConvert, QTextCodec *encoder);
+  std::string convertStringEncoding(const std::string &toConvert, const std::string& encoder);
 
   /**
    * @brief Function to extract a line from a istream. Can handle Linux,Mac and Windows end of line
