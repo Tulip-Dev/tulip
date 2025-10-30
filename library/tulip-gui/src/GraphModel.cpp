@@ -875,17 +875,25 @@ void GraphSortFilterProxyModel::setFilterProperty(BooleanProperty *prop) {
   if (_filterProperty != nullptr)
     _filterProperty->removeListener(this);
 
+  #if (QT_VERSION > QT_VERSION_CHECK(6,9,0))
+  beginFilterChange();
+  #endif
   _filterProperty = prop;
 
   if (_filterProperty != nullptr)
     _filterProperty->addListener(this);
 
+
+#if (QT_VERSION > QT_VERSION_CHECK(6,9,0))
+  endFilterChange();
+#else
   invalidateFilter();
+#endif
 }
 
 void GraphSortFilterProxyModel::treatEvent(const Event &e) {
   if (e.sender() == _filterProperty)
-    invalidateFilter();
+    invalidate();
 }
 
 BooleanProperty *GraphSortFilterProxyModel::filterProperty() const {
