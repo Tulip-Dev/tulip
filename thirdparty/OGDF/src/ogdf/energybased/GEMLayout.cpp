@@ -32,9 +32,24 @@
  */
 
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/EpsilonTest.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphAttributes.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/LayoutStandards.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/Math.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/geometry.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/energybased/GEMLayout.h>
 #include <ogdf/packing/TileToRowsCCPacker.h>
+
+#include <cmath>
+#include <random>
 
 namespace ogdf {
 
@@ -101,7 +116,7 @@ void GEMLayout::call(GraphAttributes& AG) {
 	AG.clearAllBends();
 
 	GraphCopy GC;
-	GC.createEmpty(G);
+	GC.setOriginalGraph(G);
 
 	// compute connected component of G
 	NodeArray<int> component(G);
@@ -114,12 +129,16 @@ void GEMLayout::call(GraphAttributes& AG) {
 		nodesInCC[component[v]].pushBack(v);
 	}
 
-	EdgeArray<edge> auxCopy(G);
+	NodeArray<node> nodeCopy;
+	EdgeArray<edge> auxCopy;
 	Array<DPoint> boundingBox(numCC);
 
 	int i;
 	for (i = 0; i < numCC; ++i) {
-		GC.initByNodes(nodesInCC[i], auxCopy);
+		nodeCopy.init(G);
+		auxCopy.init(G);
+		GC.clear();
+		GC.insert(nodesInCC[i].begin(), nodesInCC[i].end(), filter_any_edge, nodeCopy, auxCopy);
 
 		GraphAttributes AGC(GC);
 		for (node vCopy : GC.nodes) {

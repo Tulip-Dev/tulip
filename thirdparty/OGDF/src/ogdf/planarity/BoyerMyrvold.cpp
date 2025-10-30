@@ -30,7 +30,18 @@
  */
 
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/planarity/BoyerMyrvold.h>
+#include <ogdf/planarity/ExtractKuratowskis.h>
+#include <ogdf/planarity/KuratowskiSubdivision.h>
+#include <ogdf/planarity/boyer_myrvold/BoyerMyrvoldPlanar.h>
+#include <ogdf/planarity/boyer_myrvold/FindKuratowskis.h>
 
 namespace ogdf {
 
@@ -254,23 +265,7 @@ bool BoyerMyrvold::planarEmbed(Graph& g, SList<KuratowskiWrapper>& output, int e
 
 	// copy adjacency lists, if planar
 	if (planar) {
-		SListPure<adjEntry> entries;
-		for (node v : g.nodes) {
-			entries.clear();
-			for (adjEntry adj : h.copy(v)->adjEntries) {
-				OGDF_ASSERT(adj->theNode() == h.copy(v));
-				edge e = h.original(adj->theEdge());
-				OGDF_ASSERT(e->graphOf() == &g);
-				if (adj == adj->theEdge()->adjSource()) {
-					entries.pushBack(e->adjSource());
-					OGDF_ASSERT(e->adjSource()->theNode() == v);
-				} else {
-					entries.pushBack(e->adjTarget());
-					OGDF_ASSERT(e->adjTarget()->theNode() == v);
-				}
-			}
-			g.sort(v, entries);
-		}
+		h.copyEmbeddingToOriginal(g);
 	}
 
 	return planar;

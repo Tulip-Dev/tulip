@@ -31,9 +31,18 @@
 
 #pragma once
 
-#include <ogdf/fileformats/GraphIO.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/geometry.h>
+#include <ogdf/basic/graphics.h>
+#include <ogdf/cluster/ClusterGraph.h>
+#include <ogdf/cluster/ClusterGraphAttributes.h>
+
+#include <iosfwd>
+#include <string>
+#include <vector>
 
 namespace ogdf {
+class GraphAttributes;
 
 /**
  * \brief LaTeX+TikZ Writer
@@ -182,7 +191,7 @@ private:
 	 *
 	 * @param v node
 	 * @return double width that may be occupied by label text for node \p v
-	*/
+	 */
 	double getTextWidth(node v) const;
 
 	/**
@@ -210,16 +219,6 @@ private:
 	 * @return std::string label of \p e in TikZ syntax
 	 */
 	std::string getEdgeLabel(edge e, const DPoint& previousPoint, const DPoint& labelPoint) const;
-
-	/**
-	 * Check whether a point (e.g. edge bend point) lies within a node (using
-	 * node shapes with same size and aspect as in TikZ).
-	 *
-	 * @param p point to check
-	 * @param v node to check
-	 * @return true iff \p lies within the border of \p v
-	 */
-	bool isCoveredBy(const DPoint& p, node v) const;
 
 	/**
 	 * @brief Calculates the arrow size to be used for TikZ arrows

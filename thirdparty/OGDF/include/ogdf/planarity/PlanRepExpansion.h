@@ -32,14 +32,20 @@
 
 #pragma once
 
-#include <ogdf/basic/CombinatorialEmbedding.h>
-#include <ogdf/basic/FaceSet.h>
+#include <ogdf/basic/Array.h>
 #include <ogdf/basic/Graph.h>
-#include <ogdf/basic/NodeSet.h>
+#include <ogdf/basic/List.h>
 #include <ogdf/basic/SList.h>
-#include <ogdf/basic/tuples.h>
+#include <ogdf/basic/basic.h>
+
+#include <ostream>
 
 namespace ogdf {
+class CombinatorialEmbedding;
+class FaceSet;
+class NodeSet;
+template<class E1, class E2>
+class Tuple2;
 
 /**
  * \brief Planarized representations (of a connected component) of a graph.
@@ -269,7 +275,7 @@ public:
 	 * \pre Not both \p eOrig and \p ns may be 0.
 	 */
 	void removeEdgePathEmbedded(CombinatorialEmbedding& E, edge eOrig, nodeSplit ns,
-			FaceSet<false>& newFaces, NodeSet<false>& mergedNodes, node& oldSrc, node& oldTgt);
+			FaceSet& newFaces, NodeSet& mergedNodes, node& oldSrc, node& oldTgt);
 
 	/**
 	 * \brief Removes the insertion path of \p eOrig or \p ns.

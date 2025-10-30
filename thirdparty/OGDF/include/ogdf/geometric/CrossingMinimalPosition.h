@@ -45,14 +45,19 @@
 
 #pragma once
 
-#include <ogdf/basic/GraphAttributes.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/geometry.h>
 #include <ogdf/geometric/VertexPositionModule.h>
+
+#include <random>
 
 #ifdef OGDF_INCLUDE_CGAL
 #	include <CGAL/Gmpq.h>
 #endif
 
 namespace ogdf {
+class GraphAttributes;
 
 /**
  * \brief Compute a crossing minimal position for a vertex
@@ -61,7 +66,7 @@ namespace ogdf {
  * \pre Requires CGAL! See README.md in this folder.
  */
 template<typename FT>
-class OGDF_EXPORT CrossingMinimalPosition : public VertexPositionModule {
+class CrossingMinimalPosition : public VertexPositionModule {
 public: // ~Initialize vertex position module
 	CrossingMinimalPosition() { }
 
@@ -79,9 +84,9 @@ public: // ~Initialize vertex position module
 	}
 
 	/**set the number of edges that are randomly selected to compute the new vertex postion and the number of points that are tested within the best region.
-	* @param number_of_edge_samples  number of randomly selected edges
-	* @param number_of_point_samples number of randomly selected point
-	*/
+	 * @param number_of_edge_samples  number of randomly selected edges
+	 * @param number_of_point_samples number of randomly selected point
+	 */
 	void setSampleSize(const unsigned int number_of_edge_samples,
 			const unsigned int number_of_point_samples) {
 		m_number_of_edge_samples = number_of_edge_samples;
@@ -114,9 +119,13 @@ protected:
 	std::mt19937_64 rnd;
 };
 
+// the actual instantiation happens in CrossingMinimalPosition.cpp (thus the 'extern'),
+// here we just need to mark the instantiated class as EXPORTed
+extern template class OGDF_EXPORT_TEMPL_DECL CrossingMinimalPosition<double>;
 using CrossingMinimalPositionFast = CrossingMinimalPosition<double>;
 
 #ifdef OGDF_INCLUDE_CGAL
+extern template class OGDF_EXPORT_TEMPL_DECL CrossingMinimalPosition<CGAL::Gmpq>;
 using CrossingMinimalPositionPrecise = CrossingMinimalPosition<CGAL::Gmpq>;
 #endif
 

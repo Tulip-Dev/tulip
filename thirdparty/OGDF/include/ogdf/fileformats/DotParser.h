@@ -32,19 +32,18 @@
 #pragma once
 
 #include <ogdf/basic/Graph.h>
-#include <ogdf/basic/GraphAttributes.h>
 #include <ogdf/basic/HashArray.h>
 #include <ogdf/cluster/ClusterGraph.h>
-#include <ogdf/cluster/ClusterGraphAttributes.h>
-#include <ogdf/fileformats/DOT.h>
 #include <ogdf/fileformats/DotLexer.h>
 
-#include <cstdio>
+#include <iosfwd>
 #include <set>
 #include <string>
 #include <vector>
 
 namespace ogdf {
+class ClusterGraphAttributes;
+class GraphAttributes;
 
 namespace dot {
 
@@ -64,33 +63,33 @@ struct SubgraphData;
  * adjustments have been made just for my convenience. Neverthless, my version
  * should be equal to the official one in terms of represented language.
  *
-<a href="http://www.graphviz.org/content/dot-language">
-official DOT specification
-</a>
+ * <a href="http://www.graphviz.org/content/dot-language">
+ * official DOT specification
+ * </a>
  *
-\verbatim
-Graph = [ 'strict' ] ( 'graph' | 'digraph' ) [ id ] '{' [ StmtList ] '}'
-Subgraph = [ 'subgraph' [ id ] ] '{' StmtList '}'
-
-StmtList = Stmt [ ';' ] [ StmtList ]
-Stmt = NodeStmt | EdgeStmt | AttrStmt | AsgnStmt | Subgraph
-
-NodeStmt = NodeId [ AttrList ]
-NodeId = id [ port ]
-
-EdgeStmt = ( NodeId | Subgraph ) EdgeRhs [ AttrList ]
-EdgeRhs = ( '--' | '->' ) ( NodeId | Subgraph) [ EdgeRhs ]
-
-AttrStmt = ( 'graph' | 'node' | 'edge' ) AttrList
-
-AsgnStmt = id '=' id
-
-AttrList = '[' [ AList ] ']' [ AttrList ]
-AList = AsgnStmt [ ',' ] [ AList ]
-
-Port = ':' id [ ':' CompassPt ] | ':' CompassPt
-CompassPt = ( 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c' | '_' )
-\endverbatim
+ * \verbatim
+ * Graph = [ 'strict' ] ( 'graph' | 'digraph' ) [ id ] '{' [ StmtList ] '}'
+ * Subgraph = [ 'subgraph' [ id ] ] '{' StmtList '}'
+ *
+ * StmtList = Stmt [ ';' ] [ StmtList ]
+ * Stmt = NodeStmt | EdgeStmt | AttrStmt | AsgnStmt | Subgraph
+ *
+ * NodeStmt = NodeId [ AttrList ]
+ * NodeId = id [ port ]
+ *
+ * EdgeStmt = ( NodeId | Subgraph ) EdgeRhs [ AttrList ]
+ * EdgeRhs = ( '--' | '->' ) ( NodeId | Subgraph) [ EdgeRhs ]
+ *
+ * AttrStmt = ( 'graph' | 'node' | 'edge' ) AttrList
+ *
+ * AsgnStmt = id '=' id
+ *
+ * AttrList = '[' [ AList ] ']' [ AttrList ]
+ * AList = AsgnStmt [ ',' ] [ AList ]
+ *
+ * Port = ':' id [ ':' CompassPt ] | ':' CompassPt
+ * CompassPt = ( 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c' | '_' )
+ * \endverbatim
  *
  * The AST building process tries to mirror given grammar as much as possible
  * keeping the code clean and simple. Each grammar's nonterminal symbol has
@@ -111,22 +110,21 @@ CompassPt = ( 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c' | '_' )
  */
 class Ast {
 public:
-	struct Graph;
-	struct StmtList;
-	struct NodeStmt;
-	struct EdgeStmt;
-	struct AttrStmt;
-	struct AsgnStmt;
-	struct Subgraph;
-	struct NodeId;
-	struct EdgeRhs;
-	struct AttrList;
 	struct AList;
-	struct Port;
+	struct AsgnStmt;
+	struct AttrList;
+	struct AttrStmt;
 	struct CompassPt;
-
-	struct Stmt;
 	struct EdgeLhs;
+	struct EdgeRhs;
+	struct EdgeStmt;
+	struct Graph;
+	struct NodeId;
+	struct NodeStmt;
+	struct Port;
+	struct Stmt;
+	struct StmtList;
+	struct Subgraph;
 
 private:
 	using Tokens = std::vector<Token>;

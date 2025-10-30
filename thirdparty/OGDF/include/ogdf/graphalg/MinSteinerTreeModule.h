@@ -31,20 +31,33 @@
 
 #pragma once
 
+#include <ogdf/basic/ArrayBuffer.h>
+#include <ogdf/basic/Graph.h>
 #include <ogdf/basic/GraphAttributes.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
 #include <ogdf/basic/PriorityQueue.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/comparer.h>
 #include <ogdf/basic/extended_graph_alg.h>
+#include <ogdf/basic/graphics.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/energybased/FMMMLayout.h>
+#include <ogdf/energybased/fmmm/FMMMOptions.h>
 #include <ogdf/fileformats/GraphIO.h>
 #include <ogdf/graphalg/AStarSearch.h>
 #include <ogdf/graphalg/Dijkstra.h>
 #include <ogdf/graphalg/steiner_tree/EdgeWeightedGraphCopy.h>
-#include <ogdf/graphalg/steiner_tree/Triple.h>
 
+#include <fstream>
+#include <functional>
+#include <limits>
 #include <sstream>
+#include <string>
 
 namespace ogdf {
+template<typename T>
+class EdgeWeightedGraph;
 
 /**
  * Serves as an interface for various methods to
@@ -260,7 +273,7 @@ public:
 	static void drawSVG(const EdgeWeightedGraph<T>& G, const NodeArray<bool>& isTerminal,
 			const char* filename) {
 		EdgeWeightedGraphCopy<T> emptySteinerTree;
-		emptySteinerTree.createEmpty(G);
+		emptySteinerTree.setOriginalGraph(G);
 		drawSVG(G, isTerminal, emptySteinerTree, filename);
 	}
 
@@ -392,7 +405,7 @@ T MinSteinerTreeModule<T>::call(const EdgeWeightedGraph<T>& G, const List<node>&
 	}
 
 	finalSteinerTree = new EdgeWeightedGraphCopy<T>();
-	finalSteinerTree->createEmpty(G);
+	finalSteinerTree->setOriginalGraph(G);
 	if (!terminals.empty()) {
 		finalSteinerTree->newNode(terminals.back());
 	}

@@ -17,6 +17,7 @@
  *
  */
 
+#include <ogdf/basic/LayoutStandards.h>
 #include <ogdf/energybased/NodeRespecterLayout.h>
 #include <ogdf/basic/Math.h>
 

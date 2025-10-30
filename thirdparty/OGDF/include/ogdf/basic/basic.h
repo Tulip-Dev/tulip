@@ -31,7 +31,18 @@
 
 #pragma once
 
-#include <ogdf/basic/internal/config.h>
+#include <ogdf/basic/internal/config.h> // IWYU pragma: export
+#include <ogdf/basic/internal/config_autogen.h> // IWYU pragma: export
+
+OGDF_DISABLE_WARNING_PUSH
+OGDF_DISABLE_WARNING_DEPRECATED
+#include <algorithm>
+
+OGDF_DISABLE_WARNING_POP
+
+#include <cmath>
+#include <fstream>
+#include <string>
 
 //! @name Assertions (only active in debug builds)
 //! @{
@@ -51,9 +62,9 @@
 #	undef OGDF_ASSERT
 #	ifndef OGDF_USE_ASSERT_EXCEPTIONS
 #		include <cassert>
+
 #		define OGDF_ASSERT(expr) assert(expr)
 #	else
-#		include <sstream>
 #		include <stdexcept>
 
 namespace ogdf {
@@ -61,7 +72,7 @@ namespace ogdf {
  * A trivial exception for failed assertions.
  * Only available if the macro OGDF_USE_ASSERT_EXCEPTIONS is defined.
  */
-class AssertionFailed : public std::runtime_error {
+class OGDF_EXPORT AssertionFailed : public std::runtime_error {
 	using std::runtime_error::runtime_error;
 };
 }
@@ -73,10 +84,21 @@ class AssertionFailed : public std::runtime_error {
 					ogdf_assert_ss << "OGDF assertion `" #expr "' failed at " __FILE__ ":" \
 								   << __LINE__ << "(" << OGDF_FUNCTION_NAME << ")";        \
 					ogdf::get_stacktrace(ogdf_assert_ss);                                  \
+					OGDF_DISABLE_WARNING_PUSH                                              \
+					OGDF_DISABLE_WARNING_THROW_TERMINATE                                   \
 					throw ogdf::AssertionFailed(ogdf_assert_ss.str());                     \
+					OGDF_DISABLE_WARNING_POP                                               \
 				}                                                                          \
 			} while (false)
 #	endif
+#endif
+
+//! Single statement that will only be compiled if OGDF_DEBUG is defined.
+//! @ingroup macros
+#define OGDF_IF_DBG(x)
+#ifdef OGDF_DEBUG
+#	undef OGDF_IF_DBG
+#	define OGDF_IF_DBG(x) x
 #endif
 
 //! @}
@@ -89,12 +111,6 @@ class AssertionFailed : public std::runtime_error {
 #	define OGDF_TRIVIALLY_COPYABLE std::is_trivially_copyable
 #endif
 
-#include <algorithm>
-#include <cmath>
-#include <cstdint>
-#include <ctime>
-#include <fstream>
-#include <limits>
 
 //! The namespace for all OGDF objects.
 namespace ogdf {
@@ -109,7 +125,7 @@ using std::min;
 /**
  *  The class Initialization is used for initializing global variables.
  *  You should never create instances of it!
-*/
+ */
 class OGDF_EXPORT Initialization {
 public:
 	Initialization();

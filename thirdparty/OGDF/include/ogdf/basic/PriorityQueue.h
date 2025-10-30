@@ -31,13 +31,15 @@
 
 #pragma once
 
-#include <ogdf/basic/EdgeArray.h>
+#include <ogdf/basic/Graph.h>
 #include <ogdf/basic/HashArray.h>
-#include <ogdf/basic/NodeArray.h>
+#include <ogdf/basic/Hashing.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/basic/heap/PairingHeap.h>
 
+#include <cstddef>
 #include <functional>
-#include <utility>
+#include <initializer_list>
 
 namespace ogdf {
 
@@ -63,7 +65,6 @@ public:
 
 private:
 	size_type m_size; //!< Number of entries.
-	const C& m_cmp;
 	using SpecImpl = Impl<T, C>;
 	SpecImpl* m_impl; //!< Underlying heap data structure.
 
@@ -79,7 +80,7 @@ public:
 	 * @param initialSize The initial capacity preference (ignored if not supported by underlying heap).
 	 */
 	explicit PriorityQueue(const C& cmp = C(), int initialSize = 128)
-		: m_size(0), m_cmp(cmp), m_impl(new SpecImpl(cmp, initialSize)) { }
+		: m_size(0), m_impl(new SpecImpl(cmp, initialSize)) { }
 
 	//! Copy constructor.
 	PriorityQueue(const PriorityQueue& other)
@@ -202,7 +203,7 @@ public:
 
 	//! Removes all the entries from the queue.
 	void clear() {
-		PriorityQueue tmp(m_cmp);
+		PriorityQueue tmp(m_impl->comparator());
 		tmp.swap(*this);
 	}
 
@@ -213,12 +214,15 @@ public:
 	size_type size() const { return m_size; }
 
 	/**
-	* Returns the priority of that handle.
-	*
-	* @param pos The handle
-	* @return The priority
-	*/
+	 * Returns the priority of that handle.
+	 *
+	 * @param pos The handle
+	 * @return The priority
+	 */
 	const T& value(handle pos) const { return m_impl->value(pos); }
+
+	//! Returns the comparator used for ordering elements.
+	const C& comparator() const { return m_impl->comparator(); }
 };
 
 /**
@@ -258,7 +262,7 @@ private:
 	P m_priority;
 };
 
-//! Shortcut for the base class of ::PrioritizedQueue.
+//! Shortcut for PriorityQueue, the base class of PrioritizedQueue.
 template<typename E, typename P, class C, template<typename, class> class Impl>
 using SuperQueueTemplate = PriorityQueue<PairTemplate<E, P>, Compare<PairTemplate<E, P>, C>, Impl>;
 
@@ -391,7 +395,7 @@ using PrioritizedQueue = pq_internal::PrioritizedQueue<E, P, C, Impl>;
  * for decreasing the priority of the respective elements.
  *
  * If ::node (or ::edge) is specified as the type of keys to be stored, a
- * ::ogdf::NodeArray (or ::ogdf::EdgeArray) is used internally.
+ * ogdf::NodeArray (or ogdf::EdgeArray) is used internally.
  * These types should be chosen whenever possible.
  *
  * This queue does not support merge operations.

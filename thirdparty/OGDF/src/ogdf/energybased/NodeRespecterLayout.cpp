@@ -33,9 +33,27 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
+
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/ArrayBuffer.h>
+#include <ogdf/basic/EpsilonTest.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphAttributes.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/LayoutStandards.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/Math.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/geometry.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/energybased/NodeRespecterLayout.h>
 #include <ogdf/packing/TileToRowsCCPacker.h>
+
+#include <cmath>
+#include <iostream>
+#include <utility>
 
 //#define OGDF_NODERESPECTERLAYOUT_DEBUG
 
@@ -279,7 +297,7 @@ void NodeRespecterLayout::call(GraphAttributes& attr) {
 	}
 
 	// Create empty graph copy associated with G.
-	m_copy.createEmpty(G);
+	m_copy.setOriginalGraph(G);
 
 	// Intialize arrays with a list of nodes/edges for each connected component.
 	NodeArray<int> component(G);
@@ -300,8 +318,11 @@ void NodeRespecterLayout::call(GraphAttributes& attr) {
 	// For every connected component:
 	for (int i = 0; i < numCC; ++i) {
 		// Initialize graph copy and its data.
+		NodeArray<node> copyNodes(G);
 		EdgeArray<edge> copyEdges(G);
-		m_copy.initByNodes(nodesInCC[i], copyEdges);
+		m_copy.clear();
+		m_copy.insert(nodesInCC[i].begin(), nodesInCC[i].end(), filter_any_edge, copyNodes,
+				copyEdges);
 		initData();
 
 		// Initially place nodes randomly.

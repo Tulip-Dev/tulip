@@ -31,19 +31,20 @@
 
 #pragma once
 
-#include <ogdf/basic/pqtree/PQNodeRoot.h>
+#include <ogdf/basic/memory.h>
 
 namespace ogdf {
+class PQNodeRoot;
 
 /**
-The definitions for W, B, H and A
-describe the type of a node during the computation of the
-maximal pertinent sequence. A pertinent node X in the PQ-tree will be
-either of type B, W, A or H. Together
-with some other information stored at every node the pertinent leaves
-in the frontier of X that have to be deleted. For further
-description of the types see Jayakumar, Thulasiraman and Swamy 1989.
-*/
+ * The definitions for W, B, H and A
+ * describe the type of a node during the computation of the
+ * maximal pertinent sequence. A pertinent node X in the PQ-tree will be
+ * either of type B, W, A or H. Together
+ * with some other information stored at every node the pertinent leaves
+ * in the frontier of X that have to be deleted. For further
+ * description of the types see Jayakumar, Thulasiraman and Swamy 1989.
+ */
 
 enum class whaType { W, B, H, A };
 

@@ -12,7 +12,7 @@ else()
 endif()
 
 # compilation
-#file(GLOB_RECURSE COIN_SOURCES src/coin/*.cpp)
+# file(GLOB_RECURSE COIN_SOURCES src/coin/*.cpp)
 # compile only files needed for tulip build
 file(STRINGS cmake/coin_files_for_tlp.txt COIN_SOURCES)
 if(NOT COIN_SOLVER STREQUAL "GRB")
@@ -21,7 +21,7 @@ endif()
 if(NOT COIN_SOLVER STREQUAL "CPX")
   list(REMOVE_ITEM COIN_SOURCES "${PROJECT_SOURCE_DIR}/src/coin/Osi/OsiCpxSolverInterface.cpp")
 endif()
-#add_library(COIN ${COIN_LIBRARY_TYPE} ${COIN_SOURCES})
+# add_library(COIN ${COIN_LIBRARY_TYPE} ${COIN_SOURCES})
 add_library(COIN STATIC ${COIN_SOURCES})
 SET_TARGET_PROPERTIES(COIN PROPERTIES POSITION_INDEPENDENT_CODE ON)
 group_files(COIN_SOURCES "coin")
@@ -58,23 +58,14 @@ else()
   set(COIN_SOLVER_IS_EXTERNAL 1)
 endif()
 
-# installation
-# set(COIN_INSTALL_LIBRARY_DIR "lib/${CMAKE_LIBRARY_ARCHITECTURE}" CACHE PATH "Installation path of COIN library")
-# set(COIN_INSTALL_BIN_DIR "bin" CACHE PATH "Installation path of COIN runtime targets")
-# set(COIN_INSTALL_INCLUDE_DIR "include" CACHE PATH "Installation path of COIN header files (creates subdirectory)")
-# set(COIN_INSTALL_CMAKE_DIR "lib/${CMAKE_LIBRARY_ARCHITECTURE}/cmake/OGDF/" CACHE PATH "Installation path of COIN files for CMake")
-# mark_as_advanced(COIN_INSTALL_LIBRARY_DIR COIN_INSTALL_BIN_DIR COIN_INSTALL_INCLUDE_DIR COIN_INSTALL_CMAKE_DIR)
-# install(TARGETS COIN
-#   EXPORT CoinTargets
-#   LIBRARY DESTINATION "${COIN_INSTALL_LIBRARY_DIR}"
-#   ARCHIVE DESTINATION "${COIN_INSTALL_LIBRARY_DIR}"
-#   RUNTIME DESTINATION "${COIN_INSTALL_BIN_DIR}"
-#   INCLUDES DESTINATION "${COIN_INSTALL_INCLUDE_DIR}"
-#   PUBLIC_HEADER DESTINATION "${COIN_INSTALL_INCLUDE_DIR}")
+# installation of the COIN cmake targets included by the ogdf-config.cmake
+# install(TARGETS COIN EXPORT CoinTargets COMPONENT COIN) # add the OGDF target to the export set "CoinTargets"
+# install(EXPORT CoinTargets DESTINATION ${CMAKE_INSTALL_DATADIR}/ogdf) # write all targets in this export set to CoinTargets.cmake
+# export(EXPORT CoinTargets FILE "${PROJECT_BINARY_DIR}/CoinTargets.cmake") # and also put that file in the build-tree, not only the install-tree
+# # ...and of the static headers
 # install(DIRECTORY include/coin
-#   DESTINATION "${COIN_INSTALL_INCLUDE_DIR}"
+#   DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+#   COMPONENT COINheaders
 #   FILES_MATCHING
 #     PATTERN "*.h"
 #     PATTERN "*.hpp")
-# install(EXPORT CoinTargets DESTINATION "${COIN_INSTALL_CMAKE_DIR}")
-# export(EXPORT CoinTargets)

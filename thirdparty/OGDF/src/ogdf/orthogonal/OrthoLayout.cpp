@@ -30,10 +30,22 @@
  */
 
 
+#include <ogdf/basic/CombinatorialEmbedding.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/GridLayoutMapped.h>
+#include <ogdf/basic/Layout.h>
+#include <ogdf/basic/LayoutStandards.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/exceptions.h>
+#include <ogdf/basic/geometry.h>
 #include <ogdf/orthogonal/EdgeRouter.h>
 #include <ogdf/orthogonal/FlowCompaction.h>
+#include <ogdf/orthogonal/MinimumEdgeDistances.h>
 #include <ogdf/orthogonal/OrthoLayout.h>
+#include <ogdf/orthogonal/OrthoRep.h>
 #include <ogdf/orthogonal/OrthoShaper.h>
+#include <ogdf/planarity/PlanRep.h>
 
 namespace ogdf {
 
@@ -167,7 +179,7 @@ void OrthoLayout::call(PlanRep& PG, adjEntry adjExternal, Layout& drawing) {
 		// call flow compaction on grid
 		fc.improvementHeuristics(PG, OR, minDistGrid, gridDrawing,
 				int(gridDrawing.toGrid(m_separation)));
-	} catch (AlgorithmFailureException) {
+	} catch (const AlgorithmFailureException&) {
 		// too bad, that did not work out..
 	}
 

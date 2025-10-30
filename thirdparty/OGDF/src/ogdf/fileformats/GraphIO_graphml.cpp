@@ -29,10 +29,25 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphAttributes.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/geometry.h>
+#include <ogdf/basic/graphics.h>
+#include <ogdf/cluster/ClusterGraph.h>
+#include <ogdf/cluster/ClusterGraphAttributes.h>
 #include <ogdf/fileformats/GraphIO.h>
 #include <ogdf/fileformats/GraphML.h>
 
 #include <ogdf/lib/pugixml/pugixml.h>
+
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <sstream>
+#include <string>
 
 namespace ogdf {
 
@@ -366,20 +381,25 @@ static void writeGraphMLCluster(pugi::xml_node xmlNode, const ClusterGraphAttrib
 	using namespace graphml;
 
 	// Writing cluster attributes (defined as cluster-node attributes).
-	if (CA.label(c).length() > 0) {
+
+	if (CA.has(ClusterGraphAttributes::clusterLabel) && CA.label(c).length() > 0) {
 		writeGraphMLAttribute(clusterTag, toString(Attribute::NodeLabel), CA.label(c).c_str());
 	}
-	writeGraphMLAttribute(clusterTag, toString(Attribute::X), CA.x(c));
-	writeGraphMLAttribute(clusterTag, toString(Attribute::Y), CA.y(c));
+	if (CA.has(ClusterGraphAttributes::clusterGraphics)) {
+		writeGraphMLAttribute(clusterTag, toString(Attribute::X), CA.x(c));
+		writeGraphMLAttribute(clusterTag, toString(Attribute::Y), CA.y(c));
+	}
 
-	const Color& col = CA.fillColor(c);
-	writeGraphMLAttribute(clusterTag, toString(Attribute::R), col.red());
-	writeGraphMLAttribute(clusterTag, toString(Attribute::G), col.green());
-	writeGraphMLAttribute(clusterTag, toString(Attribute::B), col.blue());
-	writeGraphMLAttribute(clusterTag, toString(Attribute::ClusterStroke),
-			CA.strokeColor(c).toString().c_str());
+	if (CA.has(ClusterGraphAttributes::clusterStyle)) {
+		const Color& col = CA.fillColor(c);
+		writeGraphMLAttribute(clusterTag, toString(Attribute::R), col.red());
+		writeGraphMLAttribute(clusterTag, toString(Attribute::G), col.green());
+		writeGraphMLAttribute(clusterTag, toString(Attribute::B), col.blue());
+		writeGraphMLAttribute(clusterTag, toString(Attribute::ClusterStroke),
+				CA.strokeColor(c).toString().c_str());
+	}
 
-	if (CA.templateCluster(c).length() > 0) {
+	if (CA.has(ClusterGraphAttributes::clusterTemplate) && CA.templateCluster(c).length() > 0) {
 		writeGraphMLAttribute(clusterTag, toString(Attribute::Template),
 				CA.templateCluster(c).c_str());
 	}
@@ -421,7 +441,7 @@ bool GraphIO::writeGraphML(const ClusterGraph& C, std::ostream& out) {
 		pugi::xml_node rootNode = writeGraphMLHeader(doc);
 		pugi::xml_node graphNode = writeGraphTag(rootNode, "directed");
 
-		writeGraphMLCluster(graphNode, G, C.rootCluster());
+		writeGraphMLCluster(graphNode, C, C.rootCluster());
 
 		for (edge e : G.edges) {
 			writeGraphMLEdge(graphNode, e);

@@ -35,13 +35,19 @@
 
 #pragma once
 
-#include <ogdf/basic/EdgeArray.h>
-#include <ogdf/basic/LayoutStandards.h>
-#include <ogdf/basic/NodeArray.h>
-#include <ogdf/basic/exceptions.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/basic/geometry.h>
+#include <ogdf/basic/graphics.h>
+#include <ogdf/basic/internal/graph_iterators.h>
+
+#include <cstdint>
+#include <string>
 
 namespace ogdf {
+template<class E>
+class List;
 
 //! Stores additional attributes of a graph (like layout information).
 /**
@@ -185,13 +191,7 @@ public:
 	 */
 	explicit GraphAttributes(const Graph& G, long attr = nodeGraphics | edgeGraphics);
 
-	//! Copy constructor.
-	GraphAttributes(const GraphAttributes&) = default;
-
-	//! Copy assignment operator.
-	GraphAttributes& operator=(const GraphAttributes&) = default;
-
-	virtual ~GraphAttributes() { }
+	virtual ~GraphAttributes() = default;
 
 	//! Returns currently accessible attributes.
 	long attributes() const { return m_attributes; }
@@ -874,8 +874,8 @@ public:
 
 	//! @}
 	/**
-	* @name Layout transformations
-	*/
+	 * @name Layout transformations
+	 */
 	//! @{
 
 	//! Scales the layout by (\p sx,\p sy).
@@ -892,13 +892,13 @@ public:
 
 	//! Scales the layout by \p s.
 	/**
-	* If \p scaleNodes is true, node sizes are scaled as well.
-	*
-	* \param s          is the scaling factor for both x- and y-coordinates.
-	* \param scaleNodes determines if nodes size are scaled as well (true) or not.
-	*
-	* \pre #nodeGraphics and #edgeGraphics are enabled
-	*/
+	 * If \p scaleNodes is true, node sizes are scaled as well.
+	 *
+	 * \param s          is the scaling factor for both x- and y-coordinates.
+	 * \param scaleNodes determines if nodes size are scaled as well (true) or not.
+	 *
+	 * \pre #nodeGraphics and #edgeGraphics are enabled
+	 */
 	virtual void scale(double s, bool scaleNodes = true) { scale(s, s, scaleNodes); }
 
 	//! Translates the layout by (\p dx,\p dy).
@@ -927,42 +927,42 @@ public:
 
 	//! Flips the layout horizontally within its bounding box.
 	/**
-	* If preserving the bounding box is not required, the layout can also be flipped horizontally
-	* by calling <tt>scale(-1.0, 1.0, false)</tt>.
-	*/
+	 * If preserving the bounding box is not required, the layout can also be flipped horizontally
+	 * by calling <tt>scale(-1.0, 1.0, false)</tt>.
+	 */
 	virtual void flipHorizontal() { flipHorizontal(boundingBox()); }
 
 	//! Flips the (whole) layout horizontally such that the part in \p box remains in this area.
 	/**
-	* The whole layout is flipped and then moved such that the part that was in \p box before
-	* flipping is moved to this area.
-	*/
+	 * The whole layout is flipped and then moved such that the part that was in \p box before
+	 * flipping is moved to this area.
+	 */
 	virtual void flipHorizontal(const DRect& box);
 
 	//! Scales the layout by (\p sx,\p sy) and then translates it by (\p dx,\p dy).
 	/**
-	* If \p scaleNodes is true, node sizes are scaled as well. A point (\a x,\a y) is
-	* moved to (\p sx &sdot; \a x + \p dx, \p sy &sdot; \a y + \p dy).
-	*
-	* \param sx         is the scaling factor for x-coordinates.
-	* \param sy         is the scaling factor for y-coordinates.
-	* \param dx         is the translation in x-direction.
-	* \param dy         is the translation in y-direction.
-	* \param scaleNodes determines if nodes size are scaled as well (true) or not.
-	*/
+	 * If \p scaleNodes is true, node sizes are scaled as well. A point (\a x,\a y) is
+	 * moved to (\p sx &sdot; \a x + \p dx, \p sy &sdot; \a y + \p dy).
+	 *
+	 * \param sx         is the scaling factor for x-coordinates.
+	 * \param sy         is the scaling factor for y-coordinates.
+	 * \param dx         is the translation in x-direction.
+	 * \param dy         is the translation in y-direction.
+	 * \param scaleNodes determines if nodes size are scaled as well (true) or not.
+	 */
 	virtual void scaleAndTranslate(double sx, double sy, double dx, double dy,
 			bool scaleNodes = true);
 
 	//! Scales the layout by \p s and then translates it by (\p dx,\p dy).
 	/**
-	* If \p scaleNodes is true, node sizes are scaled as well. A point (\a x,\a y) is
-	* moved to (\p s &sdot; \a x + \p dx, \p s &sdot; \a y + \p dy).
-	*
-	* \param s          is the scaling factor for both x- and y-coordinates.
-	* \param dx         is the translation in x-direction.
-	* \param dy         is the translation in y-direction.
-	* \param scaleNodes determines if nodes size are scaled as well (true) or not.
-	*/
+	 * If \p scaleNodes is true, node sizes are scaled as well. A point (\a x,\a y) is
+	 * moved to (\p s &sdot; \a x + \p dx, \p s &sdot; \a y + \p dy).
+	 *
+	 * \param s          is the scaling factor for both x- and y-coordinates.
+	 * \param dx         is the translation in x-direction.
+	 * \param dy         is the translation in y-direction.
+	 * \param scaleNodes determines if nodes size are scaled as well (true) or not.
+	 */
 	virtual void scaleAndTranslate(double s, double dx, double dy, bool scaleNodes = true) {
 		scaleAndTranslate(s, s, dx, dy, scaleNodes);
 	}

@@ -264,7 +264,14 @@ IF(NOT TULIP_BUILD_CORE_ONLY)
 ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 
 SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF/include)
-SET(OGDFBuildInclude ${PROJECT_BINARY_DIR}/thirdparty/OGDF/include)
+#determine build type
+string(TOLOWER ${CMAKE_BUILD_TYPE} build_type)
+if(build_type STREQUAL debug)
+  SET(BuildType debug)
+else(build_type STREQUAL debug)
+  SET(BuildType release)
+endif(build_type STREQUAL debug)
+SET(OGDFBuildInclude ${PROJECT_BINARY_DIR}/thirdparty/OGDF/include/ogdf-${BuildType})
 SET(OGDFLibrary OGDF)
 
 #utf8-cpp

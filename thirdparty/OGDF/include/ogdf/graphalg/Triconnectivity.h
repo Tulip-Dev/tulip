@@ -34,9 +34,13 @@
 #pragma once
 
 #include <ogdf/basic/Array.h>
-#include <ogdf/basic/EdgeArray.h>
+#include <ogdf/basic/ArrayBuffer.h>
+#include <ogdf/basic/Graph.h>
 #include <ogdf/basic/GraphCopy.h>
-#include <ogdf/basic/NodeArray.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/basic.h>
+
+#include <ostream>
 
 namespace ogdf {
 
@@ -44,12 +48,26 @@ namespace ogdf {
 //! components of a biconnected multi-graph
 //! @ingroup ga-connectivity
 class OGDF_EXPORT Triconnectivity {
+	explicit Triconnectivity(Graph* G);
+
 public:
 	/**
 	 * Divides G into triconnected components.
 	 * \param G graph
 	 */
-	explicit Triconnectivity(const Graph& G);
+	explicit Triconnectivity(const Graph& G) : Triconnectivity(new GraphCopySimple(G)) {
+		m_deleteGraph = true;
+	};
+
+	/**
+	 * Divides G into triconnected components.
+	 * \param G graph
+	 * \param modifyG adds virtual edges directly to G if true, otherwise makes a copy first
+	 */
+	explicit Triconnectivity(Graph& G, bool modifyG = false)
+		: Triconnectivity(modifyG ? &G : new GraphCopySimple(G)) {
+		m_deleteGraph = !modifyG;
+	};
 
 	/**
 	 * Tests G for triconnectivity.
@@ -83,22 +101,27 @@ public:
 		}
 	};
 
-	//! copy of G containing also virtual edges
-	GraphCopySimple* m_pGC;
+	//! modifiable copy of G also containing virtual edges
+	Graph* m_pG;
 	//! array of components
 	Array<CompStruct> m_component;
 	//! number of components
+	/**
+	 * Note that m_component may have size bigger than m_numComp, in which case all later components should be ignored.
+	 * Additionally, all components before m_numComp that have zero edges shall be ignored.
+	 */
 	int m_numComp;
 
 	/**
-	 * Checks if computed triconnected componets are correct.
-	 * \pre checkComp() assumes that the graph is simple!
+	 * Checks if computed triconnected components are correct.
+	 * \pre checkComp() assumes that the graph is simple
 	 */
-	bool checkComp();
-
+	bool checkComp() const;
 
 private:
-	bool checkSepPair(edge eVirt);
+	bool checkSepPair(edge eVirt) const;
+
+	void clearStructures();
 
 	//! splits bundles of multi-edges into bonds and creates
 	//! a new virtual edge in GC.
@@ -135,27 +158,35 @@ private:
 	enum class EdgeType { unseen, tree, frond, removed };
 
 	//! first dfs traversal
-	void DFS1(const Graph& G, node v, node u);
-	//! special version for triconnectivity tes
-	void DFS1(const Graph& G, node v, node u, node& s1);
+	void DFS1(node v, node u);
+	//! special version for triconnectivity test
+	void DFS1(node v, node u, node& s1);
 
 	//! constructs ordered adjaceny lists
-	void buildAcceptableAdjStruct(const Graph& G);
+	void buildAcceptableAdjStruct();
 	//! the second dfs traversal
-	void DFS2(const Graph& G);
-	void pathFinder(const Graph& G, node v);
+	void DFS2();
+	void pathFinder(node v);
 
 	//! finding of split components
-	void pathSearch(const Graph& G, node v);
-
-	bool pathSearch(const Graph& G, node v, node& s1, node& s2);
+	/**
+	 * If fail_fast is true, the search will be aborted after finding the first split pair,
+	 * which will be assigned to s1 and s2. Otherwise, s1 and s2 are unused.
+	 */
+	bool pathSearch(node init_v, bool fail_fast, node& s1, node& s2);
+	//! pathSearch() helper for the non-fail-fast version
+	void afterRecursivePathSearch(const node v, const int vnum, const int outv,
+			const ListIterator<edge> it, const edge e, const node w, int wnum);
+	//! pathSearch() helper for the fail-fast version
+	bool afterRecursivePathSearch(const node v, const int vnum, const int outv, const edge e,
+			const node w, const int wnum, node& s1, node& s2);
 
 	//! merges split-components into triconnected components
 	void assembleTriconnectedComponents();
 
 	//! debugging stuff
-	void printOs(edge e);
-	void printStacks();
+	void printOs(edge e) const;
+	void printStacks() const;
 
 	//! returns high(v) value
 	int high(node v) { return (m_HIGHPT[v].empty()) ? 0 : m_HIGHPT[v].front(); }
@@ -165,6 +196,17 @@ private:
 		if (it.valid()) {
 			node v = e->target();
 			m_HIGHPT[v].del(it);
+		}
+	}
+
+	//! returns \p m_pG.original(n) if m_pG is a GraphCopySimple, otherwise \p n itself
+	template<typename T>
+	T GCoriginal(T n) const {
+		if (m_deleteGraph) {
+			// TODO use common superclass of all GraphCopies
+			return dynamic_cast<GraphCopySimple*>(m_pG)->original(n);
+		} else {
+			return n;
 		}
 	}
 
@@ -188,6 +230,9 @@ private:
 	node m_start; //!< start node of dfs traversal
 	int m_numCount; //!< counter for dfs-traversal
 	bool m_newPath; //!< true iff we start a new path
+	bool m_deleteGraph; //!< whether the Graph(Copy) was created by us and should thus be deleted in the destructor
 };
+
+OGDF_EXPORT std::ostream& operator<<(std::ostream& os, Triconnectivity::CompType type);
 
 }

@@ -32,10 +32,21 @@
 
 #pragma once
 
-#include <ogdf/basic/NodeSet.h>
+#include <ogdf/basic/EpsilonTest.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphAttributes.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/GraphSets.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/graphalg/MaximumDensitySubgraph.h>
 #include <ogdf/graphalg/SpannerModule.h>
+
+#include <algorithm>
+#include <cstdint>
+#include <string>
 
 namespace ogdf {
 
@@ -110,14 +121,14 @@ private:
 		while (true) {
 			node maxNode = nullptr;
 			double maxDensity = 0.0;
-			NodeSet<true> maxDenseSubset(m_GA->constGraph());
+			NodeSet maxDenseSubset(m_GA->constGraph());
 			List<edge> maxE_U; // holds the edges of the maximum dense subgraph
 
 			for (node v : m_G.nodes) {
 				// Create neighbor graph
 				GraphCopySimple neighborGraph;
 				// Note: v is not part of the neighbor graph.
-				neighborGraph.createEmpty(m_G);
+				neighborGraph.setOriginalGraph(m_G);
 				for (adjEntry adj : v->adjEntries) {
 					neighborGraph.newNode(adj->twinNode());
 				}
@@ -129,7 +140,7 @@ private:
 				}
 
 				// Calculate dense subgraph and find all edges E_U of this subgraph
-				NodeSet<true> denseSubset(m_G);
+				NodeSet denseSubset(m_G);
 				int64_t timelimit = -1;
 				if (isTimelimitEnabled()) {
 					timelimit = max(static_cast<int64_t>(0), getTimeLeft());

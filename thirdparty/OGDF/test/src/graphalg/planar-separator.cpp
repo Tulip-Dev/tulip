@@ -29,7 +29,17 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
+#include <ogdf/basic/ArrayBuffer.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/graph_generators/deterministic.h>
+#include <ogdf/basic/graph_generators/randomized.h>
+#include <ogdf/basic/simple_graph_alg.h>
+#include <ogdf/graphalg/PlanarSeparatorModule.h>
 #include <ogdf/graphalg/SeparatorDual.h>
 #include <ogdf/graphalg/SeparatorDualFC.h>
 #include <ogdf/graphalg/SeparatorHarPeled.h>
@@ -37,9 +47,14 @@
 #include <ogdf/graphalg/SeparatorLiptonTarjanFC.h>
 #include <ogdf/graphalg/ShortestPathAlgorithms.h>
 
-#include <iostream>
+#include <functional>
+#include <memory>
+#include <set>
+#include <string>
+#include <vector>
 
 #include <graphs.h>
+
 #include <testing.h>
 
 /**
@@ -48,10 +63,10 @@
  * @param n number of nodes of the graph
  * @return the graph
  */
-Graph getRandomPlanarGraph(int n) {
-	Graph graph;
+std::unique_ptr<Graph> getRandomPlanarGraph(int n) {
+	auto graph = std::make_unique<Graph>();
 	int edges = randomNumber(n, 3 * n - 6);
-	randomPlanarConnectedGraph(graph, n, edges);
+	randomPlanarConnectedGraph(*graph, n, edges);
 	return graph;
 }
 
@@ -265,8 +280,8 @@ static void describeRandomInstances(PlanarSeparatorModule& sep) {
 	for (int i = 0; i < numInstances; i++) {
 		it("works on a random planar graph number " + std::to_string(i), [&] {
 			setSeed(i);
-			Graph G = getRandomPlanarGraph(size);
-			testGraph(G, sep);
+			auto G = getRandomPlanarGraph(size);
+			testGraph(*G, sep);
 		});
 	}
 }

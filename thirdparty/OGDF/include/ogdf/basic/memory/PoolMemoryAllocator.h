@@ -32,8 +32,12 @@
 
 #pragma once
 
-#include <ogdf/basic/System.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/internal/config_autogen.h>
 
+#include <cstddef>
+#include <cstdint>
+#include <vector>
 #ifndef OGDF_MEMORY_POOL_NTS
 #	include <mutex>
 #endif
@@ -44,9 +48,9 @@ namespace ogdf {
 /**
  * Possibly allocates more memory than required.
  * Newly allocated chunks contain #BLOCK_SIZE many bytes.
- * Can allocate at most #TABLE_SIZE bytes per invocation of #allocate.
+ * Can allocate elements of size at most #TABLE_SIZE.
  *
- * For each requested memory segment of \c n bytes,
+ * For each requested memory segment of #BLOCK_SIZE bytes,
  * \c OGDF_POINTER_SIZE bytes are allocated in addition to store a pointer to another segment of memory.
  *
  * This allows to store memory that is requested to be deallocated in a single linked list,
@@ -60,8 +64,8 @@ class PoolMemoryAllocator {
 
 	using MemElemPtr = MemElem*;
 
-	struct PoolElement;
 	struct BlockChain;
+	struct PoolElement;
 
 	static constexpr size_t MIN_BYTES = sizeof(MemElemPtr);
 	static constexpr size_t TABLE_SIZE = 256;
@@ -76,7 +80,7 @@ public:
 	static OGDF_EXPORT void cleanup();
 
 	//! Returns true iff #allocate can be invoked with \c nBytes
-	static OGDF_EXPORT bool checkSize(size_t nBytes) { return nBytes < TABLE_SIZE; }
+	static OGDF_EXPORT bool checkSize(size_t nBytes);
 
 	//! Allocates memory of size \c nBytes.
 	static OGDF_EXPORT void* allocate(size_t nBytes);
@@ -107,11 +111,26 @@ public:
 	/**
 	 * Defragments the global free lists.
 	 *
-	 * This methods sorts the global free lists, so that successive elements come after each
-	 * other. This can improve perfomance for data structure that allocate many elements from
+	 * This method sorts the global free lists, so that successive parts of memory come after each
+	 * other. This can improve performance for data structures that allocate many elements from
 	 * the pool like lists and graphs.
 	 */
-	static OGDF_EXPORT void defrag();
+	static OGDF_EXPORT void defragGlobal();
+
+	/**
+	 * Defragments the thread's free lists.
+	 *
+	 * This method sorts the thread's free lists, so that successive parts of memory come after each
+	 * other. This can improve performance for data structures that allocate many elements from
+	 * the pool like lists and graphs.
+	 */
+	static OGDF_EXPORT void defragThread();
+
+	//! Reports the number of pooled memory chunks in the global free lists for each possible size up to TABLE_SIZE.
+	static OGDF_EXPORT void getGlobalFreeListSizes(std::vector<size_t>& sizes);
+
+	//! Reports the number of pooled memory chunks in the thread's free lists for each possible size up to TABLE_SIZE.
+	static OGDF_EXPORT void getThreadFreeListSizes(std::vector<size_t>& sizes);
 
 private:
 	static inline void enterCS() {
@@ -141,12 +160,6 @@ private:
 	static MemElemPtr allocateBlock();
 	static void makeSlices(MemElemPtr p, int nWords, int nSlices);
 
-	static size_t unguardedMemGlobalFreelist();
-
-	//! Contains allocated but free memory that may be used by all threads.
-	//! Filled upon exiting a thread that allocated memory that was later freed.
-	static PoolElement s_pool[TABLE_SIZE];
-
 	//! Holds all allocated memory independently of whether it is cleared in chunks of size #BLOCK_SIZE.
 	static BlockChain* s_blocks;
 
@@ -160,6 +173,10 @@ private:
 #ifdef OGDF_MEMORY_POOL_NTS
 	static MemElemPtr s_tp[TABLE_SIZE];
 #else
+	//! Contains allocated but free memory that may be used by all threads.
+	//! Filled upon exiting a thread that allocated memory that was later freed.
+	static PoolElement s_pool[TABLE_SIZE];
+
 	static std::mutex s_mutex;
 	//! Contains the allocated but free memory for a single thread.
 	static thread_local MemElemPtr s_tp[TABLE_SIZE];

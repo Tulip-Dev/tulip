@@ -32,12 +32,21 @@
 
 #pragma once
 
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphList.h>
 #include <ogdf/basic/List.h>
+#include <ogdf/basic/PriorityQueue.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/basic/extended_graph_alg.h>
+#include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/graphalg/MinSteinerTreeModule.h>
 #include <ogdf/graphalg/steiner_tree/EdgeWeightedGraphCopy.h>
 
+#include <limits>
+
 namespace ogdf {
+template<typename T>
+class EdgeWeightedGraph;
 
 /**
  * This class implements the minimum Steiner tree 2-approximation algorithm
@@ -128,7 +137,7 @@ T MinSteinerTreeTakahashi<T>::call(const EdgeWeightedGraph<T>& G, const List<nod
 	OGDF_ASSERT(isConnected(G));
 
 	EdgeWeightedGraphCopy<T> terminalSpanningTree;
-	terminalSpanningTree.createEmpty(G);
+	terminalSpanningTree.setOriginalGraph(G);
 	terminalDijkstra(G, terminalSpanningTree, startNode, terminals.size(), isTerminal);
 
 	finalSteinerTree = new EdgeWeightedGraphCopy<T>(G);

@@ -31,19 +31,41 @@
 
 #pragma once
 
+#include <ogdf/basic/Array.h>
 #include <ogdf/basic/BoundedQueue.h>
+#include <ogdf/basic/EpsilonTest.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/Math.h>
+#include <ogdf/basic/PriorityQueue.h>
 #include <ogdf/basic/SubsetEnumerator.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/extended_graph_alg.h>
+#include <ogdf/basic/simple_graph_alg.h>
+#include <ogdf/graphalg/Dijkstra.h>
 #include <ogdf/graphalg/MinSteinerTreeMehlhorn.h>
 #include <ogdf/graphalg/MinSteinerTreeTakahashi.h>
 #include <ogdf/graphalg/SteinerTreeLowerBoundDualAscent.h>
+#include <ogdf/graphalg/Voronoi.h>
+#include <ogdf/graphalg/steiner_tree/EdgeWeightedGraph.h>
+#include <ogdf/graphalg/steiner_tree/EdgeWeightedGraphCopy.h>
 #include <ogdf/graphalg/steiner_tree/HeavyPathDecomposition.h>
 
+#include <algorithm>
 #include <forward_list>
+#include <functional>
+#include <iostream>
+#include <limits>
 #include <memory>
 #include <set>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 
 namespace ogdf {
+template<typename T>
+class MinSteinerTreeModule;
 
 // Helpers:
 namespace steiner_tree {
@@ -168,7 +190,7 @@ public:
 
 		// get reduced and original solution from compact copy solution
 		EdgeWeightedGraphCopy<T> reducedSolution;
-		reducedSolution.createEmpty(m_copyGraph);
+		reducedSolution.setOriginalGraph(m_copyGraph);
 		for (node v : m_copyGraph.nodes) {
 			if (ccSolution->copy(nCopy[v]) != nullptr) { // is in solution
 				reducedSolution.newNode(v);
@@ -692,7 +714,7 @@ template<typename T>
 void SteinerTreePreprocessing<T>::computeOriginalSolution(
 		const EdgeWeightedGraphCopy<T>& reducedGraphSolution,
 		EdgeWeightedGraphCopy<T>& correspondingOriginalSolution) {
-	correspondingOriginalSolution.createEmpty(m_origGraph); // note that it is not cleared!
+	correspondingOriginalSolution.setOriginalGraph(m_origGraph); // note that it is not cleared!
 
 	Array<bool, int> isInSolution(-(m_origGraph.numberOfNodes() + m_origGraph.numberOfEdges()), -1,
 			false);

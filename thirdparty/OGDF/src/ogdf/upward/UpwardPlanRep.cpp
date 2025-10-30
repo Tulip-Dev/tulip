@@ -29,11 +29,19 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
-#include <ogdf/basic/FaceSet.h>
+#include <ogdf/basic/CombinatorialEmbedding.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/basic/tuples.h>
 #include <ogdf/upward/FaceSinkGraph.h>
 #include <ogdf/upward/UpwardPlanRep.h>
+
+#include <utility>
 
 namespace ogdf {
 
@@ -100,7 +108,7 @@ void UpwardPlanRep::copyMe(const UpwardPlanRep& UPR) {
 	NodeArray<node> vCopy;
 	EdgeArray<edge> eCopy;
 
-	Graph::construct(UPR, vCopy, eCopy);
+	insert(UPR, vCopy, eCopy);
 
 	// initGC
 	m_pGraph = UPR.m_pGraph;
@@ -174,7 +182,7 @@ void UpwardPlanRep::copyMe(const UpwardPlanRep& UPR) {
 
 UpwardPlanRep& UpwardPlanRep::operator=(const UpwardPlanRep& cp) {
 	clear();
-	createEmpty(cp.original());
+	setOriginalGraph(cp.original());
 	isAugmented = cp.isAugmented;
 	extFaceHandle = nullptr;
 	crossings = cp.crossings;

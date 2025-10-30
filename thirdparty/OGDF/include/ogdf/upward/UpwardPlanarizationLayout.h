@@ -31,10 +31,16 @@
 
 #pragma once
 
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphAttributes.h>
 #include <ogdf/basic/LayoutModule.h>
 #include <ogdf/upward/LayerBasedUPRLayout.h>
 #include <ogdf/upward/SubgraphUpwardPlanarizer.h>
+#include <ogdf/upward/UPRLayoutModule.h>
 #include <ogdf/upward/UpwardPlanRep.h>
+#include <ogdf/upward/UpwardPlanarizerModule.h>
+
+#include <memory>
 
 namespace ogdf {
 
@@ -53,7 +59,7 @@ public:
 	virtual void call(GraphAttributes& GA) override {
 		if (GA.constGraph().numberOfNodes() > 2) {
 			UpwardPlanRep UPR;
-			UPR.createEmpty(GA.constGraph());
+			UPR.setOriginalGraph(GA.constGraph());
 			m_UpwardPlanarizer->call(UPR);
 			m_layout->call(UPR, GA);
 			m_cr_nr = UPR.numberOfCrossings();

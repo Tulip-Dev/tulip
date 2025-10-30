@@ -31,8 +31,13 @@
 
 #pragma once
 
+#include <ogdf/basic/Graph.h>
 #include <ogdf/basic/GraphAttributes.h>
 #include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/basic.h>
+
+#include <memory>
+#include <string>
 
 namespace ogdf {
 
@@ -71,9 +76,9 @@ private:
 public:
 	//! constructs empty simdraw instance
 	/**
-	* GraphAttributes::edgeSubGraphs is activated.
-	* No other attributes are active.
-	*/
+	 * GraphAttributes::edgeSubGraphs is activated.
+	 * No other attributes are active.
+	 */
 	SimDraw();
 
 	//! returns graph
@@ -103,9 +108,9 @@ public:
 
 	//! returns true if node \p v is marked as dummy
 	/**
-	* All dummy node features are introduced for usage when running
-	* callSubgraphPlanarizer of SimDrawCaller.
-	*/
+	 * All dummy node features are introduced for usage when running
+	 * callSubgraphPlanarizer of SimDrawCaller.
+	 */
 	const bool& isDummy(node v) const { return m_isDummy[v]; }
 
 	//! returns true if node \p v is marked as dummy
@@ -134,18 +139,18 @@ public:
 
 	//! calculates maximum number of input graphs
 	/**
-	* Subgraphs are numbered from 0 to 31.
-	* This method returns the number of the maximal used subgraph.
-	* If the graph is empty, the function returns -1.
-	*/
+	 * Subgraphs are numbered from 0 to 31.
+	 * This method returns the number of the maximal used subgraph.
+	 * If the graph is empty, the function returns -1.
+	 */
 	int maxSubGraph() const;
 
 	//! returns number of BasicGraphs in m_G
 	/**
-	* This function uses maxSubGraph to return the number of
-	* basic graphs contained in m_G.
-	* If the graph is empty, the function returns 0.
-	*/
+	 * This function uses maxSubGraph to return the number of
+	 * basic graphs contained in m_G.
+	 * If the graph is empty, the function returns 0.
+	 */
 	int numberOfBasicGraphs() const;
 
 	//! calls GraphAttributes::readGML
@@ -154,32 +159,32 @@ public:
 	void writeGML(const char* fileName) const;
 
 	//! returns graph consisting of all edges and nodes from SubGraph \p i
-	const Graph getBasicGraph(int i) const;
+	std::unique_ptr<GraphCopy> getBasicGraph(int i) const;
 	//! returns graphattributes associated with basic graph \p i
 	/**
-	* Supported attributes are:
-	* nodeGraphics, edgeGraphics, edgeLabel, nodeLabel, nodeId,
-	* edgeIntWeight and edgeColor.
-	*/
+	 * Supported attributes are:
+	 * nodeGraphics, edgeGraphics, edgeLabel, nodeLabel, nodeId,
+	 * edgeIntWeight and edgeColor.
+	 */
 	void getBasicGraphAttributes(int i, GraphAttributes& GA, Graph& G);
 
 	//! adds new GraphAttributes to m_G
 	/**
-	* If the number of subgraphs in m_G is less than 32, this
-	* function will add the new GraphAttributes \p GA to m_G
-	* and return true.
-	* Otherwise this function returns false.
-	* The function uses the current compare mode.
-	*/
+	 * If the number of subgraphs in m_G is less than 32, this
+	 * function will add the new GraphAttributes \p GA to m_G
+	 * and return true.
+	 * Otherwise this function returns false.
+	 * The function uses the current compare mode.
+	 */
 	bool addGraphAttributes(const GraphAttributes& GA);
 
 	//! adds the graph g to the instance m_G
 	/**
-	* If the number of subgraphs in m_G is less than 32 and
-	* m_compareBy is set to index, this function will add graph
-	* \p G to m_G and return true.
-	* Otherwise this function returns false.
-	*/
+	 * If the number of subgraphs in m_G is less than 32 and
+	 * m_compareBy is set to index, this function will add graph
+	 * \p G to m_G and return true.
+	 * Otherwise this function returns false.
+	 */
 	bool addGraph(const Graph& G);
 
 	//! gives access to new attribute if not already given
@@ -195,19 +200,19 @@ private:
 
 	//! compares two nodes \p v and \p w by their labels
 	/**
-	* This method only works, if attribute nodeLabel is activated
-	* and set properly.
-	* Otherwise it is recommended to use compareById.
-	*/
+	 * This method only works, if attribute nodeLabel is activated
+	 * and set properly.
+	 * Otherwise it is recommended to use compareById.
+	 */
 	bool compareByLabel(const GraphAttributes& vGA, node v, const GraphAttributes& wGA, node w) const {
 		return vGA.label(v) == wGA.label(w);
 	}
 
 	//! compares two nodes \p v and \p w by compare mode stored in m_compareBy
 	/**
-	* This method checks whether m_compareBy was set to index or label and
-	* uses the corresponding compare method.
-	*/
+	 * This method checks whether m_compareBy was set to index or label and
+	 * uses the corresponding compare method.
+	 */
 	bool compare(const GraphAttributes& vGA, node v, const GraphAttributes& wGA, node w) const;
 };
 

@@ -37,15 +37,26 @@
 
 #pragma once
 
+#include <ogdf/basic/ArrayBuffer.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphAttributes.h>
 #include <ogdf/basic/GraphCopy.h>
-#include <ogdf/basic/GridLayout.h>
-#include <ogdf/basic/Layout.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/planarity/EdgeTypePatterns.h>
 #include <ogdf/planarity/NodeTypePatterns.h>
 
+#include <iosfwd>
+
 namespace ogdf {
 
+class CombinatorialEmbedding;
+class GridLayout;
+class Layout;
 class OrthoRep;
+class FaceSet;
+template<class E>
+class List;
 
 //! Planarized representations (of a connected component) of a graph.
 /**
@@ -614,7 +625,7 @@ public:
 	/**
 	 * \pre \p eOrig s an edge in the original graph.
 	 */
-	void removeEdgePathEmbedded(CombinatorialEmbedding& E, edge eOrig, FaceSet<false>& newFaces) {
+	void removeEdgePathEmbedded(CombinatorialEmbedding& E, edge eOrig, FaceSet& newFaces) {
 		GraphCopy::removeEdgePathEmbedded(E, eOrig, newFaces);
 	}
 
@@ -632,7 +643,7 @@ public:
 	 * @param crossedEdge is the edge that is replaced by two new edges.
 	 * @param topDown is used as follows: If set to true, \p crossingEdge will cross
 	 *        \p crossedEdge from right to left, otherwise from left to right.
-	*/
+	 */
 	edge insertCrossing(edge& crossingEdge, edge crossedEdge, bool topDown);
 
 	//! @}

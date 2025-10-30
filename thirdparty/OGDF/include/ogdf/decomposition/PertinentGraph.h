@@ -32,10 +32,9 @@
 #pragma once
 
 #include <ogdf/basic/Graph.h>
+#include <ogdf/basic/basic.h>
 
 namespace ogdf {
-
-class OGDF_EXPORT SPQRTree;
 
 //! Pertinent graphs of nodes in an SPQR-tree.
 /**
@@ -57,7 +56,7 @@ class OGDF_EXPORT SPQRTree;
  * of the skeletons of \a T.
  */
 class OGDF_EXPORT PertinentGraph {
-	friend class OGDF_EXPORT SPQRTree;
+	friend class SPQRTree;
 
 public:
 	// constructor
@@ -73,7 +72,7 @@ public:
 
 	//! Initialization of a pertinent graph of tree node \p vT.
 	void init(node vT) {
-		m_P = Graph();
+		m_P.clear();
 		m_vT = vT;
 		m_vEdge = m_skRefEdge = nullptr;
 		m_origV.init(m_P, nullptr);

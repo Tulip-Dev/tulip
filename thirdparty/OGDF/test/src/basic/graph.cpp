@@ -30,9 +30,23 @@
  */
 
 #include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/basic/graph_generators.h>
 
+#include <array>
+#include <exception>
+#include <functional>
+#include <initializer_list>
+#include <sstream>
+#include <string>
+#include <vector>
+
 #include <resources.h>
+
+#include <testing.h>
 
 /**
  * Returns an arbitrary edge where both nodes have at least \c minDegree incident edges.
@@ -87,9 +101,6 @@ go_bandit([]() {
 			AssertThat(graph.maxNodeIndex(), IsLessThan(0));
 			AssertThat(graph.maxEdgeIndex(), IsLessThan(0));
 			AssertThat(graph.maxAdjEntryIndex(), IsLessThan(0));
-			AssertThat(graph.nodeArrayTableSize(), IsGreaterThan(0));
-			AssertThat(graph.edgeArrayTableSize(), IsGreaterThan(0));
-			AssertThat(graph.adjEntryArrayTableSize(), IsGreaterThan(0));
 			AssertThat(graph.firstNode(), IsNull());
 			AssertThat(graph.lastNode(), IsNull());
 			AssertThat(graph.firstEdge(), IsNull());

@@ -33,7 +33,16 @@
 
 #pragma once
 
-#include <ogdf/basic/AdjEntryArray.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/comparer.h>
+#include <ogdf/basic/internal/config_autogen.h>
+#include <ogdf/basic/internal/graph_iterators.h>
+#include <ogdf/basic/memory.h>
+
+#include <functional>
+#include <iosfwd>
 
 namespace ogdf {
 
@@ -164,9 +173,24 @@ public:
 	OGDF_NEW_DELETE
 };
 
-class FaceArrayBase;
-template<class T>
-class FaceArray;
+using CombinatorialEmbeddingRegistry =
+		RegistryBase<face, ConstCombinatorialEmbedding, internal::GraphIterator<face>>;
+
+//! RegisteredArray for labeling the \ref face "faces" of a CombinatorialEmbedding.
+template<class Value, bool WithDefault>
+class FaceArrayBase : public RegisteredArray<ConstCombinatorialEmbedding, Value, WithDefault> {
+	using RA = RegisteredArray<ConstCombinatorialEmbedding, Value, WithDefault>;
+
+public:
+	using RA::RA;
+
+	//! Returns a pointer to the associated combinatorial embedding.
+	ConstCombinatorialEmbedding* embeddingOf() const { return RA::registeredAt(); }
+};
+
+#define OGDF_DECL_REG_ARRAY_TYPE(v, c) FaceArrayBase<v, c>
+OGDF_DECL_REG_ARRAY(FaceArray)
+#undef OGDF_DECL_REG_ARRAY_TYPE
 
 /**
  * \brief Combinatorial embeddings of planar graphs.
@@ -189,21 +213,14 @@ class FaceArray;
  * \see CombinatorialEmbedding provides additional functionality for modifying
  *      the embedding.
  */
-class OGDF_EXPORT ConstCombinatorialEmbedding {
+class OGDF_EXPORT ConstCombinatorialEmbedding : public CombinatorialEmbeddingRegistry {
 protected:
 	const Graph* m_cpGraph; //!< The associated graph.
 
 	int m_faceIdCount; //!< The index assigned to the next created face.
-	int m_faceArrayTableSize; //!< The current table size of face arrays.
 
 	AdjEntryArray<face> m_rightFace; //!< The face to which an adjacency entry belongs.
 	face m_externalFace; //! The external face.
-
-	mutable ListPure<FaceArrayBase*> m_regFaceArrays; //!< The registered face arrays.
-
-#ifndef OGDF_MEMORY_POOL_NTS
-	mutable std::mutex m_mutexRegArrays; //!< The critical section for protecting shared acces to register/unregister methods.
-#endif
 
 public:
 	//! Provides a bidirectional iterator to a face in a combinatorial embedding.
@@ -212,19 +229,15 @@ public:
 	//! The container containing all face objects.
 	internal::GraphObjectContainer<FaceElement> faces;
 
-	/** @{
-	 * \brief Creates a combinatorial embedding associated with no graph.
-	 */
+	//! Creates a combinatorial embedding associated with no graph.
 	ConstCombinatorialEmbedding();
 
+	//! Creates a combinatorial embedding of graph \p G.
 	/**
-	 * \brief Creates a combinatorial embedding of graph \p G.
-	 *
 	 * \pre Graph \p G must be embedded, i.e., the adjacency lists of its nodes
 	 *      must define an embedding.
 	 */
 	explicit ConstCombinatorialEmbedding(const Graph& G);
-
 
 	//! Copy constructor.
 	ConstCombinatorialEmbedding(const ConstCombinatorialEmbedding& C);
@@ -238,9 +251,8 @@ public:
 	//! Returns whether the embedding is associated with a graph.
 	bool valid() const { return m_cpGraph != nullptr; }
 
-	/** @} @{
-	 * \brief Returns the associated graph of the combinatorial embedding.
-	 *
+	//! Returns the associated graph of the combinatorial embedding.
+	/**
 	 * \pre The associated graph exists. See #valid().
 	 */
 	const Graph& getGraph() const {
@@ -251,9 +263,7 @@ public:
 	//! Returns associated graph
 	operator const Graph&() const { return getGraph(); }
 
-	/** @} @{
-	 * \brief Returns the first face in the list of all faces.
-	 */
+	//! Returns the first face in the list of all faces.
 	face firstFace() const { return faces.head(); }
 
 	//! Returns the last face in the list of all faces.
@@ -262,8 +272,8 @@ public:
 	//! Returns the number of faces.
 	int numberOfFaces() const { return faces.size(); }
 
-	/** @} @{
-	 * \brief Returns the face to the right of \p adj, i.e., the face containing \p adj.
+	//! Returns the face to the right of \p adj, i.e., the face containing \p adj.
+	/**
 	 * @param adj is an adjecency element in the associated graph.
 	 */
 	face rightFace(adjEntry adj) const { return m_rightFace[adj]; }
@@ -274,15 +284,10 @@ public:
 	 */
 	face leftFace(adjEntry adj) const { return m_rightFace[adj->twin()]; }
 
-	/** @} @{
-	 * \brief Returns the largest used face index.
-	 */
+	//! Returns the largest used face index.
 	int maxFaceIndex() const { return m_faceIdCount - 1; }
 
-	//! Returns the table size of face arrays associated with this embedding.
-	int faceArrayTableSize() const { return m_faceArrayTableSize; }
-
-	/** @} @{
+	/**
 	 * Returns a random face.
 	 * \c nullptr is returned if no feasible face exists.
 	 *
@@ -295,9 +300,7 @@ public:
 	//! Returns a face of maximal size.
 	face maximalFace() const;
 
-	/** @} @{
-	 * \brief Returns the external face.
-	 */
+	//! Returns the external face.
 	face externalFace() const { return m_externalFace; }
 
 	/**
@@ -313,9 +316,8 @@ public:
 		return m_rightFace[e->adjSource()] == m_rightFace[e->adjTarget()];
 	}
 
-	/** @} @{
-	 * \brief Initializes the embedding for graph \p G.
-	 *
+	//! Initializes the embedding for graph \p G.
+	/**
 	 * \pre Graph \p G must be embedded, i.e., the adjacency lists of its nodes
 	 *      must define an embedding.
 	 */
@@ -327,28 +329,35 @@ public:
 	void computeFaces();
 
 #ifdef OGDF_DEBUG
-	//! @} @{
 	//! Asserts that this embedding is consistent.
 	void consistencyCheck() const;
 #endif
 
+	static inline int keyToIndex(face key) { return key->index(); }
 
-	/** @} @{
-	 * \brief Registers the face array \p pFaceArray.
-	 *
-	 * This method is only used by face arrays.
-	 */
-	ListIterator<FaceArrayBase*> registerArray(FaceArrayBase* pFaceArray) const;
+	bool isKeyAssociated(face key) const {
+		if (key == nullptr) {
+			return false;
+		}
+#ifdef OGDF_DEBUG
+		if (key->embeddingOf() == this) {
+			OGDF_ASSERT(keyToIndex(key) < this->getArraySize());
+			return true;
+		} else {
+			return false;
+		}
+#else
+		return true;
+#endif
+	}
 
-	/**
-	 * \brief Unregisters the face array identified by \p it.
-	 *
-	 * This method is only used by face arrays.
-	 */
-	void unregisterArray(ListIterator<FaceArrayBase*> it) const;
+	int calculateArraySize(int add) const { return calculateTableSize(m_faceIdCount + add); }
 
-	//! Move the registration \p it of a node array to \p pFaceArray (used with move semantics for face arrays).
-	void moveRegisterArray(ListIterator<FaceArrayBase*> it, FaceArrayBase* pFaceArray) const;
+	int maxKeyIndex() const { return (m_faceIdCount)-1; }
+
+	face_iterator begin() const { return faces.begin(); }
+
+	face_iterator end() const { return faces.end(); }
 
 	/**
 	 * Identifies a common face of two nodes and returns the respective adjacency entry.
@@ -376,14 +385,9 @@ public:
 	 */
 	adjEntry findCommonFace(const node v, const node w, adjEntry& adjW, bool left = true) const;
 
-	/** @} */
-
 protected:
 	//! Create a new face.
 	face createFaceElement(adjEntry adjFirst);
-
-	//! Reinitialize associated face arrays.
-	void reinitArrays();
 };
 
 /**
@@ -557,9 +561,16 @@ public:
 	/**
 	 * \brief Removes edge \p e and joins the two faces adjacent to \p e.
 	 * @param e is an edge in the associated graph.
-	 * \return the resulting (joined) face.
+	 * \return the resulting (joined) face, which will be based on the larger one of the two faces separated by \p e
 	 */
 	face joinFaces(edge e);
+
+	/**
+	 * \brief Removes edge \p e corresponding to \p adj and joins the two faces adjacent to \p e.
+	 * @param adj is an adjEntry in the associated graph.
+	 * \return the resulting (joined) face, which will be the one to the right of \p adj
+	 */
+	face joinFaces(adjEntry adj);
 
 	//! Reverses edges \p e and updates embedding.
 	void reverseEdge(edge e);

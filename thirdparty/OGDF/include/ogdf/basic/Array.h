@@ -32,21 +32,26 @@
 
 #pragma once
 
-#include <ogdf/basic/Reverse.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/basic/comparer.h>
 #include <ogdf/basic/exceptions.h>
 #include <ogdf/basic/memory.h>
 
+#include <algorithm>
+#include <cstdlib>
+#include <initializer_list>
+#include <new>
+#include <ostream>
 #include <random>
 #include <type_traits>
 
 namespace ogdf {
 
+template<class E, bool isConst>
+class ArrayReverseIteratorBase;
 template<class E, class INDEX>
 class ArrayBuffer;
 
-template<class E, bool isConst>
-class ArrayReverseIteratorBase;
 template<class E>
 using ArrayConstIterator = const E*;
 template<class E>
@@ -266,7 +271,7 @@ public:
 	/**
 	 * The array \p A is empty afterwards.
 	 */
-	Array(Array<E, INDEX>&& A)
+	Array(Array<E, INDEX>&& A) noexcept
 		: m_vpStart(A.m_vpStart)
 		, m_pStart(A.m_pStart)
 		, m_pStop(A.m_pStop)
@@ -848,7 +853,7 @@ void Array<E, INDEX>::grow(INDEX add) {
 
 	// initialize new array entries
 	for (E* pDest = m_pStart + sOld; pDest < m_pStop; pDest++) {
-		new (pDest) E;
+		new (pDest) E();
 	}
 }
 
@@ -877,7 +882,7 @@ void Array<E, INDEX>::initialize() {
 	E* pDest = m_pStart;
 	try {
 		for (; pDest < m_pStop; pDest++) {
-			new (pDest) E;
+			new (pDest) E();
 		}
 	} catch (...) {
 		while (--pDest >= m_pStart) {
@@ -981,8 +986,6 @@ std::ostream& operator<<(std::ostream& os, const ogdf::Array<E, INDEX>& a) {
 }
 
 }
-
-#include <ogdf/basic/ArrayBuffer.h>
 
 namespace ogdf {
 

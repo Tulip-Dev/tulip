@@ -30,12 +30,20 @@
  */
 
 #include <ogdf/basic/CombinatorialEmbedding.h>
-#include <ogdf/basic/FaceArray.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphList.h>
 #include <ogdf/basic/Math.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/graph_generators.h>
 
+#include <exception>
+#include <functional>
+#include <sstream>
+#include <string>
+
 #include <graphs.h>
+
 #include <testing.h>
 
 constexpr int NUMBER_OF_ITERATIONS = 17;
@@ -292,7 +300,7 @@ void testConstCombinatorialEmbedding() {
 		Graph graph;
 		randomPlanarTriconnectedGraph(graph, NUMBER_OF_NODES * 10, NUMBER_OF_EDGES * 10);
 		T emb(graph);
-		AssertThat(emb.faceArrayTableSize(), IsGreaterThan(emb.numberOfFaces() - 1));
+		AssertThat(emb.getArraySize(), IsGreaterThan(emb.numberOfFaces() - 1));
 	});
 
 	for (int i = 1; i <= NUMBER_OF_ITERATIONS; i++) {

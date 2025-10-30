@@ -31,10 +31,14 @@
 
 #pragma once
 
-#include <ogdf/basic/List.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/layered/HierarchyLayoutModule.h>
 
 namespace ogdf {
+class GraphAttributes;
+class HierarchyLevelsBase;
+template<class E>
+class List;
 
 /**
  * \brief Coordinate assignment phase for the Sugiyama algorithm by Buchheim et al.
@@ -283,7 +287,7 @@ private:
 	 *   1 if it is preferred to move the long edge to the right,
 	 *   0 if there is no preference
 	 * @param marked Array for all nodes. Stores for every node, whether moveLongEdge has already been applied to it.
-	*/
+	 */
 	void moveLongEdge(int actNode, int dir, bool* marked);
 
 	/**

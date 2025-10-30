@@ -32,9 +32,21 @@
 
 #pragma once
 
-#include <ogdf/basic/NodeSet.h>
+#include <ogdf/basic/EpsilonTest.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphAttributes.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/GraphSets.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/graphalg/SpannerIteratedWrapper.h>
 #include <ogdf/graphalg/SpannerModule.h>
+
+#include <cmath>
+#include <limits>
+#include <string>
+#include <utility>
 
 namespace ogdf {
 
@@ -125,7 +137,7 @@ private:
 	 */
 	void phase1() {
 		// init
-		NodeSet<true> clusterCenters(m_G);
+		NodeSet clusterCenters(m_G);
 		for (node v : m_G.nodes) {
 			m_cluster[v] = v; // At the beginning each node is it's own cluster
 			clusterCenters.insert(v);
@@ -146,7 +158,7 @@ private:
 			NodeArray<node> oldCluster = m_cluster; // oldCluster is the cluster of iteration i-1
 
 			// 1: Sample new cluster centers
-			NodeSet<true> sampledClusterCenters(m_G);
+			NodeSet sampledClusterCenters(m_G);
 			for (node oldCenter : clusterCenters.nodes()) {
 				if (randomDouble(0.0, 1.0) <= probability) {
 					sampledClusterCenters.insert(oldCenter);

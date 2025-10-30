@@ -32,9 +32,14 @@
 
 #pragma once
 
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/layered/LayerByLayerSweep.h>
 
+#include <cstdint>
+
 namespace ogdf {
+class Level;
 
 class OGDF_EXPORT TwoLayerCrossMinSimDraw : public LayerByLayerSweep {
 public:
@@ -45,14 +50,14 @@ public:
 	virtual TwoLayerCrossMinSimDraw* clone() const = 0;
 
 	/**
-	* \brief Performs crossing minimization for level \p L.
-	*
-	* @param L is the level in the hierarchy on which nodes are permuted; the
-	*        neighbor level (fixed level) is determined by the hierarchy.
-	* @param esg points to an edge array which specifies to which subgraphs
-	*        an edge belongs; there are up to 32 possible subgraphs each of which
-	*        is represented by a bit of an <code>uint32_t</code>.
-	*/
+	 * \brief Performs crossing minimization for level \p L.
+	 *
+	 * @param L is the level in the hierarchy on which nodes are permuted; the
+	 *        neighbor level (fixed level) is determined by the hierarchy.
+	 * @param esg points to an edge array which specifies to which subgraphs
+	 *        an edge belongs; there are up to 32 possible subgraphs each of which
+	 *        is represented by a bit of an <code>uint32_t</code>.
+	 */
 	virtual void call(Level& L, const EdgeArray<uint32_t>* esg) = 0;
 
 	void call(Level& L) = 0;

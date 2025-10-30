@@ -34,12 +34,18 @@
 
 #pragma once
 
+#include <ogdf/basic/EpsilonTest.h>
+#include <ogdf/basic/Graph.h>
 #include <ogdf/basic/GraphAttributes.h>
 #include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
 #include <ogdf/basic/Module.h>
 #include <ogdf/basic/Stopwatch.h>
-#include <ogdf/basic/extended_graph_alg.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/graphalg/ShortestPathAlgorithms.h>
+
+#include <cstdint>
+#include <string>
 
 namespace ogdf {
 
@@ -142,7 +148,7 @@ protected:
 
 		const Graph& G = GA.constGraph();
 		m_spanner->clear();
-		m_spanner->createEmpty(G);
+		m_spanner->setOriginalGraph(G);
 		for (node n : G.nodes) {
 			m_spanner->newNode(n);
 		}

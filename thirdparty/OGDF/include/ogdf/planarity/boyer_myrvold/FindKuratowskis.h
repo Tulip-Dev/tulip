@@ -31,10 +31,17 @@
 
 #pragma once
 
-#include <ogdf/planarity/boyer_myrvold/BoyerMyrvoldPlanar.h>
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/ArrayBuffer.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
 
 namespace ogdf {
-
+class BoyerMyrvoldPlanar;
+enum class BoyerMyrvoldEdgeType;
+template<class E>
+class ListPure;
 
 /**
  * %List of externally active nodes strictly between x and y for minortypes \a B and \a E
@@ -263,7 +270,7 @@ protected:
 
 	//! A list to all separated DFS-children of node
 	/** The list is sorted by lowpoint values (in linear time)
-	*/
+	 */
 	const NodeArray<ListPure<node>>& m_separatedDFSChildList;
 
 	//! Identifies the rootnode of the child bicomp the given backedge points to

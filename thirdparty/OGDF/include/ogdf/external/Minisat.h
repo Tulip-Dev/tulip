@@ -31,10 +31,13 @@
 
 #pragma once
 
-#include <ogdf/basic/basic.h>
+// IWYU pragma: always_keep
 
-#include <ogdf/lib/minisat/core/Solver.h>
-#include <ogdf/lib/minisat/core/SolverTypes.h>
+#include <ogdf/lib/minisat/core/Solver.h> // IWYU pragma: export
+#include <ogdf/lib/minisat/core/SolverTypes.h> // IWYU pragma: export
+
+// IWYU pragma: begin_keep
+#include <ogdf/basic/basic.h>
 
 #include <fstream>
 #include <iostream>
@@ -44,6 +47,10 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+
+// IWYU pragma: end_keep
+
+#pragma GCC visibility push(default)
 
 namespace Minisat {
 
@@ -71,8 +78,8 @@ public:
 	// values in input are staring with 1/-1 and are recalculated to 0-base in this function
 	//! adds a literal to the clause
 	/**
-	* @param signedVar is a signed int representing a variable
-	*/
+	 * @param signedVar is a signed int representing a variable
+	 */
 	void add(Internal::Var signedVar) {
 		Internal::Lit lit;
 		if (signedVar >= 0) {
@@ -85,8 +92,8 @@ public:
 
 	//! add multiple literals to the clause
 	/**
-	* @param Amount is the number of literals to add to the clause
-	*/
+	 * @param Amount is the number of literals to add to the clause
+	 */
 	void addMultiple(int Amount, ...);
 
 	//! sets the sign of a variable if its present within the clause
@@ -144,9 +151,9 @@ public:
 using clause = Clause*;
 
 /**
-* Represents a simple class for model storage.
-* A model is a feasible assignment of variables.
-*/
+ * Represents a simple class for model storage.
+ * A model is a feasible assignment of variables.
+ */
 class OGDF_EXPORT Model {
 private:
 	//! internal storage of a model by minisat
@@ -205,11 +212,11 @@ public:
 };
 
 /**
-* The Formula class.
-* Variables and Clauses are added to the Formula.
-* The clauses can be resolved to solve a SAT problem.
-* Variables are linear indexed.
-*/
+ * The Formula class.
+ * Variables and Clauses are added to the Formula.
+ * The clauses can be resolved to solve a SAT problem.
+ * Variables are linear indexed.
+ */
 class OGDF_EXPORT Formula : private Internal::Solver {
 private:
 	std::stringstream m_messages;
@@ -235,14 +242,14 @@ public:
 
 	//! creates a new clause within the formula. If not all variables are known, missing ones are generated auomatically
 	/**
-* \returns a Pointer to the created Clause object
-*/
+	 * \returns a Pointer to the created Clause object
+	 */
 	Clause* newClause();
 
 	//! adds a clause to the formula's solver. If not all variables are known, missing ones are generated auomatically
 	/**
-* @param cl is a reference to the clause to be added to the formula
-*/
+	 * @param cl is a reference to the clause to be added to the formula
+	 */
 	void finalizeClause(const clause cl);
 
 	//! Add a clause given by a list of literals
@@ -257,9 +264,9 @@ public:
 
 	//! adds a clause to the formula's solver if all variables are known
 	/**
-* @param cl is a reference to an existing clause within the formula
-* \returns true if the clause was successfully added to the formula's solver, else return false and the clause is NOT added to the formula's solver
-*/
+	 * @param cl is a reference to an existing clause within the formula
+	 * \returns true if the clause was successfully added to the formula's solver, else return false and the clause is NOT added to the formula's solver
+	 */
 	bool finalizeNotExtensibleClause(const clause cl);
 
 	//! returns a clause at position pos in Formula
@@ -279,17 +286,17 @@ public:
 
 	//! tries to solve the formula
 	/**
-* @param ReturnModel is the model output
-* \returns true if the problem is satisfiable and writes the output model to param
-*/
+	 * @param ReturnModel is the model output
+	 * \returns true if the problem is satisfiable and writes the output model to param
+	 */
 	bool solve(Model& ReturnModel);
 
 	//! tries to solve the formula with a time limit in milliseconds
 	/**
- * @param ReturnModel is the model output
- * @param timeLimit is the time limit in milliseconds
- * \returns true if the problem is satisfiable and writes the output model to param
- */
+	 * @param ReturnModel is the model output
+	 * @param timeLimit is the time limit in milliseconds
+	 * \returns true if the problem is satisfiable and writes the output model to param
+	 */
 	bool solve(Model& ReturnModel, double& timeLimit);
 
 	Internal::Var getVarFromLit(const Internal::Lit& lit) { return Internal::var(lit); }
@@ -325,3 +332,5 @@ public:
 };
 
 }
+
+#pragma GCC visibility pop

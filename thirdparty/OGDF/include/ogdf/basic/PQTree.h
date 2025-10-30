@@ -32,13 +32,20 @@
 #pragma once
 
 #include <ogdf/basic/Array.h>
+#include <ogdf/basic/ArrayBuffer.h>
+#include <ogdf/basic/List.h>
 #include <ogdf/basic/Queue.h>
-#include <ogdf/basic/pqtree/PQInternalKey.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/internal/config_autogen.h>
 #include <ogdf/basic/pqtree/PQInternalNode.h>
 #include <ogdf/basic/pqtree/PQLeaf.h>
-#include <ogdf/basic/pqtree/PQLeafKey.h>
+#include <ogdf/basic/pqtree/PQLeafKey.h> // IWYU pragma: keep
 #include <ogdf/basic/pqtree/PQNode.h>
-#include <ogdf/basic/pqtree/PQNodeKey.h>
+#include <ogdf/basic/pqtree/PQNodeRoot.h>
+
+#include <fstream>
+#include <utility>
 
 namespace ogdf {
 
@@ -181,7 +188,7 @@ protected:
 	/**
 	 * Gives every node that has been used once in the
 	 * PQ-tree a unique identification number.
-	*/
+	 */
 	int m_identificationNumber;
 
 	//! Stores the number of leaves.
@@ -531,7 +538,7 @@ protected:
 	 * returning 0 as soon none of the facts is fulfilled.
 	 *
 	 * @return 1 if it succeeded in adding the \p child to \p parent, otherwise 0
-	*/
+	 */
 	virtual bool addNodeToNewParent(PQNode<T, X, Y>* parent, PQNode<T, X, Y>* child,
 			PQNode<T, X, Y>* leftBrother, PQNode<T, X, Y>* rightBrother);
 
@@ -608,7 +615,7 @@ protected:
 	 * and can only be accessed by inheritance.
 	 *
 	 * <b>This function does not check if \p parent is the parent node of
-	 * \p child</b>. This has to be guaranteed by the user. The reason for
+	 * \p child. </b> This has to be guaranteed by the user. The reason for
 	 * this riscfull approach lies in the details of the powerful data structure
 	 * PQ-tree. In order to reach linear runtime, the internal children
 	 * of a Q-node normally do not have valid parent pointers. So forcing

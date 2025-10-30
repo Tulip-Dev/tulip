@@ -31,10 +31,17 @@
 
 #pragma once
 
+#include <ogdf/basic/ArrayBuffer.h>
+#include <ogdf/basic/CombinatorialEmbedding.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/Observer.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/planarity/embedder/EmbedderBCTreeBase.h>
-#include <ogdf/planarity/embedder/EmbedderMaxFaceBiconnectedGraphs.h>
 
 namespace ogdf {
+class BCTree;
 
 //! Embedder that minimizes block-nesting depth for given embedded blocks.
 /**
@@ -46,6 +53,9 @@ class OGDF_EXPORT EmbedderMinDepthPiTa : public embedder::EmbedderBCTreeBase<fal
 public:
 	//constructor
 	EmbedderMinDepthPiTa() : m_useExtendedDepthDefinition(true), pm_blockCutfaceTree(nullptr) { }
+
+	/* needs to be deleted explicitly for MSVC<=16 and classes containing a NodeArrayP */
+	OGDF_NO_COPY(EmbedderMinDepthPiTa)
 
 	/**
 	 * \brief Computes an embedding of \p G.
@@ -186,7 +196,7 @@ private:
 	NodeArray<node> npBCTree_to_nBCTree;
 
 	/** all blocks */
-	NodeArray<Graph> blockG;
+	NodeArrayP<Graph> blockG;
 
 	/** a mapping of nodes in the auxiliaryGraph of the BC-tree to blockG */
 	NodeArray<NodeArray<node>> nH_to_nBlockEmbedding;
@@ -288,7 +298,7 @@ private:
 	 * given a node nT (cutvertex or block), G_nT is the subgraph of G
 	 * associated with the subtree of the BC-tree T rooted at nT
 	 */
-	NodeArray<Graph> G_nT;
+	NodeArrayP<Graph> G_nT;
 
 	/** a mapping of nodes in G_nT to nodes in G */
 	NodeArray<NodeArray<node>> nG_nT_to_nPG;

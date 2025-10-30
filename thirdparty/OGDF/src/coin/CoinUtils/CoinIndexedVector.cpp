@@ -10,7 +10,6 @@
 
 #include <cassert>
 #include <cstdio>
-#include <cstdint>
 
 #include "CoinTypes.hpp"
 #include "CoinFloatEqual.hpp"

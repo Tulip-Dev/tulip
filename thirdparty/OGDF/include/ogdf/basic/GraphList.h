@@ -32,19 +32,24 @@
 #pragma once
 
 #include <ogdf/basic/Array.h>
-#include <ogdf/basic/List.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/internal/config_autogen.h>
 #include <ogdf/basic/internal/graph_iterators.h>
+#include <ogdf/basic/memory.h>
+
+#include <iterator>
+#include <random>
+#include <utility>
 
 namespace ogdf {
 
-class Graph;
 class ClusterGraph;
-class ConstCombinatorialEmbedding;
 class CombinatorialEmbedding;
+class ConstCombinatorialEmbedding;
+class Graph;
 
 namespace internal {
 
-class OGDF_EXPORT GraphListBase;
 
 //! The base class for objects used by (hyper)graphs.
 /**
@@ -82,6 +87,9 @@ public:
 
 	//! Returns the size of the list.
 	int size() const { return m_size; }
+
+	//! Returns true iff the list is empty.
+	bool empty() const { return m_size == 0; }
 
 	//! Adds element \p pX at the end of the list.
 	void pushBack(GraphElement* pX) {
@@ -141,21 +149,26 @@ public:
 	//! Sorts the list according to \p newOrder.
 	template<class LIST>
 	void sort(const LIST& newOrder) {
-		GraphElement* pPred = nullptr;
-		typename LIST::const_iterator it = newOrder.begin();
-		if (!it.valid()) {
+		using std::begin;
+		using std::end;
+		sort(begin(newOrder), end(newOrder));
+	}
+
+	//! Sorts the list according to the range defined by two iterators.
+	template<class IT>
+	void sort(IT begin, IT end) {
+		if (begin == end) {
 			return;
 		}
-
-		m_head = *it;
-		for (; it.valid(); ++it) {
+		m_head = *begin;
+		GraphElement* pPred = nullptr;
+		for (auto it = begin; it != end; ++it) {
 			GraphElement* p = *it;
 			if ((p->m_prev = pPred) != nullptr) {
 				pPred->m_next = p;
 			}
 			pPred = p;
 		}
-
 		(m_tail = pPred)->m_next = nullptr;
 	}
 
@@ -287,6 +300,13 @@ public:
 template<class T>
 class GraphList : protected GraphListBase {
 public:
+	//! The value type (a pointer to a specific graph object)
+	using value_type = T*;
+	//! Provides a bidirectional iterator to an object in the container.
+	using iterator = GraphIterator<T*>;
+	//! Provides a bidirectional reverse iterator to an object in the container.
+	using reverse_iterator = GraphReverseIterator<T*>;
+
 	//! Constructs an empty list.
 	GraphList() { }
 
@@ -297,17 +317,14 @@ public:
 		}
 	}
 
-	//! Returns the size of the list.
-	int size() const { return m_size; }
+	using GraphListBase::empty;
+	using GraphListBase::size;
 
 	//! Returns the first element in the list.
 	T* head() const { return static_cast<T*>(m_head); }
 
 	//! Returns the last element in the list.
 	T* tail() const { return static_cast<T*>(m_tail); }
-
-	//! Returns true iff the list is empty.
-	bool empty() const { return m_size == 0; }
 
 	//! Adds element \p pX at the end of the list.
 	void pushBack(T* pX) { GraphListBase::pushBack(pX); }
@@ -364,26 +381,31 @@ public:
 		}
 	}
 
-	//! Sorts all elements according to \p newOrder.
-	template<class T_LIST>
-	void sort(const T_LIST& newOrder) {
-		GraphListBase::sort(newOrder);
-	}
+	//! Returns an iterator to the first element in the container.
+	iterator begin() const { return GraphList<T>::head(); }
 
-	//! Reverses the order of the list elements.
-	void reverse() { GraphListBase::reverse(); }
+	//! Returns an iterator to the one-past-last element in the container.
+	iterator end() const { return iterator(); }
+
+	//! Returns a reverse iterator to the last element in the container.
+	reverse_iterator rbegin() const { return reverse_iterator(GraphList<T>::tail()); }
+
+	//! Returns a reverse iterator to the one-before-first element in the container.
+	reverse_iterator rend() const { return reverse_iterator(); }
+
+	using GraphListBase::permute;
+	using GraphListBase::reverse;
+	using GraphListBase::sort;
 
 	//! Exchanges the positions of \p pX and \p pY in the list.
 	void swap(T* pX, T* pY) { GraphListBase::swap(pX, pY); }
 
-	using GraphListBase::permute;
 #ifdef OGDF_DEBUG
 	using GraphListBase::consistencyCheck;
 #endif
-
-	OGDF_NEW_DELETE
 };
 
+//! Public read-only interface for lists of graph objects.
 template<class GraphObject>
 class GraphObjectContainer : private GraphList<GraphObject> {
 	friend class ogdf::Graph;
@@ -391,31 +413,16 @@ class GraphObjectContainer : private GraphList<GraphObject> {
 	friend class ogdf::ConstCombinatorialEmbedding;
 	friend class ogdf::CombinatorialEmbedding;
 
-#if 0
-	GraphList<GraphObject> m_list;
-#endif
-
 public:
-	//! The value type (a pointer to a specific graph object)
-	using value_type = GraphObject*;
-	//! Provides a bidirectional iterator to an object in the container.
-	using iterator = GraphIterator<GraphObject*>;
-	//! Provides a bidirectional reverse iterator to an object in the container.
-	using reverse_iterator = GraphReverseIterator<GraphObject*>;
+	using typename GraphList<GraphObject>::value_type;
+	using typename GraphList<GraphObject>::iterator;
+	using typename GraphList<GraphObject>::reverse_iterator;
 
-	//! Returns an iterator to the first element in the container.
-	iterator begin() const { return GraphList<GraphObject>::head(); }
+	using GraphList<GraphObject>::begin;
+	using GraphList<GraphObject>::rbegin;
+	using GraphList<GraphObject>::end;
+	using GraphList<GraphObject>::rend;
 
-	//! Returns an iterator to the one-past-last element in the container.
-	iterator end() const { return iterator(); }
-
-	//! Returns a reverse iterator to the last element in the container.
-	reverse_iterator rbegin() const { return reverse_iterator(GraphList<GraphObject>::tail()); }
-
-	//! Returns a reverse iterator to the one-before-first element in the container.
-	reverse_iterator rend() const { return reverse_iterator(); }
-
-	using GraphList<GraphObject>::permute;
 	using GraphList<GraphObject>::size;
 	using GraphList<GraphObject>::empty;
 	using GraphList<GraphObject>::head;

@@ -31,8 +31,10 @@
 
 #pragma once
 
-#include <ogdf/basic/basic.h>
 #include <ogdf/basic/memory.h>
+
+#include <cstdlib>
+#include <ctime>
 
 namespace ogdf {
 
@@ -134,9 +136,9 @@ public:
 
 	//! Clears the current skiplist
 	/**
-	* If \p killData is true, the items of the Skiplist (which are stored as
-	* pointers) are automatically deleted.
-	*/
+	 * If \p killData is true, the items of the Skiplist (which are stored as
+	 * pointers) are automatically deleted.
+	 */
 	void clear(bool killData = false) {
 		Element* item = m_start[0];
 		while (item) {

@@ -28,11 +28,13 @@
  * License along with this program; if not, see
  * http://www.gnu.org/copyleft/gpl.html
  */
-#include "array_helper.h"
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphSets.h>
+#include <ogdf/basic/RegisteredSet.h>
+#include <ogdf/basic/graph_generators.h>
 
-using namespace ogdf;
-using namespace snowhouse;
-using namespace bandit;
+#include "array_helper.h" // IWYU pragma: associated
+#include <testing.h>
 
 go_bandit([]() {
 	auto chooseNode = [](const Graph& graph) { return graph.chooseNode(); };
@@ -41,8 +43,32 @@ go_bandit([]() {
 
 	auto createNode = [](Graph& graph) { return graph.newNode(); };
 
-	describeArray<NodeArray, node, int>("NodeArray filled with ints", 42, 43, chooseNode, allNodes,
-			createNode);
-	describeArray<NodeArray, node, List<int>>("NodeArray filled with lists of ints", {1, 2, 3},
-			{42}, chooseNode, allNodes, createNode);
+	auto deleteNode = [](Graph& graph, node n) { return graph.delNode(n); };
+
+	auto clearNodes = [](Graph& graph) { graph.clear(); };
+
+	auto init = [](Graph& graph) { randomGraph(graph, 42, 168); };
+
+	runBasicArrayTests<Graph, NodeArray, node>("NodeArray", init, chooseNode, allNodes, createNode);
+
+	describe("NodeArray filled with pointers", [&]() {
+		Graph G;
+		init(G);
+
+		it("initializes with nullptr values", [&]() {
+			NodeArray<int*> arr1(G);
+			NodeArray<int*, false> arr2(G);
+			AssertThat(arr1[chooseNode(G)], IsNull());
+			AssertThat(arr2[chooseNode(G)], IsNull());
+		});
+
+		it("initializes with a default value", [&]() {
+			std::unique_ptr<int> p(new int(42));
+			NodeArray<int*> arr(G, p.get());
+			AssertThat(arr[chooseNode(G)], Equals(p.get()));
+		});
+	});
+
+	runBasicSetTests<Graph, NodeSet, node>("NodeSet", init, chooseNode, allNodes, createNode,
+			deleteNode, clearNodes);
 });

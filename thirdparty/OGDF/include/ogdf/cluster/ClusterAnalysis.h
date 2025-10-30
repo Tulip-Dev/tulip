@@ -39,11 +39,18 @@
 
 #pragma once
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/Graph.h>
 #include <ogdf/basic/HashArray.h>
-#include <ogdf/basic/Skiplist.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/cluster/ClusterGraph.h>
 
+#include <algorithm>
+
 namespace ogdf {
+template<class X>
+class Skiplist;
 
 /***
  * @ingroup ga-cplanarity
@@ -89,9 +96,9 @@ public:
 	// Qualitative
 	//! Returns outer activity status for vertex \p v wrt cluster \p c.
 	/**
-	*  @param c is the cluster for which vertex v's activity status is stored.
-	*  @param v is the vertex for which the activity status is returned.
-	*/
+	 *  @param c is the cluster for which vertex v's activity status is stored.
+	 *  @param v is the vertex for which the activity status is returned.
+	 */
 	bool isOuterActive(node v, cluster c) const;
 	bool isInnerActive(node v, cluster c) const;
 

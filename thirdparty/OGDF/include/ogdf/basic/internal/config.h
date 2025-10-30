@@ -34,7 +34,7 @@
 #include <ogdf/basic/internal/config_autogen.h>
 #include <ogdf/basic/internal/version.h>
 
-#include <iostream>
+#include <sstream> // IWYU pragma: keep
 #include <string>
 
 #if defined(OGDF_DEBUG) && defined(NDEBUG)
@@ -94,21 +94,107 @@ using std::to_string;
 //! @{
 
 /**
- * Specifies that a function or class is exported by the OGDF DLL.
- * It is set according to the definition of OGDF_INSTALL (OGDF is build as DLL) and OGDF_DLL (OGDF is used as DLL).
- * If none of these are defined (OGDF is build or used as static library), the define expands to nothing.
+ * Specifies that a function or class is exported by the OGDF dynamic library (shared object / DLL),
+ * and can thus be used by other code that links against the OGDF.
+ * See the [gcc guide on visibility](https://gcc.gnu.org/wiki/Visibility) for more details.
+ * Rough guidelines for usage within the OGDF:
+ * - use it for all non-template classes defined in a header
+ * - don't use it for any class members (especially member functions)
+ * - don't use it for class pre-declarations (used instead of imports or needed for "cyclic" definitions)
+ * - use it for all non-template functions (not members, i.e. outside of classes) defined in a header
+ * - don't use it for template classes or template functions, except when you explicitly instantiate them
+ *   (see OGDF_EXPORT_TEMPL_INST and OGDF_EXPORT_TEMPL_DECL for explicit template instantiations)
+ * - use it for non-member functions declared as friend if you don't declare them somewhere else, e.g.
+ *   `class OGDF_EXPORT MyClass { [...] friend OGDF_EXPORT std::ostream& operator<<(std::ostream& os, const MyClass& H); }`
+ *
+ * For Windows DLL builds, this expands to \c dllexport during library build, and to \c dllimport when
+ * a header is used by another library.
+ * For shared object builds, this expands to `__attribute__((visibility("default")))`.
+ * For static builds, this expands to nothing.
+ *
+ * @sa OGDF_LOCAL
  */
 #define OGDF_EXPORT
+
+/**
+ * If you declare a template in a header file, but only provide a definition for its implementation
+ * in a cpp file, you need to also explicitly instantiate this template in the cpp file for all
+ * its anticipated uses. Templates generally do not need to be marked OGDF_EXPORT to be visible
+ * to users of the OGDF, but their explicit instantiations need to be marked such.
+ * As this works slightly different on Windows and UNIX, this macro replaces OGDF_EXPORT (only) for
+ * template instantiations.
+ *
+ * In the header file (usually where you declare the template), you will also need to declare its
+ * explicit instantiations, but also mark them `extern` to not cause their direct instantiation.
+ * For these declarations, use OGDF_EXPORT_TEMPL_DECL.
+ * In the cpp file where you actually instantiate the template, use OGDF_EXPORT_TEMPL_INST.
+ * See `CrossingMinimalPosition<CGAL::Gmpq>` in the corresponding header and cpp file or the code
+ * below for an example.
+ *
+ * Example header file:
+ * ```c++
+ * template<typename T>
+ * class MyTemplate {
+ *     void call(T data);
+ * };
+ *
+ * extern template class OGDF_EXPORT_TEMPL_DECL MyTemplate<double>;
+ * ```
+ * Example cpp implementation file:
+ * ```c++
+ * template<typename T>
+ * void MyTemplate<T>::call(T data) {
+ *     // complicated implementation
+ * }
+ *
+ * template class OGDF_EXPORT_TEMPL_INST MyTemplate<double>;
+ * ```
+ *
+ * On most systems, OGDF_EXPORT_TEMPL_DECL expands to OGDF_EXPORT and OGDF_EXPORT_TEMPL_INST expands
+ * to nothing, as e.g. for gcc the *first* declaration needs to have the export attribute.
+ * Only when building a DLL on Windows, the two definitions are switched as MSVC needs to have the
+ * export attribute on the actual instantiation.
+ *
+ * @sa OGDF_EXPORT
+ * @sa OGDF_EXPORT_TEMPL_INST
+ */
+#define OGDF_EXPORT_TEMPL_DECL OGDF_EXPORT
+
+/**
+ * See OGDF_EXPORT_TEMPL_DECL for documentation.
+ *
+ * @sa OGDF_EXPORT
+ * @sa OGDF_EXPORT_TEMPL_DECL
+ */
+#define OGDF_EXPORT_TEMPL_INST
+
+/**
+ * Specifies that a function or class is not exported by the OGDF dynamic library (shared object / DLL).
+ * Note that this means it *cannot* be used by code that dynamically links against the OGDF, which is
+ * the *default* configuration.
+ *
+ * @sa OGDF_EXPORT
+ */
+#define OGDF_LOCAL
 
 #ifdef OGDF_SYSTEM_WINDOWS
 #	ifdef OGDF_DLL
 #		undef OGDF_EXPORT
 #		ifdef OGDF_INSTALL
 #			define OGDF_EXPORT __declspec(dllexport)
+#			undef OGDF_EXPORT_TEMPL_DECL
+#			undef OGDF_EXPORT_TEMPL_INST
+#			define OGDF_EXPORT_TEMPL_DECL
+#			define OGDF_EXPORT_TEMPL_INST OGDF_EXPORT
 #		else
 #			define OGDF_EXPORT __declspec(dllimport)
 #		endif
 #	endif
+#else
+#	undef OGDF_EXPORT
+#	undef OGDF_LOCAL
+#	define OGDF_EXPORT __attribute__((visibility("default")))
+#	define OGDF_LOCAL __attribute__((visibility("hidden")))
 #endif
 
 //! @}
@@ -128,6 +214,86 @@ using std::to_string;
 #elif defined(__GNUC__)
 #	undef OGDF_DEPRECATED
 #	define OGDF_DEPRECATED(reason) __attribute__((deprecated(reason)))
+#endif
+
+//! @}
+//! @name Macros for locally disabling compiler warnings
+//! @{
+
+//! Start a new warning configuration context (i.e. do `pragma diagnostic/warning push`)
+//! @ingroup macros
+#define OGDF_DISABLE_WARNING_PUSH
+
+//! End the current warning configuration context (i.e. do `pragma diagnostic/warning pop`)
+//! @ingroup macros
+#define OGDF_DISABLE_WARNING_POP
+
+//! Disable the warning with the given number of MSVC or name of g++/clang.
+//! @ingroup macros
+#define OGDF_DISABLE_WARNING(warningNumber)
+
+//! Disable the warning that calling throw will always terminate the program in a noexept block
+//! @ingroup macros
+#define OGDF_DISABLE_WARNING_THROW_TERMINATE
+
+//! Disable the warning that something is unused
+//! @ingroup macros
+#define OGDF_DISABLE_WARNING_UNUSED
+
+//! Disable deprecation warnings
+//! @ingroup macros
+#define OGDF_DISABLE_WARNING_DEPRECATED
+
+#if defined(_MSC_VER)
+#	undef OGDF_DISABLE_WARNING_PUSH
+#	undef OGDF_DISABLE_WARNING_POP
+#	undef OGDF_DISABLE_WARNING
+
+#	define OGDF_DISABLE_WARNING_PUSH __pragma(warning(push))
+#	define OGDF_DISABLE_WARNING_POP __pragma(warning(pop))
+#	define OGDF_DISABLE_WARNING(warningNumber) __pragma(warning(disable : warningNumber))
+#elif defined(__GNUC__) || defined(__clang__)
+#	undef OGDF_DISABLE_WARNING_PUSH
+#	undef OGDF_DISABLE_WARNING_POP
+#	undef OGDF_DISABLE_WARNING
+
+#	define OGDF_DO_PRAGMA(X) _Pragma(#X)
+#	define OGDF_DISABLE_WARNING_PUSH OGDF_DO_PRAGMA(GCC diagnostic push)
+#	define OGDF_DISABLE_WARNING_POP OGDF_DO_PRAGMA(GCC diagnostic pop)
+#	define OGDF_DISABLE_WARNING(warningName) OGDF_DO_PRAGMA(GCC diagnostic ignored warningName)
+#endif
+
+#if defined(__GNUC__)
+#	if defined(__clang__)
+#		undef OGDF_DISABLE_WARNING_THROW_TERMINATE
+#		define OGDF_DISABLE_WARNING_THROW_TERMINATE OGDF_DISABLE_WARNING("-Wexceptions")
+#	else
+#		undef OGDF_DISABLE_WARNING_THROW_TERMINATE
+#		define OGDF_DISABLE_WARNING_THROW_TERMINATE OGDF_DISABLE_WARNING("-Wterminate")
+#	endif
+#	undef OGDF_DISABLE_WARNING_UNUSED
+#	define OGDF_DISABLE_WARNING_UNUSED OGDF_DISABLE_WARNING("-Wunused")
+#	undef OGDF_DISABLE_WARNING_DEPRECATED
+#	define OGDF_DISABLE_WARNING_DEPRECATED OGDF_DISABLE_WARNING("-Wdeprecated-declarations")
+#elif defined(_MSC_VER)
+#	undef OGDF_DISABLE_WARNING_THROW_TERMINATE
+#	define OGDF_DISABLE_WARNING_THROW_TERMINATE OGDF_DISABLE_WARNING(4297)
+#endif
+
+//! @}
+//! @name Unused results
+//! @{
+
+//! Indicate that the result of a function call should not be discarded.
+//! @ingroup macros
+#define OGDF_NODISCARD
+
+#if OGDF_HAS_CPP_ATTRIBUTE(nodiscard)
+#	undef OGDF_NODISCARD
+#	define OGDF_NODISCARD [[nodiscard]]
+#elif defined(__GNUC__)
+#	undef OGDF_NODISCARD
+#	define OGDF_NODISCARD __attribute__((warn_unused_result))
 #endif
 
 //! @}
@@ -186,20 +352,20 @@ using std::to_string;
 // missing dll-interface
 
 // warning C4251: 'identifier' : class 'type' needs to have dll-interface to be used by clients of class 'type2'
-#		pragma warning(disable : 4251)
+OGDF_DISABLE_WARNING(4251)
 // warning C4275: non-DLL-interface classkey 'identifier' used as base for DLL-interface classkey 'identifier'
-#		pragma warning(disable : 4275)
+OGDF_DISABLE_WARNING(4275)
 #	endif
 
 // warning C4355: 'this' : used in base member initializer list
-#	pragma warning(disable : 4355)
+OGDF_DISABLE_WARNING(4355)
 
 #endif
 
 //! Provides information about how OGDF has been configured.
 /**
-* @ingroup system
-*/
+ * @ingroup system
+ */
 class OGDF_EXPORT Configuration {
 public:
 	//! Specifies the operating system for which OGDF has been configured/built.

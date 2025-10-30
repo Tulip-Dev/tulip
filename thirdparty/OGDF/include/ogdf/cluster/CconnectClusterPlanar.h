@@ -32,11 +32,15 @@
 
 #pragma once
 
-#include <ogdf/basic/EdgeArray.h>
-#include <ogdf/cluster/ClusterArray.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/cluster/ClusterGraph.h>
+#include <ogdf/cluster/ClusterPlanarityModule.h>
 #include <ogdf/planarity/booth_lueker/PlanarPQTree.h>
 
 namespace ogdf {
+template<class E>
+class ListPure;
 
 //! C-planarity test by Cohen, Feng and Eades.
 /**
@@ -94,6 +98,14 @@ private:
 	int m_parallelCount;
 
 	ErrorCode m_errorCode;
+};
+
+class OGDF_EXPORT CconnectClusterPlanarityModule : public ClusterPlanarityModule {
+public:
+	bool isClusterPlanar(const ClusterGraph& CG) override;
+	bool isClusterPlanarDestructive(ClusterGraph& CG, Graph& G) override;
+	bool clusterPlanarEmbed(ClusterGraph& CG, Graph& G) override;
+	bool clusterPlanarEmbedClusterPlanarGraph(ClusterGraph& CG, Graph& G) override;
 };
 
 }

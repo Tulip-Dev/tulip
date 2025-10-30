@@ -34,8 +34,14 @@
 
 #pragma once
 
+#include <ogdf/basic/Graph.h>
 #include <ogdf/basic/GraphAttributes.h>
-#include <ogdf/cluster/ClusterArray.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/geometry.h>
+#include <ogdf/basic/graphics.h>
+#include <ogdf/cluster/ClusterGraph.h>
+
+#include <string>
 
 namespace ogdf {
 
@@ -109,8 +115,6 @@ public:
 	//! Constructs cluster graph attributes for cluster graph \p cg with attributes \p initAttributes.
 	explicit ClusterGraphAttributes(const ClusterGraph& cg,
 			long initAttributes = nodeGraphics | edgeGraphics | clusterGraphics);
-
-	virtual ~ClusterGraphAttributes() { }
 
 private:
 	//! Forbidden initialization, use init(ClusterGraph &cg, long initAttributes) instead!
@@ -386,33 +390,33 @@ public:
 
 	//! Scales the layout by (\p sx,\p sy).
 	/**
-	* If \p scaleNodes is true, node sizes are scaled as well.
-	*
-	* \param sx         is the scaling factor for x-coordinates.
-	* \param sy         is the scaling factor for y-coordinates.
-	* \param scaleNodes determines if nodes size are scaled as well (true) or not.
-	*/
+	 * If \p scaleNodes is true, node sizes are scaled as well.
+	 *
+	 * \param sx         is the scaling factor for x-coordinates.
+	 * \param sy         is the scaling factor for y-coordinates.
+	 * \param scaleNodes determines if nodes size are scaled as well (true) or not.
+	 */
 	virtual void scale(double sx, double sy, bool scaleNodes = true) override;
 
 	//! Translates the layout by (\p dx,\p dy).
 	/**
-	* \param dx is the translation in x-direction.
-	* \param dy is the translation in y-direction.
-	*/
+	 * \param dx is the translation in x-direction.
+	 * \param dy is the translation in y-direction.
+	 */
 	virtual void translate(double dx, double dy) override;
 
 	//! Flips the (whole) layout vertically such that the part in \p box remains in this area.
 	/**
-	* The whole layout is flipped and then moved such that the part that was in \p box before
-	* flipping is moved to this area.
-	*/
+	 * The whole layout is flipped and then moved such that the part that was in \p box before
+	 * flipping is moved to this area.
+	 */
 	virtual void flipVertical(const DRect& box) override;
 
 	//! Flips the (whole) layout horizontally such that the part in \p box remains in this area.
 	/**
-	* The whole layout is flipped and then moved such that the part that was in \p box before
-	* flipping is moved to this area.
-	*/
+	 * The whole layout is flipped and then moved such that the part that was in \p box before
+	 * flipping is moved to this area.
+	 */
 	virtual void flipHorizontal(const DRect& box) override;
 
 	//! @}

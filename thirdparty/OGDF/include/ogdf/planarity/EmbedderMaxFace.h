@@ -31,11 +31,20 @@
 
 #pragma once
 
-#include <ogdf/decomposition/StaticSPQRTree.h>
+#include <ogdf/basic/CombinatorialEmbedding.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/Observer.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/decomposition/BCTree.h>
 #include <ogdf/planarity/embedder/EmbedderBCTreeBase.h>
 #include <ogdf/planarity/embedder/EmbedderMaxFaceBiconnectedGraphs.h>
 
+#include <functional>
+
 namespace ogdf {
+class StaticSPQRTree;
 
 //! Embedder that maximizes the external face.
 /**
@@ -52,6 +61,11 @@ public:
 	 * \param adjExternal is assigned an adjacency entry on the external face and has to be set by the embedder.
 	 */
 	virtual void doCall(Graph& G, adjEntry& adjExternal) override;
+
+	EmbedderMaxFace() = default;
+
+	/* needs to be deleted explicitly for MSVC<=16 and classes containing a NodeArrayP */
+	OGDF_NO_COPY(EmbedderMaxFace)
 
 protected:
 	//! Calls \p fun for every ingoing edge (\a w,\p v).
@@ -288,7 +302,7 @@ protected:
 	virtual void embedBlock(const node& bT, const node& cT, ListIterator<adjEntry>& after);
 
 	/** all blocks */
-	NodeArray<Graph> blockG;
+	NodeArrayP<Graph> blockG;
 
 	/** a mapping of nodes in the auxiliaryGraph of the BC-tree to blockG */
 	NodeArray<NodeArray<node>> nH_to_nBlockEmbedding;

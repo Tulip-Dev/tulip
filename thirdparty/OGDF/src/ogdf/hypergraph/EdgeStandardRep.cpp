@@ -29,15 +29,20 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/hypergraph/EdgeStandardRep.h>
 #include <ogdf/hypergraph/Hypergraph.h>
+#include <ogdf/hypergraph/HypergraphObserver.h>
 
 namespace ogdf {
 
 EdgeStandardRep::EdgeStandardRep() : m_type(EdgeStandardType::star), m_hypergraph(nullptr) { }
 
 EdgeStandardRep::EdgeStandardRep(const Hypergraph& pH, EdgeStandardType pType = EdgeStandardType::star)
-	: HypergraphObserver(&pH) {
+	: HypergraphObserver() {
+	reregister(&pH);
 	m_type = pType;
 	m_hypergraph = &pH;
 

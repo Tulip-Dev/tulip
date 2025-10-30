@@ -31,11 +31,21 @@
 
 #pragma once
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphAttributes.h>
 #include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
 #include <ogdf/basic/LayoutModule.h>
+#include <ogdf/basic/LayoutStandards.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/System.h>
+#include <ogdf/basic/geometry.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/energybased/SpringForceModel.h>
 #include <ogdf/packing/TileToRowsCCPacker.h>
+
+#include <cmath>
 
 namespace ogdf {
 namespace spring_embedder {
@@ -94,7 +104,7 @@ public:
 		GA.clearAllBends();
 
 		GraphCopy GC;
-		GC.createEmpty(G);
+		GC.setOriginalGraph(G);
 
 		// compute connected component of G
 		NodeArray<int> component(G);
@@ -107,11 +117,15 @@ public:
 			nodesInCC[component[v]].pushBack(v);
 		}
 
+		NodeArray<node> nodeCopy(G);
 		EdgeArray<edge> auxCopy(G);
 		Array<DPoint> boundingBox(numCC);
 
 		for (int i = 0; i < numCC; ++i) {
-			GC.initByNodes(nodesInCC[i], auxCopy);
+			nodeCopy.init(G);
+			auxCopy.init(G);
+			GC.clear();
+			GC.insert(nodesInCC[i].begin(), nodesInCC[i].end(), filter_any_edge, nodeCopy, auxCopy);
 			makeSimpleUndirected(GC);
 
 			const int n = GC.numberOfNodes();

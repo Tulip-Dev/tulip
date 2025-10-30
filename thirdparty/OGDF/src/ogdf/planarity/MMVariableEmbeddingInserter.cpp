@@ -29,12 +29,31 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/CombinatorialEmbedding.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphAttributes.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/GraphSets.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/Module.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/simple_graph_alg.h>
+#include <ogdf/decomposition/SPQRTree.h>
+#include <ogdf/decomposition/Skeleton.h>
 #include <ogdf/decomposition/StaticPlanarSPQRTree.h>
+#include <ogdf/decomposition/StaticSPQRTree.h>
+#include <ogdf/decomposition/StaticSkeleton.h>
 #include <ogdf/fileformats/GraphIO.h>
 #include <ogdf/planarity/MMVariableEmbeddingInserter.h>
-#include <ogdf/planarity/embedding_inserter/CrossingsBucket.h>
+#include <ogdf/planarity/PlanRepExpansion.h>
+#include <ogdf/planarity/RemoveReinsertType.h>
+
+#include <iostream>
+#include <string>
+#include <utility>
 
 //#define OGDF_MMVEI_OUTPUT
 
@@ -100,8 +119,8 @@ Module::ReturnType MMVariableEmbeddingInserter::doCall(PlanRepExpansion& PG,
 		}
 	}
 
-	m_pSources = new NodeSet<>(PG);
-	m_pTargets = new NodeSet<>(PG);
+	m_pSources = new NodeSet(PG);
+	m_pTargets = new NodeSet(PG);
 
 #ifdef OGDF_MMVEI_OUTPUT
 	outputPG(PG, 0);
@@ -1712,7 +1731,7 @@ void MMVariableEmbeddingInserter::convertDummy(node u, node vOrig, PlanRepExpans
 	}
 }
 
-void MMVariableEmbeddingInserter::collectAnchorNodes(node v, NodeSet<>& nodes,
+void MMVariableEmbeddingInserter::collectAnchorNodes(node v, NodeSet& nodes,
 		const PlanRepExpansion::NodeSplit* nsParent) const {
 	if (m_pPG->original(v) != nullptr) {
 		nodes.insert(v);
@@ -1741,13 +1760,13 @@ void MMVariableEmbeddingInserter::collectAnchorNodes(node v, NodeSet<>& nodes,
 	}
 }
 
-void MMVariableEmbeddingInserter::findSourcesAndTargets(node src, node tgt, NodeSet<>& sources,
-		NodeSet<>& targets) const {
+void MMVariableEmbeddingInserter::findSourcesAndTargets(node src, node tgt, NodeSet& sources,
+		NodeSet& targets) const {
 	collectAnchorNodes(src, sources, nullptr);
 	collectAnchorNodes(tgt, targets, nullptr);
 }
 
-void MMVariableEmbeddingInserter::anchorNodes(node vOrig, NodeSet<>& nodes) const {
+void MMVariableEmbeddingInserter::anchorNodes(node vOrig, NodeSet& nodes) const {
 	node vFirst = m_pPG->expansion(vOrig).front();
 	if (m_pPG->splittableOrig(vOrig)) {
 		collectAnchorNodes(vFirst, nodes, nullptr);
@@ -1756,7 +1775,7 @@ void MMVariableEmbeddingInserter::anchorNodes(node vOrig, NodeSet<>& nodes) cons
 	}
 }
 
-node MMVariableEmbeddingInserter::commonDummy(NodeSet<>& sources, NodeSet<>& targets) {
+node MMVariableEmbeddingInserter::commonDummy(NodeSet& sources, NodeSet& targets) {
 	for (node v : sources.nodes()) {
 		if (targets.isMember(v)) {
 			return v;

@@ -31,11 +31,14 @@
 
 #pragma once
 
-#include <ogdf/decomposition/StaticSPQRTree.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/Observer.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/planarity/embedder/EmbedderBCTreeBase.h>
-#include <ogdf/planarity/embedder/EmbedderMaxFaceBiconnectedGraphs.h>
 
 namespace ogdf {
+class StaticSPQRTree;
 
 //! Embedder that minimizes block-nesting depth.
 /**
@@ -53,6 +56,11 @@ public:
 	 * \param adjExternal is assigned an adjacency entry in the external face.
 	 */
 	virtual void doCall(Graph& G, adjEntry& adjExternal) override;
+
+	EmbedderMinDepth() = default;
+
+	/* needs to be deleted explicitly for MSVC<=16 and classes containing a NodeArrayP */
+	OGDF_NO_COPY(EmbedderMinDepth)
 
 private:
 	/**
@@ -110,7 +118,7 @@ private:
 
 private:
 	/** all blocks */
-	NodeArray<Graph> blockG;
+	NodeArrayP<Graph> blockG;
 
 	/** a mapping of nodes in the auxiliaryGraph of the BC-tree to blockG */
 	NodeArray<NodeArray<node>> nH_to_nBlockEmbedding;

@@ -32,12 +32,17 @@
 
 #pragma once
 
+#include <ogdf/basic/Graph.h>
 #include <ogdf/basic/List.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/graphalg/MinSteinerTreeModule.h>
 #include <ogdf/graphalg/Voronoi.h>
 #include <ogdf/graphalg/steiner_tree/EdgeWeightedGraphCopy.h>
 
 namespace ogdf {
+template<typename T>
+class EdgeWeightedGraph;
 
 /*!
  * \brief This class implements the Minimum Steiner Tree 2-approximation algorithm by Mehlhorn.
@@ -168,7 +173,7 @@ T MinSteinerTreeMehlhorn<T>::computeSteinerTree(const EdgeWeightedGraph<T>& G,
 	computeMinST(completeTerminalGraph, completeTerminalGraph.edgeWeights(), mstPred);
 
 	finalSteinerTree = new EdgeWeightedGraphCopy<T>;
-	finalSteinerTree->createEmpty(G);
+	finalSteinerTree->setOriginalGraph(G);
 
 	reinsertShortestPaths(completeTerminalGraph, voronoi, mstPred, bridges, *finalSteinerTree, G);
 
@@ -182,7 +187,7 @@ template<typename T>
 void MinSteinerTreeMehlhorn<T>::calculateCompleteGraph(const EdgeWeightedGraph<T>& wG,
 		const List<node>& terminals, const Voronoi<T>& voronoi, EdgeArray<edge>& bridges,
 		EdgeWeightedGraphCopy<T>& completeTerminalGraph) {
-	completeTerminalGraph.createEmpty(wG);
+	completeTerminalGraph.setOriginalGraph(wG);
 
 	for (node v : terminals) {
 		completeTerminalGraph.newNode(v);

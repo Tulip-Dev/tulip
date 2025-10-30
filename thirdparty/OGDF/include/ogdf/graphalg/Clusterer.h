@@ -35,9 +35,16 @@
 
 #pragma once
 
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/graphalg/ClustererModule.h>
 
 namespace ogdf {
+class ClusterGraph;
+template<class E>
+class SList;
 
 /**
  * @ingroup ga-clustering
@@ -54,8 +61,8 @@ public:
 	explicit Clusterer(const Graph& G);
 
 	/**Default constructor allowing to cluster multiple
-	*graphs with the same instance of the Clusterer
-	*graphs */
+	 *graphs with the same instance of the Clusterer
+	 *graphs */
 	Clusterer();
 
 	virtual ~Clusterer() { }

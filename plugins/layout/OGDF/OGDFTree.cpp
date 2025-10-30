@@ -29,10 +29,9 @@
 #define LEFTTORIGHT 2
 #define RIGHTTOLEFT 3
 
-#define ROOTSELECTIONLIST "source;sink;by coord"
+#define ROOTSELECTIONLIST "source;by coord"
 #define ROOTSOURCE 0
-#define ROOTSINK 1
-#define ROOTCOORD 2
+#define ROOTCOORD 1
 
 using namespace tlp;
 using namespace ogdf;
@@ -67,7 +66,6 @@ static const char *orientationValuesDescription =
 
 static const char *rootSelectionValuesDescription =
     "source <i>(select a source in the graph)</i><br>"
-    "sink <i>(select a sink in the graph)</i><br>"
     "by coord <i>(use the coordinates, e.g., select the topmost node if orientation is "
     "top to bottom)</i>";
 
@@ -148,9 +146,6 @@ public:
         switch (sc.getCurrent()) {
         case ROOTSOURCE:
           tree->rootSelection(TreeLayout::RootSelectionType::Source);
-          break;
-        case ROOTSINK:
-          tree->rootSelection(TreeLayout::RootSelectionType::Sink);
           break;
         default:
           tree->rootSelection(TreeLayout::RootSelectionType::ByCoord);

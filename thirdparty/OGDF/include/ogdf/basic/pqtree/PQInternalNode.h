@@ -31,9 +31,15 @@
 
 #pragma once
 
+#include <ogdf/basic/pqtree/PQInternalKey.h> // IWYU pragma: keep
 #include <ogdf/basic/pqtree/PQNode.h>
+#include <ogdf/basic/pqtree/PQNodeRoot.h>
 
 namespace ogdf {
+template<class T, class X, class Y>
+class PQLeafKey;
+template<class T, class X, class Y>
+class PQNodeKey;
 
 /**
  * The class template PQInternalNode is used to present
@@ -71,7 +77,7 @@ namespace ogdf {
  * an element of type PQInternalKey automatically sets
  * the PQBasicKey::m_nodePointer (see basicKey) of this element of type
  * PQInternalKey to the newly allocated PQInternalNode.
-*/
+ */
 template<class T, class X, class Y>
 class PQInternalNode : public PQNode<T, X, Y> {
 public:
@@ -123,7 +129,7 @@ public:
 	 * be performed with the deletion of a node, either derive a new class
 	 * with an appropriate destructor, or make use of the function
 	 * CleanNode() of the class template PQTree.
-	*/
+	 */
 	~PQInternalNode() { }
 
 	//! Returns 0. An element of type PQInternalNode does not have a PQLeafKey.

@@ -31,10 +31,14 @@
 
 #pragma once
 
+#include <ogdf/basic/Graph.h>
 #include <ogdf/basic/GraphCopy.h>
-#include <ogdf/graphalg/steiner_tree/EdgeWeightedGraph.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
 
 namespace ogdf {
+template<typename T>
+class EdgeWeightedGraph;
 
 template<typename T>
 class EdgeWeightedGraphCopy : public GraphCopy {
@@ -47,7 +51,9 @@ public:
 
 	virtual ~EdgeWeightedGraphCopy() { }
 
-	void createEmpty(const Graph& wG);
+	void setOriginalGraph(const Graph* wG) override;
+	using GraphCopy::setOriginalGraph;
+
 	void init(const EdgeWeightedGraph<T>& wG);
 	edge newEdge(node u, node v, T weight);
 	edge newEdge(edge eOrig, T weight);
@@ -153,9 +159,9 @@ void EdgeWeightedGraphCopy<T>::init(const EdgeWeightedGraph<T>& wG) {
 }
 
 template<typename T>
-void EdgeWeightedGraphCopy<T>::createEmpty(const Graph& G) {
-	GraphCopy::createEmpty(G);
-	m_pGraph = &G;
+void EdgeWeightedGraphCopy<T>::setOriginalGraph(const Graph* G) {
+	GraphCopy::setOriginalGraph(G);
+	m_pGraph = G;
 	m_edgeWeight.init(*this);
 }
 

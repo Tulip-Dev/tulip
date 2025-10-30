@@ -29,13 +29,29 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/ArrayBuffer.h>
+#include <ogdf/basic/CombinatorialEmbedding.h>
+#include <ogdf/basic/DualGraph.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/Module.h>
 #include <ogdf/basic/Queue.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/basic/extended_graph_alg.h>
+#include <ogdf/planarity/CrossingMinimizationModule.h>
+#include <ogdf/planarity/PlanRep.h>
 #include <ogdf/planarity/PlanarizerChordlessCycle.h>
+#include <ogdf/planarity/StarInserter.h>
+
+#include <cstdint>
+#include <initializer_list>
 #ifdef OGDF_DEBUG
 #	include <ogdf/basic/simple_graph_alg.h>
 #endif
-#include <set>
 
 namespace ogdf {
 
@@ -212,7 +228,7 @@ Module::ReturnType PlanarizerChordlessCycle::doCall(PlanRep& pr, int cc,
 	// G -copy-> pr (final planarization, assigned at the end)
 	const Graph& G {pr.original()};
 	GraphCopy graphCopy;
-	graphCopy.createEmpty(G);
+	graphCopy.setOriginalGraph(G);
 
 	// Find a chordless cycle in G. If none could be found, G is planar.
 	List<node> cycle;
@@ -232,8 +248,10 @@ Module::ReturnType PlanarizerChordlessCycle::doCall(PlanRep& pr, int cc,
 	for (node cycleNodeOrig : cycle) {
 		activeNodes[cycleNodeOrig] = true;
 	}
-	EdgeArray<edge> edgeCopies {G, nullptr};
-	graphCopy.initByActiveNodes(cycle, activeNodes, edgeCopies);
+	EdgeArray<edge> edgeCopies {G};
+	NodeArray<node> nodeCopies {G};
+	graphCopy.clear();
+	graphCopy.insert(cycle.begin(), cycle.end(), filter_any_edge, nodeCopies, edgeCopies);
 
 	// Must hold for a chordless cycle:
 	OGDF_ASSERT(graphCopy.numberOfNodes() == cycle.size());

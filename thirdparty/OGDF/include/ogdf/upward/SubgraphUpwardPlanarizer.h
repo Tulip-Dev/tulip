@@ -31,19 +31,22 @@
 
 #pragma once
 
-#include <ogdf/decomposition/BCTree.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/layered/AcyclicSubgraphModule.h>
 #include <ogdf/layered/GreedyCycleRemoval.h>
 #include <ogdf/upward/FUPSModule.h>
 #include <ogdf/upward/FUPSSimple.h>
 #include <ogdf/upward/FixedEmbeddingUpwardEdgeInserter.h>
 #include <ogdf/upward/UpwardEdgeInserterModule.h>
-#include <ogdf/upward/UpwardPlanRep.h>
 #include <ogdf/upward/UpwardPlanarizerModule.h>
 
 #include <memory>
 
 namespace ogdf {
+class BCTree;
+class GraphCopy;
+class UpwardPlanRep;
 
 /**
  * Takes an acyclic connected non-upward-planar graph and planarizes it, i.e., we obtain an upward-planar graph
@@ -59,7 +62,7 @@ namespace ogdf {
  * Example for Input "Graph G":
  * \code
  *  UpwardPlanRep U;
- *  U.createEmpty(G);
+ *  U.setOriginalGraph(G);
  *  SubgraphUpwardPlanarizer sup;
  *  sup.call(U, 0, 0);
  * \endcode
@@ -100,12 +103,12 @@ protected:
 	int m_runs;
 
 private:
-	void constructComponentGraphs(BCTree& BC, NodeArray<GraphCopy>& biComps);
+	void constructComponentGraphs(BCTree& BC, NodeArrayP<GraphCopy>& biComps);
 
 	//! traversion the BTree and merge the component to a common graph
-	void dfsMerge(const GraphCopy& GC, BCTree& BC, NodeArray<GraphCopy>& biComps,
-			NodeArray<UpwardPlanRep>& uprs, UpwardPlanRep& UPR_res, node parent_BC, node current_BC,
-			NodeArray<bool>& nodesDone);
+	void dfsMerge(const GraphCopy& GC, BCTree& BC, NodeArrayP<GraphCopy>& biComps,
+			NodeArrayP<UpwardPlanRep>& uprs, UpwardPlanRep& UPR_res, node parent_BC,
+			node current_BC, NodeArray<bool>& nodesDone);
 
 
 	//! add UPR to UPR_res.

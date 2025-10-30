@@ -33,12 +33,16 @@
 
 #pragma once
 
+#include <ogdf/basic/Graph.h>
 #include <ogdf/basic/List.h>
+#include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/graphalg/Dijkstra.h>
 #include <ogdf/graphalg/MinSteinerTreeModule.h>
 #include <ogdf/graphalg/steiner_tree/EdgeWeightedGraphCopy.h>
 
 namespace ogdf {
+template<typename T>
+class EdgeWeightedGraph;
 
 /*!
  * \brief This class implements the Minimum Steiner Tree 2-approximation algorithm by Kou et al.
@@ -105,7 +109,7 @@ template<typename T>
 T MinSteinerTreeKou<T>::computeSteinerTree(const EdgeWeightedGraph<T>& G, const List<node>& terminals,
 		const NodeArray<bool>& isTerminal, EdgeWeightedGraphCopy<T>*& finalSteinerTree) {
 	EdgeWeightedGraphCopy<T> completeTerminalGraph;
-	completeTerminalGraph.createEmpty(G);
+	completeTerminalGraph.setOriginalGraph(G);
 
 	for (node v : terminals) {
 		completeTerminalGraph.newNode(v);
@@ -120,7 +124,7 @@ T MinSteinerTreeKou<T>::computeSteinerTree(const EdgeWeightedGraph<T>& G, const 
 	computeMinST(completeTerminalGraph, completeTerminalGraph.edgeWeights(), mstPred);
 
 	finalSteinerTree = new EdgeWeightedGraphCopy<T>();
-	finalSteinerTree->createEmpty(G);
+	finalSteinerTree->setOriginalGraph(G);
 
 	reinsertShortestPaths(completeTerminalGraph, ssspPred, mstPred, *finalSteinerTree, G);
 

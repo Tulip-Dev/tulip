@@ -30,8 +30,14 @@
  */
 
 #include <ogdf/basic/System.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/basic/exceptions.h>
 #include <ogdf/basic/memory.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <fstream>
+#include <string>
 
 // clang-format off
 #if defined(OGDF_SYSTEM_WINDOWS) || defined(__CYGWIN__)
@@ -40,22 +46,25 @@
 #    undef NOMINMAX
 #    define NOMINMAX
 
-#    include <windows.h>
-#    include <psapi.h>
+	// windows.h needs to be included first
+#    include <windows.h> // IWYU pragma: keep
+
+	// and then comes psapi.h
+#    include <psapi.h> // IWYU pragma: keep
 #    ifdef _MSC_VER
 #        pragma comment(lib, "psapi.lib")
 #    endif
 #endif
 
 #ifdef __APPLE__
-#    include <stdlib.h>
-#    include <malloc/malloc.h>
-#    include <sys/types.h>
-#    include <sys/sysctl.h>
-#    include <sys/utsname.h>
-#    include <mach/vm_statistics.h>
 #    include <mach/mach.h>
 #    include <mach/machine.h>
+#    include <mach/vm_statistics.h>
+#    include <malloc/malloc.h>
+#    include <stdlib.h>
+#    include <sys/sysctl.h>
+#    include <sys/types.h>
+#    include <sys/utsname.h>
 #elif defined(OGDF_SYSTEM_UNIX)
 #    include <malloc.h>
 #endif
@@ -63,9 +72,8 @@
 #if defined(_MSC_VER)
 #    include <intrin.h>
 #elif defined(OGDF_SYSTEM_UNIX) || (defined(__MINGW32__) && !defined(__MINGW64__))
-#    include <unistd.h>
-#    include <fcntl.h>
 #    include <sys/time.h>
+#    include <unistd.h>
 #endif
 #if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
 #    include <cpuid.h>
@@ -424,5 +432,119 @@ int System::getProcessID() { return GetCurrentProcessId(); }
 int System::getProcessID() { return getpid(); }
 
 #endif
+
+
+const char* AlgorithmFailureException::codeToString(AlgorithmFailureCode code) {
+	switch (code) {
+	default:
+		return "AlgorithmFailureCode::Unknown";
+	case AlgorithmFailureCode::IllegalParameter:
+		return "AlgorithmFailureCode::IllegalParameter";
+	case AlgorithmFailureCode::NoFlow:
+		return "AlgorithmFailureCode::NoFlow";
+	case AlgorithmFailureCode::Sort:
+		return "AlgorithmFailureCode::Sort";
+	case AlgorithmFailureCode::Label:
+		return "AlgorithmFailureCode::Label";
+	case AlgorithmFailureCode::ExternalFace:
+		return "AlgorithmFailureCode::ExternalFace";
+	case AlgorithmFailureCode::ForbiddenCrossing:
+		return "AlgorithmFailureCode::ForbiddenCrossing";
+	case AlgorithmFailureCode::TimelimitExceeded:
+		return "AlgorithmFailureCode::TimelimitExceeded";
+	case AlgorithmFailureCode::NoSolutionFound:
+		return "AlgorithmFailureCode::NoSolutionFound";
+	case AlgorithmFailureCode::IndexOutOfBounds:
+		return "AlgorithmFailureCode::IndexOutOfBounds";
+	case AlgorithmFailureCode::PrimalBound:
+		return "AlgorithmFailureCode::PrimalBound";
+	case AlgorithmFailureCode::DualBound:
+		return "AlgorithmFailureCode::DualBound";
+	case AlgorithmFailureCode::NotInteger:
+		return "AlgorithmFailureCode::NotInteger";
+	case AlgorithmFailureCode::Buffer:
+		return "AlgorithmFailureCode::Buffer";
+	case AlgorithmFailureCode::AddVar:
+		return "AlgorithmFailureCode::AddVar";
+	case AlgorithmFailureCode::Sorter:
+		return "AlgorithmFailureCode::Sorter";
+	case AlgorithmFailureCode::Phase:
+		return "AlgorithmFailureCode::Phase";
+	case AlgorithmFailureCode::Active:
+		return "AlgorithmFailureCode::Active";
+	case AlgorithmFailureCode::NoSolution:
+		return "AlgorithmFailureCode::NoSolution";
+	case AlgorithmFailureCode::MakeFeasible:
+		return "AlgorithmFailureCode::MakeFeasible";
+	case AlgorithmFailureCode::Guarantee:
+		return "AlgorithmFailureCode::Guarantee";
+	case AlgorithmFailureCode::BranchingVariable:
+		return "AlgorithmFailureCode::BranchingVariable";
+	case AlgorithmFailureCode::Strategy:
+		return "AlgorithmFailureCode::Strategy";
+	case AlgorithmFailureCode::CloseHalf:
+		return "AlgorithmFailureCode::CloseHalf";
+	case AlgorithmFailureCode::StandardPool:
+		return "AlgorithmFailureCode::StandardPool";
+	case AlgorithmFailureCode::Variable:
+		return "AlgorithmFailureCode::Variable";
+	case AlgorithmFailureCode::LpIf:
+		return "AlgorithmFailureCode::LpIf";
+	case AlgorithmFailureCode::Lp:
+		return "AlgorithmFailureCode::Lp";
+	case AlgorithmFailureCode::Bstack:
+		return "AlgorithmFailureCode::Bstack";
+	case AlgorithmFailureCode::LpStatus:
+		return "AlgorithmFailureCode::LpStatus";
+	case AlgorithmFailureCode::BranchingRule:
+		return "AlgorithmFailureCode::BranchingRule";
+	case AlgorithmFailureCode::FixSet:
+		return "AlgorithmFailureCode::FixSet";
+	case AlgorithmFailureCode::LpSub:
+		return "AlgorithmFailureCode::LpSub";
+	case AlgorithmFailureCode::String:
+		return "AlgorithmFailureCode::String";
+	case AlgorithmFailureCode::Constraint:
+		return "AlgorithmFailureCode::Constraint";
+	case AlgorithmFailureCode::Pool:
+		return "AlgorithmFailureCode::Pool";
+	case AlgorithmFailureCode::Global:
+		return "AlgorithmFailureCode::Global";
+	case AlgorithmFailureCode::FsVarStat:
+		return "AlgorithmFailureCode::FsVarStat";
+	case AlgorithmFailureCode::LpVarStat:
+		return "AlgorithmFailureCode::LpVarStat";
+	case AlgorithmFailureCode::OsiIf:
+		return "AlgorithmFailureCode::OsiIf";
+	case AlgorithmFailureCode::ConBranchRule:
+		return "AlgorithmFailureCode::ConBranchRule";
+	case AlgorithmFailureCode::Timer:
+		return "AlgorithmFailureCode::Timer";
+	case AlgorithmFailureCode::Array:
+		return "AlgorithmFailureCode::Array";
+	case AlgorithmFailureCode::Csense:
+		return "AlgorithmFailureCode::Csense";
+	case AlgorithmFailureCode::BPrioQueue:
+		return "AlgorithmFailureCode::BPrioQueue";
+	case AlgorithmFailureCode::FixCand:
+		return "AlgorithmFailureCode::FixCand";
+	case AlgorithmFailureCode::BHeap:
+		return "AlgorithmFailureCode::BHeap";
+	case AlgorithmFailureCode::Poolslot:
+		return "AlgorithmFailureCode::Poolslot";
+	case AlgorithmFailureCode::SparVec:
+		return "AlgorithmFailureCode::SparVec";
+	case AlgorithmFailureCode::Convar:
+		return "AlgorithmFailureCode::Convar";
+	case AlgorithmFailureCode::Ostream:
+		return "AlgorithmFailureCode::Ostream";
+	case AlgorithmFailureCode::Hash:
+		return "AlgorithmFailureCode::Hash";
+	case AlgorithmFailureCode::Paramaster:
+		return "AlgorithmFailureCode::Paramaster";
+	case AlgorithmFailureCode::InfeasCon:
+		return "AlgorithmFailureCode::InfeasCon";
+	}
+}
 
 }

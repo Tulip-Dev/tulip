@@ -32,10 +32,13 @@
 
 #pragma once
 
-#include <ogdf/basic/GraphAttributes.h>
+#include <ogdf/basic/ArrayBuffer.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/geometry.h>
 
 namespace ogdf {
-
+class GraphAttributes;
 
 //! Computes statistical information about a layout.
 /**
@@ -84,7 +87,7 @@ public:
 	 * as each crossing involves two edges.
 	 *
 	 * \param ga Input layout. If it contains bend points, each segment of an edge's polyline is considered as a line segment.
-	             Otherwise, a straight-line drawing is assumed.
+	 *           Otherwise, a straight-line drawing is assumed.
 	 * \return   The number of crossings for each edge.
 	 */
 	static ArrayBuffer<int> numberOfCrossings(const GraphAttributes& ga);
@@ -100,7 +103,7 @@ public:
 	 * corresponding width and height given by \p ga.
 	 *
 	 * \param ga Input layout. If it contains bend points, each segment of an edge's polyline is considered as a line segment.
-	             Otherwise, a straight-line drawing is assumed.
+	 *           Otherwise, a straight-line drawing is assumed.
 	 * \return   The number of node crossings for each edge.
 	 */
 	static ArrayBuffer<int> numberOfNodeCrossings(const GraphAttributes& ga);
@@ -133,7 +136,7 @@ public:
 	 * \warning Do not call this algorithm on drawings with arbitrarily close curves (e.g., curves overlapping on an interval).
 	 *
 	 * \param ga        Input layout. If it contains bend points, each segment of an edge's polyline is considered as a line segment.
-	                    Otherwise, a straight-line drawing is assumed.
+	 *                  Otherwise, a straight-line drawing is assumed.
 	 * \param H         Is assigned the intersection graph.
 	 * \param points    Maps nodes in \p H to their geometric position in the layout.
 	 * \param origNode  Maps nodes in \p H to nodes in \p ga's graph.

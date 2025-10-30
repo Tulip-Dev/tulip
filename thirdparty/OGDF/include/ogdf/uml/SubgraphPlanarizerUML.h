@@ -31,7 +31,10 @@
 
 #pragma once
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/Graph.h>
 #include <ogdf/basic/Logger.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/planarity/PlanarSubgraphModule.h>
 #include <ogdf/uml/UMLCrossingMinimizationModule.h>
 #include <ogdf/uml/UMLEdgeInsertionModule.h>
@@ -40,6 +43,8 @@
 #include <random>
 
 namespace ogdf {
+class PlanRepLight;
+class PlanRepUML;
 
 //! The planarization approach for UML crossing minimization.
 /**
@@ -100,7 +105,7 @@ namespace ogdf {
  *     subgraph are re-inserted one-by-one, each with as few crossings as possible.
  *   </tr>
  * </table>
-*/
+ */
 class OGDF_EXPORT SubgraphPlanarizerUML : public UMLCrossingMinimizationModule, public Logger {
 	class ThreadMaster;
 	class Worker;

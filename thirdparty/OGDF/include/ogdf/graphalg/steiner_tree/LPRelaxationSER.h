@@ -31,12 +31,33 @@
 
 #pragma once
 
-#include <coin/CoinPackedMatrix.hpp>
-
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/ArrayBuffer.h>
+#include <ogdf/basic/DisjointSets.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
 #include <ogdf/basic/SubsetEnumerator.h>
-#include <ogdf/external/coin.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/graphalg/MaxFlowGoldbergTarjan.h>
 #include <ogdf/graphalg/MinSTCutMaxFlow.h>
-#include <ogdf/graphalg/steiner_tree/FullComponentStore.h>
+
+#include <ogdf/external/coin.h>
+
+#include <cstdio>
+#include <iostream>
+#include <limits>
+
+namespace ogdf::steiner_tree {
+template<typename T, typename ExtraDataType>
+class FullComponentWithExtraStore;
+} // namespace ogdf::steiner_tree
+
+namespace ogdf {
+template<typename T>
+class EdgeWeightedGraph;
+} // namespace ogdf
 
 //#define OGDF_STEINERTREE_LPRELAXATIONSER_LOGGING
 //#define OGDF_STEINERTREE_LPRELAXATIONSER_OUTPUT_LP
@@ -98,7 +119,7 @@ class LPRelaxationSER {
 	//!  directed, with special source and target, without Steiner vertices of degree 2
 	double generateMinCutSeparationGraph(const ArrayBuffer<int>& activeComponents, node& source,
 			node& target, GraphCopy& G, EdgeArray<double>& capacity, int& cutsFound) {
-		G.createEmpty(m_G);
+		G.setOriginalGraph(m_G);
 		capacity.init(G);
 		source = G.newNode();
 		for (node t : m_terminals) { // generate all terminals

@@ -29,13 +29,27 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
+#include <ogdf/basic/Array.h>
 #include <ogdf/basic/Array2D.h>
+#include <ogdf/basic/ArrayBuffer.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
 #include <ogdf/basic/Math.h>
 #include <ogdf/basic/Queue.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/comparer.h>
 #include <ogdf/basic/simple_graph_alg.h>
+#include <ogdf/cluster/ClusterGraph.h>
 #include <ogdf/cluster/ClusterSet.h>
 #include <ogdf/layered/ExtendedNestingGraph.h>
 #include <ogdf/layered/OptimalRanking.h>
+
+#include <limits>
+#include <ostream>
+#include <tuple>
+#include <utility>
 
 using std::tuple;
 
@@ -803,7 +817,7 @@ void ExtendedNestingGraph::buildLayers() {
 	}
 
 
-	ClusterSetPure activeClusters(m_CGC);
+	ClusterSet activeClusters(m_CGC); // was ClusterSetPure
 	activeClusters.insert(m_CGC.rootCluster());
 
 	ClusterArray<LHTreeNode*> clusterToTreeNode(m_CGC, nullptr);
@@ -919,7 +933,7 @@ void ExtendedNestingGraph::buildLayers() {
 	// and foreign edges
 	m_markTree.init(m_CGC, nullptr);
 	ClusterArray<List<tuple<edge, LHTreeNode*, LHTreeNode*>>> edgeArray(m_CGC);
-	ClusterSetSimple C(m_CGC);
+	ClusterSet C(m_CGC); // was ClusterSetSimple
 	for (i = 0; i < m_numLayers - 1; ++i) {
 		for (node u : L[i]) {
 			for (adjEntry adj : u->adjEntries) {

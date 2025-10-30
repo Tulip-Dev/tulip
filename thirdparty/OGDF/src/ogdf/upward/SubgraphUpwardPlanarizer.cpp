@@ -29,9 +29,26 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
+#include <ogdf/basic/CombinatorialEmbedding.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/Module.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/basic/simple_graph_alg.h>
+#include <ogdf/decomposition/BCTree.h>
+#include <ogdf/layered/AcyclicSubgraphModule.h>
+#include <ogdf/upward/FUPSModule.h>
 #include <ogdf/upward/FaceSinkGraph.h>
 #include <ogdf/upward/SubgraphUpwardPlanarizer.h>
+#include <ogdf/upward/UpwardEdgeInserterModule.h>
+#include <ogdf/upward/UpwardPlanRep.h>
+#include <ogdf/upward/UpwardPlanarity.h>
+
+#include <limits>
+#include <memory>
 
 namespace ogdf {
 
@@ -82,12 +99,18 @@ Module::ReturnType SubgraphUpwardPlanarizer::doCall(UpwardPlanRep& UPR, const Ed
 	const Graph& bcTree = BC.bcTree();
 
 	GraphCopy G_dummy;
-	G_dummy.createEmpty(G);
-	NodeArray<GraphCopy> biComps(bcTree, G_dummy); // bicomps of G; init with an empty graph
+	G_dummy.setOriginalGraph(G);
+	NodeArrayP<GraphCopy> biComps(bcTree); // bicomps of G; init with an empty graph
+	for (node n : bcTree.nodes) {
+		biComps[n] = std::make_unique<GraphCopy>(G_dummy);
+	}
 	UpwardPlanRep UPR_dummy;
-	UPR_dummy.createEmpty(G);
-	NodeArray<UpwardPlanRep> uprs(bcTree,
-			UPR_dummy); // the upward planarized representation of the bicomps; init with an empty UpwarPlanRep
+	UPR_dummy.setOriginalGraph(G);
+	// the upward planarized representation of the bicomps; init with an empty UpwarPlanRep
+	NodeArrayP<UpwardPlanRep> uprs(bcTree);
+	for (node n : bcTree.nodes) {
+		uprs[n] = std::make_unique<UpwardPlanRep>(UPR_dummy);
+	}
 
 	constructComponentGraphs(BC, biComps);
 
@@ -96,7 +119,7 @@ Module::ReturnType SubgraphUpwardPlanarizer::doCall(UpwardPlanRep& UPR, const Ed
 			continue;
 		}
 
-		GraphCopy& block = biComps[v];
+		GraphCopy& block = *biComps[v];
 
 		OGDF_ASSERT(m_subgraph);
 
@@ -112,7 +135,7 @@ Module::ReturnType SubgraphUpwardPlanarizer::doCall(UpwardPlanRep& UPR, const Ed
 		if (!UpwardPlanarity::upwardPlanarEmbed_singleSource(block)) {
 			for (int i = 0; i < m_runs; i++) { // i multistarts
 				UpwardPlanRep UPR_tmp;
-				UPR_tmp.createEmpty(block);
+				UPR_tmp.setOriginalGraph(block);
 				List<edge> delEdges;
 
 				m_subgraph->call(UPR_tmp, delEdges);
@@ -249,14 +272,14 @@ Module::ReturnType SubgraphUpwardPlanarizer::doCall(UpwardPlanRep& UPR, const Ed
 			UPR_tmp.outputFaces(UPR_tmp.getEmbedding());
 #endif
 		}
-		uprs[v] = bestUPR;
+		*uprs[v] = bestUPR;
 	}
 
 	// compute the number of crossings
 	int nr_cr = 0;
 	for (node v : bcTree.nodes) {
 		if (BC.typeOfBNode(v) != BCTree::BNodeType::CComp) {
-			nr_cr = nr_cr + uprs[v].numberOfCrossings();
+			nr_cr = nr_cr + uprs[v]->numberOfCrossings();
 		}
 	}
 
@@ -347,11 +370,11 @@ Module::ReturnType SubgraphUpwardPlanarizer::doCall(UpwardPlanRep& UPR, const Ed
 }
 
 void SubgraphUpwardPlanarizer::dfsMerge(const GraphCopy& GC, BCTree& BC,
-		NodeArray<GraphCopy>& biComps, NodeArray<UpwardPlanRep>& uprs, UpwardPlanRep& UPR_res,
+		NodeArrayP<GraphCopy>& biComps, NodeArrayP<UpwardPlanRep>& uprs, UpwardPlanRep& UPR_res,
 		node parent_BC, node current_BC, NodeArray<bool>& nodesDone) {
 	// only one component.
 	if (current_BC->degree() == 0) {
-		merge(GC, UPR_res, biComps[current_BC], uprs[current_BC]);
+		merge(GC, UPR_res, *biComps[current_BC], *uprs[current_BC]);
 		return;
 	}
 
@@ -359,11 +382,11 @@ void SubgraphUpwardPlanarizer::dfsMerge(const GraphCopy& GC, BCTree& BC,
 		node next_BC = adj->twin()->theNode();
 		if (BC.typeOfBNode(current_BC) == BCTree::BNodeType::CComp) {
 			if (parent_BC != nullptr && !nodesDone[parent_BC]) {
-				merge(GC, UPR_res, biComps[parent_BC], uprs[parent_BC]);
+				merge(GC, UPR_res, *biComps[parent_BC], *uprs[parent_BC]);
 				nodesDone[parent_BC] = true;
 			}
 			if (!nodesDone[next_BC]) {
-				merge(GC, UPR_res, biComps[next_BC], uprs[next_BC]);
+				merge(GC, UPR_res, *biComps[next_BC], *uprs[next_BC]);
 				nodesDone[next_BC] = true;
 			}
 		}
@@ -576,7 +599,7 @@ void SubgraphUpwardPlanarizer::merge(const GraphCopy& GC, UpwardPlanRep& UPR_res
 	UPR_res.initMe();
 }
 
-void SubgraphUpwardPlanarizer::constructComponentGraphs(BCTree& BC, NodeArray<GraphCopy>& biComps) {
+void SubgraphUpwardPlanarizer::constructComponentGraphs(BCTree& BC, NodeArrayP<GraphCopy>& biComps) {
 	NodeArray<int> constructed(BC.originalGraph(), -1);
 	const Graph& bcTree = BC.bcTree();
 	int i = 0; // comp. number
@@ -592,7 +615,7 @@ void SubgraphUpwardPlanarizer::constructComponentGraphs(BCTree& BC, NodeArray<Gr
 		}
 
 		GraphCopy GC;
-		GC.createEmpty(BC.originalGraph());
+		GC.setOriginalGraph(BC.originalGraph());
 		// construct i-th component graph
 		for (edge eOrig : edges_orig) {
 			node srcOrig = eOrig->source();
@@ -607,7 +630,7 @@ void SubgraphUpwardPlanarizer::constructComponentGraphs(BCTree& BC, NodeArray<Gr
 			}
 			GC.newEdge(eOrig);
 		}
-		biComps[v] = GC;
+		*biComps[v] = GC;
 		i++;
 	}
 }

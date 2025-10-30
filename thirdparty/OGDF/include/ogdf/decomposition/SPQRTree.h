@@ -31,7 +31,10 @@
 
 #pragma once
 
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/List.h>
 #include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/decomposition/PertinentGraph.h>
 #include <ogdf/decomposition/Skeleton.h>
 
@@ -73,8 +76,13 @@ public:
 	enum class NodeType { SNode, PNode, RNode };
 
 	// destructor
-
 	virtual ~SPQRTree() { }
+
+	SPQRTree() {};
+	SPQRTree(const SPQRTree& copy) = delete;
+	SPQRTree(SPQRTree&& move) = delete;
+	SPQRTree& operator=(const SPQRTree& copy) = delete;
+	SPQRTree& operator=(SPQRTree&& move) = delete;
 
 	//! \name Access operations
 	//! @{

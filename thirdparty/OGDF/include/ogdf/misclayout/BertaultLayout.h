@@ -35,14 +35,19 @@
 
 #pragma once
 
-#include <ogdf/basic/Array.h>
 #include <ogdf/basic/Array2D.h>
-#include <ogdf/basic/CombinatorialEmbedding.h>
+#include <ogdf/basic/Graph.h>
 #include <ogdf/basic/LayoutModule.h>
 #include <ogdf/basic/List.h>
-#include <ogdf/planarity/PlanRep.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/memory.h>
+
+#include <limits>
 
 namespace ogdf {
+class GraphAttributes;
+class GraphCopy;
+class PlanRep;
 
 class OGDF_EXPORT BertaultLayout : public LayoutModule {
 public:
@@ -78,11 +83,11 @@ public:
 	double reqlength() { return req_length; }
 
 	/** Set the initPositions of nodes. Must for graphs without node attributes
-	* c accepts character arguments:
-	* 'm' for Grid-like Layout of nodes
-	* 'c' for arranging nodes in concentric circles
-	* 'r' for random arrangement of nodes
-	*/
+	 * c accepts character arguments:
+	 * 'm' for Grid-like Layout of nodes
+	 * 'c' for arranging nodes in concentric circles
+	 * 'r' for random arrangement of nodes
+	 */
 	void initPositions(GraphAttributes& AG, char c);
 
 	//! Calculates the edge crossings in the graph corresponding to AG. Node attributes required.

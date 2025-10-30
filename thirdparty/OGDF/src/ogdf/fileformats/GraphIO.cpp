@@ -30,8 +30,19 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphAttributes.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/GridLayout.h>
+#include <ogdf/basic/List.h>
 #include <ogdf/basic/Logger.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/geometry.h>
+#include <ogdf/basic/graphics.h>
 #include <ogdf/basic/simple_graph_alg.h>
+#include <ogdf/cluster/ClusterGraph.h>
+#include <ogdf/cluster/ClusterGraphAttributes.h>
 #include <ogdf/fileformats/DLParser.h>
 #include <ogdf/fileformats/DotParser.h>
 #include <ogdf/fileformats/GdfParser.h>
@@ -44,8 +55,16 @@
 #include <ogdf/fileformats/TlpParser.h>
 #include <ogdf/fileformats/TsplibXmlParser.h>
 
+#include <algorithm>
 #include <cctype>
+#include <cstdlib>
+#include <fstream>
+#include <map>
+#include <sstream>
+#include <string>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 
 // we use these data structures from the stdlib
 using std::ifstream;
@@ -228,6 +247,7 @@ std::ostream& GraphIO::indent(std::ostream& os, int depth) {
 				reader = t->FUNC;                      \
 			}                                          \
 		}                                              \
+		OGDF_ASSERT(reader);                           \
 		std::ifstream is(filename);                    \
 		return is.good() && reader(__VA_ARGS__, is);   \
 	}
@@ -258,6 +278,7 @@ bool GraphIO::read(ClusterGraphAttributes& GA, ClusterGraph& CG, Graph& G, const
 				writer = t->FUNC;                                                                      \
 			}                                                                                          \
 		}                                                                                              \
+		OGDF_ASSERT(writer);                                                                           \
 		std::ofstream os(filename);                                                                    \
 		return os.good() && writer(ARG, os);                                                           \
 	}

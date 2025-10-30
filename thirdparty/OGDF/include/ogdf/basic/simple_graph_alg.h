@@ -31,10 +31,18 @@
 
 #pragma once
 
-#include <ogdf/basic/EdgeArray.h>
-#include <ogdf/basic/NodeArray.h>
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/ArrayBuffer.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
 #include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/internal/graph_iterators.h>
+#include <ogdf/basic/internal/list_templates.h>
 #include <ogdf/basic/tuples.h>
+
+#include <functional>
 
 namespace ogdf {
 
@@ -471,12 +479,13 @@ inline void makeConnected(Graph& G) {
  *
  * @param G         is the input graph.
  * @param component is assigned a mapping from nodes to component numbers.
- * @param isolated  is assigned the list of isolated nodes. An isolated node is
- *                  a node without incident edges.
+ * @param isolated  if non-null, will contain the list of isolated nodes afterwards.
+ *                  An isolated node is a node without incident edges.
+ * @param reprs     if non-null, will contain a node from component c at index c afterwards.
  * @return the number of connected components.
  */
 OGDF_EXPORT int connectedComponents(const Graph& G, NodeArray<int>& component,
-		List<node>* isolated = nullptr);
+		List<node>* isolated = nullptr, ArrayBuffer<node>* reprs = nullptr);
 
 //! Computes the amount of connected components of \p G.
 /**
@@ -494,7 +503,7 @@ inline int connectedComponents(const Graph& G) {
 OGDF_DEPRECATED("connectedComponents() should be used instead.")
 
 /**
- * @copydoc ogdf::connectedComponents(const Graph&, NodeArray<int>&, List<node>*);
+ * @see ogdf::connectedComponents(const Graph&, NodeArray<int>&, List<node>*, ArrayBuffer<node>*)
  */
 inline int connectedIsolatedComponents(const Graph& G, List<node>& isolated,
 		NodeArray<int>& component) {
@@ -918,6 +927,9 @@ inline bool isTree(const Graph& G) {
 /**
  * @ingroup ga-tree
  *
+ * An arborescence is a digraph that has a unique node with indegree 0 (the root)
+ * such that, for any other vertex v, there is exactly one directed walk from r to v.
+ *
  * @param G is the input graph.
  * @param roots is assigned the list of root nodes of the arborescences in the forest.
  * If false is returned, \p roots is undefined.
@@ -928,6 +940,9 @@ OGDF_EXPORT bool isArborescenceForest(const Graph& G, List<node>& roots);
 //! Returns true iff \p G is a forest consisting only of arborescences.
 /**
  * @ingroup ga-tree
+ *
+ * An arborescence is a digraph that has a unique node with indegree 0 (the root)
+ * such that, for any other vertex v, there is exactly one directed walk from r to v.
  *
  * @param G is the input graph.
  * @return true if \p G represents an arborescence forest, false otherwise.
@@ -957,6 +972,9 @@ inline bool isForest(const Graph& G) { return isArborescenceForest(G); }
 /**
  * @ingroup ga-tree
  *
+ * An arborescence is a digraph that has a unique node with indegree 0 (the root)
+ * such that, for any other vertex v, there is exactly one directed walk from r to v.
+ *
  * @param G    is the input graph.
  * @param root is assigned the root node (if true is returned).
  * @return true if \p G represents an arborescence, false otherwise.
@@ -966,6 +984,9 @@ OGDF_EXPORT bool isArborescence(const Graph& G, node& root);
 //! Returns true iff \p G represents an arborescence.
 /**
  * @ingroup ga-tree
+ *
+ * An arborescence is a digraph that has a unique node with indegree 0 (the root)
+ * such that, for any other vertex v, there is exactly one directed walk from r to v.
  *
  * @param G  is the input graph.
  * @return true if \p G represents an arborescence, false otherwise.

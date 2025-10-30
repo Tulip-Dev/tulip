@@ -31,9 +31,12 @@
 
 #pragma once
 
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/graphics.h>
 #include <ogdf/simultaneous/SimDrawManipulatorModule.h>
 
 namespace ogdf {
+class SimDraw;
 
 //! Adds color to a graph
 /** SimDrawColorizer adds colors to the edges (and nodes) of a simdraw
@@ -88,23 +91,23 @@ public:
 public:
 	//! Manages the various color schemes
 	/**
-	*  Color schemes are used within SimDrawColorizer to chose
-	*  different colors for the basic graph visualizations.
-	*  It is used directly within SimDrawColorizer.
-	*
-	*  \code
-	*  SimDraw SD;
-	*  SimDrawColorizer SDC(SD);
-	*  [...]
-	*  SDC.ColorScheme() = SimDrawColorizer::redGre;
-	*  SDC.addColor();
-	*  [...]
-	*  \endcode
-	*
-	*  CAUTION: Some color schemes are only valid for a small
-	*  number (e.g. two or three) of basic graphs. The default color
-	*  scheme can be used for up to 32 basic graphs.
-	*/
+	 *  Color schemes are used within SimDrawColorizer to chose
+	 *  different colors for the basic graph visualizations.
+	 *  It is used directly within SimDrawColorizer.
+	 *
+	 *  \code
+	 *  SimDraw SD;
+	 *  SimDrawColorizer SDC(SD);
+	 *  [...]
+	 *  SDC.ColorScheme() = SimDrawColorizer::redGre;
+	 *  SDC.addColor();
+	 *  [...]
+	 *  \endcode
+	 *
+	 *  CAUTION: Some color schemes are only valid for a small
+	 *  number (e.g. two or three) of basic graphs. The default color
+	 *  scheme can be used for up to 32 basic graphs.
+	 */
 	class SimDrawColorScheme {
 	private:
 		//! stores the current colorscheme (set by constructor)
@@ -112,20 +115,20 @@ public:
 
 		//! red color component
 		/** stores the values of the red color component for every graph
-		*  according to colorscheme
-		*/
+		 *  according to colorscheme
+		 */
 		int* red;
 
 		//! green color component
 		/** stores the values of the green color component for every graph
-		*  according to colorscheme
-		*/
+		 *  according to colorscheme
+		 */
 		int* green;
 
 		//! blue color component
 		/** stores the values of the blue color component for every graph
-		*  according to colorscheme
-		*/
+		 *  according to colorscheme
+		 */
 		int* blue;
 
 	public:

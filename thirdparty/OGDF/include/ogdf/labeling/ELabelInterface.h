@@ -31,8 +31,10 @@
 
 #pragma once
 
-#include <ogdf/basic/GridLayout.h>
-#include <ogdf/basic/GridLayoutMapped.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphAttributes.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/uml/PlanRepUML.h>
 
 namespace ogdf {
@@ -63,7 +65,7 @@ enum class UsedLabels {
 // the basic single label defining class
 // holds info about all labels for one edge
 template<class coordType>
-class OGDF_EXPORT EdgeLabel {
+class EdgeLabel {
 public:
 	static const int numberUsedLabels = static_cast<int>(UsedLabels::lAll);
 

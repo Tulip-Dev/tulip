@@ -31,14 +31,26 @@
 
 #pragma once
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/internal/config_autogen.h>
 #include <ogdf/basic/internal/list_templates.h>
+#include <ogdf/basic/memory.h>
+
+#include <functional>
+#include <initializer_list>
+#include <ostream>
+#include <random>
+#include <type_traits>
+#include <utility>
 
 namespace ogdf {
 
-template<class E>
-class SListPure;
 template<class E, bool isConst>
 class SListIteratorBase;
+template<class E>
+class SListPure;
+
 template<class E>
 using SListConstIterator = SListIteratorBase<E, true>;
 template<class E>
@@ -209,7 +221,7 @@ public:
 	/**
 	 * The list \p L is empty afterwards.
 	 */
-	SListPure(SListPure<E>&& L) : m_head(L.m_head), m_tail(L.m_tail) {
+	SListPure(SListPure<E>&& L) noexcept : m_head(L.m_head), m_tail(L.m_tail) {
 		L.m_head = L.m_tail = nullptr;
 	}
 
@@ -454,8 +466,8 @@ public:
 
 	//! Adds a new element at the beginning of the list.
 	/**
-	* The element is constructed in-place with exactly the same arguments \p args as supplied to the function.
-	*/
+	 * The element is constructed in-place with exactly the same arguments \p args as supplied to the function.
+	 */
 	template<class... Args>
 	iterator emplaceFront(Args&&... args) {
 		m_head = new SListElement<E>(this, m_head, std::forward<Args>(args)...);
@@ -478,8 +490,8 @@ public:
 
 	//! Adds a new element at the end of the list.
 	/**
-	* The element is constructed in-place with exactly the same arguments \p args as supplied to the function.
-	*/
+	 * The element is constructed in-place with exactly the same arguments \p args as supplied to the function.
+	 */
 	template<class... Args>
 	iterator emplaceBack(Args&&... args) {
 		SListElement<E>* pNew = new SListElement<E>(this, nullptr, std::forward<Args>(args)...);
@@ -853,7 +865,7 @@ public:
 	/**
 	 * The list \p L is empty afterwards.
 	 */
-	SList(SList<E>&& L) : SListPure<E>(std::move(L)), m_count(L.m_count) { L.m_count = 0; }
+	SList(SList<E>&& L) noexcept : SListPure<E>(std::move(L)), m_count(L.m_count) { L.m_count = 0; }
 
 	/**
 	 * @name Access methods

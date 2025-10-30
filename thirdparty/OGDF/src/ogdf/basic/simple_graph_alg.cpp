@@ -30,10 +30,23 @@
  */
 
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/ArrayBuffer.h>
+#include <ogdf/basic/CombinatorialEmbedding.h>
+#include <ogdf/basic/EdgeArray.h>
+#include <ogdf/basic/Graph.h>
 #include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
 #include <ogdf/basic/Math.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/simple_graph_alg.h>
+#include <ogdf/basic/tuples.h>
+
+#include <functional>
+#include <limits>
 
 namespace ogdf {
 
@@ -195,7 +208,8 @@ void makeConnected(Graph& G, List<edge>& added) {
 	}
 }
 
-int connectedComponents(const Graph& G, NodeArray<int>& component, List<node>* isolated) {
+int connectedComponents(const Graph& G, NodeArray<int>& component, List<node>* isolated,
+		ArrayBuffer<node>* reprs) {
 	int nComponent = 0;
 	component.fill(-1);
 
@@ -208,6 +222,9 @@ int connectedComponents(const Graph& G, NodeArray<int>& component, List<node>* i
 
 		if (isolated != nullptr && v->degree() == 0) {
 			isolated->pushBack(v);
+		}
+		if (reprs != nullptr) {
+			reprs->push(v);
 		}
 		S.push(v);
 		component[v] = nComponent;

@@ -28,10 +28,17 @@
  * License along with this program; if not, see
  * http://www.gnu.org/copyleft/gpl.html
  */
-#include "array_helper.h"
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphSets.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/RegisteredSet.h>
+#include <ogdf/basic/graph_generators/randomized.h>
 
-using namespace ogdf;
-using namespace bandit;
+#include <functional>
+#include <string>
+
+#include "array_helper.h"
+#include <testing.h>
 
 go_bandit([]() {
 	auto chooseEdge = [](const Graph& graph) { return graph.chooseEdge(); };
@@ -42,8 +49,13 @@ go_bandit([]() {
 		return graph.newEdge(graph.chooseNode(), graph.chooseNode());
 	};
 
-	describeArray<EdgeArray, edge, int>("EdgeArray filled with ints", 42, 43, chooseEdge, allEdges,
-			createEdge);
-	describeArray<EdgeArray, edge, List<int>>("EdgeArray filled with lists of ints", {1, 2, 3},
-			{42}, chooseEdge, allEdges, createEdge);
+	auto deleteEdge = [](Graph& graph, edge e) { return graph.delEdge(e); };
+
+	auto clearEdges = [](Graph& graph) { return graph.clear(); };
+
+	auto init = [](Graph& graph) { randomGraph(graph, 42, 168); };
+
+	runBasicArrayTests<Graph, EdgeArray, edge>("EdgeArray", init, chooseEdge, allEdges, createEdge);
+	runBasicSetTests<Graph, EdgeSet, edge>("EdgeSet", init, chooseEdge, allEdges, createEdge,
+			deleteEdge, clearEdges);
 });

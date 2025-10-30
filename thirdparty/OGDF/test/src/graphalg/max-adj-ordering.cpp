@@ -29,10 +29,19 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/List.h>
 #include <ogdf/basic/graph_generators.h>
+#include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/graphalg/MaxAdjOrdering.h>
 
+#include <functional>
+#include <set>
+#include <string>
+
 #include <graphs.h>
+
 #include <testing.h>
 
 void testAllMAOs(const Graph& G) {
@@ -62,7 +71,7 @@ void testMAOBfs(const Graph& G) {
 	m.calcForest(G, MAO, &forestDecomp);
 	for (auto& forest : forestDecomp) {
 		GraphCopy GC;
-		GC.createEmpty(G);
+		GC.setOriginalGraph(G);
 		for (edge e : forest) {
 			if (GC.copy(e->source()) == nullptr) {
 				GC.newNode(e->source());

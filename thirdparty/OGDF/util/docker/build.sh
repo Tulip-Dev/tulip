@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage() {
-  echo "Invocation: ./build.sh <ci-registry> <tag of base image>"
+  echo "Invocation: ./build.sh <ci-registry> <tag of base image> <debian release name> [ld_lib_path]"
 }
 
 die() {
@@ -15,48 +15,72 @@ is_higher_version() {
 }
 
 [[ -n "$1" ]] || die "$(usage)"
-[[ -n "$2" ]] || die "$(usage)"
+registry="$1"
+shift
 
-# Initialize Dockerfile.
-echo "FROM $2" > Dockerfile
-cat Dockerfile.template >> Dockerfile
-
-base="$(echo "$2" | cut -d":" -f1)"
-version="$(echo "$2" | cut -d":" -f2)"
-
-if [[ "$2" =~ ^{gcc,clang}:[0-9][0-9\.]*$ ]]; then
+[[ -n "$1" ]] || die "$(usage)"
+if [[ "$1" =~ ^{gcc,clang}:[0-9][0-9\.]*$ ]]; then
   echo "Warning: Image not of the form ^{gcc,clang}:[0-9][0-9\.]*$"
   echo "and hence untested. Proceed with caution."
 fi
+base="$(echo "$1" | cut -d":" -f1)"
+version="$(echo "$1" | cut -d":" -f2)"
+shift
 
-# Build clang image first if needed.
-if [[ "$base" = "clang" ]]; then
-  simple_version="$(echo $version | cut -d"." -f1)"
-  sudo docker build \
-    --build-arg "llvmver"="$simple_version" \
-    -t $2 clang/ || die "Failed to build original clang image."
+[[ -n "$1" ]] || die "$(usage)"
+release="$1"
+shift
+
+if [ -z "$DOCKER_CMD" ]; then
+  # Use podman if available
+  if command -v podman > /dev/null 2>&1; then
+    DOCKER_CMD="podman"
+
+  else
+    # If user is not in docker group, use sudo.
+    prefix="sudo "
+    if groups "$(whoami)" | tr " " "\n" | grep "^docker$" || \
+      [[ "$OSTYPE" == "darwin"* ]]; then
+      prefix=""
+    fi
+    DOCKER_CMD="${prefix}docker"
+  fi
 fi
 
-# Install CGAL only for GCC_VERSION >= 6.3 or CLANG_VERSION >= 10.0 (these are
-# the minimum supported versions for CGAL 5).
+if [ -z "$DOCKER_BUILD_CMD" ]; then
+  DOCKER_BUILD_CMD="$DOCKER_CMD build"
+fi
+
+if [ -z "$DOCKER_PUSH_CMD" ]; then
+  DOCKER_PUSH_CMD="$DOCKER_CMD push"
+fi
+
+# Install CGAL 5/6 only for sufficiently recent compiler versions
 cgal_install="false"
-if { [[ "$base" = "gcc" ]]   && is_higher_version "$version" "6.3"; } || \
+if { [[ "$base" = "gcc" ]]   && is_higher_version "$version" "11.4"; } || \
+   { [[ "$base" = "clang" ]] && is_higher_version "$version" "15.0.7"; } ; then
+  cgal_install="6.0.2"
+elif { [[ "$base" = "gcc" ]]   && is_higher_version "$version" "6.3"; } || \
    { [[ "$base" = "clang" ]] && is_higher_version "$version" "10"; } ; then
-  cgal_install="true"
+  cgal_install="5.6.3"
+fi
+echo "Will install CGAL: $cgal_install"
+
+if [[ "$base" = "clang" ]]; then
+  # build clang image (with given debian version) first, result will be cached
+  $DOCKER_BUILD_CMD \
+    --build-arg "llvmver"="$version" \
+    --build-arg "release"="$release" \
+    -t "$base:$version-$release" clang/ || die "Failed to build original clang image."
 fi
 
-# Install doxygen only for CLANG_VERSION >= 11.0 (since doxygen 1.9.3 requires
-# glibc 2.29 which is not installed in the other tested images).
-doxygen_install="false"
-if { [[ "$base" = "clang" ]] && is_higher_version "$version" "11"; } ; then
-  doxygen_install="true"
-fi
 
 # Build and push the image.
-image="$1"/"$2"
-sudo docker build \
-  --no-cache \
+image="$registry/$base:$version"
+$DOCKER_BUILD_CMD \
+  --build-arg "compiler"="$base" \
+  --build-arg "version"="$version-$release" \
+  --build-arg "ld_lib_path"="$@" \
   --build-arg "CGAL_INSTALL"="$cgal_install" \
-  --build-arg "DOXYGEN_INSTALL"="$doxygen_install" \
   -t "$image" . || die "Failed to build image."
-sudo docker push "$image"
+$DOCKER_PUSH_CMD "$image"

@@ -31,9 +31,17 @@
 
 #pragma once
 
-#include <ogdf/basic/Array.h>
+#include <ogdf/basic/Array.h> // IWYU pragma: keep
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/comparer.h>
+#include <ogdf/basic/memory.h>
 
+#include <algorithm>
 #include <cstring>
+#include <limits>
+#include <ostream>
+#include <random>
+#include <type_traits>
 
 namespace ogdf {
 
@@ -336,7 +344,12 @@ public:
 		OGDF_ASSERT(this != &A2);
 		if (num) {
 			A2.init(num);
-			memcpy(A2.m_pStart, this->m_pStart, sizeof(E) * num);
+			OGDF_ASSERT(sizeof(E) <= size_t(std::numeric_limits<INDEX>::max() / num));
+
+			memcpy(A2.m_pStart, this->m_pStart,
+					sizeof(E) <= size_t(std::numeric_limits<INDEX>::max() / num)
+							? sizeof(E) * num
+							: size_t(std::numeric_limits<INDEX>::max()));
 		} else {
 			A2.init(0);
 		}

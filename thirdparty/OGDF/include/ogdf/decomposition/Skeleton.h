@@ -31,12 +31,13 @@
 
 #pragma once
 
-#include <ogdf/basic/EdgeArray.h>
-#include <ogdf/basic/NodeArray.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/memory.h>
 
 namespace ogdf {
 
-class OGDF_EXPORT SPQRTree;
+class SPQRTree;
 
 //! %Skeleton graphs of nodes in an SPQR-tree.
 /**

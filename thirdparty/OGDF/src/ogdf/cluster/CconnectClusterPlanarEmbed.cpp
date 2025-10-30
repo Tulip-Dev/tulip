@@ -30,12 +30,37 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/ArrayBuffer.h>
 #include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/Logger.h>
+#include <ogdf/basic/PQTree.h>
+#include <ogdf/basic/Queue.h>
+#include <ogdf/basic/Reverse.h>
+#include <ogdf/basic/SList.h>
 #include <ogdf/basic/STNumbering.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/basic/extended_graph_alg.h>
+#include <ogdf/basic/pqtree/PQBasicKey.h>
+#include <ogdf/basic/pqtree/PQLeaf.h>
+#include <ogdf/basic/pqtree/PQLeafKey.h>
+#include <ogdf/basic/pqtree/PQNode.h>
+#include <ogdf/basic/pqtree/PQNodeKey.h>
+#include <ogdf/basic/pqtree/PQNodeRoot.h>
 #include <ogdf/basic/simple_graph_alg.h>
+#include <ogdf/cluster/CconnectClusterPlanar.h>
 #include <ogdf/cluster/CconnectClusterPlanarEmbed.h>
+#include <ogdf/cluster/ClusterGraph.h>
 #include <ogdf/fileformats/GraphIO.h>
+#include <ogdf/planarity/booth_lueker/IndInfo.h>
+#include <ogdf/planarity/booth_lueker/PlanarLeafKey.h>
+
+#include <functional>
+#include <ostream>
+#include <stdexcept>
+#include <string>
 
 namespace ogdf {
 
@@ -198,7 +223,7 @@ bool CconnectClusterPlanarEmbed::embed(ClusterGraph& C, Graph& G) {
 void CconnectClusterPlanarEmbed::copyEmbedding(ClusterGraph& Ccopy, Graph& Gcopy, ClusterGraph& C,
 		Graph& G) {
 	OGDF_ASSERT(Gcopy.representsCombEmbedding());
-	OGDF_ASSERT(Ccopy.representsCombEmbedding());
+	OGDF_ASSERT(Ccopy.representsConnectedCombEmbedding());
 
 	AdjEntryArray<adjEntry> adjTableCopy2Orig(Gcopy);
 	AdjEntryArray<adjEntry> adjTableOrig2Copy(G);
@@ -983,9 +1008,9 @@ bool CconnectClusterPlanarEmbed::planarityTest(ClusterGraph& Ccopy, const cluste
 	}
 
 	Graph* subGraph = new Graph();
-	NodeArray<node> nodeTableOrig2New;
-	EdgeArray<edge> edgeTableOrig2New;
-	inducedSubGraph(Gcopy, subGraphNodes.begin(), (*subGraph), nodeTableOrig2New, edgeTableOrig2New);
+	NodeArray<node> nodeTableOrig2New(Gcopy, nullptr);
+	EdgeArray<edge> edgeTableOrig2New(Gcopy, nullptr);
+	subGraph->insert(subGraphNodes, Gcopy.edges, nodeTableOrig2New, edgeTableOrig2New);
 	NodeArray<node> nodeTableNew2Orig((*subGraph), nullptr);
 
 	// Necessary only for root cluster.
@@ -1833,6 +1858,22 @@ void CconnectClusterPlanarEmbed::constructWheelGraph(ClusterGraph& Ccopy, Graph&
 #ifdef OGDF_DEBUG
 	Ccopy.consistencyCheck();
 #endif
+}
+
+bool CconnectClusterPlanarityModule::clusterPlanarEmbed(ClusterGraph& CG, Graph& G) {
+	CconnectClusterPlanarEmbed inst;
+	if (inst.embed(CG, G)) {
+		return true;
+	} else if (inst.errCode() == CconnectClusterPlanarEmbed::ErrorCode::nonCPlanar
+			|| inst.errCode() == CconnectClusterPlanarEmbed::ErrorCode::nonPlanar) {
+		return false;
+	} else {
+		throw std::runtime_error("Not (cluster-)connected!");
+	}
+}
+
+bool CconnectClusterPlanarityModule::clusterPlanarEmbedClusterPlanarGraph(ClusterGraph& CG, Graph& G) {
+	return clusterPlanarEmbed(CG, G);
 }
 
 }

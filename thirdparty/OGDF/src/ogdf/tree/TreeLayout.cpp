@@ -31,9 +31,21 @@
  */
 
 
-#include <ogdf/basic/AdjEntryArray.h>
+#include <ogdf/basic/ArrayBuffer.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphAttributes.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/Math.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/comparer.h>
+#include <ogdf/basic/geometry.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/tree/TreeLayout.h>
+
+#include <cmath>
+#include <utility>
 
 namespace ogdf {
 
@@ -228,10 +240,6 @@ void TreeLayout::setRoot(GraphAttributes& AG, Graph& tree, SListPure<edge>& reve
 					if (x->indeg() == 0) {
 						root = x;
 					}
-				} else if (m_selectRoot == RootSelectionType::Sink) {
-					if (x->outdeg() == 0) {
-						root = x;
-					}
 				} else { // selectByCoordinate
 					root = x;
 				}
@@ -373,7 +381,13 @@ void TreeLayout::call(GraphAttributes& AG) {
 		return;
 	}
 
-	OGDF_ASSERT(isArborescenceForest(tree));
+#ifdef OGDF_DEBUG
+	if (m_selectRoot == RootSelectionType::Source) {
+		OGDF_ASSERT(isArborescenceForest(tree));
+	} else {
+		OGDF_ASSERT(isAcyclicUndirected(tree));
+	}
+#endif
 	OGDF_ASSERT(m_siblingDistance > 0);
 	OGDF_ASSERT(m_subtreeDistance > 0);
 	OGDF_ASSERT(m_levelDistance > 0);

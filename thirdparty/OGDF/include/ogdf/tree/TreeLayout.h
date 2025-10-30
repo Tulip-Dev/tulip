@@ -32,10 +32,15 @@
 
 #pragma once
 
+#include <ogdf/basic/Graph.h>
 #include <ogdf/basic/LayoutModule.h>
-#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
 
 namespace ogdf {
+class GraphAttributes;
+enum class Orientation;
+template<class E>
+class SListPure;
 
 /**
  * \brief The tree layout algorithm.
@@ -78,7 +83,7 @@ namespace ogdf {
  *   </tr><tr>
  *     <td><i>selectRoot</i><td> #RootSelectionType <td> RootSelectionType::Source
  *     <td>Determines how to select the root of the tree(s). Possible
- *     selection strategies are to take a (unique) source or sink in
+ *     selection strategies are to take a (unique) source in
  *     the graph, or to use the coordinates and to select the topmost
  *     node for top-to-bottom orientation, etc.
  *   </tr>
@@ -95,7 +100,6 @@ public:
 	//! Determines how to select the root of the tree.
 	enum class RootSelectionType {
 		Source, //!< Select a source in the graph.
-		Sink, //!< Select a sink in the graph.
 		ByCoord //!< Use the coordinates, e.g., select the topmost node if orientation is topToBottom.
 	};
 

@@ -30,7 +30,20 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/CombinatorialEmbedding.h>
+#include <ogdf/basic/FaceSet.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/Module.h>
+#include <ogdf/basic/Queue.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/exceptions.h>
 #include <ogdf/basic/extended_graph_alg.h>
+#include <ogdf/planarity/PlanRepLight.h>
+#include <ogdf/planarity/RemoveReinsertType.h>
 #include <ogdf/planarity/embedding_inserter/CrossingsBucket.h>
 #include <ogdf/planarity/embedding_inserter/FixEdgeInserterCore.h>
 
@@ -87,12 +100,12 @@ Module::ReturnType FixEdgeInserterCore::call(const Array<edge>& origEdges, bool 
 	// m_delFaces and m_newFaces are used by removeEdge()
 	// if we can't allocate memory for them, we throw an exception
 	if (rrPost != RemoveReinsertType::None) {
-		m_delFaces = new FaceSet<false>(E);
+		m_delFaces = new FaceSet(E);
 		if (m_delFaces == nullptr) {
 			OGDF_THROW(InsufficientMemoryException);
 		}
 
-		m_newFaces = new FaceSet<false>(E);
+		m_newFaces = new FaceSet(E);
 		if (m_newFaces == nullptr) {
 			delete m_delFaces;
 			OGDF_THROW(InsufficientMemoryException);

@@ -31,6 +31,10 @@
 
 #pragma once
 
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/geometry.h>
+#include <ogdf/cluster/ClusterGraph.h>
+#include <ogdf/cluster/ClusterGraphAttributes.h>
 #include <ogdf/fileformats/GraphIO.h>
 
 #include <ogdf/lib/pugixml/pugixml.h>
@@ -39,6 +43,10 @@
 #include <sstream>
 
 namespace ogdf {
+class GraphAttributes;
+enum class StrokeType : unsigned char;
+template<class E>
+class List;
 
 /**
  * \brief SVG Writer
@@ -217,7 +225,7 @@ private:
 	 * \param point the candidate arrow tip
 	 * \param adj the adjacency entry
 	 */
-	bool isCoveredBy(const DPoint& point, adjEntry adj);
+	bool isCoveredBy(const DPoint& point, adjEntry adj) const;
 
 	/**
 	 * Draws an arrow head at the end of the edge.

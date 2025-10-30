@@ -31,9 +31,10 @@
 
 #pragma once
 
+#include <ogdf/basic/basic.h>
 #include <ogdf/basic/heap/HeapBase.h>
 
-#include <functional>
+#include <cstddef>
 
 namespace ogdf {
 
@@ -242,6 +243,12 @@ inline PairingHeapNode<T>* PairingHeap<T, C>::pair(PairingHeapNode<T>* heapNode)
 
 template<typename T, typename C>
 inline PairingHeapNode<T>* PairingHeap<T, C>::merge(PairingHeapNode<T>* a, PairingHeapNode<T>* b) {
+	if (a == nullptr) {
+		return b;
+	}
+	if (b == nullptr) {
+		return a;
+	}
 	if (this->comparator()(a->value, b->value)) {
 		link(a, b);
 		return a;

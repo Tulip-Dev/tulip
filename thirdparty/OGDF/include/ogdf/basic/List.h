@@ -31,19 +31,29 @@
 
 #pragma once
 
-#include <ogdf/basic/Reverse.h>
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/internal/config_autogen.h>
 #include <ogdf/basic/internal/list_templates.h>
+#include <ogdf/basic/memory.h>
 
+#include <functional>
+#include <initializer_list>
+#include <iterator>
+#include <ostream>
 #include <random>
+#include <type_traits>
+#include <utility>
 
 namespace ogdf {
 
+template<class E, bool isConst, bool isReverse>
+class ListIteratorBase;
 template<class E>
 class List;
 template<class E>
 class ListPure;
-template<class E, bool isConst, bool isReverse>
-class ListIteratorBase;
+
 template<class E>
 using ListConstIterator = ListIteratorBase<E, true, false>;
 template<class E>
@@ -113,10 +123,16 @@ class ListIteratorBase {
 	//! pointer to list element
 	ListElem* m_pX;
 
+public:
+	using difference_type = std::ptrdiff_t;
+	using value_type = Elem;
+	using iterator_category = std::bidirectional_iterator_tag;
+	using pointer = value_type*;
+	using reference = value_type&;
+
 	//! Conversion to pointer to list element.
 	operator ListElem*() { return m_pX; }
 
-public:
 	//! Constructs an iterator that points to \p pX.
 	ListIteratorBase(ListElem* pX) : m_pX(pX) { }
 
@@ -252,9 +268,9 @@ public:
 	/**
 	 * The list \p L is empty afterwards.
 	 */
-	ListPure(ListPure<E>&& L) : m_head(L.m_head), m_tail(L.m_tail) {
-		reassignListRefs();
+	ListPure(ListPure<E>&& L) noexcept : m_head(L.m_head), m_tail(L.m_tail) {
 		L.m_head = L.m_tail = nullptr;
+		reassignListRefs();
 	}
 
 	//! Destructor.
@@ -605,8 +621,8 @@ public:
 
 	//! Adds a new element at the end of the list.
 	/**
-	* The element is constructed in-place with exactly the same arguments \p args as supplied to the function.
-	*/
+	 * The element is constructed in-place with exactly the same arguments \p args as supplied to the function.
+	 */
 	template<class... Args>
 	iterator emplaceBack(Args&&... args) {
 		ListElement<E>* pX = new ListElement<E>(this, nullptr, m_tail, std::forward<Args>(args)...);
@@ -1457,7 +1473,7 @@ public:
 	/**
 	 * The list \p L is empty afterwards.
 	 */
-	List(List<E>&& L) : ListPure<E>(std::move(L)), m_count(L.m_count) { L.m_count = 0; }
+	List(List<E>&& L) noexcept : ListPure<E>(std::move(L)), m_count(L.m_count) { L.m_count = 0; }
 
 	/**
 	 * @name Access methods

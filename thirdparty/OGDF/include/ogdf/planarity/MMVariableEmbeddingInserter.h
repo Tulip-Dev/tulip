@@ -31,14 +31,17 @@
 
 #pragma once
 
-#include <ogdf/basic/CombinatorialEmbedding.h>
-#include <ogdf/basic/FaceArray.h>
-#include <ogdf/basic/NodeSet.h>
-#include <ogdf/basic/tuples.h>
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/planarity/MMEdgeInsertionModule.h>
+#include <ogdf/planarity/PlanRepExpansion.h>
 #include <ogdf/planarity/RemoveReinsertType.h>
 
 namespace ogdf {
+class NodeSet;
 
 //! Minor-monotone edge insertion with variable embedding.
 /**
@@ -139,8 +142,7 @@ private:
 	 * @param nodes is assigned the set of anchor nodes.
 	 * @param nsParent is the parent node split.
 	 */
-	void collectAnchorNodes(node v, NodeSet<>& nodes,
-			const PlanRepExpansion::NodeSplit* nsParent) const;
+	void collectAnchorNodes(node v, NodeSet& nodes, const PlanRepExpansion::NodeSplit* nsParent) const;
 
 	/**
 	 * \brief Finds the set of anchor nodes of \p src and \p tgt.
@@ -150,7 +152,7 @@ private:
 	 * @param sources ia assigned the set of anchor nodes of \p src's original node.
 	 * @param targets ia assigned the set of anchor nodes of \p tgt's original node.
 	 */
-	void findSourcesAndTargets(node src, node tgt, NodeSet<>& sources, NodeSet<>& targets) const;
+	void findSourcesAndTargets(node src, node tgt, NodeSet& sources, NodeSet& targets) const;
 
 	/**
 	 * \brief Returns all anchor nodes of \p vOrig in n\p nodes.
@@ -158,9 +160,9 @@ private:
 	 * @param vOrig is a node in the original graph.
 	 * @param nodes ia assigned the set of anchor nodes.
 	 */
-	void anchorNodes(node vOrig, NodeSet<>& nodes) const;
+	void anchorNodes(node vOrig, NodeSet& nodes) const;
 
-	static node commonDummy(NodeSet<>& sources, NodeSet<>& targets);
+	static node commonDummy(NodeSet& sources, NodeSet& targets);
 
 	/**
 	 * \brief Computes insertion path \p eip.
@@ -234,8 +236,8 @@ private:
 
 	PlanRepExpansion* m_pPG; //!< Pointer to the planarized expansion.
 
-	NodeSet<>* m_pSources; //!< The set of possible start nodes of an insertion path.
-	NodeSet<>* m_pTargets; //!< The set of possible end nodes of an insertion path.
+	NodeSet* m_pSources; //!< The set of possible start nodes of an insertion path.
+	NodeSet* m_pTargets; //!< The set of possible end nodes of an insertion path.
 
 	NodeArray<SList<int>> m_compV; //!< The list of blocks containing a node \a v.
 	Array<SList<node>> m_nodeB; //!< The list of nodes in block \a i.

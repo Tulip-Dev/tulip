@@ -29,9 +29,22 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphAttributes.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/LayoutModule.h>
 #include <ogdf/uml/PlanarizationLayoutUML.h>
+#include <ogdf/uml/UMLGraph.h>
+
+#include <functional>
+#include <set>
+#include <string>
 
 #include "layout_helpers.h"
+#include <graphs.h>
+
+#include <testing.h>
 
 class PLUMock : public LayoutModule {
 	PlanarizationLayoutUML layout;
@@ -57,7 +70,8 @@ public:
 };
 
 go_bandit([] {
+	bool skipMe = true;
 	describeLayout<PLUMock>("PlanarizationLayoutUML",
 			GraphAttributes::edgeType | GraphAttributes::nodeType,
-			{GraphProperty::simple, GraphProperty::sparse}, true);
+			{GraphProperty::simple, GraphProperty::sparse}, true, GraphSizes(), skipMe);
 });

@@ -30,14 +30,21 @@
  */
 
 
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/planarity/PlanRep.h>
 #include <ogdf/planarity/PlanRepLight.h>
+
+#include <utility>
 
 namespace ogdf {
 
 
 PlanRepLight::PlanRepLight(const PlanRep& pr)
 	: m_ccInfo(pr.ccInfo()), m_pr(pr), m_currentCC(-1), m_eAuxCopy(pr.original()) {
-	GraphCopy::createEmpty(pr.original());
+	GraphCopy::setOriginalGraph(pr.original());
 }
 
 void PlanRepLight::initCC(int cc) {
@@ -52,7 +59,15 @@ void PlanRepLight::initCC(int cc) {
 	}
 
 	m_currentCC = cc;
-	initByCC(m_ccInfo, cc, m_eAuxCopy);
+	// inlined GraphCopy::initByCC(m_ccInfo, cc, m_eAuxCopy):
+	m_eAuxCopy.init(*m_pGraph);
+	clear();
+#ifdef OGDF_DEBUG
+	auto count =
+#endif
+			insert(m_ccInfo, cc, m_vCopy, m_eAuxCopy);
+	OGDF_ASSERT(count.first == m_ccInfo.numberOfNodes(cc));
+	OGDF_ASSERT(count.second == m_ccInfo.numberOfEdges(cc));
 }
 
 }

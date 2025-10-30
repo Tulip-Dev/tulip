@@ -34,7 +34,18 @@
 #pragma once
 
 #include <ogdf/basic/GraphList.h>
-#include <ogdf/basic/List.h>
+#include <ogdf/basic/Observer.h>
+#include <ogdf/basic/RegisteredArray.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/memory.h>
+
+#include <iosfwd>
+#include <string>
+
+namespace ogdf {
+template<class E>
+class List;
+} // namespace ogdf
 
 //! Iteration over all adjacency list entries \p adj of a graph element \p ge.
 #define forall_adj_elements(adj, ge) for ((adj) = (v)->firstAdj(); (adj); (adj) = (adj)->succ())
@@ -53,10 +64,10 @@
 
 namespace ogdf {
 
-class OGDF_EXPORT Hypergraph;
-class OGDF_EXPORT HypernodeElement;
-class OGDF_EXPORT HyperedgeElement;
-class OGDF_EXPORT AdjHypergraphElement;
+class AdjHypergraphElement; // IWYU pragma: keep
+class HyperedgeElement; // IWYU pragma: keep
+class Hypergraph; // IWYU pragma: keep
+class HypernodeElement; // IWYU pragma: keep
 
 //! The type of hypernodes.
 using hypernode = HypernodeElement*;
@@ -129,6 +140,8 @@ public:
 	adjHypergraphEntry cyclicPred() const;
 
 	OGDF_NEW_DELETE;
+
+	friend OGDF_EXPORT std::ostream& operator<<(std::ostream& os, ogdf::adjHypergraphEntry v);
 };
 
 //! Class for the representation of hyperedges.
@@ -206,7 +219,7 @@ public:
 		return e->index() == m_index && e->hypergraph() == m_hypergraph;
 	}
 
-	friend std::ostream& operator<<(std::ostream& os, ogdf::hyperedge e);
+	friend OGDF_EXPORT std::ostream& operator<<(std::ostream& os, ogdf::hyperedge e);
 
 	OGDF_NEW_DELETE;
 };
@@ -311,16 +324,99 @@ public:
 	}
 
 	OGDF_NEW_DELETE;
+
+	friend OGDF_EXPORT std::ostream& operator<<(std::ostream& os, ogdf::hypernode v);
 };
 
-class HypergraphArrayBase;
-template<class T>
-class HypernodeArray;
-template<class T>
-class HyperedgeArray;
-class OGDF_EXPORT HypergraphObserver;
+//! Registry for nodes and edges of a hypergraph.
+template<typename Key>
+class HypergraphRegistry
+	: public RegistryBase<Key*, HypergraphRegistry<Key>, internal::GraphIterator<Key*>> {
+	Hypergraph* m_pGraph;
+	int* m_nextKeyIndex;
 
-class OGDF_EXPORT Hypergraph {
+public:
+	using iterator = internal::GraphIterator<Key*>;
+
+	//! Constructor.
+	HypergraphRegistry(Hypergraph* graph, int* nextKeyIndex)
+		: m_pGraph(graph), m_nextKeyIndex(nextKeyIndex) { }
+
+	static inline int keyToIndex(Key* key) { return key->index(); }
+
+	bool isKeyAssociated(Key* key) const {
+		if (key == nullptr) {
+			return false;
+		}
+#ifdef OGDF_DEBUG
+		if (key->hypergraph() == m_pGraph) {
+			OGDF_ASSERT(keyToIndex(key) < this->getArraySize());
+			return true;
+		} else {
+			return false;
+		}
+#else
+		return true;
+#endif
+	}
+
+	int calculateArraySize(int add) const { return calculateTableSize(*m_nextKeyIndex + add); }
+
+	int maxKeyIndex() const { return (*m_nextKeyIndex) - 1; }
+
+	//! Returns a pointer to the associated hypergraph
+	Hypergraph* graphOf() const { return m_pGraph; }
+};
+
+OGDF_EXPORT HypergraphRegistry<HypernodeElement>::iterator begin(
+		const HypergraphRegistry<HypernodeElement>& self);
+
+OGDF_EXPORT HypergraphRegistry<HypernodeElement>::iterator end(
+		const HypergraphRegistry<HypernodeElement>& self);
+
+OGDF_EXPORT HypergraphRegistry<HyperedgeElement>::iterator begin(
+		const HypergraphRegistry<HyperedgeElement>& self);
+
+OGDF_EXPORT HypergraphRegistry<HyperedgeElement>::iterator end(
+		const HypergraphRegistry<HyperedgeElement>& self);
+
+//! RegisteredArray for nodes and edges of a hypergraph.
+template<typename Key, typename Value, bool WithDefault, typename Registry = HypergraphRegistry<Key>>
+class HypergraphRegisteredArray : public RegisteredArray<Registry, Value, WithDefault, Hypergraph> {
+	using RA = RegisteredArray<Registry, Value, WithDefault, Hypergraph>;
+
+public:
+	using RA::RA;
+
+	//! Returns a pointer to the associated hypergraph.
+	Hypergraph* hypergraphOf() const {
+		if (RA::registeredAt() == nullptr) {
+			return nullptr;
+		} else {
+			return RA::registeredAt()->graphOf();
+		}
+	}
+};
+
+#define OGDF_DECL_REG_ARRAY_TYPE(v, c) HypergraphRegisteredArray<HypernodeElement, v, c>
+//! Array for labeling the \ref hypernode "hypernodes" in a Hypergraph with an arbitrary \p Value.
+OGDF_DECL_REG_ARRAY(HypernodeArray)
+#undef OGDF_DECL_REG_ARRAY_TYPE
+
+#define OGDF_DECL_REG_ARRAY_TYPE(v, c) HypergraphRegisteredArray<HyperedgeElement, v, c>
+//! Array for labeling the \ref hyperedge "hyperedges" in a Hypergraph with an arbitrary \p Value.
+OGDF_DECL_REG_ARRAY(HyperedgeArray)
+#undef OGDF_DECL_REG_ARRAY_TYPE
+
+class HypergraphObserver;
+
+class OGDF_EXPORT Hypergraph : public Observable<HypergraphObserver, Hypergraph> {
+	//! The registered hypernode arrays
+	HypergraphRegistry<HypernodeElement> m_regHypernodeArrays;
+
+	//! The registered hyperedge arrays
+	HypergraphRegistry<HyperedgeElement> m_regHyperedgeArrays;
+
 	//! The list of all hypernodes.
 	internal::GraphList<HypernodeElement> m_hypernodes;
 
@@ -339,17 +435,6 @@ class OGDF_EXPORT Hypergraph {
 	//! The Index that will be assigned to the next created hyperedge.
 	int m_hyperedgeIdCount;
 
-	//! The current table size of hypernode arrays within the hypergraph.
-	int m_hypernodeArrayTableSize;
-
-	//! The current table size of hyperedge arrays within the hypergraph.
-	int m_hyperedgeArrayTableSize;
-
-	//! The registered hypergraph arrays & observers.
-	mutable ListPure<HypergraphArrayBase*> m_hypernodeArrays;
-	mutable ListPure<HypergraphArrayBase*> m_hyperedgeArrays;
-	mutable ListPure<HypergraphObserver*> m_observers;
-
 public:
 	//! Constructs an empty hypergraph.
 	Hypergraph();
@@ -364,10 +449,10 @@ public:
 	bool empty() const { return m_nHypernodes == 0; }
 
 	//! Returns the list of all hypernodes.
-	internal::GraphList<HypernodeElement> hypernodes() const { return m_hypernodes; }
+	const internal::GraphList<HypernodeElement>& hypernodes() const { return m_hypernodes; }
 
 	//! Returns the list of all hyperedges.
-	internal::GraphList<HyperedgeElement> hyperedges() const { return m_hyperedges; }
+	const internal::GraphList<HyperedgeElement>& hyperedges() const { return m_hyperedges; }
 
 	//! Returns the number of hypernodes in the hypergraph.
 	int numberOfHypernodes() const { return m_nHypernodes; }
@@ -392,12 +477,6 @@ public:
 
 	//! Returns the last hyperedge in the list of all hyperedges.
 	hyperedge lastHyperEdge() const { return m_hyperedges.tail(); }
-
-	//! Returns the table size of hypernode arrays with the hypergraph.
-	int hypernodeArrayTableSize() const { return m_hypernodeArrayTableSize; }
-
-	//! Returns the table size of hyperedge arrays within the hypergraph.
-	int hyperedgeArrayTableSize() const { return m_hyperedgeArrayTableSize; }
 
 	//! Creates a new hypernode and returns it.
 	hypernode newHypernode();
@@ -480,37 +559,36 @@ public:
 	//! Checks the consistency of the data structure.
 	bool consistency() const;
 
-	//! Registers a node array.
-	ListIterator<HypergraphArrayBase*> registerHypernodeArray(
-			HypergraphArrayBase* pHypernodeArray) const;
+	//! Returns a reference to the registry of hypernode arrays associated with this hypergraph.
+	HypergraphRegistry<HypernodeElement>& hypernodeRegistry() { return m_regHypernodeArrays; }
 
-	ListIterator<HypergraphArrayBase*> registerHyperedgeArray(
-			HypergraphArrayBase* pHyperedgeArray) const;
+	//! Returns a const reference to the registry of hypernode arrays associated with this hypergraph.
+	const HypergraphRegistry<HypernodeElement>& hypernodeRegistry() const {
+		return m_regHypernodeArrays;
+	}
 
-	//! Registers a hypergraph observer (e.g. a EdgeStandardRep).
-	ListIterator<HypergraphObserver*> registerObserver(HypergraphObserver* pObserver) const;
+	operator const HypergraphRegistry<HypernodeElement>&() const { return m_regHypernodeArrays; }
 
-	//! Unregisters a hypernode array.
-	void unregisterHypernodeArray(ListIterator<HypergraphArrayBase*> it) const;
+	//! Returns a reference to the registry of hyperedge arrays associated with this hypergraph.
+	HypergraphRegistry<HyperedgeElement>& hyperedgeRegistry() { return m_regHyperedgeArrays; }
 
-	//! Unregisters an hyperedge array.
-	void unregisterHyperedgeArray(ListIterator<HypergraphArrayBase*> it) const;
+	//! Returns a const reference to the registry of hyperedge arrays associated with this hypergraph.
+	const HypergraphRegistry<HyperedgeElement>& hyperedgeRegistry() const {
+		return m_regHyperedgeArrays;
+	}
 
-	//! Unregisters a hypergraph observer.
-	void unregisterObserver(ListIterator<HypergraphObserver*> it) const;
+	operator const HypergraphRegistry<HyperedgeElement>&() const { return m_regHyperedgeArrays; }
 
 	Hypergraph& operator=(const Hypergraph& H);
 
-	friend std::ostream& operator<<(std::ostream& os, ogdf::Hypergraph& H);
+	friend OGDF_EXPORT std::ostream& operator<<(std::ostream& os, ogdf::Hypergraph& H);
 
-	friend std::istream& operator>>(std::istream& is, ogdf::Hypergraph& H);
+	friend OGDF_EXPORT std::istream& operator>>(std::istream& is, ogdf::Hypergraph& H);
 
 	OGDF_MALLOC_NEW_DELETE;
 
 private:
 	void initArrays();
-
-	void initObservers();
 
 	int nextEntry(char* buffer, int from, string stop);
 

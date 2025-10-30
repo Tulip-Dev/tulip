@@ -30,11 +30,21 @@
  */
 
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/CombinatorialEmbedding.h>
 #include <ogdf/basic/FaceSet.h>
-#include <ogdf/basic/NodeSet.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/GraphSets.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/simple_graph_alg.h>
+#include <ogdf/basic/tuples.h>
 #include <ogdf/planarity/PlanRepExpansion.h>
+
+#include <utility>
 
 namespace ogdf {
 
@@ -115,7 +125,8 @@ void PlanRepExpansion::initCC(int i) {
 	m_currentCC = i;
 
 	NodeArray<node> vCopy(*m_pGraph);
-	Graph::constructInitByNodes(*m_pGraph, m_nodesInCC[i], vCopy, m_eAuxCopy);
+	m_eAuxCopy.init(*m_pGraph);
+	insert(m_nodesInCC[i], m_pGraph->edges, vCopy, m_eAuxCopy);
 
 	ListConstIterator<node> itV;
 	for (itV = m_nodesInCC[i].begin(); itV.valid(); ++itV) {
@@ -320,7 +331,7 @@ void PlanRepExpansion::insertEdgePathEmbedded(edge eOrig, nodeSplit ns, Combinat
 }
 
 void PlanRepExpansion::removeEdgePathEmbedded(CombinatorialEmbedding& E, edge eOrig, nodeSplit ns,
-		FaceSet<false>& newFaces, NodeSet<false>& mergedNodes, node& oldSrc, node& oldTgt) {
+		FaceSet& newFaces, NodeSet& mergedNodes, node& oldSrc, node& oldTgt) {
 	OGDF_ASSERT((eOrig != nullptr && ns == nullptr) || (eOrig == nullptr && ns != nullptr));
 
 	const List<edge>& path = (eOrig) ? m_eCopy[eOrig] : ns->m_path;

@@ -31,10 +31,33 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/Logger.h>
+#include <ogdf/basic/Queue.h>
+#include <ogdf/basic/SList.h>
 #include <ogdf/basic/STNumbering.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/basic/extended_graph_alg.h>
+#include <ogdf/basic/pqtree/PQLeaf.h>
+#include <ogdf/basic/pqtree/PQLeafKey.h>
+#include <ogdf/basic/pqtree/PQNode.h>
+#include <ogdf/basic/pqtree/PQNodeRoot.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/cluster/CconnectClusterPlanar.h>
+#include <ogdf/cluster/ClusterGraph.h>
+#include <ogdf/planarity/booth_lueker/PlanarLeafKey.h>
+#include <ogdf/planarity/booth_lueker/PlanarPQTree.h>
+
+#include <functional>
+#include <ostream>
+#include <stdexcept>
+
+namespace ogdf::booth_lueker {
+class IndInfo;
+} // namespace ogdf::booth_lueker
 
 namespace ogdf {
 
@@ -120,8 +143,9 @@ bool CconnectClusterPlanar::planarityTest(ClusterGraph& C, const cluster act, Gr
 	}
 
 	Graph subGraph;
-	NodeArray<node> table;
-	inducedSubGraph(G, subGraphNodes.begin(), subGraph, table);
+	NodeArray<node> table(G, nullptr);
+	EdgeArray<edge> edgeMap(G, nullptr);
+	subGraph.insert(subGraphNodes, G.edges, table, edgeMap);
 
 	// Introduce super sink and add edges corresponding
 	// to outgoing edges of the cluster
@@ -546,6 +570,22 @@ void CconnectClusterPlanar::prepareParallelEdges(Graph& G) {
 			}
 		}
 	}
+}
+
+bool CconnectClusterPlanarityModule::isClusterPlanar(const ClusterGraph& CG) {
+	CconnectClusterPlanar inst;
+	if (inst.call(CG)) {
+		return true;
+	} else if (inst.errCode() == CconnectClusterPlanar::ErrorCode::nonCPlanar
+			|| inst.errCode() == CconnectClusterPlanar::ErrorCode::nonPlanar) {
+		return false;
+	} else {
+		throw std::runtime_error("Not (cluster-)connected!");
+	}
+}
+
+bool CconnectClusterPlanarityModule::isClusterPlanarDestructive(ClusterGraph& CG, Graph& G) {
+	return isClusterPlanar(CG);
 }
 
 }

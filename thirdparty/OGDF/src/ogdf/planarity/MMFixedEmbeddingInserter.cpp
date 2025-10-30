@@ -29,10 +29,27 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/CombinatorialEmbedding.h>
+#include <ogdf/basic/FaceSet.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphAttributes.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/GraphSets.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/Module.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/graphics.h>
+#include <ogdf/basic/tuples.h>
 #include <ogdf/fileformats/GraphIO.h>
 #include <ogdf/planarity/MMFixedEmbeddingInserter.h>
+#include <ogdf/planarity/PlanRepExpansion.h>
+#include <ogdf/planarity/RemoveReinsertType.h>
 #include <ogdf/planarity/embedding_inserter/CrossingsBucket.h>
-#include <ogdf/planarlayout/PlanarStraightLayout.h>
+
+#include <string>
+#include <utility>
 
 namespace ogdf {
 
@@ -164,14 +181,14 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(PlanRepExpansion& PG,
 	}
 #endif
 
-	m_delFaces = new FaceSet<false>(E);
+	m_delFaces = new FaceSet(E);
 
 	// m_newFaces and m_mergedNodes are used by removeEdge()
 	m_newFaces = nullptr;
 	m_mergedNodes = nullptr;
 	if (removeReinsert() != RemoveReinsertType::None) {
-		m_newFaces = new FaceSet<false>(E);
-		m_mergedNodes = new NodeSet<false>(PG);
+		m_newFaces = new FaceSet(E);
+		m_mergedNodes = new NodeSet(PG);
 	}
 
 	SListPure<edge> currentOrigEdges;
@@ -181,7 +198,7 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(PlanRepExpansion& PG,
 		}
 	}
 
-	NodeSet<> sources(PG), targets(PG);
+	NodeSet sources(PG), targets(PG);
 
 	// insertion of edges
 	for (edge eOrig : origEdges) {
@@ -1141,7 +1158,7 @@ void MMFixedEmbeddingInserter::contractSplitIfReq(PlanRepExpansion& PG, Combinat
 	}
 }
 
-void MMFixedEmbeddingInserter::collectAnchorNodes(node v, NodeSet<>& nodes,
+void MMFixedEmbeddingInserter::collectAnchorNodes(node v, NodeSet& nodes,
 		const PlanRepExpansion::NodeSplit* nsParent, const PlanRepExpansion& PG) const {
 	if (PG.original(v) != nullptr) {
 		nodes.insert(v);
@@ -1170,13 +1187,13 @@ void MMFixedEmbeddingInserter::collectAnchorNodes(node v, NodeSet<>& nodes,
 	}
 }
 
-void MMFixedEmbeddingInserter::findSourcesAndTargets(node src, node tgt, NodeSet<>& sources,
-		NodeSet<>& targets, const PlanRepExpansion& PG) const {
+void MMFixedEmbeddingInserter::findSourcesAndTargets(node src, node tgt, NodeSet& sources,
+		NodeSet& targets, const PlanRepExpansion& PG) const {
 	collectAnchorNodes(src, sources, nullptr, PG);
 	collectAnchorNodes(tgt, targets, nullptr, PG);
 }
 
-void MMFixedEmbeddingInserter::anchorNodes(node vOrig, NodeSet<>& nodes,
+void MMFixedEmbeddingInserter::anchorNodes(node vOrig, NodeSet& nodes,
 		const PlanRepExpansion& PG) const {
 	node vFirst = PG.expansion(vOrig).front();
 	if (PG.splittableOrig(vOrig)) {
@@ -1186,7 +1203,7 @@ void MMFixedEmbeddingInserter::anchorNodes(node vOrig, NodeSet<>& nodes,
 	}
 }
 
-node MMFixedEmbeddingInserter::commonDummy(NodeSet<>& sources, NodeSet<>& targets) {
+node MMFixedEmbeddingInserter::commonDummy(NodeSet& sources, NodeSet& targets) {
 	ListConstIterator<node> it;
 	for (it = sources.nodes().begin(); it.valid(); ++it) {
 		if (targets.isMember(*it)) {

@@ -29,13 +29,22 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
-#include <ogdf/basic/extended_graph_alg.h>
+#include <ogdf/basic/Module.h>
 #include <ogdf/upward/SubgraphUpwardPlanarizer.h>
+#include <ogdf/upward/UpwardPlanRep.h>
+#include <ogdf/upward/UpwardPlanarity.h>
 
-#include <random>
+#include <functional>
+#include <set>
+#include <string>
 
 #include <graphs.h>
 
+#include <testing.h>
+
+namespace ogdf {
+class Graph;
+} // namespace ogdf
 
 go_bandit([] {
 	describe("SubgraphUpwardPlanarizer", [] {
@@ -44,7 +53,7 @@ go_bandit([] {
 				[](Graph& G, const std::string& graphName, const std::set<GraphProperty>& props) {
 					// Init module
 					UpwardPlanRep U;
-					U.createEmpty(G);
+					U.setOriginalGraph(G);
 					SubgraphUpwardPlanarizer sup;
 					Module::ReturnType s = sup.call(U, nullptr, nullptr);
 					AssertThat(Module::isSolution(s), IsTrue());

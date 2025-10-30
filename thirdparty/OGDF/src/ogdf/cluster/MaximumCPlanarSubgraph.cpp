@@ -29,10 +29,25 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/Logger.h>
+#include <ogdf/basic/Module.h>
+#include <ogdf/basic/Stopwatch.h>
 #include <ogdf/basic/basic.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/cluster/CconnectClusterPlanar.h>
+#include <ogdf/cluster/ClusterGraph.h>
 #include <ogdf/cluster/MaximumCPlanarSubgraph.h>
+
+#include <ogdf/external/abacus.h>
+
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
 
 #ifdef OGDF_CPLANAR_DEBUG_OUTPUT
 #	include <ogdf/fileformats/GraphIO.h>
@@ -159,17 +174,15 @@ void MaximumCPlanarSubgraph::writeFeasible(const char* filename, MaxCPlanarMaste
 	for (cluster c : clist) {
 		//we compute the subgraph induced by vertices in c
 		GraphCopy gcopy;
-		gcopy.createEmpty(G);
+		gcopy.setOriginalGraph(G);
 		List<node> clusterNodes;
 		//would be more efficient if we would just merge the childrens' vertices
 		//and add c's
 		c->getClusterNodes(clusterNodes);
-		NodeArray<bool> activeNodes(G, false); //true for all cluster nodes
 		EdgeArray<edge> copyEdge(G); //holds the edge copy
-		for (node v : clusterNodes) {
-			activeNodes[v] = true;
-		}
-		gcopy.initByActiveNodes(clusterNodes, activeNodes, copyEdge);
+		NodeArray<node> copyNode(G);
+		gcopy.clear();
+		gcopy.insert(clusterNodes.begin(), clusterNodes.end(), filter_any_edge, copyNode, copyEdge);
 		//gcopy now represents the cluster induced subgraph
 
 		//we compute the connected components and store all nodepairs

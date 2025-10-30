@@ -38,7 +38,8 @@
 #include <unordered_map>
 #include <vector>
 #include <ogdf/fileformats/GraphIO.h>
-#include <testing.h>
+
+#include <testing.h> // IWYU pragma: keep
 
 namespace resources {
 
@@ -240,6 +241,9 @@ inline void for_each_graph_it(const string &title, const std::vector<string> &fi
 			std::stringstream ss{file->data()};
 			AssertThat(reader(graph, ss), IsTrue());
 			testFunc(graph);
+#ifdef OGDF_DEBUG
+			graph.consistencyCheck();
+#endif
 		});
 	}
 }

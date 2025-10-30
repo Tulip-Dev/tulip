@@ -31,7 +31,8 @@
 
 #pragma once
 
-#include <ogdf/basic/exceptions.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/internal/copy_move.h>
 
 #include <cstring>
 
@@ -140,22 +141,43 @@ private:
 public:
 	//! Creates an empty DisjointSets structure.
 	/**
-	* \param maxNumberOfElements Expected number of Elements.
-	*/
+	 * \param maxNumberOfElements Expected number of Elements.
+	 */
 	explicit DisjointSets(int maxNumberOfElements = (1 << 15))
 		: m_parents(nullptr), m_parameters(nullptr), m_siblings(nullptr) {
 		init(maxNumberOfElements);
 	}
-
-	DisjointSets(const DisjointSets&) = delete;
-
-	DisjointSets& operator=(const DisjointSets&) = delete;
 
 	~DisjointSets() {
 		delete[] this->m_parents;
 		delete[] this->m_parameters;
 		delete[] this->m_siblings;
 	}
+
+	OGDF_COPY_CONSTR(DisjointSets) : DisjointSets(copy.m_maxNumberOfElements) {
+		m_numberOfSets = copy.m_numberOfSets;
+		m_numberOfElements = copy.m_numberOfElements;
+		if (copy.m_parents) {
+			std::copy_n(copy.m_parents, m_maxNumberOfElements, m_parents);
+		}
+		if (copy.m_parameters) {
+			std::copy_n(copy.m_parameters, m_maxNumberOfElements, m_parameters);
+		}
+		if (copy.m_siblings) {
+			std::copy_n(copy.m_siblings, m_maxNumberOfElements, m_siblings);
+		}
+	}
+
+	OGDF_SWAP_OP(DisjointSets) {
+		std::swap(first.m_numberOfSets, second.m_numberOfSets);
+		std::swap(first.m_numberOfElements, second.m_numberOfElements);
+		std::swap(first.m_maxNumberOfElements, second.m_maxNumberOfElements);
+		std::swap(first.m_parents, second.m_parents);
+		std::swap(first.m_parameters, second.m_parameters);
+		std::swap(first.m_siblings, second.m_siblings);
+	};
+
+	OGDF_COPY_MOVE_BY_SWAP(DisjointSets)
 
 	//! Resets the DisjointSets structure to be empty, also changing the expected number of elements.
 	void init(int maxNumberOfElements) {
@@ -181,10 +203,10 @@ public:
 
 	//! Returns the id of the largest superset of \p set and compresses the path according to ::CompressionOptions.
 	/**
-	* \param set Set.
-	* \return Superset id
-	* \pre \p set is a non negative properly initialized id.
-	*/
+	 * \param set Set.
+	 * \return Superset id
+	 * \pre \p set is a non negative properly initialized id.
+	 */
 	int find(int set) {
 		OGDF_ASSERT(set >= 0);
 		OGDF_ASSERT(set < m_numberOfElements);
@@ -193,10 +215,10 @@ public:
 
 	//! Returns the id of the largest superset of \p set.
 	/**
-	* \param set Set.
-	* \return Superset id
-	* \pre \p set is a non negative properly initialized id.
-	*/
+	 * \param set Set.
+	 * \return Superset id
+	 * \pre \p set is a non negative properly initialized id.
+	 */
 	int getRepresentative(int set) const {
 		OGDF_ASSERT(set >= 0);
 		OGDF_ASSERT(set < m_numberOfElements);
@@ -208,8 +230,8 @@ public:
 
 	//! Initializes a singleton set.
 	/**
-	* \return Set id of the initialized singleton set.
-	*/
+	 * \return Set id of the initialized singleton set.
+	 */
 	int makeSet() {
 		if (this->m_numberOfElements == this->m_maxNumberOfElements) {
 			int* parents = this->m_parents;
@@ -249,9 +271,9 @@ public:
 
 	//! Unions \p set1 and \p set2.
 	/**
-	* \pre \p set1 and \p set2 are maximal disjoint sets.
-	* \return Set id of the union.
-	*/
+	 * \pre \p set1 and \p set2 are maximal disjoint sets.
+	 * \return Set id of the union.
+	 */
 	int link(int set1, int set2) {
 		OGDF_ASSERT(set1 == getRepresentative(set1));
 		OGDF_ASSERT(set2 == getRepresentative(set2));
@@ -264,8 +286,8 @@ public:
 
 	//! Unions the maximal disjoint sets containing \p set1 and \p set2.
 	/**
-	* \return True, if the maximal sets containing \p set1 and \p set2 were disjoint und joined correctly. False otherwise.
-	*/
+	 * \return True, if the maximal sets containing \p set1 and \p set2 were disjoint und joined correctly. False otherwise.
+	 */
 	bool quickUnion(int set1, int set2) {
 		if (set1 == set2) {
 			return false;

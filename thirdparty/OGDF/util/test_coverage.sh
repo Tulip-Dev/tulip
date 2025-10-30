@@ -1,45 +1,62 @@
 #!/bin/bash
 #
-# Analyzes coverage.
+# Analyzes the code test coverage.
 #
-# Author: Tilo Wiedera, Ivo Hedtke
+# required tools:
+#  - clang++
+#  - llvm-profdata merge
+#  - llvm-cov show|export|report
+#
+# Author: Simon D. Fink
 
 . util/util-functions.sh || exit 123
 
-make_tmpdir $0
+set -e
+mkdir -p build-coverage/profraw coverage
 
-regex=''
+## generate compile_commands.json
+opts="cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_COMPILER='clang++' "
 
-for f in $(git ls-files include/ogdf/*.h src/ogdf/*.cpp | check_filter)
-do
-	regex="$regex|$f"
-done
+## debug config
+opts+="-DCMAKE_CXX_FLAGS_DEBUG='-g -O1' "
+opts+="-DBUILD_SHARED_LIBS=ON "
+opts+="-DCMAKE_BUILD_TYPE=Debug "
+opts+="-DOGDF_DEBUG_MODE=HEAVY "
+opts+="-DOGDF_USE_ASSERT_EXCEPTIONS=ON "
+opts+="-DOGDF_MEMORY_MANAGER=POOL_TS "
 
-regex=${regex:1}
+## include CGAL
+opts+="-DOGDF_INCLUDE_CGAL=ON "
+opts+="-DCGAL_DO_NOT_WARN_ABOUT_CMAKE_BUILD_TYPE=TRUE "
 
-library=`$OGDF_FIND $GUROBI_HOME/lib/libgurobi*.so | head -n 1`
-if [ -z "$library" ]; then
-  # For Mac and gurobi version >= 8, the library is not .so anymore but .dylib
-  library=`$OGDF_FIND $GUROBI_HOME/lib/libgurobi*.dylib | head -n 1`
-fi
+## coverage
+opts+="-DOGDF_SEPARATE_TESTS=ON "
+opts+="-DCMAKE_CXX_FLAGS='-fprofile-instr-generate -fcoverage-mapping -Wall -Wextra -fdiagnostics-show-option' "
 
-(cd $tmp && cmake ..) || die "First CMake run failed"
-cmake -DCMAKE_BUILD_TYPE=Debug \
-      -DCMAKE_CXX_FLAGS="--coverage -fPIC -Wall -Wextra -fdiagnostics-show-option -g -O0" \
-      -DCMAKE_EXE_LINKER_FLAGS="--coverage" \
-      -DOGDF_SEPARATE_TESTS=ON \
-      -DOGDF_WARNING_ERRORS=ON \
-      -DOGDF_LEAK_CHECK=ON \
-      -DOGDF_MEMORY_MANAGER=MALLOC_TS \
-      -DOGDF_INCLUDE_CGAL=ON \
-      -DCOIN_SOLVER=GRB \
-      -DCOIN_EXTERNAL_SOLVER_INCLUDE_DIRECTORIES=$GUROBI_HOME/include \
-      -DCOIN_EXTERNAL_SOLVER_LIBRARIES="$library" $tmp || die "Second CMake run failed"
-make -C $tmp -j "$cores" build-all || die "Make failed"
-util/perform_separate_tests.sh $tmp || die "Tests failed"
-echo "LAUNCHING GCOVR..."
-gcovr -r . --object-directory=$tmp/CMakeFiles -s -o /dev/null --filter="$regex" > $tmp/gcovr-summary || die "GCOVR failed"
+## cmd-line args
+opts+="$@"
 
-cat $tmp/gcovr-summary | awk '/^lines:/ { lines=$2 } /^branches:/ { branches=$2 } END { print "\nTOTAL COVERAGE IS " (lines+branches)/2 "%" }'
+export CCACHE_BASEDIR="$(pwd)"
 
+# Compile!
+echo "::group::($(date -Iseconds)) Compile"
+cd build-coverage
+echo $opts
+eval $opts
+make -j "$cores" build-all
+cp compile_commands.json ..
+cd ..
+echo "::endgroup::"
+
+# Run tests and report coverage
+export LLVM_PROFILE_FILE="$(realpath build-coverage/profraw)/%p.profraw"
 util/run_examples.sh
+util/perform_separate_tests.sh build-coverage
+echo "::group::($(date -Iseconds)) Collect coverage"
+llvm-profdata merge  -sparse build-coverage/profraw/*.profraw -o coverage/coverage.profdata
+llvm-cov show --format=text build-coverage/libOGDF-debug.so -instr-profile=coverage/coverage.profdata > coverage/coverage.txt
+# llvm-cov show --format=html build-coverage/libOGDF-debug.so -instr-profile=coverage/coverage.profdata > coverage/coverage.html
+llvm-cov export build-coverage/libOGDF-debug.so -instr-profile=coverage/coverage.profdata > coverage/coverage.json
+llvm-cov export --format=lcov build-coverage/libOGDF-debug.so -instr-profile=coverage/coverage.profdata > coverage/coverage.lcov
+llvm-cov report build-coverage/libOGDF-debug.so -instr-profile=coverage/coverage.profdata > coverage/report.txt
+echo "::endgroup::"

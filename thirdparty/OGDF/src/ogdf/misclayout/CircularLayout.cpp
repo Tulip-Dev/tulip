@@ -32,12 +32,30 @@
 
 //#define OGDF_CIRCULAR_LAYOUT_LOGGING
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/EpsilonTest.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphAttributes.h>
 #include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/Math.h>
 #include <ogdf/basic/Queue.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/comparer.h>
+#include <ogdf/basic/geometry.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/basic/tuples.h>
 #include <ogdf/misclayout/CircularLayout.h>
 #include <ogdf/packing/TileToRowsCCPacker.h>
+
+#include <algorithm>
+#include <cfloat>
+#include <cmath>
+#include <fstream>
+#include <iostream>
+#include <utility>
 
 #ifdef OGDF_CIRCULAR_LAYOUT_LOGGING
 #	include <ogdf/fileformats/GraphIO.h>
@@ -498,7 +516,7 @@ void CircularLayout::call(GraphAttributes& AG) {
 	AG.clearAllBends();
 
 	GraphCopy GC;
-	GC.createEmpty(G);
+	GC.setOriginalGraph(G);
 
 	// compute connected component of G
 	NodeArray<int> component(G);
@@ -511,12 +529,16 @@ void CircularLayout::call(GraphAttributes& AG) {
 		nodesInCC[component[v]].pushBack(v);
 	}
 
-	EdgeArray<edge> auxCopy(G);
+	NodeArray<node> nodeCopy;
+	EdgeArray<edge> auxCopy;
 	Array<DPoint> boundingBox(numCC);
 
 	int i;
 	for (i = 0; i < numCC; ++i) {
-		GC.initByNodes(nodesInCC[i], auxCopy);
+		nodeCopy.init(G);
+		auxCopy.init(G);
+		GC.clear();
+		GC.insert(nodesInCC[i].begin(), nodesInCC[i].end(), filter_any_edge, nodeCopy, auxCopy);
 
 		GraphAttributes AGC(GC);
 

@@ -31,25 +31,38 @@
  */
 
 
-#include <ogdf/basic/NodeSet.h>
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/ArrayBuffer.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/GraphSets.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/graphalg/Triconnectivity.h>
 
-//#define OGDF_TRICONNECTIVITY_OUTPUT
+#include <algorithm>
+#include <iostream>
+#include <vector>
+
+// #define OGDF_TRICONNECTIVITY_OUTPUT
 
 
 namespace ogdf {
 
-
-Triconnectivity::~Triconnectivity() { delete m_pGC; }
+Triconnectivity::~Triconnectivity() {
+	if (m_deleteGraph) {
+		delete m_pG;
+	}
+}
 
 // Divides G into triconnected components.
-Triconnectivity::Triconnectivity(const Graph& G) : m_ESTACK(G.numberOfEdges()) {
-	m_pGC = new GraphCopySimple(G);
-	GraphCopySimple& GC = *m_pGC;
-
-	const int n = GC.numberOfNodes();
-	const int m = GC.numberOfEdges();
+Triconnectivity::Triconnectivity(Graph* G)
+	: m_pG(G), m_ESTACK(G->numberOfEdges()), m_deleteGraph(false) {
+	const int n = m_pG->numberOfNodes();
+	const int m = m_pG->numberOfEdges();
 
 #ifdef OGDF_TRICONNECTIVITY_OUTPUT
 	std::cout << "Dividing G into triconnected components.\n" << std::endl;
@@ -61,62 +74,63 @@ Triconnectivity::Triconnectivity(const Graph& G) : m_ESTACK(G.numberOfEdges()) {
 
 	// special cases
 	OGDF_ASSERT(n >= 2);
-	OGDF_HEAVY_ASSERT(isBiconnected(G));
+	OGDF_HEAVY_ASSERT(isBiconnected(*m_pG));
 
 	if (n <= 2) {
 		OGDF_ASSERT(m >= 3);
 		CompStruct& C = newComp();
-		for (edge e : GC.edges) {
+		for (edge e : m_pG->edges) {
 			C << e;
 		}
 		C.m_type = CompType::bond;
 		return;
 	}
 
-	m_TYPE.init(GC, EdgeType::unseen);
+	m_TYPE.init(*m_pG, EdgeType::unseen);
 	splitMultiEdges();
 
 	// initialize arrays
-	m_NUMBER.init(GC, 0);
-	m_LOWPT1.init(GC);
-	m_LOWPT2.init(GC);
-	m_FATHER.init(GC, nullptr);
-	m_ND.init(GC);
-	m_DEGREE.init(GC);
-	m_TREE_ARC.init(GC, nullptr);
+	m_NUMBER.init(*m_pG, 0);
+	m_LOWPT1.init(*m_pG);
+	m_LOWPT2.init(*m_pG);
+	m_FATHER.init(*m_pG, nullptr);
+	m_ND.init(*m_pG);
+	m_DEGREE.init(*m_pG);
+	m_TREE_ARC.init(*m_pG, nullptr);
 	m_NODEAT = Array<node>(1, n);
 
 	m_numCount = 0;
-	m_start = GC.firstNode();
-	DFS1(GC, m_start, nullptr);
+	m_start = m_pG->firstNode();
+	node dummy;
+	DFS1(m_start, nullptr, dummy);
 
-	for (edge e : GC.edges) {
+	for (edge e : m_pG->edges) {
 		bool up = (m_NUMBER[e->target()] - m_NUMBER[e->source()] > 0);
 		if ((up && m_TYPE[e] == EdgeType::frond) || (!up && m_TYPE[e] == EdgeType::tree)) {
-			GC.reverseEdge(e);
+			m_pG->reverseEdge(e);
 		}
 	}
 
 #ifdef OGDF_TRICONNECTIVITY_OUTPUT
 	std::cout << "\nnode\tNUMBER\tFATHER\tLOWPT1\tLOWPT2\tND" << std::endl;
-	for (node v : GC.nodes) {
-		std::cout << GC.original(v) << ":  \t" << m_NUMBER[v] << "   \t";
+	for (node v : m_pG->nodes) {
+		std::cout << GCoriginal(v) << ":  \t" << m_NUMBER[v] << "   \t";
 		if (m_FATHER[v] == 0) {
 			std::cout << "nil \t";
 		} else {
-			std::cout << GC.original(m_FATHER[v]) << "   \t";
+			std::cout << GCoriginal(m_FATHER[v]) << "   \t";
 		}
 		std::cout << m_LOWPT1[v] << "   \t" << m_LOWPT2[v] << "   \t" << m_ND[v] << std::endl;
 	}
 #endif
 
-	m_A.init(GC);
-	m_IN_ADJ.init(GC, nullptr);
-	buildAcceptableAdjStruct(GC);
+	m_A.init(*m_pG);
+	m_IN_ADJ.init(*m_pG, nullptr);
+	buildAcceptableAdjStruct();
 
 #ifdef OGDF_TRICONNECTIVITY_OUTPUT
 	std::cout << "\nadjaceny lists:" << std::endl;
-	for (node v : GC.nodes) {
+	for (node v : m_pG->nodes) {
 		std::cout << v << "\t";
 		for (edge ei : m_A[v]) {
 			printOs(ei);
@@ -125,12 +139,12 @@ Triconnectivity::Triconnectivity(const Graph& G) : m_ESTACK(G.numberOfEdges()) {
 	}
 #endif
 
-	DFS2(GC);
+	DFS2();
 
 #ifdef OGDF_TRICONNECTIVITY_OUTPUT
 	std::cout << "\nnode\tNEWNUM\tLOWPT1\tLOWPT2\tHIGHPT" << std::endl;
-	for (node v : GC.nodes) {
-		std::cout << GC.original(v) << ":  \t" << m_NEWNUM[v] << "   \t";
+	for (node v : m_pG->nodes) {
+		std::cout << GCoriginal(v) << ":  \t" << m_NEWNUM[v] << "   \t";
 		std::cout << m_LOWPT1[v] << "   \t" << m_LOWPT2[v] << "   \t";
 		for (int i : m_HIGHPT[v]) {
 			std::cout << i << " ";
@@ -139,7 +153,7 @@ Triconnectivity::Triconnectivity(const Graph& G) : m_ESTACK(G.numberOfEdges()) {
 	}
 
 	std::cout << "\nedges starting a path:" << std::endl;
-	for (edge e : GC.edges) {
+	for (edge e : m_pG->edges) {
 		if (m_START[e]) {
 			printOs(e);
 		}
@@ -152,7 +166,7 @@ Triconnectivity::Triconnectivity(const Graph& G) : m_ESTACK(G.numberOfEdges()) {
 	m_TSTACK_b = new int[2 * m + 1];
 	m_TSTACK_a[m_top = 0] = -1; // start with EOS
 
-	pathSearch(G, m_start);
+	pathSearch(m_start, false, dummy, dummy);
 
 	// last split component
 	CompStruct& C = newComp();
@@ -165,27 +179,7 @@ Triconnectivity::Triconnectivity(const Graph& G) : m_ESTACK(G.numberOfEdges()) {
 	printStacks();
 #endif
 
-	delete[] m_TSTACK_h;
-	delete[] m_TSTACK_a;
-	delete[] m_TSTACK_b;
-
-	// free resources
-	m_NUMBER.init();
-	m_LOWPT1.init();
-	m_LOWPT2.init();
-	m_FATHER.init();
-	m_ND.init();
-	m_TYPE.init();
-	m_A.init();
-	m_NEWNUM.init();
-	m_HIGHPT.init();
-	m_START.init();
-	m_DEGREE.init();
-	m_TREE_ARC.init();
-	m_IN_ADJ.init();
-	m_IN_HIGH.init();
-	m_NODEAT.init();
-	m_ESTACK.clear();
+	clearStructures();
 
 	assembleTriconnectedComponents();
 
@@ -222,85 +216,7 @@ Triconnectivity::Triconnectivity(const Graph& G) : m_ESTACK(G.numberOfEdges()) {
 #endif
 }
 
-// Tests G for triconnectivity and returns a cut vertex in
-// s1 or a separation pair in (s1,s2).
-Triconnectivity::Triconnectivity(const Graph& G, bool& isTric, node& s1, node& s2) {
-	m_pGC = new GraphCopySimple(G);
-	GraphCopySimple& GC = *m_pGC;
-
-	const int n = GC.numberOfNodes();
-	const int m = GC.numberOfEdges();
-
-	s1 = s2 = nullptr;
-
-	if (n < 2) {
-		isTric = true;
-		return;
-	} else if (n == 2) {
-		isTric = hasNonSelfLoopEdges(G);
-		return;
-	} else if (m == 0) {
-		isTric = false;
-		return;
-	}
-
-	makeLoopFree(GC);
-	makeParallelFreeUndirected(GC);
-
-	// initialize arrays
-	m_TYPE.init(GC, EdgeType::unseen);
-	m_NUMBER.init(GC, 0);
-	m_LOWPT1.init(GC);
-	m_LOWPT2.init(GC);
-	m_FATHER.init(GC, nullptr);
-	m_ND.init(GC);
-	m_DEGREE.init(GC);
-	m_NODEAT.init(1, n);
-
-	m_TREE_ARC.init(GC, nullptr); // probably not required
-
-	m_numCount = 0;
-	m_start = GC.firstNode();
-	DFS1(GC, m_start, nullptr, s1);
-
-	// graph not even connected?
-	if (m_numCount < n) {
-		s1 = nullptr;
-		isTric = false;
-		return;
-	}
-
-	// graph no biconnected?
-	if (s1 != nullptr) {
-		s1 = GC.original(s1);
-		isTric = false; // s1 is a cut vertex
-		return;
-	}
-
-	for (edge e : GC.edges) {
-		bool up = (m_NUMBER[e->target()] - m_NUMBER[e->source()] > 0);
-		if ((up && m_TYPE[e] == EdgeType::frond) || (!up && m_TYPE[e] == EdgeType::tree)) {
-			GC.reverseEdge(e);
-		}
-	}
-
-	m_A.init(GC);
-	m_IN_ADJ.init(GC, nullptr);
-	buildAcceptableAdjStruct(GC);
-
-	DFS2(GC);
-
-	m_TSTACK_h = new int[m];
-	m_TSTACK_a = new int[m];
-	m_TSTACK_b = new int[m];
-	m_TSTACK_a[m_top = 0] = -1; // start with EOS
-
-	isTric = pathSearch(G, m_start, s1, s2);
-	if (s1) {
-		s1 = GC.original(s1);
-		s2 = GC.original(s2);
-	}
-
+void Triconnectivity::clearStructures() {
 	delete[] m_TSTACK_h;
 	delete[] m_TSTACK_a;
 	delete[] m_TSTACK_b;
@@ -323,14 +239,92 @@ Triconnectivity::Triconnectivity(const Graph& G, bool& isTric, node& s1, node& s
 	m_NODEAT.init();
 }
 
+// Tests G for triconnectivity and returns a cut vertex in
+// s1 or a separation pair in (s1,s2).
+Triconnectivity::Triconnectivity(const Graph& G, bool& isTric, node& s1, node& s2)
+	: m_pG(new GraphCopySimple(G)), m_deleteGraph(true) {
+	const int n = m_pG->numberOfNodes();
+	const int m = m_pG->numberOfEdges();
+
+	s1 = s2 = nullptr;
+
+	if (n < 2) {
+		isTric = true;
+		return;
+	} else if (n == 2) {
+		isTric = hasNonSelfLoopEdges(*m_pG);
+		return;
+	} else if (m == 0) {
+		isTric = false;
+		return;
+	}
+
+	makeLoopFree(*m_pG);
+	makeParallelFreeUndirected(*m_pG);
+
+	// initialize arrays
+	m_TYPE.init(*m_pG, EdgeType::unseen);
+	m_NUMBER.init(*m_pG, 0);
+	m_LOWPT1.init(*m_pG);
+	m_LOWPT2.init(*m_pG);
+	m_FATHER.init(*m_pG, nullptr);
+	m_ND.init(*m_pG);
+	m_DEGREE.init(*m_pG);
+	m_NODEAT.init(1, n);
+
+	m_TREE_ARC.init(*m_pG, nullptr); // probably not required
+
+	m_numCount = 0;
+	m_start = m_pG->firstNode();
+	DFS1(m_start, nullptr, s1);
+
+	// graph not even connected?
+	if (m_numCount < n) {
+		s1 = nullptr;
+		isTric = false;
+		return;
+	}
+
+	// graph no biconnected?
+	if (s1 != nullptr) {
+		s1 = GCoriginal(s1);
+		isTric = false; // s1 is a cut vertex
+		return;
+	}
+
+	for (edge e : m_pG->edges) {
+		bool up = (m_NUMBER[e->target()] - m_NUMBER[e->source()] > 0);
+		if ((up && m_TYPE[e] == EdgeType::frond) || (!up && m_TYPE[e] == EdgeType::tree)) {
+			m_pG->reverseEdge(e);
+		}
+	}
+
+	m_A.init(*m_pG);
+	m_IN_ADJ.init(*m_pG, nullptr);
+	buildAcceptableAdjStruct();
+
+	DFS2();
+
+	m_TSTACK_h = new int[m];
+	m_TSTACK_a = new int[m];
+	m_TSTACK_b = new int[m];
+	m_TSTACK_a[m_top = 0] = -1; // start with EOS
+
+	isTric = pathSearch(m_start, true, s1, s2);
+	if (s1) {
+		s1 = GCoriginal(s1);
+		s2 = GCoriginal(s2);
+	}
+
+	clearStructures();
+}
+
 // Splits bundles of multi-edges into bonds and creates
 // a new virtual edge in GC.
 void Triconnectivity::splitMultiEdges() {
-	GraphCopySimple& GC = *m_pGC;
-
 	SListPure<edge> edges;
-	EdgeArray<int> minIndex(GC), maxIndex(GC);
-	parallelFreeSortUndirected(GC, edges, minIndex, maxIndex);
+	EdgeArray<int> minIndex(*m_pG), maxIndex(*m_pG);
+	parallelFreeSortUndirected(*m_pG, edges, minIndex, maxIndex);
 
 	SListIterator<edge> it;
 	for (it = edges.begin(); it.valid();) {
@@ -339,7 +333,7 @@ void Triconnectivity::splitMultiEdges() {
 		++it;
 		if (it.valid() && minI == minIndex[*it] && maxI == maxIndex[*it]) {
 			CompStruct& C = newComp(CompType::bond);
-			C << GC.newEdge(e->source(), e->target()) << e << *it;
+			C << m_pG->newEdge(e->source(), e->target()) << e << *it;
 			m_TYPE[e] = m_TYPE[*it] = EdgeType::removed;
 
 			for (++it; it.valid() && minI == minIndex[*it] && maxI == maxIndex[*it]; ++it) {
@@ -351,63 +345,51 @@ void Triconnectivity::splitMultiEdges() {
 }
 
 // Checks if computed triconnected components are correct.
-bool Triconnectivity::checkSepPair(edge eVirt) {
-	GraphCopySimple G(*m_pGC);
+bool Triconnectivity::checkSepPair(edge eVirt) const {
+	GraphCopySimple G(*m_pG);
 
-	G.delNode(G.copy(m_pGC->original(eVirt->source())));
-	G.delNode(G.copy(m_pGC->original(eVirt->target())));
+	G.delNode(G.copy(eVirt->source()));
+	G.delNode(G.copy(eVirt->target()));
 
 	return !isConnected(G);
 }
 
-bool Triconnectivity::checkComp() {
+bool Triconnectivity::checkComp() const {
 	bool ok = true;
 
-	GraphCopySimple& GC = *m_pGC;
-	GraphCopySimple GTest(GC.original());
-
-	if (!isLoopFree(GC)) {
+	if (!isLoopFree(*m_pG)) {
 		ok = false;
 		std::cout << "GC contains loops!" << std::endl;
 	}
 
-	EdgeArray<int> count(GC, 0);
+	EdgeArray<int> count(*m_pG, 0);
 	for (int i = 0; i < m_numComp; i++) {
 		for (edge e : m_component[i].m_edges) {
 			count[e]++;
 		}
 	}
 
-	for (edge e : GC.edges) {
-		if (GC.original(e) == nullptr) {
-			if (count[e] != 2) {
-				ok = false;
-				std::cout << "virtual edge contained " << count[e];
-				printOs(e);
-				std::cout << std::endl;
-			}
+	for (edge e : m_pG->edges) {
+		if (count[e] == 2) {
 			if (!checkSepPair(e)) {
 				ok = false;
-				std::cout << "virtual edge";
+				std::cout << "edge in two components (alleged virtual edge) ";
 				printOs(e);
 				std::cout << " does not correspond to a sep. pair." << std::endl;
 			}
-
-		} else {
-			if (count[e] != 1) {
-				ok = false;
-				std::cout << "real edge contained " << count[e];
-				printOs(e);
-				std::cout << std::endl;
-			}
+		} else if (count[e] != 1) {
+			ok = false;
+			std::cout << "real edge contained " << count[e];
+			printOs(e);
+			std::cout << std::endl;
 		}
 	}
 
-	NodeSet<> S(GC);
-	NodeArray<node> map(GC);
+	NodeSet S(*m_pG);
+	NodeArray<node> map(*m_pG);
 
 	for (int i = 0; i < m_numComp; i++) {
-		CompStruct& C = m_component[i];
+		const CompStruct& C = m_component[i];
 		const List<edge>& L = C.m_edges;
 		if (L.size() == 0) {
 			continue;
@@ -503,11 +485,9 @@ bool Triconnectivity::checkComp() {
 // joins bonds and polygons with common virtual edge in
 // order to build the triconnected components.
 void Triconnectivity::assembleTriconnectedComponents() {
-	GraphCopySimple& GC = *m_pGC;
-
-	EdgeArray<int> comp1(GC), comp2(GC);
-	EdgeArray<ListIterator<edge>> item1(GC, ListIterator<edge>());
-	EdgeArray<ListIterator<edge>> item2(GC);
+	EdgeArray<int> comp1(*m_pG, -1), comp2(*m_pG, -1);
+	EdgeArray<ListIterator<edge>> item1(*m_pG, ListIterator<edge>());
+	EdgeArray<ListIterator<edge>> item2(*m_pG, ListIterator<edge>());
 
 	bool* visited = new bool[m_numComp];
 
@@ -519,7 +499,7 @@ void Triconnectivity::assembleTriconnectedComponents() {
 		ListIterator<edge> it;
 		for (it = L.begin(); it.valid(); ++it) {
 			edge e = *it;
-			if (!item1[e].valid()) {
+			if (comp1[e] < 0) {
 				comp1[e] = i;
 				item1[e] = it;
 			} else {
@@ -534,7 +514,7 @@ void Triconnectivity::assembleTriconnectedComponents() {
 		List<edge>& L1 = C1.m_edges;
 		visited[i] = true;
 
-		if (L1.size() == 0) {
+		if (L1.empty()) {
 			continue;
 		}
 
@@ -544,7 +524,7 @@ void Triconnectivity::assembleTriconnectedComponents() {
 				itNext = it.succ();
 				edge e = *it;
 
-				if (GC.original(e) != nullptr) {
+				if (comp2[e] < 0) {
 					continue;
 				}
 
@@ -576,7 +556,7 @@ void Triconnectivity::assembleTriconnectedComponents() {
 				}
 				L1.del(it);
 
-				GC.delEdge(e);
+				m_pG->delEdge(e);
 			}
 		}
 	}
@@ -587,58 +567,7 @@ void Triconnectivity::assembleTriconnectedComponents() {
 // The first dfs-search
 //  computes NUMBER[v], FATHER[v], LOWPT1[v], LOWPT2[v],
 //           ND[v], TYPE[e], DEGREE[v]
-void Triconnectivity::DFS1(const Graph& G, node v, node u) {
-	m_NUMBER[v] = ++m_numCount;
-	m_FATHER[v] = u;
-	m_DEGREE[v] = v->degree();
-
-	m_LOWPT1[v] = m_LOWPT2[v] = m_NUMBER[v];
-	m_ND[v] = 1;
-
-	for (adjEntry adj : v->adjEntries) {
-		edge e = adj->theEdge();
-
-		if (m_TYPE[e] != EdgeType::unseen) {
-			continue;
-		}
-
-		node w = e->opposite(v);
-
-		if (m_NUMBER[w] == 0) {
-			m_TYPE[e] = EdgeType::tree;
-
-			m_TREE_ARC[w] = e;
-
-			DFS1(G, w, v);
-
-			if (m_LOWPT1[w] < m_LOWPT1[v]) {
-				m_LOWPT2[v] = min(m_LOWPT1[v], m_LOWPT2[w]);
-				m_LOWPT1[v] = m_LOWPT1[w];
-
-			} else if (m_LOWPT1[w] == m_LOWPT1[v]) {
-				m_LOWPT2[v] = min(m_LOWPT2[v], m_LOWPT2[w]);
-
-			} else {
-				m_LOWPT2[v] = min(m_LOWPT2[v], m_LOWPT1[w]);
-			}
-
-			m_ND[v] += m_ND[w];
-
-		} else {
-			m_TYPE[e] = EdgeType::frond;
-
-			if (m_NUMBER[w] < m_LOWPT1[v]) {
-				m_LOWPT2[v] = m_LOWPT1[v];
-				m_LOWPT1[v] = m_NUMBER[w];
-
-			} else if (m_NUMBER[w] > m_LOWPT1[v]) {
-				m_LOWPT2[v] = min(m_LOWPT2[v], m_NUMBER[w]);
-			}
-		}
-	}
-}
-
-void Triconnectivity::DFS1(const Graph& G, node v, node u, node& s1) {
+void Triconnectivity::DFS1(node v, node u, node& s1) {
 	node firstSon = nullptr;
 
 	m_NUMBER[v] = ++m_numCount;
@@ -665,7 +594,7 @@ void Triconnectivity::DFS1(const Graph& G, node v, node u, node& s1) {
 
 			m_TREE_ARC[w] = e;
 
-			DFS1(G, w, v, s1);
+			DFS1(w, v, s1);
 
 			// check for cut vertex
 			if (m_LOWPT1[w] >= m_NUMBER[v] && (w != firstSon || u != nullptr)) {
@@ -700,11 +629,11 @@ void Triconnectivity::DFS1(const Graph& G, node v, node u, node& s1) {
 }
 
 // Construction of ordered adjaceny lists
-void Triconnectivity::buildAcceptableAdjStruct(const Graph& G) {
-	int max = 3 * G.numberOfNodes() + 2;
+void Triconnectivity::buildAcceptableAdjStruct() {
+	int max = 3 * m_pG->numberOfNodes() + 2;
 	Array<List<edge>> BUCKET(1, max);
 
-	for (edge e : G.edges) {
+	for (edge e : m_pG->edges) {
 		EdgeType t = m_TYPE[e];
 		if (t == EdgeType::removed) {
 			continue;
@@ -725,7 +654,7 @@ void Triconnectivity::buildAcceptableAdjStruct(const Graph& G) {
 }
 
 // The second dfs-search
-void Triconnectivity::pathFinder(const Graph& G, node v) {
+void Triconnectivity::pathFinder(node v) {
 	m_NEWNUM[v] = m_numCount - m_ND[v] + 1;
 
 	for (edge e : m_A[v]) {
@@ -737,7 +666,7 @@ void Triconnectivity::pathFinder(const Graph& G, node v) {
 		}
 
 		if (m_TYPE[e] == EdgeType::tree) {
-			pathFinder(G, w);
+			pathFinder(w);
 			m_numCount--;
 
 		} else {
@@ -747,374 +676,375 @@ void Triconnectivity::pathFinder(const Graph& G, node v) {
 	}
 }
 
-void Triconnectivity::DFS2(const Graph& G) {
-	m_NEWNUM.init(G, 0);
-	m_HIGHPT.init(G);
-	m_IN_HIGH.init(G, ListIterator<int>());
-	m_START.init(G, false);
+void Triconnectivity::DFS2() {
+	m_NEWNUM.init(*m_pG, 0);
+	m_HIGHPT.init(*m_pG);
+	m_IN_HIGH.init(*m_pG, ListIterator<int>());
+	m_START.init(*m_pG, false);
 
-	m_numCount = G.numberOfNodes();
+	m_numCount = m_pG->numberOfNodes();
 	m_newPath = true;
 
-	pathFinder(G, m_start);
+	pathFinder(m_start);
 
-	Array<int> old2new(1, G.numberOfNodes());
+	Array<int> old2new(1, m_pG->numberOfNodes());
 
-	for (node v : G.nodes) {
+	for (node v : m_pG->nodes) {
 		old2new[m_NUMBER[v]] = m_NEWNUM[v];
 	}
 
-	for (node v : G.nodes) {
+	for (node v : m_pG->nodes) {
 		m_NODEAT[m_NEWNUM[v]] = v;
 		m_LOWPT1[v] = old2new[m_LOWPT1[v]];
 		m_LOWPT2[v] = old2new[m_LOWPT2[v]];
 	}
 }
 
-// recognition of split components
-void Triconnectivity::pathSearch(const Graph& G, node v) {
+struct StackEntry {
+	const node v;
+	const int vnum;
+	int outv;
+
+	ListIterator<edge> it;
+	ListIterator<edge> itNext;
 	edge e;
-	int y = 0;
-	int vnum = m_NEWNUM[v];
-	int a, b;
+	node w;
+	int wnum;
 
-	List<edge>& Adj = m_A[v];
-	int outv = Adj.size();
+	bool after;
 
-	ListIterator<edge> it, itNext;
-	for (it = Adj.begin(); it.valid(); it = itNext) {
-		itNext = it.succ();
-		e = *it;
-		node w = e->target();
-		int wnum = m_NEWNUM[w];
+	StackEntry(node p_v, int p_vnum, int p_outv, const ListIterator<edge>& p_it, edge p_e, node p_w,
+			int p_wnum, bool p_after = false)
+		: v(p_v)
+		, vnum(p_vnum)
+		, outv(p_outv)
+		, it(p_it)
+		, itNext()
+		, e(p_e)
+		, w(p_w)
+		, wnum(p_wnum)
+		, after(p_after) {
+		if (it.valid()) {
+			itNext = it.succ();
+		}
+	}
+};
 
-		if (m_TYPE[e] == EdgeType::tree) {
-			if (m_START[e]) {
-				y = 0;
-				if (m_TSTACK_a[m_top] > m_LOWPT1[w]) {
+// recognition of split components
+bool Triconnectivity::pathSearch(node init_v, bool fail_fast, node& s1, node& s2) {
+	std::vector<StackEntry> stack;
+	{
+		auto it = m_A[init_v].begin();
+		node w = (*it)->target();
+		stack.emplace_back(init_v, m_NEWNUM[init_v], m_A[init_v].size(), it, *it, w, m_NEWNUM[w]);
+	}
+
+	while (!stack.empty()) {
+		StackEntry& se = stack.back();
+		if (!se.after && m_TYPE[se.e] == EdgeType::tree) {
+			if (m_START[se.e]) {
+				if (m_TSTACK_a[m_top] > m_LOWPT1[se.w]) {
+					int y = 0, b;
 					do {
 						y = max(y, m_TSTACK_h[m_top]);
 						b = m_TSTACK_b[m_top--];
-					} while (m_TSTACK_a[m_top] > m_LOWPT1[w]);
-					TSTACK_push(y, m_LOWPT1[w], b);
+					} while (m_TSTACK_a[m_top] > m_LOWPT1[se.w]);
+					TSTACK_push(y, m_LOWPT1[se.w], b);
 				} else {
-					TSTACK_push(wnum + m_ND[w] - 1, m_LOWPT1[w], vnum);
+					TSTACK_push(se.wnum + m_ND[se.w] - 1, m_LOWPT1[se.w], se.vnum);
 				}
 				TSTACK_pushEOS();
 			}
 
-			pathSearch(G, w);
-
-			m_ESTACK.push(m_TREE_ARC[w]); // add (v,w) to ESTACK (can differ from e!)
-
-			node x;
-
-			while (vnum != 1
-					&& ((m_TSTACK_a[m_top] == vnum)
-							|| (m_DEGREE[w] == 2 && m_NEWNUM[m_A[w].front()->target()] > wnum))) {
-				a = m_TSTACK_a[m_top];
-				b = m_TSTACK_b[m_top];
-
-				edge eVirt;
-
-				if (a == vnum && m_FATHER[m_NODEAT[b]] == m_NODEAT[a]) {
-					m_top--;
+			se.after = true;
+			{
+				auto it = m_A[se.w].begin();
+				node w = (*it)->target();
+				stack.emplace_back(se.w, m_NEWNUM[se.w], m_A[se.w].size(), it, *it, w, m_NEWNUM[w]);
+			}
+			continue;
+		} else if (se.after) {
+			if (fail_fast) {
+				if (!afterRecursivePathSearch(se.v, se.vnum, se.outv, se.e, se.w, se.wnum, s1, s2)) {
+					return false;
 				}
-
-				else {
-					edge e_ab = nullptr;
-
-					if (m_DEGREE[w] == 2 && m_NEWNUM[m_A[w].front()->target()] > wnum) {
-#ifdef OGDF_TRICONNECTIVITY_OUTPUT
-						std::cout << std::endl
-								  << "\nfound type-2 separation pair " << m_pGC->original(v) << ", "
-								  << m_pGC->original(m_A[w].front()->target());
-#endif
-
-						edge e1 = m_ESTACK.popRet();
-						edge e2 = m_ESTACK.popRet();
-						m_A[w].del(m_IN_ADJ[e2]);
-
-						x = e2->target();
-
-						eVirt = m_pGC->newEdge(v, x);
-						m_DEGREE[x]--;
-						m_DEGREE[v]--;
-
-						OGDF_ASSERT(e2->source() == w);
-						CompStruct& C = newComp(CompType::polygon);
-						C << e1 << e2 << eVirt;
-
-						if (!m_ESTACK.empty()) {
-							e1 = m_ESTACK.top();
-							if (e1->source() == x && e1->target() == v) {
-								e_ab = m_ESTACK.popRet();
-								m_A[x].del(m_IN_ADJ[e_ab]);
-								delHigh(e_ab);
-							}
-						}
-
-					} else {
-#ifdef OGDF_TRICONNECTIVITY_OUTPUT
-						std::cout << "\nfound type-2 separation pair "
-								  << m_pGC->original(m_NODEAT[a]) << ", "
-								  << m_pGC->original(m_NODEAT[b]);
-#endif
-
-						int h = m_TSTACK_h[m_top--];
-
-						CompStruct& C = newComp();
-						while (true) {
-							edge xy = m_ESTACK.top();
-							x = xy->source();
-							node xyTarget = xy->target();
-							if (!(a <= m_NEWNUM[x] && m_NEWNUM[x] <= h && a <= m_NEWNUM[xyTarget]
-										&& m_NEWNUM[xyTarget] <= h)) {
-								break;
-							}
-
-							if ((m_NEWNUM[x] == a && m_NEWNUM[xyTarget] == b)
-									|| (m_NEWNUM[xyTarget] == a && m_NEWNUM[x] == b)) {
-								e_ab = m_ESTACK.popRet();
-								m_A[e_ab->source()].del(m_IN_ADJ[e_ab]);
-								delHigh(e_ab);
-
-							} else {
-								edge eh = m_ESTACK.popRet();
-								if (it != m_IN_ADJ[eh]) {
-									m_A[eh->source()].del(m_IN_ADJ[eh]);
-									delHigh(eh);
-								}
-								C << eh;
-								m_DEGREE[x]--;
-								m_DEGREE[xyTarget]--;
-							}
-						}
-
-						eVirt = m_pGC->newEdge(m_NODEAT[a], m_NODEAT[b]);
-						C.finishTricOrPoly(eVirt);
-						x = m_NODEAT[b];
-					}
-
-					if (e_ab != nullptr) {
-						CompStruct& C = newComp(CompType::bond);
-						C << e_ab << eVirt;
-
-						eVirt = m_pGC->newEdge(v, x);
-						C << eVirt;
-
-						m_DEGREE[x]--;
-						m_DEGREE[v]--;
-					}
-
-					m_ESTACK.push(eVirt);
-					*it = eVirt;
-					m_IN_ADJ[eVirt] = it;
-
-					m_DEGREE[x]++;
-					m_DEGREE[v]++;
-					m_FATHER[x] = v;
-					m_TREE_ARC[x] = eVirt;
-					m_TYPE[eVirt] = EdgeType::tree;
-
-					w = x;
-					wnum = m_NEWNUM[w];
+			} else {
+				afterRecursivePathSearch(se.v, se.vnum, se.outv, se.it, se.e, se.w, se.wnum);
+			}
+			se.outv--;
+			se.after = false;
+		} else {
+			OGDF_ASSERT(m_TYPE[se.e] == EdgeType::frond);
+			if (m_START[se.e]) {
+				if (m_TSTACK_a[m_top] > se.wnum) {
+					int y = 0, b;
+					do {
+						y = max(y, m_TSTACK_h[m_top]);
+						b = m_TSTACK_b[m_top--];
+					} while (m_TSTACK_a[m_top] > se.wnum);
+					TSTACK_push(y, se.wnum, b);
+				} else {
+					TSTACK_push(se.vnum, se.wnum, se.vnum);
 				}
 			}
 
-			if (m_LOWPT2[w] >= vnum && m_LOWPT1[w] < vnum && (m_FATHER[v] != m_start || outv >= 2)) {
+			m_ESTACK.push(se.e); // add (v,w) to ESTACK
+		}
+
+		se.it = se.itNext;
+		if (se.it.valid()) {
+			se.itNext = se.it.succ();
+			se.e = *se.it;
+			se.w = se.e->target();
+			se.wnum = m_NEWNUM[se.w];
+		} else {
+			stack.pop_back();
+		}
+	}
+
+	return true;
+}
+
+void Triconnectivity::afterRecursivePathSearch(const node v, const int vnum, const int outv,
+		const ListIterator<edge> it, const edge e, node w, int wnum) {
+	m_ESTACK.push(m_TREE_ARC[w]); // add (v,w) to ESTACK (can differ from e!)
+
+	node x;
+
+	while (vnum != 1
+			&& ((m_TSTACK_a[m_top] == vnum)
+					|| (m_DEGREE[w] == 2 && m_NEWNUM[m_A[w].front()->target()] > wnum))) {
+		int a = m_TSTACK_a[m_top];
+		int b = m_TSTACK_b[m_top];
+
+		edge eVirt;
+
+		if (a == vnum && m_FATHER[m_NODEAT[b]] == m_NODEAT[a]) {
+			m_top--;
+		}
+
+		else {
+			edge e_ab = nullptr;
+
+			if (m_DEGREE[w] == 2 && m_NEWNUM[m_A[w].front()->target()] > wnum) {
 #ifdef OGDF_TRICONNECTIVITY_OUTPUT
-				std::cout << "\nfound type-1 separation pair "
-						  << m_pGC->original(m_NODEAT[m_LOWPT1[w]]) << ", " << m_pGC->original(v);
+				std::cout << std::endl
+						  << "\nfound type-2 separation pair " << GCoriginal(v) << ", "
+						  << GCoriginal(m_A[w].front()->target());
 #endif
 
-				CompStruct& C = newComp();
-				int xx = 0;
-				OGDF_ASSERT(!m_ESTACK.empty()); // otherwise undefined behavior since x is not initialized
-				while (!m_ESTACK.empty()) {
-					edge xy = m_ESTACK.top();
-					xx = m_NEWNUM[xy->source()];
-					y = m_NEWNUM[xy->target()];
+				edge e1 = m_ESTACK.popRet();
+				edge e2 = m_ESTACK.popRet();
+				m_A[w].del(m_IN_ADJ[e2]);
 
-					if (!((wnum <= xx && xx < wnum + m_ND[w]) || (wnum <= y && y < wnum + m_ND[w]))) {
+				x = e2->target();
+
+				eVirt = m_pG->newEdge(v, x);
+				m_DEGREE[x]--;
+				m_DEGREE[v]--;
+
+				OGDF_ASSERT(e2->source() == w);
+				CompStruct& C = newComp(CompType::polygon);
+				C << e1 << e2 << eVirt;
+
+				if (!m_ESTACK.empty()) {
+					e1 = m_ESTACK.top();
+					if (e1->source() == x && e1->target() == v) {
+						e_ab = m_ESTACK.popRet();
+						m_A[x].del(m_IN_ADJ[e_ab]);
+						delHigh(e_ab);
+					}
+				}
+
+			} else {
+#ifdef OGDF_TRICONNECTIVITY_OUTPUT
+				std::cout << "\nfound type-2 separation pair " << GCoriginal(m_NODEAT[a]) << ", "
+						  << GCoriginal(m_NODEAT[b]);
+#endif
+
+				int h = m_TSTACK_h[m_top--];
+
+				CompStruct& C = newComp();
+				while (true) {
+					edge xy = m_ESTACK.top();
+					x = xy->source();
+					node xyTarget = xy->target();
+					if (!(a <= m_NEWNUM[x] && m_NEWNUM[x] <= h && a <= m_NEWNUM[xyTarget]
+								&& m_NEWNUM[xyTarget] <= h)) {
 						break;
 					}
 
-					C << m_ESTACK.popRet();
-					delHigh(xy);
-					m_DEGREE[m_NODEAT[xx]]--;
-					m_DEGREE[m_NODEAT[y]]--;
+					if ((m_NEWNUM[x] == a && m_NEWNUM[xyTarget] == b)
+							|| (m_NEWNUM[xyTarget] == a && m_NEWNUM[x] == b)) {
+						e_ab = m_ESTACK.popRet();
+						m_A[e_ab->source()].del(m_IN_ADJ[e_ab]);
+						delHigh(e_ab);
+
+					} else {
+						edge eh = m_ESTACK.popRet();
+						if (it != m_IN_ADJ[eh]) {
+							m_A[eh->source()].del(m_IN_ADJ[eh]);
+							delHigh(eh);
+						}
+						C << eh;
+						m_DEGREE[x]--;
+						m_DEGREE[xyTarget]--;
+					}
 				}
 
-				edge eVirt = m_pGC->newEdge(v, m_NODEAT[m_LOWPT1[w]]);
+				eVirt = m_pG->newEdge(m_NODEAT[a], m_NODEAT[b]);
 				C.finishTricOrPoly(eVirt);
-
-				if ((xx == vnum && y == m_LOWPT1[w]) || (y == vnum && xx == m_LOWPT1[w])) {
-					CompStruct& compBond = newComp(CompType::bond);
-					edge eh = m_ESTACK.popRet();
-					if (m_IN_ADJ[eh] != it) {
-						m_A[eh->source()].del(m_IN_ADJ[eh]);
-					}
-					compBond << eh << eVirt;
-					eVirt = m_pGC->newEdge(v, m_NODEAT[m_LOWPT1[w]]);
-					compBond << eVirt;
-					m_IN_HIGH[eVirt] = m_IN_HIGH[eh];
-					m_DEGREE[v]--;
-					m_DEGREE[m_NODEAT[m_LOWPT1[w]]]--;
-				}
-
-				if (m_NODEAT[m_LOWPT1[w]] != m_FATHER[v]) {
-					m_ESTACK.push(eVirt);
-					*it = eVirt;
-					m_IN_ADJ[eVirt] = it;
-					if (!m_IN_HIGH[eVirt].valid() && high(m_NODEAT[m_LOWPT1[w]]) < vnum) {
-						m_IN_HIGH[eVirt] = m_HIGHPT[m_NODEAT[m_LOWPT1[w]]].pushFront(vnum);
-					}
-
-					m_DEGREE[v]++;
-					m_DEGREE[m_NODEAT[m_LOWPT1[w]]]++;
-
-				} else {
-					Adj.del(it);
-
-					CompStruct& compBond = newComp(CompType::bond);
-					compBond << eVirt;
-					eVirt = m_pGC->newEdge(m_NODEAT[m_LOWPT1[w]], v);
-					compBond << eVirt;
-
-					edge eh = m_TREE_ARC[v];
-
-					compBond << m_TREE_ARC[v];
-
-					m_TREE_ARC[v] = eVirt;
-					m_TYPE[eVirt] = EdgeType::tree;
-
-					m_IN_ADJ[eVirt] = m_IN_ADJ[eh];
-					*m_IN_ADJ[eh] = eVirt;
-				}
+				x = m_NODEAT[b];
 			}
 
-			if (m_START[e]) {
-				while (TSTACK_notEOS()) {
-					m_top--;
-				}
-				m_top--;
+			if (e_ab != nullptr) {
+				CompStruct& C = newComp(CompType::bond);
+				C << e_ab << eVirt;
+
+				eVirt = m_pG->newEdge(v, x);
+				C << eVirt;
+
+				m_DEGREE[x]--;
+				m_DEGREE[v]--;
 			}
 
-			while (TSTACK_notEOS() && m_TSTACK_b[m_top] != vnum && high(v) > m_TSTACK_h[m_top]) {
-				m_top--;
-			}
+			m_ESTACK.push(eVirt);
+			*it = eVirt;
+			m_IN_ADJ[eVirt] = it;
 
-			outv--;
+			m_DEGREE[x]++;
+			m_DEGREE[v]++;
+			m_FATHER[x] = v;
+			m_TREE_ARC[x] = eVirt;
+			m_TYPE[eVirt] = EdgeType::tree;
 
-		} else { // frond arc
-			if (m_START[e]) {
-				y = 0;
-				if (m_TSTACK_a[m_top] > wnum) {
-					do {
-						y = max(y, m_TSTACK_h[m_top]);
-						b = m_TSTACK_b[m_top--];
-					} while (m_TSTACK_a[m_top] > wnum);
-					TSTACK_push(y, wnum, b);
-				} else {
-					TSTACK_push(vnum, wnum, vnum);
-				}
-			}
-
-			m_ESTACK.push(e); // add (v,w) to ESTACK
+			w = x;
+			wnum = m_NEWNUM[w];
 		}
+	}
+
+	if (m_LOWPT2[w] >= vnum && m_LOWPT1[w] < vnum && (m_FATHER[v] != m_start || outv >= 2)) {
+#ifdef OGDF_TRICONNECTIVITY_OUTPUT
+		std::cout << "\nfound type-1 separation pair " << GCoriginal(m_NODEAT[m_LOWPT1[w]]) << ", "
+				  << GCoriginal(v);
+#endif
+
+		CompStruct& C = newComp();
+		int xx = 0, y = 0;
+		OGDF_ASSERT(!m_ESTACK.empty()); // otherwise undefined behavior since x is not initialized
+		while (!m_ESTACK.empty()) {
+			edge xy = m_ESTACK.top();
+			xx = m_NEWNUM[xy->source()];
+			y = m_NEWNUM[xy->target()];
+
+			if (!((wnum <= xx && xx < wnum + m_ND[w]) || (wnum <= y && y < wnum + m_ND[w]))) {
+				break;
+			}
+
+			C << m_ESTACK.popRet();
+			delHigh(xy);
+			m_DEGREE[m_NODEAT[xx]]--;
+			m_DEGREE[m_NODEAT[y]]--;
+		}
+
+		edge eVirt = m_pG->newEdge(v, m_NODEAT[m_LOWPT1[w]]);
+		C.finishTricOrPoly(eVirt);
+
+		if ((xx == vnum && y == m_LOWPT1[w]) || (y == vnum && xx == m_LOWPT1[w])) {
+			CompStruct& compBond = newComp(CompType::bond);
+			edge eh = m_ESTACK.popRet();
+			if (m_IN_ADJ[eh] != it) {
+				m_A[eh->source()].del(m_IN_ADJ[eh]);
+			}
+			compBond << eh << eVirt;
+			eVirt = m_pG->newEdge(v, m_NODEAT[m_LOWPT1[w]]);
+			compBond << eVirt;
+			m_IN_HIGH[eVirt] = m_IN_HIGH[eh];
+			m_DEGREE[v]--;
+			m_DEGREE[m_NODEAT[m_LOWPT1[w]]]--;
+		}
+
+		if (m_NODEAT[m_LOWPT1[w]] != m_FATHER[v]) {
+			m_ESTACK.push(eVirt);
+			*it = eVirt;
+			m_IN_ADJ[eVirt] = it;
+			if (!m_IN_HIGH[eVirt].valid() && high(m_NODEAT[m_LOWPT1[w]]) < vnum) {
+				m_IN_HIGH[eVirt] = m_HIGHPT[m_NODEAT[m_LOWPT1[w]]].pushFront(vnum);
+			}
+
+			m_DEGREE[v]++;
+			m_DEGREE[m_NODEAT[m_LOWPT1[w]]]++;
+
+		} else {
+			m_A[v].del(it);
+
+			CompStruct& compBond = newComp(CompType::bond);
+			compBond << eVirt;
+			eVirt = m_pG->newEdge(m_NODEAT[m_LOWPT1[w]], v);
+			compBond << eVirt;
+
+			edge eh = m_TREE_ARC[v];
+
+			compBond << m_TREE_ARC[v];
+
+			m_TREE_ARC[v] = eVirt;
+			m_TYPE[eVirt] = EdgeType::tree;
+
+			m_IN_ADJ[eVirt] = m_IN_ADJ[eh];
+			*m_IN_ADJ[eh] = eVirt;
+		}
+	}
+
+	if (m_START[e]) {
+		while (TSTACK_notEOS()) {
+			m_top--;
+		}
+		m_top--;
+	}
+
+	while (TSTACK_notEOS() && m_TSTACK_b[m_top] != vnum && high(v) > m_TSTACK_h[m_top]) {
+		m_top--;
 	}
 }
 
-// simplified path search for triconnectivity test
-bool Triconnectivity::pathSearch(const Graph& G, node v, node& s1, node& s2) {
-	edge e;
-	int y, vnum = m_NEWNUM[v];
-	int a, b;
+bool Triconnectivity::afterRecursivePathSearch(const node v, const int vnum, const int outv,
+		const edge e, const node w, const int wnum, node& s1, node& s2) {
+	while (vnum != 1
+			&& ((m_TSTACK_a[m_top] == vnum)
+					|| (m_DEGREE[w] == 2 && m_NEWNUM[m_A[w].front()->target()] > wnum))) {
+		int a = m_TSTACK_a[m_top];
+		int b = m_TSTACK_b[m_top];
 
-	List<edge>& Adj = m_A[v];
-	int outv = Adj.size();
+		if (a == vnum && m_FATHER[m_NODEAT[b]] == m_NODEAT[a]) {
+			m_top--;
 
-	ListIterator<edge> it, itNext;
-	for (it = Adj.begin(); it.valid(); it = itNext) {
-		itNext = it.succ();
-		e = *it;
-		node w = e->target();
-		int wnum = m_NEWNUM[w];
+		} else if (m_DEGREE[w] == 2 && m_NEWNUM[m_A[w].front()->target()] > wnum) {
+			s1 = v;
+			s2 = m_A[w].front()->target();
+			return false;
 
-		if (m_TYPE[e] == EdgeType::tree) {
-			if (m_START[e]) {
-				y = 0;
-				if (m_TSTACK_a[m_top] > m_LOWPT1[w]) {
-					do {
-						y = max(y, m_TSTACK_h[m_top]);
-						b = m_TSTACK_b[m_top--];
-					} while (m_TSTACK_a[m_top] > m_LOWPT1[w]);
-					TSTACK_push(y, m_LOWPT1[w], b);
-				} else {
-					TSTACK_push(wnum + m_ND[w] - 1, m_LOWPT1[w], vnum);
-				}
-				TSTACK_pushEOS();
-			}
-
-			if (!pathSearch(G, w, s1, s2)) {
-				return false;
-			}
-
-			while (vnum != 1
-					&& ((m_TSTACK_a[m_top] == vnum)
-							|| (m_DEGREE[w] == 2 && m_NEWNUM[m_A[w].front()->target()] > wnum))) {
-				a = m_TSTACK_a[m_top];
-				b = m_TSTACK_b[m_top];
-
-				if (a == vnum && m_FATHER[m_NODEAT[b]] == m_NODEAT[a]) {
-					m_top--;
-
-				} else if (m_DEGREE[w] == 2 && m_NEWNUM[m_A[w].front()->target()] > wnum) {
-					s1 = v;
-					s2 = m_A[w].front()->target();
-					return false;
-
-				} else {
-					s1 = m_NODEAT[a];
-					s2 = m_NODEAT[b];
-					return false;
-				}
-			}
-
-			if (m_LOWPT2[w] >= vnum && m_LOWPT1[w] < vnum && (m_FATHER[v] != m_start || outv >= 2)) {
-				s1 = m_NODEAT[m_LOWPT1[w]];
-				s2 = v;
-				return false;
-			}
-
-			if (m_START[e]) {
-				while (TSTACK_notEOS()) {
-					m_top--;
-				}
-				m_top--;
-			}
-
-			while (TSTACK_notEOS() && m_TSTACK_b[m_top] != vnum && high(v) > m_TSTACK_h[m_top]) {
-				m_top--;
-			}
-
-			outv--;
-
-		} else { // frond arc
-			if (m_START[e]) {
-				y = 0;
-				if (m_TSTACK_a[m_top] > wnum) {
-					do {
-						y = max(y, m_TSTACK_h[m_top]);
-						b = m_TSTACK_b[m_top--];
-					} while (m_TSTACK_a[m_top] > wnum);
-					TSTACK_push(y, wnum, b);
-				} else {
-					TSTACK_push(vnum, wnum, vnum);
-				}
-			}
+		} else {
+			s1 = m_NODEAT[a];
+			s2 = m_NODEAT[b];
+			return false;
 		}
+	}
+
+	if (m_LOWPT2[w] >= vnum && m_LOWPT1[w] < vnum && (m_FATHER[v] != m_start || outv >= 2)) {
+		s1 = m_NODEAT[m_LOWPT1[w]];
+		s2 = v;
+		return false;
+	}
+
+	if (m_START[e]) {
+		while (TSTACK_notEOS()) {
+			m_top--;
+		}
+		m_top--;
+	}
+
+	while (TSTACK_notEOS() && m_TSTACK_b[m_top] != vnum && high(v) > m_TSTACK_h[m_top]) {
+		m_top--;
 	}
 
 	return true;
@@ -1129,30 +1059,47 @@ bool isTriconnected(const Graph& G, node& s1, node& s2) {
 }
 
 // debugging stuff
-void Triconnectivity::printOs(edge e) {
+void Triconnectivity::printOs(edge e) const {
 #ifdef OGDF_TRICONNECTIVITY_OUTPUT
-	std::cout << " (" << m_pGC->original(e->source()) << "," << m_pGC->original(e->target()) << ","
+	std::cout << " (" << GCoriginal(e->source()) << "," << GCoriginal(e->target()) << ","
 			  << e->index() << ")";
-	if (m_pGC->original(e) == 0) {
+	if (GCoriginal(e) == 0) {
 		std::cout << "v";
 	}
 #endif
 }
 
-void Triconnectivity::printStacks() {
+void Triconnectivity::printStacks() const {
 #ifdef OGDF_TRICONNECTIVITY_OUTPUT
 	std::cout << "\n\nTSTACK:" << std::endl;
-
 	for (int i = m_top; i >= 0; i--) {
 		std::cout << "(" << m_TSTACK_h[i] << "," << m_TSTACK_a[i] << "," << m_TSTACK_b[i] << ")\n";
 	}
 
 	std::cout << "\nESTACK\n";
-	while (!m_ESTACK.empty()) {
-		printOs(m_ESTACK.popRet());
+	for (int i = m_ESTACK.size() - 1; i >= 0; i--) {
+		printOs(m_ESTACK[i]);
 		std::cout << std::endl;
 	}
 #endif
+}
+
+std::ostream& operator<<(std::ostream& os, Triconnectivity::CompType type) {
+	switch (type) {
+	case Triconnectivity::CompType::bond:
+		os << "bond";
+		break;
+	case Triconnectivity::CompType::polygon:
+		os << "polygon";
+		break;
+	case Triconnectivity::CompType::triconnected:
+		os << "triconnected";
+		break;
+	default:
+		os << "???";
+		break;
+	}
+	return os;
 }
 
 }

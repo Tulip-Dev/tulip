@@ -30,9 +30,21 @@
  */
 
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/ArrayBuffer.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/decomposition/Skeleton.h>
 #include <ogdf/decomposition/StaticSPQRTree.h>
+#include <ogdf/decomposition/StaticSkeleton.h>
+#include <ogdf/graphalg/Triconnectivity.h>
+
+#include <utility>
 
 namespace ogdf {
+class SPQRTree;
 
 StaticSkeleton::StaticSkeleton(const StaticSPQRTree* T, node vT) : Skeleton(vT), m_owner(T) {
 	m_orig.init(m_M, nullptr);
@@ -69,7 +81,7 @@ void StaticSPQRTree::init(edge eRef) {
 
 void StaticSPQRTree::init(edge eRef, Triconnectivity& tricComp) {
 	m_cpV = nullptr;
-	const GraphCopySimple& GC = *tricComp.m_pGC;
+	const GraphCopySimple& GC = *dynamic_cast<const GraphCopySimple*>(tricComp.m_pG);
 
 	m_type.init(m_tree, NodeType::SNode);
 	m_sk.init(m_tree, nullptr);

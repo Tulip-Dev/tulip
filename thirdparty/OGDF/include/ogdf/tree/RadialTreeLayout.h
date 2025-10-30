@@ -35,10 +35,15 @@
 
 #pragma once
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/Graph.h>
 #include <ogdf/basic/LayoutModule.h>
-#include <ogdf/basic/SList.h>
+#include <ogdf/basic/SList.h> // IWYU pragma: keep
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/memory.h>
 
 namespace ogdf {
+class GraphAttributes;
 
 //! The radial tree layout algorithm.
 /**
@@ -56,7 +61,7 @@ namespace ogdf {
  *     <td>Specifies how to select the root of the tree.
  *   </tr>
  * </table>
-*/
+ */
 class OGDF_EXPORT RadialTreeLayout : public LayoutModule {
 public:
 	//! Selection strategies for root of the tree.

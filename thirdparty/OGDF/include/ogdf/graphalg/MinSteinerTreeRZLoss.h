@@ -32,16 +32,33 @@
 
 #pragma once
 
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/SubsetEnumerator.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/extended_graph_alg.h>
+#include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/graphalg/MinSteinerTreeMehlhorn.h>
+#include <ogdf/graphalg/MinSteinerTreeModule.h>
+#include <ogdf/graphalg/steiner_tree/EdgeWeightedGraphCopy.h>
 #include <ogdf/graphalg/steiner_tree/Full3ComponentGeneratorVoronoi.h>
+#include <ogdf/graphalg/steiner_tree/FullComponentDecisions.h>
 #include <ogdf/graphalg/steiner_tree/FullComponentGeneratorCaller.h>
 #include <ogdf/graphalg/steiner_tree/FullComponentGeneratorDreyfusWagner.h>
 #include <ogdf/graphalg/steiner_tree/FullComponentGeneratorDreyfusWagnerWithoutMatrix.h>
 #include <ogdf/graphalg/steiner_tree/FullComponentStore.h>
 #include <ogdf/graphalg/steiner_tree/SaveStatic.h>
+#include <ogdf/graphalg/steiner_tree/common_algorithms.h>
 
+#include <algorithm>
 #include <memory>
 #include <set>
+#include <vector>
+
+namespace ogdf {
+template<typename T>
+class EdgeWeightedGraph;
+} // namespace ogdf
 
 #define OGDF_STEINERTREE_RZLOSS_REDUCE_ON
 
@@ -63,6 +80,7 @@ class MinSteinerTreeRZLoss : public MinSteinerTreeModule<T> {
 	int m_restricted;
 
 	class Main;
+
 	std::unique_ptr<Main> m_alg;
 
 public:
@@ -156,7 +174,7 @@ class MinSteinerTreeRZLoss<T>::Main {
 
 	//! Setup (build initial terminal-spanning tree, its save data structure, and find all components)
 	void setup(EdgeWeightedGraphCopy<T>& tree) {
-		tree.createEmpty(m_G);
+		tree.setOriginalGraph(m_G);
 
 		if (m_restricted >= 4
 				&& steiner_tree::FullComponentDecisions::shouldUseErickson(m_G.numberOfNodes(),
@@ -309,7 +327,7 @@ void MinSteinerTreeRZLoss<T>::Main::findFull3Components(const EdgeWeightedGraphC
 			[&](node t0, node t1, node t2, node minCenter, T minCost) {
 				// create a full 3-component
 				EdgeWeightedGraphCopy<T> minComp;
-				minComp.createEmpty(m_G);
+				minComp.setOriginalGraph(m_G);
 				node minCenterC = minComp.newNode(minCenter);
 				minComp.newEdge(minComp.newNode(t0), minCenterC, distance[t0][minCenter]);
 				minComp.newEdge(minComp.newNode(t1), minCenterC, distance[t1][minCenter]);

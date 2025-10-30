@@ -29,15 +29,35 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/Array2D.h>
+#include <ogdf/basic/CombinatorialEmbedding.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphAttributes.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/Layout.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/Math.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/geometry.h>
+#include <ogdf/basic/graphics.h>
+
+#include <cmath>
 //Debug
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/fileformats/GraphIO.h>
+#include <ogdf/uml/PlanRepUML.h>
+#include <ogdf/uml/UMLGraph.h>
 
 //zwei Moeglichkeiten: Elemente verstecken mit hide/activate
 //oder Elemente, die nicht akiv sind, loeschen
 
 #include <ogdf/planarity/PlanRepInc.h>
 #include <ogdf/planarity/TopologyModule.h>
+
+#include <iostream>
+#include <string>
 
 namespace ogdf {
 
@@ -116,7 +136,10 @@ node PlanRepInc::initActiveCCGen(int i, bool minNode) {
 	m_currentCC = i;
 
 	//double feature: liste und nodearray, besser
-	GraphCopy::initByActiveNodes(activeOrigCCNodes, m_activeNodes, m_eAuxCopy);
+	m_eAuxCopy.init(getOriginalGraph());
+	NodeArray<node> n_copy(getOriginalGraph());
+	clear();
+	insert(activeOrigCCNodes.begin(), activeOrigCCNodes.end(), filter_any_edge, n_copy, m_eAuxCopy);
 
 	// set type of edges (gen. or assoc.) in the current CC
 	if (m_pGraphAttributes->has(GraphAttributes::edgeType)) {
@@ -347,6 +370,7 @@ void PlanRepInc::getExtAdjs(List<adjEntry>& /* extAdjs */) {
 	NodeArray<int> component(*this);
 	int numPartialCC = connectedComponents(*this, component);
 	EdgeArray<edge> copyEdge; //copy edges in partial CC copy
+	NodeArray<node> nodeCopy;
 	//now we compute a copy for every CC
 	//initialize an array of lists of nodes contained in a CC
 	Array<List<node>> nodesInPartialCC;
@@ -360,8 +384,10 @@ void PlanRepInc::getExtAdjs(List<adjEntry>& /* extAdjs */) {
 	for (i = 0; i < numPartialCC; i++) {
 		List<node>& theNodes = nodesInPartialCC[i];
 		GraphCopy GC;
-		GC.createEmpty(*this);
-		GC.initByNodes(theNodes, copyEdge);
+		GC.setOriginalGraph(*this);
+		copyEdge.init(*this);
+		nodeCopy.init(*this);
+		GC.insert(theNodes.begin(), theNodes.end(), filter_any_edge, nodeCopy, copyEdge);
 		//now we derive an outer face of GC by using the
 		//layout information on it's original
 

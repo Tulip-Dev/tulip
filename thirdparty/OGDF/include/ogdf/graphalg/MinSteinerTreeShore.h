@@ -38,16 +38,24 @@
 // recursion depth
 //#define OGDF_MINSTEINERTREE_SHORE_LOGGING
 
-#include <ogdf/basic/EdgeArray.h>
+#include <ogdf/basic/Array2D.h>
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/GraphSets.h>
 #include <ogdf/basic/List.h>
-#include <ogdf/basic/NodeArray.h>
-#include <ogdf/basic/NodeSet.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/graphalg/MinSteinerTreeModule.h>
 #include <ogdf/graphalg/steiner_tree/EdgeWeightedGraphCopy.h>
 
+#include <iostream>
+#include <limits>
 #include <memory>
+#include <sstream>
+#include <string>
 
 namespace ogdf {
+template<typename T>
+class EdgeWeightedGraph;
 
 /**
  * @brief Implementation of Shore, Foulds and Gibbons exact branch and bound
@@ -91,7 +99,7 @@ private:
 	const List<node>* m_originalTerminals;
 
 	Graph m_graph;
-	std::unique_ptr<NodeSet<>> m_terminals;
+	std::unique_ptr<NodeSet> m_terminals;
 	EdgeArray<edge> m_mapping;
 	T m_upperBound;
 	Array2D<edge> m_edges;
@@ -271,9 +279,9 @@ T MinSteinerTreeShore<T>::computeSteinerTree(const EdgeWeightedGraph<T>& G,
 	m_originalTerminals = &terminals;
 
 	m_upperBound = MAX_WEIGHT;
-	m_graph = Graph();
+	m_graph.clear();
 	m_mapping.init(m_graph);
-	m_terminals.reset(new NodeSet<>(m_graph));
+	m_terminals.reset(new NodeSet(m_graph));
 	int nodeCount = m_originalGraph->numberOfNodes();
 	m_edges = Array2D<edge>(0, nodeCount, 0, nodeCount, nullptr);
 
@@ -298,7 +306,7 @@ T MinSteinerTreeShore<T>::computeSteinerTree(const EdgeWeightedGraph<T>& G,
 	T result = solve(chosenEdges);
 
 	finalSteinerTree = new EdgeWeightedGraphCopy<T>();
-	finalSteinerTree->createEmpty(*m_originalGraph);
+	finalSteinerTree->setOriginalGraph(*m_originalGraph);
 
 	for (edge e : chosenEdges) {
 		node v = e->source();
@@ -687,7 +695,7 @@ T MinSteinerTreeShore<T>::bnbInternal(T prevCost, List<edge>& currentEdges) {
 template<typename T>
 void MinSteinerTreeShore<T>::printSVG() {
 	EdgeWeightedGraphCopy<T> copiedGraph;
-	copiedGraph.createEmpty(m_graph);
+	copiedGraph.setOriginalGraph(m_graph);
 	List<node> nodes;
 	m_graph.allNodes(nodes);
 	NodeArray<bool> copiedIsTerminal(m_graph);

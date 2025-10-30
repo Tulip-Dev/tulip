@@ -31,17 +31,22 @@
 
 #pragma once
 
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/basic.h>
 #include <ogdf/decomposition/BCTree.h>
 #include <ogdf/planarity/EmbedderModule.h>
 #include <ogdf/planarity/embedder/EmbedderMaxFaceBiconnectedGraphs.h>
 #include <ogdf/planarity/embedder/EmbedderMaxFaceBiconnectedGraphsLayers.h>
+
+#include <type_traits>
 
 namespace ogdf {
 namespace embedder {
 
 //! Common base for embedder algorithms based on BC trees.
 template<bool EnableLayers, bool IsEmbedderMinDepth = false>
-class OGDF_EXPORT EmbedderBCTreeBase : public EmbedderModule {
+class EmbedderBCTreeBase : public EmbedderModule {
 	using BicompEmbedder = typename std::conditional<EnableLayers,
 			EmbedderMaxFaceBiconnectedGraphsLayers<int>, EmbedderMaxFaceBiconnectedGraphs<int>>::type;
 

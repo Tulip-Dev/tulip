@@ -30,11 +30,19 @@
  */
 #pragma once
 
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
 #include <ogdf/graphalg/SpannerModule.h>
 
+#include <algorithm>
+#include <cstdint>
+#include <limits>
 #include <memory>
+#include <string>
 
 namespace ogdf {
+class GraphAttributes;
 
 /**
  * A implementation-independed wrapper class to execute a spanner algorithm multiple times.
@@ -129,7 +137,7 @@ private:
 
 				// Copy solution to the members
 				m_spanner->clear();
-				m_spanner->createEmpty(G);
+				m_spanner->setOriginalGraph(G);
 				for (node n : G.nodes) {
 					m_spanner->newNode(n);
 				}

@@ -30,9 +30,19 @@
  */
 
 
+#include <ogdf/basic/Array.h>
+#include <ogdf/basic/Graph.h>
 #include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/List.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/decomposition/DynamicBCTree.h>
 #include <ogdf/decomposition/DynamicSPQRForest.h>
 #include <ogdf/graphalg/Triconnectivity.h>
+
+#include <ostream>
+#include <utility>
 
 namespace ogdf {
 
@@ -43,14 +53,14 @@ void DynamicSPQRForest::init() {
 	m_bNode_numP.init(m_B, 0);
 	m_bNode_numR.init(m_B, 0);
 	m_tNode_type.init(m_T, TNodeType::SComp);
-	m_tNode_owner.init(m_T);
-	m_tNode_hRefEdge.init(m_T);
-	m_tNode_hEdges.init(m_T);
+	m_tNode_owner.init(m_T, nullptr);
+	m_tNode_hRefEdge.init(m_T, nullptr);
+	m_tNode_hEdges.init(m_T, nullptr);
 	m_tNode_isMarked.init(m_T, false);
 	m_hEdge_position.init(m_H);
-	m_hEdge_tNode.init(m_H);
+	m_hEdge_tNode.init(m_H, nullptr);
 	m_hEdge_twinEdge.init(m_H, nullptr);
-	m_htogc.init(m_H);
+	m_htogc.init(m_H, nullptr);
 }
 
 void DynamicSPQRForest::createSPQR(node vB) const {
@@ -80,7 +90,7 @@ void DynamicSPQRForest::createSPQR(node vB) const {
 
 	Triconnectivity tricComp(GC);
 
-	const GraphCopySimple& GCC = *tricComp.m_pGC;
+	const GraphCopySimple& GCC = *dynamic_cast<const GraphCopySimple*>(tricComp.m_pG);
 
 	EdgeArray<node> partnerNode(GCC, nullptr);
 	EdgeArray<edge> partnerEdge(GCC, nullptr);
@@ -708,5 +718,17 @@ node DynamicSPQRForest::updateInsertedNode(edge eG, edge fG) {
 	return DynamicBCTree::updateInsertedNode(eG, fG);
 }
 
+std::ostream& operator<<(std::ostream& os, DynamicSPQRForest::TNodeType t) {
+	switch (t) {
+	case DynamicSPQRForest::TNodeType::RComp:
+		return os << "R";
+	case DynamicSPQRForest::TNodeType::SComp:
+		return os << "S";
+	case DynamicSPQRForest::TNodeType::PComp:
+		return os << "P";
+	default:
+		return os << "?";
+	}
+}
 
 }

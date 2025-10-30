@@ -37,10 +37,14 @@
 #pragma once
 
 #include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GraphList.h>
+#include <ogdf/basic/SList.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/memory.h>
 #include <ogdf/basic/simple_graph_alg.h>
-#include <ogdf/cluster/ClusterGraph.h>
 
 namespace ogdf {
+class ClusterGraph;
 
 //Helper classes to code a clustering, used as an interface to applications that
 //need to build the clustergraph structure themselves
@@ -107,12 +111,12 @@ public:
 	const Graph& getGraph() const { return *m_pGraph; }
 
 	/**
-	* \brief compute some kind of clustering on the graph m_pGraph
-	*
-	* This is the algorithm call that has to be implemented by derived classes
-	*
-	* @param sl is the resulting list of clusters
-	*/
+	 * \brief compute some kind of clustering on the graph m_pGraph
+	 *
+	 * This is the algorithm call that has to be implemented by derived classes
+	 *
+	 * @param sl is the resulting list of clusters
+	 */
 	virtual void computeClustering(SList<SimpleCluster*>& sl) = 0;
 
 	//! translate computed clustering into cluster hierarchy in cluster graph C

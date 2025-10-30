@@ -31,11 +31,15 @@
 
 #pragma once
 
+#include <ogdf/basic/Graph.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/memory.h>
 #include <ogdf/decomposition/Skeleton.h>
 
 namespace ogdf {
 
-class OGDF_EXPORT StaticSPQRTree;
+class StaticSPQRTree;
+class SPQRTree;
 
 //! %Skeleton graphs of nodes in a static SPQR-tree.
 /**
@@ -56,7 +60,7 @@ class OGDF_EXPORT StaticSPQRTree;
  * corresponds to \a eT as well. We call \a e' the twin edge of \a e.
  */
 class OGDF_EXPORT StaticSkeleton : public Skeleton {
-	friend class OGDF_EXPORT StaticSPQRTree;
+	friend class StaticSPQRTree;
 
 public:
 	// constructor

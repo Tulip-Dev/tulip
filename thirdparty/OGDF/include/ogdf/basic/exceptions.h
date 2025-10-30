@@ -31,8 +31,12 @@
 
 #pragma once
 
-#include <ogdf/basic/Logger.h>
+#include <ogdf/basic/Logger.h> // IWYU pragma: keep
 #include <ogdf/basic/basic.h>
+#include <ogdf/basic/internal/config_autogen.h>
+
+#include <exception>
+#include <iostream> // IWYU pragma: keep
 
 namespace ogdf {
 
@@ -159,7 +163,7 @@ enum class LibraryNotSupportedCode {
 /**
  * @ingroup exceptions
  */
-class OGDF_EXPORT Exception {
+class OGDF_EXPORT Exception : std::exception {
 private:
 	const char* m_file; //!< Source file where exception occurred.
 	int m_line; //!< Line number where exception occurred.
@@ -183,12 +187,14 @@ public:
 	 * Returns -1 if the line number is unknown.
 	 */
 	int line() const { return m_line; }
+
+	const char* what() const noexcept override { return "Unknown OGDF Exception"; }
 };
 
 //! %Exception thrown when result of cast is 0.
 /**
-* @ingroup exceptions
-*/
+ * @ingroup exceptions
+ */
 class OGDF_EXPORT DynamicCastFailedException : public Exception {
 public:
 	//! Constructs a dynamic cast failed exception.
@@ -198,8 +204,8 @@ public:
 
 //! %Exception thrown when not enough memory is available to execute an algorithm.
 /**
-* @ingroup exceptions
-*/
+ * @ingroup exceptions
+ */
 class OGDF_EXPORT InsufficientMemoryException : public Exception {
 public:
 	//! Constructs an insufficient memory exception.
@@ -225,8 +231,8 @@ public:
 
 //! %Exception thrown when a data type is not supported by a generic function.
 /**
-* @ingroup exceptions
-*/
+ * @ingroup exceptions
+ */
 class OGDF_EXPORT TypeNotSupportedException : public Exception {
 public:
 	//! Constructs a type-not-supported exception.
@@ -236,8 +242,8 @@ public:
 
 //! %Exception thrown when an algorithm realizes an internal bug that prevents it from continuing.
 /**
-* @ingroup exceptions
-*/
+ * @ingroup exceptions
+ */
 class OGDF_EXPORT AlgorithmFailureException : public Exception {
 public:
 	//! Constructs an algorithm failure exception.
@@ -252,14 +258,18 @@ public:
 	//! Returns the error code of the exception.
 	AlgorithmFailureCode exceptionCode() const { return m_exceptionCode; }
 
+	const char* what() const noexcept override { return codeToString(m_exceptionCode); }
+
+	static const char* codeToString(AlgorithmFailureCode code);
+
 private:
 	AlgorithmFailureCode m_exceptionCode; //!< The error code specifying the exception.
 };
 
 //! %Exception thrown when an external library shall be used which is not supported.
 /**
-* @ingroup exceptions
-*/
+ * @ingroup exceptions
+ */
 class OGDF_EXPORT LibraryNotSupportedException : public Exception {
 public:
 	//! Constructs a library not supported exception.
