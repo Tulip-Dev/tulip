@@ -6,10 +6,10 @@
 the drawing and the visualization of very large graphs (up to the million of nodes and edges).
 It has been created by [David Auber](https://www.labri.fr/perso/auber/david_auber_home_page/),
 from [LaBRI](https://www.labri.fr/) (Laboratoire Bordelais de Recherche en Informatique) and [University of Bordeaux](https://www.u-bordeaux.fr/),
-and maintained over the years by an average size development team.
+and maintained over the years by a small size development team.
 Until the 5.1 release, the main Tulip code repository (subversion based) was hosted 
 on [SourceForge](https://sourceforge.net/projects/auber/).
-That repository remains the Tulip releases download repository but Tulip 6 development are now hosted here.
+That repository remains the Tulip releases download repository up to Tulip 6.0.1. Tulip source code is still maintened and is now hosted on [Github](https://github.com/Tulip-Dev). Future source code only releases will be hosted here. **We are not offering pre-compiled binaries anymore.**
 
 ![alt text](screenshots/tulip_screenshot01.png "Tulip software GUI")
 
