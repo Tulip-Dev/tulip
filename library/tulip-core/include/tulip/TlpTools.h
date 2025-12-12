@@ -24,6 +24,7 @@
 #include <climits>
 #include <sys/types.h>
 #include <tulip/tulipconf.h>
+#include <random>
 
 // The hash_combine function from the boost library
 // Call it repeatedly to incrementally create a hash value from several variables.
@@ -123,6 +124,9 @@ TLP_SCOPE void setSeedOfRandomSequence(unsigned int seed = UINT_MAX);
  * of a random sequence
  */
 TLP_SCOPE unsigned int getSeedOfRandomSequence();
+
+// Mersenne Twister pseudo-random generator of 32-bit numbers
+TLP_SCOPE static std::mt19937 tlpmt;
 
 /**
  * @brief Initializes a random sequence with the seed previously set

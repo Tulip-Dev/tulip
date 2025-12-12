@@ -20,13 +20,10 @@
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
-#include <ctime>
 #include <string>
 #include <iostream>
 #include <clocale>
 #include <cerrno>
-#include <random>
-#include <chrono>
 
 #ifndef _WIN32
 #include <sys/stat.h>
@@ -337,8 +334,6 @@ std::ostream *tlp::getOgzstream(const std::string &name, int open_mode) {
 //=========================================================
 
 static unsigned int randomSeed = UINT_MAX;
-// Mersenne Twister pseudo-random generator of 32-bit numbers
-static std::mt19937 mt;
 
 void tlp::setSeedOfRandomSequence(unsigned int seed) {
   randomSeed = seed;
@@ -351,9 +346,10 @@ unsigned int tlp::getSeedOfRandomSequence() {
 
 void tlp::initRandomSequence() {
   if (randomSeed == UINT_MAX) {
-    mt.seed(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+    std::random_device rd;
+    tlpmt.seed(rd());
   } else {
-    mt.seed(randomSeed);
+    tlpmt.seed(randomSeed);
   }
 }
 
@@ -362,10 +358,10 @@ int tlp::randomInteger(int max) {
     return 0;
   } else if (max > 0) {
     std::uniform_int_distribution<int> dist(0, max);
-    return dist(mt);
+    return dist(tlpmt);
   } else {
     std::uniform_int_distribution<int> dist(max, 0);
-    return dist(mt);
+    return dist(tlpmt);
   }
 }
 
@@ -374,13 +370,13 @@ unsigned int tlp::randomUnsignedInteger(unsigned int max) {
     return 0;
   } else {
     std::uniform_int_distribution<unsigned int> dist(0, max);
-    return dist(mt);
+    return dist(tlpmt);
   }
 }
 
 double tlp::randomDouble(double max) {
   std::uniform_real_distribution<double> dist(0, std::nextafter(max, DBL_MAX));
-  return dist(mt);
+  return dist(tlpmt);
 }
 
 //=========================================================
