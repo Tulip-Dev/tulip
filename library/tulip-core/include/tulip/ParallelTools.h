@@ -37,13 +37,8 @@ typedef long long OMP_ITER_TYPE;
 #else
 typedef size_t OMP_ITER_TYPE;
 #endif
-#ifndef _MSC_VER
 #define OMP(x) _Pragma(STRINGIFY(omp x))
 #define OMP_CRITICAL_SECTION(x) _Pragma(STRINGIFY(omp critical(x)))
-#else
-#define OMP(x) __pragma(omp x)
-#define OMP_CRITICAL_SECTION(x) __pragma(omp critical(x))
-#endif
 
 #ifdef __APPLE__
 struct omp_lock_t;

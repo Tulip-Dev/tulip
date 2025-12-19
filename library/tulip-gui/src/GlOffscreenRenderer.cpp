@@ -17,10 +17,6 @@
  *
  */
 
-#if defined(_MSC_VER)
-#include <windows.h>
-#endif
-
 #include <GL/glew.h>
 
 // remove warnings about qt5/glew incompatibility

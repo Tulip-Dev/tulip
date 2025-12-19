@@ -20,10 +20,6 @@
 #ifndef Tulip_OPENGL_INCLUDES_H
 #define Tulip_OPENGL_INCLUDES_H
 
-#if defined(_MSC_VER)
-#include <windows.h>
-#endif
-
 #if defined(__APPLE__)
 #include <OpenGL/gl.h>
 #else

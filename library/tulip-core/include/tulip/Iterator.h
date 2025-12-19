@@ -383,12 +383,4 @@ private:
 #endif // DOXYGEN_NOTFOR_DEVEL
 } // namespace tlp
 
-#ifdef _MSC_VER
-
-#include <tulip/Edge.h>
-#include <tulip/Node.h>
-
-template struct TLP_SCOPE tlp::Iterator<tlp::edge>;
-template struct TLP_SCOPE tlp::Iterator<tlp::node>;
-#endif
 #endif

@@ -487,15 +487,6 @@ typedef Vector<float, 3, double> Vec3f;
 typedef Vector<float, 4, double> Vec4f;
 } // namespace tlp
 
-#ifdef _MSC_VER
-static double sqrt(tlp::Vector<float, 5> &v) {
-  return sqrt((double)v[0]);
-}
-
-template class TLP_SCOPE tlp::Vector<unsigned char, 4>;
-
-#endif
-
 namespace std {
 TEMPLATEVECTOR
 size_t hash_vector(const tlp::VECTOR &v) {

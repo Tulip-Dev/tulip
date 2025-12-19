@@ -21,11 +21,6 @@
 #include <cstring>
 
 #ifdef TULIP_BUILD_GL_TEX_LOADER
-#if defined(_MSC_VER)
-// need to include that header with Visual Studio to fix a typedef conflict
-// with latest version of jpeg lib (9a)
-#include <basetsd.h>
-#endif
 #include <jpeglib.h>
 #include <png.h>
 #endif
@@ -66,11 +61,7 @@ static bool loadBMP(const string &filename, TextureInfo *texture) {
   long int biSizeImage;
   int i;
 /* make sure the file is there and open it read-only (binary) */
-#ifndef _MSC_VER
   file = fopen(filename.c_str(), "rb");
-#else
-  fopen_s(&file, filename.c_str(), "rb");
-#endif
 
   if (file == nullptr) {
     tlp::error() << "File not found:" << filename << std::endl;
@@ -174,11 +165,7 @@ static bool loadBMP(const string &filename, TextureInfo *texture) {
 #endif
 static bool loadJPEG(const string &filename, TextureInfo *texture) {
   FILE *file;
-#ifndef _MSC_VER
   file = fopen(filename.c_str(), "rb");
-#else
-  fopen_s(&file, filename.c_str(), "rb");
-#endif
 
   if (file == nullptr) {
     tlp::error() << "File not found:" << filename << std::endl;
@@ -235,11 +222,7 @@ static bool loadJPEG(const string &filename, TextureInfo *texture) {
 //====================================================================
 static bool loadPNG(const string &filename, TextureInfo *texture) {
   FILE *file;
-#ifndef _MSC_VER
   file = fopen(filename.c_str(), "rb");
-#else
-  fopen_s(&file, filename.c_str(), "rb");
-#endif
 
   if (file == nullptr) {
     tlp::error() << "File not found:" << filename << std::endl;

@@ -27,12 +27,8 @@
 
 #include <tulip/ConsoleUtils.h>
 
-#ifndef _MSC_VER
 #ifdef HAVE_BFD
 #include "BfdWrapper.h"
-#endif
-#else
-typedef __int64 int64_t;
 #endif
 
 class StackWalker {

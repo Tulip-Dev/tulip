@@ -158,22 +158,10 @@ public:
       dataSet->get("max value", maxInput);
 
       /// Do not allow NaN input
-      if (overrideMaxInput &&
-#if defined(_MSC_VER) && (_MSC_VER < 1800)
-          isnan(minInput)
-#else
-          std::isnan(minInput)
-#endif
-      )
+      if (overrideMaxInput && std::isnan(minInput))
         minInput = 0;
 
-      if (overrideMinInput &&
-#if defined(_MSC_VER) && (_MSC_VER < 1800)
-          isnan(maxInput)
-#else
-          std::isnan(maxInput)
-#endif
-      )
+      if (overrideMinInput && std::isnan(maxInput))
         maxInput = 0;
 
       if (overrideMinInput && overrideMaxInput) {

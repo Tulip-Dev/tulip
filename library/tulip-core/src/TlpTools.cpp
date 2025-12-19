@@ -43,9 +43,6 @@
 #ifdef UNDEF__CRT__NO_INLINE
 #undef __CRT__NO_INLINE
 #endif
-#ifdef _MSC_VER
-#include <dbghelp.h>
-#endif
 #else
 #include <dirent.h>
 #include <dlfcn.h>
@@ -289,21 +286,6 @@ std::string tlp::demangleClassName(const char *className, bool hideTlp) {
     return std::string(demangleBuffer + 5);
 
   return std::string(demangleBuffer);
-}
-#elif defined(_MSC_VER)
-// With Visual Studio, typeid(tlp::T).name() does not return a mangled type name
-// but a human readable type name in the form "class tlp::T"
-// so just remove the first 11 characters to return T
-std::string tlp::demangleClassName(const char *className, bool hideTlp) {
-  char *clName = const_cast<char *>(className);
-
-  if (strstr(className, "class ") == className)
-    clName += 6;
-
-  if (hideTlp && strstr(clName, "tlp::") == clName)
-    return std::string(clName + 5);
-
-  return std::string(clName);
 }
 #else
 #error define symbols demangling function

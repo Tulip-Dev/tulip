@@ -40,16 +40,6 @@ void CrashHandling::setDumpPath(const string &s) {
   TULIP_DUMP_FILE = s;
 }
 
-#ifdef _MSC_VER
-
-static std::string SYMBOLS_SEARCH_PATHS = "";
-
-void CrashHandling::setExtraSymbolsSearchPaths(const std::string &searchPaths) {
-  SYMBOLS_SEARCH_PATHS = searchPaths;
-}
-
-#endif
-
 static void dumpStackTrace(StackWalker &sw) {
   std::ostream *os = &std::cerr;
   std::ofstream ofs;

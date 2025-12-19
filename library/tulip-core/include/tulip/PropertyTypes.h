@@ -246,37 +246,6 @@ struct KnownTypeSerializer : public TypedDataSerializer<typename T::RealType> {
 };
 
 extern void initTypeSerializers();
-#ifdef _MSC_VER
-template class SerializableType<double>;
-template class SerializableType<float>;
-template class SerializableType<int>;
-template class SerializableType<long>;
-template class SerializableType<unsigned int>;
-template class SerializableType<tlp::Coord>;
-template class SerializableType<tlp::Size>;
-template class SerializableVectorType<double, DoubleType, false>;
-template class SerializableVectorType<int, IntegerType, false>;
-template class SerializableVectorType<unsigned int, UnsignedIntegerType, false>;
-template class SerializableVectorType<tlp::Coord, PointType, false>;
-template class SerializableVectorType<tlp::Size, SizeType, true>;
-template class SerializableVectorType<tlp::Color, ColorType, true>;
-template class SerializableVectorType<tlp::Coord, PointType, true>;
-template class TypeInterface<tlp::Graph *>;
-template class TypeInterface<std::set<tlp::edge>>;
-template class TypeInterface<bool>;
-template class TypeInterface<std::vector<bool>>;
-template class TypeInterface<std::vector<std::string>>;
-template class TypeInterface<tlp::Color>;
-template class TypeInterface<std::string>;
-
-template class AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>;
-template class AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>;
-template class AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>;
-template class AbstractVectorProperty<StringVectorType, tlp::StringType>;
-template class AbstractVectorProperty<ColorVectorType, tlp::ColorType>;
-template class AbstractVectorProperty<SizeVectorType, tlp::SizeType>;
-template class AbstractVectorProperty<CoordVectorType, tlp::PointType>;
-#endif
 } // namespace tlp
 
 #endif
