@@ -72,17 +72,21 @@ void APIDataBase::loadApiFile(const QString &apiFilePath) {
   if (!apiFile.exists())
     return;
 
-  apiFile.open(QIODevice::ReadOnly | QIODevice::Text);
-  QTextStream in(&apiFile);
+  if (apiFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    QTextStream in(&apiFile);
 
-  while (!in.atEnd()) {
-    QString line = in.readLine();
-    addApiEntry(line);
+    while (!in.atEnd()) {
+      QString line = in.readLine();
+      addApiEntry(line);
 
-    if (line.startsWith("_tulip.tlp.Vec3f.")) {
-      addApiEntry(line.replace("Vec3f", "Coord"));
-      addApiEntry(line.replace("Coord", "Size"));
+      if (line.startsWith("_tulip.tlp.Vec3f.")) {
+        addApiEntry(line.replace("Vec3f", "Coord"));
+        addApiEntry(line.replace("Coord", "Size"));
+      }
     }
+  }
+  else {
+    tlp::warning() << "Cannot open " << QStringToTlpString(apiFilePath) << std::endl;
   }
 }
 

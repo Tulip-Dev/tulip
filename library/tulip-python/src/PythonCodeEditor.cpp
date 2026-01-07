@@ -1639,31 +1639,33 @@ bool PythonCodeEditor::loadCodeFromFile(const QString &filePath) {
   if (!file.exists())
     return false;
 
-  file.open(QIODevice::ReadOnly | QIODevice::Text);
-  QFileInfo fileInfo(file);
+  if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    QFileInfo fileInfo(file);
 
-  QString scriptCode = QString::fromUtf8(file.readAll().data());
-  file.close();
+    QString scriptCode = QString::fromUtf8(file.readAll().data());
+    file.close();
 
-  _lastSavedTime = fileInfo.lastModified();
+    _lastSavedTime = fileInfo.lastModified();
 
-  if (filePath == getFileName() && !toPlainText().isEmpty()) {
-    if (scriptCode != getCleanCode() &&
-        QMessageBox::question(QApplication::activeWindow(), "File changed on disk",
-                              QString("The file ") + filePath +
-                                  " has been modified by another editor. Do you want to reload it?",
-                              QMessageBox::Yes | QMessageBox::No,
-                              QMessageBox::Yes) == QMessageBox::Yes) {
-      setPlainText(scriptCode);
+    if (filePath == getFileName() && !toPlainText().isEmpty()) {
+      if (scriptCode != getCleanCode() &&
+          QMessageBox::question(QApplication::activeWindow(), "File changed on disk",
+                                QString("The file ") + filePath +
+                                    " has been modified by another editor. Do you want to reload it?",
+                                QMessageBox::Yes | QMessageBox::No,
+                                QMessageBox::Yes) == QMessageBox::Yes) {
+        setPlainText(scriptCode);
+      } else {
+        return false;
+      }
     } else {
-      return false;
+      setFileName(filePath);
+      setPlainText(scriptCode);
     }
-  } else {
-    setFileName(filePath);
-    setPlainText(scriptCode);
-  }
 
-  return true;
+    return true;
+  }
+  return false;
 }
 
 bool PythonCodeEditor::saveCodeToFile() {

@@ -962,10 +962,17 @@ bool PythonIDE::loadPythonPlugin(const QString &fileName, bool clear) {
   QString pluginName = "";
 
   QString pluginCode;
-  file.open(QIODevice::ReadOnly | QIODevice::Text);
-  QTextStream in(&file);
-  pluginCode = in.readAll();
-  file.close();
+  if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    QTextStream in(&file);
+    pluginCode = in.readAll();
+    file.close();
+  }
+  else {
+    QMessageBox::critical(
+        this, "Error",
+        "Cannot open plugin file: " + fileName);
+    return false;
+  }
 
   if (checkAndGetPluginInfoFromSrcCode(pluginCode, pluginName, pluginClassName, pluginType,
                                        pluginClass)) {
