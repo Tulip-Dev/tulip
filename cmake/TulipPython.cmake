@@ -25,7 +25,7 @@ ENDIF()
 
 SET(SIP_BUILD ${Python_EXECUTABLE} -m sipbuild.tools.build) #instead of sip-build
 SET(SIP_MODULE_PROG ${Python_EXECUTABLE} -m sipbuild.tools.module) #instead of sip-module
-SET(SIP_VERSION 6.9.1)
+SET(SIP_VERSION 6.10)
 #check if sip is installed (it is up to the user to install it)
 #use the detected python interpreter to call sip instead of the command line tool
 #to be sure to use the correct version (command line tool may not be in the PATH)
@@ -143,6 +143,7 @@ execute_process(
     COMMAND_ERROR_IS_FATAL ANY)
 FILE(GLOB SIP_DIST LIST_DIRECTORIES false CONFIGURE_DEPENDS ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-*.tar.gz)
 STRING(REGEX MATCH "[0-9]+\.[0-9]+\.[0-9]+" SIP_API_FULL ${SIP_DIST})
+#Always use the latest API
 STRING(REGEX MATCH "^[0-9]+\.[0-9]+" SIP_API ${SIP_API_FULL}) #used in pyproject.toml files
 FILE(ARCHIVE_EXTRACT INPUT ${SIP_DIST} DESTINATION ${SIP_INCLUDE_DIR} PATTERNS *.c *.h)
 SET (SIP_H_DIR ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-${SIP_API_FULL})
