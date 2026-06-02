@@ -350,11 +350,7 @@ void initTulipSoftware(tlp::PluginLoader *loader) {
   // depending on Python.
   auto pythonHome = tlp::PythonIDEInterface::getPythonHome();
   if (!pythonHome.isEmpty()) {
-#if (QT_VERSION > QT_VERSION_CHECK(6, 6, 0))
     SetDllDirectory(const_cast<wchar_t *>(pythonHome.toStdWString().c_str()));
-#else
-    SetDllDirectory(pythonHome.toUtf8().data());
-#endif
   }
 #endif
 
