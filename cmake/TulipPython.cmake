@@ -25,7 +25,7 @@ ENDIF()
 
 SET(SIP_BUILD ${Python_EXECUTABLE} -m sipbuild.tools.build) #instead of sip-build
 SET(SIP_MODULE_PROG ${Python_EXECUTABLE} -m sipbuild.tools.module) #instead of sip-module
-SET(SIP_VERSION 6.10)
+SET(SIP_VERSION 6.15)
 #check if sip is installed (it is up to the user to install it)
 #use the detected python interpreter to call sip instead of the command line tool
 #to be sure to use the correct version (command line tool may not be in the PATH)
