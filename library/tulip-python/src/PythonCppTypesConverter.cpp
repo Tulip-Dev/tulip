@@ -22,8 +22,8 @@
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
 
-#include <tulip/tuliphash.h>
 #include <tulip/PythonIncludes.h>
+#include <tulip/tuliphash.h>
 #include <tulip/PythonCppTypesConverter.h>
 
 static tlp_hash_map<std::string, std::string> &getTypenamesMap() {
