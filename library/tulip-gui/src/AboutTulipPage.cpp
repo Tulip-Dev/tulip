@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <vector>
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wold-style-cast"
@@ -25,6 +24,7 @@
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
+#include <vector>
 #include <ogdf/basic/internal/config.h>
 #include <zipconf.h>
 #include <tulip/AboutTulipPage.h>
