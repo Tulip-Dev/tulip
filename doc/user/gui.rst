@@ -192,7 +192,7 @@ About ten panel types are available in Tulip, each of those is presented in this
 Tulip Python IDE
 ================
 
-Even with more than a hundred algorithms at your disposition, you may have special needs and/or want to implement your own solutions. If you are willing to implement graph manipulation algorithms, directly heading to program a C/C++ module or plug-in can be rather tricky. Instead, Tulip proposes to use the dynamic programming language `Python <http://www.python.org>`_ to easily and interactively try and implement your solutions. The Tulip Python IDE allows you to create your own scripts, plugins and modules in Python.
+Even with more than a hundred algorithms at your disposition, you may have special needs and/or want to implement your own solutions. If you are willing to implement graph manipulation algorithms, directly heading to program a C/C++ module or plug-in can be rather tricky. Instead, Tulip proposes to use the dynamic programming language `Python <https://www.python.org>`_ to easily and interactively try and implement your solutions. The Tulip Python IDE allows you to create your own scripts, plugins and modules in Python.
 
 .. image:: ../python/tulipPythonScript.png
 

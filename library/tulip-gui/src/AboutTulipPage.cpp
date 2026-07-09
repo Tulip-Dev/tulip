@@ -147,8 +147,7 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
   }
 
   // relook some html links
-  std::vector<QLabel *> labels{_ui->tutorialsLabel, _ui->forumsLabel, _ui->screenshotsLabel,
-                               _ui->bugsLabel, _ui->websiteLabel};
+  std::vector<QLabel *> labels{_ui->tutorialsLabel, _ui->bugsLabel, _ui->websiteLabel};
   for (auto label : labels) {
     auto txt = label->text();
     auto pos = txt.indexOf(" href=");

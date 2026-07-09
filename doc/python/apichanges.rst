@@ -364,7 +364,7 @@ Nevertheless for backward compatibilty, instances of the :class:`tlp.ColorScale`
 Tulip predefined color scales can now be easily retrieved from Python
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-Tulip is bundled with a lot of predefined color scales (in particular, the great ones from `Color Brewer <http://colorbrewer2.org/>`_).
+Tulip is bundled with a lot of predefined color scales (in particular, the great ones from `Color Brewer <https://colorbrewer2.org/>`_).
 You can get a preview of them in the color scale config dialog inside the main Tulip GUI. The dialog can be displayed
 through the 'Edit -> Color scales management' main menu entry or by double clicking on the color scale parameter in the
 configuration table of the 'Color Mapping' algorithm.
@@ -373,7 +373,7 @@ These color scales can now be easily retrieved from Python by using the static :
 That class lies in the :mod:`tulipgui` module as Tulip uses Qt under the hood for managing predefined color scales.
 That class also allows to register new color scales in a local persistent database for further reuse in every Python working session.
 
-For instance, if one wants to use the '9-class OrRd' scale from `Color Brewer <http://colorbrewer2.org/>`_ in the above example,
+For instance, if one wants to use the '9-class OrRd' scale from `Color Brewer <https://colorbrewer2.org/>`_ in the above example,
 the instruction below can now be used::
 
   colorMappingParams['color scale'] = tlpgui.ColorScalesManager.getColorScale('OrRd_9')

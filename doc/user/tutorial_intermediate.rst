@@ -7,7 +7,7 @@ Tulip in Practice: Four case studies
 These tutorials are intended for users who are already familiarized with the Tulip workspace, as presented in :ref:`gui`, as well as with the basics of Tulip detailed in :ref:`first_steps`.
 Here, our purpose is to highlight some of the possibilities offered by Tulip for data visualization and data analysis, using real-word dataset examples. 
 
-Some of these files can be found on the website `idvbook.com <http://www.idvbook.com/teaching-aid/data-sets/>`__, which is associated with the book:
+Some of these files can be found on the website `idvbook.com <https://www.idvbook.com/teaching-aid/data-sets/>`__, which is associated with the book:
  
 *Interactive data visualization: foundations, techniques, and applications*, by Matthew Ward, Georges Grinstein, and Daniel Keim. [#footnote1]_
 
@@ -139,7 +139,7 @@ The potential offered by the *Geographic view* is indeed great for data visualiz
 Importing the data
 ------------------
 
-The data used for this visualization was downloaded from the `idvbook.com <http://www.idvbook.com/teaching-aid/data-sets/the-city-temperature-data-set/>`__ website. A *CSV* file can easily be generated from the XLS table found in the archive.
+The data used for this visualization was downloaded from the `idvbook.com <https://www.idvbook.com/teaching-aid/data-sets/the-city-temperature-data-set/>`__ website. A *CSV* file can easily be generated from the XLS table found in the archive.
 
 The point here is to make sense of the following raw data, using some of the Tulip basic features:
 
@@ -240,7 +240,7 @@ Analysis of a Multivariate Dataset
 .. |icon_search| image:: ../../plugins/perspective/GraphPerspective/resources/icons/48/search.png
     :width: 32
 					       
-In this third tutorial, we will highlight some of the possibilities offered by Tulip for the analysis of multivariate datasets. The dataset may already be familiar to the reader, as it was featured in the :ref:`workspace` section. The file may be downloaded :download:`here <./_documents/04cars_data.csv>`, and is available on the website `idvbook.com <http://www.idvbook.com/teaching-aid/data-sets/2004-cars-and-trucks-data/>`_.
+In this third tutorial, we will highlight some of the possibilities offered by Tulip for the analysis of multivariate datasets. The dataset may already be familiar to the reader, as it was featured in the :ref:`workspace` section. The file may be downloaded :download:`here <./_documents/04cars_data.csv>`, and is available on the website `idvbook.com <https://www.idvbook.com/teaching-aid/data-sets/2004-cars-and-trucks-data/>`_.
 
 Note that originally, data was missing for some cars, and so in order to *clean* the file and avoid having to deal with problems when importing the file into Tulip, we chose the strategy of simply discarding those vehicles. The resulting *cleaned* file consists of the vehicles for which all the information was available.
 

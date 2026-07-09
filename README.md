@@ -1,6 +1,6 @@
 # Tulip [![license](https://img.shields.io/badge/license-LGPL_3.0-blue)](https://www.gnu.org/licenses/lgpl-3.0.html) [![Supported platforms](https://img.shields.io/badge/platforms-Linux%2064%20|%20MacOSX%2064%20|%20Windows%2064-blue)]() [![Python supported versions](https://img.shields.io/pypi/pyversions/tulip-python)]() [![SourceForge](https://img.shields.io/sourceforge/dt/auber/tulip.svg)](https://sourceforge.net/projects/auber/files/tulip/) [![PyPI version](https://badge.fury.io/py/tulip-python.svg)](https://badge.fury.io/py/tulip-python)
 
-![alt text](https://tulip.labri.fr/site/sites/default/files/logo_web.png "Tulip")
+![alt text](https://tulip.labri.fr/images/logo_web.png "Tulip")
 
 [Tulip](https://tulip.labri.fr) is an open source, cross-platform, data visualization framework mainly dedicated to the analysis, 
 the drawing and the visualization of very large graphs (up to the million of nodes and edges).
@@ -101,21 +101,21 @@ The following dependencies are required to build Tulip:
   * A [C++17](https://en.wikipedia.org/wiki/C%2B%2B11) compiler : [GCC](https://gcc.gnu.org/) >= 9.0,
   [Clang](https://clang.llvm.org/) >= 9.0
   * [FreeType](https://www.freetype.org) 
-  * [zlib](http://zlib.net)
+  * [zlib](https://zlib.net)
   * [Qt](https://www.qt.io) >= 6.8
   * [OpenGL](https://www.opengl.org) >= 2.0
-  * [GLEW](http://glew.sourceforge.net/) >= 1.4
-  * [Python](https://www.python.org) >= 3.10
-  * [Pip] (https://pypi.org/project/pip/)
-  * [SIP](https://github.com/Python-SIP/sip) >= 6.15 (to be installed via pip or on Debian/Ubuntu packages sipbuild)
+  * [GLEW](https://glew.sourceforge.net/) >= 1.4
+  * [Python](https://www.python.org) >= 3.10 up to 3.14
+  * [Pip](https://pypi.org/project/pip/)
+  * [SIP](https://github.com/Python-SIP/sip) >= 6.10 (to be installed via pip or on Debian/Ubuntu packages sipbuild)
   * [libzip](https://libzip.org)
   * [Qhull](http://www.qhull.org/)
   * [yajl](https://lloyd.github.io/yajl/) >= 2.0  
   
 In order to generate the documentation, the following tools must be installed:
 
-  * [Sphinx](http://www.sphinx-doc.org/en/stable/) to build the [User Manual](https://tulip.labri.fr/Documentation/current/tulip-user/html/index.html), [Developer Handbook](https://tulip.labri.fr/Documentation/current/tulip-dev/html/index.html) and [Python bindings documentation](https://tulip.labri.fr/Documentation/current/tulip-python/html/index.html)
-  * [Doxygen](http://www.stack.nl/~dimitri/doxygen/) to build the [C++ API documentation](https://tulip.labri.fr/Documentation/current/doxygen/html/index.html)
+  * [Sphinx](https://www.sphinx-doc.org/en/master/) to build the [User Manual](https://tulip.labri.fr/Documentation/current/tulip-user/html/index.html), [Developer Handbook](https://tulip.labri.fr/Documentation/current/tulip-dev/html/index.html) and [Python bindings documentation](https://tulip.labri.fr/Documentation/current/tulip-python/html/index.html)
+  * [Doxygen](https://www.doxygen.nl/) to build the [C++ API documentation](https://tulip.labri.fr/Documentation/current/doxygen/html/index.html)
 
 If you are a Linux user, all these dependencies can be installed with the package manager of your distribution. The old continuous integration setup file [.travis.yml](travis.yml) can give you some hints for Tulip build on Linux platforms.
 
@@ -128,7 +128,7 @@ For windows, the use a Python distribution from the official site is recommended
 
 ## References
 
- [Tulip web site](https://tulip.labri.fr) has a dedicated page for [Tulip bibliography](https://tulip.labri.fr/site/?q=tulip-biblio).
+ The [Tulip web site](https://tulip.labri.fr) has a dedicated page for the [Tulip bibliography](https://tulip.labri.fr/biblio.html).
 
 ## License
 

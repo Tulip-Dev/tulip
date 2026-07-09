@@ -45,7 +45,7 @@
              <item>
               <spacer name="horizontalSpacer_2">
                <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Qt::Orientation::Horizontal</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -61,7 +61,7 @@
                 <string>Tulip logo</string>
                </property>
                <property name="alignment">
-                <set>Qt::AlignCenter</set>
+                <set>Qt::AlignmentFlag::AlignCenter</set>
                </property>
               </widget>
              </item>
@@ -70,18 +70,18 @@
                <property name="text">
                 <string>Tulip version</string>
                </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
                <property name="openExternalLinks">
                 <bool>true</bool>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
                </property>
               </widget>
              </item>
              <item>
               <spacer name="horizontalSpacer_3">
                <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Qt::Orientation::Horizontal</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -99,7 +99,7 @@
               <string>Dependencies information</string>
              </property>
              <property name="openExternalLinks">
-               <bool>true</bool>
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -115,7 +115,7 @@
              <item>
               <spacer name="horizontalSpacer">
                <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Qt::Orientation::Horizontal</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -144,10 +144,10 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
 }</string>
            </property>
            <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
+            <enum>QFrame::Shape::NoFrame</enum>
            </property>
            <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
+            <enum>QFrame::Shadow::Raised</enum>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
             <item>
@@ -206,7 +206,7 @@ p, li { white-space: pre-wrap; }
             <item>
              <widget class="QScrollArea" name="rssScroll">
               <property name="frameShape">
-               <enum>QFrame::NoFrame</enum>
+               <enum>QFrame::Shape::NoFrame</enum>
               </property>
               <property name="widgetResizable">
                <bool>true</bool>
@@ -217,7 +217,7 @@ p, li { white-space: pre-wrap; }
                  <x>0</x>
                  <y>0</y>
                  <width>280</width>
-                 <height>214</height>
+                 <height>212</height>
                 </rect>
                </property>
               </widget>
@@ -239,11 +239,11 @@ p, li { white-space: pre-wrap; }
 &lt;body&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://tulip.labri.fr&quot;&gt;Tulip web site&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
-              <property name="openExternalLinks">
-                <bool>true</bool>
-              </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+              </property>
+              <property name="openExternalLinks">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -288,7 +288,7 @@ p, li { white-space: pre-wrap; }
                   <pixmap resource="../resources/TulipGUIResource.qrc">:/tulip/gui/icons/icon-quote.gif</pixmap>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
                  </property>
                 </widget>
                </item>
@@ -310,7 +310,7 @@ font: bold italic 11pt &quot;Arial&quot;;</string>
                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Tulip is an information visualization framework dedicated to the analysis and visualization of relational data. Tulip aims to provide to the developer a complete library, supporting the design of interactive information visualization applications for relational data that can be tailored to the addressed problems.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="alignment">
-                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -325,7 +325,7 @@ font: bold italic 11pt &quot;Arial&quot;;</string>
               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;Written in C++ the framework enables the development of algorithms, visual encodings, interaction techniques, data models, and domain-specific visualizations. One goal of Tulip is to facilitate the reuse of components to allow developers to focus on their application. This development pipeline makes the framework efficient for research prototyping as well as the development of end-user applications.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
              </property>
              <property name="wordWrap">
               <bool>true</bool>
@@ -358,7 +358,7 @@ font: bold italic 11pt &quot;Arial&quot;;</string>
                 <bool>false</bool>
                </property>
                <property name="alignment">
-                <set>Qt::AlignCenter</set>
+                <set>Qt::AlignmentFlag::AlignCenter</set>
                </property>
               </widget>
              </item>
@@ -383,7 +383,7 @@ font: bold italic 11pt &quot;Arial&quot;;</string>
                 <bool>false</bool>
                </property>
                <property name="alignment">
-                <set>Qt::AlignCenter</set>
+                <set>Qt::AlignmentFlag::AlignCenter</set>
                </property>
               </widget>
              </item>
@@ -408,27 +408,11 @@ font: bold italic 11pt &quot;Arial&quot;;</string>
                 <bool>false</bool>
                </property>
                <property name="alignment">
-                <set>Qt::AlignCenter</set>
+                <set>Qt::AlignmentFlag::AlignCenter</set>
                </property>
               </widget>
              </item>
             </layout>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_12">
-             <property name="styleSheet">
-              <string notr="true">color: #696969;</string>
-             </property>
-             <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;Please check the list of reported bugs before reporting a new one. Only sourceforge registered users can report.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
            </item>
           </layout>
          </item>
@@ -457,7 +441,7 @@ font: bold italic 11pt &quot;Arial&quot;;</string>
                 <string/>
                </property>
                <property name="pixmap">
-                <pixmap resource="../resources/TulipGUIResource.qrc">:/tulip/gui/icons/tutorials.png</pixmap>
+                <pixmap>:/tulip/gui/icons/tutorials.png</pixmap>
                </property>
                <property name="scaledContents">
                 <bool>true</bool>
@@ -471,96 +455,6 @@ font: bold italic 11pt &quot;Arial&quot;;</string>
                </property>
                <property name="text">
                 <string>&lt;a href=&quot;https://tulip.labri.fr/Documentation/current/tulip-user/html/tutorial_intermediate.html&quot;&gt;Tutorials&lt;/a&gt;</string>
-               </property>
-               <property name="openExternalLinks">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
-             <property name="spacing">
-              <number>10</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="label_7">
-               <property name="minimumSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="pixmap">
-                <pixmap resource="../resources/TulipGUIResource.qrc">:/tulip/gui/icons/forums.png</pixmap>
-               </property>
-               <property name="scaledContents">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="forumsLabel">
-               <property name="styleSheet">
-                <string notr="true">font: bold;</string>
-               </property>
-               <property name="text">
-                <string>&lt;a href=&quot;http://sourceforge.net/projects/auber/forums/forum/206283&quot;&gt;Forums&lt;/a&gt;</string>
-               </property>
-               <property name="openExternalLinks">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_6">
-             <property name="spacing">
-              <number>10</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="label_10">
-               <property name="minimumSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="pixmap">
-                <pixmap resource="../resources/TulipGUIResource.qrc">:/tulip/gui/icons/screenshots.png</pixmap>
-               </property>
-               <property name="scaledContents">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="screenshotsLabel">
-               <property name="styleSheet">
-                <string notr="true">font: bold;</string>
-               </property>
-               <property name="text">
-                <string>&lt;a href=&quot;https://tulip.labri.fr/site/?q=screenshots&quot;&gt;Screenshots&lt;/a&gt;</string>
                </property>
                <property name="openExternalLinks">
                 <bool>true</bool>
@@ -592,7 +486,7 @@ font: bold italic 11pt &quot;Arial&quot;;</string>
                 <string/>
                </property>
                <property name="pixmap">
-                <pixmap resource="../resources/TulipGUIResource.qrc">:/tulip/gui/icons/bugs.png</pixmap>
+                <pixmap>:/tulip/gui/icons/bugs.png</pixmap>
                </property>
                <property name="scaledContents">
                 <bool>true</bool>
@@ -605,7 +499,7 @@ font: bold italic 11pt &quot;Arial&quot;;</string>
                 <string notr="true">font: bold;</string>
                </property>
                <property name="text">
-                <string>&lt;a href=&quot;http://sourceforge.net/p/auber/bugs&quot;&gt;Bugs&lt;/a&gt;</string>
+                <string>&lt;a href=&quot;https://github.com/Tulip-dev/tulip&quot;&gt;GitHub&lt;/a&gt;</string>
                </property>
                <property name="openExternalLinks">
                 <bool>true</bool>

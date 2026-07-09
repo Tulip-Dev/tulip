@@ -810,7 +810,7 @@ The view provides two exclusive tools, only available when viewing a sole histog
 Parallel coordinates view
 =========================
 
-To present this view, we use a dataset containing car specifications such as the city and highway autonomy, the engine displacement, the retail price, the physical dimensions... This document can be opened in Tulip as a project, available :download:`here <./_documents/Cars_data.tlpx>`, or can be imported with the :download:`original CSV file <./_documents/04cars_data.csv>`. The original file can be found on `this site <http://igva2012.wikispaces.asu.edu/file/detail/04cars.csv>`_.
+To present this view, we use a dataset containing car specifications such as the city and highway autonomy, the engine displacement, the retail price, the physical dimensions... This document can be opened in Tulip as a project, available :download:`here <./_documents/Cars_data.tlpx>`, or can be imported with the :download:`original CSV file <./_documents/04cars_data.csv>`.
 
 More information about the CSV import tool and mechanism can be found in the section :ref:`csv`.
 
@@ -940,7 +940,7 @@ The nodes disposition is arranged to match the chosen representation.
   .. image:: _images/i_pixel_discrete_spiral.png
     :width: 200
 
-* Z-order curve (`original picture <http://en.wikipedia.org/wiki/File:Four-level_Z.svg>`_):
+* Z-order curve (`original picture <https://en.wikipedia.org/wiki/File:Four-level_Z.svg>`_):
 
   .. image:: _images/i_pixel_z-order_curve.png
     :width: 200

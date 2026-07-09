@@ -252,7 +252,7 @@ To iterate all the nodes, we need to create an Iterator over the graph nodes wit
 
   Iterator<node> *itNodes = graph->getNodes();
 
-The documentation of the interface Iterator can be found `here <https://tulip.labri.fr/doxygen/tulip-lib/structtlp_1_1Iterator.html>`_.
+The documentation of the interface Iterator can be found `here <https://tulip.labri.fr/Documentation/current/doxygen/html/structtlp_1_1_iterator.html>`_.
 
 With the functions *template <class itType> bool tlp::Iterator<itType>::hasNext ( )* and *node next ( )*, we can iterate our graph nodes with a simple while ::
 
@@ -835,7 +835,7 @@ The whole example is, as usual, available :download:`here <./_documents/tutorial
 TUTORIAL 006: Edges order
 ==========================
 
-In this tutorial, we will learn how to change edges order in the graph edges adjacency list (please visit `Wikipedia: Adjacency and degree <http://en.wikipedia.org/wiki/Acyclic_Graph#Adjacency_and_degree>`_ for more details ). Indeed, it can be useful to sort the edges considering a metric.
+In this tutorial, we will learn how to change edges order in the graph edges adjacency list (please visit `Wikipedia: Adjacency and degree <https://en.wikipedia.org/wiki/Acyclic_Graph#Adjacency_and_degree>`_ for more details ). Indeed, it can be useful to sort the edges considering a metric.
 
 
 .. _code-example-edgesorder-intro:
