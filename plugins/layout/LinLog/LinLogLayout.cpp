@@ -589,9 +589,7 @@ bool LinLogLayout::minimizeEnergy(int nrIterations) {
   double finalAttrExponent = attrExponent;
   double finalRepuExponent = repuExponent;
 
-  // compute initial energy
-  computeBaryCenter();
-  OctTree *octTree = buildOctTree();
+  OctTree *octTree = nullptr;
 
   // minimize energy
   double oldPos[3] = {0, 0, 0};
@@ -686,6 +684,7 @@ bool LinLogLayout::minimizeEnergy(int nrIterations) {
     if ((step * 100 / nrIterations) % 10 == 0 &&
         pluginProgress->progress(step, nrIterations) != TLP_CONTINUE)
       return pluginProgress->state() != TLP_CANCEL;
+    delete octTree;
   }
 
   return true;
