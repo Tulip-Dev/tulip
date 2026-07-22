@@ -682,8 +682,10 @@ bool LinLogLayout::minimizeEnergy(int nrIterations) {
     }
 
     if ((step * 100 / nrIterations) % 10 == 0 &&
-        pluginProgress->progress(step, nrIterations) != TLP_CONTINUE)
+        pluginProgress->progress(step, nrIterations) != TLP_CONTINUE) {
+      delete octTree;
       return pluginProgress->state() != TLP_CANCEL;
+    }
     delete octTree;
   }
 
