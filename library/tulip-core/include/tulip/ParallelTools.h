@@ -28,15 +28,7 @@
 #ifndef TLP_NO_THREADS
 
 #ifdef _OPENMP
-// _OPENMP is supposed to be defined as an integer
-//  representing the year/month of the supported version
-#if _OPENMP < 200805
-// only signed integer types are supported
-// for OpenMP < 3.0
-typedef long long OMP_ITER_TYPE;
-#else
 typedef size_t OMP_ITER_TYPE;
-#endif
 #define OMP(x) _Pragma(STRINGIFY(omp x))
 #define OMP_CRITICAL_SECTION(x) _Pragma(STRINGIFY(omp critical(x)))
 
@@ -46,7 +38,7 @@ struct omp_lock_t;
 
 #else
 
-// OpenMP no available use C++11 threads
+// OpenMP not available use C++11 threads
 #include <iostream>
 #include <algorithm>
 #include <mutex>
@@ -343,7 +335,7 @@ void inline TLP_PARALLEL_SECTIONS(const F1 &f1, const F2 &f2) {
         f1();
       }
     }
-    OMP(master) {
+    OMP(masked) {
       f2();
     }
   }
@@ -372,7 +364,7 @@ void inline TLP_PARALLEL_SECTIONS(const F1 &f1, const F2 &f2, const F3 &f3) {
         f2();
       }
     }
-    OMP(master) {
+    OMP(masked) {
       f3();
     }
   }
@@ -408,7 +400,7 @@ void inline TLP_PARALLEL_SECTIONS(const F1 &f1, const F2 &f2, const F3 &f3, cons
         f3();
       }
     }
-    OMP(master) {
+    OMP(masked) {
       f4();
     }
   }
