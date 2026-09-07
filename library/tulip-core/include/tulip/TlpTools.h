@@ -126,7 +126,7 @@ TLP_SCOPE void setSeedOfRandomSequence(unsigned int seed = UINT_MAX);
 TLP_SCOPE unsigned int getSeedOfRandomSequence();
 
 // Mersenne Twister pseudo-random generator of 32-bit numbers
-TLP_SCOPE static std::mt19937 tlpmt;
+static std::mt19937 tlpmt;
 
 /**
  * @brief Initializes a random sequence with the seed previously set
