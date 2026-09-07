@@ -30,8 +30,6 @@ namespace Ui {
 class AboutTulipPageWidget;
 }
 
-class QNetworkReply;
-
 namespace tlp {
 
 /**
@@ -45,10 +43,6 @@ class TLP_QT_SCOPE AboutTulipPage : public QWidget {
 public:
   explicit AboutTulipPage(QWidget *parent = nullptr);
   ~AboutTulipPage() override;
-
-private slots:
-
-  void rssReply(QNetworkReply *);
 
 private:
   Ui::AboutTulipPageWidget *_ui;
