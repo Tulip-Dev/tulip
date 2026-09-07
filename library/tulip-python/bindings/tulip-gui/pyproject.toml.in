@@ -10,7 +10,6 @@ name = "tulipgui"
 sip-file="Module.sip"
 
 [tool.sip.project]
-abi-version="@SIP_API@"
 compile=false
 sip-files-dir="@CMAKE_CURRENT_SOURCE_DIR@"
 sip-include-dirs=["@CMAKE_CURRENT_BINARY_DIR@/../tulip-core", "@CMAKE_CURRENT_SOURCE_DIR@/../stl"]

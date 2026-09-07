@@ -144,7 +144,7 @@ execute_process(
 FILE(GLOB SIP_DIST LIST_DIRECTORIES false CONFIGURE_DEPENDS ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-*.tar.gz)
 STRING(REGEX MATCH "[0-9]+\.[0-9]+\.[0-9]+" SIP_API_FULL ${SIP_DIST})
 #Always use the latest API
-STRING(REGEX MATCH "^[0-9]+\.[0-9]+" SIP_API ${SIP_API_FULL}) #used in pyproject.toml files
+# STRING(REGEX MATCH "^[0-9]+\.[0-9]+" SIP_API ${SIP_API_FULL}) #used in pyproject.toml files
 FILE(ARCHIVE_EXTRACT INPUT ${SIP_DIST} DESTINATION ${SIP_INCLUDE_DIR} PATTERNS *.c *.h)
 SET (SIP_H_DIR ${SIP_INCLUDE_DIR}/${SIP_MODULE_}-${SIP_API_FULL})
 #######################
