@@ -193,7 +193,7 @@ ENDIF()
   FIND_PACKAGE(ZLIB REQUIRED)
 
 # Python (need to put this here to initialize Qhull properly when compiling Python wheels
-#qhull libs from manylinux-2.28 (Almalinux 8) does not work. Paclage cmeel-qhull should be used instead
+#qhull libs from manylinux-2.28 (Almalinux 8) does not work. Package cmeel-qhull should be used instead
 IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 # When building tulip wheels we make a loop of cmake builds,
 # with only a change of Python_EXECUTABLE CMake variable;

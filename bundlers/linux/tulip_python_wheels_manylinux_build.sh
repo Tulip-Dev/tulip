@@ -5,7 +5,7 @@
 # a pypa/manylinux-2.28 docker image (based on Almalinux 8)
 
 # install tulip-core wheel deps
-#yum -y upgrade
+yum -y upgrade
 yum -y install yajl-devel
 # yum -y install qhull-devel #this package does not work with manylinux_2_28
 
@@ -36,7 +36,8 @@ do
   PY_VERSION=$(${CPYBIN}/python -c "from platform import python_version; print(python_version())")
   IFS='.' read -a PY_VERSION <<< "$PY_VERSION"
   # Python < 3.10 no longer supported, 3.15 not yet supported
-  if [[ ${PY_VERSION[0]} -ne 3 ]] || [[ ${PY_VERSION[1]} -lt 10 ]] || [[ ${PY_VERSION[1]} -ge 15 ]]
+  #Tulip is not compatible with free threaded Python builds
+  if [[ ${PY_VERSION[0]} -ne 3 ]] || [[ ${PY_VERSION[1]} -lt 10 ]] || [[ ${PY_VERSION[1]} -ge 15 ]] || [[ ${PY_VERSION[1]} =~ .+t ]]
   then
      continue
   fi

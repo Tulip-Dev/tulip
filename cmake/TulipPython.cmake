@@ -3,8 +3,8 @@ SET(PYTHON_VERSION ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR})
 SET(TulipPythonModulesInstallDir ${CMAKE_INSTALL_PREFIX}/${TulipLibInstallDir}/tulip/python)
 
 MACRO(TULIP_DISABLE_COMPILER_WARNINGS_PYTHON)
-    TULIP_SET_CXX_COMPILER_FLAG("-Wno-old-style-cast -Wno-deprecated-copy -Wno-unused-variable -Wno-overloaded-virtual -Wno-missing-field-initializers")
-    TULIP_SET_C_COMPILER_FLAG("-Wno-old-style-cast -Wno-deprecated-copy -Wno-unused-variable -Wno-overloaded-virtual -Wno-missing-field-initializers")
+    TULIP_SET_CXX_COMPILER_FLAG("-Wno-old-style-cast -Wno-deprecated-copy -Wno-unused-variable -Wno-unused-parameter -Wno-overloaded-virtual -Wno-missing-field-initializers")
+    TULIP_SET_C_COMPILER_FLAG("-Wno-old-style-cast -Wno-deprecated-copy -Wno-unused-variable -Wno-unused-parameter -Wno-overloaded-virtual -Wno-missing-field-initializers")
 ENDMACRO(TULIP_DISABLE_COMPILER_WARNINGS_PYTHON)
 
 GET_FILENAME_COMPONENT(PYTHON_HOME_PATH ${Python_EXECUTABLE} DIRECTORY)
