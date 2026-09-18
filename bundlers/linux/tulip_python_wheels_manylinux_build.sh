@@ -36,10 +36,15 @@ do
   PY_VERSION=$(${CPYBIN}/python -c "from platform import python_version; print(python_version())")
   IFS='.' read -a PY_VERSION <<< "$PY_VERSION"
   # Python < 3.10 no longer supported, 3.15 not yet supported
-  #Tulip is not compatible with free threaded Python builds
-  if [[ ${PY_VERSION[0]} -ne 3 ]] || [[ ${PY_VERSION[1]} -lt 10 ]] || [[ ${PY_VERSION[1]} -ge 15 ]] || [[ ${PY_VERSION[1]} =~ .+t ]]
+  if [[ ${PY_VERSION[0]} -ne 3 ]] || [[ ${PY_VERSION[1]} -lt 10 ]] || [[ ${PY_VERSION[1]} -ge 15 ]]
   then
      continue
+  fi
+  #Tulip is not compatible with free threaded Python builds
+  VERS=$(${CPYBIN}/python -VV)
+  if [[ $VERS == *"free thread"* ]]
+  then
+    continue
   fi
   # install sip and build packages
   #cmeel-qhull is a qhull release which is installed via pip. it works but the configuration is a bit tough!!
