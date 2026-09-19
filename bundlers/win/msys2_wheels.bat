@@ -1,4 +1,4 @@
-cd C:\Tulip5
+cd C:\Tulip6
 PATH c:\msys64\ucrt64\bin;c:\msys64\usr\bin;c:\Windows\System32;%PATH%
 
 echo on
@@ -30,9 +30,9 @@ pacman --noconfirm -S --needed mingw-w64-ucrt-x86_64-qhull
 
 rem wheel packages will be stored in the wheels directory
 rem build and wheels directory must already exist
-set tulip_wheels_prefix="C:\Tulip5\wheels"
-set pyexe=C:\Tulip5\python\tools\python.exe
-PATH C:\Tulip5\python\tools;C:\Tulip5\python\Scripts;%PATH%
+set tulip_wheels_prefix="C:\Tulip6\wheels"
+set pyexe=C:\Tulip6\python\tools\python.exe
+PATH C:\Tulip6\python\tools;C:\Tulip6\python\Scripts;%PATH%
 
 
 for %%G in (3.10.11 3.11.9 3.12.10 3.13.15 3.14.7) do (
@@ -60,5 +60,5 @@ rem Install supported version of python with nuget
   rd /s /q library\tulip-python
   cd ..
   rem remove previous installed python
-  rd /s /q C:\Tulip5\python
+  rd /s /q C:\Tulip6\python
 )
