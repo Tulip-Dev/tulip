@@ -264,9 +264,8 @@ pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const char
 
   bfd_byte *from = reinterpret_cast<bfd_byte *>(symbolTable);
   bfd_byte *fromend = from + nSymbols * symbolSize;
-  int index = 0;
 
-  for (; from < fromend; from += symbolSize, index++) {
+  for (; from < fromend; from += symbolSize) {
     asymbol *sym = bfd_minisymbol_to_symbol(abfd, isDynamic, from, scratchSymbol);
 
     if (sym == nullptr) {
