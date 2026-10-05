@@ -32,12 +32,11 @@ PLUGIN(EccentricityMetric)
 
 static const char *paramHelp[] = {
     // closeness centrality
-    "If true, the closeness centrality is computed (i.e. the average distance from a node to all "
-    "others).",
+    "If true, the closeness centrality is computed (i.e., the average distance from a node to all others).",
 
     // norm
     "If true, the returned values are normalized. "
-    "For the closeness centrality, the reciprocal of the sum of distances is returned."
+    "For the closeness centrality, the reciprocal of the sum of distances is returned. "
     "The eccentricity values are divided by the graph diameter. "
     "<b> Warning: </b> The normalized eccentricity values should be computed on a (strongly) "
     "connected graph.",
@@ -49,8 +48,8 @@ static const char *paramHelp[] = {
     "An existing edge weight metric property.",
 
     // graph diameter
-    "The computed diameter; it is always computed when normalized eccentricity is required."
-    "To force its computation, in non normalized eccentricity case, set its input value to 1."
+    "The computed diameter; it is always computed when normalized eccentricity is required. "
+    "To force its computation, in non normalized eccentricity case, set its input value to 1. "
     "When not computed its output value will be set to -1."};
 
 EccentricityMetric::EccentricityMetric(const tlp::PluginContext *context)
