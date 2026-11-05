@@ -42,7 +42,7 @@ do
   fi
   #Tulip is not compatible with free threaded Python builds
   VERS=$(${CPYBIN}/python -VV)
-  if [[ $VERS == *"free thread"* ]]
+  if [[ "$VERS" == *"free-thread"* ]]
   then
     continue
   fi
