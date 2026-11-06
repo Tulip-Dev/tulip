@@ -176,8 +176,13 @@ void GlMainWidgetGraphicsItem::keyPressEvent(QKeyEvent *event) {
 
 void GlMainWidgetGraphicsItem::dragEnterEvent(QGraphicsSceneDragDropEvent *event) {
   if (glMainWidget->isEnabled() && glMainWidget->acceptDrops()) {
+#if (QT_VERSION >= QT_VERSION_CHECK(6,12,0))
+    QDragEnterEvent proxyDragEnter(event->pos(), event->dropAction(), event->mimeData(),
+                                   event->buttons(), event->modifiers());
+#else
     QDragEnterEvent proxyDragEnter(event->pos().toPoint(), event->dropAction(), event->mimeData(),
                                    event->buttons(), event->modifiers());
+#endif
     proxyDragEnter.setAccepted(event->isAccepted());
     QApplication::sendEvent(glMainWidget, &proxyDragEnter);
     event->setAccepted(proxyDragEnter.isAccepted());
@@ -194,8 +199,13 @@ void GlMainWidgetGraphicsItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *event
 
 void GlMainWidgetGraphicsItem::dragMoveEvent(QGraphicsSceneDragDropEvent *event) {
   if (glMainWidget->isEnabled() && glMainWidget->acceptDrops()) {
+    #if (QT_VERSION >= QT_VERSION_CHECK(6,12,0))
+      QDragMoveEvent dragMove(event->pos(), event->possibleActions(), event->mimeData(),
+                            event->buttons(), event->modifiers());
+#else
     QDragMoveEvent dragMove(event->pos().toPoint(), event->possibleActions(), event->mimeData(),
                             event->buttons(), event->modifiers());
+#endif
     QApplication::sendEvent(glMainWidget, &dragMove);
     event->setAccepted(dragMove.isAccepted());
     event->setDropAction(dragMove.dropAction());
