@@ -47,7 +47,7 @@ void PythonIDEInterface::loadPlugins() {
 #include <QSettings>
 
 // Current Python versions
-static const char *pythonVersion[] = {"3.14", "3.13", "3.12", "3.11", "3.10", nullptr};
+static const char *pythonVersion[] = {"3.15", "3.14", "3.13", "3.12", "3.11", nullptr};
 
 #include <QFileInfo>
 

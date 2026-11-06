@@ -105,7 +105,7 @@ The following dependencies are required to build Tulip:
   * [Qt](https://www.qt.io) >= 6.8
   * [OpenGL](https://www.opengl.org) >= 2.0
   * [GLEW](https://glew.sourceforge.net/) >= 1.4
-  * [Python](https://www.python.org) >= 3.10 up to 3.14
+  * [Python](https://www.python.org) >= 3.11 up to 3.15
   * [Pip](https://pypi.org/project/pip/)
   * [SIP](https://github.com/Python-SIP/sip) >= 6.10 (to be installed via pip or on Debian/Ubuntu packages sipbuild)
   * [libzip](https://libzip.org)
