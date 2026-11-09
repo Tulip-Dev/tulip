@@ -87,6 +87,28 @@ TEST(CheckedAPITests, test_next)
     EXPECT_EQ (w, threechars + 9);
 }
 
+TEST(CheckedAPITests, test_next_error_precedence)
+{
+    const char truncated_overlong[] = {static_cast<char>(0xe0), static_cast<char>(0x80)};
+    const char* it = truncated_overlong;
+    EXPECT_THROW(next(it, truncated_overlong + 2), not_enough_room);
+    EXPECT_EQ(it, truncated_overlong);
+
+    const char invalid_trailing_byte[] = {
+        static_cast<char>(0xed), static_cast<char>(0xa0), static_cast<char>(0x41)
+    };
+    it = invalid_trailing_byte;
+    EXPECT_THROW(next(it, invalid_trailing_byte + 3), invalid_utf8);
+    EXPECT_EQ(it, invalid_trailing_byte);
+
+    const char invalid_trailing_byte_after_invalid_range[] = {
+        static_cast<char>(0xf4), static_cast<char>(0x90), static_cast<char>(0x80), static_cast<char>(0x41)
+    };
+    it = invalid_trailing_byte_after_invalid_range;
+    EXPECT_THROW(next(it, invalid_trailing_byte_after_invalid_range + 4), invalid_utf8);
+    EXPECT_EQ(it, invalid_trailing_byte_after_invalid_range);
+}
+
 TEST(CheckedAPITests, test_next16)
 {
     const utfchar16_t u[3] = {0x65e5, 0xd800, 0xdf46};
@@ -98,6 +120,35 @@ TEST(CheckedAPITests, test_next16)
     cp = next16(w, w + 2);
     EXPECT_EQ (cp, 0x10346);
     EXPECT_EQ (w, u + 3);
+
+    w = u;
+    EXPECT_THROW(next16(w, w), not_enough_room);
+    EXPECT_EQ(w, u);
+
+    const utfchar16_t lead_at_end[] = {0xd800};
+    w = lead_at_end;
+    EXPECT_THROW(next16(w, lead_at_end + 1), not_enough_room);
+    EXPECT_EQ(w, lead_at_end);
+
+    const utfchar16_t trail_first[] = {0xdc00, 0x0041};
+    w = trail_first;
+    EXPECT_THROW(next16(w, trail_first + 2), invalid_utf16);
+    EXPECT_EQ(w, trail_first);
+
+    const utfchar16_t unpaired_lead[] = {0xd800, 0x0041};
+    w = unpaired_lead;
+    EXPECT_THROW(next16(w, unpaired_lead + 2), invalid_utf16);
+    EXPECT_EQ(w, unpaired_lead);
+}
+
+TEST(CheckedAPITests, test_next16_lone_trail_surrogate)
+{
+    // The trail_first case above, minus the trailing word: what follows a lone
+    // trail surrogate must not change the error.
+    const utfchar16_t trail_at_end[] = {0xdc00};
+    const utfchar16_t* w = trail_at_end;
+    EXPECT_THROW(next16(w, trail_at_end + 1), invalid_utf16);
+    EXPECT_EQ(w, trail_at_end);
 }
 
 TEST(CheckedAPITests, test_peek_next)

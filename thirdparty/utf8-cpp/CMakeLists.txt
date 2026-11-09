@@ -1,10 +1,11 @@
 cmake_minimum_required (VERSION 3.14...3.27)
 project (utf8cpp 
-         VERSION 4.0.8
+         VERSION 4.2.1
          LANGUAGES CXX
          DESCRIPTION "C++ portable library for working with utf-8 encoding")
 
 add_library(${PROJECT_NAME} INTERFACE)
+add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 include(GNUInstallDirs)
 
@@ -53,4 +54,9 @@ option(UTF8CPP_ENABLE_TESTS "Build and enable tests" OFF)
 if(UTF8CPP_ENABLE_TESTS)
     enable_testing()
     add_subdirectory(tests)
+endif()
+
+option(UTF8CPP_ENABLE_BENCHMARKS "Build and enable benchmarks" OFF)
+if(UTF8CPP_ENABLE_BENCHMARKS)
+    add_subdirectory(bench)
 endif()
