@@ -15,7 +15,6 @@ FILE(REMOVE_RECURSE ${PLUGINS_BUILD_DIR})
 # Ensure plugins loading test executable is built
 EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND}
                           --build ${TULIP_BIN_DIR}
-                          --config ${MSVC_CONFIGURATION}
                           --target ${TEST_EXTERNAL_PLUGINS_LOAD}
                 OUTPUT_QUIET)
 
@@ -60,7 +59,6 @@ EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND}
 IF("${CMD_RESULT}" STREQUAL "0")
   EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND}
                             --build ${PLUGINS_BUILD_DIR}
-                            --config ${MSVC_CONFIGURATION}
                   RESULT_VARIABLE CMD_RESULT)
 ENDIF("${CMD_RESULT}" STREQUAL "0")
 
